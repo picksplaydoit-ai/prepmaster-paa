@@ -6,7 +6,7 @@ admin.initializeApp();
 const db = admin.firestore();
 
 const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': 'https://preparacion-pro-udg.netlify.app',
+  'Access-Control-Allow-Origin': 'https://prepmaster-paa.vercel.app',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
   'Content-Type': 'application/json',
@@ -49,8 +49,8 @@ exports.createCheckout = functions.https.onRequest(async (req, res) => {
         quantity: 1,
       }],
       metadata: { uid, email },
-      success_url: 'https://preparacion-pro-udg.netlify.app/pago-exitoso.html?session_id={CHECKOUT_SESSION_ID}',
-      cancel_url:  'https://preparacion-pro-udg.netlify.app/?cancelled=true',
+      success_url: 'https://prepmaster-paa.vercel.app/pago-exitoso.html?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url:  'https://prepmaster-paa.vercel.app/?cancelled=true',
     });
 
     res.status(200).json({ url: session.url });
