@@ -451,6 +451,7 @@ const app  = initializeApp({
   measurementId:"G-E70MD5J2WX"
 });
 const auth = getAuth(app);
+auth.settings.appVerificationDisabledForTesting = true;
 const db   = getFirestore(app);
 
 const EXAMS = {
@@ -690,6 +691,54 @@ window.doActivateFree = async () => {
 };
 
 window.doLogout = () => signOut(auth);
+
+window.togglePanel = id => {
+  const p=document.getElementById(id), a=document.getElementById('arrow-'+id), open=p.classList.contains('open');
+  document.querySelectorAll('.exam-panel').forEach(x=>x.classList.remove('open'));
+  document.querySelectorAll('[id^="arrow-panel"]').forEach(x=>x.textContent='›');
+  if(!open){p.classList.add('open'); if(a) a.textContent='↓';}
+};
+window.openExam = (src,title) => {
+  document.getElementById('main-iframe').src=src;
+  document.getElementById('iframe-title').textContent=title;
+  document.getElementById('iframe-modal').classList.add('open');
+};
+window.openTool = window.openExam;
+window.closeIframe = () => { document.getElementById('iframe-modal').classList.remove('open'); document.getElementById('main-iframe').src=''; };
+window.openPDF = (src,title) => {
+  document.getElementById('pdf-iframe').src=src+'#toolbar=0&navpanes=0';
+  document.getElementById('pdf-title').textContent=title;
+  document.getElementById('pdf-modal').classList.add('open');
+};
+window.closePDF = () => { document.getElementById('pdf-modal').classList.remove('open'); document.getElementById('pdf-iframe').src=''; };
+window.closePDFOnBg = e => { if(e.target===document.getElementById('pdf-modal')) closePDF(); };
+document.addEventListener('keydown', e => {
+  if(document.getElementById('pdf-modal').classList.contains('open')){if((e.ctrlKey||e.metaKey)&&e.key==='s')e.preventDefault(); if(e.key==='Escape')closePDF();}
+  if(document.getElementById('iframe-modal').classList.contains('open')&&e.key==='Escape')closeIframe();
+});
+</script>
+
+<script>
+window.togglePanel = window.togglePanel || function(id) {
+  const p=document.getElementById(id), a=document.getElementById('arrow-'+id), open=p&&p.classList.contains('open');
+  document.querySelectorAll('.exam-panel').forEach(x=>x.classList.remove('open'));
+  document.querySelectorAll('[id^="arrow-panel"]').forEach(x=>x.textContent='›');
+  if(!open&&p){p.classList.add('open'); if(a) a.textContent='↓';}
+};
+window.openExam = window.openExam || function(src,title) {
+  document.getElementById('main-iframe').src=src;
+  document.getElementById('iframe-title').textContent=title;
+  document.getElementById('iframe-modal').classList.add('open');
+};
+window.openTool = window.openExam;
+window.closeIframe = window.closeIframe || function() { document.getElementById('iframe-modal').classList.remove('open'); document.getElementById('main-iframe').src=''; };
+window.openPDF = window.openPDF || function(src,title) {
+  document.getElementById('pdf-iframe').src=src+'#toolbar=0&navpanes=0';
+  document.getElementById('pdf-title').textContent=title;
+  document.getElementById('pdf-modal').classList.add('open');
+};
+window.closePDF = window.closePDF || function() { document.getElementById('pdf-modal').classList.remove('open'); document.getElementById('pdf-iframe').src=''; };
+window.closePDFOnBg = function(e) { if(e.target===document.getElementById('pdf-modal')) window.closePDF(); };
 </script>
 </body>
 </html>
