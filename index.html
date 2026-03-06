@@ -14,6 +14,10 @@
   .auth-card::before{content:'';position:absolute;top:-80px;right:-80px;width:200px;height:200px;background:radial-gradient(circle,#7c3aed33 0%,transparent 70%);pointer-events:none;}
   .auth-logo{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px;}
   .auth-logo span{color:var(--gold);}
+
+  .auth-nodata{background:#0f172a;border:1px solid #ffffff12;border-radius:10px;padding:10px 14px;margin-bottom:22px;font-size:11.5px;color:#64748b;line-height:1.6;text-align:center;}
+  .auth-nodata strong{color:#f8fafc;}
+  .auth-nodata span{color:#fbbf24;font-weight:700;}
   .auth-subtitle{color:var(--muted);font-size:14px;margin-bottom:36px;}
   .input-group{margin-bottom:16px;}
   .input-group label{display:block;font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;}
@@ -272,6 +276,8 @@
   <div class="auth-card">
     <div class="auth-logo">Prep<span>Master</span></div>
     <p class="auth-subtitle">Plataforma oficial de simulación PAA</p>
+
+    <div class="auth-nodata">📋 Esta plataforma <strong>no guarda tu progreso</strong> entre sesiones. <span>Anota tu puntaje</span> al terminar cada simulación o minijuego.</div>
 
     <!-- Tabs -->
     <div class="auth-tabs">
