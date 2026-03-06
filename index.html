@@ -783,6 +783,7 @@ const SURVIVAL = [
 
 function renderExams(key, containerId) {
   const cont = document.getElementById(containerId);
+  if (!cont) return;
   const color = COLORS[key];
   EXAMS[key].forEach((ex,i) => {
     const div = document.createElement('div');
@@ -816,7 +817,7 @@ const EXAMS_ING = [
 
 // Render English exams
 const ingCont = document.getElementById('exams-ing');
-EXAMS_ING.forEach((ex,i) => {
+if (ingCont) EXAMS_ING.forEach((ex,i) => {
   const div = document.createElement('div');
   div.className = 'exam-item';
   div.innerHTML = `
@@ -838,7 +839,7 @@ EXAMS_ING.forEach((ex,i) => {
 
 
 const svGrid = document.getElementById('survival-grid');
-SURVIVAL.forEach(sv => {
+if (svGrid) SURVIVAL.forEach(sv => {
   const d = document.createElement('div');
   d.className='tool-card'; d.dataset.accent='surv'; d.onclick=()=>openExam(sv.file,sv.name);
   d.innerHTML=`<div class="tool-badge">🔥 Supervivencia</div><div class="tool-name">${sv.icon} ${sv.name}</div><div class="tool-desc">${sv.desc}</div><button class="tool-run-btn">▶ Comenzar</button>`;
@@ -852,7 +853,7 @@ const RETOS = [
   {ppm:400, name:'Master',    label:'⚠️ Nivel Master', icon:'📕', desc:'Lee textos de ~400 palabras en 60 segundos. El mayor reto: el texto desaparece al terminar.', tags:['60s lectura','40s pregunta','texto sin vuelta'], color:'#e11d48', file:'examenes/lec/Lectura_400.html'},
 ];
 const retoGrid = document.getElementById('reto-grid');
-RETOS.forEach(r => {
+if (retoGrid) RETOS.forEach(r => {
   const d = document.createElement('div');
   d.className = 'reto-card'; d.dataset.ppm = r.ppm;
   d.onclick = () => openExam(r.file, `Reto de Lectura — ${r.label}`);
@@ -974,6 +975,12 @@ onAuthStateChanged(auth, async user => {
 
 // ── Tab switch ──────────────────────────────────────────────────────────────
 window.switchTab = (tab) => {
+  const loginErr = document.getElementById('login-error');
+  const regErr = document.getElementById('register-error');
+  const regOk = document.getElementById('register-success');
+  if (loginErr) loginErr.style.display = 'none';
+  if (regErr) regErr.style.display = 'none';
+  if (regOk) regOk.style.display = 'none';
   document.querySelectorAll('.auth-tab').forEach((t,i) => {
     t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register'));
   });
@@ -983,6 +990,7 @@ window.switchTab = (tab) => {
 
 window.toggleFreeCode = () => {
   const sec = document.getElementById('free-code-section');
+  if (!sec) return;
   sec.style.display = sec.style.display === 'block' ? 'none' : 'block';
 };
 
@@ -1121,22 +1129,12 @@ const EXPLICACIONES = [
   {name:'Idea Principal y Analogía',desc:'Cómo identificar la idea principal y resolver analogías.',             file:'examenes/explicaciones/Ideaprincipalyanalogia.html',  icon:'💡',  color:'#059669'},
 ];
 
-const expGrid = document.getElementById('explicaciones-grid');
-EXPLICACIONES.forEach(ex => {
-  const d = document.createElement('div');
-  d.className = 'tool-card';
-  d.style.cssText = '--tc:'+ex.color;
-  d.dataset.accent = 'exp';
-  d.onclick = () => openExam(ex.file, ex.name);
-  d.innerHTML = `
-    <div class="tool-badge" style="background:${ex.color}20;color:${ex.color}">📚 Explicación</div>
-    <div class="tool-name" style="font-size:15px">${ex.icon} ${ex.name}</div>
-    <div class="tool-desc">${ex.desc}</div>
-    <button class="tool-run-btn" style="background:${ex.color}18;border-color:${ex.color}40;color:${ex.color}">▶ Ver explicación</button>`;
-  expGrid.appendChild(d);
-});
+// explicaciones rendered in HTML
 
-window.doLogout = () => signOut(auth);
+window.doLogout = async () => {
+  if (auth.currentUser) await unregisterSession(auth.currentUser.uid);
+  await signOut(auth);
+};
 </script>
 
 
