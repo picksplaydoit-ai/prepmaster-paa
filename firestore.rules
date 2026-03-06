@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Subscriptions - solo el propio usuario puede leer la suya
+    match /subscriptions/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false; // Solo Firebase Functions escribe
+    }
+    // Access codes - solo lectura autenticada (Functions escribe)
+    match /access_codes/{code} {
+      allow read: if false;
+      allow write: if false;
+    }
+    // Sessions - cada usuario maneja sus propias sesiones
+    match /sessions/{uid}/active/{sessionId} {
+      allow read, write, delete: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}

@@ -760,7 +760,7 @@ window.closePDFOnBg=closePDFOnBg;
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const app  = initializeApp({
   apiKey:"AIzaSyA2-54Gk9NXW-Ebr3mSdHNP8TA7BlLuQWU",
@@ -878,6 +878,67 @@ RETOS.forEach(r => {
   retoGrid.appendChild(d);
 });
 
+
+// ── Session management (max 3 simultaneous) ─────────────────────────────────
+const MAX_SESSIONS = 3;
+let mySessionId = null;
+
+function genSessionId() {
+  return Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
+
+async function registerSession(uid) {
+  // Clean sessions older than 2 hours
+  const sessionsRef = collection(db, 'sessions', uid, 'active');
+  const snap = await getDocs(sessionsRef);
+  const now = Date.now();
+  const active = [];
+  for (const d of snap.docs) {
+    const data = d.data();
+    const age = now - (data.ts?.toMillis?.() || 0);
+    if (age > 2 * 60 * 60 * 1000) {
+      await deleteDoc(d.ref); // expired
+    } else {
+      active.push(d.id);
+    }
+  }
+  if (active.length >= MAX_SESSIONS) return false; // limit reached
+  mySessionId = genSessionId();
+  await setDoc(doc(db, 'sessions', uid, 'active', mySessionId), {
+    ts: serverTimestamp(),
+    ua: navigator.userAgent.slice(0, 80)
+  });
+  return true;
+}
+
+async function unregisterSession(uid) {
+  if (mySessionId) {
+    try { await deleteDoc(doc(db, 'sessions', uid, 'active', mySessionId)); } catch(e) {}
+    mySessionId = null;
+  }
+}
+
+// Heartbeat — refresh session timestamp every 10 min to keep it alive
+function startHeartbeat(uid) {
+  setInterval(async () => {
+    if (mySessionId) {
+      try {
+        await setDoc(doc(db, 'sessions', uid, 'active', mySessionId), 
+          { ts: serverTimestamp(), ua: navigator.userAgent.slice(0,80) }, { merge: true });
+      } catch(e) {}
+    }
+  }, 10 * 60 * 1000);
+}
+
+// Unregister session on tab close
+window.addEventListener('beforeunload', () => {
+  if (auth.currentUser && mySessionId) {
+    // Use sendBeacon for reliability on tab close
+    navigator.sendBeacon && navigator.sendBeacon('/ping'); // just to trigger beforeunload
+    unregisterSession(auth.currentUser.uid);
+  }
+});
+
 onAuthStateChanged(auth, async user => {
   if (user) {
     try {
@@ -887,6 +948,18 @@ onAuthStateChanged(auth, async user => {
         const now = new Date();
         const expires = sub.expiresAt?.toDate();
         if (sub.active && expires && expires > now) {
+          // Check session limit
+          const sessionOk = await registerSession(user.uid);
+          if (!sessionOk) {
+            document.getElementById('auth-screen').style.display = 'flex';
+            document.getElementById('app').style.display = 'none';
+            const errEl = document.getElementById('login-error');
+            errEl.textContent = '⚠️ Límite de 3 dispositivos alcanzado. Cierra sesión en otro dispositivo e intenta de nuevo.';
+            errEl.style.display = 'block';
+            await signOut(auth);
+            return;
+          }
+          startHeartbeat(user.uid);
           document.getElementById('auth-screen').style.display = 'none';
           document.getElementById('app').style.display = 'block';
           const days = Math.ceil((expires - now) / (1000*60*60*24));
