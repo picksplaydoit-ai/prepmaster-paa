@@ -436,6 +436,39 @@
   </div>
 </div>
 
+
+<script>
+// UI functions must be in a regular (non-module) script so onclick handlers work immediately
+function togglePanel(id) {
+  const p=document.getElementById(id), a=document.getElementById('arrow-panel-'+id.replace('panel-','')), open=p&&p.classList.contains('open');
+  document.querySelectorAll('.exam-panel').forEach(x=>x.classList.remove('open'));
+  document.querySelectorAll('[id^="arrow-panel"]').forEach(x=>x.textContent='›');
+  if(!open&&p){p.classList.add('open'); if(a) a.textContent='↓';}
+}
+function openExam(src,title) {
+  document.getElementById('main-iframe').src=src;
+  document.getElementById('iframe-title').textContent=title;
+  document.getElementById('iframe-modal').classList.add('open');
+}
+function openTool(src,title){ openExam(src,title); }
+function closeIframe() { document.getElementById('iframe-modal').classList.remove('open'); document.getElementById('main-iframe').src=''; }
+function openPDF(src,title) {
+  document.getElementById('pdf-iframe').src=src+'#toolbar=0&navpanes=0';
+  document.getElementById('pdf-title').textContent=title;
+  document.getElementById('pdf-modal').classList.add('open');
+}
+function closePDF() { document.getElementById('pdf-modal').classList.remove('open'); document.getElementById('pdf-iframe').src=''; }
+function closePDFOnBg(e) { if(e.target===document.getElementById('pdf-modal')) closePDF(); }
+document.addEventListener('keydown', e => {
+  if(document.getElementById('pdf-modal').classList.contains('open')){if((e.ctrlKey||e.metaKey)&&e.key==='s')e.preventDefault(); if(e.key==='Escape')closePDF();}
+  if(document.getElementById('iframe-modal').classList.contains('open')&&e.key==='Escape')closeIframe();
+});
+// Also expose to window for any dynamic calls
+window.togglePanel=togglePanel; window.openExam=openExam; window.openTool=openTool;
+window.closeIframe=closeIframe; window.openPDF=openPDF; window.closePDF=closePDF;
+window.closePDFOnBg=closePDFOnBg;
+</script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -691,54 +724,8 @@ window.doActivateFree = async () => {
 };
 
 window.doLogout = () => signOut(auth);
-
-window.togglePanel = id => {
-  const p=document.getElementById(id), a=document.getElementById('arrow-'+id), open=p.classList.contains('open');
-  document.querySelectorAll('.exam-panel').forEach(x=>x.classList.remove('open'));
-  document.querySelectorAll('[id^="arrow-panel"]').forEach(x=>x.textContent='›');
-  if(!open){p.classList.add('open'); if(a) a.textContent='↓';}
-};
-window.openExam = (src,title) => {
-  document.getElementById('main-iframe').src=src;
-  document.getElementById('iframe-title').textContent=title;
-  document.getElementById('iframe-modal').classList.add('open');
-};
-window.openTool = window.openExam;
-window.closeIframe = () => { document.getElementById('iframe-modal').classList.remove('open'); document.getElementById('main-iframe').src=''; };
-window.openPDF = (src,title) => {
-  document.getElementById('pdf-iframe').src=src+'#toolbar=0&navpanes=0';
-  document.getElementById('pdf-title').textContent=title;
-  document.getElementById('pdf-modal').classList.add('open');
-};
-window.closePDF = () => { document.getElementById('pdf-modal').classList.remove('open'); document.getElementById('pdf-iframe').src=''; };
-window.closePDFOnBg = e => { if(e.target===document.getElementById('pdf-modal')) closePDF(); };
-document.addEventListener('keydown', e => {
-  if(document.getElementById('pdf-modal').classList.contains('open')){if((e.ctrlKey||e.metaKey)&&e.key==='s')e.preventDefault(); if(e.key==='Escape')closePDF();}
-  if(document.getElementById('iframe-modal').classList.contains('open')&&e.key==='Escape')closeIframe();
-});
 </script>
 
-<script>
-window.togglePanel = window.togglePanel || function(id) {
-  const p=document.getElementById(id), a=document.getElementById('arrow-'+id), open=p&&p.classList.contains('open');
-  document.querySelectorAll('.exam-panel').forEach(x=>x.classList.remove('open'));
-  document.querySelectorAll('[id^="arrow-panel"]').forEach(x=>x.textContent='›');
-  if(!open&&p){p.classList.add('open'); if(a) a.textContent='↓';}
-};
-window.openExam = window.openExam || function(src,title) {
-  document.getElementById('main-iframe').src=src;
-  document.getElementById('iframe-title').textContent=title;
-  document.getElementById('iframe-modal').classList.add('open');
-};
-window.openTool = window.openExam;
-window.closeIframe = window.closeIframe || function() { document.getElementById('iframe-modal').classList.remove('open'); document.getElementById('main-iframe').src=''; };
-window.openPDF = window.openPDF || function(src,title) {
-  document.getElementById('pdf-iframe').src=src+'#toolbar=0&navpanes=0';
-  document.getElementById('pdf-title').textContent=title;
-  document.getElementById('pdf-modal').classList.add('open');
-};
-window.closePDF = window.closePDF || function() { document.getElementById('pdf-modal').classList.remove('open'); document.getElementById('pdf-iframe').src=''; };
-window.closePDFOnBg = function(e) { if(e.target===document.getElementById('pdf-modal')) window.closePDF(); };
-</script>
+
 </body>
 </html>
