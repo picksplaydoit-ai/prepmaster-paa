@@ -71,3 +71,4 @@ node_modules/
  1 file changed, 13 insertions(+)
  create mode 100644 serviceAccountKey.json
 functions/.env 
+serviceAccountKey.json 
