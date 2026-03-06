@@ -7,275 +7,211 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary:#6366f1; --accent:#f59e0b; --danger:#ef4444; --success:#10b981; --bg-dark:#020617; }
         body { font-family:'Plus Jakarta Sans',sans-serif; background:#020617; color:#f8fafc; background-image:radial-gradient(circle at 50% 50%,#1e1b4b 0%,#020617 100%); overflow-x:hidden; }
         .glass { background:rgba(30,41,59,0.7); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.1); }
-        .zone-card { transition:all 0.3s cubic-bezier(0.4,0,0.2,1); }
-        .zone-card:hover { transform:translateY(-6px) scale(1.02); }
-        .option-btn { transition:all 0.25s ease; border:1px solid rgba(255,255,255,0.1); }
-        .option-btn:hover:not(:disabled) { transform:translateX(8px); background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.3); }
-        .option-btn.correct { background:rgba(16,185,129,0.2)!important; border-color:#10b981!important; }
-        .option-btn.wrong { background:rgba(239,68,68,0.2)!important; border-color:#ef4444!important; }
-        @keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.15)} 100%{transform:scale(1)} }
-        @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-        .pop { animation:pop 0.35s ease; }
-        .fade-up { animation:fadeUp 0.4s ease; }
-        .demo-ribbon { background:linear-gradient(135deg,#f59e0b,#f97316); }
+        .zone-card { transition:all 0.3s ease; cursor:pointer; }
+        .zone-card:hover { transform:translateY(-5px); }
+        .opt-btn { transition:all 0.2s ease; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.04); width:100%; text-align:left; padding:12px 16px; border-radius:14px; color:#e2e8f0; font-size:14px; cursor:pointer; }
+        .opt-btn:hover:not(:disabled) { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.3); transform:translateX(6px); }
+        .opt-btn.correct { background:rgba(16,185,129,0.2)!important; border-color:#10b981!important; }
+        .opt-btn.wrong { background:rgba(239,68,68,0.2)!important; border-color:#ef4444!important; }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+        .fade-up { animation:fadeUp 0.35s ease; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-<!-- START SCREEN -->
+<!-- START -->
 <div id="screen-start" class="flex-grow flex items-center justify-center p-4 py-10">
-    <div class="max-w-lg w-full glass rounded-[2.5rem] shadow-2xl p-7 text-center fade-up">
-        <div class="demo-ribbon text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-5">🎯 Demo Gratuito</div>
+    <div class="max-w-lg w-full glass rounded-[2rem] p-7 text-center fade-up">
+        <div style="background:linear-gradient(135deg,#f59e0b,#f97316)" class="text-white text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-5">🎯 Demo Gratuito</div>
         <div class="text-6xl mb-4">⚔️</div>
-        <h1 class="text-3xl font-black tracking-tight mb-1">Reading Conquest</h1>
+        <h1 class="text-3xl font-black mb-1">Reading Conquest</h1>
         <p class="text-slate-400 text-sm mb-1 font-semibold">Misión PAA — Demo</p>
         <p class="text-indigo-400 text-xs font-bold mb-5">Lectura · Redacción · Vocabulario · Análisis</p>
 
-        <!-- no data notice -->
         <div class="bg-white/5 border border-white/10 rounded-2xl p-4 mb-5 text-left">
-            <p class="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">📋 Aviso importante</p>
-            <p class="text-xs text-slate-300 leading-relaxed">Esta app <strong class="text-white">no guarda datos</strong> entre sesiones. Para llevar tu progresión, <strong class="text-amber-400">anota tu puntaje final</strong> al terminar cada simulación o minijuego.</p>
+            <p class="text-xs font-black text-slate-400 uppercase tracking-wider mb-2">📋 Aviso</p>
+            <p class="text-xs text-slate-300 leading-relaxed">Esta app <strong class="text-white">no guarda datos</strong> entre sesiones. <strong class="text-amber-400">Anota tu puntaje final</strong> para llevar tu progresión.</p>
         </div>
 
         <div class="bg-indigo-950/60 border border-indigo-500/20 rounded-2xl p-4 mb-6 text-left">
-            <p class="text-[10px] font-black text-indigo-400 uppercase tracking-wider mb-2">✨ La versión completa incluye:</p>
+            <p class="text-xs font-black text-indigo-400 uppercase tracking-wider mb-2">✨ Versión completa incluye:</p>
             <ul class="text-xs text-slate-300 space-y-1">
-                <li>✅ <strong>6 minijuegos</strong> — Conquista Española, Conquista Matemática, Crónicas Mat., Conecta 4 (x2), Archivo del Saber</li>
-                <li>✅ <strong>8 simulaciones</strong> de Matemáticas, Redacción y Lectura</li>
-                <li>✅ <strong>13 explicaciones rápidas</strong> por tema</li>
-                <li>✅ Ejercicios de supervivencia + Reto Lectura Rápida</li>
-                <li>✅ PDFs con claves y procedimientos</li>
-                <li>✅ Calculadora de puntaje PAA + Curso en video</li>
-                <li class="text-amber-400 font-bold">💳 Todo por $89 MXN · Acceso 3 meses</li>
+                <li>✅ 6 minijuegos completos</li>
+                <li>✅ 8 simulaciones por sección (Mat, Red, Lec)</li>
+                <li>✅ 5 simulaciones de Inglés ESLAT</li>
+                <li>✅ 13 explicaciones rápidas + PDFs</li>
+                <li>✅ Calculadora PAA + Curso en video</li>
+                <li class="text-amber-400 font-bold">💳 Todo por $89 MXN · 3 meses</li>
             </ul>
         </div>
 
-        <button onclick="startGame()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] text-lg mb-3">
-            ⚔️ INICIAR DEMO GRATIS
-        </button>
-        <a href="https://prepmaster-paa.vercel.app" class="block w-full bg-amber-500 hover:bg-amber-400 text-white font-black py-3 rounded-2xl transition-all text-sm">
-            🔓 Acceder a la versión completa →
-        </a>
+        <button id="btn-start" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-4 rounded-2xl text-lg mb-3">⚔️ INICIAR DEMO GRATIS</button>
+        <a href="https://prepmaster-paa.vercel.app" class="block w-full bg-amber-500 hover:bg-amber-400 text-white font-black py-3 rounded-2xl text-sm">🔓 Acceder a la versión completa →</a>
     </div>
 </div>
 
 <!-- HUD -->
 <div id="hud" class="hidden sticky top-0 z-50 glass border-b border-white/10 px-4 py-2">
-    <div class="max-w-2xl mx-auto flex items-center justify-between gap-3">
-        <div class="flex items-center gap-3">
-            <div class="text-center">
-                <p class="text-[8px] font-black text-slate-500 uppercase">⚡ Energía</p>
-                <p id="val-energy" class="text-base font-black text-rose-400">100</p>
-            </div>
-            <div class="text-center">
-                <p class="text-[8px] font-black text-slate-500 uppercase">🪙 Oro</p>
-                <p id="val-gold" class="text-base font-black text-amber-400">0</p>
-            </div>
-            <div class="text-center">
-                <p class="text-[8px] font-black text-slate-500 uppercase">⭐ Pts</p>
-                <p id="val-score" class="text-base font-black text-white">200</p>
-            </div>
+    <div class="max-w-2xl mx-auto flex items-center justify-between">
+        <div class="flex gap-5">
+            <div class="text-center"><p class="text-xs text-slate-500">⚡ Energía</p><p id="val-energy" class="font-black text-rose-400">100</p></div>
+            <div class="text-center"><p class="text-xs text-slate-500">🪙 Oro</p><p id="val-gold" class="font-black text-amber-400">0</p></div>
+            <div class="text-center"><p class="text-xs text-slate-500">⭐ Pts</p><p id="val-score" class="font-black text-white">200</p></div>
         </div>
-        <div class="demo-ribbon text-white text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-full">DEMO</div>
+        <div style="background:linear-gradient(135deg,#f59e0b,#f97316)" class="text-white text-xs font-black uppercase px-2 py-1 rounded-full">DEMO</div>
     </div>
 </div>
 
-<!-- MAP SCREEN -->
-<div id="screen-map" class="hidden flex-grow p-4 pb-8">
+<!-- MAP -->
+<div id="screen-map" class="hidden flex-grow p-4 pb-10">
     <div class="max-w-2xl mx-auto">
-        <div class="text-center mb-6 fade-up">
-            <h2 class="text-2xl font-black tracking-tight">⚔️ Mapa de Batalla</h2>
-            <p class="text-slate-400 text-xs mt-1">Demo · 4 zonas disponibles · 1 pregunta c/u</p>
-        </div>
+        <div class="text-center mb-6"><h2 class="text-2xl font-black">⚔️ Mapa de Batalla</h2><p class="text-slate-400 text-xs mt-1">Demo · 4 zonas · 1 pregunta c/u</p></div>
         <div id="zones-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
-        <div id="demo-cta-map" class="hidden mt-8 glass rounded-3xl p-5 text-center">
-            <p class="text-lg font-black mb-1">¡Completaste el demo! 🎉</p>
-            <p class="text-slate-400 text-xs mb-4">Puntaje final: <strong id="final-pts" class="text-white"></strong> pts — Anótalo para comparar en tu siguiente sesión</p>
-            <a href="https://prepmaster-paa.vercel.app" class="inline-block bg-amber-500 hover:bg-amber-400 text-white font-black px-6 py-3 rounded-xl transition-all text-sm">🔓 Acceder a versión completa · $89 MXN</a>
+        <div id="finish-cta" class="hidden mt-8 glass rounded-3xl p-6 text-center">
+            <p class="text-xl font-black mb-1">¡Demo completado! 🎉</p>
+            <p class="text-slate-400 text-sm mb-1">Puntaje final: <strong id="final-pts" class="text-white text-xl"></strong> pts</p>
+            <p class="text-amber-400 text-xs mb-5 font-bold">📝 Anótalo para comparar tu progreso la próxima vez</p>
+            <a href="https://prepmaster-paa.vercel.app" class="inline-block bg-amber-500 hover:bg-amber-400 text-white font-black px-6 py-3 rounded-xl text-sm">🔓 Versión completa · $89 MXN</a>
         </div>
     </div>
 </div>
 
-<!-- BATTLE SCREEN -->
-<div id="screen-battle" class="hidden flex-grow p-4 pb-8">
+<!-- BATTLE -->
+<div id="screen-battle" class="hidden flex-grow p-4 pb-10">
     <div class="max-w-xl mx-auto">
         <div id="battle-header" class="glass rounded-2xl p-4 mb-4 flex items-center gap-4"></div>
         <div id="passage-box" class="hidden glass rounded-2xl p-4 mb-4 text-slate-300 text-sm italic leading-relaxed"></div>
-        <div id="question-box" class="glass rounded-2xl p-5 mb-4 fade-up">
-            <p id="question-text" class="font-semibold text-base leading-relaxed mb-4"></p>
+        <div class="glass rounded-2xl p-5 mb-4 fade-up">
+            <p id="question-text" class="font-semibold text-base leading-relaxed mb-5"></p>
             <div id="options-container" class="space-y-2"></div>
         </div>
-        <button onclick="goToMap()" id="btn-back" class="hidden w-full glass text-slate-400 font-bold py-3 rounded-2xl text-sm hover:text-white transition-colors">← Volver al mapa</button>
+        <button id="btn-back" class="hidden w-full glass text-slate-400 font-bold py-3 rounded-2xl text-sm hover:text-white transition-colors">← Volver al mapa</button>
     </div>
 </div>
 
 <script>
-const bank = {
-    reading:[{p:"El descubrimiento de la penicilina por Alexander Fleming en 1928 marcó el inicio de la era de los antibióticos. Antes de este hallazgo, enfermedades bacterianas simples podían ser mortales. Sin embargo, el uso excesivo ha llevado a la resistencia bacteriana, un desafío crítico para la medicina moderna.",q:"¿Cuál es la idea principal del texto?",o:["Fleming era un científico descuidado.","El impacto histórico y el reto actual de los antibióticos.","La penicilina es la única cura contra bacterias.","Las enfermedades bacterianas ya no existen."],a:1}],
-    writing:[{q:"Elija la mejor forma de combinar: 'El clima era frío. No llevamos abrigos.'",o:["Aunque el clima era frío, no llevamos abrigos.","El clima era frío porque no llevamos abrigos.","No llevamos abrigos si el clima era frío.","Puesto que el clima era frío no llevamos abrigos."],a:0}],
-    vocab:[{q:"En la frase: 'Su discurso fue efímero pero impactante', efímero significa:",o:["Largo","Pasajero","Elegante","Confuso"],a:1}],
-    analysis:[{p:"Caminante, no hay camino, se hace camino al andar. Al andar se hace el camino, y al volver la vista atrás se ve la senda que nunca se ha de volver a pisar. (Antonio Machado)",q:"El tono del poema es principalmente:",o:["Arrepentido","Reflexivo y existencial","Alegre y festivo","Pesimista y oscuro"],a:1}]
+var bank = {
+    reading: { p: "El descubrimiento de la penicilina por Alexander Fleming en 1928 marcó el inicio de la era de los antibióticos. Antes de este hallazgo, enfermedades bacterianas simples podían ser mortales. Sin embargo, el uso excesivo ha llevado a la resistencia bacteriana, un desafío crítico para la medicina moderna.", q: "¿Cuál es la idea principal del texto?", o: ["Fleming era un científico descuidado.", "El impacto histórico y el reto actual de los antibióticos.", "La penicilina es la única cura.", "Las enfermedades bacterianas ya no existen."], a: 1 },
+    writing: { p: null, q: "Elija la mejor forma de combinar: 'El clima era frío. No llevamos abrigos.'", o: ["Aunque el clima era frío, no llevamos abrigos.", "El clima era frío porque no llevamos abrigos.", "No llevamos abrigos si el clima era frío.", "Puesto que el clima era frío, no llevamos abrigos."], a: 0 },
+    vocab: { p: null, q: "En la frase: 'Su discurso fue efímero pero impactante', efímero significa:", o: ["Largo", "Pasajero", "Elegante", "Confuso"], a: 1 },
+    analysis: { p: "Caminante, no hay camino, se hace camino al andar. Al andar se hace el camino, y al volver la vista atrás se ve la senda que nunca se ha de volver a pisar. (Antonio Machado)", q: "El tono del poema es principalmente:", o: ["Arrepentido", "Reflexivo y existencial", "Alegre y festivo", "Pesimista y oscuro"], a: 1 }
 };
 
-const zones=[
-    {id:'reading',name:"Lectura Crítica",icon:"📖",color:"from-indigo-600 to-blue-800",cost:12,reward:45,gold:30},
-    {id:'writing',name:"Redacción",icon:"✏️",color:"from-blue-500 to-cyan-700",cost:10,reward:35,gold:25},
-    {id:'vocab',name:"Vocabulario",icon:"🔤",color:"from-emerald-500 to-teal-700",cost:8,reward:30,gold:20},
-    {id:'analysis',name:"Análisis Literario",icon:"🧠",color:"from-amber-500 to-orange-600",cost:15,reward:55,gold:40}
+var zones = [
+    { id: "reading",  name: "Lectura Crítica",   icon: "📖", grad: "from-indigo-600 to-blue-800",   cost: 12, reward: 45, gold: 30 },
+    { id: "writing",  name: "Redacción",          icon: "✏️", grad: "from-blue-500 to-cyan-700",     cost: 10, reward: 35, gold: 25 },
+    { id: "vocab",    name: "Vocabulario",         icon: "🔤", grad: "from-emerald-500 to-teal-700",  cost: 8,  reward: 30, gold: 20 },
+    { id: "analysis", name: "Análisis Literario",  icon: "🧠", grad: "from-amber-500 to-orange-600", cost: 15, reward: 55, gold: 40 }
 ];
 
-let state={energy:100,gold:0,score:200,completed:new Set()};
-let currentZone=null;
+var state = { energy: 100, gold: 0, score: 200, completed: [] };
+var currentZone = null;
 
-function startGame(){
+function startGame() {
     document.getElementById('screen-start').classList.add('hidden');
     document.getElementById('hud').classList.remove('hidden');
     document.getElementById('screen-map').classList.remove('hidden');
-    renderZones(); updateHUD();
+    renderZones();
+    updateHUD();
 }
 
-function renderZones(){
-    const c=document.getElementById('zones-container');
-    c.innerHTML=zones.map(z=>{
-        const done=state.completed.has(z.id);
-        return `<button onclick="${done?'':''enterBattle('${z.id}')"}" 
-            class="zone-card text-left bg-gradient-to-br ${z.color} rounded-[2rem] p-5 shadow-2xl border border-white/20 ${done?'opacity-50 cursor-default':''}" 
-            ${done?'disabled':''}>
-            <div class="flex justify-between items-start mb-4">
-                <div class="w-12 h-12 glass rounded-xl flex items-center justify-center text-2xl">${done?'✅':z.icon}</div>
-                <div class="text-right">
-                    <p class="text-[9px] font-black text-white/50 uppercase">Recompensa</p>
-                    <p class="text-white font-black text-lg">+${z.reward} PTS</p>
-                </div>
-            </div>
-            <h3 class="text-white font-black text-xl mb-2 tracking-tight">${z.name}</h3>
-            <div class="flex gap-2">
-                <span class="px-2 py-1 bg-white/10 rounded-lg text-[9px] font-black text-rose-100">⚡ ${z.cost}</span>
-                <span class="px-2 py-1 bg-white/10 rounded-lg text-[9px] font-black text-amber-100">🪙 +${z.gold}</span>
-                ${done?'<span class="px-2 py-1 bg-white/20 rounded-lg text-[9px] font-black text-white">✅ Completado</span>':''}
-            </div>
-        </button>`;
-    }).join('');
+function renderZones() {
+    var c = document.getElementById('zones-container');
+    var html = '';
+    for (var i = 0; i < zones.length; i++) {
+        var z = zones[i];
+        var done = state.completed.indexOf(z.id) !== -1;
+        html += '<div class="zone-card bg-gradient-to-br ' + z.grad + ' rounded-[2rem] p-5 border border-white/20 shadow-2xl' + (done ? ' opacity-60' : '') + '" onclick="' + (done ? '' : 'enterBattle(\'' + z.id + '\')') + '">';
+        html += '<div class="flex justify-between items-start mb-4">';
+        html += '<div class="w-12 h-12 glass rounded-xl flex items-center justify-center text-2xl">' + (done ? '✅' : z.icon) + '</div>';
+        html += '<div class="text-right"><p class="text-xs text-white/50">Recompensa</p><p class="text-white font-black text-lg">+' + z.reward + ' PTS</p></div>';
+        html += '</div>';
+        html += '<h3 class="text-white font-black text-xl mb-3">' + z.name + '</h3>';
+        html += '<div class="flex gap-2">';
+        html += '<span class="px-2 py-1 bg-white/10 rounded-lg text-xs font-black text-rose-100">⚡ ' + z.cost + '</span>';
+        html += '<span class="px-2 py-1 bg-white/10 rounded-lg text-xs font-black text-amber-100">🪙 +' + z.gold + '</span>';
+        if (done) html += '<span class="px-2 py-1 bg-white/20 rounded-lg text-xs font-black text-white">✅ Hecho</span>';
+        html += '</div></div>';
+    }
+    c.innerHTML = html;
 
-    if(state.completed.size===zones.length){
-        document.getElementById('demo-cta-map').classList.remove('hidden');
-        document.getElementById('final-pts').textContent=state.score;
+    if (state.completed.length === zones.length) {
+        document.getElementById('finish-cta').classList.remove('hidden');
+        document.getElementById('final-pts').textContent = state.score;
     }
 }
 
-function enterBattle(zoneId){
-    if(state.completed.has(zoneId)) return;
-    currentZone=zones.find(z=>z.id===zoneId);
-    if(!currentZone) return;
-    
+function enterBattle(zoneId) {
+    currentZone = null;
+    for (var i = 0; i < zones.length; i++) {
+        if (zones[i].id === zoneId) { currentZone = zones[i]; break; }
+    }
+    if (!currentZone) return;
+
     document.getElementById('screen-map').classList.add('hidden');
     document.getElementById('screen-battle').classList.remove('hidden');
-    
-    // Header
-    document.getElementById('battle-header').innerHTML=`
-        <div class="w-10 h-10 bg-gradient-to-br ${currentZone.color} rounded-xl flex items-center justify-center text-xl">${currentZone.icon}</div>
-        <div><p class="font-black">${currentZone.name}</p><p class="text-xs text-slate-400">Responde correctamente para ganar ${currentZone.reward} PTS y ${currentZone.gold} 🪙</p></div>`;
-    
-    const q=bank[zoneId][0];
-    
-    // Passage
-    const pb=document.getElementById('passage-box');
-    if(q.p){ pb.classList.remove('hidden'); pb.textContent=q.p; }
-    else pb.classList.add('hidden');
-    
-    // Question
-    document.getElementById('question-text').textContent=q.q;
     document.getElementById('btn-back').classList.add('hidden');
-    
-    const opts=document.getElementById('options-container');
-    opts.innerHTML=q.o.map((opt,i)=>`
-        <button onclick="selectAnswer(${i})" id="opt-${i}"
-            class="option-btn w-full text-left px-4 py-3 rounded-2xl bg-white/5 text-sm font-medium text-slate-200">
-            <span class="font-black text-slate-500 mr-2">${String.fromCharCode(65+i)}.</span>${opt}
-        </button>`).join('');
+
+    document.getElementById('battle-header').innerHTML =
+        '<div class="w-10 h-10 bg-gradient-to-br ' + currentZone.grad + ' rounded-xl flex items-center justify-center text-xl">' + currentZone.icon + '</div>' +
+        '<div><p class="font-black">' + currentZone.name + '</p><p class="text-xs text-slate-400">Gana +' + currentZone.reward + ' PTS y +' + currentZone.gold + ' 🪙 respondiendo correctamente</p></div>';
+
+    var q = bank[zoneId];
+    var pb = document.getElementById('passage-box');
+    if (q.p) { pb.classList.remove('hidden'); pb.textContent = q.p; }
+    else { pb.classList.add('hidden'); }
+
+    document.getElementById('question-text').textContent = q.q;
+
+    var optsHtml = '';
+    for (var j = 0; j < q.o.length; j++) {
+        optsHtml += '<button class="opt-btn" id="opt-' + j + '" onclick="selectAnswer(' + j + ')">';
+        optsHtml += '<span style="font-weight:900;color:#64748b;margin-right:8px">' + String.fromCharCode(65 + j) + '.</span>' + q.o[j];
+        optsHtml += '</button>';
+    }
+    document.getElementById('options-container').innerHTML = optsHtml;
 }
 
-function selectAnswer(selected){
-    const zoneId=currentZone.id;
-    const q=bank[zoneId][0];
-    const correct=selected===q.a;
-    
-    document.querySelectorAll('[id^="opt-"]').forEach((btn,i)=>{
-        btn.disabled=true;
-        if(i===q.a) btn.classList.add('correct');
-        else if(i===selected) btn.classList.add('wrong');
-    });
-    
-    if(correct){
-        state.score+=currentZone.reward;
-        state.gold+=currentZone.gold;
-        state.energy=Math.max(0,state.energy-currentZone.cost);
-    } else {
-        state.energy=Math.max(0,state.energy-currentZone.cost-5);
+function selectAnswer(selected) {
+    var q = bank[currentZone.id];
+    var btns = document.querySelectorAll('.opt-btn');
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].disabled = true;
+        if (i === q.a) btns[i].classList.add('correct');
+        else if (i === selected) btns[i].classList.add('wrong');
     }
-    
-    state.completed.add(zoneId);
+
+    if (selected === q.a) {
+        state.score += currentZone.reward;
+        state.gold += currentZone.gold;
+    }
+    state.energy = Math.max(0, state.energy - currentZone.cost);
+    state.completed.push(currentZone.id);
     updateHUD();
-    
-    setTimeout(()=>{
+
+    setTimeout(function() {
         document.getElementById('btn-back').classList.remove('hidden');
     }, 900);
 }
 
-function goToMap(){
+function goToMap() {
     document.getElementById('screen-battle').classList.add('hidden');
     document.getElementById('screen-map').classList.remove('hidden');
     document.getElementById('passage-box').classList.add('hidden');
-    renderZones(); updateHUD();
+    renderZones();
+    updateHUD();
 }
 
-function updateHUD(){
-    document.getElementById('val-energy').textContent=state.energy;
-    document.getElementById('val-gold').textContent=state.gold;
-    document.getElementById('val-score').textContent=state.score;
+function updateHUD() {
+    document.getElementById('val-energy').textContent = state.energy;
+    document.getElementById('val-gold').textContent = state.gold;
+    document.getElementById('val-score').textContent = state.score;
 }
 
-// Fix enterBattle button onclick
-document.addEventListener('click',e=>{
-    const btn=e.target.closest('button[data-zone]');
-    if(btn) enterBattle(btn.dataset.zone);
-});
-</script>
-
-<!-- Fix zone buttons - render after script -->
-<script>
-// Re-render with correct onclick
-const origRender=renderZones;
-renderZones=function(){
-    const c=document.getElementById('zones-container');
-    if(!c) return;
-    c.innerHTML=zones.map(z=>{
-        const done=state.completed.has(z.id);
-        return `<button data-zone="${z.id}" onclick="if(!${done}) enterBattle('${z.id}')" 
-            class="zone-card text-left bg-gradient-to-br ${z.color} rounded-[2rem] p-5 shadow-2xl border border-white/20 ${done?'opacity-60':''}" >
-            <div class="flex justify-between items-start mb-4">
-                <div class="w-12 h-12 glass rounded-xl flex items-center justify-center text-2xl">${done?'✅':z.icon}</div>
-                <div class="text-right">
-                    <p class="text-[9px] font-black text-white/50 uppercase">Recompensa</p>
-                    <p class="text-white font-black text-lg">+${z.reward} PTS</p>
-                </div>
-            </div>
-            <h3 class="text-white font-black text-xl mb-2 tracking-tight">${z.name}</h3>
-            <div class="flex gap-2">
-                <span class="px-2 py-1 bg-white/10 rounded-lg text-[9px] font-black text-rose-100">⚡ ${z.cost}</span>
-                <span class="px-2 py-1 bg-white/10 rounded-lg text-[9px] font-black text-amber-100">🪙 +${z.gold}</span>
-                ${done?'<span class="px-2 py-1 bg-white/20 rounded-lg text-[9px] font-black text-white">✅ Completado</span>':''}
-            </div>
-        </button>`;
-    }).join('');
-    if(state.completed.size===zones.length){
-        document.getElementById('demo-cta-map').classList.remove('hidden');
-        document.getElementById('final-pts').textContent=state.score;
-    }
-};
+document.getElementById('btn-start').onclick = startGame;
+document.getElementById('btn-back').onclick = goToMap;
 </script>
 </body>
 </html>
