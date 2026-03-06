@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survive: Aritmética PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Lora:italic&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow: hidden; }
+        .font-serif { font-family: 'Lora', serif; }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .math-fraction { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 4px; }
+        .math-numerator { border-bottom: 1px solid currentColor; padding: 0 4px; }
+        .math-denominator { padding: 0 4px; }
+        .math-sqrt { margin-right: 2px; }
+        .math-sqrt-content { border-top: 1px solid currentColor; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-2 sm:p-4">
+
+    <div id="game-container" class="max-w-lg w-full bg-slate-900 rounded-[2rem] sm:rounded-[3rem] shadow-2xl overflow-hidden border border-white/10 relative">
+        <!-- El contenido se inyecta vía JavaScript -->
+    </div>
+
+    <script>
+        // --- MOTOR DE RENDERIZADO MATEMÁTICO ---
+        function renderMath(text) {
+            if (!text) return "";
+            return text.replace(/\$([^$]+)\$/g, (match, formula) => {
+                let rendered = formula
+                    .replace(/\^2/g, '<sup>2</sup>')
+                    .replace(/\^3/g, '<sup>3</sup>')
+                    .replace(/\^x/g, '<sup>x</sup>')
+                    .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '<span class="math-fraction"><span class="math-numerator">$1</span><span class="math-denominator">$2</span></span>')
+                    .replace(/\\sqrt\{([^}]+)\}/g, '<span class="math-sqrt">√</span><span class="math-sqrt-content">$1</span>')
+                    .replace(/\\cdot/g, '·')
+                    .replace(/\\times/g, '×')
+                    .replace(/\\le/g, '≤')
+                    .replace(/\\ge/g, '≥')
+                    .replace(/\\neq/g, '≠');
+                return `<span class="font-serif italic mx-0.5 whitespace-nowrap">${rendered}</span>`;
+            });
+        }
+
+        // --- BANCO DE 50 PREGUNTAS ---
+        const questionBank = [
+            { id: 1, question: "¿Cuál es el mínimo común múltiplo (mcm) de $4$ y $6$?", options: ["2", "12", "24", "10"], correct: 1, rationale: "El mcm es el menor número múltiplo de ambos. Los múltiplos de 4 son {4, 8, 12...} y los de 6 son {6, 12...}. El común es 12." },
+            { id: 2, question: "¿Cuál es el máximo común divisor (MCD) de $12$ y $18$?", options: ["2", "3", "6", "36"], correct: 2, rationale: "El MCD es el mayor número que divide a ambos. Divisores de 12: {1,2,3,4,6,12}. Divisores de 18: {1,2,3,6,9,18}. El mayor es 6." },
+            { id: 3, question: "¿Cuál es el resultado de $|-8| + |3| - |-5|$?", options: ["6", "0", "16", "10"], correct: 0, rationale: "Por definición de valor absoluto: $8 + 3 - 5 = 6$." },
+            { id: 4, question: "¿Cuál de los siguientes números es primo?", options: ["9", "15", "21", "23"], correct: 3, rationale: "Un número primo solo tiene dos divisores (1 y sí mismo). 23 es el único de la lista." },
+            { id: 5, question: "¿Cuál es la factorización prima del número $60$?", options: ["$2 \\cdot 3 \\cdot 5$", "$2^2 \\cdot 3 \\cdot 5$", "$4 \\cdot 3 \\cdot 5$", "$2 \\cdot 3^2 \\cdot 5$"], correct: 1, rationale: "$60 = 4 \\times 15 = 2^2 \\times 3 \\times 5$." },
+            { id: 6, question: "Si la razón entre dos números es $3:5$ y el menor es $15$, ¿cuál es el mayor?", options: ["20", "25", "30", "45"], correct: 1, rationale: "Si $3k = 15$, entonces $k = 5$. El mayor es $5k = 5(5) = 25$." },
+            { id: 7, question: "¿Cuál es el $20\\%$ de $150$?", options: ["20", "30", "45", "15"], correct: 1, rationale: "$150 \\times 0.20 = 30$." },
+            { id: 8, question: "Un artículo cuesta $\\$80$ y tiene un descuento del $25\\%$. ¿Cuánto se paga?", options: ["\\$60", "\\$20", "\\$75", "\\$55"], correct: 0, rationale: "El $25\\%$ de 80 es 20. El precio final es $80 - 20 = 60$." },
+            { id: 9, question: "Si $3$ camisas cuestan $\\$45$, ¿cuánto cuestan $7$ camisas?", options: ["\\$90", "\\$105", "\\$115", "\\$70"], correct: 1, rationale: "Costo unitario: $45/3 = 15$. Por 7: $15 \\times 7 = 105$." },
+            { id: 10, question: "Si el $40\\%$ de un número es $24$, ¿cuál es el número?", options: ["60", "40", "96", "100"], correct: 0, rationale: "$0.40x = 24$ → $x = 24 / 0.4 = 60$." },
+            { id: 11, question: "Calcula el resultado de $\\frac{3}{4} + \\frac{1}{2}$.", options: ["$\\frac{4}{6}$", "$\\frac{5}{4}$", "$1$", "$\\frac{3}{8}$"], correct: 1, rationale: "Común denominador 4: $\\frac{3}{4} + \\frac{2}{4} = \\frac{5}{4}$." },
+            { id: 12, question: "¿Cuál es el resultado de $\\frac{2}{3} \\times \\frac{9}{4}$?", options: ["$\\frac{18}{12}$", "$\\frac{3}{2}$", "$\\frac{11}{7}$", "$\\frac{6}{12}$"], correct: 1, rationale: "$(2\\cdot9)/(3\\cdot4) = 18/12 = 3/2$." },
+            { id: 13, question: "Convierte $0.75$ a su fracción más simple.", options: ["$\\frac{75}{10}$", "$\\frac{3}{4}$", "$\\frac{1}{2}$", "$\\frac{7}{5}$"], correct: 1, rationale: "$0.75 = 75/100 = 3/4$." },
+            { id: 14, question: "¿Qué fracción es mayor?", options: ["$\\frac{1}{2}$", "$\\frac{2}{5}$", "$\\frac{3}{4}$", "$\\frac{5}{8}$"], correct: 2, rationale: "Comparando decimales: 0.5, 0.4, 0.75, 0.625. La mayor es 0.75 ($3/4$)." },
+            { id: 15, question: "Si divides $\\frac{1}{2}$ entre $4$, el resultado es:", options: ["$2$", "$\\frac{1}{8}$", "$8$", "$\\frac{1}{4}$"], correct: 1, rationale: "Dividir por 4 es multiplicar por 1/4: $\\frac{1}{2} \\cdot \\frac{1}{4} = \\frac{1}{8}$." },
+            { id: 16, question: "¿Cuál es el valor de $\\sqrt{144} - \\sqrt{81}$?", options: ["63", "3", "9", "12"], correct: 1, rationale: "$12 - 9 = 3$." },
+            { id: 17, question: "Simplifica $2^3 + 3^2$.", options: ["12", "17", "25", "13"], correct: 1, rationale: "$8 + 9 = 17$." },
+            { id: 18, question: "¿Qué número falta en la serie: $2, 5, 10, 17, \\dots$?", options: ["24", "26", "25", "30"], correct: 1, rationale: "Patrón: $+3, +5, +7...$ El siguiente es $+9$. $17 + 9 = 26$." },
+            { id: 19, question: "Expresa $5000$ en notación científica.", options: ["$5 \\times 10^2$", "$5 \\times 10^3$", "$50 \\times 10^2$", "$0.5 \\times 10^4$"], correct: 1, rationale: "Punto decimal se mueve 3 lugares: $5 \\times 10^3$." },
+            { id: 20, question: "Valor de $\\sqrt{2^2 \\cdot 3^2}$.", options: ["5", "6", "12", "36"], correct: 1, rationale: "$\\sqrt{4 \\cdot 9} = \\sqrt{36} = 6$." },
+            { id: 21, question: "Si un auto recorre $120$ km en $2$ h, ¿cuántos km recorre en $5$ h?", options: ["240", "300", "350", "200"], correct: 1, rationale: "Velocidad = 60 km/h. En 5 h: $60 \\times 5 = 300$." },
+            { id: 22, question: "Razón de $12$ niños a $18$ niñas simplificada:", options: ["$2:3$", "$3:2$", "$12:18$", "$1:2$"], correct: 0, rationale: "$12/18$ dividido entre 6 es $2/3$." },
+            { id: 23, question: "Si $x$ es par, ¿cuál debe ser impar?", options: ["$x+2$", "$x^2$", "$x-1$", "$2x$"], correct: 2, rationale: "Cualquier par menos 1 siempre da un impar." },
+            { id: 24, question: "¿Cuántos enteros hay entre $-2.5$ y $3.1$?", options: ["5", "6", "4", "7"], correct: 1, rationale: "Enteros: {-2, -1, 0, 1, 2, 3}. Total 6." },
+            { id: 25, question: "Suma de los primeros cuatro números primos:", options: ["10", "16", "17", "26"], correct: 2, rationale: "$2 + 3 + 5 + 7 = 17$." },
+            { id: 26, question: "Resultado de $5 + 3 \\times 2$.", options: ["16", "11", "21", "10"], correct: 1, rationale: "Jerarquía: primero la multiplicación ($3 \\times 2 = 6$), luego la suma ($5 + 6 = 11$)." },
+            { id: 27, question: "¿Cuál es el $150\\%$ de $40$?", options: ["20", "60", "90", "40"], correct: 1, rationale: "$40 \\times 1.5 = 60$." },
+            { id: 28, question: "Si comes $3$ de $8$ partes de pizza, ¿qué porcentaje queda?", options: ["$37.5\\%$", "$62.5\\%$", "$50\\%$", "$70\\%$"], correct: 1, rationale: "Quedan 5/8. $5 \\div 8 = 0.625 = 62.5\\%$." },
+            { id: 29, question: "El promedio de $10, 20$ y $30$ es:", options: ["15", "20", "25", "60"], correct: 1, rationale: "$(10+20+30)/3 = 60/3 = 20$." },
+            { id: 30, question: "¿Qué número es divisible por $3, 4$ y $5$?", options: ["30", "40", "60", "20"], correct: 2, rationale: "Debe ser múltiplo de $3 \\times 4 \\times 5 = 60$." },
+            { id: 31, question: "Si $a=4, b=9$, halla $\\sqrt{a \\cdot b}$.", options: ["13", "6", "36", "18"], correct: 1, rationale: "$\\sqrt{36} = 6$." },
+            { id: 32, question: "Mapa escala $1:100,000$. ¿$2$ cm en el mapa son cuántos km?", options: ["2 km", "20 km", "200 km", "0.2 km"], correct: 0, rationale: "$200,000$ cm = $2$ km." },
+            { id: 33, question: "Resta: $5.25 - 2.5$.", options: ["2.75", "3.25", "2.25", "3.75"], correct: 0, rationale: "Alineando decimales: $5.25 - 2.50 = 2.75$." },
+            { id: 34, question: "Valor de $2^5$:", options: ["10", "32", "25", "16"], correct: 1, rationale: "$2 \\cdot 2 \\cdot 2 \\cdot 2 \\cdot 2 = 32$." },
+            { id: 35, question: "Simplifica $\\frac{120}{150}$ al máximo.", options: ["$\\frac{12}{15}$", "$\\frac{4}{5}$", "$\\frac{3}{4}$", "$\\frac{6}{5}$"], correct: 1, rationale: "Dividiendo entre 30: $4/5$." },
+            { id: 36, question: "Tren a $80$ km/h. ¿Cuántos metros por minuto?", options: ["1333 m", "800 m", "1200 m", "1000 m"], correct: 0, rationale: "$80,000$ m / $60$ min = $1333.3$ m." },
+            { id: 37, question: "Triple del sucesor de $7$:", options: ["21", "24", "22", "18"], correct: 1, rationale: "Sucesor de 7 es 8. $3 \\times 8 = 24$." },
+            { id: 38, question: "Si $1/x = 0.25$, halla $x$.", options: ["4", "0.5", "2", "25"], correct: 0, rationale: "$x = 1/0.25 = 4$." },
+            { id: 39, question: "Suma: $1/3 + 1/6$.", options: ["$2/9$", "$1/2$", "$1/9$", "$1/4$"], correct: 1, rationale: "$2/6 + 1/6 = 3/6 = 1/2$." },
+            { id: 40, question: "Valor de $10^3 - 10^2$:", options: ["10", "90", "900", "0"], correct: 2, rationale: "$1000 - 100 = 900$." },
+            { id: 41, question: "Segundos en $1.5$ horas:", options: ["5400", "3600", "90", "4500"], correct: 0, rationale: "$1.5 \\times 3600 = 5400$." },
+            { id: 42, question: "Si $3/5$ de $30$ son niñas, ¿cuántos niños hay?", options: ["18", "12", "15", "10"], correct: 1, rationale: "Niñas: 18. Niños: $30 - 18 = 12$." },
+            { id: 43, question: "Calcula $4^2 \\cdot 2^{-2}$.", options: ["64", "4", "1", "16"], correct: 1, rationale: "$16 \\cdot 1/4 = 4$." },
+            { id: 44, question: "Resultado de $0.1 \\times 0.1$.", options: ["0.2", "0.01", "0.1", "1"], correct: 1, rationale: "Un décimo de un décimo es un centésimo." },
+            { id: 45, question: "Bolsa con $5$ bolas rojas y $15$ azules. ¿Fracción rojas?", options: ["$\\frac{1}{3}$", "$\\frac{1}{4}$", "$\\frac{1}{5}$", "$\\frac{5}{15}$"], correct: 1, rationale: "Total 20. Rojas: 5/20 = 1/4." },
+            { id: 46, question: "MCM de $10, 15$ y $20$.", options: ["30", "60", "120", "45"], correct: 1, rationale: "60 es el primero que aparece en las tres tablas." },
+            { id: 47, question: "Suma de los divisores de $6$ (incluyendo 1 y 6):", options: ["12", "6", "10", "11"], correct: 0, rationale: "Divisores: {1,2,3,6}. Suma: 12." },
+            { id: 48, question: "Subes $10\\%$ a $\\$100$ y luego bajas $10\\%$. Precio final:", options: ["\\$100", "\\$99", "\\$101", "\\$90"], correct: 1, rationale: "$100 \\to 110$. Luego $110 - 11 = 99$." },
+            { id: 49, question: "Halla el $25\\%$ del $25\\%$ de $160$.", options: ["40", "20", "10", "5"], correct: 2, rationale: "1/4 de 160 es 40. 1/4 de 40 es 10." },
+            { id: 50, question: "Divisores comunes de $12$ y $20$ (sin el 1):", options: ["{2}", "{2, 4}", "{4}", "{2, 3, 4}"], correct: 1, rationale: "Ambos son divisibles por 2 y 4." }
+        ];
+
+        // --- ESTADO DEL JUEGO ---
+        let gameState = 'START';
+        let score = 0;
+        let lives = 3;
+        let timeLeft = 60;
+        let currentQuestion = null;
+        let usedIndices = [];
+        let timerInterval = null;
+        let isFeedbackVisible = false;
+
+        const container = document.getElementById('game-container');
+
+        // --- LÓGICA PRINCIPAL ---
+        function startChallenge() {
+            gameState = 'PLAYING';
+            score = 0;
+            lives = 3;
+            usedIndices = [];
+            pickNewQuestion();
+        }
+
+        function pickNewQuestion() {
+            if (score >= 10) {
+                showEndScreen('WON');
+                return;
+            }
+
+            const available = questionBank.filter((_, i) => !usedIndices.includes(i));
+            const pool = available.length > 0 ? available : questionBank;
+            const randomIndex = Math.floor(Math.random() * pool.length);
+            const originalIndex = questionBank.indexOf(pool[randomIndex]);
+
+            currentQuestion = pool[randomIndex];
+            usedIndices.push(originalIndex);
+            
+            isFeedbackVisible = false;
+            timeLeft = 60;
+            renderGame();
+            startTimer();
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (!isFeedbackVisible) {
+                    timeLeft--;
+                    updateHUD();
+                    if (timeLeft <= 0) {
+                        handlePenalty();
+                    }
+                }
+            }, 1000);
+        }
+
+        function handlePenalty() {
+            lives--;
+            isFeedbackVisible = true;
+            if (lives <= 0) {
+                setTimeout(() => showEndScreen('LOST'), 1500);
+            }
+            renderGame();
+        }
+
+        function handleOptionClick(idx) {
+            if (isFeedbackVisible) return;
+            isFeedbackVisible = true;
+            const correct = idx === currentQuestion.correct;
+
+            if (correct) {
+                score++;
+            } else {
+                lives--;
+                if (lives <= 0) {
+                    setTimeout(() => showEndScreen('LOST'), 1500);
+                }
+            }
+            renderGame(idx);
+        }
+
+        function showEndScreen(state) {
+            gameState = state;
+            clearInterval(timerInterval);
+            renderEndScreen();
+        }
+
+        // --- RENDERIZADO UI ---
+        function updateHUD() {
+            const timerEl = document.getElementById('timer-display');
+            if (timerEl) {
+                timerEl.innerText = `${timeLeft}s`;
+                if (timeLeft < 10) timerEl.classList.add('text-rose-500', 'animate-pulse');
+            }
+            const bar = document.getElementById('timer-bar');
+            if (bar) bar.style.width = `${(timeLeft / 60) * 100}%`;
+        }
+
+        function renderGame(selectedIdx = null) {
+            container.innerHTML = `
+                <div class="flex flex-col h-full fade-in">
+                    <!-- HUD -->
+                    <div class="p-4 sm:p-6 border-b border-white/5 flex justify-between items-center bg-slate-900/50 backdrop-blur-md">
+                        <div class="flex items-center gap-3">
+                            <div class="flex gap-1">
+                                ${Array(3).fill(0).map((_, i) => `
+                                    <svg class="w-5 h-5 ${i < lives ? 'text-rose-500' : 'text-slate-700'}" fill="${i < lives ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                    </svg>
+                                `).join('')}
+                            </div>
+                            <div class="h-4 w-px bg-white/10 hidden sm:block"></div>
+                            <div class="flex items-center gap-2 text-white font-black text-sm">
+                                <span class="text-amber-500">🏆</span> ${score}/10
+                            </div>
+                        </div>
+                        <div id="timer-display" class="font-mono font-black text-xl text-emerald-400">
+                            ${timeLeft}s
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="h-1.5 w-full bg-slate-800">
+                        <div id="timer-bar" class="h-full bg-emerald-500 transition-all duration-1000 ease-linear" style="width: ${(timeLeft / 60) * 100}%"></div>
+                    </div>
+
+                    <!-- Question Content -->
+                    <div class="p-6 sm:p-8 space-y-6 overflow-y-auto max-h-[72vh] custom-scroll">
+                        <h2 class="text-lg sm:text-xl font-bold leading-relaxed text-white">
+                            ${renderMath(currentQuestion.question)}
+                        </h2>
+
+                        <div class="grid gap-2.5">
+                            ${currentQuestion.options.map((opt, idx) => {
+                                let borderClass = "border-white/5 bg-slate-800/40 hover:border-emerald-500/50 hover:bg-slate-800";
+                                let iconClass = "bg-slate-700 text-slate-400 group-hover:bg-emerald-500 group-hover:text-slate-950";
+                                
+                                if (isFeedbackVisible) {
+                                    if (idx === currentQuestion.correct) {
+                                        borderClass = "border-emerald-500 bg-emerald-500/10";
+                                        iconClass = "bg-emerald-500 text-white";
+                                    } else if (selectedIdx === idx) {
+                                        borderClass = "border-rose-500 bg-rose-500/10";
+                                        iconClass = "bg-rose-500 text-white";
+                                    } else {
+                                        borderClass = "border-white/5 opacity-40";
+                                        iconClass = "bg-slate-700 text-slate-500";
+                                    }
+                                }
+
+                                return `
+                                    <button 
+                                        onclick="handleOptionClick(${idx})"
+                                        ${isFeedbackVisible ? 'disabled' : ''}
+                                        class="w-full text-left p-4 rounded-2xl border-2 transition-all flex items-center gap-4 group ${borderClass}"
+                                    >
+                                        <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs transition-all ${iconClass}">
+                                            ${String.fromCharCode(65 + idx)}
+                                        </div>
+                                        <span class="text-sm sm:text-base font-medium">${renderMath(opt)}</span>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+
+                        ${isFeedbackVisible ? `
+                            <div class="p-4 bg-slate-800 rounded-2xl border-l-4 border-amber-500 fade-in flex gap-4 shadow-xl">
+                                <span class="text-amber-500">ℹ️</span>
+                                <div class="text-[11px] sm:text-xs text-slate-400 leading-relaxed">
+                                    <p class="font-black text-white uppercase mb-1 tracking-widest text-[9px]">Análisis Numérico</p>
+                                    ${renderMath(currentQuestion.rationale)}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="p-4 sm:p-6 bg-slate-900/80 border-t border-white/5 flex justify-end">
+                        <button 
+                            onclick="pickNewQuestion()"
+                            ${!isFeedbackVisible ? 'disabled' : ''}
+                            class="px-8 py-3.5 rounded-xl font-black uppercase tracking-widest text-[10px] flex items-center gap-2 transition-all 
+                            ${isFeedbackVisible ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400 active:scale-95 shadow-lg shadow-emerald-500/20' : 'bg-slate-800 text-slate-500 cursor-not-allowed'}"
+                        >
+                            Siguiente →
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderEndScreen() {
+            const isWon = gameState === 'WON';
+            container.innerHTML = `
+                <div class="p-8 sm:p-12 text-center space-y-8 fade-in">
+                    <div class="space-y-4">
+                        <div class="w-24 h-24 rounded-full flex items-center justify-center mx-auto shadow-2xl border-4 border-slate-900 ${isWon ? 'bg-emerald-500' : 'bg-rose-500'}">
+                            <span class="text-5xl">${isWon ? '⭐' : '💀'}</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-black uppercase tracking-tighter text-white">
+                            ${isWon ? '¡Genio Numérico!' : 'Entrenamiento Fallido'}
+                        </h2>
+                    </div>
+
+                    <div class="bg-slate-800/50 rounded-3xl p-8 border border-white/5">
+                        <p class="text-slate-500 font-black uppercase text-[10px] tracking-widest mb-3">Tu Efectividad</p>
+                        <div class="text-7xl font-black text-white tracking-tighter">${Math.round((score / 10) * 100)}%</div>
+                        <div class="mt-6 flex justify-center gap-10">
+                            <div class="text-center">
+                                <p class="text-slate-500 text-[9px] font-black uppercase mb-1">Aciertos</p>
+                                <p class="text-xl font-bold text-emerald-400">${score}</p>
+                            </div>
+                            <div class="text-center border-l border-white/10 pl-10">
+                                <p class="text-slate-500 text-[9px] font-black uppercase mb-1">Vidas</p>
+                                <p class="text-xl font-bold text-rose-500">${lives}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="startChallenge()" class="w-full bg-white text-slate-950 font-black py-5 rounded-2xl shadow-xl hover:bg-emerald-400 transition-all flex items-center justify-center gap-3 uppercase tracking-widest text-xs">
+                        🔄 Reintentar Reto
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderStartScreen() {
+            container.innerHTML = `
+                <div class="p-8 sm:p-12 text-center space-y-8 fade-in">
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 bg-emerald-500 text-slate-950 rounded-3xl flex items-center justify-center mx-auto shadow-[0_0_50px_rgba(16,185,129,0.2)] rotate-3">
+                        <span class="text-5xl">⚡</span>
+                    </div>
+                    <div class="space-y-3">
+                        <h1 class="text-3xl sm:text-4xl font-black uppercase tracking-tighter text-white">Survive: Aritmética</h1>
+                        <p class="text-emerald-400 font-bold tracking-[0.2em] text-[10px] uppercase">Nivel: PAA Razonamiento</p>
+                    </div>
+                    <div class="bg-slate-800/40 p-6 rounded-2xl text-xs sm:text-sm text-slate-400 text-left space-y-4 border border-white/5">
+                        <div class="flex items-center gap-3 text-white"><span>✅</span> <span>Banco de <b>50 preguntas únicas</b></span></div>
+                        <div class="flex items-center gap-3"><span>❤️</span> <span>Vidas: <b>3 intentos</b> únicamente.</span></div>
+                        <div class="flex items-center gap-3"><span>⏱️</span> <span>Tiempo: <b>60s por ejercicio</b></span></div>
+                    </div>
+                    <button 
+                        onclick="startChallenge()"
+                        class="w-full bg-white text-slate-950 font-black py-5 rounded-2xl hover:bg-emerald-400 transition-all uppercase tracking-widest text-xs active:scale-95 shadow-xl"
+                    >
+                        Comenzar Reto
+                    </button>
+                </div>
+            `;
+        }
+
+        // Inicialización
+        renderStartScreen();
+    </script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador PAA Redacción N°7 - 30 Minutos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow: hidden; }
+        .sticky-header { position: sticky; top: 0; z-index: 50; }
+        .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
+        .ans-wrong   { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .progress-bar { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .glass-card { background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.2); }
+        .modal-overlay { background: rgba(15,23,42,0.7); backdrop-filter: blur(4px); }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col">
+
+<div id="start-screen" class="flex-grow flex items-center justify-center p-4">
+    <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
+        <div class="w-16 h-16 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg -rotate-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+        </div>
+        <h1 class="text-2xl font-extrabold text-slate-900 mb-2 uppercase tracking-tight">Redacción PAA N°7</h1>
+        <p class="text-slate-500 mb-4 font-medium text-sm">Prueba de Lengua Española (25 Reactivos)</p>
+        <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 text-left rounded-r-xl">
+            <p class="text-xs text-amber-900 leading-relaxed font-semibold">Tienes <span class="underline">30 minutos</span> para completar la prueba.</p>
+            <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold italic">El botón de lectura aparecerá dentro de cada pregunta.</p>
+        </div>
+        <button onclick="startExam()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">COMENZAR SIMULACRO</button>
+    </div>
+</div>
+
+<div id="exam-screen" class="hidden h-full flex flex-col">
+    <div class="sticky-header bg-white border-b border-slate-200 p-3">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex gap-4">
+                <div class="text-center">
+                    <p class="text-[9px] font-black text-slate-400 uppercase">Tiempo</p>
+                    <p id="timer" class="text-lg font-mono font-black text-emerald-600 leading-none">30:00</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-[9px] font-black text-emerald-500 uppercase">Bien</p>
+                    <p id="correct-counter" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                </div>
+            </div>
+            <div class="flex-1 max-w-[120px] sm:max-w-xs ml-4 text-right">
+                <p id="progress-text" class="text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-tighter">1 de 25</p>
+                <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="progress-bar h-full bg-emerald-500 w-0"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <main class="flex-grow flex items-center justify-center p-4 overflow-hidden">
+        <div id="question-box" class="max-w-xl w-full"></div>
+    </main>
+</div>
+
+<div id="reading-modal" class="hidden fixed inset-0 z-[100] modal-overlay flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-2xl max-h-[85vh] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden border border-slate-200">
+        <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+            <div>
+                <h3 id="reading-title" class="text-lg font-black text-slate-900 uppercase tracking-tight leading-tight">Segmento</h3>
+                <p id="reading-subtitle" class="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">Base para responder</p>
+            </div>
+            <button onclick="toggleReading()" class="w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div id="reading-content" class="p-8 md:p-10 overflow-y-auto custom-scroll text-slate-700 leading-relaxed text-sm md:text-base italic"></div>
+        <div class="p-4 bg-slate-50 text-center border-t border-slate-100">
+            <button onclick="toggleReading()" class="bg-slate-900 text-white font-black px-8 py-2 rounded-xl text-xs uppercase tracking-widest shadow-lg">Cerrar Lectura</button>
+        </div>
+    </div>
+</div>
+
+<div id="result-screen" class="hidden h-full flex items-center justify-center p-4 overflow-hidden">
+    <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-white fade-in flex flex-col max-h-[95vh]">
+        <div class="bg-slate-900 p-6 md:p-8 text-center text-white flex-shrink-0">
+            <p class="text-emerald-400 font-bold uppercase tracking-[0.3em] text-[9px] mb-2">Puntaje Final Redacción</p>
+            <div class="flex items-center justify-center gap-2">
+                <h2 id="final-scale-score" class="text-6xl font-black tracking-tighter leading-none">0</h2>
+                <p class="text-slate-500 font-bold text-lg">/ 800</p>
+            </div>
+        </div>
+        <div class="p-6 md:p-8 flex-grow overflow-y-auto custom-scroll">
+            <div class="grid grid-cols-3 gap-3 mb-6 text-center">
+                <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                    <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Aciertos</p>
+                    <p class="text-xl font-black text-slate-800"><span id="total-correct">0</span><span class="text-slate-300 text-sm">/25</span></p>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                    <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Efectividad</p>
+                    <p id="total-percent" class="text-xl font-black text-emerald-600">0%</p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-2xl text-white flex flex-col justify-center">
+                    <p class="text-[7px] font-black text-emerald-400 uppercase">Estatus</p>
+                    <p class="text-xs font-bold leading-tight">Nivel Final</p>
+                </div>
+            </div>
+            <div id="area-breakdown" class="grid grid-cols-2 gap-3 mb-6"></div>
+            <div class="p-5 bg-emerald-600 rounded-3xl text-white shadow-lg">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                    <div>
+                        <h4 class="text-lg font-black leading-none mb-1 uppercase tracking-tight">¡Registra tu Test!</h4>
+                        <p class="text-emerald-100 text-[10px]">Anota tus <span id="label-score-final" class="font-black text-white underline text-xs">0</span> puntos para el promedio global.</p>
+                    </div>
+                    <button onclick="location.reload()" class="bg-white text-emerald-600 font-black px-6 py-2 rounded-xl hover:bg-emerald-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0 shadow-md">Reiniciar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const texts = {
+    segment1: {
+        title: "SEGMENTO I (Ejercicios 1-9)",
+        content: `(1) La migración de las aves es uno de los fenómenos naturales más asombrosos y precisos que existen en la Tierra. (2) Cada año, millones de especies recorren miles de kilómetros guiadas por campos magnéticos, posiciones estelares y señales del viento. (3) El albatros, por ejemplo, puede volar sin aterrizar durante semanas enteras cruzando océanos completos sin descanso aparente. (4) En el mercado de animales exóticos se venden loros y periquitos australianos a precios muy elevados. (5) Este viaje monumental no es un lujo, sino una estrategia de supervivencia vinculada a la búsqueda de alimento y condiciones climáticas óptimas. (6) Los científicos han descubierto que algunas aves llevan en su cerebro diminutos cristales de magnetita que actúan como una brújula biológica natural. (7) A pesar de las barreras humanas como cables de alta tensión, edificios de vidrio y contaminación lumínica, la mayoría completa su ruta migrante. (8) Cada migración exitosa es una victoria silenciosa de la biología sobre la adversidad del mundo transformado por el hombre. (9) Mientras el cielo nocturno aún conserve estrellas visibles, las aves seguirán encontrando su camino a casa.`
+    },
+    segment2: {
+        title: "SEGMENTO II (Ejercicios 10-17)",
+        content: `(1) El profesor Aurelio cargaba siempre el mismo maletín de cuero marrón desde hacía más de veinte años. (2) Sus alumnos juraban que el maletín estaba embrujado porque nunca se le veía vaciarlo ni llenarlo, y aun así siempre sacaba exactamente lo que necesitaba. (3) Una mañana de lunes, el maletín amaneció sobre el escritorio con un candado que nadie le había visto antes. (4) El calendario de la pared del salón mostraba el mes de octubre con una fotografía de hojas otoñales. (5) La clase entera contuvo el aliento mientras el profesor lo observaba fijamente, como si leyera un mensaje en el metal. (6) Sin pronunciar una sola palabra, Aurelio giró tres veces el dial del candado y lo abrió con un clic que resonó en el silencio absoluto del aula. (7) Dentro había únicamente una carta amarillenta con letra apretada y un pequeño dibujo de un niño corriendo bajo la lluvia. (8) El profesor la leyó en silencio, la dobló con cuidado quirúrgico y la guardó en el bolsillo de su pecho, sobre el corazón. (9) Ese día no dio clase. Simplemente los miró a todos con ojos húmedos y sonrió de un modo que ninguno supo descifrar.`
+    },
+    segment3: {
+        title: "SEGMENTO III (Ejercicios 18-25)",
+        content: `(1) El agua cubre el 71% de la superficie terrestre, sin embargo, apenas el 3% del total es agua dulce y potable. (2) De esa pequeña fracción, la mayor parte está atrapada en los polos en forma de hielo permanente o en acuíferos subterráneos de difícil acceso. (3) Esto significa que solo el 0.3% del agua del planeta está disponible en ríos, lagos y embalses listos para consumo humano. (4) Las botellas de agua mineral se venden muy bien en los supermercados durante los meses de verano. (5) La demanda mundial de agua ha crecido en un 600% en los últimos cien años, impulsada por la industria, la agricultura y el crecimiento de la población. (6) Expertos de la ONU advierten que para 2050, dos terceras partes de la humanidad podrían enfrentar escasez severa de agua. (7) Las soluciones que se estudian van desde la desalinización masiva de agua marina hasta la recuperación de acuíferos y el cultivo de plantas de bajo consumo hídrico. (8) El agua no es solo un recurso natural: es un derecho humano fundamental cuyo acceso equitativo definirá los conflictos del siglo XXI. (9) Cuidar cada gota es, hoy, el acto político más poderoso que cualquier ciudadano puede ejercer en silencio.`
+    }
+};
+
+const questions = [
+    // Segmento 1 — Migración de aves
+    { id:1,  textRef:'segment1', q:"¿Cuál integra MEJOR la secuencia del Segmento I? (Integración)", options:["El comercio ilegal de aves en mercados de México.","La migración de aves: una hazaña biológica que desafía los obstáculos humanos.","Cómo navegan los aviones en océanos usando GPS.","Las distintas especies de albatros en el Pacífico."], ans:1 },
+    { id:2,  textRef:'segment1', q:"¿Cuál enunciado del Segmento I debe eliminarse por romper la coherencia? (Elisión)", options:["Enunciado 2","Enunciado 3","Enunciado 4","Enunciado 7"], ans:2 },
+    { id:3,  textRef:'segment1', q:"¿Cuál enriquece ESTILÍSTICAMENTE la oración 9 sin contradecir lo expresado? (Adición)", options:["...las aves seguirán encontrando su camino a casa, punteando el cielo como una escritura viva.","...las aves seguirán llegando porque tienen buena memoria.","...se podrá seguir estudiando la biología en las universidades.","...los científicos podrán seguir midiendo el magnetismo terrestre."], ans:0 },
+    { id:4,  textRef:'segment1', q:"¿Cuál enunciado de los primeros cuatro funciona como la premisa o generalización del texto? (Generalización)", options:["Enunciado 1","Enunciado 2","Enunciado 3","Enunciado 4"], ans:0 },
+    { id:5,  textRef:'segment1', q:"¿Cuál enunciado expresa INDIRECTAMENTE MEJOR el sofisticado sistema de orientación que poseen las aves?", options:["Enunciado 3","Enunciado 5","Enunciado 6","Enunciado 7"], ans:2 },
+    { id:6,  textRef:'segment1', q:"De los enunciados 7 y 8, ¿cuál recoge MEJOR el contenido de la resistencia de las aves frente a los obstáculos del hombre? (Particularización)", options:["Enunciado 7","Enunciado 8","Ambos por igual","Ninguno de los dos"], ans:1 },
+    { id:7,  textRef:'segment1', q:"¿Cuál enriquece ESTILÍSTICAMENTE la oración 3 del Segmento I?", options:["...cruzando océanos completos como si el aire fuera su hogar más antiguo.","...porque tiene un metabolismo muy eficiente para el vuelo.","...aunque es una especie en peligro de extinción por la pesca.","...lo que lo hace muy apreciado en documentales de naturaleza."], ans:0 },
+    { id:8,  textRef:'segment1', q:"¿Cuál enunciado expresa INDIRECTAMENTE MEJOR la amenaza que representa la presencia humana para las aves migratorias?", options:["Enunciado 5","Enunciado 6","Enunciado 7","Enunciado 8"], ans:2 },
+    { id:9,  textRef:'segment1', q:"Si se agrega: '(10) Algunas especies recorren más de 70,000 km al año en un solo ciclo migratorio completo', ¿qué función cumple?", options:["Generaliza todo el texto.","Particulariza la distancia de la migración con un dato concreto.","Contradice la información del enunciado 5.","Elimina la necesidad del enunciado 3."], ans:1 },
+
+    // Segmento 2 — El profesor Aurelio
+    { id:10, textRef:'segment2', q:"¿Cuál enunciado rompe la atmósfera narrativa del Segmento II y debe omitirse? (Elisión)", options:["Enunciado 2","Enunciado 3","Enunciado 4","Enunciado 7"], ans:2 },
+    { id:11, textRef:'segment2', q:"¿Cuál frase integra MEJOR la secuencia del Segmento II? (Integración)", options:["Los métodos de enseñanza en escuelas preparatorias.","El misterioso maletín del profesor Aurelio y la carta que lo detuvo.","Cómo abrir candados de combinación correctamente.","El otoño y las actividades que se hacen en esa temporada."], ans:1 },
+    { id:12, textRef:'segment2', q:"¿Cuál enunciado expresa INDIRECTAMENTE MEJOR el aura misteriosa y casi sobrenatural del maletín?", options:["Enunciado 1","Enunciado 2","Enunciado 3","Enunciado 6"], ans:1 },
+    { id:13, textRef:'segment2', q:"De los enunciados 6, 7 y 8, ¿cuál recoge MEJOR el contenido del momento de apertura y lo que contenía el maletín?", options:["Enunciado 6","Enunciado 7","Enunciado 8","Ninguno de los tres"], ans:1 },
+    { id:14, textRef:'segment2', q:"¿Cuál enriquece ESTILÍSTICAMENTE la oración 5 del Segmento II?", options:["...con la misma intensidad con que un astrónomo descifra un eclipse inesperado.","...porque no entendía qué había pasado con las llaves de antes.","...mirando fijamente el escritorio donde lo había dejado.","...ya que necesitaba abrirlo para sacar los apuntes de la clase."], ans:0 },
+    { id:15, textRef:'segment2', q:"¿Qué enunciado expresa INDIRECTAMENTE MEJOR el peso emocional del contenido del maletín para el profesor?", options:["Enunciado 5","Enunciado 7","Enunciado 8","Enunciado 9"], ans:2 },
+    { id:16, textRef:'segment2', q:"El enunciado 9 cumple dentro del relato la función de:", options:["Añadir un nuevo personaje al texto.","Elidir la descripción del maletín.","Concluir la historia con una imagen que invita a la reflexión.","Particularizar las asignaturas que daba Aurelio."], ans:2 },
+    { id:17, textRef:'segment2', q:"¿Cuál enriquece ESTILÍSTICAMENTE la oración 8 del Segmento II sin negar el sentido emocional?", options:["...como si guardara el último abrazo de alguien que ya no podría volver a dar.","...ya que el papel era muy viejo y podría romperse fácilmente.","...con los dedos manchados de tinta del bolígrafo de repuesto.","...aunque luego la volvió a sacar para releerla dos veces más."], ans:0 },
+
+    // Segmento 3 — Crisis del agua
+    { id:18, textRef:'segment3', q:"¿Cuál enunciado del Segmento III rompe la unidad expositiva y debe eliminarse? (Elisión)", options:["Enunciado 2","Enunciado 3","Enunciado 4","Enunciado 6"], ans:2 },
+    { id:19, textRef:'segment3', q:"¿Cuál frase integra MEJOR la secuencia de todo el Segmento III? (Integración)", options:["La industria del agua embotellada en el mundo moderno.","La escasez global del agua dulce: una crisis que ya comenzó.","Cómo funciona una planta desalinizadora de agua marina.","Los ríos más largos del mundo y su caudal promedio."], ans:1 },
+    { id:20, textRef:'segment3', q:"¿Cuál enunciado expresa INDIRECTAMENTE MEJOR la desproporción alarmante entre agua existente y agua realmente accesible?", options:["Enunciado 1","Enunciado 2","Enunciado 3","Enunciado 5"], ans:2 },
+    { id:21, textRef:'segment3', q:"De los enunciados 7, 8 y 9, ¿cuál recoge MEJOR el contenido general de las respuestas y el llamado a la acción? (Particularización)", options:["Enunciado 7","Enunciado 8","Enunciado 9","Los tres por igual"], ans:2 },
+    { id:22, textRef:'segment3', q:"¿Cuál enriquece ESTILÍSTICAMENTE la oración 9 del Segmento III?", options:["...porque el agua se cobra en los recibos de cada mes.","...y también importante para no pagar multas del gobierno.","...susurrando con cada llave cerrada que el futuro también tiene sed.","...ya que existen campañas oficiales al respecto en varios países."], ans:2 },
+    { id:23, textRef:'segment3', q:"¿Cuál enunciado expresa INDIRECTAMENTE MEJOR la urgencia de tomar decisiones antes de que sea tarde?", options:["Enunciado 3","Enunciado 5","Enunciado 6","Enunciado 8"], ans:2 },
+    { id:24, textRef:'segment3', q:"El enunciado 8 cumple dentro del texto la función de:", options:["Elidir los datos científicos del enunciado 3.","Particularizar el costo del agua por litro en 2024.","Elevar el tema de recurso natural a derecho humano y conflicto político.","Generalizar el consumo de agua en los hogares."], ans:2 },
+    { id:25, textRef:'segment3', q:"Si se agrega: '(10) En México, el 40% del agua potable se pierde en fugas de infraestructura antes de llegar a los hogares', ¿qué función aporta al texto?", options:["Integra y resume todos los enunciados anteriores.","Contradice la proyección de la ONU del enunciado 6.","Particulariza la problemática con un dato local y concreto.","Reemplaza la conclusión del enunciado 9."], ans:2 }
+];
+
+let currentIndex=0, correctCount=0, areaStats={}, timerSeconds=1800, canAnswer=true, timerInterval;
+
+function startExam(){
+    document.getElementById('start-screen').classList.add('hidden');
+    document.getElementById('exam-screen').classList.remove('hidden');
+    showQuestion(); startTimer();
+}
+function toggleReading(){
+    const modal=document.getElementById('reading-modal');
+    if(modal.classList.contains('hidden')){
+        const q=questions[currentIndex];
+        const td=texts[q.textRef];
+        document.getElementById('reading-title').innerText=td.title;
+        document.getElementById('reading-content').innerHTML=td.content;
+        modal.classList.remove('hidden');
+    } else { modal.classList.add('hidden'); }
+}
+function showQuestion(){
+    canAnswer=true;
+    const q=questions[currentIndex];
+    document.getElementById('progress-text').innerText=`${currentIndex+1} de 25`;
+    document.getElementById('progress-bar').style.width=`${(currentIndex/25)*100}%`;
+    const container=document.getElementById('question-box');
+    let html=`<div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-lg border border-slate-100 fade-in">
+        <div class="flex justify-between items-start mb-6">
+            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-xl text-[9px] font-black uppercase tracking-widest w-fit">Segmento ${q.textRef.slice(-1)}</span>
+            <button onclick="toggleReading()" class="bg-slate-900 text-white text-[9px] font-black px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-slate-800 transition-colors uppercase tracking-widest active:scale-95 shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                Ver Lectura
+            </button>
+        </div>
+        <h2 class="text-lg font-bold text-slate-800 mb-8 leading-tight">${q.q}</h2>
+        <div id="options-grid" class="grid grid-cols-1 gap-3">`;
+    q.options.forEach((opt,i)=>{
+        html+=`<button onclick="checkAnswer(${i})" class="w-full text-left p-3 md:p-4 border-2 border-slate-50 rounded-2xl hover:border-emerald-200 transition-all flex items-center gap-4 group">
+            <span class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center font-black text-slate-400 group-hover:bg-emerald-600 group-hover:text-white transition-all text-xs">${['A','B','C','D'][i]}</span>
+            <span class="font-semibold text-slate-700 text-sm">${opt}</span></button>`;
+    });
+    container.innerHTML=html+`</div></div>`;
+}
+function checkAnswer(index){
+    if(!canAnswer)return; canAnswer=false;
+    const q=questions[currentIndex];
+    const isCorrect=(index===q.ans);
+    if(isCorrect){correctCount++;document.getElementById('correct-counter').innerText=correctCount;}
+    const seg=q.textRef;
+    if(!areaStats[seg])areaStats[seg]={ok:0,total:0};
+    areaStats[seg].total++;if(isCorrect)areaStats[seg].ok++;
+    const btns=document.querySelectorAll('#options-grid button');
+    btns[q.ans].classList.add('ans-correct');
+    if(!isCorrect)btns[index].classList.add('ans-wrong');
+    setTimeout(()=>{currentIndex++;if(currentIndex<25)showQuestion();else finishExam();},1000);
+}
+function startTimer(){
+    timerInterval=setInterval(()=>{
+        if(timerSeconds>0){timerSeconds--;let m=Math.floor(timerSeconds/60),s=timerSeconds%60;document.getElementById('timer').innerText=`${m}:${s<10?'0'+s:s}`;}
+        else finishExam();
+    },1000);
+}
+function finishExam(){
+    if(timerInterval)clearInterval(timerInterval);
+    document.getElementById('exam-screen').classList.add('hidden');
+    document.getElementById('start-screen').classList.add('hidden');
+    document.getElementById('result-screen').classList.remove('hidden');
+    const score=Math.round((correctCount/25)*600)+200;
+    document.getElementById('final-scale-score').innerText=score;
+    document.getElementById('total-correct').innerText=correctCount;
+    document.getElementById('total-percent').innerText=`${Math.round((correctCount/25)*100)}%`;
+    document.getElementById('label-score-final').innerText=score;
+    const labels={'segment1':'Seg. I — Migración de aves','segment2':'Seg. II — Prof. Aurelio','segment3':'Seg. III — Crisis del agua'};
+    let html='';
+    for(const seg in areaStats){
+        let p=Math.round((areaStats[seg].ok/areaStats[seg].total)*100);
+        html+=`<div class="bg-slate-50/50 p-2 rounded-xl border border-slate-100">
+            <div class="flex justify-between text-[7px] font-black uppercase mb-1 text-slate-400"><span>${labels[seg]||seg}</span><span>${areaStats[seg].ok}/${areaStats[seg].total}</span></div>
+            <div class="flex items-center gap-2"><div class="flex-1 h-1 bg-slate-200 rounded-full overflow-hidden"><div class="h-full bg-emerald-500" style="width:${p}%"></div></div><span class="text-[8px] font-black text-slate-700">${p}%</span></div>
+        </div>`;
+    }
+    document.getElementById('area-breakdown').innerHTML=html;
+}
+</script>
+</body>
+</html>

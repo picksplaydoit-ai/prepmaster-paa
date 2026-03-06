@@ -1,0 +1,15 @@
+[build]
+  functions = "netlify/functions"
+  publish = "."
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/*"
+  to   = "/.netlify/functions/:splat"
+  status = 200
+
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "FIREBASE_API_KEY,FIREBASE_PROJECT_ID,FIREBASE_CLIENT_EMAIL,FIREBASE_MESSAGING_SENDER_ID,FIREBASE_APP_ID,FIREBASE_MEASUREMENT_ID"
+  SECRETS_SCAN_OMIT_PATHS = "index.html,pago-exitoso.html"

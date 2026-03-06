@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador PAA Lectura N° 1 - 50 Minutos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow: hidden; }
+        .sticky-header { position: sticky; top: 0; z-index: 50; }
+        .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
+        .ans-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .progress-bar { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-overlay { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+        th, td { border: 1px solid #e2e8f0; padding: 8px; text-align: center; }
+        th { background-color: #f1f5f9; font-weight: 800; }
+    </style>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col">
+
+    <!-- Pantalla de Inicio -->
+    <div id="start-screen" class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
+            <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg -rotate-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-extrabold text-slate-900 mb-2 uppercase tracking-tight">Lectura PAA N° 1</h1>
+            <p class="text-slate-500 mb-4 font-medium text-sm">Práctica de Comprensión (45 Reactivos)</p>
+            
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 text-left rounded-r-xl">
+                <p class="text-xs text-amber-900 leading-relaxed font-semibold">
+                    ¡Listo! Tienes <span class="underline">50 minutos</span> para completar esta simulación.
+                </p>
+                <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold italic">
+                    El botón de lectura está integrado en cada pregunta.
+                </p>
+            </div>
+
+            <button onclick="startExam()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">
+                COMENZAR SIMULACRO
+            </button>
+        </div>
+    </div>
+
+    <!-- Pantalla de Examen -->
+    <div id="exam-screen" class="hidden h-full flex flex-col">
+        <div class="sticky-header bg-white border-b border-slate-200 p-3">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <div class="flex gap-4">
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Tiempo</p>
+                        <p id="timer" class="text-lg font-mono font-black text-blue-600 leading-none">50:00</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-emerald-500 uppercase">Bien</p>
+                        <p id="correct-counter" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 max-w-[120px] sm:max-w-xs ml-4 text-right">
+                    <p id="progress-text" class="text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-tighter">1 de 45</p>
+                    <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="progress-bar h-full bg-blue-600 w-0"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="flex-grow flex items-center justify-center p-4 overflow-hidden">
+            <div id="question-box" class="max-w-xl w-full"></div>
+        </main>
+    </div>
+
+    <!-- Modal de Lectura -->
+    <div id="reading-modal" class="hidden fixed inset-0 z-[100] modal-overlay flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl max-h-[85vh] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden animate-fade-in border border-slate-200">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <div>
+                    <h3 id="reading-title" class="text-lg font-black text-slate-900 uppercase tracking-tight">Segmento de Lectura</h3>
+                    <p id="reading-subtitle" class="text-[10px] text-blue-600 font-bold uppercase">Lectura base</p>
+                </div>
+                <button onclick="toggleReading()" class="w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div id="reading-content" class="p-8 md:p-10 overflow-y-auto custom-scroll text-slate-700 leading-relaxed text-sm md:text-base italic">
+                <!-- Inyectado dinámicamente -->
+            </div>
+            <div class="p-4 bg-slate-50 text-center border-t border-slate-100">
+                <button onclick="toggleReading()" class="bg-slate-900 text-white font-black px-8 py-2 rounded-xl text-xs uppercase tracking-widest shadow-lg">Cerrar Texto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla de Resultados -->
+    <div id="result-screen" class="hidden h-full flex items-center justify-center p-4 overflow-hidden">
+        <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-white fade-in flex flex-col max-h-[95vh]">
+            <div class="bg-slate-900 p-6 md:p-8 text-center text-white relative flex-shrink-0">
+                <p class="text-blue-400 font-bold uppercase tracking-[0.3em] text-[9px] mb-2">Puntaje Final Lectura</p>
+                <div class="flex items-center justify-center gap-2">
+                    <h2 id="final-scale-score" class="text-6xl font-black tracking-tighter leading-none">0</h2>
+                    <p class="text-slate-500 font-bold text-lg">/ 800</p>
+                </div>
+            </div>
+            
+            <div class="p-6 md:p-8 flex-grow overflow-y-auto custom-scroll text-center">
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Aciertos</p>
+                        <p class="text-xl font-black text-slate-800"><span id="total-correct">0</span><span class="text-slate-300 text-sm">/45</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Efectividad</p>
+                        <p id="total-percent" class="text-xl font-black text-blue-600">0%</p>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-2xl text-white flex flex-col justify-center">
+                        <p class="text-[7px] font-black text-blue-400 uppercase">Estatus</p>
+                        <p class="text-xs font-bold leading-tight">Perfil Analizado</p>
+                    </div>
+                </div>
+
+                <div class="p-5 bg-blue-600 rounded-3xl text-white relative overflow-hidden shadow-lg">
+                    <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                        <div>
+                            <h4 class="text-lg font-black leading-none mb-1 uppercase tracking-tight">¡Anota tu resultado!</h4>
+                            <p class="text-blue-100 text-[10px]">Usa tus <span id="label-score-final" class="font-black text-white underline text-xs">0</span> puntos para el promedio global.</p>
+                        </div>
+                        <button onclick="location.reload()" class="bg-white text-blue-600 font-black px-6 py-2 rounded-xl hover:bg-blue-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0 shadow-md">
+                            Reiniciar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const texts = {
+            segment1: {
+                title: "LECTURA 1: El Viejo Librero (Ejercicios 1-9)",
+                content: `La lectura trata sobre la vida de un viejo librero. (1) Don Anselmo pasaba sus días rodeado de montañas de papel ajado. Su librería, escondida en un callejón estrecho del centro de la ciudad, era un santuario para aquellos que buscaban escapar del bullicio moderno. (5) No le interesaba vender los éxitos de ventas del momento; su verdadera pasión era rescatar obras olvidadas que, según él, poseían un alma propia. (8) Cuando un cliente cruzaba la puerta, Anselmo no lo saludaba de inmediato. Primero observaba sus manos, su forma de caminar y el tiempo que le tomaba adaptarse a la penumbra del local. (12) "Los libros eligen a sus dueños, no al revés", solía murmurar mientras acariciaba el lomo de un tomo encuadernado en cuero. (15) Aunque su familia le insistía constantemente en cerrar el negocio debido a las bajas ganancias, él se negaba con una sonrisa serena. (18) Para Anselmo, cerrar la librería equivalía a apagar un faro en medio de un océano de ignorancia.`
+            },
+            segment2: {
+                title: "LECTURA 2: Microplásticos (Ejercicios 10-18)",
+                content: `<p>(1) Los microplásticos son partículas de plástico menores a 5 milímetros que se han vuelto omnipresentes en los ecosistemas marinos. (3) Estas diminutas amenazas provienen de la degradación de plásticos mayores, así como de productos cosméticos y ropa sintética. (6) Al ser tan pequeños, son ingeridos accidentalmente por una gran variedad de fauna marina, desde el plancton hasta las ballenas. (9) Un estudio reciente del Instituto Oceanográfico analizó la procedencia de los residuos plásticos en las costas del Pacífico.</p>
+                <table>
+                    <thead>
+                        <tr><th>Fuente de Microplástico</th><th>Porcentaje</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Fibras textiles sintéticas</td><td>35%</td></tr>
+                        <tr><td>Neumáticos desgastados</td><td>28%</td></tr>
+                        <tr><td>Polvo de ciudades</td><td>24%</td></tr>
+                        <tr><td>Productos de cuidado personal</td><td>13%</td></tr>
+                    </tbody>
+                </table>
+                <p>(14) Los biólogos advierten que, si las tendencias actuales no se modifican, para el año 2050 habrá más plástico que peces en el mar. (17) La solución no radica únicamente en limpiar los océanos, sino en detener la producción desmedida desde su origen terrestre.</p>`
+            },
+            segment3: {
+                title: "LECTURA 3: Educación Tradicional vs Digital (Ejercicios 19-28)",
+                content: `<p><strong>Lectura A:</strong> (1) El aula tradicional, con su pizarra de tiza y sus pupitres alineados, ha sido el pilar de la civilización durante siglos. (3) La interacción cara a cara forja un vínculo empático que ninguna pantalla puede igualar. (6) Los niños aprenden a socializar, a resolver conflictos en tiempo real y a desarrollar inteligencia emocional. (10) La tecnología es útil, pero depender de ella aísla al individuo, convirtiendo el aprendizaje en un proceso frío y robótico.</p>
+                <p class="mt-4"><strong>Lectura B:</strong> (1) La educación virtual ha democratizado el conocimiento de forma sin precedentes. (4) Un estudiante en zona rural puede acceder a las mismas clases que uno en una metrópolis. (8) Quienes la critican son nostálgicos que se niegan al progreso. (11) La tecnología no aísla, conecta a nivel global; permite un aprendizaje personalizado donde cada alumno avanza a su propio ritmo.</p>`
+            },
+            segment4: {
+                title: "LECTURA 4: Sueño y Memoria (Ejercicios 29-37)",
+                content: `(1) Durante mucho tiempo se pensó que el sueño era simplemente un estado de inactividad, una pausa necesaria para que el cuerpo descansara. (4) Sin embargo, los neurocientíficos modernos han descubierto que el cerebro es increíblemente activo mientras dormimos. (7) Una de las funciones más vitales del sueño es la consolidación de la memoria. (10) Durante la fase conocida como sueño REM, el cerebro procesa la información, descarta los datos irrelevantes y almacena los recuerdos importantes en la memoria a largo plazo. (15) Los estudios indican que la privación del sueño tiene efectos catastróficos en el aprendizaje. (18) Los estudiantes que se quedan despiertos toda la noche suelen tener un rendimiento mucho menor que aquellos que duermen ocho horas. (22) Sin el ciclo completo de sueño, las redes neuronales no pueden afianzar las nuevas conexiones, lo que provoca que el conocimiento "se evapore" rápidamente.`
+            },
+            segment5: {
+                title: "LECTURA 5: El Paso del Tiempo (Ejercicios 38-45)",
+                content: `<p>(1) Corre el reloj, tirano silencioso,<br>(2) devorando los días y las horas.<br>(3) Es un río invisible, caudaloso,<br>(4) que arrastra las sonrisas y las lloras.</p>
+                <p>(5) El niño que jugaba en la pradera<br>(6) hoy mira en el cristal a un hombre cano.<br>(7) Voló fugaz la dulce primavera,<br>(8) y el invierno le aprieta ya la mano.</p>
+                <p>(9) Mas no temas el polvo que se asienta,<br>(10) ni el tictac que retumba en la pared,<br>(11) que el alma que ha vivido no lamenta<br>(12) apagar, al final, su inmensa sed.</p>`
+            }
+        };
+
+        const questions = [
+            // Segmento 1
+            { id: 1, textRef: 'segment1', q: "En la lectura, la palabra 'ajado' (línea 2) se puede sustituir por:", options: ["Nuevo", "Brillante", "Desgastado", "Costoso"], ans: 2 },
+            { id: 2, textRef: 'segment1', q: "Según la lectura, la palabra 'santuario' (línea 3) se refiere a:", options: ["Iglesia abandonada", "Lugar sagrado y de refugio", "Mercado robado", "Museo contemporáneo"], ans: 1 },
+            { id: 3, textRef: 'segment1', q: "¿Cuál de las opciones resume MEJOR la lectura?", options: ["Crisis económica de librerías", "Técnica de venta de Anselmo", "Conflicto con su familia", "Conexión espiritual con los libros"], ans: 3 },
+            { id: 4, textRef: 'segment1', q: "De la lectura se puede INFERIR que Don Anselmo:", options: ["Era un hombre rico", "Valoraba más el significado que el dinero", "Odiaba a los clientes de best-sellers", "Tenía problemas de vista"], ans: 1 },
+            { id: 5, textRef: 'segment1', q: "¿Qué opción evidencia MEJOR que valoraba el significado sobre el dinero?", options: ["Líneas 2-4", "Líneas 5-7 (No interesaba vender éxitos...)", "Líneas 8-9", "Líneas 15-17"], ans: 1 },
+            { id: 6, textRef: 'segment1', q: "La expresión 'apagar un faro en medio de un océano de ignorancia' es:", options: ["Metáfora", "Símil", "Personificación", "Onomatopeya"], ans: 0 },
+            { id: 7, textRef: 'segment1', q: "La actitud de la familia de Anselmo hacia el negocio era de:", options: ["Admiración", "Indiferencia", "Preocupación", "Entusiasmo"], ans: 2 },
+            { id: 8, textRef: 'segment1', q: "En la lectura predomina un discurso:", options: ["Argumentativo", "Narrativo", "Expositivo", "Científico"], ans: 1 },
+            { id: 9, textRef: 'segment1', q: "Se infiere que Anselmo observaba a los clientes para:", options: ["Evitar robos", "Adivinar el libro adecuado para ellos", "Burlarse de ellos", "Obligarlos a comprar"], ans: 1 },
+            // Segmento 2
+            { id: 10, textRef: 'segment2', q: "En la lectura, la palabra 'omnipresentes' (línea 2) significa:", options: ["Invisibles", "Peligrosos", "En todas partes", "Artificiales"], ans: 2 },
+            { id: 11, textRef: 'segment2', q: "Según la lectura, una de las fuentes de microplásticos es:", options: ["Caza de ballenas", "Ropa sintética", "Calentamiento global", "Sobrepesca"], ans: 1 },
+            { id: 12, textRef: 'segment2', q: "Según la Tabla 1, la MAYOR fuente es:", options: ["Neumáticos", "Polvo de ciudad", "Cuidado personal", "Fibras textiles"], ans: 3 },
+            { id: 13, textRef: 'segment2', q: "¿Qué porcentaje suman neumáticos y polvo juntos?", options: ["48%", "52%", "63%", "72%"], ans: 1 },
+            { id: 14, textRef: 'segment2', q: "Se puede INFERIR que el problema de los microplásticos:", options: ["Se resolverá en 2050", "Se origina en tierra firme", "Solo afecta ballenas", "Es por la industria pesquera"], ans: 1 },
+            { id: 15, textRef: 'segment2', q: "¿Qué opción evidencia que se origina en tierra?", options: ["Líneas 1-3", "Líneas 6-8", "Líneas 14-16", "Líneas 17-19 (origen terrestre)"], ans: 3 },
+            { id: 16, textRef: 'segment2', q: "La palabra 'desmedida' (línea 18) se usa como:", options: ["Cuidadosa", "Exacta", "Excesiva", "Lenta"], ans: 2 },
+            { id: 17, textRef: 'segment2', q: "Propósito principal de la lectura:", options: ["Describir fabricación textil", "Alertar sobre impacto de microplásticos", "Historia de Instituto Oceanográfico", "Defender cuidado personal"], ans: 1 },
+            { id: 18, textRef: 'segment2', q: "Tono de la advertencia de los biólogos:", options: ["Optimista", "Indiferente", "Preocupante", "Sarcástico"], ans: 2 },
+            // Segmento 3
+            { id: 19, textRef: 'segment3', q: "En la lectura A, la palabra 'forja' (línea 4) significa:", options: ["Destruye", "Finge", "Crea", "Oculta"], ans: 2 },
+            { id: 20, textRef: 'segment3', q: "Según la Lectura A, mayor beneficio del aula tradicional:", options: ["Habilidades sociales y emocionales", "Enseñar mate e historia", "Uso de tiza", "Disciplina robótica"], ans: 0 },
+            { id: 21, textRef: 'segment3', q: "En lectura B, 'democratizado' se refiere a que el conocimiento es:", options: ["Político", "Accesible para todos", "Exclusivo", "Mediante votación"], ans: 1 },
+            { id: 22, textRef: 'segment3', q: "Según Lectura B, los críticos de la educación virtual son:", options: ["Rurales", "Genios", "Nostálgicos", "De metrópolis"], ans: 2 },
+            { id: 23, textRef: 'segment3', q: "Relación entre Lectura A y Lectura B:", options: ["A complementa a B", "Ambas defienden tecnología", "B refuta la idea de A", "A resume a B"], ans: 2 },
+            { id: 24, textRef: 'segment3', q: "Mientras A dice que la tecnología 'aísla', B sostiene que:", options: ["Vuelve obsoleto al hombre", "Conecta globalmente", "Genera dependencia", "Fomenta nostalgia"], ans: 1 },
+            { id: 25, textRef: 'segment3', q: "De Lectura B se INFIERE que la educación tradicional es:", options: ["Única forma de valores", "Restrictiva y limitada", "Ideal para zonas rurales", "Más avanzada"], ans: 1 },
+            { id: 26, textRef: 'segment3', q: "Evidencia de que la educación tradicional es limitada:", options: ["Líneas 1-3", "Líneas 4-7", "Líneas 8-10", "Líneas 11-14 (supera limitaciones)"], ans: 3 },
+            { id: 27, textRef: 'segment3', q: "Idea en la que estarían en DESACUERDO:", options: ["Aprender historia", "Efectividad tecnológica para relaciones reales", "Escuelas rurales", "Aprender al propio ritmo"], ans: 1 },
+            { id: 28, textRef: 'segment3', q: "En ambas lecturas predomina el discurso:", options: ["Descriptivo", "Expositivo", "Argumentativo", "Narrativo"], ans: 2 },
+            // Segmento 4
+            { id: 29, textRef: 'segment4', q: "La palabra 'consolidación' (línea 9) se refiere a:", options: ["Eliminación", "Afianzamiento", "Debilitamiento", "Soñar"], ans: 1 },
+            { id: 30, textRef: 'segment4', q: "Durante la fase REM el cerebro:", options: ["Descansa", "Absorbe del entorno", "Clasifica y almacena recuerdos", "Despierta al individuo"], ans: 2 },
+            { id: 31, textRef: 'segment4', q: "Menciona a estudiantes para:", options: ["Criticar el sistema", "Ejemplo práctico de no dormir", "Demostrar dificultad", "Exigir horarios tarde"], ans: 1 },
+            { id: 32, textRef: 'segment4', q: "La palabra 'privación' (línea 16) significa:", options: ["Exceso", "Abundancia", "Privilegio", "Carencia"], ans: 3 },
+            { id: 33, textRef: 'segment4', q: "Se infiere que para retener información es necesario:", options: ["Estudiar en fase REM", "Completar ciclos de sueño", "Evitar aprender de día", "Inactividad total"], ans: 1 },
+            { id: 34, textRef: 'segment4', q: "Evidencia de que hace falta ciclo completo:", options: ["Líneas 1-3", "Líneas 4-6", "Líneas 15-17", "Líneas 22-25"], ans: 3 },
+            { id: 35, textRef: 'segment4', q: "Resume MEJOR la tesis de la lectura:", options: ["Pausas para sobrevivir", "Olvidar traumas", "Sueño esencial para fijar memoria", "Estudiar noche garantiza éxito"], ans: 2 },
+            { id: 36, textRef: 'segment4', q: "La frase 'se evapore' es ejemplo de:", options: ["Literal científico", "Figurado (olvido)", "Teoría térmica", "Error gramatical"], ans: 1 },
+            { id: 37, textRef: 'segment4', q: "En la lectura predomina un discurso:", options: ["Argumentativo", "Literario", "Expositivo", "Narrativo"], ans: 2 },
+            // Segmento 5
+            { id: 38, textRef: 'segment5', q: "'Corre el reloj, tirano silencioso' es:", options: ["Símil", "Onomatopeya", "Personificación", "Sinestesia"], ans: 2 },
+            { id: 39, textRef: 'segment5', q: "'Es un río invisible' compara tiempo con agua vía:", options: ["Metáfora", "Ironía", "Hipérbole", "Epístola"], ans: 0 },
+            { id: 40, textRef: 'segment5', q: "La palabra 'fugaz' significa:", options: ["Brillante", "Lento", "Pasajero / Breve", "Pesado"], ans: 2 },
+            { id: 41, textRef: 'segment5', q: "En el poema, 'el invierno' alude a:", options: ["Juventud", "Vejez", "Enfermedad", "Clima"], ans: 1 },
+            { id: 42, textRef: 'segment5', q: "¿Cuál describe mejor el tema del poema?", options: ["Miedo a relojes", "Melancolía invernal", "Inevitabilidad del tiempo y aceptación", "Perder a alguien en el río"], ans: 2 },
+            { id: 43, textRef: 'segment5', q: "Según la estrofa 3, frente al tiempo debemos sentir:", options: ["Terror", "Desesperación", "Serenidad y satisfacción", "Indiferencia"], ans: 2 },
+            { id: 44, textRef: 'segment5', q: "Evidencia de serenidad final:", options: ["Versos 1-2", "Versos 5-6", "Versos 9-10", "Versos 11-12"], ans: 3 },
+            { id: 45, textRef: 'segment5', q: "La palabra 'cano' se refiere a:", options: ["Cansado", "Con canas / Anciano", "Cantante", "Valiente"], ans: 1 }
+        ];
+
+        let currentIndex = 0;
+        let correctCount = 0;
+        let timerSeconds = 3000; // 50 MINUTOS
+        let canAnswer = true;
+        let timerInterval;
+
+        function startExam() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            showQuestion();
+            startTimer();
+        }
+
+        function toggleReading() {
+            const modal = document.getElementById('reading-modal');
+            if (modal.classList.contains('hidden')) {
+                const q = questions[currentIndex];
+                const textData = texts[q.textRef];
+                document.getElementById('reading-title').innerText = textData.title;
+                document.getElementById('reading-content').innerHTML = textData.content;
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function showQuestion() {
+            canAnswer = true;
+            const q = questions[currentIndex];
+            const container = document.getElementById('question-box');
+            document.getElementById('progress-text').innerText = `${currentIndex + 1} de 45`;
+            document.getElementById('progress-bar').style.width = `${((currentIndex) / 45) * 100}%`;
+
+            let html = `
+                <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-lg border border-slate-100 fade-in">
+                    <div class="flex justify-between items-start mb-6">
+                        <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-widest w-fit">Tema ${q.textRef.slice(-1)}</span>
+                        <button onclick="toggleReading()" class="bg-slate-900 text-white text-[9px] font-black px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-slate-800 transition-colors uppercase tracking-widest active:scale-95 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Ver Lectura
+                        </button>
+                    </div>
+                    <h2 class="text-lg font-bold text-slate-800 mb-8 leading-tight">${q.q}</h2>
+                    <div id="options-grid" class="grid grid-cols-1 gap-3">
+            `;
+
+            q.options.forEach((opt, i) => {
+                html += `
+                    <button onclick="checkAnswer(${i})" 
+                        class="w-full text-left p-3 md:p-4 border-2 border-slate-50 rounded-2xl hover:border-blue-200 transition-all flex items-center gap-4 group">
+                        <span class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center font-black text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all text-xs">${['A','B','C','D'][i]}</span>
+                        <span class="font-semibold text-slate-700 text-sm">${opt}</span>
+                    </button>
+                `;
+            });
+
+            container.innerHTML = html + `</div></div>`;
+        }
+
+        function checkAnswer(index) {
+            if(!canAnswer) return;
+            canAnswer = false;
+            const q = questions[currentIndex];
+            const isCorrect = (index === q.ans);
+            
+            if(isCorrect) { 
+                correctCount++; 
+                document.getElementById('correct-counter').innerText = correctCount; 
+            }
+            
+            const btns = document.querySelectorAll('#options-grid button');
+            btns[q.ans].classList.add('ans-correct');
+            if(!isCorrect) btns[index].classList.add('ans-wrong');
+            
+            setTimeout(() => { 
+                currentIndex++; 
+                if(currentIndex < 45) showQuestion(); else finishExam(); 
+            }, 900);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => { 
+                if(timerSeconds > 0) { 
+                    timerSeconds--; 
+                    let m = Math.floor(timerSeconds/60); 
+                    let s = timerSeconds%60; 
+                    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`; 
+                } else finishExam(); 
+            }, 1000);
+        }
+
+        function finishExam() {
+            if (timerInterval) clearInterval(timerInterval);
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('reading-modal').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const score = Math.round((correctCount/45)*600)+200;
+            document.getElementById('final-scale-score').innerText = score;
+            document.getElementById('total-correct').innerText = correctCount;
+            document.getElementById('total-percent').innerText = `${Math.round((correctCount/45)*100)}%`;
+            document.getElementById('label-score-final').innerText = score;
+        }
+    </script>
+</body>
+</html>

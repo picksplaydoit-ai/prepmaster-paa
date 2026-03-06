@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador PAA Lectura N° 3 - 50 Minutos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow: hidden; }
+        .sticky-header { position: sticky; top: 0; z-index: 50; }
+        .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
+        .ans-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .progress-bar { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-overlay { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+        th, td { border: 1px solid #e2e8f0; padding: 8px; text-align: center; }
+        th { background-color: #f1f5f9; font-weight: 800; }
+    </style>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col">
+
+    <!-- Pantalla de Inicio -->
+    <div id="start-screen" class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
+            <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg -rotate-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-extrabold text-slate-900 mb-2 uppercase tracking-tight">Lectura PAA N° 3</h1>
+            <p class="text-slate-500 mb-4 font-medium text-sm">Práctica de Comprensión (45 Reactivos)</p>
+            
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 text-left rounded-r-xl">
+                <p class="text-xs text-amber-900 leading-relaxed font-semibold">
+                    ¡Restaurado! Tienes <span class="underline">50 minutos</span> para completar esta simulación.
+                </p>
+                <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold italic">
+                    El botón de lectura está integrado en cada pregunta.
+                </p>
+            </div>
+
+            <button onclick="startExam()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">
+                COMENZAR SIMULACRO
+            </button>
+        </div>
+    </div>
+
+    <!-- Pantalla de Examen -->
+    <div id="exam-screen" class="hidden h-full flex flex-col">
+        <div class="sticky-header bg-white border-b border-slate-200 p-3">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <div class="flex gap-4">
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Tiempo</p>
+                        <p id="timer" class="text-lg font-mono font-black text-blue-600 leading-none">50:00</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-emerald-500 uppercase">Bien</p>
+                        <p id="correct-counter" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 max-w-[120px] sm:max-w-xs ml-4 text-right">
+                    <p id="progress-text" class="text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-tighter">1 de 45</p>
+                    <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="progress-bar h-full bg-blue-600 w-0"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="flex-grow flex items-center justify-center p-4 overflow-hidden">
+            <div id="question-box" class="max-w-xl w-full"></div>
+        </main>
+    </div>
+
+    <!-- Modal de Lectura -->
+    <div id="reading-modal" class="hidden fixed inset-0 z-[100] modal-overlay flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl max-h-[85vh] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden animate-fade-in border border-slate-200">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <div>
+                    <h3 id="reading-title" class="text-lg font-black text-slate-900 uppercase tracking-tight">Segmento de Lectura</h3>
+                    <p id="reading-subtitle" class="text-[10px] text-blue-600 font-bold uppercase tracking-widest">Base de consulta</p>
+                </div>
+                <button onclick="toggleReading()" class="w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div id="reading-content" class="p-8 md:p-10 overflow-y-auto custom-scroll text-slate-700 leading-relaxed text-sm md:text-base italic">
+                <!-- Inyectado dinámicamente -->
+            </div>
+            <div class="p-4 bg-slate-50 text-center border-t border-slate-100">
+                <button onclick="toggleReading()" class="bg-slate-900 text-white font-black px-8 py-2 rounded-xl text-xs uppercase tracking-widest shadow-lg">Cerrar Texto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla de Resultados -->
+    <div id="result-screen" class="hidden h-full flex items-center justify-center p-4 overflow-hidden">
+        <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-white fade-in flex flex-col max-h-[95vh]">
+            <div class="bg-slate-900 p-6 md:p-8 text-center text-white relative flex-shrink-0">
+                <p class="text-blue-400 font-bold uppercase tracking-[0.3em] text-[9px] mb-2">Puntaje Final Lectura PAA</p>
+                <div class="flex items-center justify-center gap-2">
+                    <h2 id="final-scale-score" class="text-6xl font-black tracking-tighter leading-none">0</h2>
+                    <p class="text-slate-500 font-bold text-lg">/ 800</p>
+                </div>
+            </div>
+            
+            <div class="p-6 md:p-8 flex-grow overflow-y-auto custom-scroll text-center">
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Aciertos</p>
+                        <p class="text-xl font-black text-slate-800"><span id="total-correct">0</span><span class="text-slate-300 text-sm">/45</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Efectividad</p>
+                        <p id="total-percent" class="text-xl font-black text-blue-600">0%</p>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-2xl text-white flex flex-col justify-center">
+                        <p class="text-[7px] font-black text-blue-400 uppercase">Estatus</p>
+                        <p class="text-xs font-bold leading-tight">Perfil Analizado</p>
+                    </div>
+                </div>
+
+                <div class="p-5 bg-blue-600 rounded-3xl text-white relative overflow-hidden shadow-lg">
+                    <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                        <div>
+                            <h4 class="text-lg font-black leading-none mb-1 uppercase tracking-tight">¡Anota tu resultado!</h4>
+                            <p class="text-blue-100 text-[10px]">Usa tus <span id="label-score-final" class="font-black text-white underline text-xs">0</span> puntos para el promedio global.</p>
+                        </div>
+                        <button onclick="location.reload()" class="bg-white text-blue-600 font-black px-6 py-2 rounded-xl hover:bg-blue-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0 shadow-md">
+                            Reiniciar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const texts = {
+            segment1: {
+                title: "LECTURA 1: Expedición Botánica (Ejercicios 1-9)",
+                content: `La lectura trata sobre una expedición botánica. (1) El espeso dosel de la selva amazónica apenas dejaba filtrar unos finos hilos de luz dorada. (2) La doctora Mariana Silva llevaba tres semanas inmersa en esa humedad sofocante, persiguiendo un fantasma botánico. (3) Las leyendas de los lugareños hablaban de la Orquídea de Cristal, una flor traslúcida que, según los mitos, florecía únicamente una noche cada década. (4) Sus colegas en la universidad habían tildado su expedición de quijotesca, considerándola un absoluto despilfarro de los escasos fondos del departamento de ciencias. (5) Sin embargo, Mariana poseía una determinación inquebrantable, forjada en años de duro escepticismo académico. (6) De repente, su guía apartó unas enormes hojas de helecho con el machete. (7) Allí, oculta en la base húmeda de un árbol milenario, un sutil destello blanquecino capturó su atención. (8) No era un mito ni la alucinación de una mente cansada. (9) Con las manos temblorosas y la respiración contenida, Mariana sacó su libreta de campo; sabía en su interior que ese minúsculo hallazgo reescribiría por completo los libros de taxonomía sudamericana.`
+            },
+            segment2: {
+                title: "LECTURA 2: Basura Electrónica (Ejercicios 10-18)",
+                content: `<p>(1) El avance vertiginoso de la tecnología ha traído consigo un subproducto altamente alarmante: la basura electrónica, también conocida como e-waste. (2) Cada año, millones de dispositivos son desechados prematuramente debido a la obsolescencia programada. (3) Estos aparatos abandonados contienen metales pesados como plomo, mercurio y cadmio, los cuales resultan letales si llegan a filtrarse en los mantos acuíferos del subsuelo.</p>
+                <table>
+                    <thead>
+                        <tr><th>Región</th><th>Millones de Toneladas</th><th>Tasa de Reciclaje (%)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Asia</td><td>24.9</td><td>11%</td></tr>
+                        <tr><td>América del Norte</td><td>13.1</td><td>15%</td></tr>
+                        <tr><td>Europa</td><td>12.0</td><td>42%</td></tr>
+                        <tr><td>África</td><td>2.9</td><td>0.9%</td></tr>
+                    </tbody>
+                </table>
+                <p>(5) Los expertos subrayan que Europa es un modelo a imitar por su infraestructura. (6) Por el contrario, Asia enfrenta una crisis sanitaria inminente debido a su baja tasa de reciclaje respecto al volumen generado.</p>`
+            },
+            segment3: {
+                title: "LECTURA 3: El Teletrabajo (Ejercicios 19-28)",
+                content: `<p><strong>Lectura A:</strong> (1) El teletrabajo es la gran revolución laboral de nuestra época. (2) Eliminar desplazamientos estresantes aumenta el bienestar. (3) La flexibilidad permite una conciliación real vida-familia. (4) Las empresas reducen costos operativos al no alquilar oficinas. (5) Fomenta la autonomía y confianza del personal.</p>
+                <p class="mt-4"><strong>Lectura B:</strong> (1) Idealizarlo es ignorar sus grietas estructurales. (2) El aislamiento social hace perder la sinergia colaborativa presencial. (3) La frontera vida personal-laboral se desdibuja; el hogar es una sucursal ineludible. (4) La creatividad colectiva muere frente a la frialdad de las videollamadas.</p>`
+            },
+            segment4: {
+                title: "LECTURA 4: Descubrimiento de la Penicilina (Ejercicios 29-37)",
+                content: `(1) En septiembre de 1928, Alexander Fleming regresó a su laboratorio tras vacaciones. (2) Su espacio era notoriamente desordenado. (3) Al revisar placas de Petri con Staphylococcus, notó algo inusual. (4) Una placa fue contaminada accidentalmente por un hongo. (5) Alrededor del moho se formó un halo transparente donde las bacterias habían sido destruidas. (6) Identificó el hongo como Penicillium y bautizó la sustancia como penicilina. (7) Publicó hallazgos en 1929, pero el mundo médico apenas prestó atención. (8) Diez años después, Florey y Chain purificaron la sustancia para producirla en masa. (9) Este hallazgo transformó la medicina moderna salvando millones de vidas.`
+            },
+            segment5: {
+                title: "LECTURA 5: El Viento (Ejercicios 38-45)",
+                content: `<p>(1) Eres viajero invisible sin patria ni dueño,<br>(2) escultor de las nubes y rey del espacio.<br>(3) A veces murmuras un canto de sueño,<br>(4) a veces derrumbas de un soplo el palacio.</p>
+                <p>(5) Galopas furioso cruzando los mares,<br>(6) robando a las olas su espuma de sal.<br>(7) Te cuelas de noche por mis ventanales,<br>(8) trayendo el aroma del bosque otoñal.</p>
+                <p>(9) No hay muro de piedra que frene tu paso,<br>(10) ni espada forjada que hiera tu voz.<br>(11) El mundo es tu alfombra desde el primer trazo,<br>(12) aliento perpetuo, suspiro feroz.</p>`
+            }
+        };
+
+        const questions = [
+            // Segmento 1
+            { id: 1, textRef: 'segment1', q: "La palabra 'dosel' (línea 1) se usa para referirse a:", options: ["Suelo lodoso", "Techo formado por copas de árboles", "Clima caluroso", "Insecto"], ans: 1 },
+            { id: 2, textRef: 'segment1', q: "La palabra 'quijotesca' (línea 4) significa:", options: ["Idealista o difícil", "Económica", "Peligrosa", "Gubernamental"], ans: 0 },
+            { id: 3, textRef: 'segment1', q: "Se INFIERE que la actitud de los colegas de Mariana era de:", options: ["Envidia", "Apoyo", "Burla e incredulidad", "Preocupación"], ans: 2 },
+            { id: 4, textRef: 'segment1', q: "Mejor evidencia de la actitud de los colegas:", options: ["Líneas 1-2", "Línea 3", "Línea 4 (tildado... quijotesca... despilfarro)", "Línea 8"], ans: 2 },
+            { id: 5, textRef: 'segment1', q: "La frase 'fantasma botánico' es ejemplo de:", options: ["Símil", "Personificación", "Metáfora", "Ironía"], ans: 2 },
+            { id: 6, textRef: 'segment1', q: "¿Con qué frecuencia florece la Orquídea de Cristal?", options: ["Cada noche", "Una noche cada diez años", "Tres semanas", "Cada milenio"], ans: 1 },
+            { id: 7, textRef: 'segment1', q: "Mariana tenía 'manos temblorosas' (línea 9) debido a:", options: ["Frío", "Miedo", "Enfermedad", "Emoción del triunfo"], ans: 3 },
+            { id: 8, textRef: 'segment1', q: "Tema principal del texto:", options: ["Desperdicio de fondos", "Cultivo en casa", "Triunfo de perseverancia sobre escepticismo", "Leyendas indígenas"], ans: 2 },
+            { id: 9, textRef: 'segment1', q: "Predomina un discurso:", options: ["Científico", "Narrativo", "Argumentativo", "Filosófico"], ans: 1 },
+            // Segmento 2
+            { id: 10, textRef: 'segment2', q: "La palabra 'obsolescencia' (línea 2) se refiere a:", options: ["Velocidad internet", "Alto costo", "Pérdida de vigencia o utilidad", "Memoria"], ans: 2 },
+            { id: 11, textRef: 'segment2', q: "¿Por qué el e-waste es letal para el ambiente?", options: ["Espacio físico", "Metales pesados tóxicos", "Radiación climática", "Transporte"], ans: 1 },
+            { id: 12, textRef: 'segment2', q: "¿Qué región genera MAYOR cantidad de basura?", options: ["Norteamérica", "África", "Europa", "Asia"], ans: 3 },
+            { id: 13, textRef: 'segment2', q: "Región que recicla MENOS del 1%:", options: ["África", "Asia", "Europa", "Norteamérica"], ans: 0 },
+            { id: 14, textRef: 'segment2', q: "Se INFIERE que Europa es modelo porque:", options: ["No produce basura", "Recicla el porcentaje más alto", "No usa teléfonos", "Inventó metales"], ans: 1 },
+            { id: 15, textRef: 'segment2', q: "Evidencia de que Europa es modelo:", options: ["Línea 1-2", "Columna 'Tasa de Reciclaje' (42%)", "Línea 3", "Línea 5-6"], ans: 1 },
+            { id: 16, textRef: 'segment2', q: "La palabra 'disparidad' significa:", options: ["Similitud", "Desigualdad o diferencia", "Disparo", "Acuerdo"], ans: 1 },
+            { id: 17, textRef: 'segment2', q: "Problema sanitario de Asia se agrava por:", options: ["Exportación", "Vertederos clandestinos", "Falta de luz", "Lluvias"], ans: 1 },
+            { id: 18, textRef: 'segment2', q: "Propósito principal de la lectura:", options: ["Fomentar compras", "Enseñar reparaciones", "Exponer crisis de desechos tecnológicos", "Prohibir tecnología"], ans: 2 },
+            // Segmento 3
+            { id: 19, textRef: 'segment3', q: "En la lectura A, 'conciliación' (línea 3) es:", options: ["Pelea", "Equilibrio o armonía", "Renuncia", "Separación"], ans: 1 },
+            { id: 20, textRef: 'segment3', q: "Ventaja económica directa para empresas (A):", options: ["Aumento salarial", "Cobro peajes", "Reducción costos oficina", "Venta PCs"], ans: 2 },
+            { id: 21, textRef: 'segment3', q: "En la lectura B, 'sinergia' significa:", options: ["Cooperación", "Pereza", "Rivalidad", "Enfermedad"], ans: 0 },
+            { id: 22, textRef: 'segment3', q: "¿Qué ocurre con el hogar según B?", options: ["Lugar de relax", "Pierde valor", "Espacio sin fronteras con la oficina", "Se llena de colegas"], ans: 2 },
+            { id: 23, textRef: 'segment3', q: "Relación entre Lectura A y B:", options: ["A es intro de B", "B advierte desventajas de lo que A elogia", "Ambas promueven oficinas", "A refuta datos de B"], ans: 1 },
+            { id: 24, textRef: 'segment3', q: "Si A dice 'bienestar', B sostiene que el modelo provoca:", options: ["Alegría", "Autonomía", "Baja de costos", "Aislamiento y pérdida de pertenencia"], ans: 3 },
+            { id: 25, textRef: 'segment3', q: "Se INFIERE de B que la oficina física es:", options: ["Gasto inútil", "Espacio esencial para creatividad", "Lugar robótico", "Prisión"], ans: 1 },
+            { id: 26, textRef: 'segment3', q: "Evidencia de que la oficina física es esencial (B):", options: ["Línea 1", "Línea 3", "Línea 4 (creatividad surge en pasillos/cafeterías)", "Línea 5"], ans: 2 },
+            { id: 27, textRef: 'segment3', q: "¿Idea en la que estarían en DESACUERDO?", options: ["Existe videollamada", "Altera rutina", "Impacto emocional hogar-oficina", "Costo de oficinas"], ans: 2 },
+            { id: 28, textRef: 'segment3', q: "En ambas lecturas predomina el discurso:", options: ["Narrativo", "Descriptivo", "Literario", "Argumentativo"], ans: 3 },
+            // Segmento 4
+            { id: 29, textRef: 'segment4', q: "La palabra 'notoriamente' (línea 2) significa:", options: ["Secretamente", "Evidentemente", "Peligrosamente", "Ligeramente"], ans: 1 },
+            { id: 30, textRef: 'segment4', q: "¿Qué observó Fleming en la placa?", options: ["Bacterias rápidas", "Hongo muerto", "Halo transparente (bacterias destruidas)", "Insecto"], ans: 2 },
+            { id: 31, textRef: 'segment4', q: "Se INFIERE que el hallazgo fue resultado de:", options: ["Limpieza estricta", "Plan del gobierno", "Robo de datos", "Accidente y observación brillante"], ans: 3 },
+            { id: 32, textRef: 'segment4', q: "Evidencia del azar + observación:", options: ["Línea 1-2", "Línea 4-6 (contaminada accidentalmente... aguda capacidad)", "Línea 7", "Línea 8"], ans: 1 },
+            { id: 33, textRef: 'segment4', q: "'Purificar' (línea 8) se usa como:", options: ["Bendecir", "Aislar sustancia activa", "Vender caro", "Ocultar defectos"], ans: 1 },
+            { id: 34, textRef: 'segment4', q: "Reacción médica inicial en 1929:", options: ["Celebración", "Rechazo", "Indiferencia", "Financiamiento"], ans: 2 },
+            { id: 35, textRef: 'segment4', q: "Propósito de mencionar a Florey y Chain:", options: ["Acusarlos de robo", "Criticar a Fleming", "Explicar paso a medicina real y masa", "Directores hospital"], ans: 2 },
+            { id: 36, textRef: 'segment4', q: "Resume MEJOR el tema:", options: ["Higiene hospitalaria", "Biografía de Florey", "Hallazgo accidental e impacto mundial", "Tipos de hongos"], ans: 2 },
+            { id: 37, textRef: 'segment4', q: "Predomina un discurso:", options: ["Expositivo / Histórico", "Poético", "Argumentativo", "Persuasivo"], ans: 0 },
+            // Segmento 5
+            { id: 38, textRef: 'segment5', q: "'Rey del espacio' (verso 2) es:", options: ["Onomatopeya", "Metáfora", "Símil", "Paradoja"], ans: 1 },
+            { id: 39, textRef: 'segment5', q: "'Derrumbas' (verso 4) significa:", options: ["Construyes", "Acaricias", "Destruyes", "Iluminas"], ans: 2 },
+            { id: 40, textRef: 'segment5', q: "Se INFIERE de versos 3-4 que el viento es:", options: ["Destructivo", "Dual (delicado y violento)", "Triste", "Aburrido"], ans: 1 },
+            { id: 41, textRef: 'segment5', q: "Figura en verso 5 ('Galopas furioso'):", options: ["Personificación / Metáfora", "Símil", "Hipérbaton", "Epíteto"], ans: 0 },
+            { id: 42, textRef: 'segment5', q: "Según estrofa 3, el viento es:", options: ["Fácil de atrapar", "Tímido", "Imparable e invencible", "Débil"], ans: 2 },
+            { id: 43, textRef: 'segment5', q: "Evidencia de invencibilidad:", options: ["Verso 1-2", "Verso 5-6", "Versos 9-10 (No hay muro... ni espada)", "Verso 11"], ans: 2 },
+            { id: 44, textRef: 'segment5', q: "'Suspiro feroz' es contradicción porque:", options: ["Suspiro es suave vs feroz agresivo", "No hace ruido", "No puede respirar", "Rimas malas"], ans: 0 },
+            { id: 45, textRef: 'segment5', q: "Describe MEJOR el tema:", options: ["Técnica navegación", "Miedo a tormentas", "Fuerza libre e indomable", "Formación nubes"], ans: 2 }
+        ];
+
+        let currentIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        let timerSeconds = 3000; // 50 MINUTOS
+        let canAnswer = true;
+        let timerInterval;
+
+        function startExam() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            showQuestion();
+            startTimer();
+        }
+
+        function toggleReading() {
+            const modal = document.getElementById('reading-modal');
+            if (modal.classList.contains('hidden')) {
+                const q = questions[currentIndex];
+                const textData = texts[q.textRef];
+                document.getElementById('reading-title').innerText = textData.title;
+                document.getElementById('reading-content').innerHTML = textData.content;
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function showQuestion() {
+            canAnswer = true;
+            const q = questions[currentIndex];
+            const container = document.getElementById('question-box');
+            document.getElementById('progress-text').innerText = `${currentIndex + 1} de 45`;
+            document.getElementById('progress-bar').style.width = `${((currentIndex) / 45) * 100}%`;
+
+            let html = `
+                <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-lg border border-slate-100 fade-in">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-widest w-fit">Segmento ${q.textRef.slice(-1)}</span>
+                        <button onclick="toggleReading()" class="bg-slate-900 text-white text-[9px] font-black px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-slate-800 transition-colors uppercase tracking-widest active:scale-95 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Ver Lectura
+                        </button>
+                    </div>
+                    <h2 class="text-lg font-bold text-slate-800 mb-6 leading-tight">${q.q}</h2>
+                    <div id="options-grid" class="grid grid-cols-1 gap-3">
+            `;
+
+            q.options.forEach((opt, i) => {
+                html += `
+                    <button onclick="checkAnswer(${i})" 
+                        class="w-full text-left p-3 md:p-4 border-2 border-slate-50 rounded-2xl hover:border-blue-200 transition-all flex items-center gap-4 group">
+                        <span class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center font-black text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all text-xs">${['A','B','C','D'][i]}</span>
+                        <span class="font-semibold text-slate-700 text-sm">${opt}</span>
+                    </button>
+                `;
+            });
+
+            container.innerHTML = html + `</div></div>`;
+        }
+
+        function checkAnswer(index) {
+            if(!canAnswer) return;
+            canAnswer = false;
+            const q = questions[currentIndex];
+            const isCorrect = (index === q.ans);
+            
+            if(isCorrect) { 
+                correctCount++; 
+                document.getElementById('correct-counter').innerText = correctCount; 
+            } else {
+                incorrectCount++;
+            }
+            
+            const btns = document.querySelectorAll('#options-grid button');
+            btns[q.ans].classList.add('ans-correct');
+            if(!isCorrect) btns[index].classList.add('ans-wrong');
+            
+            setTimeout(() => { 
+                currentIndex++; 
+                if(currentIndex < 45) showQuestion(); else finishExam(); 
+            }, 1000);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => { 
+                if(timerSeconds > 0) { 
+                    timerSeconds--; 
+                    let m = Math.floor(timerSeconds/60); 
+                    let s = timerSeconds%60; 
+                    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`; 
+                } else finishExam(); 
+            }, 1000);
+        }
+
+        function finishExam() {
+            if (timerInterval) clearInterval(timerInterval);
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('reading-modal').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const score = Math.round((correctCount/45)*600)+200;
+            document.getElementById('final-scale-score').innerText = score;
+            document.getElementById('total-correct').innerText = correctCount;
+            document.getElementById('total-percent').innerText = `${Math.round((correctCount/45)*100)}%`;
+            document.getElementById('label-score-final').innerText = score;
+        }
+    </script>
+</body>
+</html>

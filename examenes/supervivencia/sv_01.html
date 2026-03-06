@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survival Logic: Reto 100</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .progress-transition { transition: width 0.5s ease-in-out; }
+        .option-btn:disabled { cursor: not-allowed; }
+        @keyframes pulse-red {
+            0%, 100% { border-color: #ef4444; color: #ef4444; }
+            50% { border-color: #fee2e2; color: #b91c1c; }
+        }
+        .timer-warning { animation: pulse-red 1s infinite; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-900 selection:bg-indigo-100">
+
+    <nav class="p-6">
+        <div class="max-w-2xl mx-auto flex items-center justify-center gap-2">
+            <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center shadow-lg shadow-purple-200">
+                <span class="text-white font-black">L</span>
+            </div>
+            <span class="font-black text-xl tracking-tighter">LOGIC<span class="text-purple-600">SURVIVAL</span></span>
+        </div>
+    </nav>
+
+    <main id="game-container" class="px-4 pb-12">
+        <!-- Pantallas se inyectan aquí -->
+    </main>
+
+    <script>
+        const ALL_QUESTIONS = [
+            // NIVEL 1: ORDEN Y SECUENCIAS
+            { id: 1, q: "La opción que indica que F va antes de E y que E va entre B y C es:", options: ["B, F, C, E", "F, E, C, B", "B, F, E, C", "C, E, F, B"], correct: 2 },
+            { id: 2, q: "La opción que indica que 8 va antes de 5 y que 2 NO va después de 5 ni antes de 8 es:", options: ["5, 2, 7, 8", "7, 8, 5, 2", "8, 7, 2, 5", "2, 8, 5, 7"], correct: 2 },
+            { id: 3, q: "La opción que indica que 4 NO va antes de 2 ni de 5 y que 9 NO va entre 4 y 5 es:", options: ["5, 2, 4, 9", "9, 2, 4, 5", "4, 9, 5, 2", "2, 5, 9, 4"], correct: 1 },
+            { id: 4, q: "La opción que indica que H va después de X y entre N y J y que X va antes de N y entre J y G es:", options: ["G, J, X, H, N", "X, G, N, J, H", "N, X, H, J, G", "J, X, H, N, G"], correct: 0 },
+            { id: 5, q: "La opción que indica que S va entre B y E, que Q va antes de B y después de W y que W va después de E es:", options: ["E, S, W, Q, B", "W, Q, B, S, E", "B, S, E, W, Q", "Q, E, W, S, B"], correct: 1 },
+            { id: 6, q: "La opción que indica que 5 va después de 3, que 3 va antes de 7 y después de 4 y que 2 NO va después de 7 es:", options: ["7, 2, 4, 3, 5", "3, 5, 2, 7, 4", "2, 4, 3, 5, 7", "4, 3, 5, 7, 2"], correct: 2 },
+            { id: 7, q: "La opción que indica que T está al lado de R, R está antes que P y P está antes que S es:", options: ["T, R, P, S", "R, P, S, T", "T, R, S, P", "P, S, R, T"], correct: 0 },
+            { id: 8, q: "La opción en la que 8 va después de 4 y entre 9 y 11, y 4 va entre 9 y 8 es:", options: ["9, 4, 11, 8", "9, 4, 8, 11", "4, 9, 8, 11", "4, 8, 11, 9"], correct: 1 },
+            { id: 9, q: "La opción que indica que 27 va después de 32, pero antes que 16 y 8, cuando 16 va después de 8, es:", options: ["8, 16, 32, 27", "32, 27, 8, 16", "27, 32, 8, 16", "8, 32, 27, 16"], correct: 1 },
+            { id: 10, q: "La opción que indica que M está antes que L, K está después de J, J está al lado de M, K está entre J y L, y K al lado de M es:", options: ["M, J, K, L", "J, K, M, L", "J, M, K, L", "J, M, L, K"], correct: 2 },
+            { id: 11, q: "Complete la secuencia: 10t, 25u, __, 55w.", options: ["30v", "35x", "40v", "45x"], correct: 2 },
+            { id: 12, q: "Complete los pares: (1, 3); (2, 5); (__, 7); (4, ___).", options: ["3, 8", "3, 9", "4, 10", "4, 11"], correct: 1 },
+            { id: 13, q: "Secuencia: f3, L5, e4, K6, ___, ___.", options: ["d5, J7", "d7, J5", "g5, I7", "g7, I5"], correct: 0 },
+            { id: 14, q: "Secuencia: m, O, k, Q, i, S, g, ___, ___.", options: ["T, f", "T, e", "U, f", "U, e"], correct: 2 },
+            { id: 15, q: "Secuencia: 16x², 18x⁴, 14x⁸, 22x¹⁶, ___.", options: ["6x³²", "12x²⁴", "18x³²", "26x²⁴"], correct: 0 },
+            { id: 16, q: "Secuencia: 2y², 4y³, 8y⁴, ___.", options: ["12y⁴", "14y⁶", "16y⁵", "18y⁶"], correct: 2 },
+            { id: 17, q: "Secuencia: 60, 120, 40, 80, 20, ___, ___.", options: ["40, 0", "40, 8", "60, 12", "60, 20"], correct: 1 },
+            { id: 18, q: "Secuencia: 1B, 2A, 3D, 4C, 5F, ___, ___.", options: ["6E, 7H", "6E, 7G", "6G, 7H", "6G, 7G"], correct: 0 },
+            { id: 19, q: "(a², ab²), a²b²; (x²y, xy²), ___.", options: ["xy", "x²y", "xy²", "x²y²"], correct: 3 },
+            { id: 20, q: "(4, 6), 2; (6, 9), ___.", options: ["2", "3", "4", "6"], correct: 1 },
+            { id: 21, q: "Secuencia: 5z, 10y, 20x, ___.", options: ["30w", "40w", "40v", "30v"], correct: 1 },
+            { id: 22, q: "Secuencia: A1, C4, E9, ___.", options: ["G16", "F12", "G12", "H16"], correct: 0 },
+            { id: 23, q: "Secuencia: 100, 90, 81, 73, ___.", options: ["66", "64", "65", "60"], correct: 0 },
+            { id: 24, q: "(2, 4, 8); (3, 9, 27); (4, 16, ___).", options: ["32", "48", "64", "128"], correct: 2 },
+            { id: 25, q: "Secuencia: x2, w4, u8, r16, ___.", options: ["n32", "m32", "p32", "o24"], correct: 0 },
+
+            // NIVEL 2: ANALOGÍAS Y METÁFORAS
+            { id: 26, q: "Depósito de palabras:", options: ["idea", "libro", "teclado", "voz"], correct: 1 },
+            { id: 27, q: "Armadura del árbol:", options: ["corteza", "ramas", "raíces", "follaje"], correct: 0 },
+            { id: 28, q: "Ventana al pasado:", options: ["reloj", "tiempo", "fotografía", "paisaje"], correct: 2 },
+            { id: 29, q: "Opulencia de colores:", options: ["brillo", "pigmentos", "arcoíris", "resplandor"], correct: 2 },
+            { id: 30, q: "Éxodo del invierno:", options: ["primavera", "otoño", "frío", "estación"], correct: 0 },
+            { id: 31, q: "Cimientos del árbol:", options: ["ramas", "corteza", "raíces", "tronco"], correct: 2 },
+            { id: 32, q: "Tormenta de sentimientos:", options: ["alegría", "confusión", "ansiedad", "gozo"], correct: 1 },
+            { id: 33, q: "Regla del tiempo:", options: ["cronómetro", "segundero", "hora", "minuto"], correct: 0 },
+            { id: 34, q: "Perlas de la boca:", options: ["poesía", "sonrisas", "halagos", "dientes"], correct: 3 },
+            { id: 35, q: "Resplandor de plata:", options: ["trueno", "nube", "lluvia", "rayo"], correct: 3 },
+            { id: 36, q: "Elefante es a pesado como pluma es a:", options: ["firme", "aérea", "liviana", "volátil"], correct: 2 },
+            { id: 37, q: "Sombrero es a cabeza como tulipán es a:", options: ["pétalo", "flor", "estambre", "tallo"], correct: 3 },
+            { id: 38, q: "Cansancio es a vitalidad como interés es a:", options: ["afinidad", "intriga", "apatía", "fortuna"], correct: 2 },
+            { id: 39, q: "Joyero es a anillo como coreógrafo es a:", options: ["canción", "danza", "coro", "partitura"], correct: 1 },
+            { id: 40, q: "Uva es a vino como carbono es a:", options: ["diamante", "mina", "elemento", "contaminación"], correct: 0 },
+            { id: 41, q: "Forma es a geometría como número es a:", options: ["aritmética", "triángulo", "ciencias", "división"], correct: 0 },
+            { id: 42, q: "Tijera es a papel como serrucho es a:", options: ["metal", "martillo", "madera", "carpintero"], correct: 2 },
+            { id: 43, q: "Tapa es a botella como puerta es a:", options: ["casa", "pared", "madera", "cerradura"], correct: 0 },
+            { id: 44, q: "Sol es a día como conocimiento es a:", options: ["ideas", "razón", "descubrimiento", "sabiduría"], correct: 1 },
+            { id: 45, q: "Libro es a visión como radio es a:", options: ["música", "audición", "locutor", "comunicación"], correct: 1 },
+            { id: 46, q: "Continente es a selva como ciudad es a:", options: ["parque", "nación", "municipio", "estado"], correct: 0 },
+            { id: 47, q: "Sílaba es a palabra como letra es a:", options: ["sonido", "diccionario", "lenguaje", "abecedario"], correct: 0 },
+            { id: 48, q: "Escultor es a estatua como arquitecto es a:", options: ["edificio", "cemento", "ladrillo", "ciudad"], correct: 0 },
+            { id: 49, q: "Pintura es a vista como textura es a:", options: ["color", "tacto", "suave", "cuadro"], correct: 1 },
+            { id: 50, q: "Lágrimas del cielo:", options: ["lluvia", "nubes", "viento", "estrellas"], correct: 0 },
+
+            // NIVEL 3: RAZONAMIENTO CONDICIONAL
+            { id: 51, q: "Todos los tunecinos son africanos. Todos los cartaginenses son tunecinos. Por lo tanto, todos los:", options: ["africanos son tunecinos", "tunecinos son cartaginenses", "africanos son cartaginenses", "cartaginenses son africanos"], correct: 3 },
+            { id: 52, q: "Todos los filósofos son optimistas. Ningún optimista es un soñador. Por lo tanto:", options: ["ningún filósofo es un soñador", "todos los soñadores son filósofos", "algunos soñadores son optimistas", "todos los soñadores son optimistas"], correct: 0 },
+            { id: 53, q: "Ninguna persona benévola es suspicaz. Algunos antagonistas son benévolos. Por lo tanto:", options: ["ningún antagonista es suspicaz", "algunos antagonistas no son suspicaces", "ninguna persona suspicaz es un antagonista", "algunas personas suspicaces son benévolas"], correct: 1 },
+            { id: 54, q: "Algunos lenguajes son románticos. Todos los lenguajes son hermosos. Por lo tanto:", options: ["todo lenguaje es romántico", "todo lo hermoso es romántico", "si es hermoso, entonces es lenguaje", "algunos lenguajes románticos son hermosos"], correct: 3 },
+            { id: 55, q: "Los anfibios son vertebrados. Las ranas son anfibios. Por lo tanto:", options: ["los vertebrados son anfibios", "los anfibios son ranas", "los vertebrados son ranas", "las ranas son vertebrados"], correct: 3 },
+            { id: 56, q: "Todos los ciudadanos responsables son cooperadores. Algunos vecinos son ciudadanos responsables. Por lo tanto:", options: ["todos los vecinos son cooperadores", "algunos vecinos son cooperadores", "ningún vecino es cooperador", "ningún ciudadano es cooperador"], correct: 1 },
+            { id: 57, q: "Si todos los atletas llevan una dieta rigurosa, entonces:", options: ["todos los de dieta rigurosa son atletas", "algunos atletas no llevan dieta", "Roberto lleva dieta y debe ser atleta", "Teresa es atleta y debe llevar dieta rigurosa"], correct: 3 },
+            { id: 58, q: "Si todos los escritores leen mucho y todos mis amigos son escritores, entonces:", options: ["todos mis amigos leen mucho", "todos los que leen mucho son escritores", "algunos de los que no leen mucho son mis amigos", "algunos de mis amigos no leen mucho"], correct: 0 },
+            { id: 59, q: "Si todas las ballenas son cetáceos y algunas ballenas tienen dientes, entonces:", options: ["todos los cetáceos tienen dientes", "todos los seres con dientes son cetáceos", "todas las ballenas tienen dientes", "algunos cetáceos tienen dientes"], correct: 3 },
+            { id: 60, q: "Aníbal va a la fiesta solamente si Betty va. Si Betty va, Carlos no irá. Si la fiesta no es el domingo, Carlos irá. Si los exámenes son el lunes, la fiesta no será el domingo. Hoy confirmaron los exámenes para el lunes. Por lo tanto:", options: ["ni Carlos ni Betty irán a la fiesta", "Aníbal no irá a la fiesta", "la fiesta será el sábado", "Betty irá a la fiesta"], correct: 1 },
+            { id: 61, q: "Todos los planetas giran alrededor de una estrella. Júpiter es un planeta. Por lo tanto:", options: ["Júpiter es una estrella", "Júpiter gira alrededor de una estrella", "las estrellas tienen planetas", "el sol es estrella"], correct: 1 },
+            { id: 62, q: "Si llueve, la calle se moja. La calle NO está mojada. Por lo tanto:", options: ["el sol secó la calle", "llovió muy poco", "no llovió", "va a llover"], correct: 2 },
+            { id: 63, q: "Algunas aves no vuelan. Todos los pingüinos son aves que no vuelan. Por lo tanto:", options: ["ningún ave vuela", "los pingüinos no vuelan", "los que no vuelan son pingüinos", "los pingüinos son peces"], correct: 1 },
+            { id: 64, q: "Todos los rectángulos tienen 4 lados. Todo cuadrado es un rectángulo. Por lo tanto:", options: ["los rectángulos son cuadrados", "algunos cuadrados tienen 3 lados", "todo cuadrado tiene 4 lados", "ningún rectángulo tiene 4 lados"], correct: 2 },
+            { id: 65, q: "Si el motor falla, el carro no avanza. El carro avanza. Por lo tanto:", options: ["el motor no falla", "el motor falla", "el carro no tiene motor", "el carro es eléctrico"], correct: 0 },
+            { id: 66, q: "Algunos ingenieros son creativos. Todos los inventores son creativos. Por lo tanto:", options: ["todos los ingenieros son inventores", "todos los creativos son ingenieros", "al menos un inventor es creativo", "algunos inventores son ingenieros"], correct: 2 },
+            { id: 67, q: "Ningún pájaro tiene escamas. El águila es un pájaro. Por lo tanto:", options: ["el águila tiene plumas", "el águila tiene escamas", "el águila no tiene escamas", "el águila vuela"], correct: 2 },
+            { id: 68, q: "Si es martes, hay clases. No hay clases. Por lo tanto:", options: ["es martes", "es lunes", "no es martes", "es fin de semana"], correct: 2 },
+            { id: 69, q: "Todos los felinos toman leche. Ningún reptil toma leche. Por lo tanto:", options: ["algunos reptiles son felinos", "ningún reptil es felino", "todos los que toman leche son felinos", "los felinos no son reptiles"], correct: 1 },
+            { id: 70, q: "Si la temperatura baja de cero, el agua se congela. El agua se congeló. Por lo tanto:", options: ["la temperatura bajó de cero", "el agua está fría", "la temperatura podría o no haber bajado (falacia)", "es invierno"], correct: 2 },
+            { id: 71, q: "Todas las rosas son flores. Algunas flores se marchitan rápido. Por lo tanto:", options: ["todas las rosas se marchitan rápido", "algunas rosas no son flores", "es posible que algunas rosas se marchiten rápido", "las flores no son rosas"], correct: 2 },
+            { id: 72, q: "Nadie que mienta es de confianza. Pedro es de confianza. Por lo tanto:", options: ["Pedro miente a veces", "Pedro nunca miente", "Pedro no habla", "todos los Pedro son de confianza"], correct: 1 },
+            { id: 73, q: "Si corres, te cansas. Si te cansas, duermes. Por lo tanto:", options: ["si duermes, corriste", "si corres, duermes", "si no duermes, corriste", "no corres para no dormir"], correct: 1 },
+            { id: 74, q: "Algunos árboles son frutales. El manzano es frutal. Por lo tanto:", options: ["el manzano es el único frutal", "todos los árboles son manzanos", "algunos árboles son manzanos", "el manzano da manzanas"], correct: 2 },
+            { id: 75, q: "Todo genio es incomprendido. Alberto es un genio. Por lo tanto:", options: ["Alberto es incomprendido", "Alberto entiende todo", "nadie comprende a nadie", "Alberto es popular"], correct: 0 },
+
+            // NIVEL 4: RAZONAMIENTO PRÁCTICO Y MATRICES
+            { id: 76, q: "Antonia conoce las calles, Fernando se pierde. Fernando conduce, Antonia da la dirección. Llegan tarde. Conclusión:", options: ["Antonia no conoce las calles", "Fernando estaba nervioso", "Salieron tarde", "La dirección no quedaba en la ciudad"], correct: 2 },
+            { id: 77, q: "Martín inscribió cuadros de pájaros en un concurso de paisajes. No lo premiaron porque:", options: ["jueces se oponían a su arte", "la gente no fue sincera", "llegó tarde", "la temática le impedía ser premiado"], correct: 3 },
+            { id: 78, q: "Enero: $2/100u. Feb: $3.50/60u. Marzo: $1/180u. Se infiere que:", options: ["A menor precio, mayor cantidad solicita", "El papel depende del precio", "Paga mismo precio", "A mayor precio, menor cantidad"], correct: 0 },
+            { id: 79, q: "Cristina levantó 5kg, luego 7kg, luego 10kg, luego 11kg. Conclusión:", options: ["Podría levantar 11 o más kilos", "Continuará yendo", "Levantará cualquier peso", "Se quedará en 11kg"], correct: 0 },
+            { id: 80, q: "Eduardo espera llamada a las 6pm. Carlos contesta equivocados y luego habla de 5:55 a 6:25. Conclusión:", options: ["Carlos no hizo caso", "Quien llamó a las 6:00 encontró ocupado", "Carlos recibió llamada personal", "El equivocado llamó de nuevo"], correct: 1 },
+            { id: 81, q: "Mario tiene orientación. Fernando pide que Mario conduzca a casa de Miguel. A las 10pm no han llegado. Probable:", options: ["Mario se perdió", "Fernando se perdió", "Miguel vive en lugar apartado", "suspendieron el viaje"], correct: 2 },
+            { id: 82, q: "Alumnos Roma: Margarita (geo), Juan (hist), Silvia (pol). Mario llegó último. Se infiere que:", options: ["No hizo informe", "Presentó conclusiones", "Seleccionó arte", "Analizó geografía"], correct: 2 },
+            { id: 83, q: "A=Raquetas, B=Redes, C=Ruedas. Tenis usa raqueta y red. ¿Sector?:", options: ["Sólo A", "Intersección A y B", "Sólo B", "Intersección A, B y C"], correct: 1 },
+            { id: 84, q: "Humberto recibe ruedas para ciclismo. ¿Sector?:", options: ["Intersección A y B", "Sólo B", "Intersección B y C", "Sólo C"], correct: 3 },
+            { id: 85, q: "A=Vocal, B=Verde, C=Redondo. Aguacate (Vocal, Verde, Ovalado). ¿Sector?:", options: ["Sólo A", "Intersección A y C", "Intersección A, B y C", "Intersección B y C"], correct: 2 },
+            { id: 86, q: "Nelly busca 'Sólo intersección B y C' o 'Sólo C'. ¿Qué encontró entre zanahorias, limones y uvas?:", options: ["Uvas y limones", "Limones y peras", "Uvas, zanahorias y limones", "Limones, zanahorias y peras"], correct: 0 },
+            { id: 87, q: "A=Historia, B=Biología, C=Literatura. Curso: 'Astro-influencia en literatura de época'. ¿Sector?:", options: ["Sólo Biología", "Historia, Biología, Literatura", "Biología y Literatura", "Sólo Literatura"], correct: 1 },
+            { id: 88, q: "Patrón: 1, 4, 14 / 3, 7, 37 / 7, 2, __.", options: ["49", "51", "72", "74"], correct: 2 },
+            { id: 89, q: "Sucesión: 24-52 / 30-58 / 42, 49, 56, __, __.", options: ["62, 69", "63, 70", "64, 71", "65, 72"], correct: 1 },
+            { id: 90, q: "A, e, i, o / f, G, h, j / E, i, o, u / __, H, j, k.", options: ["f", "F", "g", "G"], correct: 1 },
+            { id: 91, q: "Cobro $2 por día de retraso. Estudiante pagó $10. Se deduce:", options: ["El libro costaba $10", "Entregó con 5 días de retraso", "Perdió el libro", "No leyó el libro"], correct: 1 },
+            { id: 92, q: "M P T / O R V / Q T X / __ __ __ .", options: ["S W Z", "R V Z", "S V Y", "S V Z"], correct: 3 },
+            { id: 93, q: "Juliana invita: Andrés (cine/no playa), Nicolás (pizza/no deporte), Xavier (nadar/no TV). Felices en:", options: ["La playa", "Pizzería con arcades", "Parque con lago, cine y comida", "Escalar"], correct: 2 },
+            { id: 94, q: "Matriz: 2 4 6 / 3 5 7 / 5 __ __.", options: ["6, 8", "7, 9", "8, 10", "9, 11"], correct: 1 },
+            { id: 95, q: "Si luz parpadea, máquina se detiene. No se detuvo. Por lo tanto:", options: ["la luz no parpadeó", "la luz se fundió", "la máquina está rota", "la luz parpadeó rápido"], correct: 0 },
+            { id: 96, q: "Matriz: Z y X / W v U / T s __.", options: ["Q", "R", "r", "q"], correct: 1 },
+            { id: 97, q: "Todo pez tiene branquias. El tiburón tiene branquias. Por lo tanto:", options: ["El tiburón es pez", "El tiburón es peligroso", "Podría o no ser pez (falacia)", "El tiburón no vuela"], correct: 2 },
+            { id: 98, q: "Prohibido entrar con gorra. Luis no lleva gorra.", options: ["Luis no puede entrar", "Luis debe usar sombrero", "Luis no rompe la regla", "Luis comerá gratis"], correct: 2 },
+            { id: 99, q: "Secuencia: 1A, 4C, 9E, 16G, __.", options: ["25H", "25I", "20I", "36H"], correct: 1 },
+            { id: 100, q: "Metáfora: Lágrimas del cielo:", options: ["Lluvia", "Nubes", "Estrellas", "Cometas"], correct: 0 }
+        ];
+
+        let questions = [];
+        let currentIndex = 0;
+        let lives = 3;
+        let score = 0;
+        let timeLeft = 60;
+        let timerInterval;
+        let isAnswering = false;
+
+        const container = document.getElementById('game-container');
+
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function renderStart() {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center space-y-8 p-8 text-center bg-white rounded-3xl shadow-2xl max-w-lg mx-auto mt-12">
+                    <div class="p-4 bg-purple-100 rounded-full">
+                        <svg class="w-16 h-16 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-extrabold text-gray-900 mb-2">SURVIVAL LOGIC</h1>
+                        <p class="text-purple-600 font-bold tracking-widest text-sm uppercase">Reto 100 de Razonamiento</p>
+                    </div>
+                    <div class="space-y-4 text-left w-full bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <span class="text-red-500">❤️</span>
+                            <span class="text-gray-700 font-medium">3 Vidas - Un error te quita una</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-amber-500">⏱️</span>
+                            <span class="text-gray-700 font-medium">1 Minuto por pregunta</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-blue-500">🧩</span>
+                            <span class="text-gray-700 font-medium">100 Reactivos mezclados</span>
+                        </div>
+                    </div>
+                    <button onclick="startGame()" class="w-full py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-bold text-xl transition-all shadow-lg active:scale-95">
+                        ¡INICIAR DESAFÍO!
+                    </button>
+                    <p class="text-xs text-gray-400">Entrenamiento mental para examen de ingreso</p>
+                </div>
+            `;
+        }
+
+        function startGame() {
+            questions = shuffle([...ALL_QUESTIONS]);
+            currentIndex = 0;
+            lives = 3;
+            score = 0;
+            isAnswering = false;
+            startQuestion();
+        }
+
+        function startQuestion() {
+            timeLeft = 60;
+            isAnswering = false;
+            renderGame();
+            
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const timerEl = document.getElementById('timer-display');
+                if (timerEl) {
+                    timerEl.innerText = `${timeLeft}s`;
+                    if (timeLeft <= 10) timerEl.parentElement.classList.add('timer-warning');
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleFail('time');
+                }
+            }, 1000);
+        }
+
+        function renderGame() {
+            const q = questions[currentIndex];
+            const progress = ((currentIndex + 1) / questions.length) * 100;
+            
+            let hearts = "";
+            for(let i=0; i<3; i++) {
+                hearts += `<span class="text-2xl transition-opacity duration-300 ${i < lives ? 'opacity-100' : 'opacity-20'}">❤️</span>`;
+            }
+
+            container.innerHTML = `
+                <div class="max-w-2xl mx-auto mt-8">
+                    <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                        <div class="flex gap-1">${hearts}</div>
+                        <div class="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-amber-100 text-amber-600">
+                            <span class="font-mono text-2xl font-bold" id="timer-display">${timeLeft}s</span>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-slate-400 uppercase font-bold">Puntos</p>
+                            <p class="text-xl font-black text-purple-600">${score}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-6 h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-purple-500 progress-transition" style="width: ${progress}%"></div>
+                    </div>
+
+                    <div class="bg-white rounded-3xl shadow-xl p-8 border border-slate-100 min-h-[400px] flex flex-col">
+                        <div class="mb-8">
+                            <span class="inline-block px-3 py-1 bg-purple-50 text-purple-600 text-xs font-black rounded-lg mb-4 uppercase">
+                                Lógica - Reactivo ${currentIndex + 1}/100
+                            </span>
+                            <h2 class="text-2xl font-bold text-gray-800 leading-relaxed">${q.q}</h2>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-auto" id="options-grid">
+                            ${q.options.map((opt, i) => `
+                                <button onclick="checkAnswer(${i})" class="option-btn p-5 text-left rounded-2xl border-2 border-slate-100 hover:border-purple-200 hover:bg-purple-50 font-bold transition-all flex items-center gap-3">
+                                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-500 text-sm font-bold uppercase">${String.fromCharCode(65+i)}</span>
+                                    <span>${opt}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkAnswer(idx) {
+            if (isAnswering) return;
+            isAnswering = true;
+            clearInterval(timerInterval);
+
+            const q = questions[currentIndex];
+            const buttons = document.querySelectorAll('.option-btn');
+            
+            if (idx === q.correct) {
+                buttons[idx].classList.replace('border-slate-100', 'border-emerald-500');
+                buttons[idx].classList.add('bg-emerald-50', 'text-emerald-700');
+                score++;
+                setTimeout(nextStep, 800);
+            } else {
+                buttons[idx].classList.replace('border-slate-100', 'border-red-500');
+                buttons[idx].classList.add('bg-red-50', 'text-red-700');
+                buttons[q.correct].classList.replace('border-slate-100', 'border-emerald-500');
+                buttons[q.correct].classList.add('bg-emerald-50', 'text-emerald-700');
+                handleFail('wrong');
+            }
+        }
+
+        function handleFail(reason) {
+            lives--;
+            if (lives <= 0) {
+                setTimeout(renderGameOver, 1200);
+            } else {
+                setTimeout(nextStep, 1200);
+            }
+        }
+
+        function nextStep() {
+            currentIndex++;
+            if (currentIndex >= questions.length) {
+                renderWin();
+            } else {
+                startQuestion();
+            }
+        }
+
+        function renderGameOver() {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center space-y-8 p-12 text-center bg-white rounded-3xl shadow-2xl max-w-lg mx-auto mt-12 animate-in fade-in zoom-in duration-300">
+                    <div class="p-6 bg-red-100 rounded-full text-5xl">🧠❌</div>
+                    <h2 class="text-4xl font-black text-gray-900 uppercase">Sobrecarga Mental</h2>
+                    <p class="text-gray-500">Has agotado tus vidas de supervivencia lógica.</p>
+                    <div class="grid grid-cols-2 gap-4 w-full">
+                        <div class="p-4 bg-purple-50 rounded-2xl text-center">
+                            <p class="text-xs text-purple-400 font-black uppercase mb-1">Puntos</p>
+                            <p class="text-3xl font-black text-purple-700">${score}</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-2xl text-center">
+                            <p class="text-xs text-slate-400 font-black uppercase mb-1">Reactivo</p>
+                            <p class="text-3xl font-black text-slate-700">${currentIndex}</p>
+                        </div>
+                    </div>
+                    <button onclick="startGame()" class="w-full py-4 bg-purple-900 hover:bg-purple-800 text-white rounded-2xl font-bold text-xl transition-all shadow-xl active:scale-95 flex items-center justify-center gap-2">
+                        <span>🔄</span> REINTENTAR RETO
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderWin() {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center space-y-8 p-12 text-center bg-white rounded-3xl shadow-2xl max-w-lg mx-auto mt-12 animate-in slide-in-from-bottom-8 duration-500">
+                    <div class="p-6 bg-yellow-100 rounded-full text-5xl">👑</div>
+                    <h2 class="text-4xl font-black text-gray-900">GENIO DE LA LÓGICA</h2>
+                    <p class="text-gray-500">Superaste los 100 reactivos de supervivencia lógica. ¡Nivel Élite!</p>
+                    <div class="grid grid-cols-2 gap-4 w-full">
+                        <div class="p-4 bg-emerald-50 rounded-2xl">
+                            <p class="text-xs text-emerald-400 font-black uppercase mb-1">Aciertos</p>
+                            <p class="text-3xl font-black text-emerald-700">${score}</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-2xl">
+                            <p class="text-xs text-slate-400 font-black uppercase mb-1">Precisión</p>
+                            <p class="text-3xl font-black text-slate-700">${Math.round((score/100)*100)}%</p>
+                        </div>
+                    </div>
+                    <button onclick="startGame()" class="w-full py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-bold text-xl transition-all shadow-xl active:scale-95">
+                        REPETIR DESAFÍO
+                    </button>
+                </div>
+            `;
+        }
+
+        renderStart();
+    </script>
+</body>
+</html>

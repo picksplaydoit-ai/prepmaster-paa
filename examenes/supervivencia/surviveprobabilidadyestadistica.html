@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survive: Estadística PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Lora:italic&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow: hidden; }
+        .font-serif { font-family: 'Lora', serif; }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .math-fraction { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 4px; }
+        .math-numerator { border-bottom: 1px solid currentColor; padding: 0 4px; }
+        .math-denominator { padding: 0 4px; }
+        .math-bar { border-top: 1.5px solid currentColor; margin-top: 2px; padding-top: 1px; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-2 sm:p-4">
+
+    <div id="game-container" class="max-w-lg w-full bg-slate-900 rounded-[2rem] sm:rounded-[3rem] shadow-2xl overflow-hidden border border-white/10 relative">
+        <!-- El contenido se inyecta vía JavaScript -->
+    </div>
+
+    <script>
+        // --- MOTOR DE RENDERIZADO MATEMÁTICO ---
+        function renderMath(text) {
+            if (!text) return "";
+            return text.replace(/\$([^$]+)\$/g, (match, formula) => {
+                let rendered = formula
+                    .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '<span class="math-fraction"><span class="math-numerator">$1</span><span class="math-denominator">$2</span></span>')
+                    .replace(/\\bar\{x\}/g, '<span class="relative inline-block"><span class="absolute -top-1 left-0 right-0 border-t border-current"></span>x</span>')
+                    .replace(/\\times/g, '×')
+                    .replace(/\\neq/g, '≠')
+                    .replace(/\{([^}]+)\}/g, '{$1}'); // Para conjuntos como {1,2,3}
+                return `<span class="font-serif italic mx-0.5 whitespace-nowrap">${rendered}</span>`;
+            });
+        }
+
+        // --- BANCO DE 50 PREGUNTAS DE ESTADÍSTICA ---
+        const questionBank = [
+            { id: 1, question: "¿Cuál es la media aritmética (promedio) de los datos: $5, 10, 15, 20, 25$?", options: ["10", "15", "20", "75"], correct: 1, rationale: "Suma: $5+10+15+20+25 = 75$. Promedio: $75 / 5 = 15$." },
+            { id: 2, question: "Halla la mediana del siguiente conjunto de datos: $3, 1, 4, 2, 5$.", options: ["4", "2", "3", "2.5"], correct: 2, rationale: "Ordenamos: $1, 2, 3, 4, 5$. El valor central es 3." },
+            { id: 3, question: "¿Cuál es la moda en el conjunto: $2, 5, 2, 3, 5, 4, 5, 1$?", options: ["2", "3", "4", "5"], correct: 3, rationale: "La moda es el valor que más se repite. El 5 aparece tres veces." },
+            { id: 4, question: "¿Cuál es el rango del conjunto: $12, 5, 18, 2, 10$?", options: ["18", "16", "12", "10"], correct: 1, rationale: "Rango = Valor máximo - Valor mínimo. $18 - 2 = 16$." },
+            { id: 5, question: "Si lanzas un dado justo de 6 caras, ¿cuál es la probabilidad de obtener un número par?", options: ["$\\frac{1}{6}$", "$\\frac{1}{2}$", "$\\frac{1}{3}$", "$\\frac{2}{3}$"], correct: 1, rationale: "Casos favorables: {2, 4, 6} (3 casos). Total: 6. Probabilidad: $3/6 = 1/2$." },
+            { id: 6, question: "En una urna hay $3$ bolas rojas y $7$ blancas. ¿Cuál es la probabilidad de sacar una roja?", options: ["$0.3$", "$0.7$", "$\\frac{1}{3}$", "$3$"], correct: 0, rationale: "Favorables: 3. Total: 10. $3/10 = 0.3$." },
+            { id: 7, question: "Si la media de 4 números es $20$, ¿cuál es la suma de esos 4 números?", options: ["5", "40", "80", "100"], correct: 2, rationale: "Suma = Media $\\times$ Cantidad. $20 \\times 4 = 80$." },
+            { id: 8, question: "¿Cuál es la mediana de $2, 8, 10, 4$?", options: ["6", "4", "5", "7"], correct: 0, rationale: "Ordenados: $2, 4, 8, 10$. El centro está entre 4 y 8: $(4+8)/2 = 6$." },
+            { id: 9, question: "Un evento con probabilidad $0$ se considera:", options: ["Seguro", "Probable", "Imposible", "Raro"], correct: 2, rationale: "La probabilidad 0 indica que el evento no puede ocurrir bajo ninguna circunstancia." },
+            { id: 10, question: "Si el promedio de $x, 10$ y $15$ es $12$, ¿cuánto vale $x$?", options: ["11", "9", "12", "10"], correct: 1, rationale: "$(x + 10 + 15) / 3 = 12$ → $x + 25 = 36$ → $x = 11$ ... espera, $36-25=11$. Ah, la opción correcta es 11. (Verificando: 11+10+15=36/3=12)." },
+            { id: 11, question: "¿Cuál es la probabilidad de sacar una 'A' de la palabra 'ESTADISTICA'?", options: ["$\\frac{1}{11}$", "$\\frac{2}{11}$", "$\\frac{3}{11}$", "$\\frac{2}{10}$"], correct: 1, rationale: "La palabra tiene 11 letras. La letra 'A' aparece 2 veces. Probabilidad: $2/11$." },
+            { id: 12, question: "En una gráfica circular, un sector de $90$ grados representa qué porcentaje del total?", options: ["$10\\%$", "$20\\%$", "$25\\%$", "$50\\%$"], correct: 2, rationale: "$90$ es la cuarta parte de $360$. $1/4 = 25\\%$." },
+            { id: 13, question: "Si la probabilidad de que llueva es $0.35$, ¿cuál es la probabilidad de que NO llueva?", options: ["$0.35$", "$1.35$", "$0.65$", "$0.75$"], correct: 2, rationale: "Probabilidad del complemento: $1 - 0.35 = 0.65$." },
+            { id: 14, question: "Halla la media de: $0, 0, 0, 10$.", options: ["0", "2.5", "5", "10"], correct: 1, rationale: "Suma: 10. Cantidad: 4. $10 / 4 = 2.5$." },
+            { id: 15, question: "¿Qué medida de tendencia central es más afectada por valores extremos (outliers)?", options: ["Moda", "Mediana", "Media", "Rango"], correct: 2, rationale: "La media aritmética utiliza todos los valores, por lo que un dato muy grande o muy pequeño altera el resultado significativamente." },
+            { id: 16, question: "Rango de los datos: $-5, 0, 5, 10$.", options: ["5", "10", "15", "20"], correct: 2, rationale: "Máximo: 10. Mínimo: -5. Rango: $10 - (-5) = 15$." },
+            { id: 17, question: "Si lanzas dos monedas, ¿cuál es la probabilidad de obtener dos caras?", options: ["$\\frac{1}{2}$", "$\\frac{1}{4}$", "$\\frac{3}{4}$", "$\\frac{1}{3}$"], correct: 1, rationale: "Espacio muestral: {CC, CX, XC, XX}. Solo 1 de 4 es doble cara." },
+            { id: 18, question: "La suma de las probabilidades de todos los eventos posibles en un experimento es siempre:", options: ["0", "0.5", "1", "100"], correct: 2, rationale: "La suma de las probabilidades de un espacio muestral completo siempre es la unidad (o $100\\%$)." },
+            { id: 19, question: "Si en un grupo de 20 personas, 12 son mujeres, ¿cuál es la probabilidad de elegir un hombre?", options: ["$\\frac{3}{5}$", "$\\frac{2}{5}$", "$\\frac{12}{20}$", "$0.8$"], correct: 1, rationale: "Hombres: $20 - 12 = 8$. Probabilidad: $8/20 = 2/5 = 0.4$." },
+            { id: 20, question: "Halla la moda de: $A, B, A, C, B, A$.", options: ["A", "B", "C", "No hay"], correct: 0, rationale: "La letra 'A' aparece 3 veces, más que cualquier otra." },
+            { id: 21, question: "¿Cuántos resultados posibles hay al lanzar un dado y una moneda?", options: ["8", "12", "7", "36"], correct: 1, rationale: "Principio multiplicativo: $6 (dado) \\times 2 (moneda) = 12$." },
+            { id: 22, question: "Media de $1.5, 2.5, 5$.", options: ["3", "4.5", "9", "2.5"], correct: 0, rationale: "Suma: $1.5+2.5+5 = 9$. Promedio: $9/3 = 3$." },
+            { id: 23, question: "Si la mediana de 3 números distintos es $7$ y el menor es $3$, ¿cuál puede ser el mayor?", options: ["4", "6", "10", "7"], correct: 2, rationale: "Orden: $3, 7, x$. El mayor debe ser mayor a 7. 10 es la única opción válida." },
+            { id: 24, question: "Probabilidad de sacar un 'As' de una baraja de 52 cartas:", options: ["$\\frac{1}{52}$", "$\\frac{1}{13}$", "$\\frac{4}{13}$", "$\\frac{1}{4}$"], correct: 1, rationale: "Hay 4 ases en 52 cartas. $4/52 = 1/13$." },
+            { id: 25, question: "Si el rango de un conjunto es $0$, ¿qué podemos afirmar?", options: ["Todos los datos son 0", "Todos los datos son iguales", "No hay datos", "La media es 0"], correct: 1, rationale: "Si el máximo y el mínimo son iguales, la resta es 0, lo que implica que todos los valores son idénticos." },
+            { id: 26, question: "Mediana de: $10, 20, 30, 40, 50, 60$.", options: ["30", "40", "35", "45"], correct: 2, rationale: "Valores centrales: 30 y 40. $(30+40)/2 = 35$." },
+            { id: 27, question: "Si el promedio de dos números es $M$, ¿cuál es su suma?", options: ["$M/2$", "$M^2$", "$2M$", "$M+2$"], correct: 2, rationale: "Promedio = Suma / 2 → Suma = $2 \\times$ Promedio." },
+            { id: 28, question: "Un dado tiene 2 caras rojas, 2 verdes y 2 azules. Probabilidad de que salga roja:", options: ["$\\frac{1}{6}$", "$\\frac{1}{2}$", "$\\frac{1}{3}$", "$\\frac{2}{3}$"], correct: 2, rationale: "Favorables: 2. Total: 6. $2/6 = 1/3$." },
+            { id: 29, question: "En un histograma, la altura de la barra representa:", options: ["El valor del dato", "La frecuencia", "La media", "El rango"], correct: 1, rationale: "El eje vertical en un histograma o gráfica de barras indica cuántas veces ocurre ese intervalo o categoría." },
+            { id: 30, question: "Media de $100$ y $200$.", options: ["100", "150", "200", "300"], correct: 1, rationale: "$(100+200)/2 = 150$." },
+            { id: 31, question: "Si $P(A) = 0.8$, ¿cuánto es $P(A')$?", options: ["0.2", "0.8", "1.8", "0"], correct: 0, rationale: "$1 - 0.8 = 0.2$." },
+            { id: 32, question: "Si un conjunto tiene datos $\{5, 5, 5, 5\}$, la desviación estándar es:", options: ["5", "1", "0", "Indefinida"], correct: 2, rationale: "Como no hay dispersión (todos son iguales), la desviación es 0." },
+            { id: 33, question: "Probabilidad de sacar un número mayor a 4 en un dado:", options: ["$\\frac{1}{3}$", "$\\frac{1}{6}$", "$\\frac{1}{2}$", "$\\frac{2}{3}$"], correct: 0, rationale: "Favorables: {5, 6}. $2/6 = 1/3$." },
+            { id: 34, question: "Mediana de $\{8, 3, 9\}$.", options: ["3", "8", "9", "6.6"], correct: 1, rationale: "Ordenados: $3, 8, 9$. El de en medio es 8." },
+            { id: 35, question: "Suma de: $P(Éxito) + P(Fracaso)$ es:", options: ["0", "Variable", "1", "100"], correct: 2, rationale: "Son eventos complementarios." },
+            { id: 36, question: "¿Cuál es el promedio de los primeros 3 números naturales ($1, 2, 3$)?", options: ["1", "2", "3", "1.5"], correct: 1, rationale: "$(1+2+3)/3 = 2$." },
+            { id: 37, question: "Si la probabilidad es $1$, el evento es:", options: ["Posible", "Probable", "Seguro", "Incierto"], correct: 2, rationale: "Probabilidad 1 significa certeza absoluta." },
+            { id: 38, question: "Rango de $\{100, 101, 102\}$.", options: ["2", "1", "102", "3"], correct: 0, rationale: "$102 - 100 = 2$." },
+            { id: 39, question: "¿Cuál es el valor que falta si la media de $\{8, x\}$ es $10$?", options: ["2", "10", "12", "18"], correct: 2, rationale: "$(8+x)/2 = 10$ → $8+x = 20$ → $x = 12$." },
+            { id: 40, question: "Si lanzas una moneda 100 veces, ¿cuántas veces esperas que salga cara?", options: ["Exactamente 50", "Cerca de 50", "100", "0"], correct: 1, rationale: "La probabilidad es $0.5$, pero en la práctica los resultados fluctúan cerca del valor esperado." },
+            { id: 41, question: "Moda de $\{2, 2, 3, 3\}$.", options: ["2", "3", "2 y 3 (Bimodal)", "No hay"], correct: 2, rationale: "Ambos se repiten el mismo número máximo de veces." },
+            { id: 42, question: "Media de $\{10, 10, 40\}$.", options: ["10", "20", "30", "40"], correct: 1, rationale: "$(10+10+40)/3 = 60/3 = 20$." },
+            { id: 43, question: "Probabilidad de sacar una bola azul de una caja con 10 bolas negras:", options: ["1", "0.5", "0", "0.1"], correct: 2, rationale: "Es un evento imposible." },
+            { id: 44, question: "Si un estudiante tiene notas $70, 80, 90$, ¿qué nota necesita para promediar $85$?", options: ["85", "90", "100", "95"], correct: 2, rationale: "Suma actual: 240. Suma necesaria para 4 notas con promedio 85: $85 \\times 4 = 340$. $340 - 240 = 100$." },
+            { id: 45, question: "En una baraja de 52 cartas, ¿cuántas cartas son de corazones?", options: ["4", "10", "13", "26"], correct: 2, rationale: "Hay 4 palos, cada uno con 13 cartas ($52/4=13$)." },
+            { id: 46, question: "Mediana de $\{1, 10, 100\}$.", options: ["1", "10", "100", "37"], correct: 1, rationale: "El valor central al ordenar es 10." },
+            { id: 47, question: "Si $P(A) = 0.5$ y $P(B) = 0.5$, y son mutuamente excluyentes, $P(A \\text{ o } B) =$", options: ["0.25", "0.5", "1", "0"], correct: 2, rationale: "Suma de probabilidades: $0.5 + 0.5 = 1$." },
+            { id: 48, question: "Rango de $\{0, 0, 0\}$.", options: ["0", "No existe", "3", "1"], correct: 0, rationale: "$0 - 0 = 0$." },
+            { id: 49, question: "Promedio de los números del $1$ al $5$.", options: ["2", "2.5", "3", "5"], correct: 2, rationale: "$(1+2+3+4+5)/5 = 15/5 = 3$." },
+            { id: 50, question: "Si tienes 4 camisas y 3 pantalones, ¿cuántas combinaciones diferentes puedes hacer?", options: ["7", "12", "43", "1"], correct: 1, rationale: "$4 \\times 3 = 12$." }
+        ];
+
+        // --- ESTADO DEL JUEGO ---
+        let gameState = 'START';
+        let score = 0;
+        let lives = 3;
+        let timeLeft = 60;
+        let currentQuestion = null;
+        let usedIndices = [];
+        let timerInterval = null;
+        let isFeedbackVisible = false;
+
+        const container = document.getElementById('game-container');
+
+        // --- LÓGICA PRINCIPAL ---
+        function startChallenge() {
+            gameState = 'PLAYING';
+            score = 0;
+            lives = 3;
+            usedIndices = [];
+            pickNewQuestion();
+        }
+
+        function pickNewQuestion() {
+            if (score >= 10) {
+                showEndScreen('WON');
+                return;
+            }
+
+            const available = questionBank.filter((_, i) => !usedIndices.includes(i));
+            const pool = available.length > 0 ? available : questionBank;
+            const randomIndex = Math.floor(Math.random() * pool.length);
+            const originalIndex = questionBank.indexOf(pool[randomIndex]);
+
+            currentQuestion = pool[randomIndex];
+            usedIndices.push(originalIndex);
+            
+            isFeedbackVisible = false;
+            timeLeft = 60;
+            renderGame();
+            startTimer();
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (!isFeedbackVisible) {
+                    timeLeft--;
+                    updateHUD();
+                    if (timeLeft <= 0) {
+                        handlePenalty();
+                    }
+                }
+            }, 1000);
+        }
+
+        function handlePenalty() {
+            lives--;
+            isFeedbackVisible = true;
+            if (lives <= 0) {
+                setTimeout(() => showEndScreen('LOST'), 1500);
+            }
+            renderGame();
+        }
+
+        function handleOptionClick(idx) {
+            if (isFeedbackVisible) return;
+            isFeedbackVisible = true;
+            const correct = idx === currentQuestion.correct;
+
+            if (correct) {
+                score++;
+            } else {
+                lives--;
+                if (lives <= 0) {
+                    setTimeout(() => showEndScreen('LOST'), 1500);
+                }
+            }
+            renderGame(idx);
+        }
+
+        function showEndScreen(state) {
+            gameState = state;
+            clearInterval(timerInterval);
+            renderEndScreen();
+        }
+
+        // --- RENDERIZADO UI ---
+        function updateHUD() {
+            const timerEl = document.getElementById('timer-display');
+            if (timerEl) {
+                timerEl.innerText = `${timeLeft}s`;
+                if (timeLeft < 10) {
+                    timerEl.classList.add('text-rose-500', 'animate-pulse');
+                    timerEl.classList.remove('text-blue-400');
+                } else {
+                    timerEl.classList.remove('text-rose-500', 'animate-pulse');
+                    timerEl.classList.add('text-blue-400');
+                }
+            }
+            const bar = document.getElementById('timer-bar');
+            if (bar) bar.style.width = `${(timeLeft / 60) * 100}%`;
+        }
+
+        function renderGame(selectedIdx = null) {
+            container.innerHTML = `
+                <div class="flex flex-col h-full fade-in">
+                    <!-- HUD -->
+                    <div class="p-4 sm:p-6 border-b border-white/5 flex justify-between items-center bg-slate-900/50 backdrop-blur-md">
+                        <div class="flex items-center gap-3">
+                            <div class="flex gap-1">
+                                ${Array(3).fill(0).map((_, i) => `
+                                    <svg class="w-5 h-5 ${i < lives ? 'text-rose-500' : 'text-slate-700'}" fill="${i < lives ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                    </svg>
+                                `).join('')}
+                            </div>
+                            <div class="h-4 w-px bg-white/10 hidden sm:block"></div>
+                            <div class="flex items-center gap-2 text-white font-black text-sm">
+                                <span class="text-amber-500">🏆</span> ${score}/10
+                            </div>
+                        </div>
+                        <div id="timer-display" class="font-mono font-black text-xl text-blue-400">
+                            ${timeLeft}s
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="h-1.5 w-full bg-slate-800">
+                        <div id="timer-bar" class="h-full bg-blue-500 transition-all duration-1000 ease-linear" style="width: ${(timeLeft / 60) * 100}%"></div>
+                    </div>
+
+                    <!-- Question Content -->
+                    <div class="p-6 sm:p-8 space-y-6 overflow-y-auto max-h-[72vh] custom-scroll">
+                        <h2 class="text-lg sm:text-xl font-bold leading-relaxed text-white">
+                            ${renderMath(currentQuestion.question)}
+                        </h2>
+
+                        <div class="grid gap-2.5">
+                            ${currentQuestion.options.map((opt, idx) => {
+                                let borderClass = "border-white/5 bg-slate-800/40 hover:border-blue-500/50 hover:bg-slate-800";
+                                let iconClass = "bg-slate-700 text-slate-400 group-hover:bg-blue-500 group-hover:text-slate-950";
+                                
+                                if (isFeedbackVisible) {
+                                    if (idx === currentQuestion.correct) {
+                                        borderClass = "border-emerald-500 bg-emerald-500/10";
+                                        iconClass = "bg-emerald-500 text-white";
+                                    } else if (selectedIdx === idx) {
+                                        borderClass = "border-rose-500 bg-rose-500/10";
+                                        iconClass = "bg-rose-500 text-white";
+                                    } else {
+                                        borderClass = "border-white/5 opacity-40";
+                                        iconClass = "bg-slate-700 text-slate-500";
+                                    }
+                                }
+
+                                return `
+                                    <button 
+                                        onclick="handleOptionClick(${idx})"
+                                        ${isFeedbackVisible ? 'disabled' : ''}
+                                        class="w-full text-left p-4 rounded-2xl border-2 transition-all flex items-center gap-4 group ${borderClass}"
+                                    >
+                                        <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs transition-all ${iconClass}">
+                                            ${String.fromCharCode(65 + idx)}
+                                        </div>
+                                        <span class="text-sm sm:text-base font-medium">${renderMath(opt)}</span>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+
+                        ${isFeedbackVisible ? `
+                            <div class="p-4 bg-slate-800 rounded-2xl border-l-4 border-amber-500 fade-in flex gap-4 shadow-xl">
+                                <span class="text-amber-500 text-lg">📊</span>
+                                <div class="text-[11px] sm:text-xs text-slate-400 leading-relaxed">
+                                    <p class="font-black text-white uppercase mb-1 tracking-widest text-[9px]">Análisis de Datos</p>
+                                    ${renderMath(currentQuestion.rationale)}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="p-4 sm:p-6 bg-slate-900/80 border-t border-white/5 flex justify-end">
+                        <button 
+                            onclick="pickNewQuestion()"
+                            ${!isFeedbackVisible ? 'disabled' : ''}
+                            class="px-8 py-3.5 rounded-xl font-black uppercase tracking-widest text-[10px] flex items-center gap-2 transition-all 
+                            ${isFeedbackVisible ? 'bg-blue-500 text-slate-950 hover:bg-blue-400 active:scale-95 shadow-lg shadow-blue-500/20' : 'bg-slate-800 text-slate-500 cursor-not-allowed'}"
+                        >
+                            Siguiente →
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderEndScreen() {
+            const isWon = gameState === 'WON';
+            container.innerHTML = `
+                <div class="p-8 sm:p-12 text-center space-y-8 fade-in">
+                    <div class="space-y-4">
+                        <div class="w-24 h-24 rounded-full flex items-center justify-center mx-auto shadow-2xl border-4 border-slate-900 ${isWon ? 'bg-emerald-500' : 'bg-rose-500'}">
+                            <span class="text-5xl">${isWon ? '📈' : '📉'}</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-black uppercase tracking-tighter text-white">
+                            ${isWon ? '¡Maestro de Datos!' : 'Análisis Fallido'}
+                        </h2>
+                    </div>
+
+                    <div class="bg-slate-800/50 rounded-3xl p-8 border border-white/5">
+                        <p class="text-slate-500 font-black uppercase text-[10px] tracking-widest mb-3">Efectividad de Sesión</p>
+                        <div class="text-7xl font-black text-white tracking-tighter">${Math.round((score / 10) * 100)}%</div>
+                        <div class="mt-6 flex justify-center gap-10">
+                            <div class="text-center">
+                                <p class="text-slate-500 text-[9px] font-black uppercase mb-1">Aciertos</p>
+                                <p class="text-xl font-bold text-blue-400">${score}</p>
+                            </div>
+                            <div class="text-center border-l border-white/10 pl-10">
+                                <p class="text-slate-500 text-[9px] font-black uppercase mb-1">Vidas</p>
+                                <p class="text-xl font-bold text-rose-500">${lives}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="startChallenge()" class="w-full bg-white text-slate-950 font-black py-5 rounded-2xl shadow-xl hover:bg-blue-400 transition-all flex items-center justify-center gap-3 uppercase tracking-widest text-xs">
+                        🔄 Reiniciar Entrenamiento
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderStartScreen() {
+            container.innerHTML = `
+                <div class="p-8 sm:p-12 text-center space-y-8 fade-in">
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 bg-blue-500 text-slate-950 rounded-3xl flex items-center justify-center mx-auto shadow-[0_0_50px_rgba(59,130,246,0.2)] rotate-3">
+                        <span class="text-5xl">📊</span>
+                    </div>
+                    <div class="space-y-3">
+                        <h1 class="text-3xl sm:text-4xl font-black uppercase tracking-tighter text-white">Survive: Estadística</h1>
+                        <p class="text-blue-400 font-bold tracking-[0.2em] text-[10px] uppercase">Análisis y Probabilidad PAA</p>
+                    </div>
+                    <div class="bg-slate-800/40 p-6 rounded-2xl text-xs sm:text-sm text-slate-400 text-left space-y-4 border border-white/5">
+                        <div class="flex items-center gap-3 text-white"><span>✅</span> <span>Banco de <b>50 reactivos estadísticos</b></span></div>
+                        <div class="flex items-center gap-3"><span>❤️</span> <span>Vidas: <b>3 intentos</b> por sesión.</span></div>
+                        <div class="flex items-center gap-3"><span>⏱️</span> <span>Tiempo: <b>60s por análisis</b></span></div>
+                    </div>
+                    <button 
+                        onclick="startChallenge()"
+                        class="w-full bg-white text-slate-950 font-black py-5 rounded-2xl hover:bg-blue-400 transition-all uppercase tracking-widest text-xs active:scale-95 shadow-xl"
+                    >
+                        Entrar al Reto Final
+                    </button>
+                </div>
+            `;
+        }
+
+        // Inicialización
+        renderStartScreen();
+    </script>
+</body>
+</html>

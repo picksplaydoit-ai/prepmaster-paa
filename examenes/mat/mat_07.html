@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador PAA Matemáticas N°7</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow: hidden; }
+        .sticky-header { position: sticky; top: 0; z-index: 50; }
+        .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
+        .ans-wrong   { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .progress-bar { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(10px);} to { opacity:1; transform:translateY(0);} }
+        .glass-card { background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.2); }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .svg-wrap { background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:10px; margin-bottom:14px; display:flex; justify-content:center; }
+    </style>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col">
+
+<div id="start-screen" class="flex-grow flex items-center justify-center p-4">
+    <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
+        <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg rotate-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            </svg>
+        </div>
+        <h1 class="text-2xl font-extrabold text-slate-900 mb-2 uppercase tracking-tight">Simulador PAA</h1>
+        <p class="text-slate-500 mb-4 font-medium text-sm">Matemáticas N°7 · (55 Reactivos)</p>
+        <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 text-left rounded-r-xl">
+            <p class="text-xs text-amber-900 leading-relaxed font-semibold">¡Importante! Obtendrás de <span class="underline">200 a 800</span> puntos.</p>
+            <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold tracking-tighter italic">Anota el resultado para tu cálculo final.</p>
+        </div>
+        <button onclick="startExam()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">COMENZAR EXAMEN</button>
+    </div>
+</div>
+
+<div id="exam-screen" class="hidden h-full flex flex-col">
+    <div class="sticky-header bg-white border-b border-slate-200 p-3">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex gap-4">
+                <div class="text-center">
+                    <p class="text-[9px] font-black text-slate-400 uppercase">Tiempo</p>
+                    <p id="timer" class="text-lg font-mono font-black text-blue-600 leading-none">60:00</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-[9px] font-black text-emerald-500 uppercase">Bien</p>
+                    <p id="correct-counter" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                </div>
+            </div>
+            <div class="flex-1 max-w-xs ml-4">
+                <p id="progress-text" class="text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-tighter">Cargando...</p>
+                <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="progress-bar h-full bg-blue-600 w-0"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <main class="flex-grow flex items-center justify-center p-4 overflow-hidden">
+        <div id="question-box" class="max-w-xl w-full"></div>
+    </main>
+</div>
+
+<div id="result-screen" class="hidden h-full flex items-center justify-center p-4 overflow-hidden">
+    <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-white fade-in flex flex-col max-h-[95vh]">
+        <div class="bg-slate-900 p-6 md:p-8 text-center text-white flex-shrink-0">
+            <p class="text-blue-400 font-bold uppercase tracking-[0.3em] text-[9px] mb-2">Puntaje Final de Escala</p>
+            <div class="flex items-center justify-center gap-2">
+                <h2 id="final-scale-score" class="text-6xl font-black tracking-tighter leading-none">0</h2>
+                <p class="text-slate-500 font-bold text-lg">/ 800</p>
+            </div>
+        </div>
+        <div class="p-6 md:p-8 flex-grow overflow-y-auto custom-scroll">
+            <div class="grid grid-cols-3 gap-3 mb-6">
+                <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
+                    <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Aciertos</p>
+                    <p class="text-xl font-black text-slate-800"><span id="total-correct">0</span><span class="text-slate-300 text-sm">/55</span></p>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
+                    <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Efectividad</p>
+                    <p id="total-percent" class="text-xl font-black text-blue-600">0%</p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-2xl text-white flex flex-col justify-center text-center">
+                    <p class="text-[7px] font-black text-blue-400 uppercase">Estatus</p>
+                    <p class="text-xs font-bold leading-tight">Perfil Analizado</p>
+                </div>
+            </div>
+            <div id="area-breakdown" class="grid grid-cols-2 gap-3 mb-6"></div>
+            <div class="p-5 bg-blue-600 rounded-3xl text-white shadow-lg">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                    <div>
+                        <h4 class="text-lg font-black leading-none mb-1 uppercase tracking-tight">¡Anota tu resultado!</h4>
+                        <p class="text-blue-100 text-[10px]">Puntaje: <span id="label-score-final" class="font-black text-white underline text-xs">0</span> pts para el promedio global.</p>
+                    </div>
+                    <button onclick="location.reload()" class="bg-white text-blue-600 font-black px-6 py-2 rounded-xl hover:bg-blue-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0">Reiniciar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const svgs = {
+    barras_ventas: `<svg width="270" height="155" viewBox="0 0 270 155" font-family="Inter,sans-serif" font-size="10">
+        <!-- ejes -->
+        <line x1="40" y1="120" x2="255" y2="120" stroke="#94a3b8" stroke-width="1.5"/>
+        <line x1="40" y1="120" x2="40" y2="10" stroke="#94a3b8" stroke-width="1.5"/>
+        <!-- eje y labels -->
+        <text x="33" y="122" text-anchor="end" fill="#64748b">0</text>
+        <text x="33" y="97" text-anchor="end" fill="#64748b">10</text>
+        <text x="33" y="72" text-anchor="end" fill="#64748b">20</text>
+        <text x="33" y="47" text-anchor="end" fill="#64748b">30</text>
+        <text x="33" y="22" text-anchor="end" fill="#64748b">40</text>
+        <!-- líneas guía -->
+        <line x1="40" y1="97" x2="255" y2="97" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3"/>
+        <line x1="40" y1="72" x2="255" y2="72" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3"/>
+        <line x1="40" y1="47" x2="255" y2="47" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3"/>
+        <line x1="40" y1="22" x2="255" y2="22" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3"/>
+        <!-- barras: Lun=25, Mar=15, Mié=35, Jue=20, Vie=30 -->
+        <rect x="52" y="57" width="28" height="63" fill="#3b82f6" rx="3"/>
+        <rect x="96" y="82" width="28" height="38" fill="#3b82f6" rx="3"/>
+        <rect x="140" y="32" width="28" height="88" fill="#3b82f6" rx="3"/>
+        <rect x="184" y="70" width="28" height="50" fill="#3b82f6" rx="3"/>
+        <rect x="228" y="45" width="28" height="75" fill="#3b82f6" rx="3"/>
+        <!-- etiquetas eje x -->
+        <text x="66" y="133" text-anchor="middle" fill="#475569">Lun</text>
+        <text x="110" y="133" text-anchor="middle" fill="#475569">Mar</text>
+        <text x="154" y="133" text-anchor="middle" fill="#475569">Mié</text>
+        <text x="198" y="133" text-anchor="middle" fill="#475569">Jue</text>
+        <text x="242" y="133" text-anchor="middle" fill="#475569">Vie</text>
+        <!-- valores sobre barras -->
+        <text x="66" y="53" text-anchor="middle" font-weight="700" fill="#1d4ed8">25</text>
+        <text x="110" y="78" text-anchor="middle" font-weight="700" fill="#1d4ed8">15</text>
+        <text x="154" y="28" text-anchor="middle" font-weight="700" fill="#1d4ed8">35</text>
+        <text x="198" y="66" text-anchor="middle" font-weight="700" fill="#1d4ed8">20</text>
+        <text x="242" y="41" text-anchor="middle" font-weight="700" fill="#1d4ed8">30</text>
+        <text x="148" y="150" text-anchor="middle" font-size="9" fill="#6b7280">Ventas diarias de una semana</text>
+    </svg>`,
+
+    funcion_cuad: `<svg width="270" height="165" viewBox="0 0 270 165" font-family="Inter,sans-serif" font-size="10">
+        <line x1="30" y1="130" x2="250" y2="130" stroke="#94a3b8" stroke-width="1.5"/>
+        <line x1="140" y1="145" x2="140" y2="5" stroke="#94a3b8" stroke-width="1.5"/>
+        <!-- cuadrante labels -->
+        <text x="245" y="128" fill="#94a3b8">x</text>
+        <text x="143" y="8"  fill="#94a3b8">y</text>
+        <!-- escala x -->
+        <text x="100" y="142" text-anchor="middle" fill="#64748b">-2</text>
+        <text x="120" y="142" text-anchor="middle" fill="#64748b">-1</text>
+        <text x="140" y="142" text-anchor="middle" fill="#64748b">0</text>
+        <text x="160" y="142" text-anchor="middle" fill="#64748b">1</text>
+        <text x="180" y="142" text-anchor="middle" fill="#64748b">2</text>
+        <!-- y = -x² + 2x + 3 ; vértice (1,4) -->
+        <!-- x=-2: y=-4-4+3=-5 → off screen
+             x=-1: y=-1-2+3=0  → (120,130)
+             x=0:  y=3          → (140,100)
+             x=1:  y=4          → (160,90)
+             x=2:  y=3          → (180,100)
+             x=3:  y=0          → (200,130) -->
+        <path d="M 120,130 C 130,100 150,80 160,85 C 170,80 190,100 200,130" fill="none" stroke="#10b981" stroke-width="2.5"/>
+        <!-- vértice -->
+        <circle cx="160" cy="85" r="4" fill="#10b981"/>
+        <text x="165" y="80" fill="#059669" font-weight="700" font-size="9">V(1,4)</text>
+        <!-- intersecciones eje x -->
+        <circle cx="120" cy="130" r="3" fill="#7c3aed"/>
+        <circle cx="200" cy="130" r="3" fill="#7c3aed"/>
+        <text x="113" y="125" fill="#6d28d9" font-size="9">(-1,0)</text>
+        <text x="200" y="125" fill="#6d28d9" font-size="9">(3,0)</text>
+        <text x="205" y="55" fill="#059669" font-weight="700">y=−x²+2x+3</text>
+    </svg>`,
+
+    venn_materias: `<svg width="290" height="160" viewBox="0 0 290 160" font-family="Inter,sans-serif" font-size="10">
+        <!-- Tres conjuntos: Mat, Fís, Quím -->
+        <circle cx="115" cy="80" r="55" fill="#bfdbfe" fill-opacity="0.65" stroke="#3b82f6" stroke-width="2"/>
+        <circle cx="175" cy="80" r="55" fill="#bbf7d0" fill-opacity="0.65" stroke="#10b981" stroke-width="2"/>
+        <!-- etiquetas -->
+        <text x="85"  y="62" text-anchor="middle" font-weight="700" fill="#1e40af" font-size="11">Física</text>
+        <text x="85"  y="78" text-anchor="middle" fill="#1e40af" font-size="10">solo</text>
+        <text x="85"  y="94" text-anchor="middle" font-weight="800" fill="#1d4ed8" font-size="13">14</text>
+        <text x="145" y="70" text-anchor="middle" font-weight="700" fill="#374151" font-size="10">Ambas</text>
+        <text x="145" y="86" text-anchor="middle" font-weight="800" fill="#374151" font-size="13">6</text>
+        <text x="205" y="62" text-anchor="middle" font-weight="700" fill="#065f46" font-size="11">Química</text>
+        <text x="205" y="78" text-anchor="middle" fill="#065f46" font-size="10">solo</text>
+        <text x="205" y="94" text-anchor="middle" font-weight="800" fill="#059669" font-size="13">10</text>
+        <text x="145" y="148" text-anchor="middle" font-size="9" fill="#6b7280">Total grupo = 35 (5 ninguna)</text>
+    </svg>`,
+
+    plano_puntos: `<svg width="260" height="175" viewBox="0 0 260 175" font-family="Inter,sans-serif" font-size="10">
+        <line x1="30" y1="130" x2="240" y2="130" stroke="#94a3b8" stroke-width="1.5"/>
+        <line x1="130" y1="145" x2="130" y2="10" stroke="#94a3b8" stroke-width="1.5"/>
+        <!-- escala -->
+        <text x="70" y="143" text-anchor="middle" fill="#64748b">-3</text>
+        <text x="90" y="143" text-anchor="middle" fill="#64748b">-2</text>
+        <text x="110" y="143" text-anchor="middle" fill="#64748b">-1</text>
+        <text x="130" y="143" text-anchor="middle" fill="#64748b">0</text>
+        <text x="150" y="143" text-anchor="middle" fill="#64748b">1</text>
+        <text x="170" y="143" text-anchor="middle" fill="#64748b">2</text>
+        <text x="190" y="143" text-anchor="middle" fill="#64748b">3</text>
+        <!-- puntos del plano -->
+        <circle cx="90" cy="90" r="5" fill="#ef4444"/>
+        <text x="82" y="83" fill="#dc2626" font-weight="700">A(-2, 2)</text>
+        <circle cx="170" cy="70" r="5" fill="#3b82f6"/>
+        <text x="173" y="63" fill="#1d4ed8" font-weight="700">B(2, 3)</text>
+        <circle cx="90" cy="150" r="5" fill="#10b981"/>
+        <text x="93" y="165" fill="#059669" font-weight="700">C(-2,-1)</text>
+        <circle cx="190" cy="150" r="5" fill="#f59e0b"/>
+        <text x="193" y="165" fill="#d97706" font-weight="700">D(3,-1)</text>
+        <!-- segmento AB -->
+        <line x1="90" y1="90" x2="170" y2="70" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4"/>
+    </svg>`
+};
+
+const questions = [
+    { id:1,  area:"Aritmética",  type:"multiple", q:"Si se divide un número entre 7, el cociente es 11 y el residuo es 4. ¿Cuál es el número?", options:["74","77","81","81"], ans:2 },
+    { id:2,  area:"Álgebra I",   type:"multiple", q:"Resuelve el sistema: 2x + y = 7 y x − y = 2. ¿Cuánto vale x?", options:["2","3","4","5"], ans:1 },
+    { id:3,  area:"Geometría",   type:"multiple", q:"¿Cuántos ejes de simetría tiene un hexágono regular?", options:["3","4","6","8"], ans:2 },
+    { id:4,  area:"Probabilidad",type:"multiple", q:"¿De cuántas formas se pueden ordenar 4 personas en fila?", options:["8","12","16","24"], ans:3 },
+    { id:5,  area:"Álgebra II",  type:"multiple", q:"¿Cuál es el dominio de la función f(x) = √(x − 5)?", options:["x < 5","x ≤ 5","x ≥ 5","Todos los reales"], ans:2 },
+    { id:6,  area:"Estadística", type:"multiple", q:"Si la media es 15 y hay 6 datos cuya suma es 90, ¿cuántos datos hay?", options:["5","6","7","8"], ans:1 },
+    { id:7,  area:"Aritmética",  type:"multiple", q:"¿Cuánto es 5.2 × 10⁴ + 3.0 × 10³?", options:["8.2 × 10³","5.5 × 10⁴","8.2 × 10⁴","55 × 10³"], ans:1 },
+    { id:8,  area:"Álgebra I",   type:"multiple", q:"Si h(x) = x² + 3x − 10, ¿cuál es el valor de h(2)?", options:["−4","0","4","8"], ans:1 },
+    { id:9,  area:"Geometría",   type:"multiple", q:"Área de un trapecio con bases 8 y 14 y altura 6:", options:["44","66","72","132"], ans:1 },
+    { id:10, area:"Álgebra II",  type:"multiple", q:"¿Cuál es la ecuación de la recta paralela a y = 3x − 5 que pasa por (0, 2)?", options:["y = 2x + 3","y = 3x + 2","y = −3x + 2","y = 3x − 2"], ans:1 },
+
+    { id:11, area:"Aritmética",  type:"multiple", q:"El número 720 expresado como producto de factores primos es:", options:["2³ × 3² × 5","2⁴ × 3² × 5","2⁴ × 3³ × 5","2³ × 3³ × 5"], ans:1 },
+    { id:12, area:"Álgebra I",   type:"multiple", q:"Factoriza: x³ − 27", options:["(x−3)³","(x+3)(x²−3x+9)","(x−3)(x²+3x+9)","(x−3)(x+3)²"], ans:2 },
+    { id:13, area:"Geometría",   type:"multiple", q:"Perímetro de un semicírculo de diámetro 10:", options:["5π","10π","5π + 10","10π + 10"], ans:2 },
+    { id:14, area:"Estadística", type:"multiple", q:"La varianza de {2, 4, 4, 4, 5, 5, 7, 9} con media 5 es:", options:["2","4","5","6"], ans:1 },
+    { id:15, area:"Álgebra II",  type:"multiple", q:"Valor de 3^(−2) + 2^(−3):", options:["1/8","1/9","17/72","1/72"], ans:2 },
+    { id:16, area:"Probabilidad",type:"multiple", q:"Combinaciones de 3 elementos de un grupo de 5:", options:["10","15","20","60"], ans:0 },
+    { id:17, area:"Aritmética",  type:"multiple", q:"¿Cuál es el 35% de 140?", options:["40","49","52","56"], ans:1 },
+    { id:18, area:"Álgebra I",   type:"multiple", q:"Simplifica: (3x − 2)(3x + 2) − (3x − 2)²", options:["4 − 6x","6x − 4","12x − 8","−12x + 8"], ans:0 },
+    { id:19, area:"Geometría",   type:"multiple", q:"El ángulo central que subtiende un arco de 90° en un círculo es:", options:["45°","90°","180°","270°"], ans:1 },
+    { id:20, area:"Álgebra II",  type:"multiple", q:"Raíces de: 3x² − 12x = 0", options:["x=0 y x=4","x=0 y x=−4","x=4 y x=−4","x=3 y x=4"], ans:0 },
+
+    // SVG barras
+    { id:21, area:"Estadística", type:"multiple",
+      svg:"barras_ventas",
+      q:"Según la gráfica de barras, ¿cuántas ventas se registraron en total durante la semana?", options:["100","115","125","130"], ans:2 },
+    { id:22, area:"Estadística", type:"multiple",
+      svg:"barras_ventas",
+      q:"¿Cuál es el promedio diario de ventas según la gráfica?", options:["20","22","25","28"], ans:2 },
+    { id:23, area:"Estadística", type:"multiple",
+      svg:"barras_ventas",
+      q:"¿En qué día hubo la diferencia más grande respecto al promedio de la semana?", options:["Lunes","Martes","Miércoles","Viernes"], ans:2 },
+
+    // SVG función cuadrática
+    { id:24, area:"Álgebra II",  type:"multiple",
+      svg:"funcion_cuad",
+      q:"Según la gráfica, ¿cuál es el vértice (punto más alto) de la parábola y = −x² + 2x + 3?", options:["(0, 3)","(1, 4)","(2, 3)","(−1, 0)"], ans:1 },
+    { id:25, area:"Álgebra II",  type:"multiple",
+      svg:"funcion_cuad",
+      q:"Usando la gráfica, ¿cuáles son las intersecciones de la parábola con el eje x?", options:["x = 0 y x = 3","x = −1 y x = 3","x = 1 y x = 4","x = −1 y x = 2"], ans:1 },
+    { id:26, area:"Álgebra II",  type:"multiple",
+      svg:"funcion_cuad",
+      q:"Según la parábola mostrada, ¿para qué valores de x es positiva la función (f(x) > 0)?", options:["−1 < x < 3","x > 1","x < −1 o x > 3","−2 < x < 4"], ans:0 },
+
+    // SVG diagrama de Venn
+    { id:27, area:"Conjuntos",   type:"multiple",
+      svg:"venn_materias",
+      q:"Según el diagrama, ¿cuántos estudiantes estudian Física (incluyendo los que también estudian Química)?", options:["14","20","24","30"], ans:1 },
+    { id:28, area:"Conjuntos",   type:"multiple",
+      svg:"venn_materias",
+      q:"Si el grupo tiene 35 personas y 5 no estudian ninguna materia, ¿cuántos estudian al menos una?", options:["25","30","35","40"], ans:1 },
+
+    // SVG plano cartesiano
+    { id:29, area:"Geometría",   type:"multiple",
+      svg:"plano_puntos",
+      q:"¿Cuál es la distancia entre los puntos A(−2, 2) y B(2, 3) del plano?", options:["√15","√17","√19","5"], ans:1 },
+    { id:30, area:"Geometría",   type:"multiple",
+      svg:"plano_puntos",
+      q:"¿Cuáles son las coordenadas del punto medio del segmento CD, donde C(−2,−1) y D(3,−1)?", options:["(0.5, −1)","(1, −1)","(0, 0)","(0.5, 0)"], ans:0 },
+
+    { id:31, area:"Aritmética",  type:"multiple", q:"Un recipiente tiene 3/4 de su capacidad llena. Si contiene 12 litros, ¿cuánto es su capacidad total?", options:["9","14","16","18"], ans:2 },
+    { id:32, area:"Álgebra I",   type:"multiple", q:"Si 2^x = 64, ¿cuánto es x?", options:["4","5","6","7"], ans:2 },
+    { id:33, area:"Geometría",   type:"multiple", q:"Área de superficie de un cubo de arista 4 cm:", options:["48","64","96","128"], ans:2 },
+    { id:34, area:"Estadística", type:"multiple", q:"¿Cuántos cuartiles tiene una distribución?", options:["2","3","4","5"], ans:1 },
+    { id:35, area:"Álgebra II",  type:"multiple", q:"¿Cuál es la pendiente de la recta perpendicular a y = 2x + 1?", options:["2","−2","1/2","−1/2"], ans:3 },
+    { id:36, area:"Probabilidad",type:"multiple", q:"Urna A: 3 rojas, 2 azules. Se saca una. ¿P(no roja)?", options:["2/5","3/5","1/3","2/3"], ans:0 },
+    { id:37, area:"Aritmética",  type:"multiple", q:"Sucesión de Fibonacci: 1, 1, 2, 3, 5, 8, __ ¿Qué sigue?", options:["11","12","13","14"], ans:2 },
+    { id:38, area:"Álgebra I",   type:"multiple", q:"¿Cuánto vale k si el polinomio x² + kx + 9 es cuadrado perfecto?", options:["3","6","9","±6"], ans:3 },
+    { id:39, area:"Geometría",   type:"multiple", q:"¿Cuántos triángulos se pueden trazar en un polígono de 6 lados desde un mismo vértice?", options:["3","4","5","6"], ans:1 },
+    { id:40, area:"Álgebra II",  type:"multiple", q:"Si f(x) = x + 3 y g(x) = x², ¿cuánto es g(f(2))?", options:["7","25","14","49"], ans:1 },
+    { id:41, area:"Estadística", type:"multiple", q:"En 20 lanzamientos, una moneda cayó cara 13 veces. Frecuencia relativa de cara:", options:["0.55","0.60","0.65","0.70"], ans:2 },
+    { id:42, area:"Aritmética",  type:"multiple", q:"Dos trenes parten a la vez en sentidos contrarios: uno a 80 km/h y otro a 70 km/h. ¿En cuántas horas estarán a 300 km?", options:["1.5 h","2 h","2.5 h","3 h"], ans:1 },
+    { id:43, area:"Álgebra II",  type:"multiple", q:"¿Cuál es el valor de log₃ 81?", options:["3","4","9","27"], ans:1 },
+    { id:44, area:"Geometría",   type:"multiple", q:"El volumen de una esfera de radio 3 es:", options:["12π","36π","108π","324π"], ans:1 },
+    { id:45, area:"Probabilidad",type:"multiple", q:"¿Cuántos anagramas tiene la palabra 'AMOR' (sin repetición)?", options:["8","12","16","24"], ans:3 },
+
+    // abiertas 46-55
+    { id:46, area:"Aritmética",  type:"open", q:"¿Cuánto es 7! (factorial de 7)?", ans:"5040" },
+    { id:47, area:"Álgebra I",   type:"open", q:"Si f(x) = 2x − 5, ¿para qué valor de x f(x) = 11?", ans:"8" },
+    { id:48, area:"Geometría",   type:"open", q:"Área de un hexágono regular de lado 4 (usa A = 3√3/2 · l²). Redondea al entero más cercano.", ans:"42" },
+    { id:49, area:"Estadística", type:"open", q:"En 6 exámenes obtuve: 75, 80, 85, 90, 70 y x. Si la media es 80, ¿cuánto es x?", ans:"80" },
+    { id:50, area:"Álgebra II",  type:"open", q:"¿En qué punto corta el eje y la recta que pasa por A(1,3) y B(3,7)?", ans:"1" },
+    { id:51, area:"Probabilidad",type:"open", q:"¿Cuántas combinaciones de 2 colores se pueden hacer con 6 colores distintos?", ans:"15" },
+    { id:52, area:"Geometría",   type:"open", q:"Cateto = 7, hipotenusa = 25. ¿Cuánto mide el otro cateto?", ans:"24" },
+    { id:53, area:"Aritmética",  type:"open", q:"Jerarquía: [3² × (8 − 5) + 6] ÷ 3 = ?", ans:"11" },
+    { id:54, area:"Álgebra I",   type:"open", q:"Suma de las raíces de 2x² − 10x + 8 = 0:", ans:"5" },
+    { id:55, area:"Conjuntos",   type:"open", q:"De 40 alumnos: 22 practican deporte, 18 tocan un instrumento y 7 ambas. ¿Cuántos no hacen ninguna?", ans:"7" }
+];
+
+let currentIndex=0, correctCount=0, areaStats={}, timerSeconds=3600, canAnswer=true, timerInterval;
+
+function startExam(){
+    document.getElementById('start-screen').classList.add('hidden');
+    document.getElementById('exam-screen').classList.remove('hidden');
+    showQuestion(); startTimer();
+}
+function showQuestion(){
+    canAnswer=true;
+    const q=questions[currentIndex];
+    const container=document.getElementById('question-box');
+    document.getElementById('progress-text').innerText=`Reactivo ${currentIndex+1} de 55`;
+    document.getElementById('progress-bar').style.width=`${(currentIndex/55)*100}%`;
+    let svgHtml=q.svg?`<div class="svg-wrap">${svgs[q.svg]}</div>`:'';
+    let html=`<div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-lg border border-slate-100 fade-in">
+        <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-widest mb-4 inline-block">${q.area}</span>
+        ${svgHtml}
+        <h2 class="text-lg font-bold text-slate-800 mb-6 leading-tight">${q.q}</h2>
+        <div id="options-grid" class="space-y-3">`;
+    if(q.type==='multiple'){
+        q.options.forEach((opt,i)=>{
+            html+=`<button onclick="checkAnswer(${i})" class="w-full text-left p-3 md:p-4 border-2 border-slate-50 rounded-2xl hover:border-blue-200 transition-all flex items-center gap-4 group">
+                <span class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center font-black text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all text-xs">${['A','B','C','D'][i]}</span>
+                <span class="font-semibold text-slate-700 text-sm">${opt}</span></button>`;
+        });
+    } else {
+        html+=`<div class="space-y-4">
+            <input type="text" id="open-ans" placeholder="Escribe tu respuesta" class="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 text-3xl font-black text-blue-700 text-center transition-all">
+            <button onclick="checkAnswerOpen()" class="w-full bg-slate-900 text-white font-black py-4 rounded-xl shadow-md uppercase text-xs tracking-widest active:scale-95 transition-transform">Confirmar Respuesta</button>
+        </div>`;
+    }
+    container.innerHTML=html+`</div></div>`;
+}
+function checkAnswer(index){
+    if(!canAnswer)return; canAnswer=false;
+    const q=questions[currentIndex];
+    const isCorrect=(index===q.ans);
+    if(isCorrect){correctCount++;document.getElementById('correct-counter').innerText=correctCount;}
+    if(!areaStats[q.area])areaStats[q.area]={ok:0,total:0};
+    areaStats[q.area].total++;if(isCorrect)areaStats[q.area].ok++;
+    const btns=document.querySelectorAll('#options-grid button');
+    btns[q.ans].classList.add('ans-correct');
+    if(!isCorrect)btns[index].classList.add('ans-wrong');
+    setTimeout(()=>{currentIndex++;if(currentIndex<55)showQuestion();else finishExam();},1000);
+}
+function checkAnswerOpen(){
+    if(!canAnswer)return;
+    const input=document.getElementById('open-ans');
+    const val=input.value.trim();
+    if(val==='')return;
+    canAnswer=false;
+    const q=questions[currentIndex];
+    const isCorrect=(val===q.ans);
+    if(isCorrect){correctCount++;document.getElementById('correct-counter').innerText=correctCount;}
+    if(!areaStats[q.area])areaStats[q.area]={ok:0,total:0};
+    areaStats[q.area].total++;if(isCorrect)areaStats[q.area].ok++;
+    input.classList.add(isCorrect?'ans-correct':'ans-wrong');
+    setTimeout(()=>{currentIndex++;if(currentIndex<55)showQuestion();else finishExam();},1200);
+}
+function startTimer(){
+    timerInterval=setInterval(()=>{
+        if(timerSeconds>0){timerSeconds--;let m=Math.floor(timerSeconds/60),s=timerSeconds%60;document.getElementById('timer').innerText=`${m}:${s<10?'0'+s:s}`;}
+        else finishExam();
+    },1000);
+}
+function finishExam(){
+    if(timerInterval)clearInterval(timerInterval);
+    document.getElementById('exam-screen').classList.add('hidden');
+    document.getElementById('start-screen').classList.add('hidden');
+    document.getElementById('result-screen').classList.remove('hidden');
+    const score=Math.round((correctCount/55)*600)+200;
+    document.getElementById('final-scale-score').innerText=score;
+    document.getElementById('total-correct').innerText=correctCount;
+    document.getElementById('total-percent').innerText=`${Math.round((correctCount/55)*100)}%`;
+    document.getElementById('label-score-final').innerText=score;
+    let html='';
+    for(const area in areaStats){
+        let p=Math.round((areaStats[area].ok/areaStats[area].total)*100);
+        html+=`<div class="bg-slate-50/50 p-2 rounded-xl border border-slate-100">
+            <div class="flex justify-between text-[7px] font-black uppercase mb-1 text-slate-400"><span>${area}</span><span>${areaStats[area].ok}/${areaStats[area].total}</span></div>
+            <div class="flex items-center gap-2"><div class="flex-1 h-1 bg-slate-200 rounded-full overflow-hidden"><div class="h-full bg-blue-600" style="width:${p}%"></div></div><span class="text-[8px] font-black text-slate-700">${p}%</span></div>
+        </div>`;
+    }
+    document.getElementById('area-breakdown').innerHTML=html;
+}
+</script>
+</body>
+</html>

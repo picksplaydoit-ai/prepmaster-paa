@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador PAA Lectura N° 6 - 50 Minutos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow: hidden; }
+        .sticky-header { position: sticky; top: 0; z-index: 50; }
+        .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
+        .ans-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .progress-bar { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-overlay { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+        th, td { border: 1px solid #e2e8f0; padding: 8px; text-align: center; }
+        th { background-color: #f1f5f9; font-weight: 800; }
+    </style>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col">
+
+    <!-- Pantalla de Inicio -->
+    <div id="start-screen" class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
+            <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg -rotate-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-extrabold text-slate-900 mb-2 uppercase tracking-tight">Lectura PAA N° 6</h1>
+            <p class="text-slate-500 mb-4 font-medium text-sm">Práctica de Comprensión (45 Reactivos)</p>
+            
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 text-left rounded-r-xl">
+                <p class="text-xs text-amber-900 leading-relaxed font-semibold">
+                    ¡Listo! Tienes <span class="underline">50 minutos</span> para completar esta simulación.
+                </p>
+                <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold italic">
+                    El botón de lectura está integrado en cada pregunta.
+                </p>
+            </div>
+
+            <button onclick="startExam()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">
+                COMENZAR SIMULACRO
+            </button>
+        </div>
+    </div>
+
+    <!-- Pantalla de Examen -->
+    <div id="exam-screen" class="hidden h-full flex flex-col">
+        <div class="sticky-header bg-white border-b border-slate-200 p-3">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <div class="flex gap-4">
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Tiempo</p>
+                        <p id="timer" class="text-lg font-mono font-black text-blue-600 leading-none">50:00</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-emerald-500 uppercase">Bien</p>
+                        <p id="correct-counter" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 max-w-[120px] sm:max-w-xs ml-4 text-right">
+                    <p id="progress-text" class="text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-tighter">1 de 45</p>
+                    <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="progress-bar h-full bg-blue-600 w-0"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="flex-grow flex items-center justify-center p-4 overflow-hidden">
+            <div id="question-box" class="max-w-xl w-full"></div>
+        </main>
+    </div>
+
+    <!-- Modal de Lectura -->
+    <div id="reading-modal" class="hidden fixed inset-0 z-[100] modal-overlay flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl max-h-[85vh] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden animate-fade-in border border-slate-200">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <div>
+                    <h3 id="reading-title" class="text-lg font-black text-slate-900 uppercase tracking-tight">Segmento de Lectura</h3>
+                    <p id="reading-subtitle" class="text-[10px] text-blue-600 font-bold uppercase">Lectura base</p>
+                </div>
+                <button onclick="toggleReading()" class="w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div id="reading-content" class="p-8 md:p-10 overflow-y-auto custom-scroll text-slate-700 leading-relaxed text-sm md:text-base italic">
+                <!-- Inyectado dinámicamente -->
+            </div>
+            <div class="p-4 bg-slate-50 text-center border-t border-slate-100">
+                <button onclick="toggleReading()" class="bg-slate-900 text-white font-black px-8 py-2 rounded-xl text-xs uppercase tracking-widest shadow-lg">Cerrar Texto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla de Resultados -->
+    <div id="result-screen" class="hidden h-full flex items-center justify-center p-4 overflow-hidden">
+        <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-white fade-in flex flex-col max-h-[95vh]">
+            <div class="bg-slate-900 p-6 md:p-8 text-center text-white relative flex-shrink-0">
+                <p class="text-blue-400 font-bold uppercase tracking-[0.3em] text-[9px] mb-2">Puntaje Final Lectura</p>
+                <div class="flex items-center justify-center gap-2">
+                    <h2 id="final-scale-score" class="text-6xl font-black tracking-tighter leading-none">0</h2>
+                    <p class="text-slate-500 font-bold text-lg">/ 800</p>
+                </div>
+            </div>
+            
+            <div class="p-6 md:p-8 flex-grow overflow-y-auto custom-scroll text-center">
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Aciertos</p>
+                        <p class="text-xl font-black text-slate-800"><span id="total-correct">0</span><span class="text-slate-300 text-sm">/45</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Efectividad</p>
+                        <p id="total-percent" class="text-xl font-black text-blue-600">0%</p>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-2xl text-white flex flex-col justify-center">
+                        <p class="text-[7px] font-black text-blue-400 uppercase">Estatus</p>
+                        <p class="text-xs font-bold leading-tight">Perfil Analizado</p>
+                    </div>
+                </div>
+
+                <div class="p-5 bg-blue-600 rounded-3xl text-white relative overflow-hidden shadow-lg">
+                    <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                        <div>
+                            <h4 class="text-lg font-black leading-none mb-1 uppercase tracking-tight">¡Anota tu resultado!</h4>
+                            <p class="text-blue-100 text-[10px]">Usa tus <span id="label-score-final" class="font-black text-white underline text-xs">0</span> puntos para el promedio global.</p>
+                        </div>
+                        <button onclick="location.reload()" class="bg-white text-blue-600 font-black px-6 py-2 rounded-xl hover:bg-blue-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0 shadow-md">
+                            Reiniciar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const texts = {
+            segment1: {
+                title: "LECTURA 1: La Pintora Invisible (Ejercicios 1-9)",
+                content: `La lectura trata sobre una pintora poco conocida. (1) Valentina Ruiz pasaba sus noches mezclando pigmentos con una paciencia casi religiosa. (3) Su pequeño estudio en el barrio antiguo olía a trementina y café frío. (5) Nunca había vendido un cuadro en galería alguna; sin embargo, sus paredes estaban cubiertas de retratos que parecían respirar. (8) "El arte no se hace para que lo vean, se hace para que uno no enloquezca", le confesó una tarde a su única alumna. (11) La crítica local la ignoraba sistemáticamente. (13) Pero los vecinos del barrio sabían que cada mañana, antes del amanecer, Valentina ya estaba frente al lienzo, traduciendo en colores lo que el mundo se negaba a decir en palabras. (18) Su obra sería descubierta, irónicamente, veinte años después de su muerte.`
+            },
+            segment2: {
+                title: "LECTURA 2: La Deforestación en América Latina (Ejercicios 10-18)",
+                content: `<p>(1) La deforestación en América Latina avanza a un ritmo alarmante, amenazando la biodiversidad y acelerando el cambio climático. (3) Las principales causas incluyen la expansión agrícola, la ganadería extensiva y la extracción ilegal de madera. (6) Según datos del organismo ambiental regional, entre 2000 y 2020 se perdieron millones de hectáreas de bosque tropical.</p><table><thead><tr><th>País</th><th>Pérdida forestal anual (ha)</th><th>Causa principal</th></tr></thead><tbody><tr><td>Brasil</td><td>1,500,000</td><td>Ganadería</td></tr><tr><td>Bolivia</td><td>290,000</td><td>Agricultura</td></tr><tr><td>Colombia</td><td>170,000</td><td>Madera ilegal</td></tr><tr><td>Perú</td><td>140,000</td><td>Minería</td></tr></tbody></table><p>(14) Los expertos advierten que, de continuar esta tendencia, varios ecosistemas podrían colapsar antes del año 2060. (17) Las soluciones propuestas van desde políticas públicas más estrictas hasta la reforestación comunitaria participativa.</p>`
+            },
+            segment3: {
+                title: "LECTURA 3: Inteligencia Emocional vs. Cociente Intelectual (Ejercicios 19-28)",
+                content: `<p><strong>Lectura A:</strong> (1) Durante décadas, el cociente intelectual fue considerado el único predictor confiable del éxito académico y profesional. (3) Las pruebas estandarizadas medían la capacidad lógica, matemática y verbal como si fueran el todo de la mente humana. (6) Quienes obtenían puntajes elevados eran considerados destinados al triunfo. (9) Esta visión, sin embargo, ignoraba factores como la perseverancia, la empatía y la capacidad de manejar el fracaso.</p><p class="mt-4"><strong>Lectura B:</strong> (1) La inteligencia emocional, concepto popularizado por Daniel Goleman, propone que la habilidad para reconocer y gestionar las emociones propias y ajenas es igualmente determinante para el éxito. (5) Estudios corporativos muestran que los líderes más efectivos no siempre son los más inteligentes en términos lógicos, sino los más empáticos. (9) Una persona con alta inteligencia emocional puede transformar un equipo disfuncional en uno altamente productivo.</p>`
+            },
+            segment4: {
+                title: "LECTURA 4: El Origen del Lenguaje (Ejercicios 29-37)",
+                content: `(1) El origen del lenguaje humano es uno de los misterios más fascinantes de la ciencia. (3) A diferencia de la comunicación animal, que se basa en señales predeterminadas, el lenguaje humano es creativo e infinito. (6) Los lingüistas proponen que hace aproximadamente 70,000 años ocurrió una mutación genética que permitió al cerebro humano procesar estructuras gramaticales complejas. (10) Esta "revolución cognitiva" habría permitido a nuestros ancestros planificar el futuro, narrar el pasado y transmitir conocimientos abstractos. (14) Sin embargo, otros investigadores señalan que el lenguaje no surgió de un evento único, sino de una lenta acumulación de habilidades comunicativas. (18) Lo que sí está claro es que el lenguaje transformó radicalmente la organización social humana, permitiendo la cooperación a gran escala. (22) Gracias al lenguaje, los humanos pudieron construir culturas, instituciones y civilizaciones enteras.`
+            },
+            segment5: {
+                title: "LECTURA 5: Oda al Mar (Ejercicios 38-45)",
+                content: `<p>(1) El mar no duerme nunca, eterno y sabio,<br>(2) guarda en su fondo siglos de silencio.<br>(3) Sus olas son palabras sin vocablo,<br>(4) su espuma, el eco de un antiguo incienso.</p><p>(5) El marinero viejo que lo mira<br>(6) ya no le teme al gris de la tormenta.<br>(7) El viento en sus cabellos no suspira;<br>(8) es él quien al océano se alimenta.</p><p>(9) No hay mapa que te trace, mar oscuro,<br>(10) ni brújula que marque tu destino.<br>(11) Eres la duda eterna del maduro<br>(12) y el sueño del que busca su camino.</p>`
+            },
+        };
+
+        const questions = [
+            { id: 1, textRef: 'segment1', q: "La palabra 'trementina' (línea 3) es un tipo de:", options: ["Perfume floral", "Solvente para pintura", "Bebida típica", "Pigmento azul"], ans: 1 },
+            { id: 2, textRef: 'segment1', q: "¿Qué se puede inferir sobre la relación de Valentina con el arte?", options: ["Es una actividad económica", "Es una necesidad emocional profunda", "Es un pasatiempo ocasional", "Es una obligación familiar"], ans: 1 },
+            { id: 3, textRef: 'segment1', q: "La frase 'traduciendo en colores lo que el mundo se negaba a decir' es una:", options: ["Comparación directa", "Metáfora", "Onomatopeya", "Hipérbole"], ans: 1 },
+            { id: 4, textRef: 'segment1', q: "¿Cuál resume MEJOR la lectura?", options: ["Crítica al mercado del arte", "Artista ignorada cuya obra fue valorada póstumamente", "Técnicas de pintura al óleo", "Vida en el barrio antiguo"], ans: 1 },
+            { id: 5, textRef: 'segment1', q: "La actitud de la crítica local hacia Valentina era de:", options: ["Admiración", "Envidia", "Indiferencia", "Apoyo económico"], ans: 2 },
+            { id: 6, textRef: 'segment1', q: "La frase 'el arte no se hace para que lo vean' evidencia que:", options: ["Rechazaba el arte público", "El arte era un proceso interno y personal", "No quería enseñar", "Tenía miedo a la crítica"], ans: 1 },
+            { id: 7, textRef: 'segment1', q: "El tipo de discurso predominante en esta lectura es:", options: ["Argumentativo", "Expositivo", "Narrativo", "Científico"], ans: 2 },
+            { id: 8, textRef: 'segment1', q: "¿Qué evidencia que Valentina era reconocida en su entorno inmediato?", options: ["Líneas 1-2", "Líneas 5-7", "Líneas 11-12", "Líneas 13-17 (los vecinos sabían...)"], ans: 3 },
+            { id: 9, textRef: 'segment1', q: "La expresión 'veinte años después de su muerte' genera un efecto de:", options: ["Alegría", "Ironía trágica", "Satisfacción", "Suspenso"], ans: 1 },
+            { id: 10, textRef: 'segment2', q: "La palabra 'extensiva' (línea 4) aplicada a ganadería significa:", options: ["Intensa y concentrada", "Ocupando grandes extensiones de tierra", "Muy rentable", "Con tecnología avanzada"], ans: 1 },
+            { id: 11, textRef: 'segment2', q: "Según la tabla, ¿qué país pierde más hectáreas anualmente?", options: ["Bolivia", "Colombia", "Brasil", "Perú"], ans: 2 },
+            { id: 12, textRef: 'segment2', q: "¿Cuántas hectáreas combinadas pierden Colombia y Perú?", options: ["270,000", "310,000", "430,000", "460,000"], ans: 1 },
+            { id: 13, textRef: 'segment2', q: "Según la tabla, la causa principal en Bolivia es:", options: ["Ganadería", "Minería", "Madera ilegal", "Agricultura"], ans: 3 },
+            { id: 14, textRef: 'segment2', q: "Se puede INFERIR que la deforestación:", options: ["Se resolverá sola", "Tiene consecuencias globales más allá de los países afectados", "Solo afecta a Brasil", "Es inevitable y no tiene solución"], ans: 1 },
+            { id: 15, textRef: 'segment2', q: "¿Qué opción evidencia que la solución requiere acción colectiva?", options: ["Líneas 1-3", "Líneas 6-8", "Líneas 14-16", "Líneas 17-19 (políticas + reforestación comunitaria)"], ans: 3 },
+            { id: 16, textRef: 'segment2', q: "La palabra 'tendencia' (línea 14) se refiere a:", options: ["Un accidente puntual", "Una dirección persistente de los hechos", "Una estadística falsa", "Un fenómeno reversible"], ans: 1 },
+            { id: 17, textRef: 'segment2', q: "El propósito principal de la lectura es:", options: ["Criticar a los gobiernos latinoamericanos", "Informar sobre la magnitud del problema forestal", "Proponer una solución específica", "Narrar la historia de la selva"], ans: 1 },
+            { id: 18, textRef: 'segment2', q: "El tono de los expertos en la lectura es:", options: ["Optimista", "Indiferente", "Alarmante", "Irónico"], ans: 2 },
+            { id: 19, textRef: 'segment3', q: "En Lectura A, 'predictor' (línea 1) significa:", options: ["Indicador que anticipa resultados", "Tipo de examen", "Premio académico", "Habilidad matemática"], ans: 0 },
+            { id: 20, textRef: 'segment3', q: "Según Lectura A, ¿qué ignoraban las pruebas estandarizadas?", options: ["La memoria", "La perseverancia y la empatía", "La velocidad lectora", "Las habilidades físicas"], ans: 1 },
+            { id: 21, textRef: 'segment3', q: "En Lectura B, 'gestionar' (línea 2) las emociones significa:", options: ["Ignorarlas", "Administrarlas y manejarlas", "Ocultarlas", "Expresarlas con violencia"], ans: 1 },
+            { id: 22, textRef: 'segment3', q: "Según Lectura B, los líderes más efectivos son:", options: ["Los más inteligentes lógicamente", "Los más empáticos", "Los más jóvenes", "Los más creativos"], ans: 1 },
+            { id: 23, textRef: 'segment3', q: "La relación entre Lectura A y Lectura B es:", options: ["A confirma lo que dice B", "B amplía y corrige la visión limitada de A", "Son completamente opuestas", "A resume a B"], ans: 1 },
+            { id: 24, textRef: 'segment3', q: "Ambas lecturas coinciden en que el éxito:", options: ["Solo depende del CI", "No depende de nada", "Tiene factores mentales como base", "Es cuestión de suerte"], ans: 2 },
+            { id: 25, textRef: 'segment3', q: "De Lectura A se INFIERE que:", options: ["El CI es suficiente para el éxito", "La visión clásica del éxito era incompleta", "Las pruebas estandarizadas son perfectas", "La empatía no importa"], ans: 1 },
+            { id: 26, textRef: 'segment3', q: "¿Qué evidencia la limitación del modelo de CI en Lectura A?", options: ["Líneas A:1-3", "Líneas A:6-9 (ignoraba perseverancia y empatía)", "Líneas B:1-3", "Líneas B:5-7"], ans: 1 },
+            { id: 27, textRef: 'segment3', q: "En ambas lecturas predomina el discurso:", options: ["Narrativo", "Descriptivo", "Expositivo-argumentativo", "Poético"], ans: 2 },
+            { id: 28, textRef: 'segment3', q: "Una idea en que ambas lecturas ESTARÍAN de acuerdo:", options: ["El CI lo predice todo", "Las emociones no importan", "La mente humana influye en el éxito", "Los exámenes son perfectos"], ans: 2 },
+            { id: 29, textRef: 'segment4', q: "La palabra 'cognitiva' (línea 10) se relaciona con:", options: ["El movimiento físico", "Los procesos mentales", "La nutrición", "El sistema inmune"], ans: 1 },
+            { id: 30, textRef: 'segment4', q: "Según la lectura, la revolución cognitiva permitió:", options: ["Solo hablar entre personas", "Planificar, narrar y transmitir conceptos abstractos", "Escribir jeroglíficos únicamente", "Construir herramientas de piedra"], ans: 1 },
+            { id: 31, textRef: 'segment4', q: "La postura alternativa (línea 14) propone que el lenguaje surgió:", options: ["De un solo evento genético", "De una acumulación lenta de habilidades", "De la imitación de pájaros", "Del contacto con otras especies"], ans: 1 },
+            { id: 32, textRef: 'segment4', q: "La palabra 'abstractos' (línea 12) se refiere a:", options: ["Conceptos concretos y visibles", "Ideas que no tienen forma física", "Objetos de piedra tallada", "Sonidos de la naturaleza"], ans: 1 },
+            { id: 33, textRef: 'segment4', q: "Se puede INFERIR que sin lenguaje:", options: ["Los humanos serían más felices", "No existirían las civilizaciones complejas", "La tecnología avanzaría igual", "El arte sería más puro"], ans: 1 },
+            { id: 34, textRef: 'segment4', q: "¿Qué evidencia que el lenguaje transformó la organización social?", options: ["Líneas 1-3", "Líneas 6-9", "Líneas 14-17", "Líneas 18-23 (cooperación a gran escala...)"], ans: 3 },
+            { id: 35, textRef: 'segment4', q: "El propósito de la lectura es:", options: ["Demostrar que los animales hablan", "Explorar el origen e impacto del lenguaje humano", "Criticar a los lingüistas", "Narrar la vida prehistórica"], ans: 1 },
+            { id: 36, textRef: 'segment4', q: "La expresión 'revolución cognitiva' es un ejemplo de:", options: ["Metáfora", "Ironía", "Onomatopeya", "Hipérbole"], ans: 0 },
+            { id: 37, textRef: 'segment4', q: "El tipo de discurso predominante es:", options: ["Narrativo", "Poético", "Expositivo", "Argumentativo"], ans: 2 },
+            { id: 38, textRef: 'segment5', q: "'El mar no duerme nunca' es una figura de:", options: ["Símil", "Personificación", "Metáfora", "Sinestesia"], ans: 1 },
+            { id: 39, textRef: 'segment5', q: "'Sus olas son palabras sin vocablo' compara las olas con el lenguaje mediante:", options: ["Ironía", "Hipérbole", "Metáfora", "Símil"], ans: 2 },
+            { id: 40, textRef: 'segment5', q: "La palabra 'vocablo' (verso 3) significa:", options: ["Vocación musical", "Palabra o término", "Vocalista", "Volcán activo"], ans: 1 },
+            { id: 41, textRef: 'segment5', q: "En el poema, 'el gris de la tormenta' representa:", options: ["Una pintura abstracta", "Los peligros y dificultades de la vida", "El color favorito del marino", "La contaminación marina"], ans: 1 },
+            { id: 42, textRef: 'segment5', q: "¿Cuál describe mejor el tema central del poema?", options: ["La pesca en alta mar", "El miedo al mar en invierno", "El mar como símbolo de lo desconocido y lo eterno", "La vida del marinero moderno"], ans: 2 },
+            { id: 43, textRef: 'segment5', q: "Según la estrofa 2, el marinero viejo:", options: ["Teme la tormenta", "Perdió su barco", "Ha superado el miedo y se nutre del mar", "Quiere retirarse del oficio"], ans: 2 },
+            { id: 44, textRef: 'segment5', q: "'No hay mapa que te trace' evidencia que el mar es:", options: ["Pequeño y bien conocido", "Inmenso e incontrolable", "Fácil de navegar", "Un lago tranquilo"], ans: 1 },
+            { id: 45, textRef: 'segment5', q: "La palabra 'maduro' (verso 11) se refiere a:", options: ["Una fruta lista", "Una persona joven", "Una persona con experiencia y años", "Un marinero novato"], ans: 2 },
+        ];
+
+        let currentIndex = 0;
+        let correctCount = 0;
+        let timerSeconds = 3000; // 50 MINUTOS
+        let canAnswer = true;
+        let timerInterval;
+
+        function startExam() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            showQuestion();
+            startTimer();
+        }
+
+        function toggleReading() {
+            const modal = document.getElementById('reading-modal');
+            if (modal.classList.contains('hidden')) {
+                const q = questions[currentIndex];
+                const textData = texts[q.textRef];
+                document.getElementById('reading-title').innerText = textData.title;
+                document.getElementById('reading-content').innerHTML = textData.content;
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function showQuestion() {
+            canAnswer = true;
+            const q = questions[currentIndex];
+            const container = document.getElementById('question-box');
+            document.getElementById('progress-text').innerText = `${currentIndex + 1} de 45`;
+            document.getElementById('progress-bar').style.width = `${((currentIndex) / 45) * 100}%`;
+
+            let html = `
+                <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-lg border border-slate-100 fade-in">
+                    <div class="flex justify-between items-start mb-6">
+                        <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-widest w-fit">Tema ${q.textRef.slice(-1)}</span>
+                        <button onclick="toggleReading()" class="bg-slate-900 text-white text-[9px] font-black px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-slate-800 transition-colors uppercase tracking-widest active:scale-95 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Ver Lectura
+                        </button>
+                    </div>
+                    <h2 class="text-lg font-bold text-slate-800 mb-8 leading-tight">${q.q}</h2>
+                    <div id="options-grid" class="grid grid-cols-1 gap-3">
+            `;
+
+            q.options.forEach((opt, i) => {
+                html += `
+                    <button onclick="checkAnswer(${i})" 
+                        class="w-full text-left p-3 md:p-4 border-2 border-slate-50 rounded-2xl hover:border-blue-200 transition-all flex items-center gap-4 group">
+                        <span class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center font-black text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all text-xs">${['A','B','C','D'][i]}</span>
+                        <span class="font-semibold text-slate-700 text-sm">${opt}</span>
+                    </button>
+                `;
+            });
+
+            container.innerHTML = html + `</div></div>`;
+        }
+
+        function checkAnswer(index) {
+            if(!canAnswer) return;
+            canAnswer = false;
+            const q = questions[currentIndex];
+            const isCorrect = (index === q.ans);
+            
+            if(isCorrect) { 
+                correctCount++; 
+                document.getElementById('correct-counter').innerText = correctCount; 
+            }
+            
+            const btns = document.querySelectorAll('#options-grid button');
+            btns[q.ans].classList.add('ans-correct');
+            if(!isCorrect) btns[index].classList.add('ans-wrong');
+            
+            setTimeout(() => { 
+                currentIndex++; 
+                if(currentIndex < 45) showQuestion(); else finishExam(); 
+            }, 900);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => { 
+                if(timerSeconds > 0) { 
+                    timerSeconds--; 
+                    let m = Math.floor(timerSeconds/60); 
+                    let s = timerSeconds%60; 
+                    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`; 
+                } else finishExam(); 
+            }, 1000);
+        }
+
+        function finishExam() {
+            if (timerInterval) clearInterval(timerInterval);
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('reading-modal').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const score = Math.round((correctCount/45)*600)+200;
+            document.getElementById('final-scale-score').innerText = score;
+            document.getElementById('total-correct').innerText = correctCount;
+            document.getElementById('total-percent').innerText = `${Math.round((correctCount/45)*100)}%`;
+            document.getElementById('label-score-final').innerText = score;
+        }
+    </script>
+</body>
+</html>

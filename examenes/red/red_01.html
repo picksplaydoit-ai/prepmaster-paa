@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador PAA Redacción N° 1 - 30 Minutos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow: hidden; }
+        .sticky-header { position: sticky; top: 0; z-index: 50; }
+        .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
+        .ans-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .progress-bar { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-overlay { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col">
+
+    <!-- Pantalla de Inicio -->
+    <div id="start-screen" class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
+            <div class="w-16 h-16 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg -rotate-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-extrabold text-slate-900 mb-2 uppercase tracking-tight">Redacción PAA N° 1</h1>
+            <p class="text-slate-500 mb-4 font-medium text-sm">Prueba de Lengua Española (25 Reactivos)</p>
+            
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 text-left rounded-r-xl">
+                <p class="text-xs text-amber-900 leading-relaxed font-semibold">
+                    ¡Actualizado! Tienes <span class="underline">30 minutos</span> para completar la prueba.
+                </p>
+                <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold italic">
+                    El botón de lectura aparecerá dentro de cada pregunta.
+                </p>
+            </div>
+
+            <button onclick="startExam()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">
+                COMENZAR SIMULACRO
+            </button>
+        </div>
+    </div>
+
+    <!-- Pantalla de Examen -->
+    <div id="exam-screen" class="hidden h-full flex flex-col">
+        <div class="sticky-header bg-white border-b border-slate-200 p-3">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <div class="flex gap-4">
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Tiempo</p>
+                        <p id="timer" class="text-lg font-mono font-black text-emerald-600 leading-none">30:00</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-emerald-500 uppercase">Bien</p>
+                        <p id="correct-counter" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 max-w-[120px] sm:max-w-xs ml-4 text-right">
+                    <p id="progress-text" class="text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-tighter">1 de 25</p>
+                    <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="progress-bar h-full bg-emerald-500 w-0"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="flex-grow flex items-center justify-center p-4 overflow-hidden">
+            <div id="question-box" class="max-w-xl w-full"></div>
+        </main>
+    </div>
+
+    <!-- Modal de Lectura -->
+    <div id="reading-modal" class="hidden fixed inset-0 z-[100] modal-overlay flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl max-h-[85vh] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden animate-fade-in border border-slate-200">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <div>
+                    <h3 id="reading-title" class="text-lg font-black text-slate-900 uppercase tracking-tight leading-tight">Segmento de Lectura</h3>
+                    <p id="reading-subtitle" class="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">Base para responder</p>
+                </div>
+                <button onclick="toggleReading()" class="w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div id="reading-content" class="p-8 md:p-10 overflow-y-auto custom-scroll text-slate-700 leading-relaxed text-sm md:text-base italic">
+                <!-- Se inyecta el segmento correspondiente -->
+            </div>
+            <div class="p-4 bg-slate-50 text-center border-t border-slate-100">
+                <button onclick="toggleReading()" class="bg-slate-900 text-white font-black px-8 py-2 rounded-xl text-xs uppercase tracking-widest shadow-lg">Cerrar Lectura</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla de Resultados -->
+    <div id="result-screen" class="hidden h-full flex items-center justify-center p-4 overflow-hidden">
+        <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-white fade-in flex flex-col max-h-[95vh]">
+            <div class="bg-slate-900 p-6 md:p-8 text-center text-white relative flex-shrink-0">
+                <p class="text-emerald-400 font-bold uppercase tracking-[0.3em] text-[9px] mb-2">Puntaje Final Redacción</p>
+                <div class="flex items-center justify-center gap-2">
+                    <h2 id="final-scale-score" class="text-6xl font-black tracking-tighter leading-none">0</h2>
+                    <p class="text-slate-500 font-bold text-lg">/ 800</p>
+                </div>
+            </div>
+            
+            <div class="p-6 md:p-8 flex-grow overflow-y-auto custom-scroll">
+                <div class="grid grid-cols-3 gap-3 mb-6 text-center">
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Aciertos</p>
+                        <p class="text-xl font-black text-slate-800"><span id="total-correct">0</span><span class="text-slate-300 text-sm">/25</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Efectividad</p>
+                        <p id="total-percent" class="text-xl font-black text-emerald-600">0%</p>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-2xl text-white flex flex-col justify-center">
+                        <p class="text-[7px] font-black text-emerald-400 uppercase">Estatus</p>
+                        <p class="text-xs font-bold leading-tight">Nivel Final</p>
+                    </div>
+                </div>
+
+                <div id="area-breakdown" class="grid grid-cols-2 gap-3 mb-6"></div>
+
+                <div class="p-5 bg-emerald-600 rounded-3xl text-white relative overflow-hidden shadow-lg">
+                    <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                        <div>
+                            <h4 class="text-lg font-black leading-none mb-1 uppercase tracking-tight">¡Registra tu Test!</h4>
+                            <p class="text-emerald-100 text-[10px]">Anota tus <span id="label-score-final" class="font-black text-white underline text-xs">0</span> puntos para el promedio global.</p>
+                        </div>
+                        <button onclick="location.reload()" class="bg-white text-emerald-600 font-black px-6 py-2 rounded-xl hover:bg-emerald-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0 shadow-md">
+                            Reiniciar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const texts = {
+            segment1: {
+                title: "SEGMENTO I (Ejercicios 1-9)",
+                content: `(1) El café es una de las bebidas más consumidas y veneradas a nivel mundial. (2) Su origen histórico se remonta a la antigua provincia de Kaffa, en Abisinia, lo que hoy conocemos como Etiopía. (3) Cuenta la leyenda que un pastor notó un comportamiento inusualmente enérgico en su rebaño tras consumir unos frutos rojos silvestres. (4) El pastor usaba un bastón de madera muy tallado para guiar a sus animales. (5) Pronto, el consumo de esta infusión hirviente se expandió rápidamente por todo el mundo árabe. (6) En el siglo XVII, los mercaderes llevaron el café a Europa, causando un gran furor entre la aristocracia y los intelectuales. (7) Hoy en día, existen miles de cafeterías modernas en cada rincón de las grandes ciudades del planeta. (8) Desde un simple expreso hasta un complejo capuchino, las opciones de preparación son prácticamente infinitas. (9) Es indudable que esta pequeña semilla transformó para siempre la dinámica social de nuestras mañanas.`
+            },
+            segment2: {
+                title: "SEGMENTO II (Ejercicios 10-17)",
+                content: `(1) Don Elías era, sin lugar a dudas, el relojero más antiguo y respetado del pueblo. (2) Su pequeña tienda, ubicada en la esquina de la plaza central, olía siempre a madera y metal pulido. (3) A mí casi no me gustan los relojes modernos porque funcionan con baterías y no hacen ruido. (4) Cada mañana, Elías ajustaba los diminutos engranajes con una precisión casi quirúrgica. (5) Sus manos, profundamente marcadas por el paso de las décadas, no temblaban en lo absoluto al sostener las pinzas. (6) Los vecinos del lugar solían decir que él no reparaba simples máquinas, sino que curaba el tiempo herido de la gente. (7) Un martes de noviembre, una mujer misteriosa le dejó sobre el mostrador un reloj de bolsillo hecho de oro blanco. (8) Al abrirlo, el anciano notó que el artefacto no tenía manecillas ni números. (9) "Haz que funcione antes de la medianoche", susurró ella antes de perderse en la calle.`
+            },
+            segment3: {
+                title: "SEGMENTO III (Ejercicios 18-25)",
+                content: `(1) Las redes sociales han redefinido drásticamente la forma en que los jóvenes interactúan hoy en día. (2) Antes, las amistades se forjaban exclusivamente en los parques, las plazas o los patios de las escuelas. (3) Ahora, un simple "me gusta" puede ser el inicio de un vínculo duradero o el detonante de un severo conflicto. (4) Los teléfonos celulares de última generación cuestan demasiado dinero en las tiendas de tecnología. (5) Esta inmediatez digital permite conectar con personas al otro lado del mundo en cuestión de segundos. (6) Sin embargo, la hiperconexión ha traído consigo alarmantes problemas de ansiedad y aislamiento físico. (7) Muchos adolescentes sienten la pesada presión de mostrar al mundo una vida perfecta y filtrada. (8) La realidad detrás de las pantallas suele ser muy distinta a las maravillosas fotografías publicadas. (9) Resulta vital encontrar un sano equilibrio entre el mundo digital y nuestro entorno tangible. (10) Apagar el dispositivo de vez en cuando es el primer gran paso para reconectar con nosotros mismos.`
+            }
+        };
+
+        const questions = [
+            // Segmento 1
+            { id: 1, textRef: 'segment1', type: "multiple", q: "¿Qué enunciado del Segmento I puede omitirse sin perder información necesaria? (Elisión)", options: ["Enunciado 2", "Enunciado 3", "Enunciado 4", "Enunciado 8"], ans: 2 },
+            { id: 2, textRef: 'segment1', type: "multiple", q: "¿Cuál enunciado integra MEJOR la secuencia del Segmento I? (Integración)", options: ["La leyenda del pastor y sus cabras", "El viaje histórico y social de la semilla de café", "Las cafeterías modernas en Europa", "El impacto económico de las bebidas calientes"], ans: 1 },
+            { id: 3, textRef: 'segment1', type: "multiple", q: "¿Qué enunciado enriquece ESTILÍSTICAMENTE el enunciado 9?", options: ["...despertando a las ciudades de su letargo con su aroma embriagador.", "...ya que la gente gasta mucho dinero en comprar café todos los días.", "...aunque a muchas personas les hace daño en el estómago.", "...pues el té verde no tiene tanta cafeína."], ans: 0 },
+            { id: 4, textRef: 'segment1', type: "multiple", q: "En los enunciados 1 al 5, ¿cuál recoge MEJOR el contenido general del inicio del consumo?", options: ["Enunciado 1", "Enunciado 2", "Enunciado 3", "Enunciado 5"], ans: 0 },
+            { id: 5, textRef: 'segment1', type: "multiple", q: "¿Qué enunciado expresa INDIRECTAMENTE el impacto al llegar a un nuevo continente?", options: ["Enunciado 8", "Enunciado 6", "Enunciado 2", "Enunciado 3"], ans: 1 },
+            { id: 6, textRef: 'segment1', type: "multiple", q: "Los enunciados 7 al 9 tratan sobre el café en la actualidad. ¿Cuál recoge MEJOR su contenido general?", options: ["Enunciado 7", "Enunciado 8", "Enunciado 9", "Ninguno"], ans: 2 },
+            { id: 7, textRef: 'segment1', type: "multiple", q: "Enunciado que añade información y enriquece ESTILÍSTICAMENTE la oración 3:", options: ["...frutos que su abuelo le prohibió.", "...frutos silvestres que parecían vibrar con luz propia.", "...frutos que se venden en el mercado.", "...frutos porque tenían mucha hambre."], ans: 1 },
+            { id: 8, textRef: 'segment1', type: "multiple", q: "¿Cuál expresa INDIRECTAMENTE MEJOR el concepto de 'diversidad de consumo'?", options: ["Enunciado 4", "Enunciado 5", "Enunciado 8", "Enunciado 1"], ans: 2 },
+            { id: 9, textRef: 'segment1', type: "multiple", q: "¿Qué enunciado debería ser eliminado si se agregara '(10) La semilla se tuesta antes de molerse'?", options: ["Enunciado 10", "Enunciado 8", "Enunciado 6", "Enunciado 9"], ans: 0 },
+            // Segmento 2
+            { id: 10, textRef: 'segment2', type: "multiple", q: "¿Qué enunciado rompe la secuencia temática del Segmento II y debe ser omitido?", options: ["Enunciado 2", "Enunciado 3", "Enunciado 4", "Enunciado 5"], ans: 1 },
+            { id: 11, textRef: 'segment2', type: "multiple", q: "¿Cuál integra MEJOR la secuencia de los enunciados del Segmento II?", options: ["Historia de relojes de bolsillo", "El clima lluvioso de noviembre", "El misterioso encargo del viejo relojero", "Herramientas para reparar metales"], ans: 2 },
+            { id: 12, textRef: 'segment2', type: "multiple", q: "¿Qué enunciado expresa INDIRECTAMENTE MEJOR la edad avanzada de don Elías?", options: ["Enunciado 2", "Enunciado 4", "Enunciado 5", "Enunciado 6"], ans: 2 },
+            { id: 13, textRef: 'segment2', type: "multiple", q: "De los enunciados 1, 4, 5 y 6, ¿cuál actúa como resumen de su oficio?", options: ["Enunciado 1", "Enunciado 4", "Enunciado 5", "Enunciado 6"], ans: 3 },
+            { id: 14, textRef: 'segment2', type: "multiple", q: "¿Cuál enriquece ESTILÍSTICAMENTE la oración 2 sin negar lo expresado?", options: ["...y a secretos oxidados por los años.", "...porque la madera estaba podrida.", "...y la renta era económica.", "...donde vendían refacciones caras."], ans: 0 },
+            { id: 15, textRef: 'segment2', type: "multiple", q: "¿Qué enunciado expresa INDIRECTAMENTE MEJOR un ambiente de suspenso e intriga?", options: ["Enunciado 7", "Enunciado 8", "Enunciado 9", "ID: 7 (martes de nov)"], ans: 2 },
+            { id: 16, textRef: 'segment2', type: "multiple", q: "¿Qué enunciado enriquece ESTILÍSTICAMENTE el final del texto (oración 9)?", options: ["...para tomar el autobús.", "...desvaneciéndose como una sombra devorada por la niebla.", "...porque tenía prisa.", "...dejando el dinero sobre la mesa."], ans: 1 },
+            { id: 17, textRef: 'segment2', type: "multiple", q: "Sobre el conflicto narrativo (7-9), ¿cuál recoge la ESENCIA del problema?", options: ["Enunciado 7", "Enunciado 8", "Enunciado 9", "Ninguno"], ans: 1 },
+            // Segmento 3
+            { id: 18, textRef: 'segment3', type: "multiple", q: "¿Qué enunciado rompe la estructura del texto III y podría omitirse?", options: ["Enunciado 2", "Enunciado 4", "Enunciado 5", "Enunciado 8"], ans: 1 },
+            { id: 19, textRef: 'segment3', type: "multiple", q: "¿Cuál integra MEJOR la secuencia de los enunciados del Segmento III?", options: ["Luces y sombras de las redes sociales en la juventud", "Historia de los celulares modernos", "Cómo conseguir más 'me gusta'", "Amistades en los patios de escuelas"], ans: 0 },
+            { id: 20, textRef: 'segment3', type: "multiple", q: "¿Cuál expresa INDIRECTAMENTE la falsedad de las interacciones virtuales?", options: ["Enunciado 3", "Enunciado 5", "Enunciado 7", "Enunciado 10"], ans: 2 },
+            { id: 21, textRef: 'segment3', type: "multiple", q: "Del 5 al 8, ¿cuál recoge MEJOR el contenido general (bueno y malo)?", options: ["Enunciado 5", "Enunciado 6", "Enunciado 7", "Enunciado 8"], ans: 1 },
+            { id: 22, textRef: 'segment3', type: "multiple", q: "¿Cuál enriquece ESTILÍSTICAMENTE la oración 10 del Segmento III?", options: ["...y escuchar por fin el latido de la vida real.", "...y no gastar tanta batería.", "...porque la luz lastima los ojos.", "...mientras comemos."], ans: 0 },
+            { id: 23, textRef: 'segment3', type: "multiple", q: "¿Qué enunciado expresa INDIRECTAMENTE el concepto de 'aprobación virtual'?", options: ["Enunciado 2", "Enunciado 3", "Enunciado 5", "Enunciado 9"], ans: 1 },
+            { id: 24, textRef: 'segment3', type: "multiple", q: "Entre el 9 y 10, ¿cuál funciona como la conclusión principal?", options: ["Enunciado 9", "Enunciado 10", "Ambos iguales", "Ninguno"], ans: 0 },
+            { id: 25, textRef: 'segment3', type: "multiple", q: "Si se agrega '(11) Las plataformas pedirán tu correo', ¿qué debe hacerse?", options: ["Conservarse", "Rimarse", "Omitirse (dato irrelevante)", "Introducción"], ans: 2 }
+        ];
+
+        let currentIndex = 0;
+        let correctCount = 0;
+        let timerSeconds = 1800; // 30 MINUTOS
+        let canAnswer = true;
+        let timerInterval;
+
+        function startExam() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            showQuestion();
+            startTimer();
+        }
+
+        function toggleReading() {
+            const modal = document.getElementById('reading-modal');
+            if (modal.classList.contains('hidden')) {
+                const q = questions[currentIndex];
+                const textData = texts[q.textRef];
+                document.getElementById('reading-title').innerText = textData.title;
+                document.getElementById('reading-content').innerText = textData.content;
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function showQuestion() {
+            canAnswer = true;
+            const q = questions[currentIndex];
+            const container = document.getElementById('question-box');
+            document.getElementById('progress-text').innerText = `${currentIndex + 1} de 25`;
+            document.getElementById('progress-bar').style.width = `${((currentIndex) / 25) * 100}%`;
+
+            let html = `
+                <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-lg border border-slate-100 fade-in">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex flex-col gap-1">
+                            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-xl text-[9px] font-black uppercase tracking-widest w-fit">${q.textRef.toUpperCase()}</span>
+                            <span class="text-slate-300 font-bold text-[10px] uppercase tracking-tighter ml-1">PAA Redacción</span>
+                        </div>
+                        <button onclick="toggleReading()" class="bg-slate-900 text-white text-[9px] font-black px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-slate-800 transition-colors uppercase tracking-widest active:scale-95 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Ver Lectura
+                        </button>
+                    </div>
+                    <h2 class="text-lg font-bold text-slate-800 mb-6 leading-tight">${q.q}</h2>
+                    <div id="options-grid" class="grid grid-cols-1 gap-3">
+            `;
+
+            q.options.forEach((opt, i) => {
+                html += `
+                    <button onclick="checkAnswer(${i})" 
+                        class="w-full text-left p-3 md:p-4 border-2 border-slate-50 rounded-2xl hover:border-emerald-200 transition-all flex items-center gap-4 group">
+                        <span class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center font-black text-slate-400 group-hover:bg-emerald-600 group-hover:text-white transition-all text-xs">${['A','B','C','D'][i]}</span>
+                        <span class="font-semibold text-slate-700 text-sm">${opt}</span>
+                    </button>
+                `;
+            });
+
+            container.innerHTML = html + `</div></div>`;
+        }
+
+        function checkAnswer(index) {
+            if(!canAnswer) return;
+            canAnswer = false;
+            const q = questions[currentIndex];
+            const isCorrect = (index === q.ans);
+            
+            if(isCorrect) { 
+                correctCount++; 
+                document.getElementById('correct-counter').innerText = correctCount; 
+            }
+            
+            const btns = document.querySelectorAll('#options-grid button');
+            btns[q.ans].classList.add('ans-correct');
+            if(!isCorrect) btns[index].classList.add('ans-wrong');
+            
+            setTimeout(() => { 
+                currentIndex++; 
+                if(currentIndex < 25) showQuestion(); else finishExam(); 
+            }, 800);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => { 
+                if(timerSeconds > 0) { 
+                    timerSeconds--; 
+                    let m = Math.floor(timerSeconds/60); 
+                    let s = timerSeconds%60; 
+                    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`; 
+                } else finishExam(); 
+            }, 1000);
+        }
+
+        function finishExam() {
+            if (timerInterval) clearInterval(timerInterval);
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('reading-modal').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const score = Math.round((correctCount/25)*600)+200;
+            document.getElementById('final-scale-score').innerText = score;
+            document.getElementById('total-correct').innerText = correctCount;
+            document.getElementById('total-percent').innerText = `${Math.round((correctCount/25)*100)}%`;
+            document.getElementById('label-score-final').innerText = score;
+
+            let breakdownHtml = `
+                <div class="bg-slate-50/50 p-4 rounded-2xl border border-slate-100 col-span-2">
+                    <p class="text-[9px] font-black uppercase text-slate-400 mb-2">Desempeño Global</p>
+                    <div class="flex items-center gap-3">
+                        <div class="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-emerald-600" style="width: ${(correctCount/25)*100}%"></div>
+                        </div>
+                        <span class="text-xs font-black text-slate-700">${Math.round((correctCount/25)*100)}%</span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('area-breakdown').innerHTML = breakdownHtml;
+        }
+    </script>
+</body>
+</html>

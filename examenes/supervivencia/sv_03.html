@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survival Spanish: Reto 50</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .progress-transition { transition: width 0.5s ease-in-out; }
+        .option-btn:disabled { cursor: not-allowed; }
+        @keyframes pulse-red {
+            0%, 100% { border-color: #ef4444; color: #ef4444; }
+            50% { border-color: #fee2e2; color: #b91c1c; }
+        }
+        .timer-warning { animation: pulse-red 1s infinite; }
+        .modal-enter { animation: fadeIn 0.2s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body class="bg-orange-50 min-h-screen text-slate-900 selection:bg-orange-100">
+
+    <nav class="p-6">
+        <div class="max-w-2xl mx-auto flex items-center justify-center gap-2">
+            <div class="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center shadow-lg shadow-orange-200">
+                <span class="text-white font-black">E</span>
+            </div>
+            <span class="font-black text-xl tracking-tighter">SPANISH<span class="text-orange-600">SURVIVAL</span></span>
+        </div>
+    </nav>
+
+    <main id="game-container" class="px-4 pb-12">
+        <!-- Las pantallas se inyectan mediante JavaScript -->
+    </main>
+
+    <!-- Modal para Textos de Lectura -->
+    <div id="reading-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[80vh] overflow-hidden flex flex-col modal-enter shadow-2xl">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-orange-50">
+                <h3 class="font-black text-orange-800 uppercase tracking-tight">Texto de Apoyo</h3>
+                <button onclick="toggleReading(false)" class="text-slate-400 hover:text-slate-600 font-bold text-2xl">&times;</button>
+            </div>
+            <div class="p-8 overflow-y-auto leading-relaxed text-slate-700 text-lg" id="modal-text">
+                <!-- El texto se inyecta aquí -->
+            </div>
+            <div class="p-4 border-t border-slate-100 text-center">
+                <button onclick="toggleReading(false)" class="px-8 py-3 bg-orange-600 text-white font-bold rounded-xl hover:bg-orange-700 transition-colors">Cerrar y Responder</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Textos para comprensión lectora
+        const TEXTO_CIENCIA = "La biodiversidad es la variedad de formas de vida en el planeta. No solo incluye a las especies animales y vegetales, sino también a los ecosistemas y la diversidad genética. Actualmente, el cambio climático y la deforestación representan las mayores amenazas para este equilibrio natural. Proteger las áreas protegidas es vital para asegurar el suministro de agua y aire limpio para las futuras generaciones.";
+        const TEXTO_LITERARIO = "Cien años de soledad es la obra maestra de Gabriel García Márquez. Ambientada en el pueblo ficticio de Macondo, narra la historia de la familia Buendía a lo largo de siete generaciones. La novela es el máximo exponente del realismo mágico, donde lo cotidiano se mezcla con lo fantástico de manera natural. El tiempo en Macondo no es lineal, sino circular, condenando a sus protagonistas a repetir los errores de sus antepasados.";
+        const TEXTO_TECNOLOGIA = "La ciberseguridad se ha convertido en una prioridad global. Con el aumento del teletrabajo, los ataques de 'phishing' y el secuestro de datos (ransomware) han crecido exponencialmente. La clave de la defensa no reside solo en programas antivirus sofisticados, sino en la educación del usuario, quien suele ser el eslabón más débil de la cadena de seguridad informática.";
+
+        // Lista de 50 reactivos únicos
+        const ALL_QUESTIONS = [
+            // Ortografía y Gramática (Sin lectura, 45s)
+            { id: 1, q: "¿Qué palabra está escrita correctamente?", options: ["Halla (de encontrar)", "Haya (de encontrar)", "Haiga", "Allá (de encontrar)"], correct: 0 },
+            { id: 2, q: "Es una palabra aguda que requiere tilde:", options: ["Reloj", "Corazon", "Mesa", "Crisis"], correct: 1 },
+            { id: 3, q: "Selecciona la palabra esdrújula:", options: ["Teléfono", "Cartel", "Cuchara", "Papel"], correct: 0 },
+            { id: 4, q: "Identifica el antónimo de 'Emanicipar':", options: ["Liberar", "Someter", "Soltar", "Alejar"], correct: 1 },
+            { id: 5, q: "Complete: 'No ______ razones para enojarse'.", options: ["ay", "ahí", "hay", "allí"], correct: 2 },
+            { id: 6, q: "¿Cuál es el sujeto de: 'Ayer los niños jugaban en el parque'?", options: ["Ayer", "En el parque", "Los niños", "Jugaban"], correct: 2 },
+            { id: 7, q: "Sinónimo de la palabra 'Inmarcesible':", options: ["Que se marchita", "Que no puede marchitarse", "Muy brillante", "Duro de romper"], correct: 1 },
+            { id: 8, q: "¿Qué oración usa correctamente el punto y coma?", options: ["Vine; vi; vencí.", "Estudió mucho; sin embargo, reprobó.", "Mañana; iré al cine.", "Hola; ¿cómo estás?"], correct: 1 },
+            { id: 9, q: "Identifica el error: 'Habían muchas personas en la fila'.", options: ["Uso de 'Habían' (debe ser Había)", "Falta tilde en 'personas'", "Falta tilde en 'muchas'", "No hay error"], correct: 0 },
+            { id: 10, q: "¿Cuál es un diptongo?", options: ["Héroe", "Aire", "Poeta", "Caos"], correct: 1 },
+            { id: 11, q: "Palabra con prefijo que significa 'después de':", options: ["Preoperatorio", "Submarino", "Posguerra", "Antigás"], correct: 2 },
+            { id: 12, q: "¿Cómo se escribe correctamente?", options: ["A través", "A travez", "Atravez", "Através"], correct: 0 },
+            { id: 13, q: "Grado del adjetivo en: 'Es el más alto de todos'.", options: ["Positivo", "Comparativo", "Superlativo relativo", "Superlativo absoluto"], correct: 2 },
+            { id: 14, q: "Indica el núcleo del predicado: 'El perro de mi vecino ladra mucho'.", options: ["Perro", "Vecino", "Ladra", "Mucho"], correct: 2 },
+            { id: 15, q: "Sustantivo colectivo de 'pez':", options: ["Peces", "Cardumen", "Enjambre", "Jauría"], correct: 1 },
+            { id: 16, q: "¿Qué palabra lleva 'z'?", options: ["Analiza__", "Explo__ión", "Eficaz", "Preci__ión"], correct: 2 },
+            { id: 17, q: "Significado del prefijo 'Bio':", options: ["Dos", "Vida", "Pequeño", "Tierra"], correct: 1 },
+            { id: 18, q: "Figura retórica en: 'Tus ojos son luceros'.", options: ["Metáfora", "Símil", "Hipérbole", "Personificación"], correct: 0 },
+            { id: 19, q: "¿Cuál es una oración impersonal?", options: ["Yo como", "Llueve mucho", "Él corre", "Nosotros vamos"], correct: 1 },
+            { id: 20, q: "Femenino de 'Yerno':", options: ["Yerna", "Nuera", "Mujer", "Esposa"], correct: 1 },
+            { id: 21, q: "Uso de 'Sino' / 'Si no': 'No quiero pan, ____ fruta'.", options: ["si no", "sino", "si-no", "sinó"], correct: 1 },
+            { id: 22, q: "Palabra que NO pertenece al campo semántico de 'muebles':", options: ["Silla", "Mesa", "Libro", "Sofá"], correct: 2 },
+            { id: 23, q: "¿Cuál es el infinitivo del verbo 'conduje'?", options: ["Conducir", "Condujer", "Conducido", "Conduzco"], correct: 0 },
+            { id: 24, q: "Indica la preposición:", options: ["Y", "Pero", "Desde", "Que"], correct: 2 },
+            { id: 25, q: "Identifica la palabra homófona de 'Bello' (hermoso):", options: ["Vello (pelo corto)", "Vello (hermoso)", "Beyo", "Velo"], correct: 0 },
+            { id: 26, q: "¿Qué signo se usa para introducir una cita textual?", options: ["Paréntesis", "Guion largo", "Comillas", "Corchetes"], correct: 2 },
+            { id: 27, q: "Palabra que debe llevar tilde por ser grave terminada en consonante distinta de n, s o vocal:", options: ["Lapiz", "Silla", "Arboles", "Imagen"], correct: 0 },
+            { id: 28, q: "Antónimo de 'Efímero':", options: ["Corto", "Pasajero", "Eterno", "Fugaz"], correct: 2 },
+            { id: 29, q: "¿Qué palabra está mal escrita?", options: ["Herbir", "Hervir", "Hervido", "Hierve"], correct: 0 },
+            { id: 30, q: "Función de la lengua en una poesía:", options: ["Referencial", "Fática", "Poética", "Apelativa"], correct: 2 },
+            { id: 31, q: "Complemento directo en: 'Pedro compró flores'.", options: ["Pedro", "Compró", "Flores", "No tiene"], correct: 2 },
+            { id: 32, q: "¿Qué pronombre es de segunda persona plural?", options: ["Ellos", "Nosotros", "Ustedes", "Él"], correct: 2 },
+            { id: 33, q: "Relación entre 'Banco' (asiento) y 'Banco' (entidad):", options: ["Sinonimia", "Antonimia", "Homonimia", "Paronimia"], correct: 2 },
+            { id: 34, q: "¿Cuál es el hiato?", options: ["Ciudad", "Cacao", "Fuego", "Peine"], correct: 1 },
+            { id: 35, q: "Forma correcta del imperativo para 'ir' (tú):", options: ["Ves", "Ve", "Vaya", "Id"], correct: 1 },
+
+            // Comprensión Lectora (Con lectura, 80s)
+            { id: 36, q: "Según el texto de biodiversidad, ¿cuál NO es una amenaza mencionada?", options: ["Cambio climático", "Deforestación", "Sobrepoblación", "Todas son mencionadas"], correct: 2, reading: TEXTO_CIENCIA },
+            { id: 37, q: "En el texto de biodiversidad, ¿qué asegura proteger las áreas protegidas?", options: ["Turismo", "Agua y aire limpio", "Caza controlada", "Vivienda"], correct: 1, reading: TEXTO_CIENCIA },
+            { id: 38, q: "¿Cuál es la idea principal del texto de biodiversidad?", options: ["Los animales son bonitos", "La importancia de proteger la biodiversidad", "Cómo plantar árboles", "La historia de la ecología"], correct: 1, reading: TEXTO_CIENCIA },
+            { id: 39, q: "Según el texto literario, ¿qué es Macondo?", options: ["Un país real", "Un pueblo ficticio", "Un personaje", "Una montaña"], correct: 1, reading: TEXTO_LITERARIO },
+            { id: 40, q: "¿Qué caracteriza al realismo mágico según el fragmento?", options: ["Uso de mucha magia", "Mezcla de lo cotidiano y lo fantástico", "Historias de guerra", "Cuentos para niños"], correct: 1, reading: TEXTO_LITERARIO },
+            { id: 41, q: "En Macondo, ¿cómo es el tiempo?", options: ["Lineal", "Circular", "Muy rápido", "No existe"], correct: 1, reading: TEXTO_LITERARIO },
+            { id: 42, q: "¿A qué están condenados los protagonistas de la novela?", options: ["A la riqueza", "A repetir errores de sus antepasados", "Al olvido", "A viajar"], correct: 1, reading: TEXTO_LITERARIO },
+            { id: 43, q: "Según el texto de tecnología, ¿cuál es el 'eslabón más débil'?", options: ["El firewall", "El antivirus", "El usuario", "La conexión WiFi"], correct: 2, reading: TEXTO_TECNOLOGIA },
+            { id: 44, q: "¿Qué ha crecido exponencialmente con el teletrabajo?", options: ["La velocidad de internet", "Los ataques de ransomware", "La venta de laptops", "Las llamadas"], correct: 1, reading: TEXTO_TECNOLOGIA },
+            { id: 45, q: "Para una buena defensa informática, el texto sugiere prioritariamente:", options: ["Comprar el mejor antivirus", "Educación del usuario", "No usar internet", "Contratar hackers"], correct: 1, reading: TEXTO_TECNOLOGIA },
+            { id: 46, q: "En el texto literario, ¿quién escribió 'Cien años de soledad'?", options: ["Mario Vargas Llosa", "Gabriel García Márquez", "Julio Cortázar", "Pablo Neruda"], correct: 1, reading: TEXTO_LITERARIO },
+            { id: 47, q: "De acuerdo al texto de tecnología, ¿qué es el 'phishing'?", options: ["Una red social", "Un tipo de ataque informático", "Un software de diseño", "Un deporte"], correct: 1, reading: TEXTO_TECNOLOGIA },
+            { id: 48, q: "¿Qué significa 'Biodiversidad' según el texto de ciencia?", options: ["Solo animales", "Variedad de formas de vida", "Estudio de las plantas", "Protección del mar"], correct: 1, reading: TEXTO_CIENCIA },
+            { id: 49, q: "¿Cuál es el género de la obra mencionada en el texto literario?", options: ["Novela", "Ensayo", "Poesía", "Teatro"], correct: 0, reading: TEXTO_LITERARIO },
+            { id: 50, q: "Conclusión del texto tecnológico sobre la seguridad:", options: ["Es imposible estar seguro", "Depende solo de software", "Es un esfuerzo global y educativo", "Ya no hay ataques"], correct: 2, reading: TEXTO_TECNOLOGIA }
+        ];
+
+        let questions = [];
+        let currentIndex = 0;
+        let lives = 3;
+        let score = 0;
+        let timeLeft = 0;
+        let timerInterval;
+        let isAnswering = false;
+
+        const container = document.getElementById('game-container');
+
+        // Mezclar array
+        function shuffle(array) {
+            let m = array.length, t, i;
+            while (m) {
+                i = Math.floor(Math.random() * m--);
+                t = array[m];
+                array[m] = array[i];
+                array[i] = t;
+            }
+            return array;
+        }
+
+        function renderStart() {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center space-y-8 p-8 text-center bg-white rounded-3xl shadow-2xl max-w-lg mx-auto mt-12 animate-in fade-in zoom-in duration-300">
+                    <div class="p-4 bg-orange-100 rounded-full">
+                        <svg class="w-16 h-16 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-extrabold text-gray-900 mb-2 tracking-tight">SURVIVAL SPANISH</h1>
+                        <p class="text-orange-600 font-bold tracking-widest text-sm uppercase">Reto de 50 Reactivos Únicos</p>
+                    </div>
+                    <div class="space-y-4 text-left w-full bg-slate-50 p-6 rounded-2xl border border-slate-100 text-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="text-red-500 text-lg">❤️</span>
+                            <span class="text-gray-700 font-medium">3 Vidas - Un error termina tu racha</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-amber-500 text-lg">⏱️</span>
+                            <span class="text-gray-700 font-medium">45s (Gramática) / 1m 20s (Lectura)</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-blue-500 text-lg">📖</span>
+                            <span class="text-gray-700 font-medium">Textos de apoyo interactivos</span>
+                        </div>
+                    </div>
+                    <button onclick="startGame()" class="w-full py-4 bg-orange-600 hover:bg-orange-700 text-white rounded-2xl font-bold text-xl transition-all shadow-lg active:scale-95">
+                        COMENZAR EXAMEN
+                    </button>
+                    <p class="text-xs text-gray-400 font-medium italic">Sin preguntas repetidas. Solo conocimiento puro.</p>
+                </div>
+            `;
+        }
+
+        function startGame() {
+            questions = shuffle([...ALL_QUESTIONS]);
+            currentIndex = 0;
+            lives = 3;
+            score = 0;
+            startQuestion();
+        }
+
+        function startQuestion() {
+            const q = questions[currentIndex];
+            timeLeft = q.reading ? 80 : 45;
+            isAnswering = false;
+            renderGame();
+            
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const timerEl = document.getElementById('timer-display');
+                if (timerEl) {
+                    timerEl.innerText = `${timeLeft}s`;
+                    if (timeLeft <= 10) timerEl.parentElement.classList.add('timer-warning');
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleFail();
+                }
+            }, 1000);
+        }
+
+        function toggleReading(show) {
+            const modal = document.getElementById('reading-modal');
+            const textEl = document.getElementById('modal-text');
+            const q = questions[currentIndex];
+            if (show && q.reading) {
+                textEl.innerText = q.reading;
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function renderGame() {
+            const q = questions[currentIndex];
+            const progress = ((currentIndex + 1) / questions.length) * 100;
+            
+            let hearts = "";
+            for(let i=0; i<3; i++) {
+                hearts += `<span class="text-2xl transition-opacity duration-300 ${i < lives ? 'opacity-100' : 'opacity-20'}">❤️</span>`;
+            }
+
+            container.innerHTML = `
+                <div class="max-w-2xl mx-auto mt-8">
+                    <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                        <div class="flex gap-1">${hearts}</div>
+                        <div class="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-orange-100 text-orange-600">
+                            <span class="font-mono text-2xl font-bold" id="timer-display">${timeLeft}s</span>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-slate-400 uppercase font-bold">Aciertos</p>
+                            <p class="text-xl font-black text-orange-600">${score}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-6 h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-orange-500 progress-transition" style="width: ${progress}%"></div>
+                    </div>
+
+                    <div class="bg-white rounded-3xl shadow-xl p-8 border border-slate-100 min-h-[420px] flex flex-col relative">
+                        <div class="mb-6">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="inline-block px-3 py-1 bg-orange-50 text-orange-600 text-xs font-black rounded-lg">
+                                    REACTIVO ${currentIndex + 1}/50
+                                </span>
+                                ${q.reading ? `
+                                    <button onclick="toggleReading(true)" class="flex items-center gap-2 px-4 py-1.5 bg-orange-100 text-orange-700 rounded-full text-sm font-bold hover:bg-orange-200 transition-colors shadow-sm">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                        VER LECTURA
+                                    </button>
+                                ` : ''}
+                            </div>
+                            <h2 class="text-2xl font-bold text-gray-800 leading-tight">${q.q}</h2>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4 mt-auto">
+                            ${q.options.map((opt, i) => `
+                                <button onclick="checkAnswer(${i})" class="option-btn p-4 text-left rounded-2xl border-2 border-slate-100 hover:border-orange-200 hover:bg-orange-50 font-bold transition-all flex items-center gap-3 group">
+                                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-500 text-sm group-hover:bg-orange-600 group-hover:text-white transition-colors uppercase font-bold">${String.fromCharCode(65+i)}</span>
+                                    <span>${opt}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkAnswer(idx) {
+            if (isAnswering) return;
+            isAnswering = true;
+            clearInterval(timerInterval);
+
+            const q = questions[currentIndex];
+            const buttons = document.querySelectorAll('.option-btn');
+            
+            if (idx === q.correct) {
+                buttons[idx].classList.replace('border-slate-100', 'border-emerald-500');
+                buttons[idx].classList.add('bg-emerald-50', 'text-emerald-700');
+                score++;
+                setTimeout(nextStep, 800);
+            } else {
+                buttons[idx].classList.replace('border-slate-100', 'border-red-500');
+                buttons[idx].classList.add('bg-red-50', 'text-red-700');
+                buttons[q.correct].classList.replace('border-slate-100', 'border-emerald-500');
+                buttons[q.correct].classList.add('bg-emerald-50', 'text-emerald-700');
+                handleFail();
+            }
+        }
+
+        function handleFail() {
+            lives--;
+            if (lives <= 0) {
+                setTimeout(renderGameOver, 1200);
+            } else {
+                setTimeout(nextStep, 1200);
+            }
+        }
+
+        function nextStep() {
+            currentIndex++;
+            if (currentIndex >= questions.length) {
+                renderWin();
+            } else {
+                startQuestion();
+            }
+        }
+
+        function renderGameOver() {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center space-y-8 p-12 text-center bg-white rounded-3xl shadow-2xl max-w-lg mx-auto mt-12 animate-in fade-in zoom-in duration-300">
+                    <div class="p-6 bg-red-100 rounded-full text-5xl">📖❌</div>
+                    <h2 class="text-4xl font-black text-gray-900 uppercase tracking-tight">Sobrecarga</h2>
+                    <p class="text-gray-500">Has agotado tus oportunidades. ¡Cada error es una lección!</p>
+                    <div class="grid grid-cols-2 gap-4 w-full">
+                        <div class="p-4 bg-orange-50 rounded-2xl">
+                            <p class="text-xs text-orange-400 font-black uppercase mb-1">Aciertos</p>
+                            <p class="text-3xl font-black text-orange-700">${score}</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-2xl">
+                            <p class="text-xs text-slate-400 font-black uppercase mb-1">Progreso</p>
+                            <p class="text-3xl font-black text-slate-700">${currentIndex}/50</p>
+                        </div>
+                    </div>
+                    <button onclick="startGame()" class="w-full py-4 bg-gray-900 hover:bg-gray-800 text-white rounded-2xl font-bold text-xl transition-all shadow-xl active:scale-95">
+                        REINTENTAR RETO
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderWin() {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center space-y-8 p-12 text-center bg-white rounded-3xl shadow-2xl max-w-lg mx-auto mt-12 animate-in slide-in-from-bottom-8">
+                    <div class="p-6 bg-yellow-100 rounded-full text-5xl">🎓</div>
+                    <h2 class="text-4xl font-black text-gray-900 uppercase">¡EXCELENCIA!</h2>
+                    <p class="text-gray-500">Has completado los 50 reactivos únicos de español.</p>
+                    <div class="grid grid-cols-2 gap-4 w-full">
+                        <div class="p-4 bg-emerald-50 rounded-2xl">
+                            <p class="text-xs text-emerald-400 font-black uppercase mb-1">Puntaje Final</p>
+                            <p class="text-3xl font-black text-emerald-700">${score}/50</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-2xl">
+                            <p class="text-xs text-slate-400 font-black uppercase mb-1">Efectividad</p>
+                            <p class="text-3xl font-black text-slate-700">${Math.round((score/50)*100)}%</p>
+                        </div>
+                    </div>
+                    <button onclick="startGame()" class="w-full py-4 bg-orange-600 hover:bg-orange-700 text-white rounded-2xl font-bold text-xl transition-all shadow-xl active:scale-95">
+                        VOLVER A JUGAR
+                    </button>
+                </div>
+            `;
+        }
+
+        renderStart();
+    </script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador PAA Lectura N° 7 - 50 Minutos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow: hidden; }
+        .sticky-header { position: sticky; top: 0; z-index: 50; }
+        .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
+        .ans-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .progress-bar { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-overlay { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+        th, td { border: 1px solid #e2e8f0; padding: 8px; text-align: center; }
+        th { background-color: #f1f5f9; font-weight: 800; }
+    </style>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col">
+
+    <!-- Pantalla de Inicio -->
+    <div id="start-screen" class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
+            <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg -rotate-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-extrabold text-slate-900 mb-2 uppercase tracking-tight">Lectura PAA N° 7</h1>
+            <p class="text-slate-500 mb-4 font-medium text-sm">Práctica de Comprensión (45 Reactivos)</p>
+            
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 text-left rounded-r-xl">
+                <p class="text-xs text-amber-900 leading-relaxed font-semibold">
+                    ¡Listo! Tienes <span class="underline">50 minutos</span> para completar esta simulación.
+                </p>
+                <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold italic">
+                    El botón de lectura está integrado en cada pregunta.
+                </p>
+            </div>
+
+            <button onclick="startExam()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">
+                COMENZAR SIMULACRO
+            </button>
+        </div>
+    </div>
+
+    <!-- Pantalla de Examen -->
+    <div id="exam-screen" class="hidden h-full flex flex-col">
+        <div class="sticky-header bg-white border-b border-slate-200 p-3">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <div class="flex gap-4">
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Tiempo</p>
+                        <p id="timer" class="text-lg font-mono font-black text-blue-600 leading-none">50:00</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-emerald-500 uppercase">Bien</p>
+                        <p id="correct-counter" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 max-w-[120px] sm:max-w-xs ml-4 text-right">
+                    <p id="progress-text" class="text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-tighter">1 de 45</p>
+                    <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="progress-bar h-full bg-blue-600 w-0"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="flex-grow flex items-center justify-center p-4 overflow-hidden">
+            <div id="question-box" class="max-w-xl w-full"></div>
+        </main>
+    </div>
+
+    <!-- Modal de Lectura -->
+    <div id="reading-modal" class="hidden fixed inset-0 z-[100] modal-overlay flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl max-h-[85vh] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden animate-fade-in border border-slate-200">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <div>
+                    <h3 id="reading-title" class="text-lg font-black text-slate-900 uppercase tracking-tight">Segmento de Lectura</h3>
+                    <p id="reading-subtitle" class="text-[10px] text-blue-600 font-bold uppercase">Lectura base</p>
+                </div>
+                <button onclick="toggleReading()" class="w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div id="reading-content" class="p-8 md:p-10 overflow-y-auto custom-scroll text-slate-700 leading-relaxed text-sm md:text-base italic">
+                <!-- Inyectado dinámicamente -->
+            </div>
+            <div class="p-4 bg-slate-50 text-center border-t border-slate-100">
+                <button onclick="toggleReading()" class="bg-slate-900 text-white font-black px-8 py-2 rounded-xl text-xs uppercase tracking-widest shadow-lg">Cerrar Texto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla de Resultados -->
+    <div id="result-screen" class="hidden h-full flex items-center justify-center p-4 overflow-hidden">
+        <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-white fade-in flex flex-col max-h-[95vh]">
+            <div class="bg-slate-900 p-6 md:p-8 text-center text-white relative flex-shrink-0">
+                <p class="text-blue-400 font-bold uppercase tracking-[0.3em] text-[9px] mb-2">Puntaje Final Lectura</p>
+                <div class="flex items-center justify-center gap-2">
+                    <h2 id="final-scale-score" class="text-6xl font-black tracking-tighter leading-none">0</h2>
+                    <p class="text-slate-500 font-bold text-lg">/ 800</p>
+                </div>
+            </div>
+            
+            <div class="p-6 md:p-8 flex-grow overflow-y-auto custom-scroll text-center">
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Aciertos</p>
+                        <p class="text-xl font-black text-slate-800"><span id="total-correct">0</span><span class="text-slate-300 text-sm">/45</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Efectividad</p>
+                        <p id="total-percent" class="text-xl font-black text-blue-600">0%</p>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-2xl text-white flex flex-col justify-center">
+                        <p class="text-[7px] font-black text-blue-400 uppercase">Estatus</p>
+                        <p class="text-xs font-bold leading-tight">Perfil Analizado</p>
+                    </div>
+                </div>
+
+                <div class="p-5 bg-blue-600 rounded-3xl text-white relative overflow-hidden shadow-lg">
+                    <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                        <div>
+                            <h4 class="text-lg font-black leading-none mb-1 uppercase tracking-tight">¡Anota tu resultado!</h4>
+                            <p class="text-blue-100 text-[10px]">Usa tus <span id="label-score-final" class="font-black text-white underline text-xs">0</span> puntos para el promedio global.</p>
+                        </div>
+                        <button onclick="location.reload()" class="bg-white text-blue-600 font-black px-6 py-2 rounded-xl hover:bg-blue-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0 shadow-md">
+                            Reiniciar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const texts = {
+            segment1: {
+                title: "LECTURA 1: El Cartógrafo del Olvido (Ejercicios 1-9)",
+                content: `La lectura trata sobre un hombre que hace mapas de lugares desaparecidos. (1) Rodrigo Salinas dedicó cuarenta años a trazar mapas de pueblos que ya no existían. (3) No era geógrafo ni historiador; se definía simplemente como "un cartógrafo del olvido". (5) Cada mapa era una investigación: entrevistaba a ancianos, consultaba archivos polvorientos y buscaba fotografías en cajas de cartón. (8) "Un lugar desaparece dos veces", decía con tristeza: "primero físicamente, y luego cuando nadie lo recuerda". (11) Sus mapas no tenían valor comercial, pero los museos regionales comenzaron a exhibirlos como patrimonio cultural. (14) Rodrigo murió sin jamás haber cobrado un peso por su trabajo. (16) Sin embargo, gracias a él, más de doscientos pueblos fantasma viven hoy en papel.`
+            },
+            segment2: {
+                title: "LECTURA 2: Energías Renovables en México (Ejercicios 10-18)",
+                content: `<p>(1) México posee un enorme potencial para la generación de energía renovable, gracias a su geografía diversa y sus recursos naturales. (3) Sin embargo, la transición energética avanza lentamente debido a obstáculos económicos, políticos y de infraestructura.</p><table><thead><tr><th>Tipo de energía</th><th>Capacidad instalada (GW)</th><th>Potencial estimado (GW)</th></tr></thead><tbody><tr><td>Solar</td><td>8.5</td><td>1,000+</td></tr><tr><td>Eólica</td><td>7.2</td><td>71</td></tr><tr><td>Hidroeléctrica</td><td>13.1</td><td>53</td></tr><tr><td>Geotérmica</td><td>0.96</td><td>10</td></tr></tbody></table><p>(10) La energía solar es la que mayor contraste presenta entre lo instalado y su potencial real. (13) Expertos del sector argumentan que se requieren reformas regulatorias urgentes y mayor inversión privada para aprovechar este potencial. (17) Sin esos cambios, México dependerá del petróleo por décadas más.</p>`
+            },
+            segment3: {
+                title: "LECTURA 3: El Tiempo Libre — ¿Lujo o Necesidad? (Ejercicios 19-28)",
+                content: `<p><strong>Lectura A:</strong> (1) En la sociedad contemporánea, el tiempo libre es visto con sospecha. (3) La productividad se ha convertido en el valor supremo: si no estás produciendo, estás desperdiciando. (5) Esta mentalidad genera ansiedad, agotamiento y, paradójicamente, menor eficiencia. (7) Estudios de neurociencia demuestran que el cerebro necesita períodos de descanso para consolidar aprendizajes y generar ideas creativas. (10) El tiempo libre no es un lujo; es una condición biológica para el bienestar y el rendimiento.</p><p class="mt-4"><strong>Lectura B:</strong> (1) Existe una diferencia entre descanso y ocio improductivo. (3) Descansar activamente —leyendo, caminando, cultivando un hobby— genera beneficios cognitivos y emocionales. (6) En cambio, el consumo pasivo de entretenimiento digital puede sustituir el verdadero descanso sin aportarlo. (9) El problema no es si tenemos tiempo libre, sino qué hacemos con él.</p>`
+            },
+            segment4: {
+                title: "LECTURA 4: La Revolución Industrial y sus Consecuencias (Ejercicios 29-37)",
+                content: `(1) La Revolución Industrial, iniciada en Gran Bretaña a mediados del siglo XVIII, transformó de manera irreversible la estructura económica, social y ambiental del mundo. (4) El paso de una economía agraria a una industrial desplazó a millones de campesinos hacia las ciudades, creando las primeras grandes concentraciones urbanas. (8) Las condiciones laborales en las fábricas eran brutales: jornadas de dieciséis horas, trabajo infantil y salarios miserables. (12) Sin embargo, este mismo período generó avances tecnológicos sin precedentes: la máquina de vapor, el ferrocarril y la producción en serie. (16) El debate histórico continúa: ¿fue la Revolución Industrial un progreso o un retroceso para la humanidad? (19) La respuesta, como suele ocurrir en historia, depende de quién la cuenta y desde qué perspectiva.`
+            },
+            segment5: {
+                title: "LECTURA 5: Canción de la Lluvia (Ejercicios 38-45)",
+                content: `<p>(1) La lluvia llega sin pedir permiso,<br>(2) golpea el techo, besa el pavimento.<br>(3) Transforma el gris en un color preciso:<br>(4) el verde oscuro del presentimiento.</p><p>(5) Los niños corren, abren los brazos,<br>(6) reciben el agua como si fuera don.<br>(7) El viejo desde adentro cuenta los plazos<br>(8) del tiempo que le queda y que se va en borrón.</p><p>(9) La lluvia no distingue entre el rico y el pobre,<br>(10) moja por igual la flor y la maleza.<br>(11) Quizás por eso el alma que se asombre<br>(12) encuentre en ella rastros de pureza.</p>`
+            },
+        };
+
+        const questions = [
+            { id: 1, textRef: 'segment1', q: "La palabra 'cartógrafo' (línea 3) se refiere a alguien que:", options: ["Escribe cartas", "Hace mapas", "Estudia historia", "Fotografía ruinas"], ans: 1 },
+            { id: 2, textRef: 'segment1', q: "¿Qué se puede inferir sobre la motivación de Rodrigo?", options: ["Buscaba fama y dinero", "Lo impulsaba preservar la memoria de lugares olvidados", "Quería publicar libros", "Era un trabajo obligatorio"], ans: 1 },
+            { id: 3, textRef: 'segment1', q: "'Un lugar desaparece dos veces' es una figura de:", options: ["Personificación", "Hipérbole", "Metáfora reflexiva", "Comparación"], ans: 2 },
+            { id: 4, textRef: 'segment1', q: "¿Cuál resume MEJOR la lectura?", options: ["La historia de la geografía mexicana", "Un hombre que dedicó su vida a preservar la memoria de pueblos desaparecidos", "La crisis de los museos regionales", "Los archivos históricos de México"], ans: 1 },
+            { id: 5, textRef: 'segment1', q: "La frase 'murió sin cobrar un peso' evidencia que Rodrigo:", options: ["Fracasó en su labor", "Era irresponsable con el dinero", "Actuaba por vocación genuina, no por dinero", "Tenía otra fuente de ingresos"], ans: 2 },
+            { id: 6, textRef: 'segment1', q: "¿Qué evidencia el valor social de su trabajo?", options: ["Líneas 1-3", "Líneas 5-7", "Líneas 11-13 (museos regionales lo exhiben)", "Líneas 14-16"], ans: 2 },
+            { id: 7, textRef: 'segment1', q: "El tipo de discurso predominante en esta lectura es:", options: ["Argumentativo", "Narrativo descriptivo", "Científico", "Poético"], ans: 1 },
+            { id: 8, textRef: 'segment1', q: "La expresión 'pueblos fantasma viven hoy en papel' significa:", options: ["Los fantasmas escriben", "Los mapas preservan su existencia", "Los pueblos son de cartón", "Son pueblos ficticios"], ans: 1 },
+            { id: 9, textRef: 'segment1', q: "La actitud de Rodrigo hacia su trabajo era de:", options: ["Indiferencia", "Frustración constante", "Dedicación apasionada", "Arrepentimiento"], ans: 2 },
+            { id: 10, textRef: 'segment2', q: "La palabra 'transición' (línea 3) en el contexto energético significa:", options: ["Un tipo de impuesto", "El cambio de un sistema a otro", "Una interrupción del servicio", "Una ley nueva"], ans: 1 },
+            { id: 11, textRef: 'segment2', q: "Según la tabla, ¿qué tipo de energía tiene MAYOR capacidad instalada?", options: ["Solar", "Eólica", "Hidroeléctrica", "Geotérmica"], ans: 2 },
+            { id: 12, textRef: 'segment2', q: "¿Qué tipo de energía muestra el mayor contraste entre capacidad instalada y potencial?", options: ["Eólica", "Geotérmica", "Hidroeléctrica", "Solar"], ans: 3 },
+            { id: 13, textRef: 'segment2', q: "Según la tabla, la capacidad instalada de geotérmica es:", options: ["7.2 GW", "13.1 GW", "0.96 GW", "8.5 GW"], ans: 2 },
+            { id: 14, textRef: 'segment2', q: "Se puede INFERIR que México:", options: ["Ya no usa petróleo", "Aprovecha plenamente su potencial solar", "Está muy por debajo de su potencial renovable real", "No tiene recursos renovables"], ans: 2 },
+            { id: 15, textRef: 'segment2', q: "¿Qué evidencia que se necesitan cambios para lograr la transición?", options: ["Líneas 1-3", "Líneas 10-12", "Líneas 13-17 (se requieren reformas e inversión)", "Tabla de capacidades"], ans: 2 },
+            { id: 16, textRef: 'segment2', q: "La palabra 'regulatorias' (línea 14) se relaciona con:", options: ["Regulación de temperatura", "Normas y leyes que gobiernan un sector", "Tipos de energía", "Empresas privadas"], ans: 1 },
+            { id: 17, textRef: 'segment2', q: "El propósito principal de la lectura es:", options: ["Criticar al gobierno mexicano", "Analizar el potencial y los obstáculos de las renovables en México", "Promover la energía solar", "Describir el petróleo"], ans: 1 },
+            { id: 18, textRef: 'segment2', q: "El tono de los expertos del sector es:", options: ["Resignado", "Optimista sin condiciones", "Urgente y propositivo", "Indiferente"], ans: 2 },
+            { id: 19, textRef: 'segment3', q: "En Lectura A, 'paradójicamente' (línea 5) significa:", options: ["De manera esperada", "De forma contradictoria a lo lógico", "Con mucha rapidez", "De modo científico"], ans: 1 },
+            { id: 20, textRef: 'segment3', q: "Según Lectura A, el cerebro necesita descanso para:", options: ["Solo dormir", "Consolidar aprendizajes y generar ideas creativas", "Hacer ejercicio", "Consumir entretenimiento"], ans: 1 },
+            { id: 21, textRef: 'segment3', q: "En Lectura B, 'ocio improductivo' se refiere a:", options: ["Leer un libro", "Caminar en el parque", "Consumir entretenimiento digital pasivo", "Cultivar un hobby"], ans: 2 },
+            { id: 22, textRef: 'segment3', q: "Según Lectura B, el descanso activo incluye:", options: ["Ver series sin parar", "Solo dormir mucho", "Leer, caminar o tener hobbies", "Usar redes sociales"], ans: 2 },
+            { id: 23, textRef: 'segment3', q: "La relación entre Lectura A y Lectura B es:", options: ["Se contradicen completamente", "B complementa A diferenciando tipos de descanso", "A resume a B", "Son independientes"], ans: 1 },
+            { id: 24, textRef: 'segment3', q: "Ambas lecturas coinciden en que:", options: ["Toda pantalla es dañina", "El tiempo libre de calidad es beneficioso", "Trabajar más es siempre mejor", "El descanso es un lujo"], ans: 1 },
+            { id: 25, textRef: 'segment3', q: "De Lectura A se INFIERE que la cultura de la productividad:", options: ["Mejora la salud mental", "Genera problemas de bienestar", "Es siempre positiva", "No tiene efectos"], ans: 1 },
+            { id: 26, textRef: 'segment3', q: "¿Qué evidencia en Lectura A que el descanso es una necesidad biológica?", options: ["Líneas 1-3", "Líneas 3-5", "Líneas 7-10 (neurociencia: el cerebro necesita...)", "Líneas 1-2 de Lectura B"], ans: 2 },
+            { id: 27, textRef: 'segment3', q: "En ambas lecturas predomina el discurso:", options: ["Narrativo", "Poético", "Descriptivo", "Expositivo-argumentativo"], ans: 3 },
+            { id: 28, textRef: 'segment3', q: "Una idea en la que Lectura A y B ESTARÍAN en desacuerdo:", options: ["El descanso es valioso", "Si todo tiempo libre equivale a recuperación real", "El trabajo es importante", "El cerebro funciona mejor descansado"], ans: 1 },
+            { id: 29, textRef: 'segment4', q: "La palabra 'irreversible' (línea 2) significa:", options: ["Que puede revertirse", "Que no puede deshacerse", "Muy lento", "Muy rápido"], ans: 1 },
+            { id: 30, textRef: 'segment4', q: "Según la lectura, ¿qué provocó el desplazamiento de campesinos a ciudades?", options: ["Una guerra", "El paso de economía agraria a industrial", "Una epidemia", "La llegada del ferrocarril"], ans: 1 },
+            { id: 31, textRef: 'segment4', q: "¿Qué condiciones laborales existían en las fábricas según la lectura?", options: ["Salarios altos y pocas horas", "Jornadas largas, trabajo infantil y salarios miserables", "Trabajo solo para adultos", "Condiciones modernas y seguras"], ans: 1 },
+            { id: 32, textRef: 'segment4', q: "La palabra 'precedentes' (línea 13) en 'sin precedentes' significa:", options: ["Con muchos ejemplos anteriores", "Sin casos anteriores comparables", "Con mucha rapidez", "Con apoyo del gobierno"], ans: 1 },
+            { id: 33, textRef: 'segment4', q: "Se puede INFERIR que la evaluación de la Revolución Industrial:", options: ["Es universalmente positiva", "Es universalmente negativa", "Depende de la perspectiva del observador", "Solo la hacen historiadores ingleses"], ans: 2 },
+            { id: 34, textRef: 'segment4', q: "¿Qué evidencia el lado negativo de la Revolución Industrial?", options: ["Líneas 1-3", "Líneas 4-7", "Líneas 8-11 (condiciones laborales brutales)", "Líneas 12-15"], ans: 2 },
+            { id: 35, textRef: 'segment4', q: "El propósito de la lectura es:", options: ["Glorificar la industria inglesa", "Presentar una visión equilibrada de la Revolución Industrial", "Solo mostrar los avances tecnológicos", "Criticar el capitalismo"], ans: 1 },
+            { id: 36, textRef: 'segment4', q: "La frase 'depende de quién la cuenta' es un ejemplo de:", options: ["Metáfora", "Reflexión sobre la subjetividad histórica", "Ironía científica", "Hipérbole"], ans: 1 },
+            { id: 37, textRef: 'segment4', q: "El tipo de discurso predominante es:", options: ["Narrativo", "Poético", "Argumentativo expositivo", "Descriptivo"], ans: 2 },
+            { id: 38, textRef: 'segment5', q: "'La lluvia llega sin pedir permiso' es una figura de:", options: ["Metáfora", "Símil", "Personificación", "Sinestesia"], ans: 2 },
+            { id: 39, textRef: 'segment5', q: "'Besa el pavimento' (verso 2) es un ejemplo de:", options: ["Hipérbole", "Personificación", "Onomatopeya", "Ironía"], ans: 1 },
+            { id: 40, textRef: 'segment5', q: "La palabra 'presentimiento' (verso 4) significa:", options: ["Un color verde", "Sensación anticipada de algo que va a ocurrir", "Un tipo de flor", "Una emoción alegre"], ans: 1 },
+            { id: 41, textRef: 'segment5', q: "El contraste entre los niños (verso 5) y el viejo (verso 7) representa:", options: ["Diferencia de ropa", "La oposición entre la alegría juvenil y la conciencia del tiempo", "Preferencias climáticas", "Diferencia de estatura"], ans: 1 },
+            { id: 42, textRef: 'segment5', q: "¿Cuál describe mejor el tema central del poema?", options: ["Los beneficios del agua", "La lluvia como reflejo de la condición humana", "El ciclo del agua", "Los niños bajo la lluvia"], ans: 1 },
+            { id: 43, textRef: 'segment5', q: "Según la estrofa 3, la lluvia simboliza:", options: ["Tristeza y dolor", "Igualdad y pureza", "Riqueza y abundancia", "Caos y destrucción"], ans: 1 },
+            { id: 44, textRef: 'segment5', q: "'La lluvia no distingue entre el rico y el pobre' evidencia el tema de:", options: ["La pobreza urbana", "La igualdad ante la naturaleza", "El clima impredecible", "La injusticia social"], ans: 1 },
+            { id: 45, textRef: 'segment5', q: "La palabra 'maleza' (verso 10) se refiere a:", options: ["Plantas cultivadas", "Hierba silvestre o plantas no deseadas", "Un tipo de árbol frutal", "Una enfermedad de las plantas"], ans: 1 },
+        ];
+
+        let currentIndex = 0;
+        let correctCount = 0;
+        let timerSeconds = 3000; // 50 MINUTOS
+        let canAnswer = true;
+        let timerInterval;
+
+        function startExam() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            showQuestion();
+            startTimer();
+        }
+
+        function toggleReading() {
+            const modal = document.getElementById('reading-modal');
+            if (modal.classList.contains('hidden')) {
+                const q = questions[currentIndex];
+                const textData = texts[q.textRef];
+                document.getElementById('reading-title').innerText = textData.title;
+                document.getElementById('reading-content').innerHTML = textData.content;
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function showQuestion() {
+            canAnswer = true;
+            const q = questions[currentIndex];
+            const container = document.getElementById('question-box');
+            document.getElementById('progress-text').innerText = `${currentIndex + 1} de 45`;
+            document.getElementById('progress-bar').style.width = `${((currentIndex) / 45) * 100}%`;
+
+            let html = `
+                <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-lg border border-slate-100 fade-in">
+                    <div class="flex justify-between items-start mb-6">
+                        <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-widest w-fit">Tema ${q.textRef.slice(-1)}</span>
+                        <button onclick="toggleReading()" class="bg-slate-900 text-white text-[9px] font-black px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-slate-800 transition-colors uppercase tracking-widest active:scale-95 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Ver Lectura
+                        </button>
+                    </div>
+                    <h2 class="text-lg font-bold text-slate-800 mb-8 leading-tight">${q.q}</h2>
+                    <div id="options-grid" class="grid grid-cols-1 gap-3">
+            `;
+
+            q.options.forEach((opt, i) => {
+                html += `
+                    <button onclick="checkAnswer(${i})" 
+                        class="w-full text-left p-3 md:p-4 border-2 border-slate-50 rounded-2xl hover:border-blue-200 transition-all flex items-center gap-4 group">
+                        <span class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center font-black text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all text-xs">${['A','B','C','D'][i]}</span>
+                        <span class="font-semibold text-slate-700 text-sm">${opt}</span>
+                    </button>
+                `;
+            });
+
+            container.innerHTML = html + `</div></div>`;
+        }
+
+        function checkAnswer(index) {
+            if(!canAnswer) return;
+            canAnswer = false;
+            const q = questions[currentIndex];
+            const isCorrect = (index === q.ans);
+            
+            if(isCorrect) { 
+                correctCount++; 
+                document.getElementById('correct-counter').innerText = correctCount; 
+            }
+            
+            const btns = document.querySelectorAll('#options-grid button');
+            btns[q.ans].classList.add('ans-correct');
+            if(!isCorrect) btns[index].classList.add('ans-wrong');
+            
+            setTimeout(() => { 
+                currentIndex++; 
+                if(currentIndex < 45) showQuestion(); else finishExam(); 
+            }, 900);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => { 
+                if(timerSeconds > 0) { 
+                    timerSeconds--; 
+                    let m = Math.floor(timerSeconds/60); 
+                    let s = timerSeconds%60; 
+                    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`; 
+                } else finishExam(); 
+            }, 1000);
+        }
+
+        function finishExam() {
+            if (timerInterval) clearInterval(timerInterval);
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('reading-modal').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const score = Math.round((correctCount/45)*600)+200;
+            document.getElementById('final-scale-score').innerText = score;
+            document.getElementById('total-correct').innerText = correctCount;
+            document.getElementById('total-percent').innerText = `${Math.round((correctCount/45)*100)}%`;
+            document.getElementById('label-score-final').innerText = score;
+        }
+    </script>
+</body>
+</html>

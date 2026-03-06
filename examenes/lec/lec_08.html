@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador PAA Lectura N° 8 - 50 Minutos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow: hidden; }
+        .sticky-header { position: sticky; top: 0; z-index: 50; }
+        .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
+        .ans-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .progress-bar { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-overlay { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+        th, td { border: 1px solid #e2e8f0; padding: 8px; text-align: center; }
+        th { background-color: #f1f5f9; font-weight: 800; }
+    </style>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col">
+
+    <!-- Pantalla de Inicio -->
+    <div id="start-screen" class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
+            <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg -rotate-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-extrabold text-slate-900 mb-2 uppercase tracking-tight">Lectura PAA N° 8</h1>
+            <p class="text-slate-500 mb-4 font-medium text-sm">Práctica de Comprensión (45 Reactivos)</p>
+            
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 text-left rounded-r-xl">
+                <p class="text-xs text-amber-900 leading-relaxed font-semibold">
+                    ¡Listo! Tienes <span class="underline">50 minutos</span> para completar esta simulación.
+                </p>
+                <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold italic">
+                    El botón de lectura está integrado en cada pregunta.
+                </p>
+            </div>
+
+            <button onclick="startExam()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">
+                COMENZAR SIMULACRO
+            </button>
+        </div>
+    </div>
+
+    <!-- Pantalla de Examen -->
+    <div id="exam-screen" class="hidden h-full flex flex-col">
+        <div class="sticky-header bg-white border-b border-slate-200 p-3">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <div class="flex gap-4">
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Tiempo</p>
+                        <p id="timer" class="text-lg font-mono font-black text-blue-600 leading-none">50:00</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-emerald-500 uppercase">Bien</p>
+                        <p id="correct-counter" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 max-w-[120px] sm:max-w-xs ml-4 text-right">
+                    <p id="progress-text" class="text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-tighter">1 de 45</p>
+                    <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="progress-bar h-full bg-blue-600 w-0"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="flex-grow flex items-center justify-center p-4 overflow-hidden">
+            <div id="question-box" class="max-w-xl w-full"></div>
+        </main>
+    </div>
+
+    <!-- Modal de Lectura -->
+    <div id="reading-modal" class="hidden fixed inset-0 z-[100] modal-overlay flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl max-h-[85vh] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden animate-fade-in border border-slate-200">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <div>
+                    <h3 id="reading-title" class="text-lg font-black text-slate-900 uppercase tracking-tight">Segmento de Lectura</h3>
+                    <p id="reading-subtitle" class="text-[10px] text-blue-600 font-bold uppercase">Lectura base</p>
+                </div>
+                <button onclick="toggleReading()" class="w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div id="reading-content" class="p-8 md:p-10 overflow-y-auto custom-scroll text-slate-700 leading-relaxed text-sm md:text-base italic">
+                <!-- Inyectado dinámicamente -->
+            </div>
+            <div class="p-4 bg-slate-50 text-center border-t border-slate-100">
+                <button onclick="toggleReading()" class="bg-slate-900 text-white font-black px-8 py-2 rounded-xl text-xs uppercase tracking-widest shadow-lg">Cerrar Texto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla de Resultados -->
+    <div id="result-screen" class="hidden h-full flex items-center justify-center p-4 overflow-hidden">
+        <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-white fade-in flex flex-col max-h-[95vh]">
+            <div class="bg-slate-900 p-6 md:p-8 text-center text-white relative flex-shrink-0">
+                <p class="text-blue-400 font-bold uppercase tracking-[0.3em] text-[9px] mb-2">Puntaje Final Lectura</p>
+                <div class="flex items-center justify-center gap-2">
+                    <h2 id="final-scale-score" class="text-6xl font-black tracking-tighter leading-none">0</h2>
+                    <p class="text-slate-500 font-bold text-lg">/ 800</p>
+                </div>
+            </div>
+            
+            <div class="p-6 md:p-8 flex-grow overflow-y-auto custom-scroll text-center">
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Aciertos</p>
+                        <p class="text-xl font-black text-slate-800"><span id="total-correct">0</span><span class="text-slate-300 text-sm">/45</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Efectividad</p>
+                        <p id="total-percent" class="text-xl font-black text-blue-600">0%</p>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-2xl text-white flex flex-col justify-center">
+                        <p class="text-[7px] font-black text-blue-400 uppercase">Estatus</p>
+                        <p class="text-xs font-bold leading-tight">Perfil Analizado</p>
+                    </div>
+                </div>
+
+                <div class="p-5 bg-blue-600 rounded-3xl text-white relative overflow-hidden shadow-lg">
+                    <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                        <div>
+                            <h4 class="text-lg font-black leading-none mb-1 uppercase tracking-tight">¡Anota tu resultado!</h4>
+                            <p class="text-blue-100 text-[10px]">Usa tus <span id="label-score-final" class="font-black text-white underline text-xs">0</span> puntos para el promedio global.</p>
+                        </div>
+                        <button onclick="location.reload()" class="bg-white text-blue-600 font-black px-6 py-2 rounded-xl hover:bg-blue-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0 shadow-md">
+                            Reiniciar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const texts = {
+            segment1: {
+                title: "LECTURA 1: La Última Sinfonía (Ejercicios 1-9)",
+                content: `La lectura trata sobre un compositor que terminó su obra maestra mientras perdía el oído. (1) A los cincuenta y siete años, el maestro Lorenzo Torres no podía escuchar ni el sonido de su propia voz. (3) La sordera había avanzado lentamente durante una década, robándole el instrumento más precioso de un músico: el oído. (6) Sin embargo, Lorenzo continuó componiendo. (7) Utilizaba el piso de madera como una superficie de resonancia: se quitaba los zapatos y apoyaba los pies descalzos mientras tocaba el piano, captando las vibraciones que sus oídos ya no podían procesar. (12) Sus colegas lo observaban con una mezcla de asombro y tristeza. (14) Cuando estrenó su Sinfonía en Re Menor, la sala entera se puso de pie antes de que terminara el último compás. (17) Lorenzo, de espaldas al público, sintió el aplauso a través del suelo.`
+            },
+            segment2: {
+                title: "LECTURA 2: Agua y Conflicto Global (Ejercicios 10-18)",
+                content: `<p>(1) El acceso al agua potable se ha convertido en uno de los mayores desafíos geopolíticos del siglo XXI. (3) Mientras algunas naciones nadan en abundancia hídrica, otras enfrentan una escasez crítica que amenaza su estabilidad social y económica.</p><table><thead><tr><th>Región</th><th>% Población sin acceso a agua potable</th><th>Conflictos relacionados al agua (2000-2020)</th></tr></thead><tbody><tr><td>África Subsahariana</td><td>40%</td><td>47</td></tr><tr><td>Asia Central</td><td>22%</td><td>31</td></tr><tr><td>Oriente Medio</td><td>18%</td><td>28</td></tr><tr><td>América Latina</td><td>8%</td><td>12</td></tr></tbody></table><p>(10) Los analistas señalan que existe una correlación directa entre la escasez de agua y el número de conflictos armados en una región. (13) Para 2050, se estima que más de 5,000 millones de personas vivirán en zonas con estrés hídrico severo. (16) La gestión sostenible del agua ya no es una opción ambiental, sino una urgencia de seguridad global.</p>`
+            },
+            segment3: {
+                title: "LECTURA 3: El Rol de los Medios de Comunicación (Ejercicios 19-28)",
+                content: `<p><strong>Lectura A:</strong> (1) Los medios de comunicación son el cuarto poder de las democracias modernas. (3) Su función es informar con veracidad, investigar al poder y dar voz a quienes no la tienen. (5) Cuando los medios cumplen este rol, fortalecen la democracia y protegen los derechos ciudadanos. (7) Sin embargo, la concentración mediática en pocas manos corporativas representa un riesgo: la información puede convertirse en un instrumento de manipulación al servicio de intereses particulares.</p><p class="mt-4"><strong>Lectura B:</strong> (1) En la era digital, los ciudadanos ya no dependen exclusivamente de los medios tradicionales. (3) Las redes sociales han democratizado la producción de contenido, permitiendo que cualquier persona sea un emisor de información. (6) Esta revolución tiene un costo: la proliferación de desinformación y noticias falsas que circulan sin verificación. (9) La educación mediática se vuelve indispensable para navegar este ecosistema informativo sin ser manipulado.</p>`
+            },
+            segment4: {
+                title: "LECTURA 4: La Neuroplasticidad del Cerebro (Ejercicios 29-37)",
+                content: `(1) Durante mucho tiempo, la ciencia creyó que el cerebro adulto era una estructura fija, incapaz de generar nuevas conexiones neuronales. (4) Esta idea, que dominó la neurología durante el siglo XX, ha sido completamente refutada. (6) Los investigadores han descubierto que el cerebro posee una capacidad de reorganización llamada neuroplasticidad: la habilidad de crear, fortalecer y modificar conexiones entre neuronas a lo largo de toda la vida. (11) Esta propiedad explica por qué los pacientes que sufren accidentes cerebrovasculares pueden recuperar funciones perdidas mediante la rehabilitación. (14) También explica por qué aprender un nuevo idioma o instrumento musical de adulto fortalece redes neuronales que protegen contra el deterioro cognitivo. (18) El cerebro, en palabras de los neurocientíficos, es el órgano más plástico del cuerpo humano.`
+            },
+            segment5: {
+                title: "LECTURA 5: Soneto del Regreso (Ejercicios 38-45)",
+                content: `<p>(1) Volví al pueblo después de tantos años,<br>(2) y hallé que todo era igual pero distinto.<br>(3) Los mismos techos, pero otros sus tamaños;<br>(4) el mismo olor, pero en diferente instinto.</p><p>(5) El árbol viejo donde tallé mi nombre<br>(6) creció más alto que mi propia altura.<br>(7) Ya nadie en la plaza recuerda a un hombre<br>(8) que se fue joven y regresa con canas y amargura.</p><p>(9) Quizás el cambio no estuvo en las calles,<br>(10) ni en los colores que ya no recuerdo bien.<br>(11) El que cambió fui yo, entre los valles<br>(12) que dejé atrás buscando algo también.</p>`
+            },
+        };
+
+        const questions = [
+            { id: 1, textRef: 'segment1', q: "La palabra 'sordera' (línea 3) es la pérdida de:", options: ["La vista", "El habla", "La audición", "El equilibrio"], ans: 2 },
+            { id: 2, textRef: 'segment1', q: "¿Qué se puede inferir sobre Lorenzo Torres?", options: ["Se rindió ante la adversidad", "Adaptó su método de trabajo para seguir componiendo", "Esperó recuperar el oído", "Dejó de componer por años"], ans: 1 },
+            { id: 3, textRef: 'segment1', q: "La técnica de usar el piso como superficie de resonancia demuestra:", options: ["Que Lorenzo era excéntrico", "Una adaptación creativa a su discapacidad", "Un error técnico de composición", "Que no tenía dinero para audífonos"], ans: 1 },
+            { id: 4, textRef: 'segment1', q: "¿Cuál resume MEJOR la lectura?", options: ["La historia de la música clásica", "Un compositor que superó su sordera gracias a su pasión", "La vida de un músico famoso", "Los peligros de la sordera profesional"], ans: 1 },
+            { id: 5, textRef: 'segment1', q: "La reacción del público (línea 14) evidencia:", options: ["Que no entendieron la música", "Un reconocimiento extraordinario de su obra", "Una reacción de lástima", "Protocolo habitual de concierto"], ans: 1 },
+            { id: 6, textRef: 'segment1', q: "La frase 'sintió el aplauso a través del suelo' es una imagen:", options: ["Metafórica y poética", "Literalmente imposible", "Científicamente inexacta", "Cómica e irónica"], ans: 0 },
+            { id: 7, textRef: 'segment1', q: "El tipo de discurso predominante en esta lectura es:", options: ["Argumentativo", "Expositivo científico", "Narrativo", "Poético"], ans: 2 },
+            { id: 8, textRef: 'segment1', q: "La expresión 'robándole el instrumento más precioso' aplica la figura de:", options: ["Comparación", "Metáfora (el oído como instrumento)", "Hipérbole", "Onomatopeya"], ans: 1 },
+            { id: 9, textRef: 'segment1', q: "La mezcla de 'asombro y tristeza' de los colegas refleja:", options: ["Indiferencia", "La contradicción entre admirar su fortaleza y lamentarse por su pérdida", "Envidia profesional", "Desprecio artístico"], ans: 1 },
+            { id: 10, textRef: 'segment2', q: "La palabra 'geopolíticos' (línea 2) se refiere a:", options: ["Solo a la política local", "A la relación entre geografía, recursos y política internacional", "Al gobierno de una ciudad", "A las fronteras entre países"], ans: 1 },
+            { id: 11, textRef: 'segment2', q: "Según la tabla, ¿qué región tiene MAYOR porcentaje de población sin agua?", options: ["Asia Central", "Oriente Medio", "América Latina", "África Subsahariana"], ans: 3 },
+            { id: 12, textRef: 'segment2', q: "¿Cuántos conflictos suman África Subsahariana y Asia Central?", options: ["59", "78", "47", "75"], ans: 1 },
+            { id: 13, textRef: 'segment2', q: "Según la tabla, ¿qué región tiene MENOS conflictos relacionados al agua?", options: ["Asia Central", "Oriente Medio", "África Subsahariana", "América Latina"], ans: 3 },
+            { id: 14, textRef: 'segment2', q: "Se puede INFERIR que:", options: ["El agua es solo un problema ambiental", "La escasez de agua puede desencadenar conflictos armados", "América Latina no tiene problemas de agua", "El agua no afecta la política"], ans: 1 },
+            { id: 15, textRef: 'segment2', q: "¿Qué evidencia la correlación entre escasez y conflictos?", options: ["La tabla completa de datos", "Líneas 1-3", "Líneas 10-12 (correlación directa...)", "Solo el caso de África"], ans: 2 },
+            { id: 16, textRef: 'segment2', q: "La palabra 'hídrico' (línea 15) se relaciona con:", options: ["La energía eléctrica", "El agua", "La agricultura", "El petróleo"], ans: 1 },
+            { id: 17, textRef: 'segment2', q: "El propósito principal de la lectura es:", options: ["Narrar conflictos del pasado", "Alertar sobre el agua como problema de seguridad global", "Promover la tecnología de desalinización", "Comparar continentes"], ans: 1 },
+            { id: 18, textRef: 'segment2', q: "El tono de los analistas en la lectura es:", options: ["Optimista y tranquilizador", "Indiferente", "Urgente y alarmante", "Histórico y nostálgico"], ans: 2 },
+            { id: 19, textRef: 'segment3', q: "En Lectura A, 'veracidad' (línea 3) significa:", options: ["Velocidad", "Calidad de ser verdadero", "Popularidad", "Objetividad perfecta"], ans: 1 },
+            { id: 20, textRef: 'segment3', q: "Según Lectura A, ¿cuándo fortalecen la democracia los medios?", options: ["Cuando tienen muchos lectores", "Cuando informan con veracidad e investigan al poder", "Cuando son privados", "Cuando usan redes sociales"], ans: 1 },
+            { id: 21, textRef: 'segment3', q: "En Lectura B, 'proliferación' (línea 6) significa:", options: ["Reducción", "Multiplicación acelerada", "Verificación", "Control"], ans: 1 },
+            { id: 22, textRef: 'segment3', q: "Según Lectura B, el costo de la democratización digital es:", options: ["La pérdida de internet", "La proliferación de desinformación", "El fin de los medios tradicionales", "La censura gubernamental"], ans: 1 },
+            { id: 23, textRef: 'segment3', q: "La relación entre Lectura A y Lectura B es:", options: ["Son totalmente opuestas", "A habla de medios tradicionales y B del ecosistema digital; se complementan", "B refuta a A completamente", "A resume a B"], ans: 1 },
+            { id: 24, textRef: 'segment3', q: "Ambas lecturas coinciden en que la información:", options: ["Siempre es confiable", "Puede ser manipulada o falsa", "Es solo para expertos", "No tiene impacto real"], ans: 1 },
+            { id: 25, textRef: 'segment3', q: "De Lectura B se INFIERE que los ciudadanos:", options: ["Deben dejar las redes sociales", "Necesitan habilidades críticas para evaluar información", "Deben confiar solo en medios oficiales", "No tienen responsabilidad sobre lo que consumen"], ans: 1 },
+            { id: 26, textRef: 'segment3', q: "¿Qué evidencia el riesgo en Lectura A?", options: ["Líneas 1-3", "Líneas 3-5", "Líneas 5-6", "Líneas 7-10 (concentración mediática como riesgo)"], ans: 3 },
+            { id: 27, textRef: 'segment3', q: "En ambas lecturas predomina el discurso:", options: ["Narrativo", "Poético", "Descriptivo", "Argumentativo"], ans: 3 },
+            { id: 28, textRef: 'segment3', q: "Una idea en que A y B ESTARÍAN en desacuerdo:", options: ["La información puede manipular", "Si los medios tradicionales siguen siendo indispensables en la era digital", "La educación mediática es importante", "Los ciudadanos deben informarse"], ans: 1 },
+            { id: 29, textRef: 'segment4', q: "La palabra 'refutada' (línea 4) significa:", options: ["Confirmada completamente", "Demostrada como incorrecta", "Publicada en una revista", "Apoyada por nuevos estudios"], ans: 1 },
+            { id: 30, textRef: 'segment4', q: "¿Qué es la neuroplasticidad según la lectura?", options: ["Una enfermedad cerebral", "La capacidad del cerebro de reorganizarse y crear nuevas conexiones", "Un tipo de cirugía", "La pérdida de neuronas con la edad"], ans: 1 },
+            { id: 31, textRef: 'segment4', q: "¿Para qué menciona la lectura los accidentes cerebrovasculares?", options: ["Para describir sus síntomas", "Como ejemplo de la neuroplasticidad en la recuperación", "Para criticar la medicina tradicional", "Como causa del deterioro cognitivo"], ans: 1 },
+            { id: 32, textRef: 'segment4', q: "La palabra 'deterioro' (línea 16) significa:", options: ["Mejora progresiva", "Empeoramiento gradual", "Cambio repentino", "Estabilidad"], ans: 1 },
+            { id: 33, textRef: 'segment4', q: "Se puede INFERIR que aprender nuevas habilidades en la adultez:", options: ["Es imposible", "Es perjudicial para el cerebro", "Protege contra el envejecimiento cognitivo", "Solo sirve para músicos"], ans: 2 },
+            { id: 34, textRef: 'segment4', q: "¿Qué evidencia que el cerebro puede cambiar toda la vida?", options: ["Líneas 1-3", "Líneas 4-6", "Líneas 6-10 (neuroplasticidad: crear y modificar conexiones)", "Líneas 14-17"], ans: 2 },
+            { id: 35, textRef: 'segment4', q: "El propósito de la lectura es:", options: ["Demostrar que el cerebro adulto no cambia", "Explicar el concepto de neuroplasticidad y sus implicaciones", "Criticar la neurología del siglo XX", "Promocionar la música como terapia"], ans: 1 },
+            { id: 36, textRef: 'segment4', q: "La expresión 'el órgano más plástico' es una:", options: ["Comparación literal", "Metáfora científica (plástico = moldeable)", "Hipérbole exagerada", "Onomatopeya"], ans: 1 },
+            { id: 37, textRef: 'segment4', q: "El tipo de discurso predominante es:", options: ["Narrativo", "Poético", "Argumentativo", "Expositivo"], ans: 3 },
+            { id: 38, textRef: 'segment5', q: "'Todo era igual pero distinto' (verso 2) expresa:", options: ["Una contradicción sin sentido", "La paradoja del regreso: el lugar y el que regresa han cambiado", "Un error de percepción", "Una descripción objetiva del pueblo"], ans: 1 },
+            { id: 39, textRef: 'segment5', q: "'El árbol creció más alto que mi propia altura' simboliza:", options: ["El paso del tiempo y el crecimiento", "Un árbol muy fertilizado", "La tristeza del viaje", "El orgullo del regreso"], ans: 0 },
+            { id: 40, textRef: 'segment5', q: "La palabra 'amargura' (verso 8) significa:", options: ["Alegría nostálgica", "Sentimiento de decepción y dolor", "Sabor ácido", "Cansancio físico"], ans: 1 },
+            { id: 41, textRef: 'segment5', q: "'Ya nadie en la plaza recuerda a un hombre' expresa:", options: ["Que el hombre era desconocido", "El olvido inevitable con el paso del tiempo", "Que la plaza está vacía", "Un crimen sin resolver"], ans: 1 },
+            { id: 42, textRef: 'segment5', q: "¿Cuál describe mejor el tema central del poema?", options: ["La belleza de los pueblos pequeños", "El deseo de volver al pasado", "La transformación personal reflejada en el regreso al lugar de origen", "La tristeza del viaje largo"], ans: 2 },
+            { id: 43, textRef: 'segment5', q: "Según la estrofa 3, ¿qué concluye el poeta?", options: ["El pueblo cambió mucho", "El pueblo no cambió nada", "El que realmente cambió fue él mismo", "El viaje fue un error"], ans: 2 },
+            { id: 44, textRef: 'segment5', q: "La frase 'regresa con canas y amargura' (verso 8) es un ejemplo de:", options: ["Metáfora", "Personificación", "Enumeración descriptiva", "Hipérbole"], ans: 0 },
+            { id: 45, textRef: 'segment5', q: "La palabra 'instinto' (verso 4) en el poema se usa para referirse a:", options: ["Un impulso animal", "La percepción o sensación subjetiva del olor", "Un tipo de flor", "La intuición matemática"], ans: 1 },
+        ];
+
+        let currentIndex = 0;
+        let correctCount = 0;
+        let timerSeconds = 3000; // 50 MINUTOS
+        let canAnswer = true;
+        let timerInterval;
+
+        function startExam() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            showQuestion();
+            startTimer();
+        }
+
+        function toggleReading() {
+            const modal = document.getElementById('reading-modal');
+            if (modal.classList.contains('hidden')) {
+                const q = questions[currentIndex];
+                const textData = texts[q.textRef];
+                document.getElementById('reading-title').innerText = textData.title;
+                document.getElementById('reading-content').innerHTML = textData.content;
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function showQuestion() {
+            canAnswer = true;
+            const q = questions[currentIndex];
+            const container = document.getElementById('question-box');
+            document.getElementById('progress-text').innerText = `${currentIndex + 1} de 45`;
+            document.getElementById('progress-bar').style.width = `${((currentIndex) / 45) * 100}%`;
+
+            let html = `
+                <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-lg border border-slate-100 fade-in">
+                    <div class="flex justify-between items-start mb-6">
+                        <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-widest w-fit">Tema ${q.textRef.slice(-1)}</span>
+                        <button onclick="toggleReading()" class="bg-slate-900 text-white text-[9px] font-black px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-slate-800 transition-colors uppercase tracking-widest active:scale-95 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Ver Lectura
+                        </button>
+                    </div>
+                    <h2 class="text-lg font-bold text-slate-800 mb-8 leading-tight">${q.q}</h2>
+                    <div id="options-grid" class="grid grid-cols-1 gap-3">
+            `;
+
+            q.options.forEach((opt, i) => {
+                html += `
+                    <button onclick="checkAnswer(${i})" 
+                        class="w-full text-left p-3 md:p-4 border-2 border-slate-50 rounded-2xl hover:border-blue-200 transition-all flex items-center gap-4 group">
+                        <span class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center font-black text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all text-xs">${['A','B','C','D'][i]}</span>
+                        <span class="font-semibold text-slate-700 text-sm">${opt}</span>
+                    </button>
+                `;
+            });
+
+            container.innerHTML = html + `</div></div>`;
+        }
+
+        function checkAnswer(index) {
+            if(!canAnswer) return;
+            canAnswer = false;
+            const q = questions[currentIndex];
+            const isCorrect = (index === q.ans);
+            
+            if(isCorrect) { 
+                correctCount++; 
+                document.getElementById('correct-counter').innerText = correctCount; 
+            }
+            
+            const btns = document.querySelectorAll('#options-grid button');
+            btns[q.ans].classList.add('ans-correct');
+            if(!isCorrect) btns[index].classList.add('ans-wrong');
+            
+            setTimeout(() => { 
+                currentIndex++; 
+                if(currentIndex < 45) showQuestion(); else finishExam(); 
+            }, 900);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => { 
+                if(timerSeconds > 0) { 
+                    timerSeconds--; 
+                    let m = Math.floor(timerSeconds/60); 
+                    let s = timerSeconds%60; 
+                    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`; 
+                } else finishExam(); 
+            }, 1000);
+        }
+
+        function finishExam() {
+            if (timerInterval) clearInterval(timerInterval);
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('reading-modal').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const score = Math.round((correctCount/45)*600)+200;
+            document.getElementById('final-scale-score').innerText = score;
+            document.getElementById('total-correct').innerText = correctCount;
+            document.getElementById('total-percent').innerText = `${Math.round((correctCount/45)*100)}%`;
+            document.getElementById('label-score-final').innerText = score;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador PAA Redacción N° 2 - 30 Minutos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow: hidden; }
+        .sticky-header { position: sticky; top: 0; z-index: 50; }
+        .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
+        .ans-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .progress-bar { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-overlay { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col">
+
+    <!-- Pantalla de Inicio -->
+    <div id="start-screen" class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
+            <div class="w-16 h-16 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg -rotate-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-extrabold text-slate-900 mb-2 uppercase tracking-tight">Redacción PAA N° 2</h1>
+            <p class="text-slate-500 mb-4 font-medium text-sm">Prueba de Lengua Española (25 Reactivos)</p>
+            
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 text-left rounded-r-xl">
+                <p class="text-xs text-amber-900 leading-relaxed font-semibold">
+                    ¡Listo! Tienes <span class="underline">30 minutos</span> para completar esta simulación.
+                </p>
+                <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold italic">
+                    El botón de lectura está integrado en cada pregunta.
+                </p>
+            </div>
+
+            <button onclick="startExam()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">
+                COMENZAR SIMULACRO
+            </button>
+        </div>
+    </div>
+
+    <!-- Pantalla de Examen -->
+    <div id="exam-screen" class="hidden h-full flex flex-col">
+        <div class="sticky-header bg-white border-b border-slate-200 p-3">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <div class="flex gap-4">
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Tiempo</p>
+                        <p id="timer" class="text-lg font-mono font-black text-emerald-600 leading-none">30:00</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-emerald-500 uppercase">Bien</p>
+                        <p id="correct-counter" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 max-w-[120px] sm:max-w-xs ml-4 text-right">
+                    <p id="progress-text" class="text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-tighter">1 de 25</p>
+                    <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="progress-bar h-full bg-emerald-500 w-0"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="flex-grow flex items-center justify-center p-4 overflow-hidden">
+            <div id="question-box" class="max-w-xl w-full"></div>
+        </main>
+    </div>
+
+    <!-- Modal de Lectura -->
+    <div id="reading-modal" class="hidden fixed inset-0 z-[100] modal-overlay flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl max-h-[85vh] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden animate-fade-in border border-slate-200">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <div>
+                    <h3 id="reading-title" class="text-lg font-black text-slate-900 uppercase tracking-tight">Segmento de Lectura</h3>
+                    <p id="reading-subtitle" class="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">Base para responder</p>
+                </div>
+                <button onclick="toggleReading()" class="w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div id="reading-content" class="p-8 md:p-10 overflow-y-auto custom-scroll text-slate-700 leading-relaxed text-sm md:text-base italic">
+                <!-- Se inyecta dinámicamente -->
+            </div>
+            <div class="p-4 bg-slate-50 text-center border-t border-slate-100">
+                <button onclick="toggleReading()" class="bg-slate-900 text-white font-black px-8 py-2 rounded-xl text-xs uppercase tracking-widest shadow-lg">Cerrar Lectura</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla de Resultados -->
+    <div id="result-screen" class="hidden h-full flex items-center justify-center p-4 overflow-hidden">
+        <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-white fade-in flex flex-col max-h-[95vh]">
+            <div class="bg-slate-900 p-6 md:p-8 text-center text-white relative flex-shrink-0">
+                <p class="text-emerald-400 font-bold uppercase tracking-[0.3em] text-[9px] mb-2">Puntaje Final Redacción</p>
+                <div class="flex items-center justify-center gap-2">
+                    <h2 id="final-scale-score" class="text-6xl font-black tracking-tighter leading-none">0</h2>
+                    <p class="text-slate-500 font-bold text-lg">/ 800</p>
+                </div>
+            </div>
+            
+            <div class="p-6 md:p-8 flex-grow overflow-y-auto custom-scroll">
+                <div class="grid grid-cols-3 gap-3 mb-6 text-center">
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Aciertos</p>
+                        <p class="text-xl font-black text-slate-800"><span id="total-correct">0</span><span class="text-slate-300 text-sm">/25</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Efectividad</p>
+                        <p id="total-percent" class="text-xl font-black text-emerald-600">0%</p>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-2xl text-white flex flex-col justify-center">
+                        <p class="text-[7px] font-black text-emerald-400 uppercase">Estatus</p>
+                        <p class="text-xs font-bold leading-tight">Perfil Redacción</p>
+                    </div>
+                </div>
+
+                <div id="area-breakdown" class="grid grid-cols-1 gap-3 mb-6"></div>
+
+                <div class="p-5 bg-emerald-600 rounded-3xl text-white relative overflow-hidden shadow-lg">
+                    <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                        <div>
+                            <h4 class="text-lg font-black leading-none mb-1 uppercase tracking-tight">¡Registra tu Test!</h4>
+                            <p class="text-emerald-100 text-[10px]">Anota tus <span id="label-score-final" class="font-black text-white underline text-xs">0</span> puntos para el promedio global.</p>
+                        </div>
+                        <button onclick="location.reload()" class="bg-white text-emerald-600 font-black px-6 py-2 rounded-xl hover:bg-emerald-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0 shadow-md">
+                            Reiniciar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const texts = {
+            segment1: {
+                title: "SEGMENTO I (Ejercicios 1-8)",
+                content: `(1) La exploración espacial ha sido uno de los mayores logros colectivos de la humanidad en el último siglo. (2) Desde el lanzamiento del satélite Sputnik en 1957, nuestra perspectiva del cosmos cambió radicalmente. (3) El ser humano logró pisar la superficie de la Luna en 1969, un evento que paralizó a millones de espectadores frente a sus televisores. (4) A mi tío le gusta mucho ver películas de extraterrestres los fines de semana. (5) Hoy en día, agencias como la NASA y diversas empresas privadas tienen la mirada fija en el planeta Marte. (6) Establecer una colonia humana en el planeta rojo presenta desafíos colosales de ingeniería, biología y psicología. (7) La radiación extrema, la falta de oxígeno y el aislamiento prolongado son los principales obstáculos a vencer. (8) A pesar de los riesgos, el instinto explorador del hombre lo empuja inexorablemente a conquistar las estrellas.`
+            },
+            segment2: {
+                title: "SEGMENTO II (Ejercicios 9-16)",
+                content: `(1) La arquitectura sostenible no es solo una moda estética, sino una necesidad urgente para el planeta. (2) Los edificios tradicionales consumen enormes cantidades de energía y generan demasiados residuos. (3) Por el contrario, las construcciones ecológicas utilizan materiales reciclados y aprovechan la luz solar al máximo. (4) Los paneles solares y los techos verdes se han convertido en elementos característicos de estas edificaciones. (5) Me gustaría pintar mi habitación de color verde claro para que parezca más ecológica. (6) Además, este tipo de arquitectura busca integrarse armoniosamente con el paisaje natural sin destruirlo. (7) El aislamiento térmico adecuado permite reducir drásticamente el uso de aire acondicionado en verano. (8) Al final, diseñar pensando en la ecología es asegurar la supervivencia de las futuras generaciones urbanas.`
+            },
+            segment3: {
+                title: "SEGMENTO III (Ejercicios 17-25)",
+                content: `(1) Tomás había cuidado el Faro del Sur durante más de treinta años seguidos. (2) Su única compañía en la torre de piedra eran el viento ensordecedor y el rugido del mar chocando contra los acantilados. (3) Cada atardecer, subía los ciento veinte escalones de caracol para encender la inmensa lámpara halógena. (4) Muchos marineros le debían la vida a esa luz que cortaba la oscuridad como una espada brillante. (5) Los barcos modernos tienen sistemas GPS muy avanzados que ya no necesitan faros. (6) Una noche de tormenta inusual, el generador eléctrico principal falló súbitamente. (7) La torre quedó sumida en tinieblas justo cuando un buque mercante se acercaba a las rocas. (8) Con las manos temblorosas pero el espíritu firme, Tomás encendió los antiguos faroles de aceite de reserva. (9) Esa noche, el viejo farero no solo salvó un barco, sino que demostró que el factor humano jamás será obsoleto.`
+            }
+        };
+
+        const questions = [
+            // Segmento 1
+            { id: 1, textRef: 'segment1', type: "multiple", q: "¿Cuál combina o integra MEJOR la secuencia de los enunciados del 1 al 8 del Segmento I? (Integración)", options: ["Los peligros biológicos de viajar al espacio.", "La historia y el futuro de la exploración espacial humana.", "El aterrizaje en la Luna y la televisión en 1969.", "Las películas de extraterrestres en la modernidad."], ans: 1 },
+            { id: 2, textRef: 'segment1', type: "multiple", q: "¿Cuál de los enunciados del Segmento I debe omitirse sin perder información necesaria? (Elisión)", options: ["Enunciado 2", "Enunciado 3", "Enunciado 4", "Enunciado 7"], ans: 2 },
+            { id: 3, textRef: 'segment1', type: "multiple", q: "¿Cuál de los siguientes enunciados enriquece ESTILÍSTICAMENTE la oración 8 del Segmento I? (Adición)", options: ["...convirtiendo la inmensidad del universo en su próximo hogar.", "...porque gastaron mucho dinero en construir los cohetes.", "...siempre y cuando lleven suficiente comida en la nave.", "...aunque algunos astronautas sientan miedo al despegar."], ans: 0 },
+            { id: 4, textRef: 'segment1', type: "multiple", q: "Los enunciados 6 y 7 describen el proyecto de viajar a Marte. ¿Cuál recoge MEJOR su contenido general?", options: ["Enunciado 6", "Enunciado 7", "Ninguno, son temas opuestos.", "El enunciado 5 resume a los dos."], ans: 0 },
+            { id: 5, textRef: 'segment1', type: "multiple", q: "¿Qué enunciado expresa INDIRECTAMENTE MEJOR el impacto mediático y social de la carrera espacial?", options: ["Enunciado 1", "Enunciado 3", "Enunciado 5", "Enunciado 6"], ans: 1 },
+            { id: 6, textRef: 'segment1', type: "multiple", q: "Si se añade: 'Este pequeño satélite ruso abrió la puerta a una competencia feroz', ¿qué función cumple?", options: ["Contradecir la información.", "Generalizar el texto hacia Rusia.", "Enriquecer estilísticamente y conectar enunciados 2 y 3.", "Particularizar el concepto de la Luna."], ans: 2 },
+            { id: 7, textRef: 'segment1', type: "multiple", q: "¿Qué enunciado expresa INDIRECTAMENTE MEJOR las condiciones hostiles del espacio exterior?", options: ["Enunciado 2", "Enunciado 3", "Enunciado 7", "Enunciado 8"], ans: 2 },
+            { id: 8, textRef: 'segment1', type: "multiple", q: "De los enunciados 1, 2 y 3, ¿cuál funciona como la premisa general (Generalización)?", options: ["Enunciado 1", "Enunciado 2", "Enunciado 3", "Enunciado 4"], ans: 0 },
+            // Segmento 2
+            { id: 9, textRef: 'segment2', type: "multiple", q: "¿Cuál integra MEJOR la secuencia de los enunciados del Segmento II?", options: ["Importancia del aislamiento térmico.", "Altos costos de edificios tradicionales.", "Principios y relevancia de la arquitectura sostenible.", "Cómo instalar paneles solares."], ans: 2 },
+            { id: 10, textRef: 'segment2', type: "multiple", q: "¿Qué enunciado del Segmento II debe omitirse por romper la secuencia lógica? (Elisión)", options: ["Enunciado 3", "Enunciado 4", "Enunciado 5", "Enunciado 7"], ans: 2 },
+            { id: 11, textRef: 'segment2', type: "multiple", q: "¿Cuál enunciado enriquece ESTILÍSTICAMENTE la oración 6 sin alterar su significado?", options: ["...como si el edificio fuera un árbol más que respira.", "...para que las personas puedan pasear a sus mascotas.", "...porque las multas por talar árboles son caras.", "...utilizando cemento gris oscuro."], ans: 0 },
+            { id: 12, textRef: 'segment2', type: "multiple", q: "De los enunciados 3, 4 y 7, ¿cuál recoge MEJOR el contenido general como premisa?", options: ["Enunciado 3", "Enunciado 4", "Enunciado 7", "Ninguno de los anteriores."], ans: 0 },
+            { id: 13, textRef: 'segment2', type: "multiple", q: "¿Qué enunciado del 1 al 4 expresa INDIRECTAMENTE MEJOR la ineficiencia ambiental clásica?", options: ["Enunciado 1", "Enunciado 2", "Enunciado 3", "Enunciado 4"], ans: 1 },
+            { id: 14, textRef: 'segment2', type: "multiple", q: "¿Qué enunciado expresa INDIRECTAMENTE MEJOR el beneficio a largo plazo de estas acciones?", options: ["Enunciado 3", "Enunciado 6", "Enunciado 7", "Enunciado 8"], ans: 3 },
+            { id: 15, textRef: 'segment2', type: "multiple", q: "El enunciado 8 funciona dentro del texto como una:", options: ["Introducción al problema de la basura.", "Conclusión general que resume el propósito del texto.", "Explicación técnica.", "Oración que debe ser elidida."], ans: 1 },
+            { id: 16, textRef: 'segment2', type: "multiple", q: "Añadir un enunciado detallando el ahorro económico en recibos de luz aportaría una:", options: ["Particularización de la oración 7.", "Elisión de la oración 1.", "Integración total del texto.", "Contradicción estilística."], ans: 0 },
+            // Segmento 3
+            { id: 17, textRef: 'segment3', type: "multiple", q: "¿Cuál integra MEJOR la secuencia de los enunciados del Segmento III?", options: ["La tecnología GPS en barcos mercantes.", "El farero del Sur y su heroica lucha contra la tormenta.", "Mantenimiento de lámparas halógenas.", "Peligros de navegar cerca de acantilados."], ans: 1 },
+            { id: 18, textRef: 'segment3', type: "multiple", q: "¿Cuál de los enunciados del 1 al 9 rompe la tensión dramática y debe omitirse?", options: ["Enunciado 3", "Enunciado 4", "Enunciado 5", "Enunciado 6"], ans: 2 },
+            { id: 19, textRef: 'segment3', type: "multiple", q: "¿Cuál enunciado enriquece ESTILÍSTICAMENTE la oración 2 del Segmento III?", options: ["...una sinfonía salvaje que era su única música.", "...lo cual le daba mucho frío.", "...por lo que usaba tapones.", "...donde había gaviotas."], ans: 0 },
+            { id: 20, textRef: 'segment3', type: "multiple", q: "De los enunciados 6, 7 y 8, ¿cuál recoge MEJOR el contenido y acción ante el problema?", options: ["Enunciado 6", "Enunciado 7", "Enunciado 8", "Enunciado 9"], ans: 2 },
+            { id: 21, textRef: 'segment3', type: "multiple", q: "¿Cuál expresa INDIRECTAMENTE MEJOR el valor indispensable de Tomás?", options: ["Enunciado 1", "Enunciado 4", "Enunciado 6", "Enunciado 7"], ans: 1 },
+            { id: 22, textRef: 'segment3', type: "multiple", q: "¿Qué enunciado expresa INDIRECTAMENTE MEJOR la potencia visual de la luz del faro?", options: ["Enunciado 2", "Enunciado 3", "Enunciado 4", "Enunciado 5"], ans: 2 },
+            { id: 23, textRef: 'segment3', type: "multiple", q: "El enunciado 9 cumple la función de:", options: ["Elidir la historia.", "Particularizar el clima.", "Generalizar y concluir la moraleja.", "Añadir un personaje."], ans: 2 },
+            { id: 24, textRef: 'segment3', type: "multiple", q: "¿Qué enunciado enriquece ESTILÍSTICAMENTE la oración 8 sin negar el sentido?", options: ["...iluminando su rostro con un destello de esperanza.", "...que olían mal por el aceite viejo.", "...quemándose un dedo accidentalmente.", "...porque el barco ya había chocado."], ans: 0 },
+            { id: 25, textRef: 'segment3', type: "multiple", q: "Resumir el texto como 'La voluntad humana supera fallas técnicas' es una:", options: ["Adición", "Elisión", "Particularización", "Integración / Generalización temática"], ans: 3 }
+        ];
+
+        let currentIndex = 0;
+        let correctCount = 0;
+        let timerSeconds = 1800; // 30 Minutos
+        let canAnswer = true;
+        let timerInterval;
+
+        function startExam() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            showQuestion();
+            startTimer();
+        }
+
+        function toggleReading() {
+            const modal = document.getElementById('reading-modal');
+            if (modal.classList.contains('hidden')) {
+                const q = questions[currentIndex];
+                const textData = texts[q.textRef];
+                document.getElementById('reading-title').innerText = textData.title;
+                document.getElementById('reading-content').innerText = textData.content;
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function showQuestion() {
+            canAnswer = true;
+            const q = questions[currentIndex];
+            const container = document.getElementById('question-box');
+            document.getElementById('progress-text').innerText = `${currentIndex + 1} de 25`;
+            document.getElementById('progress-bar').style.width = `${((currentIndex) / 25) * 100}%`;
+
+            let html = `
+                <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-lg border border-slate-100 fade-in relative">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="flex flex-col gap-1">
+                            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-xl text-[9px] font-black uppercase tracking-widest w-fit">${q.textRef.toUpperCase()}</span>
+                            <span class="text-slate-300 font-bold text-[10px] uppercase tracking-tighter ml-1">Simulador N° 2</span>
+                        </div>
+                        <button onclick="toggleReading()" class="bg-slate-900 text-white text-[9px] font-black px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-slate-800 transition-colors uppercase tracking-widest active:scale-95 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Ver Lectura
+                        </button>
+                    </div>
+                    <h2 class="text-lg font-bold text-slate-800 mb-8 leading-tight">${q.q}</h2>
+                    <div id="options-grid" class="grid grid-cols-1 gap-3">
+            `;
+
+            q.options.forEach((opt, i) => {
+                html += `
+                    <button onclick="checkAnswer(${i})" 
+                        class="w-full text-left p-3 md:p-4 border-2 border-slate-50 rounded-2xl hover:border-emerald-200 transition-all flex items-center gap-4 group">
+                        <span class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center font-black text-slate-400 group-hover:bg-emerald-600 group-hover:text-white transition-all text-xs">${['A','B','C','D'][i]}</span>
+                        <span class="font-semibold text-slate-700 text-sm">${opt}</span>
+                    </button>
+                `;
+            });
+
+            container.innerHTML = html + `</div></div>`;
+        }
+
+        function checkAnswer(index) {
+            if(!canAnswer) return;
+            canAnswer = false;
+            const q = questions[currentIndex];
+            const isCorrect = (index === q.ans);
+            
+            if(isCorrect) { 
+                correctCount++; 
+                document.getElementById('correct-counter').innerText = correctCount; 
+            }
+            
+            const btns = document.querySelectorAll('#options-grid button');
+            btns[q.ans].classList.add('ans-correct');
+            if(!isCorrect) btns[index].classList.add('ans-wrong');
+            
+            setTimeout(() => { 
+                currentIndex++; 
+                if(currentIndex < 25) showQuestion(); else finishExam(); 
+            }, 900);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => { 
+                if(timerSeconds > 0) { 
+                    timerSeconds--; 
+                    let m = Math.floor(timerSeconds/60); 
+                    let s = timerSeconds%60; 
+                    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`; 
+                } else finishExam(); 
+            }, 1000);
+        }
+
+        function finishExam() {
+            if (timerInterval) clearInterval(timerInterval);
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('reading-modal').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const score = Math.round((correctCount/25)*600)+200;
+            document.getElementById('final-scale-score').innerText = score;
+            document.getElementById('total-correct').innerText = correctCount;
+            document.getElementById('total-percent').innerText = `${Math.round((correctCount/25)*100)}%`;
+            document.getElementById('label-score-final').innerText = score;
+
+            let breakdownHtml = `
+                <div class="bg-slate-50/50 p-4 rounded-2xl border border-slate-100 text-center">
+                    <p class="text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Resumen de Desempeño</p>
+                    <div class="flex items-center gap-3">
+                        <div class="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-emerald-600" style="width: ${(correctCount/25)*100}%"></div>
+                        </div>
+                        <span class="text-xs font-black text-slate-700">${Math.round((correctCount/25)*100)}%</span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('area-breakdown').innerHTML = breakdownHtml;
+        }
+    </script>
+</body>
+</html>

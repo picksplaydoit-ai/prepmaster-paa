@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador PAA Redacción N° 4 - 30 Minutos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow: hidden; }
+        .sticky-header { position: sticky; top: 0; z-index: 50; }
+        .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
+        .ans-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .progress-bar { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-overlay { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col">
+
+    <!-- Pantalla de Inicio -->
+    <div id="start-screen" class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
+            <div class="w-16 h-16 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg -rotate-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-extrabold text-slate-900 mb-2 uppercase tracking-tight">Redacción PAA N° 4</h1>
+            <p class="text-slate-500 mb-4 font-medium text-sm">Prueba de Lengua Española (25 Reactivos)</p>
+            
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 text-left rounded-r-xl">
+                <p class="text-xs text-amber-900 leading-relaxed font-semibold">
+                    ¡Listo! Tienes <span class="underline">30 minutos</span> para completar esta simulación.
+                </p>
+                <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold italic">
+                    El botón de lectura está integrado en cada pregunta.
+                </p>
+            </div>
+
+            <button onclick="startExam()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">
+                COMENZAR SIMULACRO
+            </button>
+        </div>
+    </div>
+
+    <!-- Pantalla de Examen -->
+    <div id="exam-screen" class="hidden h-full flex flex-col">
+        <div class="sticky-header bg-white border-b border-slate-200 p-3">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <div class="flex gap-4">
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Tiempo</p>
+                        <p id="timer" class="text-lg font-mono font-black text-emerald-600 leading-none">30:00</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-emerald-500 uppercase">Bien</p>
+                        <p id="correct-counter" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 max-w-[120px] sm:max-w-xs ml-4 text-right">
+                    <p id="progress-text" class="text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-tighter">1 de 25</p>
+                    <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="progress-bar h-full bg-emerald-500 w-0"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="flex-grow flex items-center justify-center p-4 overflow-hidden">
+            <div id="question-box" class="max-w-xl w-full"></div>
+        </main>
+    </div>
+
+    <!-- Modal de Lectura -->
+    <div id="reading-modal" class="hidden fixed inset-0 z-[100] modal-overlay flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl max-h-[85vh] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden animate-fade-in border border-slate-200">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <div>
+                    <h3 id="reading-title" class="text-lg font-black text-slate-900 uppercase tracking-tight leading-tight">Segmento de Lectura</h3>
+                    <p id="reading-subtitle" class="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">Base para responder</p>
+                </div>
+                <button onclick="toggleReading()" class="w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div id="reading-content" class="p-8 md:p-10 overflow-y-auto custom-scroll text-slate-700 leading-relaxed text-sm md:text-base italic">
+                <!-- Se inyecta dinámicamente -->
+            </div>
+            <div class="p-4 bg-slate-50 text-center border-t border-slate-100">
+                <button onclick="toggleReading()" class="bg-slate-900 text-white font-black px-8 py-2 rounded-xl text-xs uppercase tracking-widest shadow-lg">Cerrar Lectura</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla de Resultados -->
+    <div id="result-screen" class="hidden h-full flex items-center justify-center p-4 overflow-hidden">
+        <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-white fade-in flex flex-col max-h-[95vh]">
+            <div class="bg-slate-900 p-6 md:p-8 text-center text-white relative flex-shrink-0">
+                <p class="text-emerald-400 font-bold uppercase tracking-[0.3em] text-[9px] mb-2">Puntaje Final Redacción</p>
+                <div class="flex items-center justify-center gap-2">
+                    <h2 id="final-scale-score" class="text-6xl font-black tracking-tighter leading-none">0</h2>
+                    <p class="text-slate-500 font-bold text-lg">/ 800</p>
+                </div>
+            </div>
+            
+            <div class="p-6 md:p-8 flex-grow overflow-y-auto custom-scroll text-center">
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Aciertos</p>
+                        <p class="text-xl font-black text-slate-800"><span id="total-correct">0</span><span class="text-slate-300 text-sm">/25</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Efectividad</p>
+                        <p id="total-percent" class="text-xl font-black text-emerald-600">0%</p>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-2xl text-white flex flex-col justify-center">
+                        <p class="text-[7px] font-black text-emerald-400 uppercase">Estatus</p>
+                        <p class="text-xs font-bold leading-tight">Perfil Final</p>
+                    </div>
+                </div>
+
+                <div id="area-breakdown" class="mb-6"></div>
+
+                <div class="p-5 bg-emerald-600 rounded-3xl text-white relative overflow-hidden shadow-lg">
+                    <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                        <div>
+                            <h4 class="text-lg font-black leading-none mb-1 uppercase tracking-tight">¡Registra tu Test!</h4>
+                            <p class="text-emerald-100 text-[10px]">Anota tus <span id="label-score-final" class="font-black text-white underline text-xs">0</span> puntos para el promedio global.</p>
+                        </div>
+                        <button onclick="location.reload()" class="bg-white text-emerald-600 font-black px-6 py-2 rounded-xl hover:bg-emerald-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0 shadow-md">
+                            Reiniciar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const texts = {
+            segment1: {
+                title: "SEGMENTO I (Ejercicios 1-8)",
+                content: `(1) La Inteligencia Artificial ha cruzado la estricta frontera de los números para adentrarse atrevidamente en el terreno de la creatividad. (2) Hoy en día, algoritmos avanzados son capaces de componer sinfonías enteras o pintar cuadros que rivalizan con los de artistas humanos. (3) Por ejemplo, un programa informático analizó miles de obras de Rembrandt y logró generar una pintura inédita con su estilo. (4) Las computadoras de escritorio de los años noventa eran muy pesadas y ocupaban mucho espacio en las casas. (5) Esto ha generado un intenso debate ético en la comunidad artística sobre qué constituye realmente el "arte". (6) Algunos sostienen que una máquina carece de alma, por lo que sus creaciones son meras réplicas matemáticas sin emoción legítima. (7) Otros, en cambio, ven a la Inteligencia Artificial como un nuevo y poderoso pincel a disposición del ingenio humano. (8) El futuro del arte no parece ser una guerra de destrucción mutua, sino una colaboración inexplorada.`
+            },
+            segment2: {
+                title: "SEGMENTO II (Ejercicios 9-16)",
+                content: `(1) El bonsái es mucho más que una simple planta confinada en una maceta; es una disciplina espiritual de origen asiático. (2) Consiste en cultivar árboles reduciendo su tamaño mediante técnicas meticulosas de poda, alambrado y control de raíces. (3) A mi vecino le gusta plantar enredaderas y rosales en la fachada de su casa rodante. (4) A través de la paciencia extrema, el cultivador moldea la naturaleza para representar paisajes majestuosos en plena miniatura. (5) Un bonsái bien cuidado puede vivir cientos de años, pasando de generación en generación como un preciado tesoro familiar. (6) Observar su crecimiento milimétrico ayuda a las personas a comprender lo efímero de la vida humana. (7) Quien modela pacientemente sus ramas termina, de algún modo misterioso, modelando su propio carácter interior. (8) En definitiva, esta práctica conecta al hombre urbano con la paz de lo ancestral.`
+            },
+            segment3: {
+                title: "SEGMENTO III (Ejercicios 17-25)",
+                content: `(1) Las abejas son unas diminutas heroínas de las que depende gran parte de nuestra supervivencia alimentaria. (2) Al buscar su néctar, transportan el polen de flor en flor, garantizando la reproducción vital de innumerables plantas. (3) Sin este proceso silencioso, un tercio de los alimentos que consumimos a diario desaparecería rápidamente de nuestras mesas. (4) La miel comercial que compramos en el supermercado es muy dulce para los postres. (5) Lamentablemente, las poblaciones de abejas están colapsando a un ritmo alarmante en casi todos los continentes. (6) El uso indiscriminado de pesticidas industriales y la deforestación de su hábitat son los principales culpables de este declive mortal. (7) Cuidar de estos laboriosos insectos no es solo una noble causa ecológica, sino un escudo contra una emergencia global inminente. (8) Cada zumbido que se apaga permanentemente en el campo es una dura advertencia para el futuro del ser humano.`
+            }
+        };
+
+        const questions = [
+            // Segmento 1
+            { id: 1, textRef: 'segment1', type: "multiple", q: "¿Cuál de los enunciados del Segmento I podría omitirse sin perder información necesaria?", options: ["Enunciado 2", "Enunciado 3", "Enunciado 4", "Enunciado 6"], ans: 2 },
+            { id: 2, textRef: 'segment1', type: "multiple", q: "¿Cuál combina o integra MEJOR la secuencia de los enunciados del 1 al 8 del Segmento I?", options: ["Programación de PCs pesadas", "Técnica de pintura de Rembrandt", "Debate de la IA como creadora de arte", "Sinfonías musicales del s. XXI"], ans: 2 },
+            { id: 3, textRef: 'segment1', type: "multiple", q: "¿Qué enunciado del Segmento I recoge MEJOR el contenido que da pie a las posturas divididas (6 y 7)?", options: ["Enunciado 3", "Enunciado 5", "Enunciado 8", "Enunciado 1"], ans: 1 },
+            { id: 4, textRef: 'segment1', type: "multiple", q: "¿Qué enunciado enriquece ESTILÍSTICAMENTE la oración 7 del Segmento I?", options: ["...expandiendo el horizonte de nuestra propia imaginación.", "...porque las licencias son muy costosas.", "...dejando sin empleo a muchos diseñadores.", "...igual que pasó con la fotografía."], ans: 0 },
+            { id: 5, textRef: 'segment1', type: "multiple", q: "¿Qué enunciado del 5 al 7 expresa INDIRECTAMENTE el escepticismo de los tradicionalistas?", options: ["Enunciado 5", "Enunciado 6", "Enunciado 7", "Enunciado 8"], ans: 1 },
+            { id: 6, textRef: 'segment1', type: "multiple", q: "¿Qué enunciado expresa INDIRECTAMENTE la capacidad de imitación de los sistemas?", options: ["Enunciado 1", "Enunciado 3", "Enunciado 6", "Enunciado 8"], ans: 1 },
+            { id: 7, textRef: 'segment1', type: "multiple", q: "El enunciado 8 actúa en el texto como una:", options: ["Particularización aislada", "Generalización conclusiva del futuro", "Oración elidible", "Premisa inicial fuera de lugar"], ans: 1 },
+            { id: 8, textRef: 'segment1', type: "multiple", q: "Seleccione la frase que MEJOR enlaza el enunciado 5 con el 6.", options: ["Por un lado,...", "Sin embargo,...", "Además de esto,...", "En conclusión,..."], ans: 0 },
+            // Segmento 2
+            { id: 9, textRef: 'segment2', type: "multiple", q: "¿Cuál enunciado combina o integra MEJOR la secuencia del Segmento II?", options: ["Arte y espiritualidad del bonsái", "Técnicas agrícolas de raíces", "Longevidad de plantas asiáticas", "Decoración de jardines mini"], ans: 0 },
+            { id: 10, textRef: 'segment2', type: "multiple", q: "¿Cuál de los enunciados del Segmento II rompe con el tema central y estilo?", options: ["Enunciado 2", "Enunciado 3", "Enunciado 5", "Enunciado 6"], ans: 1 },
+            { id: 11, textRef: 'segment2', type: "multiple", q: "¿Qué enunciado enriquece ESTILÍSTICAMENTE la oración 8 sin contradecirla?", options: ["...convirtiendo un puñado de tierra en un templo de silencio.", "...porque regar relaja después del trabajo.", "...aunque las herramientas japonesas sean peligrosas.", "...y además decoran muy bien la mesa."], ans: 0 },
+            { id: 12, textRef: 'segment2', type: "multiple", q: "¿Qué enunciado expresa INDIRECTAMENTE el cultivo de la virtud de la paciencia?", options: ["Enunciado 5", "Enunciado 6", "Enunciado 7", "Enunciado 8"], ans: 2 },
+            { id: 13, textRef: 'segment2', type: "multiple", q: "¿Cuál enunciado de los primeros dos actúa como la premisa principal?", options: ["Enunciado 1", "Enunciado 2", "Ambos iguales", "Enunciado 4"], ans: 0 },
+            { id: 14, textRef: 'segment2', type: "multiple", q: "¿Qué enunciado expresa INDIRECTAMENTE el concepto de 'legado histórico'?", options: ["Enunciado 2", "Enunciado 4", "Enunciado 5", "Enunciado 7"], ans: 2 },
+            { id: 15, textRef: 'segment2', type: "multiple", q: "Añadir datos técnicos de especies al final del texto se consideraría:", options: ["Adición poética", "Elisión necesaria", "Generalización", "Error de coherencia (dato técnico fuera de lugar)"], ans: 3 },
+            { id: 16, textRef: 'segment2', type: "multiple", q: "La expresión 'paisajes majestuosos en plena miniatura' es una forma de:", options: ["Contradecir el tamaño", "Particularizar el objetivo visual", "Generalizar plantas", "Elidir la técnica"], ans: 1 },
+            // Segmento 3
+            { id: 17, textRef: 'segment3', type: "multiple", q: "¿Cuál de los enunciados del Segmento III rompe la secuencia sobre el peligro ambiental?", options: ["Enunciado 2", "Enunciado 3", "Enunciado 4", "Enunciado 5"], ans: 2 },
+            { id: 18, textRef: 'segment3', type: "multiple", q: "¿Cuál enunciado integra MEJOR el contenido total del Segmento III?", options: ["Producción de miel en campos", "Uso de pesticidas industriales", "Polinización biológica", "Abejas: pilar alimentario y declive"], ans: 3 },
+            { id: 19, textRef: 'segment3', type: "multiple", q: "¿Qué enunciado enriquece ESTILÍSTICAMENTE la oración 8 sin negar el mensaje?", options: ["...un reloj de arena que cuenta nuestros días.", "...porque nos quedaríamos sin miel.", "...aunque hay otros insectos.", "...y obligaría a usar drones."], ans: 0 },
+            { id: 20, textRef: 'segment3', type: "multiple", q: "¿Qué enunciado expresa INDIRECTAMENTE las causas provocadas por el hombre?", options: ["Enunciado 5", "Enunciado 6", "Enunciado 7 (inicio)", "Enunciado 7 (final)"], ans: 1 },
+            { id: 21, textRef: 'segment3', type: "multiple", q: "De 1, 2 y 3, ¿cuál recoge MEJOR el contenido general del valor de la especie?", options: ["Enunciado 1", "Enunciado 2", "Enunciado 3", "Enunciado 4"], ans: 0 },
+            { id: 22, textRef: 'segment3', type: "multiple", q: "¿Qué enunciado expresa INDIRECTAMENTE la consecuencia apocalíptica de no actuar?", options: ["Enunciado 2", "Enunciado 3", "Enunciado 5", "Enunciado 6"], ans: 1 },
+            { id: 23, textRef: 'segment3', type: "multiple", q: "El enunciado 7 cumple una función integradora al:", options: ["Cambiar a política", "Ser puente entre ecología y supervivencia", "Omitir pesticidas", "Describir físicamente"], ans: 1 },
+            { id: 24, textRef: 'segment3', type: "multiple", q: "Utilizar 'diminutas heroínas' es un recurso de:", options: ["Adición / Metáfora", "Generalización biológica", "Particularización anatómica", "Elisión de nombre real"], ans: 0 },
+            { id: 25, textRef: 'segment3', type: "multiple", q: "¿Qué conector sería el más adecuado para iniciar la oración 3?", options: ["No obstante,", "En efecto,", "Porque,", "En cambio,"], ans: 1 }
+        ];
+
+        let currentIndex = 0;
+        let correctCount = 0;
+        let timerSeconds = 1800; // 30 Minutos
+        let canAnswer = true;
+        let timerInterval;
+
+        function startExam() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            showQuestion();
+            startTimer();
+        }
+
+        function toggleReading() {
+            const modal = document.getElementById('reading-modal');
+            if (modal.classList.contains('hidden')) {
+                const q = questions[currentIndex];
+                const textData = texts[q.textRef];
+                document.getElementById('reading-title').innerText = textData.title;
+                document.getElementById('reading-content').innerText = textData.content;
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function showQuestion() {
+            canAnswer = true;
+            const q = questions[currentIndex];
+            const container = document.getElementById('question-box');
+            document.getElementById('progress-text').innerText = `${currentIndex + 1} de 25`;
+            document.getElementById('progress-bar').style.width = `${((currentIndex) / 25) * 100}%`;
+
+            let html = `
+                <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-lg border border-slate-100 fade-in relative">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="flex flex-col gap-1">
+                            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-xl text-[9px] font-black uppercase tracking-widest w-fit">${q.textRef.toUpperCase()}</span>
+                            <span class="text-slate-300 font-bold text-[10px] uppercase tracking-tighter ml-1">Simulador N° 4</span>
+                        </div>
+                        <button onclick="toggleReading()" class="bg-slate-900 text-white text-[9px] font-black px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-slate-800 transition-colors uppercase tracking-widest active:scale-95 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Ver Lectura
+                        </button>
+                    </div>
+                    <h2 class="text-lg font-bold text-slate-800 mb-8 leading-tight">${q.q}</h2>
+                    <div id="options-grid" class="grid grid-cols-1 gap-3">
+            `;
+
+            q.options.forEach((opt, i) => {
+                html += `
+                    <button onclick="checkAnswer(${i})" 
+                        class="w-full text-left p-3 md:p-4 border-2 border-slate-50 rounded-2xl hover:border-emerald-200 transition-all flex items-center gap-4 group">
+                        <span class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center font-black text-slate-400 group-hover:bg-emerald-600 group-hover:text-white transition-all text-xs">${['A','B','C','D'][i]}</span>
+                        <span class="font-semibold text-slate-700 text-sm">${opt}</span>
+                    </button>
+                `;
+            });
+
+            container.innerHTML = html + `</div></div>`;
+        }
+
+        function checkAnswer(index) {
+            if(!canAnswer) return;
+            canAnswer = false;
+            const q = questions[currentIndex];
+            const isCorrect = (index === q.ans);
+            
+            if(isCorrect) { 
+                correctCount++; 
+                document.getElementById('correct-counter').innerText = correctCount; 
+            }
+            
+            const btns = document.querySelectorAll('#options-grid button');
+            btns[q.ans].classList.add('ans-correct');
+            if(!isCorrect) btns[index].classList.add('ans-wrong');
+            
+            setTimeout(() => { 
+                currentIndex++; 
+                if(currentIndex < 25) showQuestion(); else finishExam(); 
+            }, 900);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => { 
+                if(timerSeconds > 0) { 
+                    timerSeconds--; 
+                    let m = Math.floor(timerSeconds/60); 
+                    let s = timerSeconds%60; 
+                    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`; 
+                } else finishExam(); 
+            }, 1000);
+        }
+
+        function finishExam() {
+            if (timerInterval) clearInterval(timerInterval);
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('reading-modal').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const score = Math.round((correctCount/25)*600)+200;
+            document.getElementById('final-scale-score').innerText = score;
+            document.getElementById('total-correct').innerText = correctCount;
+            document.getElementById('total-percent').innerText = `${Math.round((correctCount/25)*100)}%`;
+            document.getElementById('label-score-final').innerText = score;
+
+            let breakdownHtml = `
+                <div class="bg-slate-50/50 p-4 rounded-2xl border border-slate-100 text-center">
+                    <p class="text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Resumen de Desempeño</p>
+                    <div class="flex items-center gap-3">
+                        <div class="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-emerald-600" style="width: ${(correctCount/25)*100}%"></div>
+                        </div>
+                        <span class="text-xs font-black text-slate-700">${Math.round((correctCount/25)*100)}%</span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('area-breakdown').innerHTML = breakdownHtml;
+        }
+    </script>
+</body>
+</html>

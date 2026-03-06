@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador PAA Matemáticas - Interactivos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow: hidden; }
+        .sticky-header { position: sticky; top: 0; z-index: 50; }
+        .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
+        .ans-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .progress-bar { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col">
+
+    <!-- Pantalla de Inicio -->
+    <div id="start-screen" class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
+            <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg rotate-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-extrabold text-slate-900 mb-2 uppercase tracking-tight">Simulador PAA</h1>
+            <p class="text-slate-500 mb-4 font-medium text-sm">Matemáticas (55 Reactivos)</p>
+            
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 text-left rounded-r-xl">
+                <div class="flex">
+                    <div class="ml-1">
+                        <p class="text-xs text-amber-900 leading-relaxed font-semibold">
+                            ¡Importante! Obtendrás de <span class="underline">200 a 800</span> puntos.
+                        </p>
+                        <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold tracking-tighter italic">
+                            Anota el resultado para tu cálculo final.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <button onclick="startExam()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">
+                    COMENZAR EXAMEN
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla de Examen -->
+    <div id="exam-screen" class="hidden h-full flex flex-col">
+        <div class="sticky-header bg-white border-b border-slate-200 p-3">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <div class="flex gap-4">
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Tiempo</p>
+                        <p id="timer" class="text-lg font-mono font-black text-blue-600 leading-none">60:00</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-emerald-500 uppercase">Bien</p>
+                        <p id="correct-counter" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                    </div>
+                </div>
+                <div class="flex-1 max-w-xs ml-4">
+                    <p id="progress-text" class="text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-tighter">Cargando...</p>
+                    <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="progress-bar h-full bg-blue-600 w-0"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="flex-grow flex items-center justify-center p-4 overflow-hidden">
+            <div id="question-box" class="max-w-xl w-full"></div>
+        </main>
+    </div>
+
+    <!-- Pantalla de Resultados -->
+    <div id="result-screen" class="hidden h-full flex items-center justify-center p-4 overflow-hidden">
+        <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-white fade-in flex flex-col max-h-[95vh]">
+            <div class="bg-slate-900 p-6 md:p-8 text-center text-white relative flex-shrink-0">
+                <p class="text-blue-400 font-bold uppercase tracking-[0.3em] text-[9px] mb-2">Puntaje Final de Escala</p>
+                <div class="flex items-center justify-center gap-2">
+                    <h2 id="final-scale-score" class="text-6xl font-black tracking-tighter leading-none">0</h2>
+                    <p class="text-slate-500 font-bold text-lg">/ 800</p>
+                </div>
+            </div>
+            
+            <div class="p-6 md:p-8 flex-grow overflow-y-auto custom-scroll">
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Aciertos</p>
+                        <p class="text-xl font-black text-slate-800"><span id="total-correct">0</span><span class="text-slate-300 text-sm">/55</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Efectividad</p>
+                        <p id="total-percent" class="text-xl font-black text-blue-600">0%</p>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-2xl text-white flex flex-col justify-center text-center">
+                        <p class="text-[7px] font-black text-blue-400 uppercase">Estatus</p>
+                        <p class="text-xs font-bold leading-tight">Perfil Analizado</p>
+                    </div>
+                </div>
+
+                <div id="area-breakdown" class="grid grid-cols-2 gap-3 mb-6"></div>
+
+                <div class="p-5 bg-blue-600 rounded-3xl text-white relative overflow-hidden shadow-lg">
+                    <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                        <div>
+                            <h4 class="text-lg font-black leading-none mb-1 uppercase tracking-tight">¡Anota tu resultado!</h4>
+                            <p class="text-blue-100 text-[10px]">Usa este puntaje para la simulación de ingreso.</p>
+                        </div>
+                        <button onclick="location.reload()" class="bg-white text-blue-600 font-black px-6 py-2 rounded-xl hover:bg-blue-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0">
+                            Reiniciar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { id: 1, area: "Aritmética", type: "multiple", q: "Un artículo cuesta $120. Si se le aplica un descuento del 25%, ¿cuánto se pagará finalmente?", options: ["$80", "$90", "$95", "$100"], ans: 1 },
+            { id: 2, area: "Álgebra I", type: "multiple", q: "Al simplificar la expresión (3x²y)(4x³y²), se obtiene:", options: ["12x⁵y³", "7x⁶y²", "12x⁶y³", "7x⁵y³"], ans: 0 },
+            { id: 3, area: "Geometría", type: "multiple", q: "Si el área de un círculo es 49π, ¿cuál es la medida de su diámetro?", options: ["7", "14", "24.5", "49"], ans: 1 },
+            { id: 4, area: "Estadística", type: "multiple", q: "El promedio de los números 8, 12, 15 y x es 11. ¿Valor de x?", options: ["8", "9", "10", "11"], ans: 1 },
+            { id: 5, area: "Álgebra II", type: "multiple", q: "¿Soluciones de la ecuación x² − 7x + 10 = 0?", options: ["x=−2, x=−5", "x=−2, x=5", "x=2, x=−5", "x=2, x=5"], ans: 3 },
+            { id: 6, area: "Aritmética", type: "multiple", q: "¿Resultado de sumar 4/3 + 5/1?", options: ["9/4", "20/19", "20/11", "20/3"], ans: 1 },
+            { id: 7, area: "Geometría", type: "multiple", q: "¿Volumen de un cubo cuyas aristas miden 4 cm?", options: ["16", "24", "64", "96"], ans: 2 },
+            { id: 8, area: "Álgebra I", type: "multiple", q: "Si f(x) = 2x² − 3x + 1, ¿valor de f(−2)?", options: ["-1", "3", "11", "15"], ans: 3 },
+            { id: 9, area: "Estadística", type: "multiple", q: "Mediana del conjunto: {5, 2, 9, 8, 1, 4, 7}", options: ["4", "5", "6", "7"], ans: 1 },
+            { id: 10, area: "Álgebra II", type: "multiple", q: "¿Pendiente de la recta 2y − 4x = 8?", options: ["-4", "-2", "2", "4"], ans: 2 },
+            { id: 11, area: "Aritmética", type: "multiple", q: "¿Mínimo Común Múltiplo (MCM) de 12 e 18?", options: ["6", "24", "36", "72"], ans: 2 },
+            { id: 12, area: "Álgebra I", type: "multiple", q: "¿Valor de x en 3(x − 2) = x + 10?", options: ["2", "4", "6", "8"], ans: 3 },
+            { id: 13, area: "Geometría", type: "multiple", q: "Ángulos de un triángulo: 40°, 60° y x. ¿Valor de x?", options: ["70°", "80°", "90°", "100°"], ans: 1 },
+            { id: 14, area: "Probabilidad", type: "multiple", q: "Probabilidad de sacar un Rey de una baraja de 52:", options: ["1/52", "1/26", "1/13", "1/4"], ans: 2 },
+            { id: 15, area: "Álgebra II", type: "multiple", q: "Distancia entre (0, 0) y (3, 4):", options: ["3", "4", "5", "7"], ans: 2 },
+            { id: 16, area: "Aritmética", type: "multiple", q: "Si 4 libros cuestan $60, ¿cuánto cuestan 7?", options: ["$90", "$105", "$115", "$120"], ans: 1 },
+            { id: 17, area: "Álgebra I", type: "multiple", q: "Desarrollar (x − 5)(x + 5):", options: ["x² + 25", "x² - 10x + 25", "x² - 25", "x² - 10x - 25"], ans: 2 },
+            { id: 18, area: "Geometría", type: "multiple", q: "Perímetro de rectángulo (Largo 10m, Ancho 4m):", options: ["14 m", "28 m", "40 m", "80 m"], ans: 1 },
+            { id: 19, area: "Estadística", type: "multiple", q: "Moda de: 12, 13, 13, 14, 14, 14, 15:", options: ["12", "13", "14", "15"], ans: 2 },
+            { id: 20, area: "Álgebra II", type: "multiple", q: "Punto medio entre A(-2, 4) y B(6, 8):", options: ["(2, 6)", "(4, 4)", "(4, 6)", "(8, 12)"], ans: 0 },
+            { id: 21, area: "Aritmética", type: "multiple", q: "2.5 × 10³ en forma decimal:", options: ["25", "250", "2,500", "25,000"], ans: 2 },
+            { id: 22, area: "Álgebra I", type: "multiple", q: "Valores de x para |x − 3| = 5:", options: ["8 y -2", "8 y 2", "-8 y 2", "-8 y -2"], ans: 0 },
+            { id: 23, area: "Geometría", type: "multiple", q: "Área de triángulo con base 12 y altura 5:", options: ["17", "30", "34", "60"], ans: 1 },
+            { id: 24, area: "Probabilidad", type: "multiple", q: "Lanzar dos monedas, ¿probabilidad de dos caras?", options: ["0.25", "0.50", "0.75", "1.00"], ans: 0 },
+            { id: 25, area: "Álgebra II", type: "multiple", q: "Solución para x + 3 < 8:", options: ["(−∞, 11)", "(5, ∞)", "(−∞, 5)", "[-5, 5]"], ans: 2 },
+            { id: 26, area: "Aritmética", type: "multiple", q: "Sucesión: 1, 4, 9, 16, __, 36.", options: ["20", "24", "25", "30"], ans: 2 },
+            { id: 27, area: "Álgebra I", type: "multiple", q: "Factorización de x² + 6x + 9:", options: ["(x+3)(x-3)", "(x+6)²", "(x+3)²", "(x+9)(x+1)"], ans: 2 },
+            { id: 28, area: "Geometría", type: "multiple", q: "Ángulo suplementario de 110°:", options: ["70°", "80°", "110°", "250°"], ans: 0 },
+            { id: 29, area: "Estadística", type: "multiple", q: "Grados de un sector del 20% en círculo:", options: ["20°", "40°", "72°", "90°"], ans: 2 },
+            { id: 30, area: "Álgebra II", type: "multiple", q: "Valor de x: x + y = 10; x − y = 4:", options: ["x=3", "x=6", "x=7", "x=14"], ans: 2 },
+            { id: 31, area: "Aritmética", type: "multiple", q: "Máximo Común Divisor de 24 y 36:", options: ["6", "8", "12", "72"], ans: 2 },
+            { id: 32, area: "Álgebra I", type: "multiple", q: "Simplificar: √144 + √25:", options: ["13", "17", "23", "169"], ans: 1 },
+            { id: 33, area: "Geometría", type: "multiple", q: "Hipotenusa si catetos son 5 y 12:", options: ["13", "14", "17", "60"], ans: 0 },
+            { id: 34, area: "Estadística", type: "multiple", q: "Rango de: {15, 2, 9, 20, 7}:", options: ["9", "15", "18", "20"], ans: 2 },
+            { id: 35, area: "Álgebra II", type: "multiple", q: "Ecuación de círculo (0,0) y radio 3:", options: ["x²+y²=3", "x²+y²=6", "x²+y²=9", "x²-y²=9"], ans: 2 },
+            { id: 36, area: "Aritmética", type: "multiple", q: "Resultado de 8/5 ÷ 4/3:", options: ["32/15", "6/5", "11/8", "15/12"], ans: 1 },
+            { id: 37, area: "Álgebra I", type: "multiple", q: "Valor de 3⁻²:", options: ["-9", "-6", "1/6", "1/9"], ans: 3 },
+            { id: 38, area: "Geometría", type: "multiple", q: "Volumen cilindro (Radio 2, Altura 5):", options: ["10π", "14π", "20π", "40π"], ans: 2 },
+            { id: 39, area: "Aritmética", type: "multiple", q: "30% de 500:", options: ["15", "50", "150", "1500"], ans: 2 },
+            { id: 40, area: "Álgebra II", type: "multiple", q: "Rectas paralelas tienen:", options: ["m1 inversa", "m1 = m2", "Cruz origen", "m = 0"], ans: 1 },
+            { id: 41, area: "Aritmética", type: "multiple", q: "Primos de 60:", options: ["2²×3×5", "3²×2×5", "4×15", "2×3²×5"], ans: 0 },
+            { id: 42, area: "Álgebra I", type: "multiple", q: "Suma: (2x + 3) + (4x − 1):", options: ["6x+4", "6x+2", "8x²-3", "8x-2"], ans: 1 },
+            { id: 43, area: "Geometría", type: "multiple", q: "Trapecio: bases 6, 10; altura 4:", options: ["20", "32", "40", "64"], ans: 1 },
+            { id: 44, area: "Probabilidad", type: "multiple", q: "Dado, probabilidad de múltiplo de 3:", options: ["1/6", "1/3", "1/2", "2/3"], ans: 1 },
+            { id: 45, area: "Álgebra II", type: "multiple", q: "Vértice de y = (x − 2)² + 3:", options: ["(-2,3)", "(2,-3)", "(2,3)", "(-2,-3)"], ans: 2 },
+            { id: 46, area: "Aritmética", type: "open", q: "Un grifo llena un estanque en 2h y otro en 3h. ¿En cuántos MINUTOS se llena si se abren ambos?", ans: "72" },
+            { id: 47, area: "Álgebra I", type: "open", q: "Si a^b = 8 y b = 3, ¿valor de a?", ans: "2" },
+            { id: 48, area: "Geometría", type: "open", q: "Área cuadrado = 81. ¿Lado?", ans: "9" },
+            { id: 49, area: "Estadística", type: "open", q: "Media: 10, 15, 20, 25.", ans: "17.5" },
+            { id: 50, area: "Álgebra II", type: "open", q: "Si 2^{x+1} = 32, ¿x?", ans: "4" },
+            { id: 51, area: "Aritmética", type: "open", q: "Primos entre 10 y 20:", ans: "4" },
+            { id: 52, area: "Álgebra I", type: "open", q: "Si f(x) = x³ − x, ¿f(3)?", ans: "24" },
+            { id: 53, area: "Geometría", Petersen: "open", q: "Grados ángulo interior hexágono:", ans: "120" },
+            { id: 54, area: "Estadística", type: "open", q: "12 niños, 18 niñas. % niños?", ans: "40" },
+            { id: 55, area: "Álgebra II", type: "open", q: "Corte y de 5x - 2y = 10 (si x=0)?", ans: "-5" }
+        ];
+
+        let currentIndex = 0;
+        let correctCount = 0;
+        let areaStats = {};
+        let timerSeconds = 3600;
+        let canAnswer = true;
+        let timerInterval;
+
+        function startExam() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            showQuestion();
+            startTimer();
+        }
+
+        function showQuestion() {
+            canAnswer = true;
+            const q = questions[currentIndex];
+            const container = document.getElementById('question-box');
+            document.getElementById('progress-text').innerText = `Reactivo ${currentIndex+1} de 55`;
+            document.getElementById('progress-bar').style.width = `${(currentIndex/55)*100}%`;
+
+            let html = `
+                <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-lg border border-slate-100 fade-in">
+                    <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-widest mb-4 inline-block">${q.area}</span>
+                    <h2 class="text-lg font-bold text-slate-800 mb-6 leading-tight">${q.q}</h2>
+                    <div id="options-grid" class="space-y-3">
+            `;
+
+            if (q.type === 'multiple') {
+                q.options.forEach((opt, i) => {
+                    html += `
+                        <button onclick="checkAnswer(${i})" 
+                            class="w-full text-left p-3 md:p-4 border-2 border-slate-50 rounded-2xl hover:border-blue-200 transition-all flex items-center gap-4 group">
+                            <span class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center font-black text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all text-xs">${['A','B','C','D'][i]}</span>
+                            <span class="font-semibold text-slate-700 text-sm">${opt}</span>
+                        </button>
+                    `;
+                });
+            } else {
+                html += `
+                    <div class="space-y-4">
+                        <input type="text" id="open-ans" placeholder="Escribe el número" class="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 text-3xl font-black text-blue-700 text-center transition-all">
+                        <button onclick="checkAnswerOpen()" class="w-full bg-slate-900 text-white font-black py-4 rounded-xl shadow-md uppercase text-xs tracking-widest active:scale-95 transition-transform">Confirmar Respuesta</button>
+                    </div>
+                `;
+            }
+            container.innerHTML = html + `</div></div>`;
+        }
+
+        function checkAnswer(index) {
+            if(!canAnswer) return;
+            canAnswer = false;
+            const q = questions[currentIndex];
+            const isCorrect = (index === q.ans);
+            if(isCorrect) { correctCount++; document.getElementById('correct-counter').innerText = correctCount; }
+            if(!areaStats[q.area]) areaStats[q.area] = { ok: 0, total: 0 };
+            areaStats[q.area].total++; if(isCorrect) areaStats[q.area].ok++;
+            
+            const btns = document.querySelectorAll('#options-grid button');
+            btns[q.ans].classList.add('ans-correct');
+            if(!isCorrect) btns[index].classList.add('ans-wrong');
+            setTimeout(() => { currentIndex++; if(currentIndex < 55) showQuestion(); else finishExam(); }, 1000);
+        }
+
+        function checkAnswerOpen() {
+            if(!canAnswer) return;
+            const input = document.getElementById('open-ans');
+            const val = input.value.trim();
+            if(val === "") return;
+            canAnswer = false;
+            const q = questions[currentIndex];
+            const isCorrect = (val === q.ans);
+            if(isCorrect) { correctCount++; document.getElementById('correct-counter').innerText = correctCount; }
+            if(!areaStats[q.area]) areaStats[q.area] = { ok: 0, total: 0 };
+            areaStats[q.area].total++; if(isCorrect) areaStats[q.area].ok++;
+            input.classList.add(isCorrect ? 'ans-correct' : 'ans-wrong');
+            setTimeout(() => { currentIndex++; if(currentIndex < 55) showQuestion(); else finishExam(); }, 1200);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => { if(timerSeconds > 0) { timerSeconds--; let m = Math.floor(timerSeconds/60); let s = timerSeconds%60; document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`; } else finishExam(); }, 1000);
+        }
+
+        function finishExam() {
+            if (timerInterval) clearInterval(timerInterval);
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const score = Math.round((correctCount/55)*600)+200;
+            document.getElementById('final-scale-score').innerText = score;
+            document.getElementById('total-correct').innerText = correctCount;
+            document.getElementById('total-percent').innerText = `${Math.round((correctCount/55)*100)}%`;
+            document.getElementById('label-score-final').innerText = score;
+
+            let html = "";
+            for (const area in areaStats) {
+                let p = Math.round((areaStats[area].ok/areaStats[area].total)*100);
+                html += `
+                    <div class="bg-slate-50/50 p-2 rounded-xl border border-slate-100">
+                        <div class="flex justify-between text-[7px] font-black uppercase mb-1 text-slate-400"><span>${area}</span><span>${areaStats[area].ok}/${areaStats[area].total}</span></div>
+                        <div class="flex items-center gap-2">
+                            <div class="flex-1 h-1 bg-slate-200 rounded-full overflow-hidden"><div class="h-full bg-blue-600" style="width: ${p}%"></div></div>
+                            <span class="text-[8px] font-black text-slate-700">${p}%</span>
+                        </div>
+                    </div>
+                `;
+            }
+            document.getElementById('area-breakdown').innerHTML = html;
+        }
+    </script>
+</body>
+</html>

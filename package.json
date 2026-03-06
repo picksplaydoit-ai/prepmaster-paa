@@ -1,0 +1,9 @@
+{
+  "name": "prepmaster-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for PrepMaster PAA",
+  "dependencies": {
+    "stripe": "^14.0.0",
+    "firebase-admin": "^12.0.0"
+  }
+}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>¡Pago exitoso! — PrepMaster</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:#0a0a0f;color:#f0f0f8;
+    min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+  .card{background:#12121a;border:1px solid #ffffff1a;border-radius:24px;
+    padding:48px 40px;max-width:440px;width:100%;text-align:center;}
+  .icon{font-size:56px;margin-bottom:24px;}
+  h1{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:10px;}
+  p{color:#8888aa;font-size:15px;line-height:1.6;margin-bottom:8px;}
+  .highlight{color:#fbbf24;font-weight:600;}
+  .divider{border:none;border-top:1px solid #ffffff0f;margin:28px 0;}
+  .btn{display:block;width:100%;padding:15px;background:linear-gradient(135deg,#7c3aed,#5b21b6);
+    border:none;border-radius:12px;color:white;font-family:'Syne',sans-serif;
+    font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;
+    transition:opacity .2s;}
+  .btn:hover{opacity:.9;}
+  .loading{color:#8888aa;font-size:13px;margin-top:16px;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon">🎉</div>
+  <h1>¡Pago recibido!</h1>
+  <p>Tu acceso a <span class="highlight">PrepMaster PAA</span> está siendo activado.</p>
+  <p>En unos segundos podrás entrar con tu correo y contraseña.</p>
+  <hr class="divider"/>
+  <p style="font-size:13px;margin-bottom:24px;">
+    Tu suscripción es válida por <span class="highlight">3 meses</span> a partir de hoy.
+    Recibirás acceso completo a todas las simulaciones, modos supervivencia y guías de respuestas.
+  </p>
+  <a href="/" class="btn" id="btn-enter">Entrar a PrepMaster →</a>
+  <p class="loading" id="status-msg">Activando tu cuenta...</p>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  const app = initializeApp({
+    apiKey:"AIzaSyA2-54Gk9NXW-Ebr3mSdHNP8TA7BlLuQWU",
+    authDomain:"simulador-udg-2026.firebaseapp.com",
+    projectId:"simulador-udg-2026",
+    storageBucket:"simulador-udg-2026.firebasestorage.app",
+    messagingSenderId:"346117076783",
+    appId:"1:346117076783:web:65f9859b09cea4f64893da",
+  });
+  const auth = getAuth(app);
+  const statusMsg = document.getElementById('status-msg');
+
+  // Poll until subscription appears (webhook can take 2-5 seconds)
+  async function pollSubscription(uid, attempts = 0) {
+    if (attempts > 15) {
+      statusMsg.textContent = 'Tardando más de lo usual — intenta entrar manualmente.';
+      return;
+    }
+    try {
+      const { getFirestore, doc, getDoc } = await import(
+        "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"
+      );
+      const db = getFirestore(app);
+      const snap = await getDoc(doc(db, 'subscriptions', uid));
+      if (snap.exists() && snap.data().active) {
+        statusMsg.textContent = '✅ ¡Cuenta activada! Ya puedes entrar.';
+        statusMsg.style.color = '#10b981';
+        return;
+      }
+    } catch(e) { /* retry */ }
+    setTimeout(() => pollSubscription(uid, attempts + 1), 2000);
+  }
+
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      pollSubscription(user.uid);
+    } else {
+      statusMsg.textContent = 'Inicia sesión para verificar tu acceso.';
+    }
+  });
+</script>
+</body>
+</html>

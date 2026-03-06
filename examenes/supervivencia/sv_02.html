@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survival Math: Reto 100</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .progress-transition { transition: width 0.5s ease-in-out; }
+        .option-btn:disabled { cursor: not-allowed; }
+        @keyframes pulse-red {
+            0%, 100% { border-color: #ef4444; color: #ef4444; }
+            50% { border-color: #fee2e2; color: #b91c1c; }
+        }
+        .timer-warning { animation: pulse-red 1s infinite; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-900 selection:bg-indigo-100">
+
+    <nav class="p-6">
+        <div class="max-w-2xl mx-auto flex items-center justify-center gap-2">
+            <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-200">
+                <span class="text-white font-black">M</span>
+            </div>
+            <span class="font-black text-xl tracking-tighter">MATH<span class="text-indigo-600">SURVIVAL</span></span>
+        </div>
+    </nav>
+
+    <main id="game-container" class="px-4 pb-12">
+        <!-- Pantallas se inyectan aquí -->
+    </main>
+
+    <script>
+        const ALL_QUESTIONS = [
+            // NIVEL 1
+            { id: 1, q: "La temperatura fue de 0°. Aumentó 5° y luego disminuyó 8°. ¿Cuál es la temperatura final?", options: ["–8", "–3", "3", "13"], correct: 1 },
+            { id: 2, q: "¿Cuál es el valor de la expresión (–3)³?", options: ["81", "27", "–9", "–27"], correct: 3 },
+            { id: 3, q: "¿Cuál es el resultado de –9 – (–3) – 8?", options: ["–20", "–14", "4", "14"], correct: 1 },
+            { id: 4, q: "La cantidad de matriculados se duplicó cada hora. Si a las 5:00 a.m. había 4, ¿cuántos había a las 8:00 a.m.?", options: ["12", "16", "32", "64"], correct: 2 },
+            { id: 5, q: "Si k representa la edad de Julio, ¿qué representa k – 3?", options: ["Edad en 3 años", "Edad hace 3 años", "Triple de su edad", "Un tercio de su edad"], correct: 1 },
+            { id: 6, q: "¿Cuál es la factorización de x² – 2x – 15?", options: ["(x+5)(x–3)", "(x–2)(x–15)", "(x–5)(x+3)", "(x+2)(x–15)"], correct: 2 },
+            { id: 7, q: "¿Cuál es la solución de 4(x – 3) < 2x – 2?", options: ["x < 1", "x < 5", "x < 6", "x < 7"], correct: 1 },
+            { id: 8, q: "Si f(x) = 1 – x², halle f(3 + k).", options: ["–8–6k–k²", "–8+6k–k²", "–8–6k+k²", "–8+6k+k²"], correct: 0 },
+            { id: 9, q: "Si 5(2x – 2) = 3x + 11, ¿cuál es el valor de x?", options: ["–4", "–2", "3", "7"], correct: 2 },
+            { id: 10, q: "Evalúe 4n² + 3n para n = 3.", options: ["22", "33", "45", "82"], correct: 2 },
+            { id: 11, q: "¿Cuál es el conjunto solución de x² – 5 = 4?", options: ["{–1, 1}", "{1}", "{–3, 3}", "{–9, 9}"], correct: 2 },
+            { id: 12, q: "¿Cuál es el resultado de 5⁻¹ + 2⁻² – 4⁻²?", options: ["31/80", "3/80", "41/80", "31/40"], correct: 0 },
+            { id: 13, q: "Juan tiene 1 1/3 litros de leche y Luisa 1/2 litro. Al juntarlos, ¿cuánto tienen?", options: ["7/6", "11/6", "8/6", "10/6"], correct: 1 },
+            { id: 14, q: "Pablo tenía 3/4 de litro de pintura. Utilizó la mitad. ¿Qué parte le sobró?", options: ["1/3", "1/4", "3/8", "1/2"], correct: 2 },
+            { id: 15, q: "Un atleta corrió 3 1/4 km el sábado y 2 7/8 km el domingo. ¿Cuántos km corrió en total?", options: ["5 8/12", "6 1/8", "5 2/3", "6 7/32"], correct: 1 },
+            { id: 16, q: "Al expresar 250 en notación científica se obtiene:", options: ["0.25 × 10⁻²", "2.5 × 10²", "2.5 × 10¹", "0.25 × 10³"], correct: 1 },
+            { id: 17, q: "Simplifique (x²y) / (xy²).", options: ["xy", "x/y", "y/x", "1/xy"], correct: 1 },
+            { id: 18, q: "La solución de la ecuación (1/2)x + 1 = 5 es:", options: ["2", "4", "8", "10"], correct: 2 },
+            { id: 19, q: "Juan ganó el doble de juegos que Pedro. Si jugaron 18 en total, la ecuación para Pedro es:", options: ["2x = 18", "x + 2x = 18", "x/2 = 18", "x = 18/2"], correct: 1 },
+            { id: 20, q: "El resultado de simplificar (4^7) / (4^5) es:", options: ["4^7", "4^6", "4^4", "4^2"], correct: 3 },
+            { id: 21, q: "Un número es divisible por 9 si la suma de sus dígitos lo es. ¿Cuál es divisible por 45?", options: ["72,365", "99,999", "72,144", "98,145"], correct: 3 },
+            { id: 22, q: "Si 2/3 < k < 4/5, ¿cuál es un posible valor para k?", options: ["0.660", "0.665", "0.666", "0.750"], correct: 3 },
+            { id: 23, q: "¿Cuál es el valor de (2³)(3²)?", options: ["17", "25", "30", "72"], correct: 3 },
+            { id: 24, q: "¿Cuál es el valor de 1.35 × 10³?", options: ["135", "1,350", "13,500", "135,000"], correct: 1 },
+            { id: 25, q: "Si se efectúan las operaciones indicadas, ¿cuál es el valor de (1/2 + 1/2)(3/2)?", options: ["1/2", "5/2", "7/4", "3/2"], correct: 3 },
+            // NIVEL 2
+            { id: 26, q: "La colegiatura costaba $8000 y hoy $9600. ¿Cuál es el porcentaje de incremento?", options: ["19%", "14%", "15%", "20%"], correct: 3 },
+            { id: 27, q: "Un reloj cuesta $15,250 con descuento del 12%. ¿Cuánto costará hoy?", options: ["$13,420", "$14,925", "$13,990", "$14,500"], correct: 0 },
+            { id: 28, q: "Descuentos del 25% en pantalones de $350 y 10% en camisas de $140. Al comprar 2 de cada uno, ¿cuánto pagará?", options: ["$490", "$777", "$791", "$805"], correct: 1 },
+            { id: 29, q: "13 obreros requieren 28 días para una obra. ¿Cuántos días necesitarán 6 obreros?", options: ["60.6", "50.5", "12.5", "30.0"], correct: 0 },
+            { id: 30, q: "El costo de 2 aparatos es $374. ¿Cuál será el costo de 7 aparatos?", options: ["$1309", "$2618", "$1500", "$1000"], correct: 0 },
+            { id: 31, q: "Un turista alquila un auto a $17 por día y $4 la hora extra. Lo tuvo de lunes a las 9 a.m. al viernes a las 11 a.m. ¿Cuánto pagó?", options: ["$68", "$70", "$76", "$85"], correct: 2 },
+            { id: 32, q: "El perímetro de un cuadrado es 100 m. ¿Cuántos metros mide su lado?", options: ["10", "20", "25", "50"], correct: 2 },
+            { id: 33, q: "Caja rectangular con fondo cuadrado de lado 3 cm y altura de 8 cm. ¿Cuál es el volumen en cm³?", options: ["14", "24", "48", "72"], correct: 3 },
+            { id: 34, q: "Si la longitud de un rectángulo aumenta 20% y su ancho 60%, ¿cuál es el aumento en su área?", options: ["40%", "80%", "92%", "120%"], correct: 2 },
+            { id: 35, q: "¿Cuál de los siguientes sólidos puede tener una base triangular?", options: ["Cono", "Cubo", "Paralelepípedo", "Prisma"], correct: 3 },
+            { id: 36, q: "Área lateral (sin tapas) de un cilindro con radio 12 cm y altura 25 cm.", options: ["1864 cm²", "1884 cm²", "1800 cm²", "300 cm²"], correct: 1 },
+            { id: 37, q: "¿Qué figura debe rotar exactamente 6 veces sobre su vértice para dar un giro completo?", options: ["Triángulo equilátero", "Cuadrado", "Hexágono", "Pentágono"], correct: 2 },
+            { id: 38, q: "Distancia más corta del punto (2,1) a la recta x – y = 0.", options: ["1", "√2", "√2 - 1", "√2 / 2"], correct: 3 },
+            { id: 39, q: "Luis camina en línea recta 8m a la derecha y luego 12m a la izquierda. ¿A qué distancia está del punto de partida?", options: ["4m", "3m", "–4m", "–3m"], correct: 0 },
+            { id: 40, q: "¿Cuál es el perímetro de una circunferencia cuya área es de 169π?", options: ["13π", "26π", "169π", "338π"], correct: 1 },
+            { id: 41, q: "Dos carros salen del mismo lugar en direcciones opuestas. En 4 horas están a 240 millas. Si uno viaja 6 mph más rápido, ¿a qué velocidades van?", options: ["27 y 33", "30 y 33", "45 y 51", "27 y 33"], correct: 0 },
+            { id: 42, q: "Las manecillas de un reloj apuntan al 3 y al 12. ¿Cuántos grados mide el ángulo que forman?", options: ["90°", "60°", "45°", "30°"], correct: 0 },
+            { id: 43, q: "¿Cuál es el promedio, en grados, de los ángulos interiores de cualquier triángulo?", options: ["30", "60", "90", "180"], correct: 1 },
+            { id: 44, q: "En un círculo de radio 1.5 cm, halle la medida aproximada de su circunferencia (π≈3.14).", options: ["2.25", "3.00", "7.07", "9.42"], correct: 3 },
+            { id: 45, q: "Una bodega de 4m largo, 5m ancho y 3m alto alberga 600 cajas. Si se duplica el largo y triplica el ancho, ¿cuántas cabrán?", options: ["2400", "1800", "3600", "3000"], correct: 2 },
+            { id: 46, q: "Una alumna proyecta 1.20m de sombra y un poste 2.90m. Si ella mide 1.70m, ¿cuánto mide el poste?", options: ["4.10m", "4.20m", "4.30m", "6.00m"], correct: 0 },
+            { id: 47, q: "En la figura, si el ángulo CQB mide 80°, ¿cuánto mide la suma de sus ángulos suplementarios adyacentes?", options: ["100°", "80°", "60°", "40°"], correct: 0 },
+            { id: 48, q: "¿Cuántos grados suman los ángulos internos de un cuadrilátero?", options: ["90°", "180°", "270°", "360°"], correct: 3 },
+            { id: 49, q: "Si el radio de un círculo se duplica, ¿qué pasa con su área?", options: ["Se duplica", "Se triplica", "Se cuadruplica", "Queda igual"], correct: 2 },
+            { id: 50, q: "Un triángulo rectángulo tiene catetos de 6 y 8 cm. Su hipotenusa mide:", options: ["10 cm", "12 cm", "14 cm", "100 cm"], correct: 0 },
+            // NIVEL 3
+            { id: 51, q: "El promedio de {4, m, 6, 10} es 7. ¿Cuál es el valor de m?", options: ["8", "7", "4", "2"], correct: 0 },
+            { id: 52, q: "A un conjunto de 3 números con media de 3.1 se le añaden 2.2 y 3.5. ¿Cuál es la nueva media?", options: ["4.12", "3.50", "3.11", "3.00"], correct: 3 },
+            { id: 53, q: "Moda de la serie: 8, 3, 6, 5, 4, 5, 6, 8, 6, 4, 4, 8, 3, 4, 5, 4, 8, 3, 5, 4.", options: ["3", "4", "6", "7"], correct: 1 },
+            { id: 54, q: "Puntajes de Sara: 92, 85, 86 y 90. ¿Qué mínimo necesita en la quinta (max 100) para promediar 90?", options: ["90", "92", "95", "97"], correct: 3 },
+            { id: 55, q: "María obtuvo: 95, 85, 75, 90 y 100. ¿Cuál es la mediana?", options: ["100", "95", "90", "85"], correct: 2 },
+            { id: 56, q: "En una reunión hay 50 personas, 12 son niños. Probabilidad de que NO gane un niño al rifar algo:", options: ["0.12", "0.24", "0.76", "0.88"], correct: 2 },
+            { id: 57, q: "De 16 personas, 8 leyeron el libro, 5 vieron la película, 2 hicieron ambas. Probabilidad de elegir a quien NO hizo ninguna:", options: ["1/16", "2/16", "5/16", "11/16"], correct: 2 },
+            { id: 58, q: "La colección tiene 112 insectos y 3/4 son mariposas. ¿Cuántas mariposas hay?", options: ["28", "37", "64", "84"], correct: 3 },
+            { id: 59, q: "Isaac tiene igual cantidad de libros de drama, historia y arte. Si tiene 6 de detectives y 3 de ficción, ¿cuántos de historia tiene?", options: ["3", "6", "9", "12"], correct: 2 },
+            { id: 60, q: "Probabilidad de seleccionar al azar uno de arte de la biblioteca de Isaac:", options: ["1/4", "1/3", "1/2", "1/8"], correct: 0 },
+            { id: 61, q: "Si cada símbolo de auto representa 20 carros y hay 19.5 símbolos en total. ¿Cuántos pasaron?", options: ["19.5", "20", "390", "400"], correct: 2 },
+            { id: 62, q: "Si lanzas un dado regular de 6 caras, ¿cuál es la probabilidad de sacar un número mayor que 4?", options: ["1/6", "1/3", "1/2", "2/3"], correct: 1 },
+            { id: 63, q: "En una urna hay 3 bolas rojas y 2 azules. Si sacas una, ¿probabilidad de que sea azul?", options: ["2/3", "2/5", "3/5", "1/2"], correct: 1 },
+            { id: 64, q: "¿Cuál es la mediana de {2, 7, 4, 9, 1}?", options: ["4", "5", "7", "9"], correct: 0 },
+            { id: 65, q: "Promedio de 5, 10 y un número desconocido es 10. ¿Cuál es el número?", options: ["10", "15", "20", "25"], correct: 1 },
+            { id: 66, q: "Si el 40% de 50 estudiantes son niñas, ¿cuántos niños hay?", options: ["20", "30", "40", "10"], correct: 1 },
+            { id: 67, q: "La media de 10 números es 5. Si sumo todos, el resultado es:", options: ["15", "25", "50", "500"], correct: 2 },
+            { id: 68, q: "Una moneda se lanza 3 veces. Probabilidad de que caigan 3 cruces:", options: ["1/3", "1/6", "1/8", "1/9"], correct: 2 },
+            { id: 69, q: "Hay 4 pantalones y 3 camisas. ¿Cuántas combinaciones de 1 pantalón y 1 camisa se pueden hacer?", options: ["7", "12", "24", "81"], correct: 1 },
+            { id: 70, q: "El rango (amplitud) del conjunto {5, 2, 9, 12, 4} es:", options: ["7", "8", "10", "12"], correct: 2 },
+            { id: 71, q: "Si la probabilidad de lluvia es 0.35, la probabilidad de que NO llueva es:", options: ["0.35", "0.65", "0.50", "1.00"], correct: 1 },
+            { id: 72, q: "Si en un gráfico circular un sector representa el 25%, ¿cuántos grados tiene su ángulo central?", options: ["25°", "45°", "90°", "180°"], correct: 2 },
+            { id: 73, q: "De 20 bolas, el 20% son verdes. Si extraigo una, ¿cuántas verdes se quedan en la bolsa?", options: ["3", "4", "5", "16"], correct: 0 },
+            { id: 74, q: "En la sucesión 2, 5, 10, 17... ¿cuál es el quinto término?", options: ["24", "25", "26", "27"], correct: 2 },
+            { id: 75, q: "Si el primer número es 0, el segundo 2 y el tercero 6, ¿cuál es el quinto?", options: ["12", "16", "20", "24"], correct: 2 },
+            // NIVEL 4
+            { id: 76, q: "Si 3(x + 2) = 15, ¿cuánto vale x?", options: ["2", "3", "4", "5"], correct: 1 },
+            { id: 77, q: "Resuelva para y: 2y - 7 = y + 3.", options: ["4", "10", "14", "-4"], correct: 1 },
+            { id: 78, q: "¿Qué número sigue en la secuencia: 1, 4, 9, 16, 25, ___?", options: ["30", "32", "36", "49"], correct: 2 },
+            { id: 79, q: "Si un artículo cuesta $200 y se le aplica un impuesto del 10%, ¿cuál es el precio final?", options: ["$210", "$220", "$230", "$240"], correct: 1 },
+            { id: 80, q: "Simplifica la fracción 48 / 64.", options: ["1/2", "2/3", "3/4", "4/5"], correct: 2 },
+            { id: 81, q: "La suma de tres números enteros consecutivos es 30. ¿Cuál es el mayor?", options: ["9", "10", "11", "12"], correct: 2 },
+            { id: 82, q: "Si a = 3 y b = -2, ¿cuál es el valor de 2a - 3b?", options: ["0", "6", "12", "15"], correct: 2 },
+            { id: 83, q: "Una docena de lápices cuesta $18. ¿Cuánto cuestan 5 lápices?", options: ["$5.00", "$7.50", "$9.00", "$10.00"], correct: 1 },
+            { id: 84, q: "¿Cuál es la raíz cuadrada de 144 sumado a la raíz de 25?", options: ["13", "17", "19", "22"], correct: 1 },
+            { id: 85, q: "Un tren viaja a 80 km/h. ¿Qué distancia recorrerá en 2.5 horas?", options: ["160 km", "180 km", "200 km", "220 km"], correct: 2 },
+            { id: 86, q: "Factoriza la expresión x² - 16.", options: ["(x-4)(x-4)", "(x+4)(x-4)", "(x+8)(x-2)", "x(x-16)"], correct: 1 },
+            { id: 87, q: "¿Cuál es la pendiente de la recta y = 4x - 7?", options: ["-7", "4", "7", "-4"], correct: 1 },
+            { id: 88, q: "Mínimo Común Múltiplo (MCM) de 6 y 8.", options: ["12", "18", "24", "48"], correct: 2 },
+            { id: 89, q: "El doble de un número menos 5 es igual a 15. ¿Cuál es el número?", options: ["5", "10", "15", "20"], correct: 1 },
+            { id: 90, q: "¿A cuánto equivale el 15% de 300?", options: ["15", "30", "45", "60"], correct: 2 },
+            { id: 91, q: "Calcula el valor de x en: x / 4 = 7.", options: ["11", "21", "28", "35"], correct: 2 },
+            { id: 92, q: "Si un triángulo tiene un área de 20 y una base de 8, ¿cuál es su altura?", options: ["4", "5", "8", "10"], correct: 1 },
+            { id: 93, q: "Simplifica: 5x + 3y - 2x + y.", options: ["3x + 4y", "7x + 4y", "3x + 2y", "7x + 2y"], correct: 0 },
+            { id: 94, q: "¿Cuántos minutos hay en 3.5 horas?", options: ["180", "210", "240", "350"], correct: 1 },
+            { id: 95, q: "Si 1/x = 1/5, entonces x es igual a:", options: ["1", "5", "10", "0.5"], correct: 1 },
+            { id: 96, q: "¿Qué fracción es equivalente a 0.8?", options: ["3/4", "4/5", "5/6", "7/8"], correct: 1 },
+            { id: 97, q: "¿Cuántos centímetros hay en 4.5 metros?", options: ["45", "450", "4500", "0.45"], correct: 1 },
+            { id: 98, q: "¿Cuál es el área de un rectángulo con vértices en (0,0), (0,4), (3,4) y (3,0)?", options: ["7", "12", "14", "24"], correct: 1 },
+            { id: 99, q: "Resuelve: 10 - 2(3 - 1).", options: ["6", "8", "12", "16"], correct: 0 },
+            { id: 100, q: "Si lanzas dos dados, ¿cuál es la suma máxima posible?", options: ["6", "10", "12", "36"], correct: 2 }
+        ];
+
+        let questions = [];
+        let currentIndex = 0;
+        let lives = 3;
+        let score = 0;
+        let timeLeft = 60;
+        let timerInterval;
+        let isAnswering = false;
+
+        const container = document.getElementById('game-container');
+
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function renderStart() {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center space-y-8 p-8 text-center bg-white rounded-3xl shadow-2xl max-w-lg mx-auto mt-12">
+                    <div class="p-4 bg-indigo-100 rounded-full">
+                        <svg class="w-16 h-16 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-extrabold text-gray-900 mb-2">SURVIVAL MATH</h1>
+                        <p class="text-indigo-600 font-bold tracking-widest text-sm uppercase">Reto 100 Reactivos</p>
+                    </div>
+                    <div class="space-y-4 text-left w-full bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <span class="text-red-500">❤️</span>
+                            <span class="text-gray-700 font-medium">3 Vidas totales</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-amber-500">⏱️</span>
+                            <span class="text-gray-700 font-medium">1 Minuto por reactivo</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-blue-500">🔄</span>
+                            <span class="text-gray-700 font-medium">Orden aleatorio cada vez</span>
+                        </div>
+                    </div>
+                    <button onclick="startGame()" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-xl transition-all shadow-lg active:scale-95">
+                        ¡EMPEZAR DESAFÍO!
+                    </button>
+                    <p class="text-xs text-gray-400">Práctica intensiva para el examen de ingreso</p>
+                </div>
+            `;
+        }
+
+        function startGame() {
+            questions = shuffle([...ALL_QUESTIONS]);
+            currentIndex = 0;
+            lives = 3;
+            score = 0;
+            isAnswering = false;
+            startQuestion();
+        }
+
+        function startQuestion() {
+            timeLeft = 60;
+            isAnswering = false;
+            renderGame();
+            
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const timerEl = document.getElementById('timer-display');
+                if (timerEl) {
+                    timerEl.innerText = `${timeLeft}s`;
+                    if (timeLeft <= 10) timerEl.parentElement.classList.add('timer-warning');
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleFail('time');
+                }
+            }, 1000);
+        }
+
+        function renderGame() {
+            const q = questions[currentIndex];
+            const progress = ((currentIndex + 1) / questions.length) * 100;
+            
+            let hearts = "";
+            for(let i=0; i<3; i++) {
+                hearts += `<span class="text-2xl transition-opacity duration-300 ${i < lives ? 'opacity-100' : 'opacity-20'}">❤️</span>`;
+            }
+
+            container.innerHTML = `
+                <div class="max-w-2xl mx-auto mt-8">
+                    <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                        <div class="flex gap-1">${hearts}</div>
+                        <div class="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-amber-100 text-amber-600">
+                            <span class="font-mono text-2xl font-bold" id="timer-display">${timeLeft}s</span>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-slate-400 uppercase font-bold">Aciertos</p>
+                            <p class="text-xl font-black text-indigo-600">${score}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-6 h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-indigo-500 progress-transition" style="width: ${progress}%"></div>
+                    </div>
+
+                    <div class="bg-white rounded-3xl shadow-xl p-8 border border-slate-100 min-h-[400px] flex flex-col">
+                        <div class="mb-8">
+                            <span class="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-black rounded-lg mb-4">
+                                REACTIVO ${currentIndex + 1} DE 100
+                            </span>
+                            <h2 class="text-2xl font-bold text-gray-800 leading-relaxed">${q.q}</h2>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-auto" id="options-grid">
+                            ${q.options.map((opt, i) => `
+                                <button onclick="checkAnswer(${i})" class="option-btn p-5 text-left rounded-2xl border-2 border-slate-100 hover:border-indigo-200 hover:bg-indigo-50 font-bold transition-all flex items-center gap-3">
+                                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-500 text-sm">${String.fromCharCode(65+i)}</span>
+                                    <span>${opt}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkAnswer(idx) {
+            if (isAnswering) return;
+            isAnswering = true;
+            clearInterval(timerInterval);
+
+            const q = questions[currentIndex];
+            const buttons = document.querySelectorAll('.option-btn');
+            
+            if (idx === q.correct) {
+                buttons[idx].classList.remove('border-slate-100');
+                buttons[idx].classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-700');
+                score++;
+                setTimeout(nextStep, 800);
+            } else {
+                buttons[idx].classList.remove('border-slate-100');
+                buttons[idx].classList.add('border-red-500', 'bg-red-50', 'text-red-700');
+                buttons[q.correct].classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-700');
+                handleFail('wrong');
+            }
+        }
+
+        function handleFail(reason) {
+            lives--;
+            if (lives <= 0) {
+                setTimeout(renderGameOver, 1200);
+            } else {
+                setTimeout(nextStep, 1200);
+            }
+        }
+
+        function nextStep() {
+            currentIndex++;
+            if (currentIndex >= questions.length) {
+                renderWin();
+            } else {
+                startQuestion();
+            }
+        }
+
+        function renderGameOver() {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center space-y-8 p-12 text-center bg-white rounded-3xl shadow-2xl max-w-lg mx-auto mt-12">
+                    <div class="p-6 bg-red-100 rounded-full text-5xl">💀</div>
+                    <h2 class="text-4xl font-black text-gray-900">FIN DEL JUEGO</h2>
+                    <p class="text-gray-500">Te has quedado sin vidas. ¡Sigue practicando!</p>
+                    <div class="grid grid-cols-2 gap-4 w-full">
+                        <div class="p-4 bg-indigo-50 rounded-2xl">
+                            <p class="text-xs text-indigo-400 font-black uppercase mb-1">Puntuación</p>
+                            <p class="text-3xl font-black text-indigo-700">${score}</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-2xl">
+                            <p class="text-xs text-slate-400 font-black uppercase mb-1">Progreso</p>
+                            <p class="text-3xl font-black text-slate-700">${currentIndex}/100</p>
+                        </div>
+                    </div>
+                    <button onclick="startGame()" class="w-full py-4 bg-gray-900 hover:bg-gray-800 text-white rounded-2xl font-bold text-xl transition-all shadow-xl active:scale-95">
+                        REINTENTAR DESAFÍO
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderWin() {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center space-y-8 p-12 text-center bg-white rounded-3xl shadow-2xl max-w-lg mx-auto mt-12">
+                    <div class="p-6 bg-yellow-100 rounded-full text-5xl">🏆</div>
+                    <h2 class="text-4xl font-black text-gray-900">¡MISIÓN CUMPLIDA!</h2>
+                    <p class="text-gray-500">Has sobrevivido a los 100 reactivos. ¡Estás listo para la universidad!</p>
+                    <div class="grid grid-cols-2 gap-4 w-full">
+                        <div class="p-4 bg-emerald-50 rounded-2xl">
+                            <p class="text-xs text-emerald-400 font-black uppercase mb-1">Aciertos</p>
+                            <p class="text-3xl font-black text-emerald-700">${score}</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-2xl">
+                            <p class="text-xs text-slate-400 font-black uppercase mb-1">Efectividad</p>
+                            <p class="text-3xl font-black text-slate-700">${Math.round((score/100)*100)}%</p>
+                        </div>
+                    </div>
+                    <button onclick="startGame()" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-xl transition-all shadow-xl active:scale-95">
+                        VOLVER A JUGAR
+                    </button>
+                </div>
+            `;
+        }
+
+        renderStart();
+    </script>
+</body>
+</html>

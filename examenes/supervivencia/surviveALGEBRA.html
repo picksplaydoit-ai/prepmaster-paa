@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Survive: Álgebra</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:#020617;color:#e2e8f0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;}
+.card{background:#0f172a;border:1px solid rgba(255,255,255,0.08);border-radius:28px;width:100%;max-width:520px;overflow:hidden;}
+.topbar{padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center;background:#0f172a;}
+.lives{display:flex;gap:6px;align-items:center;}
+.heart{font-size:18px;transition:all .2s;}
+.heart.empty{opacity:.2;}
+.score-badge{display:flex;align-items:center;gap:6px;font-weight:800;font-size:15px;color:white;}
+.score-badge span{color:#64748b;font-weight:500;}
+.timer{font-family:'Inter',monospace;font-weight:900;font-size:20px;color:#f59e0b;transition:color .3s;}
+.timer.urgent{color:#f43f5e;animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+.progress-bar{height:4px;background:#1e293b;}
+.progress-fill{height:100%;background:#f59e0b;transition:width 1s linear;}
+.content{padding:28px;}
+.question-text{font-size:17px;font-weight:600;line-height:1.6;color:white;margin-bottom:24px;}
+.options{display:flex;flex-direction:column;gap:10px;}
+.opt-btn{display:flex;align-items:center;gap:14px;padding:14px 16px;background:#1e293b;border:2px solid rgba(255,255,255,0.05);border-radius:14px;cursor:pointer;transition:all .2s;text-align:left;width:100%;color:#cbd5e1;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;}
+.opt-btn:not([disabled]):hover{border-color:#f59e0b80;background:#1e293b;color:white;}
+.opt-btn .letter{width:34px;height:34px;border-radius:10px;background:#0f172a;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#64748b;flex-shrink:0;transition:all .2s;}
+.opt-btn:not([disabled]):hover .letter{background:#f59e0b;color:#020617;}
+.opt-btn.correct{border-color:#10b981;background:#10b98115;color:#6ee7b7;}
+.opt-btn.correct .letter{background:#10b981;color:white;}
+.opt-btn.wrong{border-color:#f43f5e;background:#f43f5e15;color:#fca5a5;}
+.opt-btn.wrong .letter{background:#f43f5e;color:white;}
+.opt-btn.dim{opacity:.3;}
+.rationale{margin-top:16px;padding:14px 16px;background:#1e293b;border-left:3px solid #f59e0b;border-radius:0 10px 10px 0;font-size:13px;color:#94a3b8;line-height:1.6;}
+.rationale strong{display:block;color:white;font-size:10px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
+.next-btn{margin-top:20px;width:100%;padding:14px;background:white;color:#020617;font-family:'Inter',sans-serif;font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:.15em;border:none;border-radius:12px;cursor:pointer;transition:all .2s;}
+.next-btn:hover{background:#f59e0b;}
+.next-btn:disabled{background:#1e293b;color:#475569;cursor:not-allowed;}
+.screen{padding:40px 28px;text-align:center;}
+.icon-box{width:80px;height:80px;background:#f59e0b;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 24px;transform:rotate(3deg);}
+h1{font-size:30px;font-weight:900;color:white;text-transform:uppercase;letter-spacing:-.5px;margin-bottom:8px;}
+.tagline{color:#f59e0b;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;margin-bottom:24px;}
+.info-box{background:#1e293b;border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:20px;text-align:left;margin-bottom:24px;}
+.info-row{display:flex;align-items:center;gap:10px;font-size:13px;color:#94a3b8;margin-bottom:10px;}
+.info-row:last-child{margin-bottom:0;}
+.info-row b{color:white;}
+.start-btn{width:100%;padding:18px;background:white;color:#020617;font-family:'Inter',sans-serif;font-weight:900;font-size:13px;text-transform:uppercase;letter-spacing:.15em;border:none;border-radius:14px;cursor:pointer;transition:all .2s;}
+.start-btn:hover{background:#f59e0b;}
+.result-circle{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 20px;}
+.result-circle.win{background:#10b981;}
+.result-circle.lose{background:#f43f5e;}
+.big-percent{font-size:64px;font-weight:900;color:white;line-height:1;}
+.stats{display:flex;gap:0;margin-top:20px;}
+.stat{flex:1;text-align:center;}
+.stat + .stat{border-left:1px solid rgba(255,255,255,0.08);}
+.stat-label{font-size:9px;font-weight:700;text-transform:uppercase;color:#64748b;letter-spacing:.1em;margin-bottom:4px;}
+.stat-val{font-size:20px;font-weight:700;}
+.retry-btn{margin-top:20px;width:100%;padding:16px;background:white;color:#020617;font-family:'Inter',sans-serif;font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:.15em;border:none;border-radius:12px;cursor:pointer;transition:all .2s;}
+.retry-btn:hover{background:#f59e0b;}
+.hidden{display:none!important;}
+</style>
+</head>
+<body>
+<div class="card">
+
+  <!-- PANTALLA INICIO -->
+  <div id="screen-start" class="screen">
+    <div class="icon-box">📐</div>
+    <h1>Survive: Álgebra</h1>
+    <p class="tagline">Batería de 50 preguntas</p>
+    <div class="info-box">
+      <div class="info-row">❤️ <span>Vidas: <b>3 intentos</b></span></div>
+      <div class="info-row">🏆 <span>Meta: <b>10 aciertos</b> para ganar</span></div>
+      <div class="info-row">⏱️ <span>Tiempo por pregunta: <b>60 segundos</b></span></div>
+    </div>
+    <button class="start-btn" onclick="startGame()">Iniciar Desafío →</button>
+  </div>
+
+  <!-- PANTALLA JUEGO -->
+  <div id="screen-game" class="hidden">
+    <div class="topbar">
+      <div class="lives" id="lives-display"></div>
+      <div class="timer" id="timer-display">60s</div>
+      <div class="score-badge">🏆 <span id="score-val">0</span><span>/10</span></div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:100%"></div></div>
+    <div class="content">
+      <div class="question-text" id="question-text"></div>
+      <div class="options" id="options-container"></div>
+      <div id="rationale-box" class="rationale hidden"></div>
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()" disabled>Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- PANTALLA RESULTADO -->
+  <div id="screen-result" class="screen hidden">
+    <div class="result-circle" id="result-icon"></div>
+    <h1 id="result-title"></h1>
+    <p class="tagline" id="result-sub"></p>
+    <div class="info-box">
+      <div class="big-percent" id="result-percent"></div>
+      <div class="stats">
+        <div class="stat"><div class="stat-label">Aciertos</div><div class="stat-val" id="result-score" style="color:#f59e0b"></div></div>
+        <div class="stat"><div class="stat-label">Vidas restantes</div><div class="stat-val" id="result-lives" style="color:#f43f5e"></div></div>
+      </div>
+    </div>
+    <button class="retry-btn" onclick="startGame()">↺ Reintentar</button>
+  </div>
+
+</div>
+
+<script>
+const QUESTIONS = [{"question": "Si $4(x - 3) = 2x + 8$, ¿cuál es el valor de $x$?", "options": ["5", "10", "2", "1"], "correct": 1, "rationale": "Resolvemos: $4x - 12 = 2x + 8$ → $2x = 20$ → $x = 10$."}, {"question": "Resuelve para $w$: $3w/4 - 2 = 7$.", "options": ["12", "6", "9", "15"], "correct": 0, "rationale": "$3w/4 = 9$ → $3w = 36$ → $w = 12$."}, {"question": "Si $x + 5 = 2x - 3$, ¿cuál es el valor de $x$?", "options": ["2", "8", "-8", "15"], "correct": 1, "rationale": "Restamos $x$ y sumamos 3 en ambos lados: $8 = x$."}, {"question": "Simplifica la expresión: $(x^3 \\\\cdot x^4) / x^2$.", "options": ["$x^5$", "$x^9$", "$x^6$", "$x^{12}$"], "correct": 0, "rationale": "Leyes de exponentes: sumamos al multiplicar ($3+4=7$) y restamos al dividir ($7-2=5$)."}, {"question": "¿Cuál es la factorización de $x^2 - 25$?", "options": ["$(x-5)(x-5)$", "$(x+5)(x+5)$", "$(x+5)(x-5)$", "$(x-25)(x+1)$"], "correct": 2, "rationale": "Es una diferencia de cuadrados perfectos: $a^2 - b^2 = (a+b)(a-b)$."}, {"question": "Si $y = 3x$ y $x + y = 20$, ¿cuál es el valor de $y$?", "options": ["5", "10", "15", "20"], "correct": 2, "rationale": "Sustitución: $x + 3x = 20$ → $4x = 20$ → $x = 5$. Por tanto, $y = 3(5) = 15$."}, {"question": "Resuelve la desigualdad: $3x - 4 < 11$.", "options": ["$x < 5$", "$x > 5$", "$x < 15$", "$x < 7$"], "correct": 0, "rationale": "$3x < 15$ → $x < 5$."}, {"question": "Si el área de un cuadrado es $x^2 + 6x + 9$, ¿cuánto mide su lado?", "options": ["$x+3$", "$x+9$", "$x+6$", "$x+2$"], "correct": 0, "rationale": "El área es $(lado)^2$. El trinomio cuadrado perfecto es $(x+3)^2$."}, {"question": "Simplifica: $2x - 3y + 5x + y$.", "options": ["$7x - 2y$", "$7x + 4y$", "$10x - 3y$", "$7x - 4y$"], "correct": 0, "rationale": "Agrupamos términos semejantes: $2x+5x=7x$ y $-3y+y=-2y$."}, {"question": "Si $\\\\sqrt{x} + 2 = 5$, ¿cuál es el valor de $x$?", "options": ["3", "9", "25", "6"], "correct": 1, "rationale": "$\\\\sqrt{x} = 3$. Elevando al cuadrado: $x = 9$."}, {"question": "Si $x^2 + kx + 49$ es un trinomio cuadrado perfecto, ¿cuál es el valor positivo de $k$?", "options": ["7", "14", "49", "21"], "correct": 1, "rationale": "La raíz de 49 es 7. El término medio es $2 \\\\cdot 7 \\\\cdot x = 14x$."}, {"question": "¿Qué expresión es equivalente a $x^{1/2}$?", "options": ["$x/2$", "$x^2$", "$\\\\sqrt{x}$", "$2x$"], "correct": 2, "rationale": "Un exponente fraccionario de $1/2$ equivale a la raíz cuadrada."}, {"question": "Si el sistema es {$x + y = 12$, $x - y = 4$}, ¿cuál es el valor de $x$?", "options": ["4", "10", "8", "16"], "correct": 2, "rationale": "Sumamos las ecuaciones: $2x = 16$ → $x = 8$."}, {"question": "Valor de la expresión $x^2 - 3x$ cuando $x = -1$.", "options": ["4", "2", "-4", "-2"], "correct": 0, "rationale": "$(-1)^2 - 3(-1) = 1 + 3 = 4$."}, {"question": "¿Cuál es la solución del sistema mostrado en la gráfica?", "options": ["(2, 4)", "(4, 2)", "(0, 6)", "(1, 5)"], "correct": 0, "rationale": "La solución es el punto de intersección de ambas rectas."}, {"question": "Si $3x = 12$, ¿cuánto vale $x^2$?", "options": ["4", "16", "144", "8"], "correct": 1, "rationale": "$x = 4$ → $4^2 = 16$."}, {"question": "La suma de tres enteros consecutivos es 33. ¿Cuál es el mayor?", "options": ["10", "11", "12", "13"], "correct": 2, "rationale": "$n+(n+1)+(n+2) = 33$ → $3n = 30$ → $n=10$. El mayor es 12."}, {"question": "Expande el binomio: $(x + 4)^2$.", "options": ["$x^2 + 16$", "$x^2 + 8x + 16$", "$x^2 + 4x + 8$", "$x^2 + 8x + 8$"], "correct": 1, "rationale": "Aplicamos $(a+b)^2 = a^2 + 2ab + b^2$."}, {"question": "Si $-2x > 10$, ¿cuál es el conjunto solución?", "options": ["$x > -5$", "$x < -5$", "$x > 5$", "$x < 5$"], "correct": 1, "rationale": "Al dividir por un negativo, el sentido de la desigualdad cambia: $x < -5$."}, {"question": "Simplifica: $(12x^3) / (4x)$.", "options": ["$3x^2$", "$8x^2$", "$3x$", "$3x^4$"], "correct": 0, "rationale": "Dividimos coeficientes ($12/4=3$) y restamos exponentes ($3-1=2$)."}, {"question": "Si $a/b = 2$, ¿cuánto es $3a/b$?", "options": ["5", "6", "2", "8"], "correct": 1, "rationale": "$3 \\\\cdot (a/b) = 3 \\\\cdot 2 = 6$."}, {"question": "Factoriza extrayendo el término común: $5x^2 + 10x$.", "options": ["$5(x^2+2)$", "$x(5x+10)$", "$5x(x+2)$", "$5x(x+10)$"], "correct": 2, "rationale": "El máximo común divisor es $5x$."}, {"question": "Si $x + y = z$, despeja $y$.", "options": ["$z - x$", "$x - z$", "$z + x$", "$z/x$"], "correct": 0, "rationale": "Restamos $x$ en ambos lados para dejar sola a la $y$."}, {"question": "Factoriza $x^2 + 5x + 6$.", "options": ["$(x+2)(x+3)$", "$(x+1)(x+6)$", "$(x+5)(x+1)$", "$(x-2)(x-3)$"], "correct": 0, "rationale": "Buscamos números que sumen 5 y multipliquen 6."}, {"question": "Simplifica: $a^0 + a^1$ (si $a > 0$).", "options": ["$a+1$", "$a$", "$1$", "$2a$"], "correct": 0, "rationale": "Todo número elevado a 0 es 1 (excepto 0). $1 + a$."}, {"question": "¿Cuál es el valor de $x$ en $2^x = 32$?", "options": ["4", "5", "6", "16"], "correct": 1, "rationale": "$2 \\\\cdot 2 \\\\cdot 2 \\\\cdot 2 \\\\cdot 2 = 32$. Es decir, $2^5$."}, {"question": "Si $2x + 3 = 11$, ¿cuánto es $4x + 6$?", "options": ["11", "22", "14", "15"], "correct": 1, "rationale": "Notamos que $4x+6$ es exactamente el doble de $2x+3$. $11 \\\\cdot 2 = 22$."}, {"question": "Simplifica: $\\\\sqrt{36x^4}$.", "options": ["$6x^2$", "$18x^2$", "$6x^8$", "$36x^2$"], "correct": 0, "rationale": "Raíz de 36 es 6; raíz de $x^4$ es $x^2$."}, {"question": "Si el triple de un número aumentado en 5 es 20, ¿cuál es el número?", "options": ["5", "15", "25", "3"], "correct": 0, "rationale": "$3x + 5 = 20$ → $3x = 15$ → $x = 5$."}, {"question": "Factoriza $x^2 - x - 2$.", "options": ["$(x-2)(x+1)$", "$(x+2)(x-1)$", "$(x-2)(x-1)$", "$(x+2)(x+1)$"], "correct": 0, "rationale": "Suman -1 y multiplican -2: son -2 y 1."}, {"question": "Simplifica: $5(x - 2) + 10$.", "options": ["$5x$", "$5x - 20$", "$5x + 10$", "$x + 8$"], "correct": 0, "rationale": "$5x - 10 + 10 = 5x$."}, {"question": "Si $x/y = 1$ y $y \\\\neq 0$, ¿qué podemos afirmar?", "options": ["$x = y$", "$x = 0$", "$y = 1$", "$x + y = 1$"], "correct": 0, "rationale": "Una fracción es igual a 1 si el numerador y denominador son iguales."}, {"question": "Resultado de $(x - 1)(x + 1)$.", "options": ["$x^2 - 1$", "$x^2 + 1$", "$x^2 - 2x + 1$", "$x^2 - 2$"], "correct": 0, "rationale": "Producto de binomios conjugados: diferencia de cuadrados."}, {"question": "Si $4x - 10 = 2$, ¿cuánto es $2x$?", "options": ["6", "12", "3", "4"], "correct": 0, "rationale": "$4x = 12$ → $x = 3$. Luego $2x = 6$."}, {"question": "Simplifica: $x^5 / x^{-2}$.", "options": ["$x^3$", "$x^7$", "$x^{-10}$", "$x^{-3}$"], "correct": 1, "rationale": "Restamos exponentes: $5 - (-2) = 5 + 2 = 7$."}, {"question": "Si $3(2x - 4) = 0$, ¿cuánto vale $x$?", "options": ["2", "-2", "4", "0"], "correct": 0, "rationale": "$6x - 12 = 0$ → $6x = 12$ → $x = 2$."}, {"question": "Resuelve: $|x| = 5$.", "options": ["Solo 5", "Solo -5", "5 y -5", "No tiene solución"], "correct": 2, "rationale": "El valor absoluto mide distancia al cero, puede ser 5 o -5."}, {"question": "Si $x = 2$ y $y = -3$, ¿cuánto es $xy - x$?", "options": ["-8", "-4", "4", "-7"], "correct": 0, "rationale": "$(2)(-3) - 2 = -6 - 2 = -8$."}, {"question": "Simplifica: $10x - (2x + 5)$.", "options": ["$8x + 5$", "$8x - 5$", "$12x + 5$", "$8x$"], "correct": 1, "rationale": "El signo negativo cambia todo dentro del paréntesis: $10x - 2x - 5 = 8x - 5$."}, {"question": "Si $P(x) = x^2 + 1$, ¿cuánto es $P(2)$?", "options": ["3", "5", "4", "1"], "correct": 1, "rationale": "$2^2 + 1 = 4 + 1 = 5$."}, {"question": "¿Cuál es la pendiente de la recta $y = 5x - 2$?", "options": ["-2", "5", "2", "0"], "correct": 1, "rationale": "En $y = mx + b$, la pendiente es $m$."}, {"question": "Si $x^2 = 100$, ¿cuáles son los valores de $x$?", "options": ["10", "-10", "10 y -10", "50"], "correct": 2, "rationale": "Tanto $10^2$ como $(-10)^2$ resultan en 100."}, {"question": "Factoriza $x^2 - 6x + 9$.", "options": ["$(x-3)^2$", "$(x+3)^2$", "$(x-3)(x+3)$", "$(x-9)(x-1)$"], "correct": 0, "rationale": "Trinomio cuadrado perfecto: $(x-3)(x-3)$."}, {"question": "Si $x/2 = 10$, ¿cuánto es $x/4$?", "options": ["20", "5", "10", "2.5"], "correct": 1, "rationale": "$x = 20$. Luego $20/4 = 5$."}, {"question": "Simplifica: $(2x)^3$.", "options": ["$2x^3$", "$6x^3$", "$8x^3$", "$8x$"], "correct": 2, "rationale": "Elevamos ambos: $2^3$ y $x^3$. Resultado: $8x^3$."}, {"question": "Si $x + 2 > 5$, entonces...", "options": ["$x > 3$", "$x < 3$", "$x > 7$", "$x < 7$"], "correct": 0, "rationale": "Restamos 2 en ambos lados: $x > 3$."}, {"question": "Valor de $k$ en $kx = 20$ si $x = 4$.", "options": ["5", "16", "24", "80"], "correct": 0, "rationale": "$4k = 20$ → $k = 5$."}, {"question": "Simplifica: $x \\cdot x \\cdot x \\cdot y \\cdot y$.", "options": ["$3x + 2y$", "$x^3 y^2$", "$x^3 + y^2$", "$6xy$"], "correct": 1, "rationale": "Multiplicación repetida se expresa como potencia."}, {"question": "Si $x^2 - 4 = 0$, ¿qué valores puede tener $x$?", "options": ["2", "-2", "2 y -2", "4"], "correct": 2, "rationale": "$x^2 = 4$ → $x = \\pm 2$."}, {"question": "Simplifica: $3x^2 + 5x^2 - x^2$.", "options": ["$7x^2$", "$8x^2$", "$9x^2$", "$7x$"], "correct": 0, "rationale": "Sumamos coeficientes de términos semejantes: $3+5-1 = 7$."}];
+let score=0, lives=3, timeLeft=60, timerInterval=null, currentQ=null, answered=false, usedIds=new Set();
+
+function processMath(text) {
+  return text.replace(/\$([^$]+)\$/g, (_, f) => {
+    let r = f.replace(/\^2/g,'<sup>2</sup>').replace(/\^3/g,'<sup>3</sup>')
+              .replace(/\^x/g,'<sup>x</sup>').replace(/\^\{1\/2\}/g,'<sup>½</sup>')
+              .replace(/\\sqrt\{([^}]+)\}/g,'√($1)').replace(/\\sqrt/g,'√')
+              .replace(/\\le/g,'≤').replace(/\\ge/g,'≥').replace(/\\neq/g,'≠')
+              .replace(/\\cdot/g,'·').replace(/\\pm/g,'±').replace(/\\pi/g,'π')
+              .replace(/\\[a-zA-Z]+/g,'');
+    return '<i>'+r+'</i>';
+  });
+}
+
+function updateLives() {
+  const d = document.getElementById('lives-display');
+  d.innerHTML = [0,1,2].map(i=>`<span class="heart ${i<lives?'':'empty'}">❤️</span>`).join('');
+}
+
+function startGame() {
+  score=0; lives=3; usedIds=new Set();
+  document.getElementById('score-val').textContent='0';
+  document.getElementById('screen-start').classList.add('hidden');
+  document.getElementById('screen-result').classList.add('hidden');
+  document.getElementById('screen-game').classList.remove('hidden');
+  updateLives();
+  loadQuestion();
+}
+
+function loadQuestion() {
+  if(score>=10){ endGame(true); return; }
+  if(lives<=0){ endGame(false); return; }
+  
+  let pool = QUESTIONS.filter((_,i)=>!usedIds.has(i));
+  if(pool.length===0){ usedIds=new Set(); pool=QUESTIONS; }
+  const idx = Math.floor(Math.random()*pool.length);
+  const origIdx = QUESTIONS.indexOf(pool[idx]);
+  usedIds.add(origIdx);
+  currentQ = pool[idx];
+  answered = false;
+  timeLeft = 60;
+
+  document.getElementById('question-text').innerHTML = processMath(currentQ.question);
+  document.getElementById('rationale-box').classList.add('hidden');
+  document.getElementById('next-btn').disabled = true;
+
+  const opts = document.getElementById('options-container');
+  opts.innerHTML = '';
+  currentQ.options.forEach((opt,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML = `<div class="letter">${['A','B','C','D'][i]}</div><span>${processMath(opt)}</span>`;
+    btn.onclick = ()=>selectAnswer(i);
+    opts.appendChild(btn);
+  });
+
+  clearInterval(timerInterval);
+  updateTimer();
+  timerInterval = setInterval(()=>{
+    timeLeft--;
+    updateTimer();
+    if(timeLeft<=0){ clearInterval(timerInterval); timeExpired(); }
+  },1000);
+}
+
+function updateTimer(){
+  const el = document.getElementById('timer-display');
+  el.textContent = timeLeft+'s';
+  el.className = 'timer' + (timeLeft<10?' urgent':'');
+  document.getElementById('progress-fill').style.width = (timeLeft/60*100)+'%';
+}
+
+function selectAnswer(idx){
+  if(answered) return;
+  answered=true;
+  clearInterval(timerInterval);
+  
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach((b,i)=>{
+    b.disabled=true;
+    if(i===currentQ.correct) b.classList.add('correct');
+    else if(i===idx) b.classList.add('wrong');
+    else b.classList.add('dim');
+  });
+
+  if(idx===currentQ.correct){
+    score++;
+    document.getElementById('score-val').textContent=score;
+  } else {
+    lives--;
+    updateLives();
+    if(lives<=0){ setTimeout(()=>endGame(false),1200); return; }
+  }
+
+  showRationale();
+  document.getElementById('next-btn').disabled=false;
+  if(score>=10) setTimeout(()=>endGame(true),1200);
+}
+
+function timeExpired(){
+  if(answered) return;
+  answered=true;
+  lives--;
+  updateLives();
+  const btns=document.querySelectorAll('.opt-btn');
+  btns.forEach((b,i)=>{ b.disabled=true; if(i===currentQ.correct) b.classList.add('correct'); else b.classList.add('dim'); });
+  showRationale();
+  document.getElementById('next-btn').disabled=false;
+  if(lives<=0) setTimeout(()=>endGame(false),1200);
+}
+
+function showRationale(){
+  const box=document.getElementById('rationale-box');
+  box.innerHTML=`<strong>Análisis</strong>${processMath(currentQ.rationale)}`;
+  box.classList.remove('hidden');
+}
+
+function nextQuestion(){ loadQuestion(); }
+
+function endGame(won){
+  clearInterval(timerInterval);
+  document.getElementById('screen-game').classList.add('hidden');
+  document.getElementById('screen-result').classList.remove('hidden');
+  const icon=document.getElementById('result-icon');
+  icon.className='result-circle '+(won?'win':'lose');
+  icon.textContent=won?'🏆':'💀';
+  document.getElementById('result-title').textContent=won?'¡Lo lograste!':'Sigue practicando';
+  document.getElementById('result-sub').textContent=won?'Completaste el desafío':'No te rindas';
+  document.getElementById('result-percent').textContent=Math.round(score/10*100)+'%';
+  document.getElementById('result-score').textContent=score;
+  document.getElementById('result-lives').textContent=lives;
+}
+</script>
+</body>
+</html>

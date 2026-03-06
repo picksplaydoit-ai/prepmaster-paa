@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PrepMaster PAA — Plataforma de Exámenes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+  :root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;--border:#ffffff0f;--border-bright:#ffffff1a;--text:#f0f0f8;--muted:#8888aa;--mat:#ff6b35;--red:#7c3aed;--lec:#059669;--surv:#0ea5e9;--calc:#f59e0b;--gold:#fbbf24;--reto:#e11d48;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+  #auth-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:1000;padding:24px;}
+  .auth-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:24px;padding:48px 40px;width:100%;max-width:420px;position:relative;overflow:hidden;}
+  .auth-card::before{content:'';position:absolute;top:-80px;right:-80px;width:200px;height:200px;background:radial-gradient(circle,#7c3aed33 0%,transparent 70%);pointer-events:none;}
+  .auth-logo{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px;}
+  .auth-logo span{color:var(--gold);}
+  .auth-subtitle{color:var(--muted);font-size:14px;margin-bottom:36px;}
+  .input-group{margin-bottom:16px;}
+  .input-group label{display:block;font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;}
+  .input-group input{width:100%;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .2s;}
+  .input-group input:focus{border-color:var(--red);}
+  .btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#5b21b6);border:none;border-radius:10px;color:white;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;transition:opacity .2s,transform .1s;}
+  .btn-primary:hover{opacity:.9;transform:translateY(-1px);}
+
+  /* ── Auth tabs ── */
+  .auth-tabs{display:flex;gap:4px;background:var(--surface2);border-radius:10px;padding:4px;margin-bottom:28px;}
+  .auth-tab{flex:1;padding:9px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;border-radius:7px;cursor:pointer;transition:all .2s;}
+  .auth-tab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 4px #0006;}
+  .auth-panel{display:none;} .auth-panel.active{display:block;}
+  .btn-secondary{width:100%;padding:13px;background:transparent;border:1px solid var(--border-bright);border-radius:10px;color:var(--text);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:10px;transition:all .2s;}
+  .btn-secondary:hover{border-color:var(--gold);color:var(--gold);}
+  .auth-divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--muted);font-size:12px;}
+  .auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+  .free-code-toggle{font-size:12px;color:var(--muted);text-align:center;margin-top:14px;cursor:pointer;}
+  .free-code-toggle:hover{color:var(--gold);}
+  #free-code-section{display:none;margin-top:14px;padding:16px;background:var(--surface2);border-radius:12px;border:1px solid var(--border);}
+  .auth-success{background:#10b98120;border:1px solid #10b98140;border-radius:8px;padding:10px 14px;font-size:13px;color:#10b981;margin-top:12px;display:none;}
+  .price-badge{display:inline-flex;align-items:center;gap:6px;background:#fbbf2418;border:1px solid #fbbf2430;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;color:#fbbf24;margin-bottom:20px;}
+  .auth-error{background:#ff6b3520;border:1px solid #ff6b3540;border-radius:8px;padding:10px 14px;font-size:13px;color:#ff9966;margin-top:12px;display:none;}
+  #app{display:none;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;background:#0a0a0fcc;backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;}
+  .nav-logo span{color:var(--gold);}
+  .nav-right{display:flex;align-items:center;gap:16px;}
+  .nav-user{font-size:13px;color:var(--muted);}
+  .btn-logout{padding:7px 16px;background:transparent;border:1px solid var(--border-bright);border-radius:8px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;}
+  .btn-logout:hover{border-color:#ff6b35;color:#ff6b35;}
+  .hero{padding:140px 40px 80px;text-align:center;position:relative;}
+  .hero::after{content:'';position:absolute;top:80px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,#7c3aed18 0%,transparent 65%);pointer-events:none;}
+  .hero-badge{display:inline-block;padding:6px 14px;background:#fbbf2415;border:1px solid #fbbf2430;border-radius:100px;font-size:12px;font-weight:500;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;}
+  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(36px,6vw,72px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:20px;}
+  .hero h1 em{font-style:normal;background:linear-gradient(90deg,#ff6b35,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hero p{color:var(--muted);font-size:18px;max-width:500px;margin:0 auto;line-height:1.6;}
+  .section{padding:60px 40px;max-width:1200px;margin:0 auto;}
+  .section-header{display:flex;align-items:baseline;gap:14px;margin-bottom:32px;}
+  .section-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.5px;}
+  .section-line{flex:1;height:1px;background:var(--border);}
+  .section-count{font-size:13px;color:var(--muted);}
+  .categories-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
+  .cat-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
+  .cat-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;}
+  .cat-card:hover{transform:translateY(-4px);border-color:var(--border-bright);}
+  .cat-card:hover::before{opacity:1;}
+  .cat-card[data-cat="mat"]{--cc:var(--mat);}
+  .cat-card[data-cat="mat"]::before{background:radial-gradient(circle at top right,#ff6b3510 0%,transparent 60%);}
+  .cat-card[data-cat="mat"]:hover{box-shadow:0 20px 60px #ff6b3520;}
+  .cat-card[data-cat="red"]{--cc:var(--red);}
+  .cat-card[data-cat="red"]::before{background:radial-gradient(circle at top right,#7c3aed10 0%,transparent 60%);}
+  .cat-card[data-cat="red"]:hover{box-shadow:0 20px 60px #7c3aed20;}
+  .cat-card[data-cat="lec"]{--cc:var(--lec);}
+  .cat-card[data-cat="lec"]::before{background:radial-gradient(circle at top right,#05966910 0%,transparent 60%);}
+  .cat-card[data-cat="lec"]:hover{box-shadow:0 20px 60px #05966920;}
+  .cat-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px;background:var(--cc);}
+  .cat-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+  .cat-desc{font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.5;}
+  .cat-footer{display:flex;align-items:center;justify-content:space-between;}
+  .cat-count{font-size:13px;color:var(--muted);}
+  .cat-arrow{width:32px;height:32px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:16px;transition:all .2s;}
+  .cat-card:hover .cat-arrow{background:var(--cc);border-color:var(--cc);color:white;}
+  .exam-panel{display:none;margin-top:12px;background:var(--surface);border:1px solid var(--border-bright);border-radius:16px;overflow:hidden;animation:slideDown .3s ease;}
+  @keyframes slideDown{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+  .exam-panel.open{display:block;}
+  .exam-panel-header{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;}
+  .exam-panel-dot{width:8px;height:8px;border-radius:50%;}
+  .exam-item{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border);transition:background .15s;}
+  .exam-item:last-child{border-bottom:none;}
+  .exam-item:hover{background:var(--surface2);}
+  .exam-item-left{display:flex;align-items:center;gap:14px;}
+  .exam-num{width:36px;height:36px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--muted);flex-shrink:0;}
+  .exam-info-name{font-size:15px;font-weight:500;margin-bottom:2px;}
+  .exam-info-meta{font-size:12px;color:var(--muted);}
+  .exam-item-actions{display:flex;gap:8px;flex-shrink:0;}
+  .btn-exam{padding:7px 14px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px;}
+  .btn-exam-start{color:white;}
+  .btn-exam-start:hover{filter:brightness(1.1);transform:translateY(-1px);}
+  .btn-exam-pdf{background:transparent;color:var(--muted);border-color:var(--border-bright);}
+  .btn-exam-pdf:hover{border-color:var(--gold);color:var(--gold);}
+  .tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
+  .tool-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;cursor:pointer;transition:all .25s;}
+  .tool-card[data-accent="surv"]{--tc:var(--surv);}
+  .tool-card[data-accent="calc"]{--tc:var(--calc);}
+  .tool-card:hover{transform:translateY(-3px);border-color:var(--tc);box-shadow:0 12px 40px color-mix(in srgb,var(--tc) 15%,transparent);}
+  .tool-badge{display:inline-block;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;background:color-mix(in srgb,var(--tc) 15%,transparent);color:var(--tc);}
+  .tool-name{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;margin-bottom:6px;}
+  .tool-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .tool-run-btn{margin-top:16px;padding:8px 16px;background:color-mix(in srgb,var(--tc) 15%,transparent);border:1px solid color-mix(in srgb,var(--tc) 30%,transparent);border-radius:8px;color:var(--tc);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
+  .tool-run-btn:hover{background:color-mix(in srgb,var(--tc) 25%,transparent);}
+  .reto-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+  .reto-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
+  .reto-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;}
+  .reto-card:hover{transform:translateY(-4px);}
+  .reto-card:hover::before{opacity:1;}
+  .reto-card[data-ppm="100"]{--rc:#6366f1;}
+  .reto-card[data-ppm="100"]::before{background:radial-gradient(circle at top right,#6366f115,transparent 65%);}
+  .reto-card[data-ppm="100"]:hover{border-color:#6366f155;box-shadow:0 16px 48px #6366f125;}
+  .reto-card[data-ppm="200"]{--rc:#059669;}
+  .reto-card[data-ppm="200"]::before{background:radial-gradient(circle at top right,#05966915,transparent 65%);}
+  .reto-card[data-ppm="200"]:hover{border-color:#05966955;box-shadow:0 16px 48px #05966925;}
+  .reto-card[data-ppm="300"]{--rc:#7c3aed;}
+  .reto-card[data-ppm="300"]::before{background:radial-gradient(circle at top right,#7c3aed15,transparent 65%);}
+  .reto-card[data-ppm="300"]:hover{border-color:#7c3aed55;box-shadow:0 16px 48px #7c3aed25;}
+  .reto-card[data-ppm="400"]{--rc:#e11d48;}
+  .reto-card[data-ppm="400"]::before{background:radial-gradient(circle at top right,#e11d4815,transparent 65%);}
+  .reto-card[data-ppm="400"]:hover{border-color:#e11d4855;box-shadow:0 16px 48px #e11d4825;}
+  .reto-ppm-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.5px;margin-bottom:14px;background:color-mix(in srgb,var(--rc) 15%,transparent);color:var(--rc);border:1px solid color-mix(in srgb,var(--rc) 30%,transparent);}
+  .reto-speed{font-family:'Syne',sans-serif;font-size:42px;font-weight:800;letter-spacing:-2px;color:var(--rc);line-height:1;margin-bottom:2px;}
+  .reto-unit{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;}
+  .reto-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;}
+  .reto-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:16px;}
+  .reto-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;}
+  .reto-tag{font-size:11px;padding:3px 9px;border-radius:6px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);}
+  .reto-btn{width:100%;padding:10px;background:color-mix(in srgb,var(--rc) 12%,transparent);border:1px solid color-mix(in srgb,var(--rc) 35%,transparent);border-radius:10px;color:var(--rc);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
+  .reto-btn:hover{background:color-mix(in srgb,var(--rc) 22%,transparent);}
+  .reto-intro{background:var(--surface);border:1px solid var(--border-bright);border-radius:14px;padding:18px 22px;margin-bottom:24px;display:flex;align-items:flex-start;gap:14px;}
+  .reto-intro-icon{font-size:24px;flex-shrink:0;margin-top:2px;}
+  .reto-intro-text{font-size:13px;color:var(--muted);line-height:1.6;}
+  .reto-intro-text strong{color:var(--text);}
+  .iframe-modal{position:fixed;inset:0;z-index:500;display:none;flex-direction:column;background:var(--bg);}
+  .iframe-modal.open{display:flex;}
+  .iframe-topbar{height:56px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:16px;flex-shrink:0;}
+  .iframe-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;flex:1;}
+  .btn-close-modal{padding:7px 16px;background:transparent;border:1px solid var(--border-bright);border-radius:8px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;}
+  .btn-close-modal:hover{border-color:#ff6b35;color:#ff6b35;}
+  .iframe-modal iframe{flex:1;border:none;width:100%;}
+  .pdf-modal{position:fixed;inset:0;z-index:600;display:none;align-items:center;justify-content:center;background:#000000cc;backdrop-filter:blur(8px);padding:24px;}
+  .pdf-modal.open{display:flex;}
+  .pdf-container{width:100%;max-width:900px;height:90vh;background:var(--surface);border:1px solid var(--border-bright);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;}
+  .pdf-topbar{height:52px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:14px;flex-shrink:0;}
+  .pdf-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;flex:1;}
+  .pdf-readonly{font-size:11px;color:var(--gold);background:#fbbf2415;border:1px solid #fbbf2425;padding:3px 8px;border-radius:6px;letter-spacing:.5px;text-transform:uppercase;}
+  .btn-close-pdf{width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid var(--border-bright);color:var(--muted);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+  .btn-close-pdf:hover{border-color:#ff6b35;color:#ff6b35;}
+  .pdf-frame-wrap{flex:1;overflow:hidden;}
+  .pdf-frame-wrap iframe{width:100%;height:100%;border:none;}
+  .divider{border:none;border-top:1px solid var(--border);margin:0;}
+  footer{text-align:center;padding:48px 24px;color:var(--muted);font-size:13px;border-top:1px solid var(--border);margin-top:40px;}
+  .recursos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;}
+  .recurso-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;text-decoration:none;display:block;transition:all .3s;position:relative;overflow:hidden;}
+  .recurso-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;}
+  .recurso-card:hover{transform:translateY(-4px);}
+  .recurso-card:hover::before{opacity:1;}
+  .recurso-card[data-type="pdf"]{--rcc:#f59e0b;}
+  .recurso-card[data-type="pdf"]::before{background:radial-gradient(circle at top right,#f59e0b12,transparent 65%);}
+  .recurso-card[data-type="pdf"]:hover{border-color:#f59e0b55;box-shadow:0 16px 48px #f59e0b20;}
+  .recurso-card[data-type="video"]{--rcc:#e11d48;}
+  .recurso-card[data-type="video"]::before{background:radial-gradient(circle at top right,#e11d4812,transparent 65%);}
+  .recurso-card[data-type="video"]:hover{border-color:#e11d4855;box-shadow:0 16px 48px #e11d4820;}
+  .recurso-card[data-type="web"]{--rcc:#0ea5e9;}
+  .recurso-card[data-type="web"]::before{background:radial-gradient(circle at top right,#0ea5e912,transparent 65%);}
+  .recurso-card[data-type="web"]:hover{border-color:#0ea5e955;box-shadow:0 16px 48px #0ea5e920;}
+  .recurso-type-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.5px;margin-bottom:14px;background:color-mix(in srgb,var(--rcc) 15%,transparent);color:var(--rcc);border:1px solid color-mix(in srgb,var(--rcc) 30%,transparent);}
+  .recurso-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px;color:var(--text);}
+  .recurso-org{font-size:12px;color:var(--rcc);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+  .recurso-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:18px;}
+  .recurso-action{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;background:color-mix(in srgb,var(--rcc) 12%,transparent);border:1px solid color-mix(in srgb,var(--rcc) 35%,transparent);border-radius:10px;color:var(--rcc);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;transition:background .2s;}
+  .recurso-card:hover .recurso-action{background:color-mix(in srgb,var(--rcc) 22%,transparent);}
+  .recursos-note{background:var(--surface);border:1px solid var(--border-bright);border-radius:14px;padding:16px 20px;margin-bottom:24px;font-size:13px;color:var(--muted);line-height:1.6;}
+  .recursos-note strong{color:var(--text);}
+  @media(max-width:640px){.recursos-grid{grid-template-columns:1fr;gap:12px;}}
+  @media(max-width:640px){
+    nav{padding:0 16px;}
+    .nav-logo{font-size:17px;}
+    .nav-user{display:none;}
+    .hero{padding:100px 16px 50px;}
+    .hero h1{letter-spacing:-1px;}
+    .hero p{font-size:15px;}
+    .section{padding:32px 16px;}
+    .section-title{font-size:18px;}
+    .categories-grid{grid-template-columns:1fr;gap:14px;}
+    .cat-card{padding:22px;}
+    .cat-name{font-size:17px;}
+    .tools-grid{grid-template-columns:1fr;gap:12px;}
+    .reto-grid{grid-template-columns:1fr;gap:12px;}
+    .reto-speed{font-size:34px;}
+    .exam-item{flex-direction:column;align-items:flex-start;gap:10px;}
+    .exam-item-actions{width:100%;justify-content:flex-end;}
+    .exam-num{width:30px;height:30px;font-size:12px;}
+    .auth-card{padding:32px 20px;}
+    .auth-logo{font-size:24px;}
+    .iframe-topbar{padding:0 14px;gap:10px;}
+    .iframe-title{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .btn-close-modal{padding:6px 12px;font-size:12px;flex-shrink:0;}
+    .pdf-container{height:95vh;border-radius:14px;}
+    .pdf-topbar{padding:0 14px;}
+    .reto-intro{padding:14px 16px;gap:10px;}
+    .reto-card{padding:20px;}
+    .tool-card{padding:20px;}
+    .hero-badge{font-size:11px;}
+  }
+  @media(max-width:400px){
+    .hero h1{font-size:30px;}
+    .btn-exam{padding:6px 10px;font-size:12px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">Prep<span>Master</span></div>
+    <p class="auth-subtitle">Plataforma oficial de simulación PAA</p>
+
+    <!-- Tabs -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Iniciar sesión</button>
+      <button class="auth-tab" onclick="switchTab('register')">Crear cuenta</button>
+    </div>
+
+    <!-- LOGIN PANEL -->
+    <div id="panel-login" class="auth-panel active">
+      <div class="input-group"><label>Correo</label><input type="email" id="login-email" placeholder="correo@ejemplo.com"/></div>
+      <div class="input-group"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      <button class="btn-primary" onclick="doLogin()">Entrar →</button>
+      <div class="auth-error" id="login-error"></div>
+    </div>
+
+    <!-- REGISTER PANEL -->
+    <div id="panel-register" class="auth-panel">
+      <div class="price-badge">💳 $89 MXN · Acceso 3 meses</div>
+      <div class="input-group"><label>Correo</label><input type="email" id="reg-email" placeholder="correo@ejemplo.com"/></div>
+      <div class="input-group"><label>Contraseña</label><input type="password" id="reg-pass" placeholder="Mínimo 6 caracteres"/></div>
+      <div class="input-group"><label>Confirmar contraseña</label><input type="password" id="reg-pass2" placeholder="Repite tu contraseña"/></div>
+      <button class="btn-primary" onclick="doRegisterAndPay()" id="btn-register">Crear cuenta y pagar →</button>
+      <div class="auth-error" id="register-error"></div>
+      <div class="auth-success" id="register-success"></div>
+
+      <!-- Free code toggle -->
+      <div class="auth-divider">o</div>
+      <div class="free-code-toggle" onclick="toggleFreeCode()">🎁 ¿Tienes un código de acceso gratuito?</div>
+      <div id="free-code-section">
+        <div class="input-group" style="margin-bottom:10px"><label>Código de acceso</label><input type="text" id="free-code-input" placeholder="CÓDIGO" style="text-transform:uppercase;letter-spacing:.1em"/></div>
+        <button class="btn-secondary" onclick="doActivateFree()">Activar acceso gratuito →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="app">
+  <nav>
+    <div class="nav-logo">Prep<span>Master</span></div>
+    <div class="nav-right">
+      <span class="nav-user" id="nav-user-email"></span>
+      <button class="btn-logout" onclick="doLogout()">Salir</button>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-badge">🎯 Simulación PAA Oficial</div>
+    <h1>Prepárate para<br/><em>el PAA</em></h1>
+    <p>Simulaciones reales de Matemáticas, Redacción y Lectura con respuestas y procedimientos explicados.</p>
+  </div>
+
+  <hr class="divider"/>
+
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Exámenes de simulación</h2>
+      <div class="section-line"></div>
+      <span class="section-count">3 secciones · 5 simulaciones c/u</span>
+    </div>
+    <div class="categories-grid">
+      <div>
+        <div class="cat-card" data-cat="mat" onclick="togglePanel('panel-mat')">
+          <div class="cat-icon">📐</div>
+          <div class="cat-name">Matemáticas</div>
+          <div class="cat-desc">Aritmética, Álgebra, Geometría, Estadística y Probabilidad.</div>
+          <div class="cat-footer"><span class="cat-count">5 simulaciones · 55 reactivos c/u</span><span class="cat-arrow" id="arrow-panel-mat">›</span></div>
+        </div>
+        <div class="exam-panel" id="panel-mat">
+          <div class="exam-panel-header"><span class="exam-panel-dot" style="background:var(--mat)"></span>Matemáticas — Elige una simulación</div>
+          <div id="exams-mat"></div>
+        </div>
+      </div>
+      <div>
+        <div class="cat-card" data-cat="red" onclick="togglePanel('panel-red')">
+          <div class="cat-icon">✍️</div>
+          <div class="cat-name">Redacción</div>
+          <div class="cat-desc">Coherencia, cohesión, integración, elisión y estilo textual.</div>
+          <div class="cat-footer"><span class="cat-count">5 simulaciones · 25 reactivos c/u</span><span class="cat-arrow" id="arrow-panel-red">›</span></div>
+        </div>
+        <div class="exam-panel" id="panel-red">
+          <div class="exam-panel-header"><span class="exam-panel-dot" style="background:var(--red)"></span>Redacción — Elige una simulación</div>
+          <div id="exams-red"></div>
+        </div>
+      </div>
+      <div>
+        <div class="cat-card" data-cat="lec" onclick="togglePanel('panel-lec')">
+          <div class="cat-icon">📖</div>
+          <div class="cat-name">Lectura</div>
+          <div class="cat-desc">Comprensión lectora, inferencia, vocabulario y análisis literario.</div>
+          <div class="cat-footer"><span class="cat-count">8 simulaciones · 45 reactivos c/u</span><span class="cat-arrow" id="arrow-panel-lec">›</span></div>
+        </div>
+        <div class="exam-panel" id="panel-lec">
+          <div class="exam-panel-header"><span class="exam-panel-dot" style="background:var(--lec)"></span>Lectura — Elige una simulación</div>
+          <div id="exams-lec"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Ejercicios de supervivencia</h2>
+      <div class="section-line"></div>
+      <span class="section-count">Matemáticas · Redacción · Lectura</span>
+    </div>
+    <div class="tools-grid" id="survival-grid"></div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">⚡ Reto de Lectura Rápida</h2>
+      <div class="section-line"></div>
+      <span class="section-count">4 niveles · 15 lecturas aleatorias c/u</span>
+    </div>
+    <div class="reto-intro">
+      <div class="reto-intro-icon">📖</div>
+      <div class="reto-intro-text">
+        <strong>Entrena tu velocidad y comprensión lectora.</strong> Cada nivel te presenta 3 lecturas aleatorias de un banco de 15 textos. Lee en el tiempo indicado y responde preguntas de comprensión. Ideal para dominar la sección de Lectura del PAA.
+      </div>
+    </div>
+    <div class="reto-grid" id="reto-grid"></div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Herramientas</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card" data-accent="calc" onclick="openTool('calculadora.html','Calculadora de Puntajes PAA')">
+        <div class="tool-badge">Herramienta</div>
+        <div class="tool-name">🧮 Calculadora de puntajes</div>
+        <div class="tool-desc">Calcula tu puntaje estimado de ingreso y descubre cuánto necesitas para entrar.</div>
+        <button class="tool-run-btn">▶ Abrir calculadora</button>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">📚 Recursos oficiales &amp; apoyo</h2>
+      <div class="section-line"></div>
+      <span class="section-count">Guías · PDFs · Video curso</span>
+    </div>
+    <div class="recursos-note">
+      <strong>Material oficial para tu preparación.</strong> Descarga las guías de estudio publicadas por la UDG y College Board, y accede al curso en video con los temas completos del PAA.
+    </div>
+    <div class="recursos-grid">
+
+      <a class="recurso-card" data-type="pdf" href="https://escolar.udg.mx/sites/default/files/adjuntos/paa-prueba-practica.pdf" target="_blank" rel="noopener">
+        <div class="recurso-type-badge">📄 PDF Descargable</div>
+        <div class="recurso-org">UDG · Escolar</div>
+        <div class="recurso-title">Guía PAA — Prueba Práctica</div>
+        <div class="recurso-desc">Guía oficial de la Universidad de Guadalajara con ejercicios de práctica para Matemáticas, Redacción y Lectura. Formato examen real.</div>
+        <span class="recurso-action">⬇ Descargar PDF · 2.17 MB</span>
+      </a>
+
+      <a class="recurso-card" data-type="pdf" href="https://escolar.udg.mx/sites/default/files/adjuntos/paa-prueba-practica-en-linea.pdf" target="_blank" rel="noopener">
+        <div class="recurso-type-badge">📄 PDF Descargable</div>
+        <div class="recurso-org">UDG · Escolar</div>
+        <div class="recurso-title">Guía PAA — Prueba en Línea</div>
+        <div class="recurso-desc">Versión compacta orientada al formato de examen en línea. Ideal para repasar la estructura y tipo de reactivos antes del día del examen.</div>
+        <span class="recurso-action">⬇ Descargar PDF · 203 KB</span>
+      </a>
+
+      <a class="recurso-card" data-type="web" href="https://latam.collegeboard.org/publicaciones/guia-de-estudio-paa/" target="_blank" rel="noopener">
+        <div class="recurso-type-badge">🌐 Sitio Oficial</div>
+        <div class="recurso-org">College Board Latinoamérica</div>
+        <div class="recurso-title">Guía de Estudio Oficial PAA</div>
+        <div class="recurso-desc">Publicación oficial de College Board con la estructura completa del examen, ejemplos de preguntas y consejos estratégicos para cada sección.</div>
+        <span class="recurso-action">→ Visitar sitio College Board</span>
+      </a>
+
+      <a class="recurso-card" data-type="video" href="https://youtube.com/playlist?list=PLntSR0lA0YhT8Ml0Qb962itGM0SsPB5Bp" target="_blank" rel="noopener">
+        <div class="recurso-type-badge">▶ Curso en Video</div>
+        <div class="recurso-org">YouTube · Lista de reproducción</div>
+        <div class="recurso-title">Curso Completo de Preparación PAA</div>
+        <div class="recurso-desc">Lista de reproducción con lecciones en video de todos los temas del PAA: Aritmética, Álgebra, Funciones, Redacción y Comprensión lectora.</div>
+        <span class="recurso-action">▶ Ver curso en YouTube</span>
+      </a>
+
+    </div>
+  </section>
+
+  <footer>PrepMaster © 2025 · Todos los derechos reservados · Acceso exclusivo para usuarios registrados</footer>
+</div>
+
+<div class="iframe-modal" id="iframe-modal">
+  <div class="iframe-topbar">
+    <span class="iframe-title" id="iframe-title">Examen</span>
+    <button class="btn-close-modal" onclick="closeIframe()">✕ Cerrar</button>
+  </div>
+  <iframe id="main-iframe" src="" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+</div>
+
+<div class="pdf-modal" id="pdf-modal" onclick="closePDFOnBg(event)">
+  <div class="pdf-container">
+    <div class="pdf-topbar">
+      <span class="pdf-title" id="pdf-title">Respuestas</span>
+      <span class="pdf-readonly">📄 Solo lectura</span>
+      <button class="btn-close-pdf" onclick="closePDF()">×</button>
+    </div>
+    <div class="pdf-frame-wrap">
+      <iframe id="pdf-iframe" src="" oncontextmenu="return false;"></iframe>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const app  = initializeApp({
+  apiKey:"AIzaSyA2-54Gk9NXW-Ebr3mSdHNP8TA7BlLuQWU",
+  authDomain:"simulador-udg-2026.firebaseapp.com",
+  projectId:"simulador-udg-2026",
+  storageBucket:"simulador-udg-2026.firebasestorage.app",
+  messagingSenderId:"346117076783",
+  appId:"1:346117076783:web:65f9859b09cea4f64893da",
+  measurementId:"G-E70MD5J2WX"
+});
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+const EXAMS = {
+  mat: Array.from({length:5},(_,i)=>({name:`Simulación Matemáticas ${i+1}`,file:`examenes/mat/mat_0${i+1}.html`,pdf:`respuestas/mat/mat_0${i+1}_resp.pdf`,meta:'55 reactivos'})),
+  red: Array.from({length:5},(_,i)=>({name:`Simulación Redacción ${i+1}`,file:`examenes/red/red_0${i+1}.html`,pdf:`respuestas/red/red_0${i+1}_resp.pdf`,meta:'25 reactivos'})),
+  lec: Array.from({length:8},(_,i)=>({name:`Simulación Lectura ${i+1}`,file:`examenes/lec/lec_0${i+1}.html`,pdf:`respuestas/lec/lec_0${i+1}_resp.pdf`,meta:'45 reactivos'})),
+};
+const COLORS = {mat:'#ff6b35',red:'#7c3aed',lec:'#059669'};
+const SURVIVAL = [
+  {name:'Supervivencia Aritmética',      desc:'Operaciones, fracciones y porcentajes contra el reloj.',  file:'examenes/supervivencia/surviveARITMETICA.html',                icon:'🔢'},
+  {name:'Supervivencia Álgebra',         desc:'Ecuaciones y expresiones algebraicas bajo presión.',       file:'examenes/supervivencia/surviveALGEBRA.html',                   icon:'📐'},
+  {name:'Supervivencia Funciones',       desc:'Funciones y gráficas en modo contrarreloj.',               file:'examenes/supervivencia/survivefunciones.html',                 icon:'📈'},
+  {name:'Supervivencia Probabilidad',    desc:'Estadística y probabilidad a contrarreloj.',               file:'examenes/supervivencia/surviveprobabilidadyestadistica.html',  icon:'🎲'},
+  {name:'Supervivencia Diagramas Venn',  desc:'Conjuntos y diagramas de Venn bajo presión.',              file:'examenes/supervivencia/SurviveDiagramasdeVenn.html',           icon:'⭕'},
+  {name:'Supervivencia Redacción',       desc:'Coherencia y cohesión contra el reloj.',                   file:'examenes/supervivencia/sv_01.html',                            icon:'✍️'},
+  {name:'Supervivencia Lectura',         desc:'Comprensión lectora en modo contrarreloj.',                file:'examenes/supervivencia/sv_03.html',                            icon:'📖'},
+  {name:'Survival Math: Reto 100',       desc:'60 reactivos de matemáticas en modo supervivencia. Vidas limitadas, sin tregua.',  file:'examenes/supervivencia/Supervivencia_Matematicas.html', icon:'🧮'},
+];
+
+function renderExams(key, containerId) {
+  const cont = document.getElementById(containerId);
+  const color = COLORS[key];
+  EXAMS[key].forEach((ex,i) => {
+    const div = document.createElement('div');
+    div.className = 'exam-item';
+    div.innerHTML = `
+      <div class="exam-item-left">
+        <div class="exam-num">${String(i+1).padStart(2,'0')}</div>
+        <div>
+          <div class="exam-info-name">${ex.name}</div>
+          <div class="exam-info-meta">${ex.meta} · PDF con procedimientos incluido</div>
+        </div>
+      </div>
+      <div class="exam-item-actions">
+        <button class="btn-exam btn-exam-start" style="background:${color};border-color:${color}"
+          onclick="event.stopPropagation();openExam('${ex.file}','${ex.name}')">▶ Iniciar</button>
+        <button class="btn-exam btn-exam-pdf"
+          onclick="event.stopPropagation();openPDF('${ex.pdf}','Respuestas — ${ex.name}')">📄 Respuestas</button>
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+['mat','red','lec'].forEach(k => renderExams(k, `exams-${k}`));
+
+const svGrid = document.getElementById('survival-grid');
+SURVIVAL.forEach(sv => {
+  const d = document.createElement('div');
+  d.className='tool-card'; d.dataset.accent='surv'; d.onclick=()=>openExam(sv.file,sv.name);
+  d.innerHTML=`<div class="tool-badge">🔥 Supervivencia</div><div class="tool-name">${sv.icon} ${sv.name}</div><div class="tool-desc">${sv.desc}</div><button class="tool-run-btn">▶ Comenzar</button>`;
+  svGrid.appendChild(d);
+});
+
+const RETOS = [
+  {ppm:100, name:'Iniciante', label:'Nivel Iniciante', icon:'📗', desc:'Lee textos de ~100 palabras en 60 segundos. Ideal para empezar a entrenar tu velocidad lectora.', tags:['60s lectura','40s pregunta','3 de 15 textos'], color:'#6366f1', file:'examenes/lec/Lectura_100.html'},
+  {ppm:200, name:'Pro',       label:'Nivel Pro',       icon:'📘', desc:'Lee textos de ~200 palabras en 60 segundos. Aumenta tu velocidad sin perder comprensión.', tags:['60s lectura','40s pregunta','3 de 15 textos'], color:'#059669', file:'examenes/lec/Lectura_200.html'},
+  {ppm:300, name:'Élite',     label:'Nivel Élite',     icon:'📙', desc:'Lee textos densos de ~300 palabras en 60 segundos. Requiere fijación visual amplia.', tags:['60s lectura','40s pregunta','3 de 15 textos'], color:'#7c3aed', file:'examenes/lec/Lectura_300.html'},
+  {ppm:400, name:'Master',    label:'⚠️ Nivel Master', icon:'📕', desc:'Lee textos de ~400 palabras en 60 segundos. El mayor reto: el texto desaparece al terminar.', tags:['60s lectura','40s pregunta','texto sin vuelta'], color:'#e11d48', file:'examenes/lec/Lectura_400.html'},
+];
+const retoGrid = document.getElementById('reto-grid');
+RETOS.forEach(r => {
+  const d = document.createElement('div');
+  d.className = 'reto-card'; d.dataset.ppm = r.ppm;
+  d.onclick = () => openExam(r.file, `Reto de Lectura — ${r.label}`);
+  d.innerHTML = `
+    <div class="reto-ppm-badge">${r.icon} ${r.label}</div>
+    <div class="reto-speed">${r.ppm}</div>
+    <div class="reto-unit">palabras por minuto</div>
+    <div class="reto-name">${r.name}</div>
+    <div class="reto-desc">${r.desc}</div>
+    <div class="reto-tags">${r.tags.map(t=>`<span class="reto-tag">${t}</span>`).join('')}</div>
+    <button class="reto-btn">▶ Iniciar reto</button>`;
+  retoGrid.appendChild(d);
+});
+
+onAuthStateChanged(auth, async user => {
+  if (user) {
+    try {
+      const subDoc = await getDoc(doc(db, 'subscriptions', user.uid));
+      if (subDoc.exists()) {
+        const sub = subDoc.data();
+        const now = new Date();
+        const expires = sub.expiresAt?.toDate();
+        if (sub.active && expires && expires > now) {
+          document.getElementById('auth-screen').style.display = 'none';
+          document.getElementById('app').style.display = 'block';
+          const days = Math.ceil((expires - now) / (1000*60*60*24));
+          const userEl = document.getElementById('nav-user-email');
+          userEl.textContent = user.displayName || user.email;
+          userEl.title = `Acceso válido hasta ${expires.toLocaleDateString('es-MX')} (${days} días restantes)`;
+          return;
+        }
+      }
+    } catch(e) { console.error('Error verificando suscripción:', e); }
+    // No active subscription
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
+    const errEl = document.getElementById('login-error');
+    errEl.textContent = '⚠️ Tu acceso no está activo o expiró. Crea una cuenta y paga para entrar.';
+    errEl.style.display = 'block';
+    await signOut(auth);
+  } else {
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
+  }
+});
+
+// ── Tab switch ──────────────────────────────────────────────────────────────
+window.switchTab = (tab) => {
+  document.querySelectorAll('.auth-tab').forEach((t,i) => {
+    t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register'));
+  });
+  document.getElementById('panel-login').classList.toggle('active', tab==='login');
+  document.getElementById('panel-register').classList.toggle('active', tab==='register');
+};
+
+window.toggleFreeCode = () => {
+  const sec = document.getElementById('free-code-section');
+  sec.style.display = sec.style.display === 'block' ? 'none' : 'block';
+};
+
+// ── Login ───────────────────────────────────────────────────────────────────
+window.doLogin = async () => {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-pass').value;
+  const err   = document.getElementById('login-error');
+  err.style.display = 'none';
+  if (!email || !pass) { err.textContent = 'Completa todos los campos.'; err.style.display='block'; return; }
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch(e) {
+    const msgs = {
+      'auth/invalid-email':'Correo inválido.',
+      'auth/user-not-found':'No existe esa cuenta.',
+      'auth/wrong-password':'Contraseña incorrecta.',
+      'auth/invalid-credential':'Correo o contraseña incorrectos.',
+    };
+    err.textContent = msgs[e.code] || 'Error al iniciar sesión.';
+    err.style.display = 'block';
+  }
+};
+
+// ── Register + Redirect to Stripe ───────────────────────────────────────────
+window.doRegisterAndPay = async () => {
+  const email  = document.getElementById('reg-email').value.trim();
+  const pass   = document.getElementById('reg-pass').value;
+  const pass2  = document.getElementById('reg-pass2').value;
+  const err    = document.getElementById('register-error');
+  const ok     = document.getElementById('register-success');
+  const btn    = document.getElementById('btn-register');
+  err.style.display = 'none'; ok.style.display = 'none';
+
+  if (!email || !pass || !pass2) { err.textContent='Completa todos los campos.'; err.style.display='block'; return; }
+  if (pass !== pass2)             { err.textContent='Las contraseñas no coinciden.'; err.style.display='block'; return; }
+  if (pass.length < 6)            { err.textContent='La contraseña debe tener al menos 6 caracteres.'; err.style.display='block'; return; }
+
+  btn.textContent = 'Creando cuenta...'; btn.disabled = true;
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    const uid  = cred.user.uid;
+
+    ok.textContent = '✅ Cuenta creada. Redirigiendo a pago...';
+    ok.style.display = 'block';
+
+    // Call Netlify function to create Stripe Checkout session
+    const res = await fetch('https://us-central1-simulador-udg-2026.cloudfunctions.net/createCheckout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, uid }),
+    });
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      throw new Error(data.error || 'No se pudo crear la sesión de pago.');
+    }
+  } catch(e) {
+    const msgs = {
+      'auth/email-already-in-use':'Este correo ya tiene una cuenta. Inicia sesión.',
+      'auth/invalid-email':'Correo inválido.',
+      'auth/weak-password':'Contraseña muy débil.',
+    };
+    err.textContent = msgs[e.code] || e.message;
+    err.style.display = 'block';
+    btn.textContent = 'Crear cuenta y pagar →'; btn.disabled = false;
+  }
+};
+
+// ── Activate free code ───────────────────────────────────────────────────────
+window.doActivateFree = async () => {
+  const email = document.getElementById('reg-email').value.trim();
+  const pass  = document.getElementById('reg-pass').value;
+  const pass2 = document.getElementById('reg-pass2').value;
+  const code  = document.getElementById('free-code-input').value.trim();
+  const err   = document.getElementById('register-error');
+  const ok    = document.getElementById('register-success');
+  err.style.display = 'none'; ok.style.display = 'none';
+
+  if (!email || !pass) { err.textContent='Ingresa correo y contraseña primero.'; err.style.display='block'; return; }
+  if (pass !== pass2 && pass2) { err.textContent='Las contraseñas no coinciden.'; err.style.display='block'; return; }
+  if (!code) { err.textContent='Ingresa el código de acceso.'; err.style.display='block'; return; }
+
+  try {
+    // Create account if new, or get existing
+    let uid;
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      uid = cred.user.uid;
+    } catch(e) {
+      if (e.code === 'auth/email-already-in-use') {
+        const cred = await signInWithEmailAndPassword(auth, email, pass);
+        uid = cred.user.uid;
+      } else throw e;
+    }
+
+    const res = await fetch('https://us-central1-simulador-udg-2026.cloudfunctions.net/activateFree', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uid, email, code }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      ok.textContent = '✅ ¡Acceso activado! Entrando...';
+      ok.style.display = 'block';
+      // onAuthStateChanged will detect the subscription and show the app
+    } else {
+      throw new Error(data.error || 'Código inválido.');
+    }
+  } catch(e) {
+    const msgs = {
+      'auth/invalid-email':'Correo inválido.',
+      'auth/weak-password':'Contraseña muy débil (mínimo 6 caracteres).',
+      'auth/wrong-password':'Contraseña incorrecta para esa cuenta.',
+    };
+    err.textContent = msgs[e.code] || e.message;
+    err.style.display = 'block';
+  }
+};
+
+window.doLogout = () => signOut(auth);
+</script>
+</body>
+</html>
