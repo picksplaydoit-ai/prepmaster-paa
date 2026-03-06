@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow: hidden; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         .sticky-header { position: sticky; top: 0; z-index: 50; }
         .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
         .ans-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
@@ -26,10 +26,10 @@
         .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-slate-50 h-screen flex flex-col">
+<body class="bg-slate-50 min-h-screen flex flex-col">
 
     <!-- Pantalla de Inicio -->
-    <div id="start-screen" class="flex-grow flex items-center justify-center p-4">
+    <div id="start-screen" class="flex-grow flex items-center justify-center p-4 overflow-y-auto">
         <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
             <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg rotate-3">
                 
@@ -57,7 +57,7 @@
     </div>
 
     <!-- Pantalla de Examen -->
-    <div id="exam-screen" class="hidden h-full flex flex-col">
+    <div id="exam-screen" class="hidden min-h-screen flex flex-col">
         <div class="sticky-header bg-white border-b border-slate-200 p-3">
             <div class="max-w-4xl mx-auto flex justify-between items-center">
                 <div class="flex gap-4">
@@ -79,14 +79,14 @@
             </div>
         </div>
 
-        <main class="flex-grow flex items-center justify-center p-4 overflow-hidden">
-            <div id="question-box" class="max-w-xl w-full"></div>
+        <main class="flex-grow flex items-center justify-center p-4 overflow-y-auto">
+            <div id="question-box" class="max-w-xl w-full pb-4"></div>
         </main>
     </div>
 
     <!-- Pantalla de Resultados -->
-    <div id="result-screen" class="hidden h-full flex items-center justify-center p-4 overflow-hidden">
-        <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-white fade-in flex flex-col max-h-[95vh]">
+    <div id="result-screen" class="hidden flex items-center justify-center p-4 py-8 overflow-y-auto">
+        <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl border border-white fade-in flex flex-col">
             <div class="bg-slate-900 p-6 md:p-8 text-center text-white relative flex-shrink-0">
                 <p class="text-blue-400 font-bold uppercase tracking-[0.3em] text-[9px] mb-2">Puntaje Final de Escala</p>
                 <div class="flex items-center justify-center gap-2">

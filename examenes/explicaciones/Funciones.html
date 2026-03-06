@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dominando las Funciones PAA - Full Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuración de MathJax para fórmulas perfectas -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .slide {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+
+        .card {
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.08);
+            max-width: 800px;
+            width: 100%;
+            padding: 2rem;
+            position: relative;
+            border: 1px solid #f1f5f9;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 1.5rem;
+                border-radius: 1.5rem;
+                width: 95%;
+            }
+            h2 { font-size: 1.3rem !important; }
+        }
+
+        .badge-purple {
+            background: #6366f1;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .btn-nav {
+            background: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            border: 2px solid #f1f5f9;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: #fff;
+            font-size: 0.9rem;
+        }
+
+        .option-btn:hover {
+            border-color: #6366f1;
+            background: #f5f3ff;
+        }
+
+        .option-correct {
+            background: #10b981 !important;
+            color: white !important;
+            border-color: #059669 !important;
+        }
+
+        .option-incorrect {
+            background: #ef4444 !important;
+            color: white !important;
+            border-color: #dc2626 !important;
+        }
+
+        .progress-indicator {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background: #6366f1;
+            transition: width 0.3s ease;
+            z-index: 100;
+        }
+
+        .step-pill {
+            background: #e0e7ff;
+            color: #4338ca;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Intro -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-4">Manual de Supervivencia: Funciones PAA 🚀</h1>
+            <p class="text-lg text-slate-500 mb-8 max-w-lg mx-auto leading-relaxed">
+                Toda la guía oficial del College Board en un solo lugar. Sin vueltas, sin aburrimiento, solo lo que necesitas para ganar puntos.
+            </p>
+            <button class="btn-nav px-12 py-4 text-lg" onclick="nextSlide()">¡A por ese puntaje!</button>
+        </div>
+    </div>
+
+    <!-- Slide 2: El Concepto -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <div class="badge-purple">Nivel 1</div>
+            <h2 class="text-2xl font-bold mb-4">¿Qué rayos es una función? 🤔</h2>
+            <div class="space-y-4 text-slate-600">
+                <p>Imagínate una <b>máquina de dulces</b>. Le metes una moneda ($x$), la máquina hace su magia (la regla) y te saca un dulce ($f(x)$).</p>
+                <p>Regla de oro: <b>¡Para cada moneda solo sale UN tipo de dulce!</b> Si metes $5 y sale un chicle o un chocolate al azar, la máquina está loca y NO es función.</p>
+                <div class="p-3 bg-yellow-50 rounded-lg text-xs italic border border-yellow-100">
+                    💡 Truco: Si ves una gráfica y una línea vertical toca dos puntos a la vez... ¡No es función!
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between"><button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button><button class="btn-nav" onclick="nextSlide()">Evaluar</button></div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Evaluar -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <div class="badge-purple">Nivel 2</div>
+            <h2 class="text-2xl font-bold mb-4">Evaluar: "Quitar y Poner" ⚽</h2>
+            <div class="space-y-4 text-slate-600">
+                <p>Evaluar es ser el <b>mánager</b>: la $x$ sale a descansar y el número que te dan entra a jugar en su lugar exacto.</p>
+                <div class="bg-slate-50 p-4 rounded-xl text-center border font-mono">
+                    Si $f(x) = 2x + 5$ <br>
+                    $f(4) = 2(4) + 5 = 13$
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between"><button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button><button class="btn-nav" onclick="nextSlide()">Tu Turno</button></div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Reto Evaluar -->
+    <div class="slide" id="slide-3">
+        <div class="card text-center">
+            <h2 class="text-xl font-bold mb-6">Si $h(x) = 3x - 10$, ¿cuánto es $h(5)$?</h2>
+            <div class="space-y-2 max-w-xs mx-auto">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'e1')">A) 15</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'e1')">B) 5</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'e1')">C) 25</button>
+            </div>
+            <div id="feedback-e1" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between"><button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button><button class="btn-nav" onclick="nextSlide()">Tablas</button></div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Tablas -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <div class="badge-purple">Nivel 3</div>
+            <h2 class="text-2xl font-bold mb-4">Tablas: Mapas de Citas 📊</h2>
+            <p class="text-slate-600 mb-4 text-sm">A cada $x$ le corresponde su pareja $f(x)$. ¡Solo tienes que mirar!</p>
+            <table class="w-full text-center border rounded-lg overflow-hidden text-sm">
+                <tr class="bg-slate-100 font-bold"><td>$x$</td><td>$f(x)$</td></tr>
+                <tr><td>1</td><td>7</td></tr>
+                <tr class="bg-indigo-50"><td>2</td><td class="text-indigo-600 font-bold">10</td></tr>
+                <tr><td>3</td><td>13</td></tr>
+            </table>
+            <p class="mt-4 text-xs italic text-slate-500">¿Ves el 2? Su pareja es 10. Entonces $f(2) = 10$.</p>
+            <div class="mt-8 flex justify-between"><button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button><button class="btn-nav" onclick="nextSlide()">Composición</button></div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Composición (Resuelvo yo) -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <div class="badge-purple">Nivel 4</div>
+            <h2 class="text-2xl font-bold mb-4">La Muñeca Rusa 🪆</h2>
+            <div class="space-y-4">
+                <p class="text-slate-600 text-sm">Cuando veas $f(g(x))$, ¡siempre de <b>ADENTRO hacia AFUERA</b>!</p>
+                <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 text-sm">
+                    <p class="font-bold text-indigo-900 mb-2">Ejemplo Resuelto:</p>
+                    <p>Si $f(x)=x+3$ y $g(x)=2x$. ¿Cuánto es $f(g(5))$?</p>
+                    <p class="mt-2"><span class="step-pill">1</span> $g(5) = 2(5) = 10$</p>
+                    <p><span class="step-pill">2</span> Ahora metes ese 10 en $f$: $f(10) = 10+3 = 13$</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between"><button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button><button class="btn-nav" onclick="nextSlide()">Tu Reto</button></div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Reto Composición -->
+    <div class="slide" id="slide-6">
+        <div class="card text-center">
+            <h2 class="text-xl font-bold mb-6">Si $f(x)=x+2$ y $g(x)=x^2$, ¿cuánto es $g(f(3))$?</h2>
+            <div class="space-y-2 max-w-xs mx-auto">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'c1')">A) 11</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'c1')">B) 25</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'c1')">C) 5</button>
+            </div>
+            <div id="feedback-c1" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between"><button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button><button class="btn-nav" onclick="nextSlide()">Problemas</button></div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Problemas Aplicados -->
+    <div class="slide" id="slide-7">
+        <div class="card">
+            <div class="badge-purple">Nivel 5</div>
+            <h2 class="text-2xl font-bold mb-4">Historias: El taxi/Gym 🚕</h2>
+            <div class="space-y-4 text-sm text-slate-600">
+                <p>Armar la función es fácil: identifica el <b>Fijo</b> y lo que <b>Cambia</b>.</p>
+                <div class="bg-slate-50 p-4 rounded-xl border">
+                    <p class="italic">"Cobro $10 de entrada más $2 por cada kilómetro (x)"</p>
+                    <p class="font-bold text-center mt-2 text-indigo-600">$$f(x) = 2x + 10$$</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between"><button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button><button class="btn-nav" onclick="nextSlide()">Interceptos</button></div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Interceptos (Explicación) -->
+    <div class="slide" id="slide-8">
+        <div class="card">
+            <div class="badge-purple">Nivel 6</div>
+            <h2 class="text-2xl font-bold mb-4">Interceptos: "El Choque" 💥</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>Es saber dónde la gráfica choca con las líneas del plano ($x$ y $y$).</p>
+                <div class="bg-slate-50 p-4 rounded-xl border-l-4 border-indigo-400">
+                    <p class="font-bold mb-1">Eje Y (El regalito):</p>
+                    <p>Es cuando $x=0$. En $f(x)=mx+b$, ¡es simplemente el número <b>b</b>!</p>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border-l-4 border-emerald-400">
+                    <p class="font-bold mb-1">Eje X (La igualdad):</p>
+                    <p>Es cuando el resultado es $0$. Tienes que igualar a cero y despejar $x$.</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between"><button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button><button class="btn-nav" onclick="nextSlide()">Ejemplo Eje Y</button></div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Intercepto Y (Resuelvo yo) -->
+    <div class="slide" id="slide-9">
+        <div class="card">
+            <div class="badge-purple">Intercepto Y</div>
+            <h2 class="text-xl font-bold mb-4 text-indigo-700">Yo resuelvo el Eje Y 📍</h2>
+            <p class="mb-4 text-slate-600">¿Dónde choca al eje $y$ la función $f(x) = 5x + 7$?</p>
+            <div class="bg-indigo-50 p-4 rounded-xl">
+                <p class="font-semibold">¡Fácil!</p>
+                <p>Miras el número que está solo al final. Es el $7$.</p>
+                <p class="font-bold text-center mt-2">Punto: (0, 7)</p>
+            </div>
+            <div class="mt-8 flex justify-between"><button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button><button class="btn-nav" onclick="nextSlide()">Ejemplo Eje X</button></div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Intercepto X (Resuelvo yo) -->
+    <div class="slide" id="slide-10">
+        <div class="card">
+            <div class="badge-purple">Intercepto X</div>
+            <h2 class="text-xl font-bold mb-4 text-emerald-700">Yo resuelvo el Eje X 🎯</h2>
+            <p class="mb-4 text-slate-600">¿Dónde choca al eje $x$ la función $f(x) = 2x - 10$?</p>
+            <div class="bg-emerald-50 p-4 rounded-xl space-y-2">
+                <p><span class="step-pill">1</span> Igualamos a cero: $2x - 10 = 0$</p>
+                <p><span class="step-pill">2</span> Pasamos el 10: $2x = 10$</p>
+                <p><span class="step-pill">3</span> Despejamos $x$: $x = 10 / 2 = 5$</p>
+                <p class="font-bold text-center text-emerald-700">Punto: (5, 0)</p>
+            </div>
+            <div class="mt-8 flex justify-between"><button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button><button class="btn-nav" onclick="nextSlide()">Tu Reto Final</button></div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Reto Interceptos -->
+    <div class="slide" id="slide-11">
+        <div class="card text-center">
+            <h2 class="text-xl font-bold mb-6">¿En qué punto cruza al eje $x$ la función $f(x) = 4x - 12$?</h2>
+            <div class="space-y-2 max-w-xs mx-auto">
+                <button class="option-btn" onclick="checkAnswer(this, true, 'i1')">A) x = 3</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'i1')">B) x = -12</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'i1')">C) x = 12</button>
+            </div>
+            <div id="feedback-i1" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between"><button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button><button class="btn-nav" onclick="nextSlide()">Finalizar</button></div>
+        </div>
+    </div>
+
+    <!-- Slide Final -->
+    <div class="slide" id="slide-12">
+        <div class="card text-center">
+            <h1 class="text-5xl mb-4">👑</h1>
+            <h2 class="text-3xl font-extrabold mb-4">¡Nivel Leyenda PAA!</h2>
+            <p class="text-slate-500 mb-10 leading-relaxed">Ya dominas evaluación, tablas, composición, problemas e interceptos. Tienes todo lo necesario para destrozar la sección de funciones.</p>
+            <button class="btn-nav px-12 py-4" onclick="goToStart()">Reiniciar Aventura</button>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        }
+
+        function checkAnswer(btn, isCorrect, qId) {
+            const fb = document.getElementById(`feedback-${qId}`);
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.textContent = "¡Dominado! ✨";
+                fb.className = "mt-4 font-bold text-green-600 block";
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.textContent = "¡Casi! Intenta de nuevo ❌";
+                fb.className = "mt-4 font-bold text-red-600 block";
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() {
+            currentSlide = 0;
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
+            document.querySelectorAll('[id^="feedback-"]').forEach(f => f.textContent = "");
+            updateUI();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        let ts = 0;
+        document.addEventListener('touchstart', e => ts = e.touches[0].clientX);
+        document.addEventListener('touchend', e => {
+            let te = e.changedTouches[0].clientX;
+            if (ts - te > 50) nextSlide();
+            if (te - ts > 50) prevSlide();
+        });
+
+        updateUI();
+    </script>
+</body>
+</html>

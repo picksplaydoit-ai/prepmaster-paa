@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulación 0: Inglés PAA (ESLAT)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX included for consistency, though primarily using standard text -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; overflow-x: hidden; }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .custom-scroll::-webkit-scrollbar { width: 5px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        .ans-correct { background-color: #ecfdf5 !important; border-color: #10b981 !important; color: #065f46 !important; }
+        .ans-wrong { background-color: #fef2f2 !important; border-color: #ef4444 !important; color: #991b1b !important; }
+        .ans-correct-hint { border-color: #10b981 !important; border-style: dashed !important; border-width: 2px !important; }
+        
+        .reading-passage { background-color: #f1f5f9; border-left: 4px solid #3b82f6; padding: 1.5rem; margin-bottom: 2rem; border-radius: 0 1rem 1rem 0; font-style: italic; line-height: 1.8; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start py-4 sm:py-8 px-2">
+
+    <!-- Start Screen -->
+    <div id="start-screen" class="max-w-2xl w-full bg-white rounded-3xl shadow-xl p-8 text-center border border-slate-200">
+        <div class="w-20 h-20 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg -rotate-3">
+            <span class="text-4xl font-black">EN</span>
+        </div>
+        <h1 class="text-3xl font-black text-slate-900 mb-2 uppercase tracking-tight">English Simulation 0</h1>
+        <p class="text-indigo-600 font-bold mb-8 tracking-widest uppercase text-sm">ESLAT - PAA Standard</p>
+        
+        <div class="grid grid-cols-2 gap-4 mb-8 text-left">
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Items</p>
+                <p class="text-xl font-bold">50 Questions</p>
+            </div>
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Time Limit</p>
+                <p class="text-xl font-bold">50 Minutes</p>
+            </div>
+        </div>
+
+        <div class="bg-indigo-50 border-l-4 border-indigo-400 p-4 mb-8 text-left rounded-r-xl">
+            <p class="text-xs text-indigo-900 leading-relaxed">
+                This test evaluates <b>Language Use & Vocabulary</b>, <b>Reading Comprehension</b>, and <b>Indirect Writing</b>. Feedback is instant, and the test advances automatically.
+            </p>
+        </div>
+
+        <button onclick="startExam()" class="w-full bg-indigo-900 hover:bg-black text-white font-black py-4 rounded-2xl shadow-xl transition-all active:scale-95 text-lg uppercase tracking-widest">
+            Start Simulation
+        </button>
+    </div>
+
+    <!-- Exam Interface -->
+    <div id="exam-screen" class="hidden max-w-4xl w-full flex flex-col gap-4">
+        <header class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm sticky top-0 z-50 grid grid-cols-3 items-center">
+            <div class="flex flex-col">
+                <p class="text-[9px] font-black text-slate-400 uppercase">Time Left</p>
+                <p id="timer" class="text-lg font-mono font-black text-indigo-600 leading-none">50:00</p>
+            </div>
+            
+            <div class="flex justify-center gap-6">
+                <div class="text-center">
+                    <p class="text-[9px] font-black text-emerald-500 uppercase">Correct</p>
+                    <p id="live-correct" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-[9px] font-black text-rose-500 uppercase">Errors</p>
+                    <p id="live-wrong" class="text-lg font-black text-rose-600 leading-none">0</p>
+                </div>
+            </div>
+
+            <div class="text-right">
+                <p id="progress-label" class="text-[9px] font-black text-slate-400 uppercase">1 of 50</p>
+                <div class="w-full h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden border border-slate-200">
+                    <div id="progress-bar" class="h-full bg-indigo-600 transition-all duration-300" style="width: 2%"></div>
+                </div>
+            </div>
+        </header>
+
+        <main class="bg-white border border-slate-200 rounded-[2.5rem] shadow-lg p-6 sm:p-10 flex flex-col min-h-[450px]">
+            <div id="question-container" class="flex-grow fade-in overflow-y-auto custom-scroll max-h-[70vh]">
+                <!-- Content injected here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Results -->
+    <div id="result-screen" class="hidden max-w-2xl w-full bg-white rounded-[3rem] shadow-2xl overflow-hidden fade-in border border-slate-200">
+        <div class="bg-slate-900 p-10 text-center text-white">
+            <p class="text-indigo-400 font-black uppercase tracking-[0.3em] text-[10px] mb-2">Final ESLAT Score</p>
+            <div class="flex items-center justify-center gap-2">
+                <h2 id="final-score" class="text-8xl font-black tracking-tighter leading-none">200</h2>
+                <span class="text-slate-500 font-bold text-xl self-end mb-2">/ 800</span>
+            </div>
+        </div>
+        
+        <div class="p-8 sm:p-12">
+            <h3 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-tight">Performance Breakdown</h3>
+            <div id="area-results" class="space-y-4 mb-8"></div>
+
+            <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100 flex items-center justify-between mb-8">
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Total Correct</p>
+                    <p class="text-2xl font-black text-slate-900"><span id="correct-total">0</span> of 50</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Accuracy</p>
+                    <p id="accuracy-percent" class="text-2xl font-black text-indigo-600">0%</p>
+                </div>
+            </div>
+
+            <button onclick="location.reload()" class="w-full bg-indigo-900 text-white font-black py-5 rounded-2xl shadow-xl hover:bg-black transition-all uppercase tracking-widest text-sm">
+                Restart Simulation
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const readingPassage1 = "Reading is a window to new worlds. When you open a book, you are not just reading words; you are exploring different cultures, historical events, and creative ideas. This habit sharpens the mind and improves empathy. In decorative arts, books are symbols of knowledge. A room filled with shelves of books feels warmer and more inviting. Moreover, studies show that reading for just six minutes a day can reduce stress levels by sixty-eight percent. It is the perfect way to escape the pressure of modern life while gaining valuable insights into the human condition.";
+
+        const readingPassage2 = "The Great Barrier Reef, located off the coast of Australia, is the world's largest coral reef system. It is composed of over 2,900 individual reefs and 900 islands. This natural wonder can be seen from outer space and is the world's biggest single structure made by living organisms. However, climate change is a significant threat. Rising ocean temperatures lead to coral bleaching, which can destroy large sections of the reef. Protection efforts are essential to preserve this unique ecosystem for future generations.";
+
+        const questionBank = [
+            // Language Use & Vocabulary (15)
+            { area: "Language Use & Vocabulary", q: "Choose the correct word: My brother designs software and websites. He is ______.", options: ["a nurse", "a programmer", "an accountant", "a pilot"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "Sarah bought three ______ at the store yesterday.", options: ["dress", "dresses", "dress's", "dresses'"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "The students have ______ own laptops for the project.", options: ["they", "them", "their", "there"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "We ______ to the cinema last Friday night.", options: ["go", "goes", "went", "going"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "This cake is ______ than the one we had yesterday.", options: ["good", "better", "best", "more good"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "Please turn ______ the lights before you leave the room.", options: ["on", "off", "up", "in"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "Choose the correct sentence:", options: ["Yesterday she arrives late.", "She arrives late yesterday.", "She arrived late yesterday.", "Arrived she late yesterday."], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "I haven't seen him ______ three years.", options: ["since", "for", "during", "ago"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "The meeting starts ______ 9:00 AM.", options: ["in", "on", "at", "by"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "If I ______ enough money, I would buy a new car.", options: ["have", "has", "had", "having"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "She is very interested ______ learning Japanese.", options: ["at", "on", "in", "to"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "Neither the teacher nor the students ______ happy with the result.", options: ["is", "are", "was", "be"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "That is the house ______ my parents built.", options: ["who", "whose", "which", "whom"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "He works ______ than his colleague.", options: ["hard", "harder", "hardest", "more hard"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "I am looking forward ______ you again soon.", options: ["to see", "see", "to seeing", "seeing"], ans: 2 },
+
+            // Reading Comprehension - Passage 1 (10)
+            { area: "Reading Comprehension", passage: readingPassage1, q: "According to the passage, reading for six minutes can reduce stress by ______.", options: ["25%", "50%", "68%", "100%"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "What is the MAIN idea of the reading?", options: ["How to build a library.", "The benefits of reading.", "Historical events in books.", "Modern life pressures."], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "The word 'habit' in the text refers to ______.", options: ["a costume", "a frequent action", "a difficult task", "a dream"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "According to the text, books are symbols of ______.", options: ["wealth", "knowledge", "decoration", "history"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "The author suggests that reading improves ______.", options: ["empathy", "wealth", "physical speed", "vision"], ans: 0 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "A room with books feels 'warmer' means it feels more ______.", options: ["hot", "expensive", "inviting", "crowded"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "The word 'valuable' is closest in meaning to ______.", options: ["cheap", "important", "heavy", "secret"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "Which of the following is NOT mentioned?", options: ["Stress reduction", "Empathy improvement", "Buying expensive books", "Escaping pressure"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "The tone of the author is ______.", options: ["angry", "indifferent", "positive", "critical"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "Reading allows us to 'escape' means it helps us ______.", options: ["run away physically", "get distracted positively", "hide from friends", "forget everything"], ans: 1 },
+
+            // Reading Comprehension - Passage 2 (7)
+            { area: "Reading Comprehension", passage: readingPassage2, q: "Where is the Great Barrier Reef located?", options: ["South Africa", "Australia", "Brazil", "Japan"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "The reef is the biggest structure made by ______.", options: ["humans", "living organisms", "machines", "aliens"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "What is a major threat to the reef?", options: ["Tourism", "Climate change", "Fishing", "Littering"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "Coral bleaching is caused by ______.", options: ["rising temperatures", "too many fish", "pollution", "sunlight"], ans: 0 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "The reef can be seen from ______.", options: ["underwater only", "outer space", "large cities", "mountains"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "The word 'preserve' means ______.", options: ["destroy", "protect", "change", "study"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "How many individual reefs are mentioned?", options: ["900", "2,900", "over 2,900", "less than 2,000"], ans: 2 },
+
+            // Indirect Writing (18)
+            { area: "Indirect Writing", q: "Identify the error: He don't (A) like to eat (B) vegetables for (C) dinner.", options: ["don't", "eat", "for", "No error"], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: She has (A) went (B) to the bank already (C).", options: ["has", "went", "already", "No error"], ans: 1 },
+            { area: "Indirect Writing", q: "Choose the best way to combine: The weather was bad. We stayed at home.", options: ["Because the weather was bad, so we stayed home.", "The weather was bad because we stayed home.", "Since the weather was bad, we stayed home.", "We stayed home if the weather was bad."], ans: 2 },
+            { area: "Indirect Writing", q: "Identify the error: The team (A) are (B) playing very well today (C).", options: ["The team", "are", "today", "No error"], ans: 1 },
+            { area: "Indirect Writing", q: "Choose the best word order: ______ at the party last night?", options: ["Was you", "Did you were", "Were you", "You were"], ans: 2 },
+            { area: "Indirect Writing", q: "Identify the error: My friend (A) lives (B) in (C) Paris since 2010.", options: ["friend", "lives", "in", "No error"], ans: 1 },
+            { area: "Indirect Writing", q: "Choose the correct connector: I wanted to buy the shoes, ______ they were too expensive.", options: ["because", "but", "so", "or"], ans: 1 },
+            { area: "Indirect Writing", q: "Improve the sentence: This book for me is too difficult.", options: ["This book is too difficult for me.", "For me this book is too difficult.", "Is too difficult for me this book.", "No change needed."], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: They (A) arrived (B) at (C) the airport early.", options: ["They", "arrived", "at", "No error"], ans: 3 },
+            { area: "Indirect Writing", q: "Choose the best way to combine: I have a cat. I have a dog. They are both black.", options: ["I have a cat and a dog, and they are both black.", "Because I have a cat and a dog, they are black.", "I have a cat but a dog black.", "Black are my cat and dog black."], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: Who (A) is that (B) man standing (C) there?", options: ["Who", "is that", "standing", "No error"], ans: 3 },
+            { area: "Indirect Writing", q: "Identify the error: If I am (A) you, I would (B) study more (C).", options: ["am", "would", "more", "No error"], ans: 0 },
+            { area: "Indirect Writing", q: "Choose the best way to combine: The food was delicious. The service was slow.", options: ["The food was delicious, but the service was slow.", "The food was delicious because the service was slow.", "The service was slow so the food was delicious.", "Service was slow if food was delicious."], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: Neither (A) of (B) the boys (C) are here.", options: ["Neither", "of", "are", "No error"], ans: 2 },
+            { area: "Indirect Writing", q: "Choose the best correction: Each of the girls have a book.", options: ["Each of the girls has a book.", "The girls has a book each.", "All of the girls has a book.", "No change needed."], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: We enjoyed (A) our (B) trip to (C) the mountains.", options: ["enjoyed", "our", "to", "No error"], ans: 3 },
+            { area: "Indirect Writing", q: "Identify the error: I (A) am (B) not (C) knowing the answer.", options: ["am", "not", "knowing", "No error"], ans: 2 },
+            { area: "Indirect Writing", q: "Choose the correct sentence:", options: ["He drives always carefully.", "He always drives carefully.", "Always he drives carefully.", "Carefully he drives always."], ans: 1 }
+        ];
+
+        let currentIndex = 0;
+        let scoreCorrect = 0;
+        let scoreWrong = 0;
+        let timeLeft = 3000; // 50 minutes
+        let timerInterval;
+        let canAnswer = true;
+        let answersData = [];
+
+        function startExam() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            renderQuestion();
+            startTimer();
+        }
+
+        function renderQuestion() {
+            const q = questionBank[currentIndex];
+            const container = document.getElementById('question-container');
+            canAnswer = true;
+
+            document.getElementById('progress-label').innerText = `${currentIndex + 1} of 50`;
+            document.getElementById('progress-bar').style.width = `${((currentIndex + 1) / 50) * 100}%`;
+
+            let html = `
+                <div class="mb-8">
+                    <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-[10px] font-black uppercase tracking-widest">${q.area}</span>
+                </div>
+            `;
+
+            if (q.passage) {
+                html += `<div class="reading-passage">${q.passage}</div>`;
+            }
+
+            html += `
+                <div class="text-xl sm:text-2xl font-bold leading-relaxed mb-10 text-slate-800">
+                    ${q.q}
+                </div>
+                <div id="options-list" class="grid gap-3">
+                    ${q.options.map((opt, idx) => `
+                        <button onclick="checkAnswer(${idx})" class="option-btn flex items-center gap-4 p-4 rounded-2xl border-2 border-slate-100 bg-white transition-all text-left group">
+                            <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center font-black text-sm text-slate-400 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                                ${String.fromCharCode(65 + idx)}
+                            </div>
+                            <div class="font-semibold text-slate-700 text-lg">${opt}</div>
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function checkAnswer(selectedIdx) {
+            if (!canAnswer) return;
+            canAnswer = false;
+
+            const q = questionBank[currentIndex];
+            const isCorrect = selectedIdx === q.ans;
+            const buttons = document.querySelectorAll('.option-btn');
+
+            if (isCorrect) {
+                buttons[selectedIdx].classList.add('ans-correct');
+                scoreCorrect++;
+                document.getElementById('live-correct').innerText = scoreCorrect;
+            } else {
+                buttons[selectedIdx].classList.add('ans-wrong');
+                buttons[q.ans].classList.add('ans-correct-hint');
+                scoreWrong++;
+                document.getElementById('live-wrong').innerText = scoreWrong;
+            }
+
+            answersData.push({ area: q.area, correct: isCorrect });
+
+            setTimeout(() => {
+                if (currentIndex < questionBank.length - 1) {
+                    currentIndex++;
+                    renderQuestion();
+                } else {
+                    finishExam();
+                }
+            }, 1200);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const m = Math.floor(timeLeft / 60);
+                const s = timeLeft % 60;
+                const timerEl = document.getElementById('timer');
+                timerEl.innerText = `${m}:${s < 10 ? '0' + s : s}`;
+                if (timeLeft < 300) timerEl.classList.add('text-rose-600');
+                if (timeLeft <= 0) finishExam();
+            }, 1000);
+        }
+
+        function finishExam() {
+            clearInterval(timerInterval);
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const total = questionBank.length;
+            const finalScale = 200 + Math.round((scoreCorrect / total) * 600);
+            
+            document.getElementById('final-score').innerText = finalScale;
+            document.getElementById('correct-total').innerText = scoreCorrect;
+            document.getElementById('accuracy-percent').innerText = `${Math.round((scoreCorrect / total) * 100)}%`;
+
+            const areas = ["Language Use & Vocabulary", "Reading Comprehension", "Indirect Writing"];
+            const breakdown = document.getElementById('area-results');
+            breakdown.innerHTML = "";
+
+            areas.forEach(area => {
+                const areaQs = answersData.filter(a => a.area === area);
+                const areaCorrect = areaQs.filter(a => a.correct).length;
+                const areaTotal = areaQs.length;
+                const percent = areaTotal > 0 ? (areaCorrect / areaTotal) * 100 : 0;
+
+                breakdown.innerHTML += `
+                    <div>
+                        <div class="flex justify-between text-[10px] font-black uppercase text-slate-400 mb-1">
+                            <span>${area}</span>
+                            <span class="text-slate-600">${areaCorrect} / ${areaTotal}</span>
+                        </div>
+                        <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                            <div class="h-full bg-indigo-500 transition-all duration-700" style="width: ${percent}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>

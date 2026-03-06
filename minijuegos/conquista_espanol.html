@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Conquest: Misión PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX para renderizado matemático (aunque en español se usa menos, se mantiene para consistencia) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --bg-dark: #020617;
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-dark); 
+            color: #f8fafc; 
+            background-image: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #020617 100%);
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes streak-glow {
+            0%, 100% { filter: drop-shadow(0 0 5px #fbbf24); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 15px #f59e0b); transform: scale(1.05); }
+        }
+
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        .shake-screen { animation: shake 0.2s ease-in-out 2; }
+        .streak-active { animation: streak-glow 0.8s ease-in-out infinite; }
+        
+        .zone-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .zone-card:hover {
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .option-btn:hover {
+            transform: translateX(8px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .resource-pop {
+            animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-2">
+
+    <div id="game-container" class="max-w-5xl w-full glass rounded-[3rem] shadow-2xl relative flex flex-col border border-white/5" style="min-height:95vh">
+        
+        <!-- PANTALLA DE INICIO -->
+        <div id="screen-start" class="absolute inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
+            <div class="relative mb-8 animate-float">
+                <div class="w-32 h-32 bg-indigo-600 rounded-[2.5rem] flex items-center justify-center shadow-[0_0_60px_rgba(99,102,241,0.5)] rotate-12">
+                    <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                </div>
+            </div>
+
+            <h1 class="text-5xl font-black tracking-tighter uppercase mb-4 text-white">READING CONQUEST</h1>
+            <p class="text-indigo-400 font-bold tracking-[0.4em] text-xs uppercase mb-12">Dominio de Lectura y Redacción PAA</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-3xl mb-12 text-left">
+                <div class="bg-white/5 p-5 rounded-3xl border border-white/10">
+                    <p class="text-amber-500 font-black text-[10px] uppercase mb-1">Misiones</p>
+                    <p class="text-sm text-slate-300">Resuelve pasajes de lectura e identificación de errores.</p>
+                </div>
+                <div class="bg-white/5 p-5 rounded-3xl border border-white/10">
+                    <p class="text-orange-500 font-black text-[10px] uppercase mb-1">Bono Lingüístico</p>
+                    <p class="text-sm text-slate-300">7 respuestas correctas seguidas recuperan Energía.</p>
+                </div>
+                <div class="bg-white/5 p-5 rounded-3xl border border-white/10">
+                    <p class="text-emerald-500 font-black text-[10px] uppercase mb-1">Puntaje</p>
+                    <p class="text-sm text-slate-300">Escala de 200 a 800 puntos basada en tu precisión.</p>
+                </div>
+            </div>
+
+            <button onclick="startGame()" class="px-12 py-5 bg-white text-slate-950 font-black rounded-3xl shadow-2xl hover:bg-indigo-400 transition-all active:scale-95 uppercase tracking-widest text-sm">
+                Iniciar Misión
+            </button>
+        </div>
+
+        <!-- HEADER HUD -->
+        <header id="hud" class="hidden h-24 border-b border-white/10 flex items-center px-4 sm:px-10 justify-between bg-slate-900/40">
+            <div class="flex items-center gap-4 sm:gap-8">
+                <!-- Energía -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-rose-500/20 rounded-2xl flex items-center justify-center text-rose-500 border border-rose-500/30">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21L1 12l11-9 11 9-11 9z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-[9px] font-black text-slate-500 uppercase mb-1">Moral</p>
+                        <p id="val-energy" class="text-lg sm:text-xl font-black text-white tabular-nums">100</p>
+                    </div>
+                </div>
+                <!-- Oro -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-amber-500/20 rounded-2xl flex items-center justify-center text-amber-500 border border-amber-500/30">
+                        <span class="text-xl font-bold">$</span>
+                    </div>
+                    <div>
+                        <p class="text-[9px] font-black text-slate-500 uppercase mb-1">Recursos</p>
+                        <p id="val-gold" class="text-lg sm:text-xl font-black text-white tabular-nums">0</p>
+                    </div>
+                </div>
+                <!-- Racha -->
+                <div id="streak-container" class="flex items-center gap-3 opacity-50 transition-all duration-300">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-orange-500/20 rounded-2xl flex items-center justify-center text-orange-500 border border-orange-500/30">
+                        <span class="text-xl">🔥</span>
+                    </div>
+                    <div>
+                        <p class="text-[9px] font-black text-slate-500 uppercase mb-1">Racha</p>
+                        <p id="val-streak" class="text-lg sm:text-xl font-black text-white leading-none">0<span class="text-xs text-slate-500">/7</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hidden lg:flex flex-col items-center">
+                <p class="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-1">Escala PAA</p>
+                <div class="flex items-center gap-2">
+                    <span id="val-score" class="text-4xl font-black text-white tabular-nums">200</span>
+                    <span class="text-slate-500 font-bold text-sm">/ 800</span>
+                </div>
+            </div>
+
+            <button onclick="openStore()" class="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white hover:bg-indigo-500 transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+            </button>
+        </header>
+
+        <!-- MAPA -->
+        <main id="screen-map" class="hidden flex-grow relative overflow-y-auto bg-slate-900">
+            <div id="streak-toast" class="hidden absolute top-6 left-1/2 -translate-x-1/2 bg-orange-500 text-slate-950 px-8 py-3 rounded-2xl font-black uppercase text-sm shadow-[0_0_40px_rgba(245,158,11,0.5)] z-50 animate-bounce">
+                ¡RACHA LINGÜÍSTICA! +10 MORAL ⚡
+            </div>
+            
+            <div class="absolute inset-0 flex flex-col items-center justify-center p-6 sm:p-10">
+                <h2 class="text-slate-500 font-black uppercase tracking-[0.4em] text-[10px] mb-12">Sectores de Operación de Español</h2>
+                <div id="zones-container" class="grid grid-cols-2 gap-6 sm:gap-10 max-w-4xl w-full"></div>
+            </div>
+
+            <!-- Panel Inferior -->
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-4">
+                <div class="px-8 py-4 glass rounded-3xl flex items-center gap-10">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🛡️</span>
+                        <div class="text-left">
+                            <p class="text-[8px] font-black text-slate-500 uppercase">Escudos</p>
+                            <p id="p-shields" class="font-black text-lg leading-none">0</p>
+                        </div>
+                    </div>
+                    <div class="w-px h-8 bg-white/10"></div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">📡</span>
+                        <div class="text-left">
+                            <p class="text-[8px] font-black text-slate-500 uppercase">Radares</p>
+                            <p id="p-radars" class="font-black text-lg leading-none">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- BATALLA -->
+        <div id="screen-battle" class="hidden absolute inset-0 z-[60] bg-slate-950/98 backdrop-blur-3xl flex flex-col p-6 sm:p-10 fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-5">
+                    <div id="battle-icon" class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-2xl"></div>
+                    <div>
+                        <h3 id="battle-area" class="font-black text-white uppercase tracking-widest text-lg leading-none mb-1">ÁREA</h3>
+                        <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest">Infiltración Crítica</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div id="radar-active-tag" class="hidden px-5 py-2 bg-indigo-500/20 text-indigo-400 rounded-xl text-[10px] font-black uppercase border border-indigo-500/40 animate-pulse">📡 Radar Operativo</div>
+                    <div class="text-emerald-400 font-black text-2xl">+<span id="battle-reward-val">0</span> PTS</div>
+                </div>
+            </div>
+
+            <div class="flex-grow flex flex-col max-w-5xl mx-auto w-full overflow-y-auto no-scrollbar custom-scroll pr-2">
+                <div id="reading-context" class="hidden mb-6 p-6 bg-white/5 rounded-[2rem] border border-white/5 text-slate-300 italic leading-relaxed text-sm sm:text-base shadow-inner">
+                    <!-- Pasaje de lectura -->
+                </div>
+                <div id="question-box" class="text-xl sm:text-2xl font-bold text-white mb-8 leading-snug tracking-tight"></div>
+                <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 pb-8"></div>
+            </div>
+        </div>
+
+        <!-- TIENDA -->
+        <div id="screen-store" class="hidden absolute inset-0 z-[70] bg-slate-950/95 backdrop-blur-xl flex items-center justify-center p-6">
+            <div class="max-w-md w-full bg-slate-900 rounded-[3rem] p-10 border border-white/10 shadow-2xl relative">
+                <button onclick="closeStore()" class="absolute top-8 right-8 text-slate-500 hover:text-white">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+                <h2 class="text-3xl font-black text-white mb-10 uppercase tracking-tighter">Depósito de Suministros</h2>
+                
+                <div class="space-y-5 mb-10">
+                    <div class="p-6 bg-white/5 rounded-[2rem] border border-white/5 flex items-center justify-between group">
+                        <div class="flex items-center gap-5">
+                            <div class="text-4xl">🛡️</div>
+                            <div>
+                                <p class="font-black text-white text-lg">Diccionario PAA</p>
+                                <p class="text-[10px] text-slate-500 uppercase font-bold">Evita caída de Moral</p>
+                            </div>
+                        </div>
+                        <button onclick="buyItem('shield', 50)" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-black text-xs shadow-lg shadow-emerald-600/20">$50</button>
+                    </div>
+                    
+                    <div class="p-6 bg-white/5 rounded-[2rem] border border-white/5 flex items-center justify-between group">
+                        <div class="flex items-center gap-5">
+                            <div class="text-4xl">📡</div>
+                            <div>
+                                <p class="font-black text-white text-lg">Sensor Semántico</p>
+                                <p class="text-[10px] text-slate-500 uppercase font-bold">Elimina una trampa</p>
+                            </div>
+                        </div>
+                        <button onclick="buyItem('radar', 80)" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-xs shadow-lg shadow-indigo-600/20">$80</button>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <p class="text-[10px] font-black text-slate-500 uppercase mb-1">Recursos Libres</p>
+                    <p class="text-3xl font-black text-amber-500 tabular-nums">$<span id="store-gold">0</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FIN DEL JUEGO -->
+        <div id="screen-end" class="hidden absolute inset-0 z-[100] bg-slate-950 flex flex-col items-center justify-center p-8 text-center">
+            <div id="end-vfx" class="w-32 h-32 rounded-full flex items-center justify-center text-6xl mb-10 shadow-2xl"></div>
+            <h2 id="end-title" class="text-5xl font-black uppercase mb-4 tracking-tighter text-white"></h2>
+            <div class="bg-white/5 border border-white/10 p-12 rounded-[4rem] w-full max-w-xs mb-12 shadow-2xl">
+                <p class="text-[10px] font-black text-slate-500 uppercase mb-2">Escala ESLAT</p>
+                <p id="end-score-val" class="text-8xl font-black text-white tracking-tighter">0</p>
+            </div>
+            <button onclick="location.reload()" class="px-16 py-6 bg-white text-slate-950 font-black rounded-[2rem] hover:bg-indigo-400 transition-all uppercase tracking-widest text-sm shadow-2xl active:scale-95">Reiniciar Misión</button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- BANCO DE PREGUNTAS ESPAÑOL PAA ---
+        const bank = {
+            reading: [
+                { 
+                    p: "El descubrimiento de la penicilina por Alexander Fleming en 1928 marcó el inicio de la era de los antibióticos. Antes de este hallazgo, enfermedades bacterianas simples podían ser mortales. Sin embargo, el uso excesivo de estos medicamentos ha llevado a la resistencia bacteriana, un desafío crítico para la medicina moderna.",
+                    q: "¿Cuál es la idea principal del texto?", 
+                    o: ["Fleming era un científico descuidado.", "El impacto histórico y el reto actual de los antibióticos.", "La penicilina es la única cura contra bacterias.", "Las enfermedades bacterianas ya no existen."], 
+                    a: 1 
+                },
+                {
+                    p: "La inteligencia artificial no es solo una herramienta de automatización, sino un cambio de paradigma en la forma en que interactuamos con la información. Al procesar billones de datos en segundos, permite descubrimientos científicos que al ser humano le tomarían décadas.",
+                    q: "Según el pasaje, la inteligencia artificial se define como:",
+                    o: ["Un sustituto del pensamiento humano.", "Una herramienta de procesamiento de datos.", "Un cambio de paradigma en la interacción informativa.", "Un peligro para la ciencia moderna."],
+                    a: 2
+                },
+                {
+                    p: "La Gran Muralla China no se construyó en una sola etapa, sino a lo largo de varias dinastías para protegerse de invasiones. Sus muros cuentan la historia de un imperio que buscaba consolidar su soberanía y paz interna.",
+                    q: "El propósito principal de la construcción de la muralla fue:",
+                    o: ["Atraer el turismo imperial.", "Demostrar la riqueza de las dinastías.", "La defensa contra invasiones externas.", "Crear una ruta comercial cerrada."],
+                    a: 2
+                }
+            ],
+            writing: [
+                { q: "Identifique el error en la oración: 'El grupo de estudiantes (A) decidieron (B) cancelar la (C) excursión de (D) fin de curso.'", o: ["estudiantes", "decidieron", "cancelar", "excursión"], a: 1 },
+                { q: "Elija la mejor forma de combinar: 'El clima era frío. No llevamos abrigos.'", o: ["Aunque el clima era frío, no llevamos abrigos.", "El clima era frío porque no llevamos abrigos.", "No llevamos abrigos si el clima era frío.", "Puesto que el clima era frío, no llevamos abrigos."], a: 0 },
+                { q: "Identifique la oración escrita correctamente:", o: ["Hubieron muchos invitados en la fiesta.", "Han habido muchos invitados en la fiesta.", "Hubo muchos invitados en la fiesta.", "Hubieron habido muchos invitados."], a: 2 },
+                { q: "Elija el conector lógico adecuado: 'Estudió mucho para el examen; ______, obtuvo la calificación más alta.'", o: ["sin embargo", "por consiguiente", "no obstante", "aunque"], a: 1 }
+            ],
+            vocab: [
+                { q: "En la frase: 'Su discurso fue **efímero** pero impactante', la palabra resaltada significa:", o: ["Largo", "Pasajero", "Elegante", "Confuso"], a: 1 },
+                { q: "El sinónimo de **abrumador** en el contexto de un trabajo difícil es:", o: ["Escaso", "Agobiante", "Simple", "Divertido"], a: 1 },
+                { q: "Elija la palabra que completa mejor: 'El juez actuó con ______ al dictar la sentencia justa.'", o: ["parcialidad", "probidad", "negligencia", "apatía"], a: 1 },
+                { q: "Contexto: 'La crisis fue el **detonante** de las reformas'. Sinónimo de detonante:", o: ["Consecuencia", "Causa o provocador", "Final", "Obstáculo"], a: 1 }
+            ],
+            analysis: [
+                { 
+                    p: "Caminante, no hay camino, se hace camino al andar. Al andar se hace el camino, y al volver la vista atrás se ve la senda que nunca se ha de volver a pisar. (Antonio Machado)",
+                    q: "El tono del poema es principalmente:",
+                    o: ["Arrepentido", "Reflexivo y existencial", "Alegre y festivo", "Pesimista y oscuro"], 
+                    a: 1 
+                },
+                {
+                    p: "El Quijote no solo es una burla a los libros de caballerías, sino una profunda exploración de la dualidad entre el idealismo y el realismo en la naturaleza humana.",
+                    q: "Se infiere que el autor considera a Don Quijote como:",
+                    o: ["Una figura puramente cómica.", "Un símbolo de la complejidad humana.", "Un caballero real de la época.", "Un villano incomprendido."],
+                    a: 1
+                }
+            ]
+        };
+
+        const zones = [
+            { id: 'reading', name: "Lectura Crítica", icon: "📖", color: "from-indigo-600 to-blue-800", shadow: "shadow-indigo-500/40", cost: 12, reward: 45, gold: 30 },
+            { id: 'writing', name: "Redacción Indirecta", icon: "✏️", color: "from-blue-500 to-cyan-700", shadow: "shadow-blue-400/40", cost: 10, reward: 35, gold: 25 },
+            { id: 'vocab', name: "Vocabulario", icon: "🔤", color: "from-emerald-500 to-teal-700", shadow: "shadow-emerald-500/40", cost: 8, reward: 30, gold: 20 },
+            { id: 'analysis', name: "Análisis Literario", icon: "🧠", color: "from-amber-500 to-orange-600", shadow: "shadow-amber-500/40", cost: 15, reward: 55, gold: 40 }
+        ];
+
+        let state = {
+            energy: 100, gold: 0, score: 200, streak: 0,
+            powers: { shield: 0, radar: 0 },
+            usedQuestions: {} 
+        };
+
+        function startGame() {
+            document.getElementById('screen-start').classList.add('hidden');
+            document.getElementById('hud').classList.remove('hidden');
+            document.getElementById('screen-map').classList.remove('hidden');
+            renderZones();
+            updateStats();
+        }
+
+        function renderZones() {
+            const container = document.getElementById('zones-container');
+            container.innerHTML = zones.map(z => `
+                <button onclick="enterBattle('${z.id}')" class="zone-card group bg-gradient-to-br ${z.color} rounded-[2.5rem] p-6 sm:p-8 text-left shadow-2xl ${z.shadow} border border-white/20">
+                    <div class="flex justify-between items-start mb-8">
+                        <div class="w-14 h-14 glass rounded-2xl flex items-center justify-center text-3xl shadow-inner">${z.icon}</div>
+                        <div class="text-right">
+                            <p class="text-[10px] font-black text-white/50 uppercase mb-1">Impacto</p>
+                            <p class="text-white font-black text-xl">+${z.reward} PTS</p>
+                        </div>
+                    </div>
+                    <h3 class="text-white font-black text-2xl mb-2 tracking-tight">${z.name}</h3>
+                    <div class="flex items-center gap-4">
+                        <span class="px-3 py-1 bg-white/10 rounded-lg text-[10px] font-black text-rose-100">⚡ ${z.cost}</span>
+                        <span class="px-3 py-1 bg-white/10 rounded-lg text-[10px] font-black text-amber-100">$${z.gold}</span>
+                    </div>
+                </button>
+            `).join('');
+        }
+
+        function updateStats() {
+            document.getElementById('val-energy').innerText = state.energy;
+            document.getElementById('val-gold').innerText = state.gold;
+            document.getElementById('val-score').innerText = state.score;
+            document.getElementById('val-streak').innerHTML = `${state.streak}<span class="text-xs text-slate-500">/7</span>`;
+            
+            const sCont = document.getElementById('streak-container');
+            if (state.streak > 0) {
+                sCont.style.opacity = "1";
+                if (state.streak >= 4) sCont.classList.add('streak-active');
+                else sCont.classList.remove('streak-active');
+            } else {
+                sCont.style.opacity = "0.5";
+                sCont.classList.remove('streak-active');
+            }
+
+            document.getElementById('p-shields').innerText = state.powers.shield;
+            document.getElementById('p-radars').innerText = state.powers.radar;
+            document.getElementById('store-gold').innerText = state.gold;
+        }
+
+        function enterBattle(zoneId) {
+            const zone = zones.find(z => z.id === zoneId);
+            if (state.energy < zone.cost) {
+                document.getElementById('game-container').classList.add('shake-screen');
+                setTimeout(() => document.getElementById('game-container').classList.remove('shake-screen'), 300);
+                return;
+            }
+            state.currentZone = zone;
+            
+            const pool = bank[zoneId];
+            if (!state.usedQuestions[zoneId]) state.usedQuestions[zoneId] = [];
+            
+            let available = pool.filter((_, i) => !state.usedQuestions[zoneId].includes(i));
+            if (available.length === 0) {
+                state.usedQuestions[zoneId] = [];
+                available = pool;
+            }
+            
+            const qIndex = pool.indexOf(available[Math.floor(Math.random() * available.length)]);
+            const q = pool[qIndex];
+            state.usedQuestions[zoneId].push(qIndex);
+
+            document.getElementById('battle-area').innerText = zone.name;
+            document.getElementById('battle-icon').innerText = zone.icon;
+            document.getElementById('battle-icon').className = `w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-2xl bg-gradient-to-br ${zone.color}`;
+            document.getElementById('battle-reward-val').innerText = zone.reward;
+            
+            // Contexto de lectura si existe
+            const contextEl = document.getElementById('reading-context');
+            if (q.p) {
+                contextEl.innerText = q.p;
+                contextEl.classList.remove('hidden');
+            } else {
+                contextEl.classList.add('hidden');
+            }
+
+            document.getElementById('question-box').innerText = q.q;
+            
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = q.o.map((opt, i) => `
+                <button onclick="handleAnswer(${i}, ${q.a})" class="option-btn p-6 glass rounded-[2rem] border border-white/5 text-left flex items-center gap-6 group">
+                    <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center font-black text-slate-500 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                        ${String.fromCharCode(65+i)}
+                    </div>
+                    <div class="text-white text-lg font-bold">${opt}</div>
+                </button>
+            `).join('');
+
+            if (state.powers.radar > 0) {
+                document.getElementById('radar-active-tag').classList.remove('hidden');
+                const incorrect = q.o.map((_, i) => i).filter(idx => idx !== q.a);
+                const toHide = incorrect[Math.floor(Math.random() * incorrect.length)];
+                grid.children[toHide].style.opacity = "0.1";
+                grid.children[toHide].style.pointerEvents = "none";
+                state.powers.radar--;
+            } else { document.getElementById('radar-active-tag').classList.add('hidden'); }
+
+            document.getElementById('screen-map').classList.add('hidden');
+            document.getElementById('screen-battle').classList.remove('hidden');
+        }
+
+        function handleAnswer(idx, correct) {
+            const isCorrect = idx === correct;
+            const zone = state.currentZone;
+
+            if (isCorrect) {
+                state.score += zone.reward;
+                state.gold += zone.gold;
+                state.energy -= zone.cost;
+                state.streak++;
+                if (state.streak === 7) {
+                    state.energy = Math.min(state.energy + 10, 100);
+                    state.streak = 0;
+                    showStreakBonus();
+                }
+            } else {
+                state.streak = 0;
+                if (state.powers.shield > 0) {
+                    state.powers.shield--;
+                } else {
+                    state.energy -= 15;
+                    document.getElementById('game-container').classList.add('shake-screen');
+                    setTimeout(() => document.getElementById('game-container').classList.remove('shake-screen'), 300);
+                }
+            }
+            updateStats();
+            checkEnd();
+            setTimeout(() => {
+                document.getElementById('screen-battle').classList.add('hidden');
+                document.getElementById('screen-map').classList.remove('hidden');
+            }, 800);
+        }
+
+        function showStreakBonus() {
+            const toast = document.getElementById('streak-toast');
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3500);
+        }
+
+        function openStore() { document.getElementById('screen-store').classList.remove('hidden'); }
+        function closeStore() { document.getElementById('screen-store').classList.add('hidden'); }
+        
+        function buyItem(type, cost) {
+            if (state.gold >= cost) {
+                state.gold -= cost;
+                state.powers[type]++;
+                updateStats();
+            }
+        }
+
+        function checkEnd() {
+            if (state.score >= 800) finish('WON');
+            else if (state.energy <= 0) finish('LOST');
+        }
+
+        function finish(res) {
+            const screen = document.getElementById('screen-end');
+            const vfx = document.getElementById('end-vfx');
+            const title = document.getElementById('end-title');
+            screen.classList.remove('hidden');
+            document.getElementById('end-score-val').innerText = state.score;
+            if (res === 'WON') {
+                vfx.innerText = "🎓";
+                vfx.className = "w-32 h-32 rounded-full flex items-center justify-center text-6xl mb-10 shadow-[0_0_60px_#6366f1] bg-indigo-600 animate-float";
+                title.innerText = "CONQUISTA LOGRADA";
+            } else {
+                vfx.innerText = "📚";
+                vfx.className = "w-32 h-32 rounded-full flex items-center justify-center text-6xl mb-10 shadow-[0_0_60px_#ef4444] bg-rose-600";
+                title.innerText = "MISIÓN ABORTADA";
+            }
+        }
+    </script>
+</body>
+</html>

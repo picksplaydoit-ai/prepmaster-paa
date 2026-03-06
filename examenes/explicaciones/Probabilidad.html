@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual PAA: Datos y Probabilidad</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuración de MathJax para fórmulas perfectas -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .slide {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+
+        .card {
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.08);
+            max-width: 800px;
+            width: 100%;
+            padding: 2rem;
+            position: relative;
+            border: 1px solid #f1f5f9;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 1.5rem;
+                border-radius: 1.5rem;
+                width: 95%;
+            }
+            h2 { font-size: 1.3rem !important; }
+        }
+
+        .badge-orange {
+            background: #f59e0b;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .btn-nav {
+            background: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            border: 2px solid #f1f5f9;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: #fff;
+            font-size: 0.9rem;
+        }
+
+        .option-btn:hover {
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .option-correct {
+            background: #10b981 !important;
+            color: white !important;
+            border-color: #059669 !important;
+        }
+
+        .option-incorrect {
+            background: #ef4444 !important;
+            color: white !important;
+            border-color: #dc2626 !important;
+        }
+
+        .progress-indicator {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background: #f59e0b;
+            transition: width 0.3s ease;
+            z-index: 100;
+        }
+
+        .step-pill {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            margin-right: 8px;
+        }
+
+        .chart-mock {
+            background: #fffbeb;
+            border: 1px dashed #f59e0b;
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 100px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 0: Intro -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-4">Datos y Probabilidad PAA 🎲</h1>
+            <p class="text-lg text-slate-500 mb-8 max-w-lg mx-auto leading-relaxed">
+                Aprende a dominar las gráficas, la estadística y el azar como si estuviéramos platicando. ¡Sin dramas matemáticos!
+            </p>
+            <button class="btn-nav bg-orange-500 px-12 py-4 text-lg" onclick="nextSlide()">¡Empecemos!</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: Gráficas y Tablas (Explicación) -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <div class="badge-orange">Concepto 01</div>
+            <h2 class="text-2xl font-bold mb-4">Gráficas: ¡No te marees! 📊</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>En la PAA te dan un montón de números para que te pierdas. El secreto es ser un <b>francotirador</b>:</p>
+                <ul class="list-disc ml-5 space-y-2">
+                    <li><b>Títulos de los ejes:</b> Antes de leer los datos, mira qué significa la línea de abajo y la de al lado.</li>
+                    <li><b>Tendencias:</b> ¿Sube, baja o se queda igual?</li>
+                </ul>
+                <div class="chart-mock">
+                    <div class="bg-orange-300 w-8 h-[30%] rounded-t-md"></div>
+                    <div class="bg-orange-500 w-8 h-[80%] rounded-t-md"></div>
+                    <div class="bg-orange-400 w-8 h-[50%] rounded-t-md"></div>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <span></span>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo uno</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Gráficas (Yo resuelvo) -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <div class="badge-orange">Ejemplo Resuelto</div>
+            <h2 class="text-xl font-bold mb-4">Leyendo la Tabla 📍</h2>
+            <p class="text-slate-600 text-sm mb-4">"Venta de playeras: Enero (50), Febrero (80), Marzo (40). ¿Cuál es la diferencia entre el mes que más se vendió y el que menos?"</p>
+            <div class="bg-orange-50 p-5 rounded-xl border border-orange-100">
+                <p class="font-semibold text-orange-900 mb-2">Mi análisis:</p>
+                <p class="text-xs mb-1"><span class="step-pill">1</span> Busco el mayor: Febrero con <b>80</b>.</p>
+                <p class="text-xs mb-1"><span class="step-pill">2</span> Busco el menor: Marzo con <b>40</b>.</p>
+                <p class="text-xs"><span class="step-pill">3</span> Resto: $80 - 40 = \mathbf{40}$.</p>
+                <p class="font-bold text-center mt-3 text-orange-600">¡Resultado: 40 playeras!</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Tu turno</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Gráficas (Reto) -->
+    <div class="slide" id="slide-3">
+        <div class="card text-center">
+            <div class="badge-orange">Reto de Tabla</div>
+            <h2 class="text-lg font-bold mb-6">
+                En una encuesta, 60 personas prefieren Pizza y 40 Hamburguesas. ¿Qué fracción del total de personas prefiere Pizza?
+            </h2>
+            <div class="space-y-3 max-w-xs mx-auto">
+                <button class="option-btn" onclick="checkAnswer(this, false, 't1')">A) 1/2</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 't1')">B) 3/5</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 't1')">C) 6/4</button>
+            </div>
+            <div id="feedback-t1" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Siguiente: Estadística</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Media y Mediana (Explicación) -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <div class="badge-orange">Concepto 02</div>
+            <h2 class="text-2xl font-bold mb-4">Media vs Mediana 🥊</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <div class="p-3 bg-slate-50 rounded-xl border-l-4 border-indigo-500">
+                    <p class="font-bold">Media (Promedio):</p>
+                    <p>Es el "repartidor justo". Sumas todos los valores y los divides entre cuántos hay.</p>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl border-l-4 border-orange-500">
+                    <p class="font-bold">Mediana (El del centro):</p>
+                    <p>Es el que vive justo a la mitad. <b>¡CUIDADO!</b> Tienes que ordenarlos de menor a mayor primero o te saldrá mal.</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo uno</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Estadística (Yo resuelvo) -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <div class="badge-orange">Yo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4 text-center">Buscando la Mediana 📏</h2>
+            <p class="mb-4 text-slate-600 text-sm">"Halla la mediana de estas calificaciones: 90, 70, 100, 80, 85"</p>
+            <div class="bg-orange-50 p-5 rounded-xl text-sm">
+                <p class="mb-2"><span class="step-pill">1</span> <b>Ordeno:</b> 70, 80, 85, 90, 100</p>
+                <p><span class="step-pill">2</span> <b>Cuento:</b> Hay 5 números. El del medio es el tercero.</p>
+                <p class="font-bold text-center mt-3 text-orange-700 text-lg">Resultado: 85</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Tu turno</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Estadística (Reto) -->
+    <div class="slide" id="slide-6">
+        <div class="card text-center">
+            <div class="badge-orange">Reto Mental</div>
+            <h2 class="text-lg font-bold mb-6">¿Cuál es el promedio (media) de los números: 10, 20 y 30?</h2>
+            <div class="space-y-3 max-w-xs mx-auto">
+                <button class="option-btn text-center" onclick="checkAnswer(this, false, 's1')">A) 10</button>
+                <button class="option-btn text-center" onclick="checkAnswer(this, true, 's1')">B) 20</button>
+                <button class="option-btn text-center" onclick="checkAnswer(this, false, 's1')">C) 60</button>
+            </div>
+            <div id="feedback-s1" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Siguiente: Probabilidad</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Probabilidad (Explicación) -->
+    <div class="slide" id="slide-7">
+        <div class="card">
+            <div class="badge-orange">Concepto 03</div>
+            <h2 class="text-2xl font-bold mb-4">Probabilidad: El "Quiero/Total" 🎲</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>La probabilidad es solo una división amigable. Olvida las fórmulas raras y recuerda esto:</p>
+                <div class="bg-slate-100 p-6 rounded-2xl text-center border-2 border-orange-200">
+                    <p class="font-bold">$$P = \frac{\text{Lo que quiero (Éxitos)}}{\text{Total de opciones}}$$</p>
+                </div>
+                <p class="text-xs italic text-slate-500">Ejemplo: Si hay 10 pelotas y 2 son rojas, la probabilidad de sacar roja es $2/10$.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo uno</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Probabilidad (Yo resuelvo) -->
+    <div class="slide" id="slide-8">
+        <div class="card">
+            <div class="badge-orange">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4 text-center">La tómbola del azar 🎰</h2>
+            <p class="mb-4 text-slate-600 text-sm">"En una urna hay 5 canicas verdes, 3 rojas y 2 azules. ¿Cuál es la probabilidad de sacar una que NO sea verde?"</p>
+            <div class="bg-orange-50 p-5 rounded-xl text-sm">
+                <p class="mb-2"><span class="step-pill">1</span> <b>Total:</b> $5 + 3 + 2 = \mathbf{10}$.</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Lo que quiero:</b> Las que NO son verdes (Rojas + Azules) $\rightarrow 3 + 2 = \mathbf{5}$.</p>
+                <p><span class="step-pill">3</span> <b>Fracción:</b> $5/10$ que es lo mismo que $\mathbf{1/2}$ o **0.50**.</p>
+                <p class="font-bold text-center mt-3 text-orange-700">¡Resultado: 50%!</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Tu Reto Azar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Probabilidad (Reto) -->
+    <div class="slide" id="slide-9">
+        <div class="card text-center">
+            <div class="badge-orange">Reto de Azar</div>
+            <h2 class="text-lg font-bold mb-6 italic">"Si lanzas un dado de 6 caras, ¿cuál es la probabilidad de que caiga un número mayor que 4?"</h2>
+            <div class="space-y-3 max-w-xs mx-auto">
+                <button class="option-btn text-center" onclick="checkAnswer(this, false, 'p1')">A) 1/6</button>
+                <button class="option-btn text-center" onclick="checkAnswer(this, true, 'p1')">B) 1/3 (es decir, 2/6)</button>
+                <button class="option-btn text-center" onclick="checkAnswer(this, false, 'p1')">C) 1/2</button>
+            </div>
+            <div id="feedback-p1" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Finalizar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide Final -->
+    <div class="slide" id="slide-10">
+        <div class="card text-center">
+            <div class="mb-6 flex justify-center text-6xl">✨</div>
+            <h2 class="text-4xl font-extrabold text-slate-900 mb-6">¡Nivel Experto!</h2>
+            <p class="text-lg text-slate-500 mb-10 leading-relaxed max-w-md mx-auto">
+                Has dominado la interpretación de datos y el cálculo de probabilidad básica. Estas son preguntas seguras en tu PAA. ¡Confía en tu lógica!
+            </p>
+            <button class="btn-nav px-12 py-4" onclick="goToStart()">Reiniciar Guía</button>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        }
+
+        function checkAnswer(btn, isCorrect, qId) {
+            const fb = document.getElementById(`feedback-${qId}`);
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.textContent = "¡Dominado! ✨";
+                fb.className = "mt-4 font-bold text-green-600 block scale-110 transition-transform";
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.textContent = "¡Casi! Inténtalo de nuevo ❌";
+                fb.className = "mt-4 font-bold text-red-600 block";
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() {
+            currentSlide = 0;
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
+            document.querySelectorAll('[id^="feedback-"]').forEach(f => f.textContent = "");
+            updateUI();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        let ts = 0;
+        document.addEventListener('touchstart', e => ts = e.touches[0].clientX);
+        document.addEventListener('touchend', e => {
+            let te = e.changedTouches[0].clientX;
+            if (ts - te > 70) nextSlide();
+            if (te - ts > 70) prevSlide();
+        });
+
+        updateUI();
+    </script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Aritmética PAA Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuración de MathJax para fórmulas perfectas -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .slide {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+
+        .card {
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.08);
+            max-width: 800px;
+            width: 100%;
+            padding: 2.5rem;
+            position: relative;
+            border: 1px solid #f1f5f9;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 1.5rem;
+                border-radius: 1.5rem;
+                width: 95%;
+            }
+            h2 { font-size: 1.25rem !important; }
+        }
+
+        .badge-math {
+            background: #10b981;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .btn-nav {
+            background: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            border: 2px solid #f1f5f9;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: #fff;
+            font-size: 0.9rem;
+        }
+
+        .option-btn:hover { border-color: #10b981; background: #ecfdf5; }
+        .option-correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
+        .option-incorrect { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
+
+        .progress-indicator {
+            position: fixed;
+            bottom: 0; left: 0; height: 5px;
+            background: #10b981; transition: width 0.3s ease; z-index: 100;
+        }
+
+        .step-pill {
+            background: #dcfce7; color: #166534; padding: 2px 8px;
+            border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-right: 8px;
+        }
+
+        .formula-box {
+            background: #f0fdf4; border-left: 4px solid #10b981;
+            padding: 1rem; border-radius: 0.75rem; margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 0: Intro -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-4 text-balance">Aritmética PAA: El Manual Definitivo 🧮</h1>
+            <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
+                Dominaremos las proporciones y las famosas <b>Reglas de 3</b>. Prepárate para entender cuándo multiplicar cruzado y cuándo de frente.
+            </p>
+            <button class="btn-nav bg-emerald-600 px-12 py-4 text-lg" onclick="nextSlide()">¡Empecemos!</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: Razones y Proporciones (TEORÍA) -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <div class="badge-math">Nivel 1: Proporciones</div>
+            <h2 class="text-2xl font-bold mb-4 text-emerald-700">Razones: Comparando Peras con Manzanas 🍎</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>Una <b>razón</b> es solo una comparación entre dos números. Se puede escribir como \( a:b \) o como fracción \( \frac{a}{b} \).</p>
+                <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                    <p class="font-bold mb-2">¿Qué es una proporción?</p>
+                    <p>Es cuando dos razones son iguales. Es como decir que dos recetas de cocina saben igual aunque una sea para 2 personas y la otra para 10.</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Proporciones</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Ejemplo Proporciones (YO RESUELVO) -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <div class="badge-math">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">La Receta del Éxito 🍳</h2>
+            <p class="text-slate-600 text-sm mb-4">"Si una receta de galletas usa 2 tazas de harina por cada 3 tazas de azúcar, ¿cuántas tazas de harina se necesitan si usamos 12 tazas de azúcar?"</p>
+            <div class="bg-emerald-50 p-5 rounded-xl border border-emerald-100 text-sm">
+                <p class="mb-2 font-semibold text-emerald-900">1. Planteo la igualdad:</p>
+                <p class="text-center italic">\( \frac{2 \text{ harina}}{3 \text{ azúcar}} = \frac{x \text{ harina}}{12 \text{ azúcar}} \)</p>
+                <p class="mt-4 mb-2 font-semibold text-emerald-900">2. Busco el factor:</p>
+                <p>¿Qué le pasó al 3 para volverse 12? ¡Se multiplicó por 4! Entonces, multiplico el de arriba (2) por el mismo factor.</p>
+                <p class="text-center font-bold text-lg mt-2">\( 2 \times 4 = \mathbf{8 \text{ tazas}} \)</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Proporciones</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Reto Proporciones (INTERACTIVO) -->
+    <div class="slide" id="slide-3">
+        <div class="card text-center">
+            <div class="badge-math">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-6 italic">
+                En una escuela, la razón de maestros a alumnos es de 1 a 25. Si hay 200 alumnos, ¿cuántos maestros hay?
+            </h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rp')">A) 8 maestros</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rp')">B) 10 maestros</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rp')">C) 12 maestros</button>
+            </div>
+            <div id="feedback-rp" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Regla de 3 Directa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Regla de 3 Directa (TEORÍA) -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <div class="badge-math">Nivel 2: Regla de 3</div>
+            <h2 class="text-2xl font-bold mb-4 text-emerald-700">Directa: El Efecto Espejo 📈</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>Es la más común. Se usa cuando las dos variables se llevan bien: si una <b>sube</b>, la otra <b>sube</b>. Si una <b>baja</b>, la otra <b>baja</b>.</p>
+                <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+                    <p class="font-bold text-indigo-800 mb-2">¿Cómo detectarla?</p>
+                    <p>Hazte la pregunta: "¿Si compro más, pago más?". Si la respuesta es sí, es <b>DIRECTA</b>.</p>
+                    <p class="mt-2 text-xs font-semibold">Técnica: Multiplicación en CRUZ ⚔️</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo la resuelvo (Directa)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Ejemplo Directa (YO RESUELVO) -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <div class="badge-math">Yo la resuelvo</div>
+            <h2 class="text-xl font-bold mb-4 text-emerald-800">El Viaje en Coche 🚗</h2>
+            <p class="text-slate-600 text-sm mb-4">"Si un coche recorre 180 km con 15 litros de gasolina, ¿cuántos km recorrerá con 20 litros?"</p>
+            <div class="bg-emerald-50 p-5 rounded-xl border border-emerald-100 text-sm">
+                <p class="mb-2 font-semibold">1. Acomodo:</p>
+                <p class="ml-4">15 litros \(\rightarrow\) 180 km</p>
+                <p class="ml-4">20 litros \(\rightarrow\) \( x \) km</p>
+                <p class="mt-4 mb-2 font-semibold italic text-indigo-700">Lógica: A más litros, más km. ¡Es Directa!</p>
+                <p class="text-center font-mono text-lg mt-2">\( x = \frac{20 \times 180}{15} = \frac{3600}{15} = \mathbf{240 \text{ km}} \)</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Directa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Reto Directa (INTERACTIVO) -->
+    <div class="slide" id="slide-6">
+        <div class="card text-center">
+            <div class="badge-math">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-6 italic">
+                Si 5 boletos para el cine cuestan $45, ¿cuánto pagarás por 8 boletos?
+            </h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rd')">A) $64</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rd')">B) $72</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rd')">C) $80</button>
+            </div>
+            <div id="feedback-rd" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Regla de 3 Inversa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Regla de 3 Inversa (TEORÍA) -->
+    <div class="slide" id="slide-7">
+        <div class="card">
+            <div class="badge-math">Nivel 3: Regla de 3</div>
+            <h2 class="text-2xl font-bold mb-4 text-emerald-700">Inversa: El Efecto Balancín ⚖️</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>Aquí las variables no se llevan bien: si una <b>sube</b>, la otra <b>baja</b>. </p>
+                <div class="bg-orange-50 p-4 rounded-xl border border-orange-100">
+                    <p class="font-bold text-orange-800 mb-2">¿Cómo detectarla?</p>
+                    <p>Hazte la pregunta: "¿Si pongo más gente a trabajar, tardaremos menos tiempo?". Si la respuesta es sí, es <b>INVERSA</b>.</p>
+                    <p class="mt-2 text-xs font-semibold">Técnica: Multiplicación LINEAL (de frente) 📏</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo la resuelvo (Inversa)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Ejemplo Inversa (YO RESUELVO) -->
+    <div class="slide" id="slide-8">
+        <div class="card">
+            <div class="badge-math">Yo la resuelvo</div>
+            <h2 class="text-xl font-bold mb-4 text-orange-800">Pintando la Pared 🖌️</h2>
+            <p class="text-slate-600 text-sm mb-4">"Si 3 pintores tardan 8 horas en terminar un mural, ¿cuántas horas tardarían 6 pintores?"</p>
+            <div class="bg-orange-50 p-5 rounded-xl border border-orange-100 text-sm">
+                <p class="mb-2 font-semibold">1. Acomodo:</p>
+                <p class="ml-4">3 pintores \(\rightarrow\) 8 horas</p>
+                <p class="ml-4">6 pintores \(\rightarrow\) \( x \) horas</p>
+                <p class="mt-4 mb-2 font-semibold italic text-orange-700">Lógica: A más pintores, menos tiempo. ¡Es Inversa!</p>
+                <p class="text-center font-mono text-lg mt-2">\( x = \frac{3 \times 8}{6} = \frac{24}{6} = \mathbf{4 \text{ horas}} \)</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Inversa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Reto Inversa (INTERACTIVO) -->
+    <div class="slide" id="slide-9">
+        <div class="card text-center">
+            <div class="badge-math">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-6 italic">
+                Un coche viaja a 60 km/h y tarda 4 horas en llegar a su destino. ¿Cuánto tardará si viaja a 80 km/h?
+            </h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'ri')">A) 5.3 horas</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'ri')">B) 3 horas</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'ri')">C) 2 horas</button>
+            </div>
+            <div id="feedback-ri" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Finalizar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide Final -->
+    <div class="slide" id="slide-10">
+        <div class="card text-center">
+            <div class="mb-6 flex justify-center text-6xl">🏆</div>
+            <h2 class="text-4xl font-extrabold text-slate-900 mb-6">¡Aritmética Dominada!</h2>
+            <p class="text-lg text-slate-500 mb-10 leading-relaxed max-w-md mx-auto">
+                Has aprendido a diferenciar entre proporciones, reglas de 3 directas e inversas. Con esto, los problemas de lógica numérica de la PAA serán pan comido.
+            </p>
+            <button class="btn-nav px-12 py-4" onclick="goToStart()">Reiniciar Guía</button>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        }
+
+        function checkAnswer(btn, isCorrect, qId) {
+            const fb = document.getElementById(`feedback-${qId}`);
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.textContent = "¡Perfecto! ✨";
+                fb.className = "mt-4 font-bold text-green-600 block scale-110 transition-transform text-center";
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.textContent = "¡Casi! Revisa si es directa o inversa ❌";
+                fb.className = "mt-4 font-bold text-red-600 block text-center";
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() {
+            currentSlide = 0;
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
+            document.querySelectorAll('[id^="feedback-"]').forEach(f => f.textContent = "");
+            updateUI();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        updateUI();
+    </script>
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation 3: English PAA (ESLAT)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; overflow-x: hidden; }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .custom-scroll::-webkit-scrollbar { width: 5px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        .ans-correct { background-color: #ecfdf5 !important; border-color: #10b981 !important; color: #065f46 !important; }
+        .ans-wrong { background-color: #fef2f2 !important; border-color: #ef4444 !important; color: #991b1b !important; }
+        .ans-correct-hint { border-color: #10b981 !important; border-style: dashed !important; border-width: 2px !important; }
+        
+        .reading-passage { background-color: #ffffff; border: 1px solid #e2e8f0; padding: 1.5rem; margin-bottom: 2rem; border-radius: 1rem; font-style: normal; line-height: 1.8; color: #334155; box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start py-4 sm:py-8 px-2">
+
+    <!-- Start Screen -->
+    <div id="start-screen" class="max-w-2xl w-full bg-white rounded-3xl shadow-xl p-8 text-center border border-slate-200">
+        <div class="w-20 h-20 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg rotate-3">
+            <span class="text-4xl font-black">3</span>
+        </div>
+        <h1 class="text-3xl font-black text-slate-900 mb-2 uppercase tracking-tight">English Simulation 3</h1>
+        <p class="text-blue-600 font-bold mb-8 tracking-widest uppercase text-sm">Final Proficiency Practice - ESLAT</p>
+        
+        <div class="grid grid-cols-2 gap-4 mb-8 text-left">
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Total Items</p>
+                <p class="text-xl font-bold">50 Questions</p>
+            </div>
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Time allowed</p>
+                <p class="text-xl font-bold">50 Minutes</p>
+            </div>
+        </div>
+
+        <button onclick="startExam()" class="w-full bg-blue-600 hover:bg-black text-white font-black py-4 rounded-2xl shadow-xl transition-all active:scale-95 text-lg uppercase tracking-widest">
+            Begin Final Challenge
+        </button>
+    </div>
+
+    <!-- Exam Interface -->
+    <div id="exam-screen" class="hidden max-w-4xl w-full flex flex-col gap-4">
+        <header class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm sticky top-0 z-50 grid grid-cols-3 items-center">
+            <div class="flex flex-col">
+                <p class="text-[9px] font-black text-slate-400 uppercase">Timer</p>
+                <p id="timer" class="text-lg font-mono font-black text-blue-600 leading-none">50:00</p>
+            </div>
+            
+            <div class="flex justify-center gap-6">
+                <div class="text-center">
+                    <p class="text-[9px] font-black text-emerald-500 uppercase">Correct</p>
+                    <p id="live-correct" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-[9px] font-black text-rose-500 uppercase">Errors</p>
+                    <p id="live-wrong" class="text-lg font-black text-rose-600 leading-none">0</p>
+                </div>
+            </div>
+
+            <div class="text-right">
+                <p id="progress-label" class="text-[9px] font-black text-slate-400 uppercase">Item 1/50</p>
+                <div class="w-full h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden border border-slate-200">
+                    <div id="progress-bar" class="h-full bg-blue-600 transition-all duration-300" style="width: 2%"></div>
+                </div>
+            </div>
+        </header>
+
+        <main class="bg-white border border-slate-200 rounded-[2.5rem] shadow-lg p-6 sm:p-10 flex flex-col min-h-[450px]">
+            <div id="question-container" class="flex-grow fade-in overflow-y-auto custom-scroll max-h-[70vh]">
+                <!-- Dynamic Content -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Results -->
+    <div id="result-screen" class="hidden max-w-2xl w-full bg-white rounded-[3rem] shadow-2xl overflow-hidden fade-in border border-slate-200">
+        <div class="bg-slate-900 p-10 text-center text-white">
+            <p class="text-blue-400 font-black uppercase tracking-[0.3em] text-[10px] mb-2">Final Estimated Score</p>
+            <div class="flex items-center justify-center gap-2">
+                <h2 id="final-score" class="text-8xl font-black tracking-tighter leading-none">200</h2>
+                <span class="text-slate-500 font-bold text-xl self-end mb-2">/ 800</span>
+            </div>
+        </div>
+        
+        <div class="p-8 sm:p-12">
+            <h3 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-tight">Final Assessment</h3>
+            <div id="area-results" class="space-y-4 mb-8"></div>
+
+            <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100 flex items-center justify-between mb-8">
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Total Correct</p>
+                    <p class="text-2xl font-black text-slate-900"><span id="correct-total">0</span>/50</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Overall Accuracy</p>
+                    <p id="accuracy-percent" class="text-2xl font-black text-blue-600">0%</p>
+                </div>
+            </div>
+
+            <button onclick="location.reload()" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl shadow-xl hover:bg-black transition-all uppercase tracking-widest text-sm">
+                Finish & Restart
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const readingPassage1 = "The deep sea remains one of the last frontiers of exploration on Earth. Covering more than sixty percent of our planet, the deep ocean is a world of extreme pressure, near-freezing temperatures, and total darkness. Despite these harsh conditions, it is home to a diverse array of unique life forms that have adapted in extraordinary ways. Scientists use remotely operated vehicles (ROVs) to study these ecosystems and discover new species. Each mission brings back data that helps us understand the critical role the ocean plays in regulating the global climate and supporting life on the surface.";
+
+        const readingPassage2 = "Cinema has evolved dramatically since the first silent films of the late 19th century. Early movies relied on physical acting and title cards to convey stories without sound. The introduction of 'talkies' in the late 1920s transformed the industry, making dialogue and music essential elements of filmmaking. Today, digital technology and computer-generated imagery (CGI) allow directors to create breathtaking visual effects that were once impossible. However, many critics argue that despite these technological advances, the core of a great movie remains a compelling story and strong character development.";
+
+        const questionBank = [
+            // Language Use & Vocabulary (15 items)
+            { area: "Language Use & Vocabulary", q: "Complete the sentence: My neighbor is a talented ______; he designs beautiful gardens and parks.", options: ["carpenter", "landscape architect", "electrician", "plumber"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "Choose the correct form: By the time the movie ended, we ______ already finished our popcorn.", options: ["have", "has", "had", "having"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "The team members are proud of ______ achievements this year.", options: ["them", "they", "their", "theirs"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "She ______ a new language every two years.", options: ["learn", "learns", "learning", "learned"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "Identify the most appropriate word: The ______ provided a detailed map for our hiking trip.", options: ["chef", "guide", "waiter", "tailor"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "I ______ any homework tonight because I finished it in class.", options: ["don't have", "doesn't have", "no have", "haven't"], ans: 0 },
+            { area: "Language Use & Vocabulary", q: "Choose the CORRECT question:", options: ["Why you are late?", "Why are you late?", "Are you why late?", "Why late you are?"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "This is the ______ book I have ever read.", options: ["interesting", "more interesting", "most interesting", "interestinger"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "We usually have lunch ______ noon.", options: ["at", "on", "in", "by"], ans: 0 },
+            { area: "Language Use & Vocabulary", q: "If they ______ harder, they would win the match.", options: ["train", "trains", "trained", "training"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "He is very skilled ______ solving complex puzzles.", options: ["at", "on", "with", "for"], ans: 0 },
+            { area: "Language Use & Vocabulary", q: "There ______ a large crowd outside the stadium right now.", options: ["is", "are", "was", "be"], ans: 0 },
+            { area: "Language Use & Vocabulary", q: "I have been working here ______ 2018.", options: ["for", "during", "since", "ago"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "This path is ______ than the one we took earlier.", options: ["narrowest", "more narrow", "narrower", "narrow"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "Can you see ______ over there? It's my brother's car.", options: ["this", "that", "these", "those"], ans: 1 },
+
+            // Reading Comprehension - Passage 1 (10 items)
+            { area: "Reading Comprehension", passage: readingPassage1, q: "How much of the planet is covered by the deep ocean?", options: ["Less than 20%", "Exactly 50%", "More than 60%", "Over 90%"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "What is a characteristic of the deep sea mentioned in the text?", options: ["Bright sunlight", "Tropical temperatures", "Extreme pressure", "Fast currents"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "The word 'extraordinary' in the text describes ______.", options: ["life forms", "ROVs", "scientists", "climate"], ans: 0 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "Scientists use ROVs to ______.", options: ["fish for food", "study ecosystems", "travel across the surface", "control the climate"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "The text states that deep sea life has ______ to harsh conditions.", options: ["failed to survive", "moved to the surface", "adapted", "remained unchanged"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "According to the passage, the ocean plays a critical role in ______.", options: ["creating pressure", "making light", "regulating the global climate", "producing freezing water"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "The word 'harsh' in the text is closest in meaning to ______.", options: ["pleasant", "easy", "difficult and severe", "colorful"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "Which of the following is NOT mentioned as a condition of the deep sea?", options: ["High pressure", "Low temperatures", "Darkness", "Strong winds"], ans: 3 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "The author considers the deep sea a ______.", options: ["discovered island", "frontier of exploration", "noisy environment", "small lake"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "What is the MAIN purpose of the missions mentioned?", options: ["To catch new fish", "To gather data and understand the ocean's role", "To build underwater cities", "To fix ROVs"], ans: 1 },
+
+            // Reading Comprehension - Passage 2 (7 items)
+            { area: "Reading Comprehension", passage: readingPassage2, q: "When did silent films first appear?", options: ["Early 18th century", "Late 19th century", "Early 1920s", "Modern times"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "What were 'title cards' used for in silent films?", options: ["To sell tickets", "To show the actors' names only", "To convey stories without sound", "To advertise other movies"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "The term 'talkies' refers to movies that ______.", options: ["are very long", "have sound and dialogue", "are animated", "use only digital effects"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "CGI allows modern directors to create ______.", options: ["silent scenes", "breathtaking visual effects", "title cards", "black and white films"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "What do critics argue is still the most important part of a movie?", options: ["High-tech CGI", "Fast digital cameras", "A compelling story and character development", "Famous actors"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "The word 'convey' in the text means ______.", options: ["hide", "transmit or communicate", "delete", "repair"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "The introduction of sound ______ the movie industry.", options: ["ended", "transformed", "ignored", "limited"], ans: 1 },
+
+            // Indirect Writing (18 items)
+            { area: "Indirect Writing", q: "Identify the error: He (A) have (B) finished his project (C) already.", options: ["He", "have", "finished", "No error"], ans: 1 },
+            { area: "Indirect Writing", q: "Choose the best correction: None of the students has their books.", options: ["have their books", "has his book", "have its books", "No change needed"], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: Despite (A) the weather was bad (B), they went out (C).", options: ["Despite", "weather", "went out", "No error"], ans: 0 },
+            { area: "Indirect Writing", q: "Choose the best way to combine: I love music. I play the violin. I practice every day.", options: ["Because I love music, I play the violin and practice every day.", "I love music and I play the violin but practice every day.", "I love music if I play the violin every day.", "Playing the violin is love music and practice."], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: We (A) discussed (B) about (C) the problem for hours.", options: ["discussed", "about", "for", "No error"], ans: 1 },
+            { area: "Indirect Writing", q: "Choose the best word order: ______ your parents going on vacation next week?", options: ["Do", "Are", "Is", "Were"], ans: 1 },
+            { area: "Indirect Writing", q: "Improve the sentence: Quickly to the store the boy ran.", options: ["The boy ran quickly to the store.", "To the store quickly the boy ran.", "Ran the boy quickly to the store.", "No change needed."], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: She (A) is (B) best (C) than me at math.", options: ["is", "best", "at", "No error"], ans: 1 },
+            { area: "Indirect Writing", q: "Choose the correct connector: She didn't study; ______, she failed the test.", options: ["however", "consequently", "but", "nevertheless"], ans: 1 },
+            { area: "Indirect Writing", q: "Identify the error: I (A) am (B) seeing (C) him tomorrow at noon.", options: ["I", "am", "seeing", "No error"], ans: 3 },
+            { area: "Indirect Writing", q: "Choose the best way to combine: The cake is sweet. The cake is delicious. It was made by my sister.", options: ["The sweet, delicious cake was made by my sister.", "The cake is sweet so delicious made by my sister.", "Since the cake is sweet, it is delicious by my sister.", "My sister made the cake because it is sweet and delicious."], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: Each (A) of (B) the players (C) want to win.", options: ["Each", "of", "want", "No error"], ans: 2 },
+            { area: "Indirect Writing", q: "Choose the best correction: If it rains, the ground gets wet.", options: ["will get wet", "got wet", "getting wet", "No change needed"], ans: 3 },
+            { area: "Indirect Writing", q: "Identify the error: This (A) is (B) the (C) more worst day ever.", options: ["This", "is", "more worst", "No error"], ans: 2 },
+            { area: "Indirect Writing", q: "Improve the sentence: Never I have seen such a beautiful view.", options: ["I have never seen such a beautiful view.", "Seen have I never such a beautiful view.", "Such a beautiful view never I have seen.", "No change needed."], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: Who's (A) book (B) is this on the (C) table?", options: ["Who's", "book", "on the", "No error"], ans: 0 },
+            { area: "Indirect Writing", q: "Choose the best word order: ______ you been waiting for a long time?", options: ["Do", "Are", "Have", "Were"], ans: 2 },
+            { area: "Indirect Writing", q: "Identify the error: They (A) are (B) having (C) much (D) fun.", options: ["They", "are", "much", "No error"], ans: 2 }
+        ];
+
+        let currentIndex = 0;
+        let scoreCorrect = 0;
+        let scoreWrong = 0;
+        let timeLeft = 3000; // 50 minutes
+        let timerInterval;
+        let canAnswer = true;
+        let answersData = [];
+
+        function startExam() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            renderQuestion();
+            startTimer();
+        }
+
+        function renderQuestion() {
+            const q = questionBank[currentIndex];
+            const container = document.getElementById('question-container');
+            canAnswer = true;
+
+            document.getElementById('progress-label').innerText = `Item ${currentIndex + 1}/50`;
+            document.getElementById('progress-bar').style.width = `${((currentIndex + 1) / 50) * 100}%`;
+
+            let html = `
+                <div class="mb-6">
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-lg text-[10px] font-black uppercase tracking-widest">${q.area}</span>
+                </div>
+            `;
+
+            if (q.passage) {
+                html += `<div class="reading-passage">${q.passage}</div>`;
+            }
+
+            html += `
+                <div class="text-xl sm:text-2xl font-bold leading-relaxed mb-10 text-slate-800">
+                    ${q.q}
+                </div>
+                <div id="options-list" class="grid gap-3">
+                    ${q.options.map((opt, idx) => `
+                        <button onclick="checkAnswer(${idx})" class="option-btn flex items-center gap-4 p-5 rounded-2xl border-2 border-slate-100 bg-white transition-all text-left group">
+                            <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center font-black text-sm text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                ${String.fromCharCode(65 + idx)}
+                            </div>
+                            <div class="font-semibold text-slate-700 text-lg">${opt}</div>
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function checkAnswer(selectedIdx) {
+            if (!canAnswer) return;
+            canAnswer = false;
+
+            const q = questionBank[currentIndex];
+            const isCorrect = selectedIdx === q.ans;
+            const buttons = document.querySelectorAll('.option-btn');
+
+            if (isCorrect) {
+                buttons[selectedIdx].classList.add('ans-correct');
+                scoreCorrect++;
+                document.getElementById('live-correct').innerText = scoreCorrect;
+            } else {
+                buttons[selectedIdx].classList.add('ans-wrong');
+                buttons[q.ans].classList.add('ans-correct-hint');
+                scoreWrong++;
+                document.getElementById('live-wrong').innerText = scoreWrong;
+            }
+
+            answersData.push({ area: q.area, correct: isCorrect });
+
+            setTimeout(() => {
+                if (currentIndex < questionBank.length - 1) {
+                    currentIndex++;
+                    renderQuestion();
+                } else {
+                    finishExam();
+                }
+            }, 1200);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const m = Math.floor(timeLeft / 60);
+                const s = timeLeft % 60;
+                const timerEl = document.getElementById('timer');
+                timerEl.innerText = `${m}:${s < 10 ? '0' + s : s}`;
+                if (timeLeft < 300) timerEl.classList.add('text-rose-600');
+                if (timeLeft <= 0) finishExam();
+            }, 1000);
+        }
+
+        function finishExam() {
+            clearInterval(timerInterval);
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const total = 50;
+            const finalScale = 200 + Math.round((scoreCorrect / total) * 600);
+            
+            document.getElementById('final-score').innerText = finalScale;
+            document.getElementById('correct-total').innerText = scoreCorrect;
+            document.getElementById('accuracy-percent').innerText = `${Math.round((scoreCorrect / total) * 100)}%`;
+
+            const areas = ["Language Use & Vocabulary", "Reading Comprehension", "Indirect Writing"];
+            const breakdown = document.getElementById('area-results');
+            breakdown.innerHTML = "";
+
+            areas.forEach(area => {
+                const areaQs = answersData.filter(a => a.area === area);
+                const areaCorrect = areaQs.filter(a => a.correct).length;
+                const areaTotal = areaQs.length;
+                const percent = areaTotal > 0 ? (areaCorrect / areaTotal) * 100 : 0;
+
+                breakdown.innerHTML += `
+                    <div>
+                        <div class="flex justify-between text-[10px] font-black uppercase text-slate-400 mb-1">
+                            <span>${area}</span>
+                            <span class="text-slate-600">${areaCorrect} / ${areaTotal}</span>
+                        </div>
+                        <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                            <div class="h-full bg-blue-600 transition-all duration-700" style="width: ${percent}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>

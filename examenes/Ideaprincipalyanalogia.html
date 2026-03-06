@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Lectura y Razonamiento PAA Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Soporte para símbolos si fueran necesarios -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+            margin: 0;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .slide {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+
+        .card {
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.08);
+            max-width: 850px;
+            width: 100%;
+            padding: 2rem;
+            position: relative;
+            border: 1px solid #e2e8f0;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 1.5rem;
+                border-radius: 1.5rem;
+                width: 95%;
+            }
+            h2 { font-size: 1.2rem !important; }
+            p { font-size: 0.9rem !important; }
+        }
+
+        .badge-reading {
+            background: #3b82f6;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .badge-verbal {
+            background: #8b5cf6;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .btn-nav {
+            background: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            border: 2px solid #f1f5f9;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: #fff;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .option-btn:hover { border-color: #3b82f6; background: #eff6ff; }
+        .option-correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
+        .option-incorrect { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
+
+        .progress-indicator {
+            position: fixed;
+            bottom: 0; left: 0; height: 5px;
+            background: #3b82f6; transition: width 0.3s ease; z-index: 100;
+        }
+
+        .text-block {
+            background: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-style: italic;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .step-pill {
+            background: #dbeafe; color: #1e40af; padding: 2px 8px;
+            border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 0: Intro -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-4 text-balance">Lectura y Razonamiento PAA 📚💡</h1>
+            <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
+                Domina la comprensión de textos y el razonamiento lógico verbal. Vamos a <b>hackear</b> el examen con estrategia.
+            </p>
+            <button class="btn-nav bg-blue-600 px-12 py-4 text-lg" onclick="nextSlide()">¡Empezar entrenamiento!</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: Idea Principal -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <div class="badge-reading">Lectura</div>
+            <h2 class="text-2xl font-bold mb-4 text-blue-700">La Idea Principal ❤️</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>Es el corazón del texto. Si la quitas, nada tiene sentido. Suele responder a: <b>¿Qué es lo más importante que el autor quiere decir?</b></p>
+                <div class="p-4 bg-blue-50 rounded-xl border border-blue-100">
+                    <p class="font-bold mb-2">Hack:</p>
+                    <p>No te distraigas con los detalles o ejemplos. Busca la oración que resume el propósito global.</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Idea Principal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Reto Idea Principal -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <div class="badge-reading">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-4 text-balance text-center">¿Cuál es la idea principal?</h2>
+            <div class="text-block">
+                "El telescopio James Webb ha revolucionado nuestra comprensión del cosmos. Gracias a su tecnología infrarroja, ha captado imágenes de galaxias formadas apenas unos cientos de millones de años después del Big Bang, permitiendo estudiar el origen del universo con una nitidez nunca antes vista."
+            </div>
+            <div class="space-y-3">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'q1')">A) El telescopio Webb usa tecnología infrarroja avanzada.</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'q1')">B) El Webb ha transformado la astronomía al permitir estudiar el origen del universo.</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'q1')">C) Las galaxias se formaron poco después del Big Bang.</button>
+            </div>
+            <div id="feedback-q1" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Inferencias</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Inferencias (TEORÍA) -->
+    <div class="slide" id="slide-3">
+        <div class="card">
+            <div class="badge-reading">Lectura</div>
+            <h2 class="text-2xl font-bold mb-4 text-blue-700">Inferencias: Leer entre líneas 🕵️‍♂️</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>Una inferencia es algo que el texto <b>sugiere pero no dice literalmente</b>. Es como concluir que alguien está triste porque tiene los ojos rojos y pañuelos en la mano.</p>
+                <div class="p-4 bg-yellow-50 border-yellow-400 border-l-4 rounded-lg">
+                    <p class="font-bold">¡Cuidado!</p>
+                    <p>Si la respuesta está escrita exactamente igual en el texto, <b>NO</b> es una inferencia, es un dato literal.</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Inferencia</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Reto Inferencia -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <div class="badge-reading">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-4 text-center">¿Qué se sugiere en el texto?</h2>
+            <div class="text-block">
+                "Cuando Juan llegó a la meta, no celebró. Se sentó en el suelo, bajó la cabeza y comenzó a desatarse los zapatos con movimientos lentos, mientras sus compañeros de equipo lo miraban en silencio desde la banca."
+            </div>
+            <div class="space-y-3">
+                <button class="option-btn" onclick="checkAnswer(this, true, 'q2')">A) Juan no obtuvo el resultado que esperaba en la carrera.</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'q2')">B) Juan ganó la carrera y está descansando.</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'q2')">C) A Juan se le rompieron los zapatos durante la competencia.</button>
+            </div>
+            <div id="feedback-q2" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Razonamiento Verbal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BLOQUE NUEVO: RAZONAMIENTO VERBAL -->
+
+    <!-- Slide 5: Analogías (TEORÍA) -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <div class="badge-verbal">Razonamiento</div>
+            <h2 class="text-2xl font-bold mb-4 text-purple-700">Analogías: El juego de parejas 🎭</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>Las analogías miden cómo relacionas conceptos. El secreto es construir una <b>oración lógica</b> con el primer par y aplicarla al segundo.</p>
+                <div class="bg-purple-50 p-4 rounded-xl border border-purple-100">
+                    <p class="font-bold mb-2">Yo lo resuelvo:</p>
+                    <p class="italic">ANESTESIA : DOLOR ::</p>
+                    <p class="text-xs mt-2">1. Hago la oración: "La anestesia sirve para <b>quitar</b> el dolor".</p>
+                    <p class="text-xs">2. Busco la pareja que cumpla lo mismo: "El <b>antibiótico</b> sirve para quitar la <b>infección</b>".</p>
+                </div>
+                <p class="text-xs italic text-purple-500">Recuerda: El orden importa. Si es causa-efecto, la respuesta debe ser causa-efecto.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Analogía</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Reto Analogía -->
+    <div class="slide" id="slide-6">
+        <div class="card">
+            <div class="badge-verbal">Tu Reto</div>
+            <h2 class="text-xl font-bold mb-6 text-center">PÁJARO : NIDO ::</h2>
+            <div class="space-y-3 max-w-sm mx-auto">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rv1')">A) PERRO : CADENA</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rv1')">B) OSO : CUEVA</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rv1')">C) PEZ : AGUA</button>
+            </div>
+            <p class="text-xs text-center text-slate-400 mt-4 italic">Oración: "El pájaro vive/se refugia en el nido".</p>
+            <div id="feedback-rv1" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Completar Oraciones</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Completar Oraciones (TEORÍA) -->
+    <div class="slide" id="slide-7">
+        <div class="card">
+            <div class="badge-verbal">Razonamiento</div>
+            <h2 class="text-2xl font-bold mb-4 text-purple-700">Completar Oraciones 🧩</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>Aquí buscas <b>coherencia</b> y <b>lógica</b>. No solo que suene bien, sino que el sentido del texto sea sólido.</p>
+                <div class="p-4 bg-slate-50 rounded-xl border">
+                    <p class="font-bold mb-2">Estrategia Maestra:</p>
+                    <ul class="list-decimal ml-5 space-y-2">
+                        <li>Lee la oración ignorando los espacios.</li>
+                        <li>Identifica "palabras brújula" (pero, aunque, sin embargo, por lo tanto).</li>
+                        <li>Prueba las opciones: <b>Ambas</b> palabras deben encajar perfectamente.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Oración</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Ejemplo Completar (YO RESUELVO) -->
+    <div class="slide" id="slide-8">
+        <div class="card">
+            <div class="badge-verbal">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">Lógica de Huecos</h2>
+            <p class="text-slate-600 text-sm mb-4 italic">"A pesar de la _______ del terreno, los exploradores decidieron _______ la expedición."</p>
+            <div class="bg-purple-50 p-5 rounded-xl border border-purple-100 text-sm">
+                <p class="font-semibold text-purple-900 mb-2">Mi análisis:</p>
+                <p class="mb-2"><span class="step-pill">1</span> <b>Palabra brújula:</b> "A pesar de". Indica oposición (pasa algo malo pero hacen algo positivo).</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Opción lógica:</b> "Dificultad" y "Continuar".</p>
+                <p class="font-bold text-center mt-3 text-purple-700">Resultado: "A pesar de la dificultad... decidieron continuar".</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Completar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Reto Completar -->
+    <div class="slide" id="slide-9">
+        <div class="card">
+            <div class="badge-verbal">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-6 text-center">"La _______ de las estrellas siempre ha causado _______ en el ser humano."</h2>
+            <div class="space-y-3 max-w-sm mx-auto">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rv2')">A) distancia - indiferencia</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rv2')">B) inmensidad - asombro</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rv2')">C) luz - sueño</button>
+            </div>
+            <div id="feedback-rv2" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Relaciones entre Palabras</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Relaciones entre Palabras (TEORÍA) -->
+    <div class="slide" id="slide-10">
+        <div class="card">
+            <div class="badge-verbal">Razonamiento</div>
+            <h2 class="text-2xl font-bold mb-4 text-purple-700">Relaciones entre Palabras 🔤</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>No es solo saber el significado, sino cómo se conectan. Los tipos más comunes son:</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="p-3 border rounded-xl bg-slate-50"><b>Sinonimia:</b> Significan lo mismo (Bello - Hermoso).</div>
+                    <div class="p-3 border rounded-xl bg-slate-50"><b>Antonimia:</b> Son opuestos (Guerra - Paz).</div>
+                    <div class="p-3 border rounded-xl bg-slate-50"><b>Causa-Efecto:</b> (Chispa - Incendio).</div>
+                    <div class="p-3 border rounded-xl bg-slate-50"><b>Parte-Todo:</b> (Pedal - Bicicleta).</div>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Final Verbal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Reto Final Verbal -->
+    <div class="slide" id="slide-11">
+        <div class="card text-center">
+            <div class="badge-verbal">Reto Final</div>
+            <h2 class="text-lg font-bold mb-6 italic text-balance">
+                ¿Qué relación hay entre las palabras EFÍMERO y ETERNO?
+            </h2>
+            <div class="space-y-3 max-w-xs mx-auto">
+                <button class="option-btn text-center" onclick="checkAnswer(this, false, 'rv3')">A) Son Sinónimos</button>
+                <button class="option-btn text-center" onclick="checkAnswer(this, true, 'rv3')">B) Son Antónimos</button>
+                <button class="option-btn text-center" onclick="checkAnswer(this, false, 'rv3')">C) Relación Parte-Todo</button>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-4">Pista: Efímero dura muy poco; eterno no tiene fin.</p>
+            <div id="feedback-rv3" class="mt-4 font-bold h-6"></div>
+            <div class="mt-10 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Finalizar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide Final -->
+    <div class="slide" id="slide-12">
+        <div class="card text-center">
+            <div class="mb-6 flex justify-center text-6xl">🎓</div>
+            <h2 class="text-4xl font-extrabold text-slate-900 mb-6 text-balance">¡Eres un Maestro de la PAA!</h2>
+            <p class="text-lg text-slate-500 mb-10 leading-relaxed max-w-md mx-auto text-balance">
+                Has dominado la lectura y el razonamiento verbal. Con estas estrategias y tu lógica, el éxito en la prueba de español está garantizado.
+            </p>
+            <button class="btn-nav px-12 py-4" onclick="goToStart()">Reiniciar Guía</button>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkAnswer(btn, isCorrect, qId) {
+            const fb = document.getElementById(`feedback-${qId}`);
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.textContent = "¡Perfecto! ✨";
+                fb.className = "mt-4 font-bold text-green-600 block scale-110 transition-transform text-center";
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.textContent = "¡Casi! Revisa la lógica ❌";
+                fb.className = "mt-4 font-bold text-red-600 block text-center";
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() {
+            currentSlide = 0;
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
+            document.querySelectorAll('[id^="feedback-"]').forEach(f => f.textContent = "");
+            updateUI();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        updateUI();
+    </script>
+</body>
+</html>

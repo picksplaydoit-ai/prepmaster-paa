@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Diagramas de Venn PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuración de MathJax para fórmulas perfectas -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .slide {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+
+        .card {
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.08);
+            max-width: 800px;
+            width: 100%;
+            padding: 2.5rem;
+            position: relative;
+            border: 1px solid #f1f5f9;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 1.5rem;
+                border-radius: 1.5rem;
+                width: 95%;
+            }
+            h2 { font-size: 1.2rem !important; }
+        }
+
+        .badge-logic {
+            background: #6366f1;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .btn-nav {
+            background: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            border: 2px solid #f1f5f9;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: #fff;
+            font-size: 0.9rem;
+        }
+
+        .option-btn:hover { border-color: #6366f1; background: #f5f3ff; }
+        .option-correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
+        .option-incorrect { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
+
+        .progress-indicator {
+            position: fixed;
+            bottom: 0; left: 0; height: 5px;
+            background: #6366f1; transition: width 0.3s ease; z-index: 100;
+        }
+
+        .step-pill {
+            background: #e0e7ff; color: #4338ca; padding: 2px 8px;
+            border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-right: 8px;
+        }
+
+        .venn-diagram-ui {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 120px;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .circle {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 2px solid #6366f1;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .circle-a { background: rgba(99, 102, 241, 0.1); left: 35%; }
+        .circle-b { background: rgba(244, 63, 94, 0.1); left: 45%; border-color: #f43f5e; }
+
+        .symbol-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 0: Intro -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-4 text-balance">Diagramas de Venn: Círculos y Símbolos ⭕⭕</h1>
+            <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
+                ¿Te pierdes cuando te dicen "a 10 les gusta el café y a 5 las dos cosas"? Vamos a organizar ese caos visualmente y aprender su lenguaje secreto.
+            </p>
+            <button class="btn-nav bg-indigo-600 px-12 py-4 text-lg" onclick="nextSlide()">¡Empecemos!</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: Concepto Básico -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <div class="badge-logic">Nivel 1</div>
+            <h2 class="text-2xl font-bold mb-4 text-indigo-700">¿Qué es un diagrama de Venn? 🤔</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>Es una forma de organizar grupos. Lo más importante es el <b>"abrazo"</b> entre los círculos:</p>
+                <div class="venn-diagram-ui">
+                    <div class="circle circle-a text-indigo-600">A</div>
+                    <div class="circle circle-b text-rose-600">B</div>
+                </div>
+                <ul class="list-disc ml-5 space-y-2">
+                    <li><b>Intersección:</b> Donde viven los que pertenecen a ambos grupos.</li>
+                    <li><b>Unión:</b> Todo lo que hay dentro de los círculos (A o B).</li>
+                    <li><b>Afuera:</b> Los que no pertenecen a ninguno de los dos.</li>
+                </ul>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Lenguaje Secreto (Símbolos)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Nomenclatura (NUEVO) -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <div class="badge-logic">Nomenclatura</div>
+            <h2 class="text-2xl font-bold mb-4 text-indigo-700">El Diccionario PAA 📖</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>Si ves estos símbolos, no te asustes. Significan cosas muy simples:</p>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="symbol-card">
+                        <p class="text-2xl font-bold text-indigo-600">\(\in\)</p>
+                        <p class="text-xs"><b>Pertenece a</b></p>
+                    </div>
+                    <div class="symbol-card">
+                        <p class="text-2xl font-bold text-rose-500">\(\notin\)</p>
+                        <p class="text-xs"><b>No pertenece a</b></p>
+                    </div>
+                    <div class="symbol-card">
+                        <p class="text-2xl font-bold text-emerald-500">\(\cup\)</p>
+                        <p class="text-xs"><b>Unión (Todos)</b></p>
+                    </div>
+                    <div class="symbol-card">
+                        <p class="text-2xl font-bold text-amber-500">\(\cap\)</p>
+                        <p class="text-xs"><b>Intersección (Común)</b></p>
+                    </div>
+                </div>
+                <p class="mt-2 italic text-center">Ejemplo: \(x \in A\) significa "X está dentro del círculo A".</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo leo Símbolos</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Ejemplo Símbolos (NUEVO - YO RESUELVO) -->
+    <div class="slide" id="slide-3">
+        <div class="card">
+            <div class="badge-logic">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">Traduciendo el lenguaje 🗣️</h2>
+            <p class="text-slate-600 text-sm mb-4">"Si un elemento $z$ está en la parte donde se cruzan A y B, ¿cómo se escribe?"</p>
+            <div class="bg-indigo-50 p-5 rounded-xl border border-indigo-100 text-sm">
+                <p class="font-semibold text-indigo-900 mb-2">Mi análisis:</p>
+                <p class="mb-2"><span class="step-pill">1</span> <b>Lugar:</b> El cruce es la <u>Intersección</u>.</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Símbolo:</b> Intersección se escribe \(\cap\).</p>
+                <p class="mb-2"><span class="step-pill">3</span> <b>Pertenece:</b> Se usa \(\in\).</p>
+                <p class="font-bold text-indigo-600 text-center text-lg mt-3">Respuesta: \(z \in A \cap B\)</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Símbolos</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Reto Símbolos (NUEVO - INTERACTIVO) -->
+    <div class="slide" id="slide-4">
+        <div class="card text-center">
+            <div class="badge-logic">Tu Reto</div>
+            <h2 class="text-xl font-bold mb-6 italic text-balance">
+                Si decimos que "Lili no estudia Medicina (Grupo M)", ¿cuál es la forma correcta de representarlo?
+            </h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rs1')">A) \(Lili \in M\)</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rs1')">B) \(Lili \notin M\)</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rs1')">C) \(Lili \cup M\)</button>
+            </div>
+            <div id="feedback-rs1" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">El Secreto del Centro</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: El Secreto del Centro -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <div class="badge-logic">El Truco</div>
+            <h2 class="text-2xl font-bold mb-4 text-indigo-700">Regla de Oro: Empieza por el centro 🎯</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>El error más común en la PAA es contar dos veces a las mismas personas. Para evitarlo:</p>
+                <div class="p-4 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl italic">
+                    "Siempre coloca primero el número de la intersección (\(A \cap B\)) y réstalo de los totales de cada grupo."
+                </div>
+                <p>Si 20 juegan Fútbol y 5 juegan ambos, los que <b>SOLO</b> juegan Fútbol son $20 - 5 = \mathbf{15}$.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo uno (Club)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Ejemplo (YO RESUELVO) -->
+    <div class="slide" id="slide-6">
+        <div class="card">
+            <div class="badge-logic">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">El Club de Lectura 📚</h2>
+            <p class="text-slate-600 text-sm mb-4">"En un grupo de 30 personas, 15 leen Novelas, 10 leen Poesía y 5 leen ambas. ¿Cuántos no leen ninguna?"</p>
+            <div class="bg-indigo-50 p-5 rounded-xl border border-indigo-100 text-sm">
+                <p class="mb-2 font-semibold">1. Centro:</p> Pongo el <b>5</b> en medio.
+                <p class="mb-2 font-semibold">2. Resto:</p> Solo Novelas = $15-5=10$. Solo Poesía = $10-5=5$.
+                <p class="mb-2 font-semibold">3. Sumo todo:</p> $10 + 5 + 5 = \mathbf{20}$ personas que leen algo.
+                <p class="mt-3 font-bold text-indigo-600 text-center text-lg">Respuesta: $30 - 20 = \mathbf{10}$ personas.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Conteo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Reto Conteo (INTERACTIVO) -->
+    <div class="slide" id="slide-7">
+        <div class="card text-center">
+            <div class="badge-logic">Tu Reto</div>
+            <h2 class="text-xl font-bold mb-6 italic text-balance">
+                En un salón de 40 alumnos, 25 juegan Fútbol y 15 juegan Básquet. Si 10 juegan ambos, ¿cuántos juegan <u>solamente</u> Fútbol?
+            </h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rv1')">A) 25</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rv1')">B) 15 (25 total - 10 ambos)</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rv1')">C) 10</button>
+            </div>
+            <div id="feedback-rv1" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Palabras Clave</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Palabras Clave -->
+    <div class="slide" id="slide-8">
+        <div class="card">
+            <div class="badge-logic">Nivel Pro</div>
+            <h2 class="text-2xl font-bold mb-4 text-indigo-700">Detectives de Palabras 🕵️‍♂️</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>La PAA usa palabras específicas para confundirte. ¡Aprende a leerlas!</p>
+                <div class="grid grid-cols-1 gap-2 font-mono">
+                    <div class="p-2 border rounded-xl bg-slate-50"><span class="text-rose-500 font-bold">"SOLO A":</span> Sin la intersección.</div>
+                    <div class="p-2 border rounded-xl bg-slate-50"><span class="text-indigo-500 font-bold">"A":</span> Incluye a los de ambos grupos.</div>
+                    <div class="p-2 border rounded-xl bg-slate-50"><span class="text-emerald-500 font-bold">"O":</span> Es la Unión (\(\cup\)).</div>
+                    <div class="p-2 border rounded-xl bg-slate-50"><span class="text-amber-500 font-bold">"Y":</span> Es la Intersección (\(\cap\)).</div>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Final Maestro</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Reto Final -->
+    <div class="slide" id="slide-9">
+        <div class="card text-center">
+            <div class="badge-logic">Reto Maestro</div>
+            <h2 class="text-lg font-bold mb-6 italic text-balance">
+                De 50 personas, 20 beben solo Té, 15 beben solo Café y 5 no beben ninguno. ¿Cuántos beben Té <u>y</u> Café? (\(T \cap C\))
+            </h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rv2')">A) 10 (Total 50 - 20 - 15 - 5)</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rv2')">B) 5</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rv2')">C) 15</button>
+            </div>
+            <div id="feedback-rv2" class="mt-4 font-bold h-6"></div>
+            <div class="mt-10 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">¡Dominado!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide Final -->
+    <div class="slide" id="slide-10">
+        <div class="card text-center">
+            <div class="mb-6 flex justify-center text-6xl">🎯</div>
+            <h2 class="text-4xl font-extrabold text-slate-900 mb-6 text-balance">¡Lógica de Círculos Dominada!</h2>
+            <p class="text-lg text-slate-500 mb-10 leading-relaxed max-w-md mx-auto">
+                Ya sabes que el secreto está en el centro y ahora conoces el lenguaje de los símbolos \(\in\) y \(\cap\). ¡Los diagramas de Venn ahora trabajan para ti!
+            </p>
+            <button class="btn-nav px-12 py-4" onclick="goToStart()">Reiniciar Guía</button>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        }
+
+        function checkAnswer(btn, isCorrect, qId) {
+            const fb = document.getElementById(`feedback-${qId}`);
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.textContent = "¡Perfecto! ✨";
+                fb.className = "mt-4 font-bold text-green-600 block scale-110 transition-transform text-center";
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.textContent = "¡Casi! Revisa la lógica ❌";
+                fb.className = "mt-4 font-bold text-red-600 block text-center";
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() {
+            currentSlide = 0;
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
+            document.querySelectorAll('[id^="feedback-"]').forEach(f => f.textContent = "");
+            updateUI();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        updateUI();
+    </script>
+</body>
+</html>

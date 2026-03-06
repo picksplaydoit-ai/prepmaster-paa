@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Análisis de Textos PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #fdfcf8; /* Un tono crema suave para lectura */
+            color: #1e293b;
+            margin: 0;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .slide {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+
+        .card {
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.05);
+            max-width: 850px;
+            width: 100%;
+            padding: 2.5rem;
+            position: relative;
+            border: 1px solid #f1f5f9;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 1.5rem;
+                border-radius: 1.5rem;
+                width: 95%;
+            }
+            h2 { font-size: 1.25rem !important; }
+        }
+
+        .badge-verbal {
+            background: #f59e0b;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .btn-nav {
+            background: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            border: 2px solid #f1f5f9;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: #fff;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .option-btn:hover { border-color: #f59e0b; background: #fffbeb; }
+        .option-correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
+        .option-incorrect { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
+
+        .progress-indicator {
+            position: fixed;
+            bottom: 0; left: 0; height: 5px;
+            background: #f59e0b; transition: width 0.3s ease; z-index: 100;
+        }
+
+        .step-pill {
+            background: #fef3c7; color: #92400e; padding: 2px 8px;
+            border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-right: 8px;
+        }
+
+        .reading-box {
+            background: #f8fafc;
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            border-radius: 0 1rem 1rem 0;
+            margin: 1rem 0;
+            font-style: italic;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .tag-type {
+            font-size: 0.65rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 0: Intro -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-4 text-balance">Análisis de Textos PAA: ¡No leas por leer! 📖✨</h1>
+            <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
+                Dominar la lectura en la PAA no es saber mucho vocabulario, es saber <b>qué buscar</b> en cada párrafo. Vamos a convertirte en un detective de textos.
+            </p>
+            <button class="btn-nav bg-amber-600 px-12 py-4 text-lg" onclick="nextSlide()">Abrir el libro</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: Tipos de Textos (Panorama General) -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <div class="badge-verbal">Panorama</div>
+            <h2 class="text-2xl font-bold mb-4 text-amber-700">¿Qué te vas a encontrar? 🔍</h2>
+            <div class="space-y-3 text-slate-600 text-sm">
+                <p>En el examen no todos los textos se leen igual. Tienes 4 grandes grupos:</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="p-3 bg-amber-50 rounded-lg border border-amber-100">
+                        <b>1. Literario:</b> Historias, cuentos, emociones. Buscan entretener o conmover.
+                    </div>
+                    <div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
+                        <b>2. Expositivo:</b> Datos, conceptos, definiciones. Solo quieren informarte.
+                    </div>
+                    <div class="p-3 bg-rose-50 rounded-lg border border-rose-100">
+                        <b>3. Argumentativo:</b> Opiniones, debates, posturas. Quieren convencerte.
+                    </div>
+                    <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-100">
+                        <b>4. Informativo:</b> Noticias, reportes, hechos actuales. Son directos.
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Texto Literario: Pro</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Texto Literario (TEORÍA) -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <div class="badge-verbal">Nivel 1</div>
+            <h2 class="text-2xl font-bold mb-4 text-amber-800">El Mundo Literario 🎭</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>Aquí lo importante no son los datos fríos, sino <b>cómo</b> se siente el personaje o <b>qué</b> representa un objeto.</p>
+                <div class="p-4 bg-slate-50 rounded-xl border">
+                    <p class="font-bold mb-2">Tips de Detective:</p>
+                    <ul class="list-disc ml-5 space-y-1">
+                        <li>Fíjate en los <b>adjetivos</b> (¿está triste, eufórico, cansado?).</li>
+                        <li>Busca la <b>metáfora</b>: si dice que "su corazón era un desierto", busca soledad.</li>
+                        <li>Identifica el <b>conflicto</b>: ¿qué problema tiene el que habla?</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo analizo Literario</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Ejemplo Literario (YO RESUELVO) -->
+    <div class="slide" id="slide-3">
+        <div class="card">
+            <div class="badge-verbal">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">Fragmento de Cuento 📖</h2>
+            <div class="reading-box">
+                "La habitación guardaba un silencio sepulcral. Pedro miró el reloj una vez más; las manecillas parecían haberse detenido por piedad ante su espera angustiosa."
+            </div>
+            <div class="bg-amber-50 p-5 rounded-xl border border-amber-100 text-sm">
+                <p class="font-semibold text-amber-900 mb-2">Mi análisis:</p>
+                <p class="mb-2"><span class="step-pill">1</span> <b>Detecto emoción:</b> "Silencio sepulcral", "Angustiosa". No es un momento feliz.</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Metáfora:</b> El reloj "se detiene por piedad". Significa que el tiempo se le hace eterno.</p>
+                <p><span class="step-pill">3</span> <b>Conclusión:</b> El tema es la desesperación ante la espera.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Literario</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Reto Literario -->
+    <div class="slide" id="slide-4">
+        <div class="card text-center">
+            <div class="badge-verbal">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-4 italic">"En el texto de Pedro, ¿qué sugiere la frase 'el reloj se detuvo por piedad'?"</h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rl1')">A) Que el reloj estaba roto.</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rl1')">B) Que para Pedro el tiempo pasaba muy lento debido a su estado emocional.</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rl1')">C) Que el tiempo realmente dejó de avanzar en ese lugar.</button>
+            </div>
+            <div id="feedback-rl1" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Texto Expositivo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Texto Expositivo/Informativo (TEORÍA) -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <div class="badge-verbal">Nivel 2</div>
+            <h2 class="text-2xl font-bold mb-4 text-blue-700">Expositivo e Informativo 🧠</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>Aquí no importan los sentimientos. Son textos que te enseñan algo (ciencia, historia, tecnología).</p>
+                <div class="p-4 bg-blue-50 rounded-xl border border-blue-100">
+                    <p class="font-bold mb-2">Estructura típica:</p>
+                    <ul class="list-disc ml-5">
+                        <li><b>Tesis/Definición:</b> De qué trata.</li>
+                        <li><b>Desarrollo:</b> Ejemplos, datos, fechas.</li>
+                        <li><b>Conclusión:</b> Resumen de lo aprendido.</li>
+                    </ul>
+                </div>
+                <p class="italic">Tip PAA: Las preguntas suelen ser de "Idea Principal" o "Datos específicos".</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo analizo Expositivo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Ejemplo Expositivo (YO RESUELVO) -->
+    <div class="slide" id="slide-6">
+        <div class="card">
+            <div class="badge-verbal">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">Artículo de Ciencia 🐝</h2>
+            <div class="reading-box">
+                "Las abejas son polinizadores esenciales que contribuyen a la biodiversidad global. Sin embargo, el uso de pesticidas y el cambio climático han reducido sus poblaciones en un 30% en la última década."
+            </div>
+            <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 text-sm">
+                <p class="font-semibold text-blue-900 mb-2">Mi análisis:</p>
+                <p class="mb-2"><span class="step-pill">1</span> <b>Sujeto:</b> Las abejas.</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Predicado:</b> Son vitales pero están desapareciendo.</p>
+                <p><span class="step-pill">3</span> <b>Idea Principal:</b> El declive de las poblaciones de abejas y su importancia ecológica.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Expositivo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Reto Expositivo -->
+    <div class="slide" id="slide-7">
+        <div class="card text-center">
+            <div class="badge-verbal">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-4 italic">"¿Cuál es el propósito primordial del texto sobre las abejas?"</h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 're1')">A) Convencer al lector de no usar pesticidas.</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 're1')">B) Informar sobre la importancia de las abejas y los riesgos que enfrentan.</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 're1')">C) Narrar la vida cotidiana de una colmena.</button>
+            </div>
+            <div id="feedback-re1" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Texto Argumentativo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Texto Argumentativo (TEORÍA) -->
+    <div class="slide" id="slide-8">
+        <div class="card">
+            <div class="badge-verbal">Nivel 3</div>
+            <h2 class="text-2xl font-bold mb-4 text-rose-700">Argumentativo: El Debate 🗣️</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>Aquí el autor tiene un **ego matemático**: cree que tiene la razón y quiere que tú también lo creas.</p>
+                <div class="p-4 bg-rose-50 rounded-xl border border-rose-100">
+                    <p class="font-bold mb-2">Busca estas señales:</p>
+                    <ul class="list-disc ml-5">
+                        <li><b>Palabras de opinión:</b> "Es necesario", "Es inaceptable", "Deberíamos".</li>
+                        <li><b>Tesis:</b> La idea que defiende.</li>
+                        <li><b>Contraargumentos:</b> Cuando menciona lo que dicen otros para luego decir por qué están mal.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo analizo Argumento</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Ejemplo Argumentativo (YO RESUELVO) -->
+    <div class="slide" id="slide-9">
+        <div class="card">
+            <div class="badge-verbal">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">Columna de Opinión ✍️</h2>
+            <div class="reading-box">
+                "Es absurdo prohibir la tecnología en las aulas. En lugar de negarnos al futuro, los maestros debemos enseñar a los jóvenes a usar estas herramientas con ética y criterio."
+            </div>
+            <div class="bg-rose-50 p-5 rounded-xl border border-rose-100 text-sm">
+                <p class="font-semibold text-rose-900 mb-2">Mi análisis:</p>
+                <p class="mb-2"><span class="step-pill">1</span> <b>Palabra clave:</b> "Es absurdo" (Opinión fuerte).</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Tesis:</b> La tecnología no debe prohibirse, debe integrarse con ética.</p>
+                <p><span class="step-pill">3</span> <b>Tono:</b> Crítico y propositivo.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Argumento</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Reto Argumentativo -->
+    <div class="slide" id="slide-10">
+        <div class="card text-center">
+            <div class="badge-verbal">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-4 italic">"¿Cuál es la postura del autor respecto a la tecnología en clase?"</h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, true, 'ra1')">A) Favorece su integración educativa bajo supervisión ética.</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'ra1')">B) Sugiere que los alumnos saben usarla mejor que los maestros.</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'ra1')">C) Defiende que el futuro no puede ser controlado.</button>
+            </div>
+            <div id="feedback-ra1" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Técnicas Finales</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Técnicas Finales -->
+    <div class="slide" id="slide-11">
+        <div class="card">
+            <div class="badge-verbal">Bonus</div>
+            <h2 class="text-2xl font-bold mb-4 text-emerald-700">Trucos de "Supervivencia" 🏹</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <div class="p-3 bg-slate-50 border rounded-xl">
+                    <p class="font-bold">1. No traigas tus ideas de fuera:</p>
+                    <p>Si el texto dice que el sol es verde, para el examen el sol ES verde. Responde **solo** con lo que dice el texto.</p>
+                </div>
+                <div class="p-3 bg-slate-50 border rounded-xl">
+                    <p class="font-bold">2. Vocabulario en contexto:</p>
+                    <p>Si no conoces una palabra, lee la frase anterior y la siguiente. La respuesta siempre está en los vecinos.</p>
+                </div>
+                <div class="p-3 bg-slate-50 border rounded-xl">
+                    <p class="font-bold">3. Idea Principal vs. Secundaria:</p>
+                    <p>La principal es el tronco; las secundarias son los adornos. Si quitas la principal, el texto no tiene sentido.</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Finalizar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide Final -->
+    <div class="slide" id="slide-12">
+        <div class="card text-center">
+            <div class="mb-6 flex justify-center text-6xl">📖✨</div>
+            <h2 class="text-4xl font-extrabold text-slate-900 mb-6">¡Lectura Dominada!</h2>
+            <p class="text-lg text-slate-500 mb-10 leading-relaxed max-w-md mx-auto">
+                Ya sabes identificar textos literarios, expositivos y argumentativos. No dejes que los párrafos largos te asusten; ¡tú tienes el control!
+            </p>
+            <button class="btn-nav px-12 py-4" onclick="goToStart()">Reiniciar Guía</button>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkAnswer(btn, isCorrect, qId) {
+            const fb = document.getElementById(`feedback-${qId}`);
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.textContent = "¡Perfecto! Detective ✨";
+                fb.className = "mt-4 font-bold text-green-600 block scale-110 transition-transform text-center";
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.textContent = "¡Casi! Busca en el texto ❌";
+                fb.className = "mt-4 font-bold text-red-600 block text-center";
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() {
+            currentSlide = 0;
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
+            document.querySelectorAll('[id^="feedback-"]').forEach(f => f.textContent = "");
+            updateUI();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        updateUI();
+    </script>
+</body>
+</html>

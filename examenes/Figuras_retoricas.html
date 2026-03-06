@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Figuras Retóricas PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #fafafa;
+            color: #1e293b;
+            margin: 0;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .slide {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+
+        .card {
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.05);
+            max-width: 850px;
+            width: 100%;
+            padding: 2.5rem;
+            position: relative;
+            border: 1px solid #f1f5f9;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 1.5rem;
+                border-radius: 1.5rem;
+                width: 95%;
+            }
+            h2 { font-size: 1.25rem !important; }
+        }
+
+        .badge-rhetoric {
+            background: #8b5cf6;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .btn-nav {
+            background: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            border: 2px solid #f1f5f9;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: #fff;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .option-btn:hover { border-color: #8b5cf6; background: #f5f3ff; }
+        .option-correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
+        .option-incorrect { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
+
+        .progress-indicator {
+            position: fixed;
+            bottom: 0; left: 0; height: 5px;
+            background: #8b5cf6; transition: width 0.3s ease; z-index: 100;
+        }
+
+        .step-pill {
+            background: #ede9fe; color: #5b21b6; padding: 2px 8px;
+            border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-right: 8px;
+        }
+
+        .example-box {
+            background: #f8fafc;
+            border-left: 4px solid #8b5cf6;
+            padding: 1.5rem;
+            border-radius: 0 1rem 1rem 0;
+            margin: 1rem 0;
+            font-style: italic;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 0: Intro -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-4 text-balance text-indigo-600">Figuras Retóricas: El Código Secreto 🔍✨</h1>
+            <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
+                ¿Por qué los poetas no dicen las cosas directas? Porque el "maquillaje" de las palabras le da poder al texto. Vamos a aprender a identificar estos trucos para la PAA.
+            </p>
+            <button class="btn-nav bg-indigo-600 px-12 py-4 text-lg" onclick="nextSlide()">Empezar el viaje</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: Metáfora y Símil -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <div class="badge-rhetoric">Nivel 1</div>
+            <h2 class="text-2xl font-bold mb-4 text-violet-800">Metáfora vs. Símil 🪞</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>Ambas comparan dos cosas, pero hay una diferencia clave que el College Board ama poner como trampa:</p>
+                <div class="p-3 border-l-4 border-violet-500 bg-violet-50 rounded-r-xl">
+                    <p class="font-bold text-violet-900">Símil:</p>
+                    <p>Usa conectores como <b>"como", "cual", "parece"</b>. Es una comparación explícita.</p>
+                </div>
+                <div class="p-3 border-l-4 border-indigo-500 bg-indigo-50 rounded-r-xl">
+                    <p class="font-bold text-indigo-900">Metáfora:</p>
+                    <p>Dice que una cosa <u>ES</u> otra. Es una comparación directa sin conectores.</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo estas</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Ejemplo Metáfora/Símil (YO RESUELVO) -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <div class="badge-rhetoric">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">Diferenciando el rastro 🔎</h2>
+            <div class="space-y-4">
+                <div class="example-box">"El sol es un disco de oro que cae al mar".</div>
+                <div class="bg-indigo-50 p-5 rounded-xl border border-indigo-100 text-sm">
+                    <p class="font-semibold text-indigo-900 mb-2">Mi análisis:</p>
+                    <p class="mb-1"><span class="step-pill">1</span> ¿Hay un "como"? No.</p>
+                    <p class="mb-1"><span class="step-pill">2</span> ¿Sustituye el sol por un disco? Sí.</p>
+                    <p class="font-bold text-indigo-600 mt-2">Conclusión: Es una Metáfora.</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto 1: ¿Tú lo ves?</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Reto Metáfora/Símil -->
+    <div class="slide" id="slide-3">
+        <div class="card text-center">
+            <div class="badge-rhetoric">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-4 italic">"Sus palabras cayeron <u>como</u> granizo sobre mi espalda". ¿Qué figura es?</h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rf1')">A) Símil (Porque usa "como").</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rf1')">B) Metáfora.</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rf1')">C) Hipérbole.</button>
+            </div>
+            <div id="feedback-rf1" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Hipérbole: El Drama</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Hipérbole (TEORÍA) -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <div class="badge-rhetoric">Nivel 2</div>
+            <h2 class="text-2xl font-bold mb-4 text-violet-800">Hipérbole: ¡No exageres! 📣</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>La hipérbole es una exageración total. El autor aumenta o disminuye las cosas de forma increíble para enfatizar una emoción.</p>
+                <div class="p-4 bg-red-50 rounded-xl border border-red-100">
+                    <p class="font-bold text-red-900 mb-2">Señal para detectarla:</p>
+                    <p>Si lo que dice es <u>físicamente imposible</u> pero transmite un sentimiento fuerte, ¡es hipérbole!</p>
+                    <p class="italic mt-2">"Te busqué por mil años en un segundo".</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Hipérbole</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Ejemplo Hipérbole (YO RESUELVO) -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <div class="badge-rhetoric">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4 text-violet-900">El hambre infinita 🍔</h2>
+            <div class="example-box">"Tengo tanta hambre que me comería una ballena entera yo solo".</div>
+            <div class="bg-violet-50 p-5 rounded-xl border border-violet-100 text-sm">
+                <p class="font-semibold text-violet-900 mb-2">Mi lógica:</p>
+                <p class="mb-1"><span class="step-pill">1</span> ¿Es real? No, nadie puede comerse una ballena.</p>
+                <p class="mb-1"><span class="step-pill">2</span> ¿Qué quiere decir? Que tiene muchísima hambre.</p>
+                <p class="font-bold text-violet-600 mt-2">Conclusión: Hipérbole pura.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Hipérbole</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Reto Hipérbole -->
+    <div class="slide" id="slide-6">
+        <div class="card text-center">
+            <div class="badge-rhetoric">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-4 italic">"Por tu amor, me duele hasta el aliento". ¿Qué figura predomina?</h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rf2')">A) Hipérbole (Exagera el dolor emocional).</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rf2')">B) Personificación.</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rf2')">C) Epíteto.</button>
+            </div>
+            <div id="feedback-rf2" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Personificación</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Personificación (TEORÍA) -->
+    <div class="slide" id="slide-7">
+        <div class="card">
+            <div class="badge-rhetoric">Nivel 3</div>
+            <h2 class="text-2xl font-bold mb-4 text-violet-800">Personificación: Vida a lo inanimado 🌟</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>También llamada <b>Prosopopeya</b>. Consiste en darle rasgos humanos (sentimientos, acciones, palabras) a objetos, animales o ideas.</p>
+                <div class="p-4 bg-amber-50 rounded-xl border border-amber-100">
+                    <p class="font-bold text-amber-900 mb-2">Clave:</p>
+                    <p>Busca un verbo de humanos aplicado a un objeto: "La campana <u>lloraba</u>", "El viento <u>correría</u> por el valle".</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo esta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Ejemplo Personificación (YO RESUELVO) -->
+    <div class="slide" id="slide-8">
+        <div class="card">
+            <div class="badge-rhetoric">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4 text-violet-900">La ciudad que no duerme</h2>
+            <div class="example-box">"Las estrellas nos miraban con curiosidad desde el cielo nocturno".</div>
+            <div class="bg-violet-50 p-5 rounded-xl border border-violet-100 text-sm">
+                <p class="font-semibold text-violet-900 mb-2">Mi lógica:</p>
+                <p class="mb-1"><span class="step-pill">1</span> Sujeto: Estrellas (objetos inanimados).</p>
+                <p class="mb-1"><span class="step-pill">2</span> Acción: "Mirar con curiosidad" (humano).</p>
+                <p class="font-bold text-violet-600 mt-2">Conclusión: Es Personificación.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Personificación</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Reto Personificación -->
+    <div class="slide" id="slide-9">
+        <div class="card text-center">
+            <div class="badge-rhetoric">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-4 italic">"El televisor gritaba de dolor ante tanto ruido". ¿Qué figura es?</h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rf3')">A) Metáfora.</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rf3')">B) Personificación (Gritar y sentir dolor son humanos).</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rf3')">C) Símil.</button>
+            </div>
+            <div id="feedback-rf3" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Ironía y Paradoja</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Ironía y Paradoja (TEORÍA) -->
+    <div class="slide" id="slide-10">
+        <div class="card">
+            <div class="badge-rhetoric">Nivel Experto</div>
+            <h2 class="text-2xl font-bold mb-4 text-violet-800">Ironía y Paradoja 🤡🌀</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>Estas son las figuras del pensamiento. Son más "cerebrales":</p>
+                <div class="p-3 border-l-4 border-blue-500 bg-blue-50 rounded-r-xl mb-2">
+                    <p class="font-bold">Ironía:</p>
+                    <p>Decir lo opuesto de lo que se piensa (sarcasmo elegante).</p>
+                </div>
+                <div class="p-3 border-l-4 border-indigo-700 bg-indigo-50 rounded-r-xl">
+                    <p class="font-bold">Paradoja:</p>
+                    <p>Dos ideas que parecen contrarias pero juntas tienen un sentido profundo.</p>
+                    <p class="italic mt-1">"Solo sé que no sé nada".</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Paradoja</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Ejemplo Paradoja (YO RESUELVO) -->
+    <div class="slide" id="slide-11">
+        <div class="card">
+            <div class="badge-rhetoric">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4 text-violet-900">La contradicción lógica</h2>
+            <div class="example-box">"Es un fuego helado, es una herida que duele y no se siente".</div>
+            <div class="bg-violet-50 p-5 rounded-xl border border-violet-100 text-sm">
+                <p class="font-semibold text-violet-900 mb-2">Mi lógica:</p>
+                <p class="mb-1"><span class="step-pill">1</span> Ideas opuestas: Fuego (caliente) vs Helado. Doler vs No sentir.</p>
+                <p class="mb-1"><span class="step-pill">2</span> ¿Se contradicen? Sí, pero juntas describen el amor.</p>
+                <p class="font-bold text-violet-600 mt-2">Conclusión: Paradoja.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Antítesis y Epíteto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Antítesis y Epíteto (TEORÍA EXTRA) -->
+    <div class="slide" id="slide-12">
+        <div class="card">
+            <div class="badge-rhetoric">Bonus PAA</div>
+            <h2 class="text-2xl font-bold mb-4 text-violet-800">Antítesis y Epíteto 🌓🖋️</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <div class="p-3 border-l-4 border-slate-500 bg-slate-100 rounded-r-xl mb-2">
+                    <p class="font-bold">Antítesis:</p>
+                    <p>Poner dos palabras opuestas cerca (no es paradoja porque no se contradicen, solo contrastan).</p>
+                    <p class="italic mt-1">"Es tan corto el amor y tan <u>largo el olvido</u>".</p>
+                </div>
+                <div class="p-3 border-l-4 border-emerald-500 bg-emerald-50 rounded-r-xl">
+                    <p class="font-bold">Epíteto:</p>
+                    <p>Un adjetivo que dice algo OBVIO del sustantivo para darle énfasis.</p>
+                    <p class="italic mt-1">"La <u>blanca</u> nieve", "El <u>ardiente</u> fuego".</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Final</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: Reto Final -->
+    <div class="slide" id="slide-13">
+        <div class="card text-center">
+            <div class="badge-rhetoric">Reto Maestro</div>
+            <h2 class="text-lg font-bold mb-4 italic text-balance">"La dulce amargura de tu despedida". ¿Qué figura retórica se presenta aquí?</h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rf4')">A) Epíteto (No es obvio).</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rf4')">B) Antítesis (Contrasta dulce con amargo).</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rf4')">C) Personificación.</button>
+            </div>
+            <div id="feedback-rf4" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-10 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Terminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide Final -->
+    <div class="slide" id="slide-14">
+        <div class="card text-center">
+            <div class="mb-6 flex justify-center text-6xl">📖🎓</div>
+            <h2 class="text-4xl font-extrabold text-slate-900 mb-6 text-balance">¡Maestro de la Retórica!</h2>
+            <p class="text-lg text-slate-500 mb-10 leading-relaxed max-w-md mx-auto">
+                Has dominado las figuras retóricas más importantes de la PAA. Ahora, cuando leas un texto literario, podrás ver los hilos que usa el autor para emocionarte. ¡Mucho éxito en tu examen!
+            </p>
+            <button class="btn-nav px-12 py-4" onclick="goToStart()">Reiniciar Guía</button>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkAnswer(btn, isCorrect, qId) {
+            const fb = document.getElementById(`feedback-${qId}`);
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.textContent = "¡Perfecto! ✨";
+                fb.className = "mt-4 font-bold text-green-600 block scale-110 transition-transform text-center";
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.textContent = "¡Casi! Intenta de nuevo ❌";
+                fb.className = "mt-4 font-bold text-red-600 block text-center";
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() {
+            currentSlide = 0;
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
+            document.querySelectorAll('[id^="feedback-"]').forEach(f => f.textContent = "");
+            updateUI();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        updateUI();
+    </script>
+</body>
+</html>

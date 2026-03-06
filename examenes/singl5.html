@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation 4: English PAA (ESLAT)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; overflow-x: hidden; }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .custom-scroll::-webkit-scrollbar { width: 5px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        .ans-correct { background-color: #ecfdf5 !important; border-color: #10b981 !important; color: #065f46 !important; }
+        .ans-wrong { background-color: #fef2f2 !important; border-color: #ef4444 !important; color: #991b1b !important; }
+        .ans-correct-hint { border-color: #10b981 !important; border-style: dashed !important; border-width: 2px !important; }
+        
+        .reading-passage { background-color: #ffffff; border: 1px solid #e2e8f0; padding: 1.5rem; margin-bottom: 2rem; border-radius: 1rem; font-style: normal; line-height: 1.8; color: #334155; box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start py-4 sm:py-8 px-2">
+
+    <!-- Pantalla de Inicio -->
+    <div id="start-screen" class="max-w-2xl w-full bg-white rounded-3xl shadow-xl p-8 text-center border border-slate-200">
+        <div class="w-20 h-20 bg-blue-700 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg rotate-3">
+            <span class="text-4xl font-black">4</span>
+        </div>
+        <h1 class="text-3xl font-black text-slate-900 mb-2 uppercase tracking-tight">English Simulation 4</h1>
+        <p class="text-blue-700 font-bold mb-8 tracking-widest uppercase text-sm">Final Mastery Challenge - ESLAT</p>
+        
+        <div class="grid grid-cols-2 gap-4 mb-8 text-left">
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Total Items</p>
+                <p class="text-xl font-bold">50 Questions</p>
+            </div>
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Time allowed</p>
+                <p class="text-xl font-bold">50 Minutes</p>
+            </div>
+        </div>
+
+        <button onclick="startExam()" class="w-full bg-blue-900 hover:bg-black text-white font-black py-4 rounded-2xl shadow-xl transition-all active:scale-95 text-lg uppercase tracking-widest">
+            Start Final Test
+        </button>
+    </div>
+
+    <!-- Interfaz del Examen -->
+    <div id="exam-screen" class="hidden max-w-4xl w-full flex flex-col gap-4">
+        <header class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm sticky top-0 z-50 grid grid-cols-3 items-center">
+            <div class="flex flex-col">
+                <p class="text-[9px] font-black text-slate-400 uppercase">Clock</p>
+                <p id="timer" class="text-lg font-mono font-black text-blue-700 leading-none">50:00</p>
+            </div>
+            
+            <div class="flex justify-center gap-6">
+                <div class="text-center">
+                    <p class="text-[9px] font-black text-emerald-500 uppercase">Score</p>
+                    <p id="live-correct" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-[9px] font-black text-rose-500 uppercase">Wrong</p>
+                    <p id="live-wrong" class="text-lg font-black text-rose-600 leading-none">0</p>
+                </div>
+            </div>
+
+            <div class="text-right">
+                <p id="progress-label" class="text-[9px] font-black text-slate-400 uppercase">Item 1/50</p>
+                <div class="w-full h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden border border-slate-200">
+                    <div id="progress-bar" class="h-full bg-blue-700 transition-all duration-300" style="width: 2%"></div>
+                </div>
+            </div>
+        </header>
+
+        <main class="bg-white border border-slate-200 rounded-[2.5rem] shadow-lg p-6 sm:p-10 flex flex-col min-h-[450px]">
+            <div id="question-container" class="flex-grow fade-in overflow-y-auto custom-scroll max-h-[70vh]">
+                <!-- Dynamic Content -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Resultados -->
+    <div id="result-screen" class="hidden max-w-2xl w-full bg-white rounded-[3rem] shadow-2xl overflow-hidden fade-in border border-slate-200">
+        <div class="bg-slate-900 p-10 text-center text-white">
+            <p class="text-blue-400 font-black uppercase tracking-[0.3em] text-[10px] mb-2">Final Estimated Score</p>
+            <div class="flex items-center justify-center gap-2">
+                <h2 id="final-score" class="text-8xl font-black tracking-tighter leading-none">200</h2>
+                <span class="text-slate-500 font-bold text-xl self-end mb-2">/ 800</span>
+            </div>
+        </div>
+        
+        <div class="p-8 sm:p-12">
+            <h3 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-tight">Competency Review</h3>
+            <div id="area-results" class="space-y-4 mb-8"></div>
+
+            <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100 flex items-center justify-between mb-8">
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Total Items Correct</p>
+                    <p class="text-2xl font-black text-slate-900"><span id="correct-total">0</span>/50</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Overall Accuracy</p>
+                    <p id="accuracy-percent" class="text-2xl font-black text-blue-700">0%</p>
+                </div>
+            </div>
+
+            <button onclick="location.reload()" class="w-full bg-blue-900 text-white font-black py-5 rounded-2xl shadow-xl hover:bg-black transition-all uppercase tracking-widest text-sm">
+                Finish & Restart Simulation
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const readingPassage1 = "Space junk, also known as orbital debris, refers to defunct human-made objects in Earth's orbit. These include non-functional satellites, spent rocket stages, and fragments from collisions or explosions. Because these objects travel at speeds of up to 28,000 kilometers per hour, even a tiny piece of metal can cause catastrophic damage to active spacecraft or the International Space Station. As the number of satellite launches increases, the risk of a chain reaction—where one collision creates more debris—grows. Current international efforts focus on tracking debris and developing 'space tugs' or nets to capture and remove the most dangerous items from orbit.";
+
+        const readingPassage2 = "The history of coffee dates back centuries to the ancient coffee forests of Ethiopia. Legend has it that a goat herder named Kaldi discovered the energizing effects of the beans after his goats ate from a certain tree. From Ethiopia, coffee spread to the Arabian Peninsula, specifically Yemen, where it was first cultivated and brewed into a beverage known as 'qahwa.' By the 17th century, coffee houses became popular social hubs in Europe, often referred to as 'penny universities' because for the price of a cup of coffee, people could engage in intellectual debates. Today, coffee is one of the world's most traded commodities and a vital part of many cultures globally.";
+
+        const questionBank = [
+            // Language Use & Vocabulary (15 items)
+            { area: "Language Use & Vocabulary", q: "Complete the sentence: My brother is an ______; he designs bridges and skyscrapers.", options: ["artist", "engineer", "editor", "agent"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "Identify the correct verb form: They ______ the project before the deadline yesterday.", options: ["finish", "finishes", "finished", "finishing"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "I can't find my glasses. I think I left ______ in the car.", options: ["them", "they", "their", "it"], ans: 0 },
+            { area: "Language Use & Vocabulary", q: "The weather in this city is ______ than in my hometown.", options: ["humid", "more humid", "most humid", "humider"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "Which word fits best? The ______ prepared a delicious five-course meal for the guests.", options: ["butcher", "waiter", "chef", "baker"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "We ______ any homework to do this weekend.", options: ["haven't", "don't have", "doesn't have", "no have"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "Choose the CORRECT question:", options: ["What time the train leaves?", "What time does the train leave?", "What time leaves the train?", "The train leaves what time?"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "She is the ______ singer in the entire competition.", options: ["better", "good", "best", "more good"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "The library is closed ______ Sundays.", options: ["in", "on", "at", "to"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "If I ______ you, I would take that opportunity immediately.", options: ["am", "was", "were", "be"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "He is really afraid ______ spiders.", options: ["of", "to", "with", "at"], ans: 0 },
+            { area: "Language Use & Vocabulary", q: "There ______ a few apples left in the basket.", options: ["is", "are", "was", "be"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "We have been waiting for the bus ______ twenty minutes.", options: ["since", "for", "during", "ago"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "This task is much ______ than the last one.", options: ["easiest", "more easy", "easier", "easy"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "This is my pen. That one is ______.", options: ["yours", "your", "you", "yourself"], ans: 0 },
+
+            // Reading Comprehension - Passage 1 (10 items)
+            { area: "Reading Comprehension", passage: readingPassage1, q: "What does 'orbital debris' mainly consist of?", options: ["Natural space rocks", "Defunct human-made objects", "Alien artifacts", "Active satellites"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "Why is even a tiny piece of space junk dangerous?", options: ["It is radioactive.", "It travels at very high speeds.", "It is very hot.", "It is invisible."], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "The word 'catastrophic' in the text means ______.", options: ["minor", "unexpected", "disastrous", "slow"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "A 'chain reaction' occurs when ______.", options: ["a satellite is launched", "a collision creates more debris", "the sun shines too brightly", "space junk falls to Earth"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "How fast can space junk travel according to the text?", options: ["28,000 km/h", "2,800 km/h", "280 km/h", "Speed of light"], ans: 0 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "What is one proposed solution for removing debris?", options: ["Building bigger satellites", "Using nets or space tugs", "Launching fewer rockets", "Ignoring it"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "The tone of the author regarding space junk is ______.", options: ["humorous", "concerned and informative", "optimistic", "bored"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "The term 'spent rocket stages' refers to ______.", options: ["new rockets", "used parts of a rocket", "fuel for satellites", "radio signals"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "Increasing satellite launches leads to ______ risk of collisions.", options: ["a lower", "a stable", "a higher", "no"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "The primary purpose of the text is to ______.", options: ["promote space travel", "explain the dangers of space debris", "sell insurance for satellites", "advertise new telescopes"], ans: 1 },
+
+            // Reading Comprehension - Passage 2 (7 items)
+            { area: "Reading Comprehension", passage: readingPassage2, q: "According to the legend, Kaldi was a ______.", options: ["monk", "merchant", "goat herder", "king"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "In which modern-day country was coffee first brewed?", options: ["Ethiopia", "Yemen", "Italy", "Brazil"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "What was the name of the beverage in the Arabian Peninsula?", options: ["Coffee", "Mocha", "Qahwa", "Kaldi"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "Why were coffee houses called 'penny universities'?", options: ["Because they cost a lot", "Because students owned them", "Because people could learn while drinking", "Because they were located on campuses"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "What is coffee's economic status today?", options: ["A minor product", "One of the most traded commodities", "An illegal substance", "A rare luxury only"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "The word 'vital' in the text means ______.", options: ["useless", "essential", "expensive", "temporary"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "The main idea of the passage is ______.", options: ["the history and cultural spread of coffee", "why Kaldi liked his goats", "how to brew the best qahwa", "the price of coffee in Europe"], ans: 0 },
+
+            // Indirect Writing (18 items)
+            { area: "Indirect Writing", q: "Identify the error: The manager (A) don't (B) want (C) to sign (D) the contract.", options: ["manager", "don't", "sign", "No error"], ans: 1 },
+            { area: "Indirect Writing", q: "Choose the best correction: Each of the students have to submit their project.", options: ["has to submit", "have submitting", "has submitted", "No change needed"], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: We (A) was (B) very (C) tired (D) after the trip.", options: ["We", "was", "very", "No error"], ans: 1 },
+            { area: "Indirect Writing", q: "Choose the best way to combine: It was raining. We stayed home.", options: ["Since it was raining, we stayed home.", "It was raining but we stayed home.", "We stayed home if it was raining.", "It was raining so we stayed home."], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: He (A) has (B) never (C) went (D) to Paris.", options: ["He", "has", "went", "No error"], ans: 2 },
+            { area: "Indirect Writing", q: "Choose the best word order: ______ you know where the station is?", options: ["Do", "Does", "Are", "Did"], ans: 0 },
+            { area: "Indirect Writing", q: "Improve the sentence: Into the house the dog ran quickly.", options: ["Quickly the dog ran into the house.", "The dog ran into the house quickly.", "The dog ran quickly into the house.", "No change needed."], ans: 2 },
+            { area: "Indirect Writing", q: "Identify the error: If I am (A) you, I would (B) buy (C) that car.", options: ["am", "would", "buy", "No error"], ans: 0 },
+            { area: "Indirect Writing", q: "Choose the correct connector: She didn't study; ______, she failed the test.", options: ["however", "therefore", "but", "although"], ans: 1 },
+            { area: "Indirect Writing", q: "Identify the error: They (A) arrived (B) at (C) the (D) school since 8:00.", options: ["arrived", "at", "since", "No error"], ans: 2 },
+            { area: "Indirect Writing", q: "Choose the best way to combine: I have a laptop. I have a tablet. They are both silver.", options: ["I have a laptop and a tablet, which are both silver.", "Because I have a laptop and tablet, silver.", "I have a laptop but tablet silver.", "Laptop and tablet silver I have."], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: Who (A) is (B) that (C) person standing (D) there?", options: ["Who", "is", "that", "No error"], ans: 3 },
+            { area: "Indirect Writing", q: "Choose the best correction: There is many people at the concert.", options: ["There are many people", "There was many people", "Many people are there", "No change needed"], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: I (A) am (B) not (C) liking (D) this movie.", options: ["am", "not", "liking", "No error"], ans: 2 },
+            { area: "Indirect Writing", q: "Improve the sentence: Carefully the vase the girl placed on the table.", options: ["The girl carefully placed the vase on the table.", "The girl placed the vase carefully on the table.", "Carefully the girl placed the vase on the table.", "No change needed."], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: She (A) is (B) more (C) better (D) than me.", options: ["is", "more", "better", "No error"], ans: 2 },
+            { area: "Indirect Writing", q: "Choose the best word order: ______ you been studying English for a long time?", options: ["Do", "Did", "Have", "Are"], ans: 2 },
+            { area: "Indirect Writing", q: "Identify the error: This (A) book (B) is (C) more (D) interestingest.", options: ["This", "book", "interestingest", "No error"], ans: 2 }
+        ];
+
+        let currentIndex = 0;
+        let scoreCorrect = 0;
+        let scoreWrong = 0;
+        let timeLeft = 3000; // 50 minutes
+        let timerInterval;
+        let canAnswer = true;
+        let answersData = [];
+
+        function startExam() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            renderQuestion();
+            startTimer();
+        }
+
+        function renderQuestion() {
+            const q = questionBank[currentIndex];
+            const container = document.getElementById('question-container');
+            canAnswer = true;
+
+            document.getElementById('progress-label').innerText = `Item ${currentIndex + 1}/50`;
+            document.getElementById('progress-bar').style.width = `${((currentIndex + 1) / 50) * 100}%`;
+
+            let html = `
+                <div class="mb-6">
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-lg text-[10px] font-black uppercase tracking-widest">${q.area}</span>
+                </div>
+            `;
+
+            if (q.passage) {
+                html += `<div class="reading-passage">${q.passage}</div>`;
+            }
+
+            html += `
+                <div class="text-xl sm:text-2xl font-bold leading-relaxed mb-10 text-slate-800">
+                    ${q.q}
+                </div>
+                <div id="options-list" class="grid gap-3">
+                    ${q.options.map((opt, idx) => `
+                        <button onclick="checkAnswer(${idx})" class="option-btn flex items-center gap-4 p-5 rounded-2xl border-2 border-slate-100 bg-white transition-all text-left group">
+                            <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center font-black text-sm text-slate-400 group-hover:bg-blue-700 group-hover:text-white transition-colors">
+                                ${String.fromCharCode(65 + idx)}
+                            </div>
+                            <div class="font-semibold text-slate-700 text-lg">${opt}</div>
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function checkAnswer(selectedIdx) {
+            if (!canAnswer) return;
+            canAnswer = false;
+
+            const q = questionBank[currentIndex];
+            const isCorrect = selectedIdx === q.ans;
+            const buttons = document.querySelectorAll('.option-btn');
+
+            if (isCorrect) {
+                buttons[selectedIdx].classList.add('ans-correct');
+                scoreCorrect++;
+                document.getElementById('live-correct').innerText = scoreCorrect;
+            } else {
+                buttons[selectedIdx].classList.add('ans-wrong');
+                buttons[q.ans].classList.add('ans-correct-hint');
+                scoreWrong++;
+                document.getElementById('live-wrong').innerText = scoreWrong;
+            }
+
+            answersData.push({ area: q.area, correct: isCorrect });
+
+            setTimeout(() => {
+                if (currentIndex < questionBank.length - 1) {
+                    currentIndex++;
+                    renderQuestion();
+                } else {
+                    finishExam();
+                }
+            }, 1300);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const m = Math.floor(timeLeft / 60);
+                const s = timeLeft % 60;
+                const timerEl = document.getElementById('timer');
+                timerEl.innerText = `${m}:${s < 10 ? '0' + s : s}`;
+                if (timeLeft < 300) timerEl.classList.add('text-rose-600');
+                if (timeLeft <= 0) finishExam();
+            }, 1000);
+        }
+
+        function finishExam() {
+            clearInterval(timerInterval);
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const total = 50;
+            const finalScale = 200 + Math.round((scoreCorrect / total) * 600);
+            
+            document.getElementById('final-score').innerText = finalScale;
+            document.getElementById('correct-total').innerText = scoreCorrect;
+            document.getElementById('accuracy-percent').innerText = `${Math.round((scoreCorrect / total) * 100)}%`;
+
+            const areas = ["Language Use & Vocabulary", "Reading Comprehension", "Indirect Writing"];
+            const breakdown = document.getElementById('area-results');
+            breakdown.innerHTML = "";
+
+            areas.forEach(area => {
+                const areaQs = answersData.filter(a => a.area === area);
+                const areaCorrect = areaQs.filter(a => a.correct).length;
+                const areaTotal = areaQs.length;
+                const percent = areaTotal > 0 ? (areaCorrect / areaTotal) * 100 : 0;
+
+                breakdown.innerHTML += `
+                    <div>
+                        <div class="flex justify-between text-[10px] font-black uppercase text-slate-400 mb-1">
+                            <span>${area}</span>
+                            <span class="text-slate-600">${areaCorrect} / ${areaTotal}</span>
+                        </div>
+                        <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                            <div class="h-full bg-blue-700 transition-all duration-700" style="width: ${percent}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>

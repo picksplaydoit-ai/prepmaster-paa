@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Lectura PAA Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Soporte para símbolos si fueran necesarios -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+            margin: 0;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .slide {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+
+        .card {
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.08);
+            max-width: 850px;
+            width: 100%;
+            padding: 2rem;
+            position: relative;
+            border: 1px solid #e2e8f0;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 1.5rem;
+                border-radius: 1.5rem;
+                width: 95%;
+            }
+            h2 { font-size: 1.2rem !important; }
+            p { font-size: 0.9rem !important; }
+        }
+
+        .badge-reading {
+            background: #3b82f6;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .btn-nav {
+            background: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            border: 2px solid #f1f5f9;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: #fff;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .option-btn:hover { border-color: #3b82f6; background: #eff6ff; }
+        .option-correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
+        .option-incorrect { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
+
+        .progress-indicator {
+            position: fixed;
+            bottom: 0; left: 0; height: 5px;
+            background: #3b82f6; transition: width 0.3s ease; z-index: 100;
+        }
+
+        .text-block {
+            background: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-style: italic;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .step-pill {
+            background: #dbeafe; color: #1e40af; padding: 2px 8px;
+            border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 0: Intro -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-4 text-balance">Comprensión de Lectura PAA 📚</h1>
+            <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
+                Olvídate de leer por leer. Vamos a aprender a <b>hackear</b> los textos para encontrar las respuestas sin perderte en los párrafos.
+            </p>
+            <button class="btn-nav bg-blue-600 px-12 py-4 text-lg" onclick="nextSlide()">¡Empezar el entrenamiento!</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: Idea Principal (TEORÍA) -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <div class="badge-reading">Nivel 1: El Corazón del Texto</div>
+            <h2 class="text-2xl font-bold mb-4 text-blue-700">La Idea Principal ❤️</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>Es la respuesta a la pregunta: <b>¿De qué trata el texto principalmente?</b>. Es el resumen de una sola oración que le da sentido a todo.</p>
+                <div class="p-4 bg-blue-50 rounded-xl border border-blue-100">
+                    <p class="font-bold mb-2">Trucos para hallarla:</p>
+                    <ul class="list-disc ml-5 space-y-1">
+                        <li>Suele estar al principio (planteamiento) o al final (conclusión).</li>
+                        <li>Si quitas esta idea, el texto se queda sin sentido.</li>
+                        <li>No confundas un "ejemplo" con la idea principal.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Idea Principal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Ejemplo Idea Principal (YO RESUELVO) -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <div class="badge-reading">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">Análisis de párrafo</h2>
+            <div class="text-block">
+                "La deforestación en el Amazonas ha alcanzado niveles críticos en la última década. A pesar de los esfuerzos internacionales por proteger este pulmón del mundo, la tala ilegal y la expansión agrícola continúan devorando miles de hectáreas diariamente."
+            </div>
+            <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 text-sm">
+                <p class="font-semibold text-blue-900 mb-2">Mi lógica:</p>
+                <p class="mb-2"><span class="step-pill">1</span> ¿Qué me dice? Que hay mucha deforestación en el Amazonas.</p>
+                <p class="mb-2"><span class="step-pill">2</span> ¿Los esfuerzos sirven? No mucho, la tala sigue.</p>
+                <p><span class="step-pill">3</span> <b>Idea Principal:</b> La persistente crisis de deforestación en el Amazonas a pesar de los intentos de protección.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Idea Principal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Reto Idea Principal (INTERACTIVO) -->
+    <div class="slide" id="slide-3">
+        <div class="card">
+            <div class="badge-reading">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-4">¿Cuál es la idea principal?</h2>
+            <div class="text-block">
+                "El telescopio James Webb ha revolucionado nuestra comprensión del cosmos. Gracias a su tecnología infrarroja, ha captado imágenes de galaxias formadas apenas unos cientos de millones de años después del Big Bang, permitiendo a los científicos estudiar el origen del universo con una nitidez nunca antes vista."
+            </div>
+            <div class="space-y-3">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'q1')">A) El telescopio Webb usa tecnología infrarroja avanzada.</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'q1')">B) El Webb ha transformado la astronomía al permitir estudiar el origen del universo.</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'q1')">C) Las galaxias se formaron poco después del Big Bang.</button>
+            </div>
+            <div id="feedback-q1" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Ideas Secundarias</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Ideas Secundarias (TEORÍA) -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <div class="badge-reading">Nivel 2: Los Detalles</div>
+            <h2 class="text-2xl font-bold mb-4 text-blue-700">Ideas Secundarias 🦴</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>Si la idea principal es el corazón, las secundarias son los <b>músculos y huesos</b> que lo sostienen.</p>
+                <div class="p-4 bg-slate-50 rounded-xl border">
+                    <p class="font-bold mb-2">Su función es:</p>
+                    <ul class="list-disc ml-5 space-y-1">
+                        <li><b>Ejemplificar:</b> Dar casos concretos.</li>
+                        <li><b>Explicar:</b> Decir el "cómo" o el "por qué".</li>
+                        <li><b>Comparar:</b> Mostrar diferencias.</li>
+                    </ul>
+                </div>
+                <p class="text-xs italic text-blue-500">Ojo en la PAA: Muchas preguntas dicen "¿Cuál de las siguientes opciones NO es una idea secundaria mencionada?". ¡Lee bien!</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Inferencias: El Detective</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Inferencias (TEORÍA DEEP) -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <div class="badge-reading">Nivel 3: El Detective</div>
+            <h2 class="text-2xl font-bold mb-4 text-blue-700">Inferencias (Leer entre líneas) 🕵️‍♂️</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>Una inferencia es algo que el texto <b>sugiere pero no dice literalmente</b>. Es como ver a alguien entrar con un paraguas goteando y concluir que está lloviendo.</p>
+                <div class="formula-box bg-blue-50 border-blue-400 p-4 border-l-4 rounded-lg">
+                    <p class="font-bold">Ecuación del Detective:</p>
+                    <p class="text-lg text-center font-mono">Lo que dice el texto + Mi lógica = Inferencia</p>
+                </div>
+                <p class="text-xs text-red-500 font-bold">⚠️ PRO TIP: Si una opción de respuesta está escrita igualita en el texto, ¡NO es una inferencia! Eso es literal.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Inferencia</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Ejemplo Inferencia (YO RESUELVO) -->
+    <div class="slide" id="slide-6">
+        <div class="card">
+            <div class="badge-reading">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">Pistas en la oscuridad</h2>
+            <div class="text-block">
+                "Cuando Juan llegó a la meta, no celebró. Se sentó en el suelo, bajó la cabeza y comenzó a desatarse los zapatos con movimientos lentos, mientras sus compañeros de equipo lo miraban en silencio desde la banca."
+            </div>
+            <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 text-sm">
+                <p class="font-semibold text-blue-900 mb-2">Mi análisis de detective:</p>
+                <p class="mb-2"><span class="step-pill">1</span> <b>Dato:</b> Llegó a la meta pero no celebró.</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Dato:</b> Sus compañeros están en silencio.</p>
+                <p><span class="step-pill">3</span> <b>Inferencia:</b> Probablemente Juan perdió la carrera o no logró el tiempo que esperaba.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Inferencia</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Reto Inferencia (INTERACTIVO) -->
+    <div class="slide" id="slide-7">
+        <div class="card">
+            <div class="badge-reading">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-4">¿Qué se sugiere en el texto?</h2>
+            <div class="text-block">
+                "La nueva ley de envases plásticos entrará en vigor el próximo mes. Aunque las grandes empresas han protestado por los costos de adaptación, los pequeños mercados locales ya han comenzado a ofrecer bolsas de tela y recipientes de vidrio a sus clientes."
+            </div>
+            <div class="space-y-3">
+                <button class="option-btn" onclick="checkAnswer(this, true, 'q2')">A) Los pequeños comercios se han adaptado más rápido que las grandes empresas.</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'q2')">B) La ley prohíbe totalmente el uso de cualquier tipo de plástico.</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'q2')">C) Las bolsas de tela son más baratas que las de plástico.</button>
+            </div>
+            <div id="feedback-q2" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Interpretación de Frases</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Interpretación de Frases (TEORÍA) -->
+    <div class="slide" id="slide-8">
+        <div class="card">
+            <div class="badge-reading">Nivel 4: Contexto</div>
+            <h2 class="text-2xl font-bold mb-4 text-blue-700">Interpretación de Frases 🗣️</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>A veces el autor usa metáforas o frases con un significado especial. La clave es el <b>vecindario</b> (el contexto): lo que dice antes y lo que dice después.</p>
+                <div class="p-4 bg-yellow-50 rounded-xl border border-yellow-200">
+                    <p class="font-bold">Pasos maestros:</p>
+                    <ol class="list-decimal ml-5 mt-2">
+                        <li>Ubica la frase en el texto.</li>
+                        <li>Sustitúyela por una de las opciones de respuesta.</li>
+                        <li>¿Sigue teniendo el mismo sentido? ¡Esa es!</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Propósito del Autor</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Propósito del Autor (TEORÍA) -->
+    <div class="slide" id="slide-9">
+        <div class="card">
+            <div class="badge-reading">Nivel 5: La Intención</div>
+            <h2 class="text-2xl font-bold mb-4 text-blue-700">¿Para qué escribió esto? 🎯</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>Todo autor tiene una agenda. Identifica el <b>verbo de acción</b>:</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="p-3 border rounded-xl bg-slate-50"><b>Informar:</b> Dar datos objetivos sin opinar.</div>
+                    <div class="p-3 border rounded-xl bg-slate-50"><b>Persuadir:</b> Convencerte de algo (usa adjetivos).</div>
+                    <div class="p-3 border rounded-xl bg-slate-50"><b>Criticar:</b> Señalar errores o fallas.</div>
+                    <div class="p-3 border rounded-xl bg-slate-50"><b>Narrar:</b> Contar una historia.</div>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Relación entre Párrafos</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Relación entre Párrafos (TEORÍA) -->
+    <div class="slide" id="slide-10">
+        <div class="card">
+            <div class="badge-reading">Nivel 6: El Mapa</div>
+            <h2 class="text-2xl font-bold mb-4 text-blue-700">Relación entre Párrafos 🗺️</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>¿Cómo se conectan las ideas? Piensa en los párrafos como piezas de un rompecabezas:</p>
+                <div class="space-y-2">
+                    <div class="p-3 bg-slate-50 rounded-lg border">
+                        <b>Párrafo 1:</b> Presenta el problema. <br> <b>Párrafo 2:</b> Da la solución o una causa.
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-lg border">
+                        <b>Párrafo 1:</b> Idea general. <br> <b>Párrafo 2:</b> Un ejemplo específico (pasa de lo macro a lo micro).
+                    </div>
+                </div>
+                <p class="text-xs italic text-blue-500">Pregunta típica: "¿Qué función cumple el segundo párrafo respecto al primero?".</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Final Relación</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Reto Final Relación (INTERACTIVO) -->
+    <div class="slide" id="slide-11">
+        <div class="card">
+            <div class="badge-reading">Reto Maestro</div>
+            <h2 class="text-lg font-bold mb-4">¿Cuál es la relación entre los párrafos?</h2>
+            <div class="text-block">
+                "P1: El ejercicio físico regular reduce el estrés y mejora la salud cardiovascular en adultos de todas las edades.<br><br>
+                P2: Por ejemplo, un estudio reciente demostró que caminar 30 minutos al día disminuye en un 20% el riesgo de infartos."
+            </div>
+            <div class="space-y-3">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'q3')">A) El P2 contradice la afirmación del P1.</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'q3')">B) El P2 provee evidencia concreta para la idea general del P1.</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'q3')">C) El P1 explica las causas de los datos dados en el P2.</button>
+            </div>
+            <div id="feedback-q3" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Finalizar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide Final -->
+    <div class="slide" id="slide-12">
+        <div class="card text-center">
+            <div class="mb-6 flex justify-center text-6xl">🎓</div>
+            <h2 class="text-4xl font-extrabold text-slate-900 mb-6">¡Maestro de la Lectura!</h2>
+            <p class="text-lg text-slate-500 mb-10 leading-relaxed max-w-md mx-auto text-balance">
+                Has aprendido a diseccionar textos, a pensar como detective y a entender la mente del autor. Con estas herramientas, la sección de lectura de la PAA será tu mayor fortaleza.
+            </p>
+            <button class="btn-nav px-12 py-4" onclick="goToStart()">Reiniciar Guía</button>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkAnswer(btn, isCorrect, qId) {
+            const fb = document.getElementById(`feedback-${qId}`);
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.textContent = "¡Perfecto! ✨";
+                fb.className = "mt-4 font-bold text-green-600 block scale-110 transition-transform text-center";
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.textContent = "¡Casi! Revisa la lógica ❌";
+                fb.className = "mt-4 font-bold text-red-600 block text-center";
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() {
+            currentSlide = 0;
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
+            document.querySelectorAll('[id^="feedback-"]').forEach(f => f.textContent = "");
+            updateUI();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        updateUI();
+    </script>
+</body>
+</html>

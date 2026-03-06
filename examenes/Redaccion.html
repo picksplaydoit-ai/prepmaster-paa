@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Redacción Indirecta PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #fdf2f8; /* Un tono rosado muy suave para diferenciarlo de mate */
+            color: #1e293b;
+            margin: 0;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .slide {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+
+        .card {
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.08);
+            max-width: 850px;
+            width: 100%;
+            padding: 2.5rem;
+            position: relative;
+            border: 1px solid #fce7f3;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 1.5rem;
+                border-radius: 1.5rem;
+                width: 95%;
+            }
+            h2 { font-size: 1.2rem !important; }
+        }
+
+        .badge-red {
+            background: #ec4899; /* Rosa/Fucsia para Redacción */
+            color: white;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .btn-nav {
+            background: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            border: 2px solid #f1f5f9;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: #fff;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .option-btn:hover { border-color: #ec4899; background: #fdf2f8; }
+        .option-correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
+        .option-incorrect { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
+
+        .progress-indicator {
+            position: fixed;
+            bottom: 0; left: 0; height: 5px;
+            background: #ec4899; transition: width 0.3s ease; z-index: 100;
+        }
+
+        .step-pill {
+            background: #fce7f3; color: #9d174d; padding: 2px 8px;
+            border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-right: 8px;
+        }
+
+        .example-box {
+            background: #f8fafc; border-left: 4px solid #ec4899;
+            padding: 1rem; border-radius: 0.75rem; margin: 1rem 0;
+        }
+
+        .highlight {
+            color: #ec4899;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 0: Intro -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-4">Redacción Indirecta: El Arte de Corregir ✍️</h1>
+            <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
+                En la PAA no vas a escribir, vas a ser el editor. Vamos a aprender a detectar errores de "oído" y lógica gramatical.
+            </p>
+            <button class="btn-nav bg-pink-600 px-12 py-4 text-lg" onclick="nextSlide()">¡Empezar el taller!</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: Concordancia (TEORÍA) -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <div class="badge-red">Nivel 1: Concordancia</div>
+            <h2 class="text-2xl font-bold mb-4 text-pink-700">¿Todo encaja? 🧩</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>La concordancia es que el sujeto y el verbo hablen el mismo idioma (singular con singular, plural con plural).</p>
+                <div class="example-box">
+                    <p class="font-bold mb-1 text-red-500">❌ Error común:</p>
+                    <p>"La gente <b>llegaron</b> temprano."</p>
+                    <p class="font-bold mt-3 mb-1 text-green-600">✅ Correcto:</p>
+                    <p>"La gente <b>llegó</b> temprano." (Gente es colectivo, pero gramaticalmente es singular).</p>
+                </div>
+                <p>¡Ojo con las frases largas! A veces el sujeto está lejos del verbo para confundirte.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Concordancia</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Ejemplo Concordancia (YO RESUELVO) -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <div class="badge-red">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4 text-pink-800">El sujeto camuflado 🕵️‍♂️</h2>
+            <p class="text-slate-600 text-sm mb-4 italic">"El conjunto de técnicas antiguas de pintura <b>representan</b> un reto."</p>
+            <div class="bg-pink-50 p-5 rounded-xl border border-pink-100 text-sm">
+                <p class="font-semibold text-pink-900 mb-2">Mi análisis:</p>
+                <p class="mb-2"><span class="step-pill">1</span> <b>Busco el núcleo:</b> ¿Qué es lo que representa un reto? ¿La pintura? ¿Las técnicas? ¡No! Es <b>"El conjunto"</b>.</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Analizo:</b> "Conjunto" es singular.</p>
+                <p class="mb-2"><span class="step-pill">3</span> <b>Corrijo:</b> El verbo debe ser singular ("representa").</p>
+                <p class="font-bold text-center mt-3 text-pink-700">"El conjunto... <b>representa</b> un reto."</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Concordancia</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Reto Concordancia (INTERACTIVO) -->
+    <div class="slide" id="slide-3">
+        <div class="card text-center">
+            <div class="badge-red">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-6 italic">¿Cuál de las siguientes oraciones es gramaticalmente correcta?</h2>
+            <div class="space-y-3 max-w-md mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rc1')">A) Hubieron muchos problemas durante la filmación.</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rc1')">B) Hubo muchos problemas durante la filmación.</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rc1')">C) Habían muchos problemas en la producción.</button>
+            </div>
+            <div id="feedback-rc1" class="mt-4 font-bold h-6"></div>
+            <p class="mt-2 text-[10px] text-slate-400 italic text-center">Tip: El verbo "haber" de existencia siempre es singular.</p>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Conectores</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Conectores (TEORÍA) -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <div class="badge-red">Nivel 2: Conectores</div>
+            <h2 class="text-2xl font-bold mb-4 text-pink-700">Pegamento de ideas 🔗</h2>
+            <div class="space-y-3 text-slate-600 text-sm">
+                <p>Los conectores le dan el "vibe" a la frase. Si usas el equivocado, la idea se rompe:</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="p-3 bg-slate-50 rounded-lg border">
+                        <b class="text-pink-600">Oposición:</b> Sin embargo, pero, no obstante. (Idea A vs Idea B).
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-lg border">
+                        <b class="text-pink-600">Causa/Efecto:</b> Porque, por lo tanto, dado que. (A causa B).
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-lg border">
+                        <b class="text-pink-600">Adición:</b> Además, también, asimismo. (Suma ideas).
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-lg border">
+                        <b class="text-pink-600">Tiempo:</b> Luego, después, finalmente. (Ordena).
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Conectores</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Ejemplo Conectores (YO RESUELVO) -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <div class="badge-red">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">El puente roto 🌉</h2>
+            <p class="text-slate-600 text-sm mb-4">"Estudió mucho para el examen; _________, no logró la calificación que esperaba."</p>
+            <div class="bg-pink-50 p-5 rounded-xl border border-pink-100 text-sm">
+                <p class="font-semibold text-pink-900 mb-2">Mi análisis:</p>
+                <p class="mb-2"><span class="step-pill">1</span> <b>Idea 1:</b> Estudió (Positivo).</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Idea 2:</b> No logró la nota (Negativo).</p>
+                <p class="mb-2"><span class="step-pill">3</span> <b>Lógica:</b> Son ideas opuestas. Necesito un conector de <b>contraste</b>.</p>
+                <p class="font-bold text-center mt-3 text-pink-700">"Estudió mucho; <b>sin embargo</b>, no logró..."</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Conectores</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Reto Conectores (INTERACTIVO) -->
+    <div class="slide" id="slide-6">
+        <div class="card text-center">
+            <div class="badge-red">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-6 italic">"El clima era perfecto para el picnic, ________ decidieron quedarse en casa viendo películas."</h2>
+            <div class="space-y-3 max-w-md mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rcon')">A) por lo tanto</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rcon')">B) no obstante</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rcon')">C) además</button>
+            </div>
+            <div id="feedback-rcon" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Orden Lógico</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Orden Lógico (TEORÍA) -->
+    <div class="slide" id="slide-7">
+        <div class="card">
+            <div class="badge-red">Nivel 3: Orden</div>
+            <h2 class="text-2xl font-bold mb-4 text-pink-700">Sujeto + Verbo + Predicado 🚂</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>A la PAA le encanta escribir al estilo de Yoda para confundirte. El orden más claro siempre es:</p>
+                <div class="p-4 bg-slate-50 rounded-xl border font-bold text-center text-pink-600">
+                    Sujeto (¿Quién?) + Verbo (¿Qué hace?) + Complementos (¿Cómo/Cuándo/Dónde?)
+                </div>
+                <p>Busca la opción que evite rodeos innecesarios. Menos es más.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Orden</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Ejemplo Orden (YO RESUELVO) -->
+    <div class="slide" id="slide-8">
+        <div class="card">
+            <div class="badge-red">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">Desenredando la frase 🧶</h2>
+            <p class="text-slate-600 text-sm mb-4">"Ayer los alumnos, muy entusiasmados por la feria, compraron libros."</p>
+            <div class="bg-pink-50 p-5 rounded-xl border border-pink-100 text-sm">
+                <p class="font-semibold text-pink-900 mb-2">Cómo mejorarla:</p>
+                <p class="mb-2"><span class="step-pill">1</span> <b>Identifico sujeto:</b> Los alumnos.</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Acción principal:</b> Compraron libros.</p>
+                <p class="mb-2"><span class="step-pill">3</span> <b>Complemento:</b> Con entusiasmo en la feria.</p>
+                <p class="font-bold text-center mt-3 text-pink-700">"Los alumnos compraron libros ayer en la feria con mucho entusiasmo."</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Orden</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Reto Orden (INTERACTIVO) -->
+    <div class="slide" id="slide-9">
+        <div class="card text-center">
+            <div class="badge-red">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-6 italic text-balance">¿Cuál de estas opciones expresa la idea de forma más clara y directa?</h2>
+            <div class="space-y-3 max-w-md mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'ro1')">A) El investigador, después de años, descubrió la cura finalmente.</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'ro1')">B) El investigador finalmente descubrió la cura después de años.</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'ro1')">C) Después de años, la cura el investigador finalmente descubrió.</button>
+            </div>
+            <div id="feedback-ro1" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Cohesión y Coherencia</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Coherencia y Cohesión (TEORÍA) -->
+    <div class="slide" id="slide-10">
+        <div class="card">
+            <div class="badge-red">Nivel 4: Texto Pro</div>
+            <h2 class="text-2xl font-bold mb-4 text-pink-700">Cohesión y Coherencia 🌊</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>Un texto fluye como el agua si evitas repetir palabras y usas pronombres correctamente.</p>
+                <ul class="list-disc ml-5 space-y-2">
+                    <li><b>Sinónimos:</b> No digas "casa" 10 veces, usa "hogar", "vivienda", "residencia".</li>
+                    <li><b>Pronombres:</b> "Juan llegó. <b>Él</b> traía flores." (Evitas repetir Juan).</li>
+                    <li><b>Elipsis:</b> Omitir el sujeto si ya se entiende. "Fui al cine y [yo] compré palomitas."</li>
+                </ul>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Puntuación: Los Signos</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Signos de Puntuación (TEORÍA) -->
+    <div class="slide" id="slide-11">
+        <div class="card">
+            <div class="badge-red">Nivel 5: Puntuación</div>
+            <h2 class="text-2xl font-bold mb-4 text-pink-700">Signos que salvan vidas 🚑</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-pink-500">
+                    <p class="font-bold">La Coma (,):</p>
+                    <p>Separa elementos de una lista o explicaciones adicionales. <b>Jamás</b> separa al sujeto del verbo.</p>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-pink-500">
+                    <p class="font-bold">El Punto y Coma (;):</p>
+                    <p>Separa dos oraciones completas que están muy relacionadas.</p>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-pink-500">
+                    <p class="font-bold">Los Dos Puntos (:):</p>
+                    <p>¡Viene algo importante! (Una lista, una cita o una explicación).</p>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Final Puntuación</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Reto Puntuación (INTERACTIVO) -->
+    <div class="slide" id="slide-12">
+        <div class="card text-center">
+            <div class="badge-red">Examen Final</div>
+            <h2 class="text-lg font-bold mb-6 italic">¿Cuál oración utiliza los signos de puntuación de forma impecable?</h2>
+            <div class="space-y-3 max-w-md mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rfp')">A) Juan, compró manzanas peras y uvas en el mercado.</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rfp')">B) Juan compró varias frutas: manzanas, peras y uvas.</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rfp')">C) Juan compró manzanas, peras y uvas: en el mercado.</button>
+            </div>
+            <div id="feedback-rfp" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-10 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Finalizar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide Final -->
+    <div class="slide" id="slide-13">
+        <div class="card text-center">
+            <div class="mb-6 flex justify-center text-6xl">🎓</div>
+            <h2 class="text-4xl font-extrabold text-slate-900 mb-6">¡Maestro del Lenguaje!</h2>
+            <p class="text-lg text-slate-500 mb-10 leading-relaxed max-w-md mx-auto">
+                Has dominado la concordancia, los conectores, el orden lógico y la puntuación. Ya tienes el "ojo clínico" para arrasar en Redacción Indirecta.
+            </p>
+            <button class="btn-nav px-12 py-4" onclick="goToStart()">Reiniciar Guía</button>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkAnswer(btn, isCorrect, qId) {
+            const fb = document.getElementById(`feedback-${qId}`);
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.textContent = "¡Dominado! ✨";
+                fb.className = "mt-4 font-bold text-green-600 block scale-110 transition-transform text-center";
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.textContent = "¡Casi! Intenta de nuevo ❌";
+                fb.className = "mt-4 font-bold text-red-600 block text-center";
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() {
+            currentSlide = 0;
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
+            document.querySelectorAll('[id^="feedback-"]').forEach(f => f.textContent = "");
+            updateUI();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        updateUI();
+    </script>
+</body>
+</html>

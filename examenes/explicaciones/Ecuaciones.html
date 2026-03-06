@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Álgebra PAA Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuración de MathJax para fórmulas perfectas -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .slide {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+
+        .card {
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.08);
+            max-width: 800px;
+            width: 100%;
+            padding: 2.5rem;
+            position: relative;
+            border: 1px solid #f1f5f9;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 1.5rem;
+                border-radius: 1.5rem;
+                width: 95%;
+            }
+            h2 { font-size: 1.25rem !important; }
+        }
+
+        .badge-algebra {
+            background: #f43f5e;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .btn-nav {
+            background: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            border: 2px solid #f1f5f9;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: #fff;
+            font-size: 0.9rem;
+        }
+
+        .option-btn:hover { border-color: #f43f5e; background: #fff1f2; }
+        .option-correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
+        .option-incorrect { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
+
+        .progress-indicator {
+            position: fixed;
+            bottom: 0; left: 0; height: 5px;
+            background: #f43f5e; transition: width 0.3s ease; z-index: 100;
+        }
+
+        .step-pill {
+            background: #ffe4e6; color: #9f1239; padding: 2px 8px;
+            border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-right: 8px;
+        }
+
+        .formula-box {
+            background: #fff1f2; border-left: 4px solid #f43f5e;
+            padding: 1rem; border-radius: 0.75rem; margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 0: Intro -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-4 text-balance">Álgebra PAA: El Arte de Despejar 🔍</h1>
+            <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
+                ¿Ecuaciones? No son más que una <b>balanza</b> buscando equilibrio. Aprenderemos a mover los números como piezas de ajedrez para liberar a la $x$.
+            </p>
+            <button class="btn-nav bg-rose-600 px-12 py-4 text-lg" onclick="nextSlide()">¡Empecemos!</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: El concepto de la Balanza (TEORÍA) -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <div class="badge-algebra">Nivel 1: Conceptos</div>
+            <h2 class="text-2xl font-bold mb-4 text-rose-700">La Ecuación es una Balanza ⚖️</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>El signo <b>=</b> es el centro de la balanza. Todo lo que hagas de un lado, tienes que hacerlo del otro para que no se incline.</p>
+                <div class="p-4 bg-rose-50 rounded-xl border border-rose-100">
+                    <p class="font-bold mb-2">La Regla del "Lado Opuesto":</p>
+                    <p>Cuando un número salta al otro lado del signo =, cambia a su <b>operación contraria</b>:</p>
+                    <ul class="list-disc ml-5 mt-2 space-y-1">
+                        <li>Si está <b>Sumando (+)</b> $\rightarrow$ Pasa <b>Restando (-)</b></li>
+                        <li>Si está <b>Restando (-)</b> $\rightarrow$ Pasa <b>Sumando (+)</b></li>
+                        <li>Si está <b>Multiplicando</b> $\rightarrow$ Pasa <b>Dividiendo</b></li>
+                        <li>Si está <b>Dividiendo</b> $\rightarrow$ Pasa <b>Multiplicando</b></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Despejes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Ejemplo Despeje Básico (YO RESUELVO) -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <div class="badge-algebra">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">Ecuación de primer grado 🧩</h2>
+            <p class="text-slate-600 text-sm mb-4 italic text-center">"Halla el valor de $x$ en: $2x - 10 = 20$"</p>
+            <div class="bg-rose-50 p-5 rounded-xl border border-rose-100 text-sm">
+                <p class="mb-2 font-semibold text-rose-900">Pasos para liberar a la $x$:</p>
+                <p class="mb-2"><span class="step-pill">1</span> <b>Muevo el número suelto:</b> El $-10$ estorba, lo paso al otro lado sumando. <br> $2x = 20 + 10 \rightarrow 2x = 30$.</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Quito el pegoste:</b> El $2$ está multiplicando a la $x$, pasa dividiendo. <br> $x = 30 / 2$.</p>
+                <p><span class="step-pill">3</span> <b>Final:</b> $x = \mathbf{15}$.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Despeje</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Reto Despeje (INTERACTIVO) -->
+    <div class="slide" id="slide-3">
+        <div class="card text-center">
+            <div class="badge-algebra">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-6 italic">
+                ¿Cuál es el valor de $x$ en la ecuación: $3x + 4 = 19$?
+            </h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rd')">A) $x = 5$</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rd')">B) $x = 7.6$</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rd')">C) $x = 3$</button>
+            </div>
+            <div id="feedback-rd" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Ecuaciones con Fracciones</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Ecuaciones con Fracciones (TEORÍA) -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <div class="badge-algebra">Nivel 2: Fracciones</div>
+            <h2 class="text-2xl font-bold mb-4 text-rose-700">¡Fuera denominadores! 🌊</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>Si ves una $x$ dividida por un número, no entres en pánico. El número de abajo es un <b>estorbo</b> que pasa al otro lado multiplicando a <b>TODO</b>.</p>
+                <div class="formula-box text-center">
+                    <p>Si tienes: $\frac{x}{5} = 4$</p>
+                    <p>El 5 salta y: $x = 4 \times 5$</p>
+                    <p><b>$x = 20$</b></p>
+                </div>
+                <p class="text-xs italic text-slate-400 text-center">Tip: "El que divide abajo, multiplica arriba en el otro lado".</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Fracción</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Ejemplo Fracción (YO RESUELVO) -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <div class="badge-algebra">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">La fracción rebelde</h2>
+            <p class="text-slate-600 text-sm mb-4 italic text-center">"Halla $x$ en: $\frac{x + 2}{3} = 5$"</p>
+            <div class="bg-rose-50 p-5 rounded-xl border border-rose-100 text-sm">
+                <p class="mb-2"><span class="step-pill">1</span> <b>Quito la base:</b> El 3 está dividiendo a todo lo de arriba, lo paso multiplicando. <br> $x + 2 = 5 \times 3 \rightarrow x + 2 = 15$.</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Libero a la x:</b> El +2 pasa restando. <br> $x = 15 - 2$.</p>
+                <p><span class="step-pill">3</span> <b>Resultado:</b> $x = \mathbf{13}$.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Fracción</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Reto Fracción (INTERACTIVO) -->
+    <div class="slide" id="slide-6">
+        <div class="card text-center">
+            <div class="badge-algebra">Tu Reto</div>
+            <h2 class="text-lg font-bold mb-6 italic">
+                ¿Cuál es el valor de $x$ en: $\frac{x}{2} - 5 = 10$?
+            </h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rf')">A) $x = 7.5$</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rf')">B) $x = 25$</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rf')">C) $x = 30$ (Primero suma 5, luego multiplica por 2)</button>
+            </div>
+            <div id="feedback-rf" class="mt-4 font-bold h-6"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Traducción Algebraica</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Traducción Algebraica (TEORÍA) -->
+    <div class="slide" id="slide-7">
+        <div class="card">
+            <div class="badge-algebra">Nivel 3: Lenguaje</div>
+            <h2 class="text-2xl font-bold mb-4 text-rose-700">De Español a Matemáticas 🗣️</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <p>La PAA te pondrá acertijos. Solo tienes que saber qué palabra significa qué símbolo:</p>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="p-3 border rounded-xl bg-slate-50"><b>"Un número"</b> $\rightarrow x$</div>
+                    <div class="p-3 border rounded-xl bg-slate-50"><b>"El doble"</b> $\rightarrow 2x$</div>
+                    <div class="p-3 border rounded-xl bg-slate-50"><b>"Aumentado en"</b> $\rightarrow +$</div>
+                    <div class="p-3 border rounded-xl bg-slate-50"><b>"Disminuido en"</b> $\rightarrow -$</div>
+                    <div class="p-3 border rounded-xl bg-slate-50"><b>"Es igual a"</b> $\rightarrow =$</div>
+                    <div class="p-3 border rounded-xl bg-slate-50"><b>"Consecutivo"</b> $\rightarrow x + 1$</div>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Lenguaje (Pro)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Ejemplo Lenguaje (YO RESUELVO NUEVO) -->
+    <div class="slide" id="slide-8">
+        <div class="card">
+            <div class="badge-algebra">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4 text-rose-800">Números Consecutivos 🏃‍♂️</h2>
+            <p class="text-slate-600 text-sm mb-4 italic text-center">"La suma de tres números consecutivos es igual a 60. ¿Cuál es el número más pequeño?"</p>
+            <div class="bg-rose-50 p-5 rounded-xl border border-rose-100 text-sm">
+                <p class="mb-2 font-semibold text-rose-900">El secreto de los consecutivos:</p>
+                <p class="mb-2"><span class="step-pill">1</span> <b>Traduzco:</b> El primero es $x$, el siguiente es $x+1$, el tercero es $x+2$.</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Planteo:</b> $x + (x+1) + (x+2) = 60$. <br> Juntamos las $x$: $3x + 3 = 60$.</p>
+                <p class="mb-2"><span class="step-pill">3</span> <b>Despejo:</b> $3x = 60 - 3 \rightarrow 3x = 57$. <br> $x = 57 / 3$.</p>
+                <p><span class="step-pill">4</span> <b>Final:</b> $x = \mathbf{19}$.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto Final Lenguaje</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Reto Final Lenguaje (INTERACTIVO) -->
+    <div class="slide" id="slide-9">
+        <div class="card text-center">
+            <div class="badge-algebra">Reto Final</div>
+            <h2 class="text-lg font-bold mb-6 italic text-balance">
+                "El triple de un número, disminuido en 5, es igual a 10". ¿Qué ecuación representa esto?
+            </h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rl')">A) $3(x - 5) = 10$</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'rl')">B) $3x - 5 = 10$</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'rl')">C) $x^3 - 5 = 10$</button>
+            </div>
+            <div id="feedback-rl" class="mt-4 font-bold h-6"></div>
+            <div class="mt-10 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Finalizar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide Final -->
+    <div class="slide" id="slide-10">
+        <div class="card text-center">
+            <div class="mb-6 flex justify-center text-6xl">🏆</div>
+            <h2 class="text-4xl font-extrabold text-slate-900 mb-6">¡Álgebra Dominada!</h2>
+            <p class="text-lg text-slate-500 mb-10 leading-relaxed max-w-md mx-auto">
+                Has aprendido a despejar, a manejar fracciones en ecuaciones y a traducir problemas reales al lenguaje matemático. ¡Estás listo para cualquier reto de álgebra en la PAA!
+            </p>
+            <button class="btn-nav px-12 py-4" onclick="goToStart()">Reiniciar Guía</button>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        }
+
+        function checkAnswer(btn, isCorrect, qId) {
+            const fb = document.getElementById(`feedback-${qId}`);
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.textContent = "¡Perfecto! ✨";
+                fb.className = "mt-4 font-bold text-green-600 block scale-110 transition-transform text-center";
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.textContent = "¡Casi! Revisa el despeje ❌";
+                fb.className = "mt-4 font-bold text-red-600 block text-center";
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() {
+            currentSlide = 0;
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
+            document.querySelectorAll('[id^="feedback-"]').forEach(f => f.textContent = "");
+            updateUI();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        updateUI();
+    </script>
+</body>
+</html>

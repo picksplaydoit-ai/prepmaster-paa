@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation 2: English PAA (ESLAT)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; overflow-x: hidden; }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .custom-scroll::-webkit-scrollbar { width: 5px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        .ans-correct { background-color: #ecfdf5 !important; border-color: #10b981 !important; color: #065f46 !important; }
+        .ans-wrong { background-color: #fef2f2 !important; border-color: #ef4444 !important; color: #991b1b !important; }
+        .ans-correct-hint { border-color: #10b981 !important; border-style: dashed !important; border-width: 2px !important; }
+        
+        .reading-passage { background-color: #ffffff; border: 1px solid #e2e8f0; padding: 1.5rem; margin-bottom: 2rem; border-radius: 1rem; font-style: normal; line-height: 1.8; color: #334155; box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start py-4 sm:py-8 px-2">
+
+    <!-- Start Screen -->
+    <div id="start-screen" class="max-w-2xl w-full bg-white rounded-3xl shadow-xl p-8 text-center border border-slate-200">
+        <div class="w-20 h-20 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg rotate-3">
+            <span class="text-4xl font-black">2</span>
+        </div>
+        <h1 class="text-3xl font-black text-slate-900 mb-2 uppercase tracking-tight">English Simulation 2</h1>
+        <p class="text-emerald-600 font-bold mb-8 tracking-widest uppercase text-sm">Advanced Proficiency - ESLAT</p>
+        
+        <div class="grid grid-cols-2 gap-4 mb-8 text-left">
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Total Items</p>
+                <p class="text-xl font-bold">50 Questions</p>
+            </div>
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Time allowed</p>
+                <p class="text-xl font-bold">50 Minutes</p>
+            </div>
+        </div>
+
+        <button onclick="startExam()" class="w-full bg-emerald-900 hover:bg-black text-white font-black py-4 rounded-2xl shadow-xl transition-all active:scale-95 text-lg uppercase tracking-widest">
+            Launch Simulation
+        </button>
+    </div>
+
+    <!-- Exam Interface -->
+    <div id="exam-screen" class="hidden max-w-4xl w-full flex flex-col gap-4">
+        <header class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm sticky top-0 z-50 grid grid-cols-3 items-center">
+            <div class="flex flex-col">
+                <p class="text-[9px] font-black text-slate-400 uppercase">Countdown</p>
+                <p id="timer" class="text-lg font-mono font-black text-emerald-600 leading-none">50:00</p>
+            </div>
+            
+            <div class="flex justify-center gap-6">
+                <div class="text-center">
+                    <p class="text-[9px] font-black text-emerald-500 uppercase">Correct</p>
+                    <p id="live-correct" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-[9px] font-black text-rose-500 uppercase">Errors</p>
+                    <p id="live-wrong" class="text-lg font-black text-rose-600 leading-none">0</p>
+                </div>
+            </div>
+
+            <div class="text-right">
+                <p id="progress-label" class="text-[9px] font-black text-slate-400 uppercase">Item 1/50</p>
+                <div class="w-full h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden border border-slate-200">
+                    <div id="progress-bar" class="h-full bg-emerald-600 transition-all duration-300" style="width: 2%"></div>
+                </div>
+            </div>
+        </header>
+
+        <main class="bg-white border border-slate-200 rounded-[2.5rem] shadow-lg p-6 sm:p-10 flex flex-col min-h-[450px]">
+            <div id="question-container" class="flex-grow fade-in overflow-y-auto custom-scroll max-h-[70vh]">
+                <!-- Dynamic Content -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Results -->
+    <div id="result-screen" class="hidden max-w-2xl w-full bg-white rounded-[3rem] shadow-2xl overflow-hidden fade-in border border-slate-200">
+        <div class="bg-slate-900 p-10 text-center text-white">
+            <p class="text-emerald-400 font-black uppercase tracking-[0.3em] text-[10px] mb-2">Final Estimated Score</p>
+            <div class="flex items-center justify-center gap-2">
+                <h2 id="final-score" class="text-8xl font-black tracking-tighter leading-none">200</h2>
+                <span class="text-slate-500 font-bold text-xl self-end mb-2">/ 800</span>
+            </div>
+        </div>
+        
+        <div class="p-8 sm:p-12">
+            <h3 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-tight">Skill Evaluation</h3>
+            <div id="area-results" class="space-y-4 mb-8"></div>
+
+            <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100 flex items-center justify-between mb-8">
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Total Correct</p>
+                    <p class="text-2xl font-black text-slate-900"><span id="correct-total">0</span>/50</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Accuracy</p>
+                    <p id="accuracy-percent" class="text-2xl font-black text-emerald-600">0%</p>
+                </div>
+            </div>
+
+            <button onclick="location.reload()" class="w-full bg-emerald-900 text-white font-black py-5 rounded-2xl shadow-xl hover:bg-black transition-all uppercase tracking-widest text-sm">
+                Take New Simulation
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const readingPassage1 = "Solar energy is becoming one of the most reliable sources of power globally. By capturing sunlight using photovoltaic panels, we can generate electricity without emitting greenhouse gases. This technology has significantly dropped in price over the last decade, making it accessible to both homeowners and large industries. However, storage remains a challenge. Because the sun does not shine at night, batteries are needed to save energy for later use. Scientists are currently working on more efficient and eco-friendly battery designs to ensure a 24/7 supply of green power.";
+
+        const readingPassage2 = "The invention of the printing press by Johannes Gutenberg in the mid-15th century was a turning point in human history. Before this, books were copied by hand, a slow process that made them rare and expensive. Gutenberg's machine used movable type, which allowed for the mass production of books for the first time. This led to a rapid increase in literacy rates across Europe as information became more available to the public. Scholars suggest that the printing press was a key factor in the spread of the Renaissance and the Scientific Revolution, as it allowed new ideas to travel faster than ever before.";
+
+        const questionBank = [
+            // Language Use & Vocabulary (15 items)
+            { area: "Language Use & Vocabulary", q: "Complete the sentence: My aunt is a very famous ______; she treats patients at the local hospital.", options: ["journalist", "doctor", "architect", "lawyer"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "Identify the correct form: She has ______ to the park every morning this week.", options: ["go", "gone", "went", "going"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "I found ______ wallet on the floor under the table.", options: ["me", "my", "mine", "I"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "The children ______ very quietly in the library right now.", options: ["read", "is reading", "are reading", "reads"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "Which is the most appropriate word? The ______ was very helpful during our flight.", options: ["pilot", "waitress", "flight attendant", "conductor"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "We ______ any coffee left in the kitchen.", options: ["don't have", "doesn't have", "not have", "haven't"], ans: 0 },
+            { area: "Language Use & Vocabulary", q: "Which is the CORRECT question?", options: ["Where you go yesterday?", "Where did you went yesterday?", "Where did you go yesterday?", "Yesterday where you went?"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "He is the ______ student in our entire class.", options: ["smartest", "smarter", "most smart", "smart"], ans: 0 },
+            { area: "Language Use & Vocabulary", q: "The movie starts ______ exactly eight o'clock.", options: ["in", "on", "at", "to"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "I would travel more if I ______ more free time.", options: ["have", "has", "had", "will have"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "She is good ______ playing the guitar.", options: ["in", "on", "at", "with"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "There ______ many people at the concert last night.", options: ["was", "were", "are", "be"], ans: 1 },
+            { area: "Language Use & Vocabulary", q: "I haven't seen my cousin ______ last year.", options: ["for", "during", "since", "ago"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "This car is ______ than the previous model.", options: ["fastest", "more fast", "faster", "fast"], ans: 2 },
+            { area: "Language Use & Vocabulary", q: "Whose bag is this? It's ______.", options: ["hers", "she", "her", "herself"], ans: 0 },
+
+            // Reading Comprehension - Passage 1 (10 items)
+            { area: "Reading Comprehension", passage: readingPassage1, q: "Photovoltaic panels are used to capture ______.", options: ["wind", "water", "sunlight", "heat"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "What is the MAIN benefit mentioned about solar energy?", options: ["It works at night.", "It is a green power source.", "It is the only power source.", "It is used by scientists."], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "The word 'reliable' in the text is closest in meaning to ______.", options: ["expensive", "dependable", "dangerous", "new"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "According to the passage, why are batteries necessary?", options: ["To make panels cheaper.", "To store energy for night use.", "To cool down the house.", "To emit greenhouse gases."], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "The price of solar technology has ______ in the last ten years.", options: ["increased", "stayed the same", "decreased", "doubled"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "Industries and homeowners find solar energy ______.", options: ["useless", "too complex", "accessible", "noisy"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "Scientists are focusing on making batteries more ______.", options: ["colorful", "heavy", "eco-friendly", "temporary"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "The text implies that greenhouse gases are ______.", options: ["good for the air", "a byproduct of solar energy", "harmful to the environment", "made by batteries"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "The tone of the author is ______.", options: ["worried", "pessimistic", "informative", "humorous"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage1, q: "What does '24/7 supply' mean?", options: ["24 panels for 7 houses", "Continuous supply", "Only on weekends", "Supply during the day"], ans: 1 },
+
+            // Reading Comprehension - Passage 2 (7 items)
+            { area: "Reading Comprehension", passage: readingPassage2, q: "Who invented the printing press?", options: ["Isaac Newton", "Leonardo da Vinci", "Johannes Gutenberg", "William Shakespeare"], ans: 2 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "Before the printing press, how were books made?", options: ["Using computers", "By hand", "Using cameras", "They didn't exist"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "The use of 'movable type' allowed for ______.", options: ["faster travel", "mass production of books", "painting walls", "better farming"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "What was a result of books becoming more available?", options: ["Literacy rates dropped", "Literacy rates increased", "People stopped reading", "Books became more expensive"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "The printing press helped spread the ______.", options: ["Middle Ages", "Renaissance", "Industrial Revolution", "Internet Age"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "The word 'rare' in the text means ______.", options: ["common", "uncommon", "colorful", "useful"], ans: 1 },
+            { area: "Reading Comprehension", passage: readingPassage2, q: "The author suggests that the printing press was a ______.", options: ["mistake", "minor invention", "turning point", "challenge"], ans: 2 },
+
+            // Indirect Writing (18 items)
+            { area: "Indirect Writing", q: "Identify the error: She (A) is (B) much (C) more tall (D) than her brother.", options: ["is", "much", "more tall", "No error"], ans: 2 },
+            { area: "Indirect Writing", q: "Choose the best correction: Everyone in the group were surprised by the news.", options: ["was surprised", "were surprising", "have been surprised", "No change needed"], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: If I am (A) rich, I would (B) buy a big (C) boat.", options: ["am", "would", "big", "No error"], ans: 0 },
+            { area: "Indirect Writing", q: "Choose the best way to combine: It was cold. We turned on the heater.", options: ["Since it was cold, we turned on the heater.", "It was cold but we turned on the heater.", "Although it was cold, we turned on the heater.", "We turned on the heater if it was cold."], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: They (A) arrived (B) to (C) the airport late yesterday.", options: ["They", "arrived", "to", "No error"], ans: 2 },
+            { area: "Indirect Writing", q: "Choose the best word order: ______ your friend live in this neighborhood?", options: ["Do", "Does", "Is", "Has"], ans: 1 },
+            { area: "Indirect Writing", q: "Improve the sentence: Slowly the cat the room entered.", options: ["Slowly the room the cat entered.", "The cat entered the room slowly.", "Entered the cat the room slowly.", "No change needed."], ans: 1 },
+            { area: "Indirect Writing", q: "Identify the error: He has (A) been (B) living (C) here since three years.", options: ["has", "living", "since", "No error"], ans: 2 },
+            { area: "Indirect Writing", q: "Choose the correct connector: I wanted to go out, ______ it was raining heavily.", options: ["because", "so", "but", "therefore"], ans: 2 },
+            { area: "Indirect Writing", q: "Identify the error: We (A) saw (B) many (C) deers in the forest.", options: ["saw", "many", "deers", "No error"], ans: 2 },
+            { area: "Indirect Writing", q: "Choose the best way to combine: She likes tea. She likes coffee. She does not like milk.", options: ["She likes tea and coffee, but not milk.", "She likes tea but coffee and milk.", "Because she likes tea and coffee, milk.", "Tea and coffee likes she, milk no."], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: This laptop (A) belongs (B) to (C) he.", options: ["belongs", "to", "he", "No error"], ans: 2 },
+            { area: "Indirect Writing", q: "Choose the best correction: Neither John nor his friends is going to the party.", options: ["are going", "goes", "has gone", "No change needed"], ans: 0 },
+            { area: "Indirect Writing", q: "Identify the error: I (A) am (B) not (C) like (D) spicy food.", options: ["am", "not", "like", "No error"], ans: 0 },
+            { area: "Indirect Writing", q: "Improve the sentence: Fast the car through the street moved.", options: ["The car through the street moved fast.", "The car moved fast through the street.", "Fast through the street the car moved.", "No change needed."], ans: 1 },
+            { area: "Indirect Writing", q: "Identify the error: He (A) don't (B) have (C) a (D) car.", options: ["don't", "have", "a", "No error"], ans: 0 },
+            { area: "Indirect Writing", q: "Choose the best word order: ______ you see that movie last week?", options: ["Do", "Did", "Have", "Were"], ans: 1 },
+            { area: "Indirect Writing", q: "Identify the error: This is (A) the (B) more (C) expensive (D) dress.", options: ["the", "more", "expensive", "No error"], ans: 2 }
+        ];
+
+        let currentIndex = 0;
+        let scoreCorrect = 0;
+        let scoreWrong = 0;
+        let timeLeft = 3000; // 50 minutes
+        let timerInterval;
+        let canAnswer = true;
+        let answersData = [];
+
+        function startExam() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            renderQuestion();
+            startTimer();
+        }
+
+        function renderQuestion() {
+            const q = questionBank[currentIndex];
+            const container = document.getElementById('question-container');
+            canAnswer = true;
+
+            document.getElementById('progress-label').innerText = `Item ${currentIndex + 1}/50`;
+            document.getElementById('progress-bar').style.width = `${((currentIndex + 1) / 50) * 100}%`;
+
+            let html = `
+                <div class="mb-6">
+                    <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-lg text-[10px] font-black uppercase tracking-widest">${q.area}</span>
+                </div>
+            `;
+
+            if (q.passage) {
+                html += `<div class="reading-passage">${q.passage}</div>`;
+            }
+
+            html += `
+                <div class="text-xl sm:text-2xl font-bold leading-relaxed mb-10 text-slate-800">
+                    ${q.q}
+                </div>
+                <div id="options-list" class="grid gap-3">
+                    ${q.options.map((opt, idx) => `
+                        <button onclick="checkAnswer(${idx})" class="option-btn flex items-center gap-4 p-5 rounded-2xl border-2 border-slate-100 bg-white transition-all text-left group">
+                            <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center font-black text-sm text-slate-400 group-hover:bg-emerald-700 group-hover:text-white transition-colors">
+                                ${String.fromCharCode(65 + idx)}
+                            </div>
+                            <div class="font-semibold text-slate-700 text-lg">${opt}</div>
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function checkAnswer(selectedIdx) {
+            if (!canAnswer) return;
+            canAnswer = false;
+
+            const q = questionBank[currentIndex];
+            const isCorrect = selectedIdx === q.ans;
+            const buttons = document.querySelectorAll('.option-btn');
+
+            if (isCorrect) {
+                buttons[selectedIdx].classList.add('ans-correct');
+                scoreCorrect++;
+                document.getElementById('live-correct').innerText = scoreCorrect;
+            } else {
+                buttons[selectedIdx].classList.add('ans-wrong');
+                buttons[q.ans].classList.add('ans-correct-hint');
+                scoreWrong++;
+                document.getElementById('live-wrong').innerText = scoreWrong;
+            }
+
+            answersData.push({ area: q.area, correct: isCorrect });
+
+            setTimeout(() => {
+                if (currentIndex < questionBank.length - 1) {
+                    currentIndex++;
+                    renderQuestion();
+                } else {
+                    finishExam();
+                }
+            }, 1300);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const m = Math.floor(timeLeft / 60);
+                const s = timeLeft % 60;
+                const timerEl = document.getElementById('timer');
+                timerEl.innerText = `${m}:${s < 10 ? '0' + s : s}`;
+                if (timeLeft < 300) timerEl.classList.add('text-rose-600');
+                if (timeLeft <= 0) finishExam();
+            }, 1000);
+        }
+
+        function finishExam() {
+            clearInterval(timerInterval);
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const total = 50;
+            const finalScale = 200 + Math.round((scoreCorrect / total) * 600);
+            
+            document.getElementById('final-score').innerText = finalScale;
+            document.getElementById('correct-total').innerText = scoreCorrect;
+            document.getElementById('accuracy-percent').innerText = `${Math.round((scoreCorrect / total) * 100)}%`;
+
+            const areas = ["Language Use & Vocabulary", "Reading Comprehension", "Indirect Writing"];
+            const breakdown = document.getElementById('area-results');
+            breakdown.innerHTML = "";
+
+            areas.forEach(area => {
+                const areaQs = answersData.filter(a => a.area === area);
+                const areaCorrect = areaQs.filter(a => a.correct).length;
+                const areaTotal = areaQs.length;
+                const percent = areaTotal > 0 ? (areaCorrect / areaTotal) * 100 : 0;
+
+                breakdown.innerHTML += `
+                    <div>
+                        <div class="flex justify-between text-[10px] font-black uppercase text-slate-400 mb-1">
+                            <span>${area}</span>
+                            <span class="text-slate-600">${areaCorrect} / ${areaTotal}</span>
+                        </div>
+                        <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                            <div class="h-full bg-emerald-600 transition-all duration-700" style="width: ${percent}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>

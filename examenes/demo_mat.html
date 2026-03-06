@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo PrepMaster — Matemáticas PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .sticky-header { position: sticky; top: 0; z-index: 50; }
+        .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
+        .ans-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .progress-bar { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .glass-card { background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col">
+
+    <div id="start-screen" class="flex-grow flex items-center justify-center p-4 overflow-y-auto">
+        <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
+            <div class="bg-amber-400 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-4">🎯 Versión Demo Gratuita</div>
+            <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg rotate-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-extrabold text-slate-900 mb-1 uppercase tracking-tight">Simulador PAA</h1>
+            <p class="text-slate-500 mb-1 font-medium text-sm">Matemáticas · Demo (4 Reactivos)</p>
+            <p class="text-blue-600 text-xs font-bold mb-4">Aritmética · Álgebra · Geometría · Probabilidad</p>
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-4 text-left rounded-r-xl">
+                <p class="text-xs text-amber-900 font-semibold">Prueba gratuita con <span class="underline">4 preguntas representativas</span> del examen real.</p>
+                <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold italic">El examen completo tiene 55 reactivos cronometrados.</p>
+            </div>
+            
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 mb-4 text-left">
+                <p class="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-1">📋 Aviso importante</p>
+                <p class="text-xs text-slate-600 leading-relaxed">Esta app <strong>no guarda datos</strong> entre sesiones. Para llevar tu progresión, <strong class="text-blue-700">anota tu puntaje</strong> al terminar cada simulación o minijuego.</p>
+            </div>
+            <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-4 text-left">
+                <p class="text-[10px] font-black text-blue-700 uppercase tracking-wider mb-2">✨ La versión completa incluye:</p>
+                                                <ul class="text-xs text-slate-600 space-y-1">
+                    <li>✅ <strong>8 simulaciones</strong> de Matemáticas (55 reactivos c/u)</li>
+                    <li>✅ <strong>8 simulaciones</strong> de Redacción (25 reactivos c/u)</li>
+                    <li>✅ <strong>8 simulaciones</strong> de Lectura (45 reactivos c/u)</li>
+                    <li>✅ <strong>5 simulaciones</strong> de Inglés ESLAT (50 reactivos c/u)</li>
+                    <li>✅ <strong>13 explicaciones rápidas</strong> por tema (Mate, Redac, Lectura)</li>
+                    <li>✅ <strong>6 minijuegos</strong> — Conquista, Crónicas, Conecta 4 y más</li>
+                    <li>✅ Ejercicios de supervivencia + Reto de Lectura Rápida</li>
+                    <li>✅ PDFs con respuestas y procedimientos explicados</li>
+                    <li>✅ Calculadora de puntaje de ingreso PAA + Curso en video</li>
+                    <li class="text-blue-700 font-bold">💳 Todo por $89 MXN · Acceso 3 meses</li>
+                </ul>
+            </div>
+            <button onclick="startExam()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] text-lg mb-3">INICIAR DEMO GRATIS</button>
+            <a href="../minijuegos/demo_conquista.html" target="_blank" class="block w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-2xl shadow transition-all text-sm mb-3">
+                ⚔️ Probar Demo Minijuego Gratis →
+            </a>
+
+            <a href="https://prepmaster-paa.vercel.app" class="block w-full bg-amber-400 hover:bg-amber-500 text-white font-bold py-3 rounded-2xl shadow transition-all text-sm">🔓 Acceder a la versión completa →</a>
+        </div>
+    </div>
+
+    <div id="exam-screen" class="hidden min-h-screen flex flex-col">
+        <div class="sticky-header bg-white border-b border-slate-200 p-3">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <div class="flex gap-4">
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Bien</p>
+                        <p id="correct-counter" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                    </div>
+                </div>
+                <div class="flex-1 max-w-xs ml-4">
+                    <p id="progress-text" class="text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-tighter">Cargando...</p>
+                    <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="progress-bar h-full bg-blue-600 w-0"></div>
+                    </div>
+                </div>
+                <div class="bg-amber-400 text-white text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-full ml-3">DEMO</div>
+            </div>
+        </div>
+        <main class="flex-grow flex items-center justify-center p-4 overflow-y-auto">
+            <div id="question-box" class="max-w-xl w-full pb-4"></div>
+        </main>
+    </div>
+
+    <div id="result-screen" class="hidden flex items-center justify-center p-4 py-8">
+        <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl border border-white fade-in">
+            <div class="bg-slate-900 p-6 text-center text-white">
+                <p class="text-blue-400 font-bold uppercase tracking-[0.3em] text-[9px] mb-1">Puntaje de Escala — Demo Matemáticas</p>
+                <div class="flex items-center justify-center gap-2 mb-1">
+                    <h2 id="final-score" class="text-6xl font-black tracking-tighter leading-none">0</h2>
+                    <p class="text-slate-500 font-bold text-lg">/ 800</p>
+                </div>
+                <p class="text-slate-500 text-[10px] uppercase tracking-wider mb-1">Igual que el examen real PAA</p>
+                <p id="result-msg" class="text-slate-300 text-sm mt-1"></p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-2 gap-3 mb-5">
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Aciertos</p>
+                        <p class="text-xl font-black text-slate-800"><span id="total-correct">0</span><span class="text-slate-300 text-sm">/4</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Efectividad</p>
+                        <p id="total-percent" class="text-xl font-black text-blue-600">0%</p>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-3xl p-5 text-white mb-5">
+                    <h4 class="text-lg font-black mb-1 uppercase tracking-tight">¿Listo para prepararte en serio?</h4>
+                    <p class="text-blue-100 text-xs mb-4">8 simulaciones por sección, 13 explicaciones rápidas por tema, supervivencia, lectura rápida, PDFs con procedimientos y curso en video. Todo por $89 MXN.</p>
+                    <div class="flex gap-3 flex-wrap">
+                        <a href="https://prepmaster-paa.vercel.app" class="bg-white text-blue-600 font-black px-5 py-2 rounded-xl hover:bg-blue-50 transition-all text-xs uppercase tracking-widest">🔓 Acceder · $89 MXN</a>
+                        <button onclick="location.reload()" class="bg-blue-500 text-white font-black px-5 py-2 rounded-xl hover:bg-blue-400 transition-all text-xs uppercase tracking-widest">Repetir demo</button>
+                    </div>
+                </div>
+                <div id="review-list" class="space-y-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { id:1, area:"Aritmética", q:"Un artículo cuesta $120. Si se le aplica un descuento del 25%, ¿cuánto se pagará finalmente?", options:["$80","$90","$95","$100"], ans:1 },
+            { id:2, area:"Álgebra", q:"¿Cuál es el valor de x en la ecuación 3(x − 2) = x + 10?", options:["x = 2","x = 4","x = 6","x = 8"], ans:3 },
+            { id:3, area:"Geometría", q:"Si el área de un círculo es 49π, ¿cuál es la medida de su diámetro?", options:["7","14","24.5","49"], ans:1 },
+            { id:4, area:"Probabilidad", q:"Al lanzar un dado, ¿cuál es la probabilidad de obtener un número múltiplo de 3?", options:["1/6","1/3","1/2","2/3"], ans:1 },
+        ];
+        let currentIndex = 0, correctCount = 0, canAnswer = true;
+        const userAnswers = [];
+
+        function startExam() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentIndex >= questions.length) { showResults(); return; }
+            const q = questions[currentIndex];
+            canAnswer = true;
+            document.getElementById('progress-text').textContent = `Pregunta ${currentIndex+1} de ${questions.length} · ${q.area}`;
+            document.getElementById('progress-bar').style.width = `${(currentIndex/questions.length)*100}%`;
+            document.getElementById('question-box').innerHTML = `
+                <div class="bg-white rounded-3xl shadow-lg p-6 border border-slate-100 fade-in">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="bg-blue-100 text-blue-700 text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded-lg">${q.area}</span>
+                        <span class="text-slate-300 text-xs">Pregunta ${currentIndex+1}/${questions.length}</span>
+                    </div>
+                    <p class="text-slate-800 font-semibold text-base leading-relaxed mb-5">${q.q}</p>
+                    <div class="space-y-3">
+                        ${q.options.map((opt,i)=>`
+                            <button onclick="selectAnswer(${i})" id="opt-${i}"
+                                class="w-full text-left px-4 py-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50 transition-all font-medium text-sm text-slate-700">
+                                <span class="font-black text-slate-400 mr-2">${String.fromCharCode(65+i)}.</span>${opt}
+                            </button>`).join('')}
+                    </div>
+                </div>`;
+        }
+
+        function selectAnswer(selected) {
+            if (!canAnswer) return;
+            canAnswer = false;
+            const q = questions[currentIndex];
+            userAnswers.push({q, selected});
+            document.querySelectorAll('[id^="opt-"]').forEach((btn,i) => {
+                btn.disabled = true;
+                if (i === q.ans) btn.classList.add('ans-correct');
+                else if (i === selected) btn.classList.add('ans-wrong');
+            });
+            if (selected === q.ans) { correctCount++; document.getElementById('correct-counter').textContent = correctCount; }
+            setTimeout(() => { currentIndex++; showQuestion(); }, 1200);
+        }
+
+        function showResults() {
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            const pct = Math.round((correctCount/questions.length)*100);
+            const scaleScore = Math.round((correctCount/4)*600)+200;
+            document.getElementById('final-score').textContent = scaleScore;
+            document.getElementById('total-correct').textContent = correctCount;
+            document.getElementById('total-percent').textContent = pct + '%';
+            document.getElementById('scale-score-small').textContent = scaleScore;
+            const msgs = ['Sigue practicando 💪','Vas bien, sigue así 📚','Muy bien hecho ⭐','¡Excelente, perfecto! 🏆'];
+            document.getElementById('result-msg').textContent = `${msgs[correctCount] || msgs[3]} · Puntaje estimado: ${scaleScore}/800`;
+            document.getElementById('review-list').innerHTML = userAnswers.map((item,i)=>`
+                <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                    <p class="text-[10px] font-black text-slate-400 uppercase mb-1">${item.q.area} · Pregunta ${i+1}</p>
+                    <p class="text-sm font-semibold text-slate-700 mb-2">${item.q.q}</p>
+                    <p class="${item.selected===item.q.ans?'text-emerald-600':'text-red-500'} text-xs font-bold">
+                        ${item.selected===item.q.ans?'✅ Correcto':'❌ Incorrecto — Respuesta: '+item.q.options[item.q.ans]}
+                    </p>
+                </div>`).join('');
+        }
+    </script>
+</body>
+</html>
