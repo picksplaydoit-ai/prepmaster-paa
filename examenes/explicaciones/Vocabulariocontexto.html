@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Vocabulario PAA Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fdfcf8; color: #1e293b; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: white; border-radius: 2rem; box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.08); max-width: 850px; width: 100%; padding: 2.5rem; position: relative; border: 1px solid #f1f5f9; max-height: 95vh; overflow-y: auto; }
+        .badge-vocab { background: #f59e0b; color: white; padding: 4px 14px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; }
+        .btn-nav { background: #1e293b; color: white; padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: all 0.2s ease; font-size: 0.9rem; }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid #f1f5f9; border-radius: 12px; margin-bottom: 8px; font-weight: 500; transition: all 0.2s ease; background: #fff; font-size: 0.85rem; line-height: 1.4; }
+        .option-btn:hover { border-color: #f59e0b; background: #fffbeb; }
+        .option-correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
+        .option-incorrect { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: #f59e0b; transition: width 0.3s ease; z-index: 100; }
+        .text-block { background: #f8fafc; border-left: 4px solid #f59e0b; padding: 1.25rem; border-radius: 0.5rem; margin: 1rem 0; font-style: italic; font-size: 0.95rem; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <!-- Slide 0: Intro -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-4">Vocabulario en Contexto 📖✨</h1>
+            <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
+                Olvídate del diccionario. En la PAA, las palabras son como camaleones: cambian su color según lo que tengan al lado.
+            </p>
+            <button class="btn-nav bg-amber-600 px-12 py-4 text-lg" onclick="nextSlide()">¡Empezar!</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: El Secreto -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <div class="badge-vocab">El Secreto</div>
+            <h2 class="text-2xl font-bold mb-4 text-amber-700">Ignora el diccionario 🚫📕</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>El College Board te pondrá palabras que ya conoces, pero con un sentido que <u>no es el común</u>.</p>
+                <div class="p-4 bg-amber-50 rounded-xl border border-amber-100 italic">
+                    "La música de Bach tiene una arquitectura **robusta**."
+                </div>
+                <p>¿Bach construyó un edificio? No. Aquí "robusta" no significa "fuerte físicamente", significa "compleja" o "sólida".</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Técnica de Sustitución</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Técnica -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <div class="badge-vocab">La Técnica</div>
+            <h2 class="text-2xl font-bold mb-4 text-amber-700">El Método del "Espacio en Blanco" 🕳️</h2>
+            <div class="space-y-4 text-slate-600 text-sm">
+                <ol class="list-decimal ml-5 space-y-3">
+                    <li>Borra la palabra difícil mentalmente.</li>
+                    <li>Lee la oración con un espacio vacío.</li>
+                    <li>Prueba las opciones de respuesta en ese espacio.</li>
+                    <li><b>La correcta debe mantener el "sabor" (sentido) de la oración.</b></li>
+                </ol>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo 1</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Ejemplo 1 -->
+    <div class="slide" id="slide-3">
+        <div class="card">
+            <div class="badge-vocab">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">Cultivar el éxito 🌱</h2>
+            <div class="text-block">
+                "Desde joven, la escritora decidió **cultivar** sus relaciones con los editores locales para asegurar un espacio en el mercado literario."
+            </div>
+            <div class="bg-amber-50 p-5 rounded-xl border border-amber-100 text-sm">
+                <p class="mb-2"><b>Análisis:</b></p>
+                <p class="mb-1">1. ¿Significa sembrar plantas? No.</p>
+                <p class="mb-1">2. Sustituyo: "...decidió **fomentar** sus relaciones..."</p>
+                <p class="font-bold text-center mt-3 text-amber-700">Sentido: Fomentar o desarrollar.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto 1</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Reto 1 -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <div class="badge-vocab">Tu Reto 1</div>
+            <h2 class="text-lg font-bold mb-4">¿Cuál es el sentido de la palabra resaltada?</h2>
+            <div class="text-block">
+                "El científico presentó una teoría **audaz** sobre el origen de las galaxias, desafiando las leyes físicas establecidas durante siglos."
+            </div>
+            <div class="space-y-3">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'v1')">A) Valiente (Porque no tiene miedo).</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'v1')">B) Innovadora (Porque desafía lo establecido).</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'v1')">C) Arriesgada (Porque puede fallar).</button>
+            </div>
+            <div id="feedback-v1" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto 2</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Reto 2 (NUEVO) -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <div class="badge-vocab">Tu Reto 2</div>
+            <h2 class="text-lg font-bold mb-4">¿Cuál es el sentido de la palabra resaltada?</h2>
+            <div class="text-block">
+                "A pesar de sus esfuerzos, el equipo obtuvo un resultado muy **pobre**, lo que obligó a replantear la estrategia para el próximo torneo."
+            </div>
+            <div class="space-y-3">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'v2')">A) Humilde (Sin recursos económicos).</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'v2')">B) Escaso (Poca cantidad de puntos).</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'v2')">C) Insuficiente (No alcanzó el nivel esperado).</button>
+            </div>
+            <div id="feedback-v2" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="goToStart()">Terminar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+        function checkAnswer(btn, isCorrect, qId) {
+            const fb = document.getElementById(`feedback-${qId}`);
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.textContent = "¡Perfecto! El contexto manda ✨";
+                fb.className = "mt-4 font-bold text-green-600 block text-center";
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.textContent = "¡Casi! Prueba sustituyendo la palabra ❌";
+                fb.className = "mt-4 font-bold text-red-600 block text-center";
+            }
+        }
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Razones y Proporciones PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color: #1e293b; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: white; border-radius: 2rem; box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.08); max-width: 800px; width: 100%; padding: 2.5rem; position: relative; border: 1px solid #f1f5f9; max-height: 95vh; overflow-y: auto; }
+        .badge-ratio { background: #8b5cf6; color: white; padding: 4px 14px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; }
+        .btn-nav { background: #1e293b; color: white; padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: all 0.2s ease; font-size: 0.9rem; }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid #f1f5f9; border-radius: 12px; margin-bottom: 8px; font-weight: 500; transition: all 0.2s ease; background: #fff; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #8b5cf6; background: #f5f3ff; }
+        .option-correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
+        .option-incorrect { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: #8b5cf6; transition: width 0.3s ease; z-index: 100; }
+        .step-pill { background: #ddd6fe; color: #5b21b6; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-right: 8px; }
+    </style>
+</head>
+<body>
+    <!-- Slide 0: Intro -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-4">Razones y Proporciones ⚖️</h1>
+            <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
+                ¿Si 3 máquinas hacen 10 piezas, cuántas hacen 6 máquinas? Aprende a resolver las famosas "Reglas de 3" sin errores.
+            </p>
+            <button class="btn-nav bg-purple-600 px-12 py-4 text-lg" onclick="nextSlide()">¡Empezar!</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: Proporción Directa -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <div class="badge-ratio">Nivel 1</div>
+            <h2 class="text-2xl font-bold mb-4 text-purple-700">Proporción Directa 📈</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>Es cuando las dos cosas suben o bajan juntas. **Más de esto = Más de aquello**.</p>
+                <div class="p-4 bg-purple-50 rounded-xl border border-purple-100 text-center">
+                    "Si doblo la cantidad de ingredientes, doblo el número de pasteles."
+                </div>
+                <p><b>La técnica:</b> Se multiplica en cruz.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Directa 1</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Ejemplo Directa 1 -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <div class="badge-ratio">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4 text-purple-800">Costo de boletos 🎟️</h2>
+            <p class="text-slate-600 text-sm mb-4 italic text-center">"Si 5 boletos para el cine cuestan $450, ¿cuánto cuestan 8 boletos?"</p>
+            <div class="bg-purple-50 p-5 rounded-xl border border-purple-100 text-sm">
+                <p class="mb-2"><span class="step-pill">1</span> <b>Acomodo:</b> 5 boletos $\rightarrow$ 450 | 8 boletos $\rightarrow$ $x$.</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Multiplico en cruz:</b> $8 \times 450 = 3600$.</p>
+                <p class="mb-2"><span class="step-pill">3</span> <b>Divido entre el que sobra:</b> $3600 / 5 = \mathbf{720}$.</p>
+                <p class="font-bold text-center mt-3 text-purple-700">Respuesta: $720</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Directa 2</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Ejemplo Directa 2 (NUEVO) -->
+    <div class="slide" id="slide-3">
+        <div class="card">
+            <div class="badge-ratio">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4 text-purple-800">Mezcla de Pintura 🎨</h2>
+            <p class="text-slate-600 text-sm mb-4 italic text-center">"Para obtener un tono de naranja, se mezclan 2 litros de rojo por cada 3 de amarillo. Si usas 10 litros de rojo, ¿cuánto amarillo necesitas?"</p>
+            <div class="bg-purple-50 p-5 rounded-xl border border-purple-100 text-sm">
+                <p class="mb-2"><span class="step-pill">1</span> <b>Acomodo:</b> Rojo (2) $\rightarrow$ Amarillo (3) | Rojo (10) $\rightarrow$ Amarillo ($x$).</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Multiplico cruzado:</b> $10 \times 3 = 30$.</p>
+                <p class="mb-2"><span class="step-pill">3</span> <b>Resuelvo:</b> $30 / 2 = \mathbf{15}$ litros.</p>
+                <p class="font-bold text-center mt-3 text-purple-700">Respuesta: 15 litros</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Proporción Inversa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Proporción Inversa -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <div class="badge-ratio">Nivel 2</div>
+            <h2 class="text-2xl font-bold mb-4 text-purple-700">Proporción Inversa 📉</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <p>Aquí las cosas van al revés. **Más de esto = Menos de aquello**.</p>
+                <div class="p-4 bg-orange-50 rounded-xl border border-orange-100 text-center">
+                    "Más obreros trabajando = Menos tiempo para terminar la obra."
+                </div>
+                <p><b>La técnica:</b> Se multiplica en línea recta y se divide.</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Inversa 1</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Ejemplo Inversa 1 -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <div class="badge-ratio">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4 text-purple-800">Tiempo de viaje 🚗</h2>
+            <p class="text-slate-600 text-sm mb-4 italic text-center">"Si un auto a 60 km/h tarda 4 horas en llegar, ¿cuánto tardará a 80 km/h?"</p>
+            <div class="bg-purple-50 p-5 rounded-xl border border-purple-100 text-sm">
+                <p class="mb-2"><span class="step-pill">1</span> <b>Lógica:</b> A más velocidad, menos tiempo. ¡Es Inversa!</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Multiplico en línea:</b> $60 \times 4 = 240$.</p>
+                <p class="mb-2"><span class="step-pill">3</span> <b>Divido:</b> $240 / 80 = \mathbf{3}$ horas.</p>
+                <p class="font-bold text-center mt-3 text-purple-700">Respuesta: 3 horas</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Retos Pro</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Reto 1 -->
+    <div class="slide" id="slide-6">
+        <div class="card text-center">
+            <div class="badge-ratio">Tu Reto 1</div>
+            <h2 class="text-xl font-bold mb-6 italic text-balance">
+                3 pintores tardan 12 días en pintar una casa. ¿Cuántos días tardarían 9 pintores?
+            </h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'r1')">A) 36 días</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'r1')">B) 4 días (Inversa: 3x12 / 9)</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'r1')">C) 6 días</button>
+            </div>
+            <div id="feedback-r1" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto 2</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Reto 2 (NUEVO) -->
+    <div class="slide" id="slide-7">
+        <div class="card text-center">
+            <div class="badge-ratio">Tu Reto 2</div>
+            <h2 class="text-xl font-bold mb-6 italic text-balance">
+                Si con $150 puedes comprar 12 cuadernos, ¿cuántos cuadernos podrías comprar con $200?
+            </h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'r2')">A) 15 cuadernos</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'r2')">B) 16 cuadernos (Directa: 200x12 / 150)</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'r2')">C) 18 cuadernos</button>
+            </div>
+            <div id="feedback-r2" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="goToStart()">Terminar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        }
+        function checkAnswer(btn, isCorrect, qId) {
+            const fb = document.getElementById(`feedback-${qId}`);
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.textContent = "¡Dominado! ✨";
+                fb.className = "mt-4 font-bold text-green-600 block scale-110 transition-transform text-center";
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.textContent = "¡Casi! Analiza si es Directa o Inversa ❌";
+                fb.className = "mt-4 font-bold text-red-600 block text-center";
+            }
+        }
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>

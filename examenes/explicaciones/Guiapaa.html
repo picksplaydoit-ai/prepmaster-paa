@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Todo sobre la PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: #f8fafc; 
+            color: #1e293b; 
+            margin: 0; 
+            min-height: 100vh;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-tab.active { 
+            background: white; 
+            color: #4f46e5; 
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); 
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .section-tag {
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .tag-counts { background: #dcfce7; color: #166534; }
+        .tag-no-counts { background: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <!-- Encabezado -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-2">Guía Maestra PAA 🎓</h1>
+            <p class="text-slate-500 font-medium">Todo lo que necesitas saber antes de tu examen de admisión</p>
+        </header>
+
+        <!-- Navegación de Pestañas -->
+        <nav class="flex p-1 bg-slate-200/50 rounded-2xl mb-8 max-w-md mx-auto">
+            <button onclick="showTab('info')" id="btn-info" class="nav-tab active flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all">
+                Sobre la PAA
+            </button>
+            <button onclick="showTab('temario')" id="btn-temario" class="nav-tab flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all">
+                Temario por Área
+            </button>
+        </nav>
+
+        <!-- Contenido 1: Información General -->
+        <div id="tab-info" class="tab-content active space-y-6">
+            <!-- NOTA IMPORTANTE SOBRE INGLÉS -->
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-2xl mb-6 shadow-sm">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <span class="text-amber-500 text-xl">⚠️</span>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-amber-800 font-bold uppercase tracking-wide">Nota Importante</p>
+                        <p class="text-sm text-amber-700">
+                            La sección de <b>Inglés</b> es únicamente diagnóstica. Los resultados obtenidos en esta área <b>no se consideran para el puntaje de admisión</b> ni para la escala de 1600 puntos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Qué es la PAA -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                    <h3 class="text-xl font-bold text-indigo-600 mb-4">¿Qué es la PAA? 🏛️</h3>
+                    <p class="text-slate-600 leading-relaxed mb-4">
+                        La <b>Prueba de Aptitud Académica (PAA)</b> es el estándar de admisión del <i>College Board</i>. Evalúa habilidades de razonamiento lógico y verbal fundamentales para el éxito en el nivel universitario.
+                    </p>
+                    <div class="mt-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <h4 class="font-bold text-sm text-slate-700 mb-2">¿Cuáles secciones cuentan para mi puntaje?</h4>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li class="flex items-center"><span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span> <b>Lectura y Redacción:</b> Suman 800 puntos.</li>
+                            <li class="flex items-center"><span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span> <b>Matemáticas:</b> Suma 800 puntos.</li>
+                            <li class="flex items-center opacity-60"><span class="w-2 h-2 bg-red-400 rounded-full mr-2"></span> <b>Inglés:</b> Diagnóstica (No cuenta).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Evaluación -->
+                <div class="bg-indigo-600 p-8 rounded-3xl text-white shadow-xl flex flex-col justify-center">
+                    <h3 class="text-xl font-bold mb-6">Composición del Puntaje 📊</h3>
+                    <div class="space-y-4">
+                        <div class="bg-white/10 p-4 rounded-2xl">
+                            <div class="flex justify-between items-center">
+                                <span class="text-indigo-100">Puntaje Verbal</span>
+                                <span class="text-2xl font-black">800</span>
+                            </div>
+                            <span class="text-[0.6rem] text-indigo-200">(Lectura + Redacción)</span>
+                        </div>
+                        <div class="bg-white/10 p-4 rounded-2xl">
+                            <div class="flex justify-between items-center">
+                                <span class="text-indigo-100">Puntaje Matemático</span>
+                                <span class="text-2xl font-black">800</span>
+                            </div>
+                            <span class="text-[0.6rem] text-indigo-200">(Matemáticas)</span>
+                        </div>
+                        <div class="pt-4 border-t border-indigo-400 flex justify-between items-center">
+                            <span class="font-bold uppercase tracking-wider">Total Oficial</span>
+                            <span class="text-3xl font-black text-white">1600 pts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tiempos y Estructura -->
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                <h3 class="text-xl font-bold text-slate-800 mb-6 text-center">Estructura Detallada ⏱️</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-transparent hover:border-indigo-100 transition-all">
+                        <span class="section-tag tag-counts mb-2 inline-block">Suma Puntos</span>
+                        <h4 class="font-bold text-slate-900">Lectura</h4>
+                        <p class="text-xs text-slate-500">45 Ejercicios</p>
+                        <p class="text-indigo-600 font-bold mt-2">50 min</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-transparent hover:border-indigo-100 transition-all">
+                        <span class="section-tag tag-counts mb-2 inline-block">Suma Puntos</span>
+                        <h4 class="font-bold text-slate-900">Redacción</h4>
+                        <p class="text-xs text-slate-500">25 Ejercicios</p>
+                        <p class="text-indigo-600 font-bold mt-2">30 min</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-transparent hover:border-indigo-100 transition-all">
+                        <span class="section-tag tag-counts mb-2 inline-block">Suma Puntos</span>
+                        <h4 class="font-bold text-slate-900">Matemáticas</h4>
+                        <p class="text-xs text-slate-500">55 Ejercicios</p>
+                        <p class="text-indigo-600 font-bold mt-2">85 min</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-transparent hover:border-red-100 transition-all opacity-80">
+                        <span class="section-tag tag-no-counts mb-2 inline-block">Diagnóstica</span>
+                        <h4 class="font-bold text-slate-900 text-slate-400 font-normal">Inglés</h4>
+                        <p class="text-xs text-slate-500">50 Ejercicios</p>
+                        <p class="text-slate-400 font-bold mt-2">50 min</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido 2: Temario -->
+        <div id="tab-temario" class="tab-content space-y-6">
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Matemáticas -->
+                <div class="glass-card p-6 rounded-3xl border border-indigo-100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-indigo-600 font-bold text-xl">π</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800">Matemáticas</h3>
+                    </div>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex items-start"><span class="text-indigo-500 mr-2">•</span><b>Aritmética:</b> Fracciones, razones, porcentajes y sucesiones.</li>
+                        <li class="flex items-start"><span class="text-indigo-500 mr-2">•</span><b>Álgebra:</b> Ecuaciones, sistemas lineales, funciones y exponentes.</li>
+                        <li class="flex items-start"><span class="text-indigo-500 mr-2">•</span><b>Geometría:</b> Perímetros, áreas, volúmenes y teoremas circulares.</li>
+                        <li class="flex items-start"><span class="text-indigo-500 mr-2">•</span><b>Estadística:</b> Probabilidad, media, moda y diagramas de Venn.</li>
+                    </ul>
+                </div>
+
+                <!-- Lectura -->
+                <div class="glass-card p-6 rounded-3xl border border-emerald-100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-emerald-600 font-bold">A</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800">Lectura</h3>
+                    </div>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex items-start"><span class="text-emerald-500 mr-2">•</span><b>Vocabulario en contexto:</b> Sentido preciso de palabras.</li>
+                        <li class="flex items-start"><span class="text-emerald-500 mr-2">•</span><b>Análisis de Textos:</b> Identificación de ideas principales y detalles.</li>
+                        <li class="flex items-start"><span class="text-emerald-500 mr-2">•</span><b>Inferencia:</b> Deducción de información no explícita.</li>
+                        <li class="flex items-start"><span class="text-emerald-500 mr-2">•</span><b>Análisis Dual:</b> Relación entre dos lecturas distintas.</li>
+                    </ul>
+                </div>
+
+                <!-- Redacción -->
+                <div class="glass-card p-6 rounded-3xl border border-pink-100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-pink-600 font-bold">✎</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800">Redacción</h3>
+                    </div>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex items-start"><span class="text-pink-500 mr-2">•</span><b>Edición de Textos:</b> Eliminación de enunciados redundantes.</li>
+                        <li class="flex items-start"><span class="text-pink-500 mr-2">•</span><b>Estructura:</b> Combinación de oraciones y conectores lógicos.</li>
+                        <li class="flex items-start"><span class="text-pink-500 mr-2">•</span><b>Sintaxis:</b> Concordancia, puntuación y uso correcto del lenguaje.</li>
+                    </ul>
+                </div>
+
+                <!-- Inglés -->
+                <div class="glass-card p-6 rounded-3xl border border-amber-100 opacity-60">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-amber-600 font-bold">EN</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800">Inglés (Diagnóstica)</h3>
+                    </div>
+                    <p class="text-xs text-amber-800 bg-amber-100/50 p-2 rounded-lg mb-4 italic">Esta área no suma puntos al examen.</p>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex items-start"><span class="text-amber-500 mr-2">•</span><b>Language Use:</b> Gramática básica y estructuras verbales.</li>
+                        <li class="flex items-start"><span class="text-amber-500 mr-2">•</span><b>Reading Comprehension:</b> Ideas principales en textos cortos.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('tab-' + tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+    </script>
+</body>
+</html>

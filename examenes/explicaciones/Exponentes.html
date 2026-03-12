@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Exponentes PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color: #1e293b; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: white; border-radius: 2rem; box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.08); max-width: 800px; width: 100%; padding: 2.5rem; position: relative; border: 1px solid #f1f5f9; max-height: 95vh; overflow-y: auto; }
+        .badge-math { background: #6366f1; color: white; padding: 4px 14px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; }
+        .btn-nav { background: #1e293b; color: white; padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: all 0.2s ease; font-size: 0.9rem; }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid #f1f5f9; border-radius: 12px; margin-bottom: 8px; font-weight: 500; transition: all 0.2s ease; background: #fff; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #6366f1; background: #f5f3ff; }
+        .option-correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
+        .option-incorrect { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: #6366f1; transition: width 0.3s ease; z-index: 100; }
+        .step-pill { background: #e0e7ff; color: #4338ca; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-right: 8px; }
+    </style>
+</head>
+<body>
+    <!-- Slide 0: Intro -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-4">Exponentes y Radicales 🚀</h1>
+            <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
+                Aprende a simplificar potencias y raíces con las leyes del "Poder Matemático". Es el tema que más se repite en el área de álgebra.
+            </p>
+            <button class="btn-nav bg-indigo-600 px-12 py-4 text-lg" onclick="nextSlide()">¡Empezar!</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: Leyes Básicas -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <div class="badge-math">Nivel 1</div>
+            <h2 class="text-2xl font-bold mb-4 text-indigo-700">Leyes de las Potencias 📜</h2>
+            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
+                <div class="p-4 bg-indigo-50 rounded-xl border border-indigo-100">
+                    <p class="mb-2">1. <b>Multiplicación:</b> Se suman los exponentes. $x^a \cdot x^b = x^{a+b}$</p>
+                    <p class="mb-2">2. <b>División:</b> Se restan los exponentes. $\frac{x^a}{x^b} = x^{a-b}$</p>
+                    <p>3. <b>Potencia de Potencia:</b> Se multiplican. $(x^a)^b = x^{a \cdot b}$</p>
+                </div>
+                <p class="italic text-xs text-indigo-500">Recuerda: Cualquier número elevado a la cero es 1 ($x^0 = 1$).</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo 1</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Ejemplo 1 -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <div class="badge-math">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">Simplificación Pro 🧩</h2>
+            <p class="text-slate-600 text-sm mb-4 italic text-center">"Simplifica la expresión: $\frac{(x^3)^2}{x^4}$"</p>
+            <div class="bg-indigo-50 p-5 rounded-xl border border-indigo-100 text-sm">
+                <p class="mb-2"><span class="step-pill">1</span> <b>Potencia arriba:</b> Multiplico $3 \times 2 = 6$. Me queda $x^6$.</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>División:</b> Resto exponentes $6 - 4 = 2$.</p>
+                <p class="font-bold text-center mt-3 text-indigo-700">Resultado: $x^2$</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo 2</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Ejemplo 2 -->
+    <div class="slide" id="slide-3">
+        <div class="card">
+            <div class="badge-math">Yo lo resuelvo</div>
+            <h2 class="text-xl font-bold mb-4">Raíces y Potencias 🧪</h2>
+            <p class="text-slate-600 text-sm mb-4 italic text-center">"¿Cuál es el valor de $\sqrt{x^6}$?"</p>
+            <div class="bg-indigo-50 p-5 rounded-xl border border-indigo-100 text-sm">
+                <p class="mb-2"><span class="step-pill">1</span> <b>La regla:</b> Una raíz es un exponente fraccionario. $\sqrt[b]{x^a} = x^{a/b}$.</p>
+                <p class="mb-2"><span class="step-pill">2</span> <b>Aplicación:</b> El índice de la raíz cuadrada es 2. $x^{6/2}$.</p>
+                <p class="font-bold text-center mt-3 text-indigo-700">Resultado: $x^3$</p>
+            </div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto 1</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Reto 1 -->
+    <div class="slide" id="slide-4">
+        <div class="card text-center">
+            <div class="badge-math">Tu Reto 1</div>
+            <h2 class="text-xl font-bold mb-6 italic text-balance">
+                Simplifica: $x^5 \cdot x^2 / x^4$
+            </h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'e1')">A) $x^11$</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'e1')">B) $x^3$ (Suma 5+2=7, resta 7-4=3)</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'e1')">C) $x^{10}$</button>
+            </div>
+            <div id="feedback-e1" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="nextSlide()">Reto 2</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Reto 2 -->
+    <div class="slide" id="slide-5">
+        <div class="card text-center">
+            <div class="badge-math">Tu Reto 2</div>
+            <h2 class="text-xl font-bold mb-6 italic text-balance">
+                ¿A cuánto equivale $(2^2)^3 \cdot 2^{-4}$?
+            </h2>
+            <div class="space-y-3 max-w-xs mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'e2')">A) 16</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'e2')">B) 4 ($2^6 \cdot 2^{-4} = 2^2$)</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'e2')">C) 1</button>
+            </div>
+            <div id="feedback-e2" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-8 flex justify-between">
+                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
+                <button class="btn-nav" onclick="goToStart()">Terminar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        }
+        function checkAnswer(btn, isCorrect, qId) {
+            const fb = document.getElementById(`feedback-${qId}`);
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.textContent = "¡Poder matemático activado! 🏆";
+                fb.className = "mt-4 font-bold text-green-600 block text-center";
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.textContent = "¡Casi! Revisa las leyes de suma/resta ❌";
+                fb.className = "mt-4 font-bold text-red-600 block text-center";
+            }
+        }
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>
