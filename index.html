@@ -371,8 +371,13 @@
       <div class="section-line"></div>
       <span class="section-count">Estructura · Puntajes · Temario</span>
     </div>
-    <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:20px;overflow:hidden;">
-      <iframe src="examenes/explicaciones/Guiapaa.html" style="width:100%;height:520px;border:none;display:block;" scrolling="yes" title="Guía PAA"></iframe>
+    <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:20px;padding:32px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;">
+      <div style="font-size:48px;">🎓</div>
+      <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;">Todo lo que necesitas saber antes del examen</div>
+      <p style="font-size:14px;color:var(--muted);max-width:480px;line-height:1.7;">Estructura del examen, puntajes por sección, temario completo de Matemáticas, Redacción, Lectura e Inglés.</p>
+      <button onclick="openExam('examenes/explicaciones/Guiapaa.html','Guía Maestra PAA')" style="padding:14px 32px;background:linear-gradient(135deg,#7c3aed,#5b21b6);border:none;border-radius:12px;color:white;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        📖 Ver Guía PAA completa
+      </button>
     </div>
   </section>
 
@@ -799,14 +804,6 @@
         <div class="recurso-title">Guía de Estudio Oficial PAA</div>
         <div class="recurso-desc">Publicación oficial de College Board con la estructura completa del examen, ejemplos de preguntas y consejos estratégicos para cada sección.</div>
         <span class="recurso-action">→ Visitar sitio College Board</span>
-      </a>
-
-      <a class="recurso-card" data-type="video" href="https://youtube.com/playlist?list=PLBTgDwgGiqvmdGRTdxiZPJHuxMNbMN_A-" target="_blank" rel="noopener">
-        <div class="recurso-type-badge">▶ Curso en Video</div>
-        <div class="recurso-org">YouTube · Lista de reproducción</div>
-        <div class="recurso-title">Curso Completo de Preparación PAA</div>
-        <div class="recurso-desc">Lista de reproducción con lecciones en video de todos los temas del PAA: Aritmética, Álgebra, Funciones, Geometría, Probabilidad, Redacción y Comprensión lectora. Complementa perfectamente las explicaciones rápidas de la plataforma.</div>
-        <span class="recurso-action">▶ Ver curso en YouTube</span>
       </a>
 
     </div>
