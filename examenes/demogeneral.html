@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Demo PrepMaster PAA - Aplicación Completa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color: #1e293b; margin: 0; -webkit-tap-highlight-color: transparent; }
+        .screen { display: none; min-height: 100vh; animation: fadeIn 0.4s ease; }
+        .screen.active { display: flex; flex-direction: column; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .option-btn { width: 100%; text-align: left; padding: 1rem; border: 2px solid #e2e8f0; border-radius: 1rem; margin-bottom: 0.75rem; background: white; transition: all 0.2s; font-weight: 500; }
+        
+        /* Estados de respuesta */
+        .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; border-width: 3px; }
+        .ans-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; border-width: 3px; }
+        
+        .progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #4f46e5; transition: width 0.3s ease; }
+        .reading-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; font-size: 0.9rem; line-height: 1.6; max-height: 250px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+
+    <!-- PANTALLA 1: BIENVENIDA -->
+    <div id="screen-welcome" class="screen active justify-center p-6">
+        <div class="max-w-md mx-auto w-full bg-white p-8 rounded-3xl shadow-xl border border-slate-100">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-4xl">🚀</span>
+                </div>
+                <h1 class="text-2xl font-extrabold text-slate-900">Demo de Aplicación</h1>
+                <p class="text-slate-500 mt-2">Simulacro Corto PAA Master</p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Nombre Completo:</label>
+                    <input type="text" id="user-name" placeholder="Tu nombre..." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl text-xs text-slate-600 space-y-2">
+                    <p><b>• Total:</b> 12 preguntas.</p>
+                    <p><b>• Tiempo:</b> 12 minutos.</p>
+                    <p><b>• Feedback:</b> Resultados instantáneos.</p>
+                </div>
+                <button onclick="startExam()" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-indigo-700 transition-all">
+                    Iniciar Demo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA 2: EXAMEN -->
+    <div id="screen-quiz" class="screen p-4">
+        <div class="max-w-2xl mx-auto w-full flex flex-col h-full">
+            <!-- HEADER CON CONTADORES -->
+            <div class="flex flex-col mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-lg font-black text-slate-700 font-mono" id="timer">12:00</span>
+                        <div class="flex space-x-2 text-[10px] font-bold">
+                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded">Aciertos: <span id="count-hit">0</span></span>
+                            <span class="bg-red-100 text-red-700 px-2 py-0.5 rounded">Errores: <span id="count-miss">0</span></span>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold text-slate-400" id="counter">1/12</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] font-black px-2 py-1 bg-indigo-100 text-indigo-700 rounded-lg uppercase tracking-wider" id="area-label">MATEMÁTICAS</span>
+                </div>
+            </div>
+            
+            <div class="progress-bar mb-6">
+                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex-1 overflow-y-auto mb-4">
+                <div id="reading-container" class="hidden">
+                    <p class="text-[10px] font-bold text-amber-600 uppercase mb-2">Lectura de Referencia:</p>
+                    <div class="reading-box" id="reading-text"></div>
+                </div>
+                <h2 class="text-lg font-bold text-slate-800 leading-snug mb-6" id="question-text"></h2>
+                <div id="options-container"></div>
+                <div id="instant-feedback" class="hidden mt-4 p-3 rounded-xl text-xs font-bold"></div>
+            </div>
+
+            <button onclick="nextQuestion()" id="next-btn" disabled class="w-full bg-slate-200 text-slate-400 font-bold py-4 rounded-2xl transition-all cursor-not-allowed">
+                Siguiente
+            </button>
+        </div>
+    </div>
+
+    <!-- PANTALLA 3: RESULTADOS -->
+    <div id="screen-results" class="screen p-6 overflow-y-auto">
+        <div class="max-w-2xl mx-auto w-full pb-10">
+            <div class="bg-white p-8 rounded-3xl shadow-xl text-center border border-slate-100 mb-8">
+                <h2 class="text-xl font-bold text-slate-500 mb-1">Resultados de:</h2>
+                <h1 class="text-2xl font-black text-indigo-600 mb-6" id="res-name-display">Usuario</h1>
+                
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="bg-indigo-50 p-4 rounded-2xl border border-indigo-100">
+                        <p class="text-[10px] font-black text-indigo-400 uppercase">Matemáticas</p>
+                        <p class="text-3xl font-black text-indigo-700" id="score-mat">200</p>
+                        <p class="text-[10px] font-bold text-indigo-400">Escala 200-800</p>
+                    </div>
+                    <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
+                        <p class="text-[10px] font-black text-emerald-400 uppercase">Español (L+R)</p>
+                        <p class="text-3xl font-black text-emerald-700" id="score-spa">200</p>
+                        <p class="text-[10px] font-bold text-emerald-400">Escala 200-800</p>
+                    </div>
+                </div>
+
+                <div class="flex justify-around items-center py-4 border-t border-slate-50 mb-6">
+                    <div>
+                        <p class="text-2xl font-black text-slate-900" id="res-total-correct">0/12</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">Aciertos Totales</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-black text-slate-900" id="res-percent">0%</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">Efectividad</p>
+                    </div>
+                </div>
+                
+                <button onclick="location.reload()" class="w-full bg-slate-900 text-white font-bold py-4 rounded-xl shadow-lg">
+                    Reintentar Demo
+                </button>
+            </div>
+
+            <h3 class="text-xl font-bold text-slate-800 mb-4 px-2">Revisión detallada</h3>
+            <div id="feedback-list" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <script>
+        const readingPassage = "El telescopio James Webb, lanzado en diciembre de 2021, representa un hito audaz en la astronomía moderna. A diferencia de su predecesor, el Hubble, el Webb observa principalmente en el espectro infrarrojo, lo que le permite 'ver' a través de densas nubes de polvo cósmico donde nacen las estrellas. Su espejo principal, recubierto de una fina capa de oro para maximizar la reflexión, es seis veces más grande que el del Hubble. Este prodigio tecnológico se encuentra orbitando a 1.5 millones de kilómetros de la Tierra, en un punto de equilibrio gravitacional llamado L2, capturando imágenes de las primeras galaxias formadas tras el Big Bang.";
+
+        const questions = [
+            // MATEMÁTICAS (4)
+            { area: "MATEMÁTICAS", type: "mat", q: "¿Cuál es el valor de $x$ en la ecuación $2x - 5 = 11$?", options: ["3", "8", "6", "12"], ans: 1, feedback: "Despeje: $2x = 16 \\rightarrow x = 8$." },
+            { area: "MATEMÁTICAS", type: "mat", q: "Si el perímetro de un cuadrado es 24, ¿cuál es su área?", options: ["36", "24", "16", "48"], ans: 0, feedback: "Lado = $24/4 = 6$. Área = $6^2 = 36$." },
+            { area: "MATEMÁTICAS", type: "mat", q: "¿Cuál es el 15% de 80?", options: ["8", "10", "12", "15"], ans: 2, feedback: "$80 \\times 0.15 = 12$." },
+            { area: "MATEMÁTICAS", type: "mat", q: "En la sucesión $3, 7, 11, 15, \\dots$ ¿Cuál es el término número 10?", options: ["35", "39", "40", "43"], ans: 1, feedback: "Regla: $4n - 1$. Para $n=10$: $4(10) - 1 = 39$." },
+            
+            // REDACCIÓN (4)
+            { area: "REDACCIÓN", type: "spa", q: "Elija la mejor combinación de las siguientes oraciones:\n(1) El girasol sigue la ruta del sol.\n(2) El girasol posee flores amarillas.", options: ["El girasol sigue la ruta del sol y el girasol posee flores amarillas.", "El girasol, que posee flores amarillas, sigue la ruta del sol.", "Las flores amarillas del girasol siguen al sol porque son amarillas.", "Sigue el sol el girasol con flores amarillas."], ans: 1, feedback: "Uso correcto de la cláusula relativa 'que' para evitar redundancia." },
+            { area: "REDACCIÓN", type: "spa", q: "Identifique el enunciado que debe ELIMINARSE por ser irrelevante:\n(1) El café es una bebida mundial. (2) Se cultiva en climas tropicales. (3) Me gusta tomarlo con mucha azúcar. (4) Brasil es el principal productor.", options: ["(1)", "(2)", "(3)", "(4)"], ans: 2, feedback: "El enunciado (3) es una opinión subjetiva que rompe el tono informativo del texto." },
+            { area: "REDACCIÓN", type: "spa", q: "Complete con el conector correcto:\n'Entrenó muy duro para la competencia; _______, no logró ganar la medalla de oro.'", options: ["por lo tanto", "sin embargo", "puesto que", "además"], ans: 1, feedback: "Se requiere un conector de contraste u oposición." },
+            { area: "REDACCIÓN", type: "spa", q: "Elija la opción con concordancia gramatical correcta:", options: ["La jauría de perros corrían por el campo.", "El grupo de estudiantes entregaron el examen.", "La mayoría de la gente prefiere el descanso.", "Habían muchas personas en la fila."], ans: 2, feedback: "Sujeto colectivo ('la mayoría') concuerda en singular con el verbo." },
+
+            // LECTURA (4)
+            { area: "LECTURA", type: "spa", reading: readingPassage, q: "¿Cuál es la idea principal del texto?", options: ["La vida del telescopio Hubble.", "Las ventajas del uso del oro en la tecnología.", "Las capacidades y características del telescopio Webb.", "La ubicación del punto gravitacional L2."], ans: 2, feedback: "El texto describe qué es el Webb, cómo funciona y su importancia." },
+            { area: "LECTURA", type: "spa", reading: readingPassage, q: "En el texto, la palabra 'audaz' se refiere a algo:", options: ["Peligroso", "Innovador", "Rápido", "Costoso"], ans: 1, feedback: "Contexto: representa un salto tecnológico avanzado o innovador." },
+            { area: "LECTURA", type: "spa", reading: readingPassage, q: "Según el texto, el Webb es diferente al Hubble porque:", options: ["Es más pequeño.", "Se encuentra en la Tierra.", "Observa en el espectro infrarrojo.", "Fue lanzado en los años 90."], ans: 2, feedback: "Diferencia explícita mencionada: 'observa principalmente en el espectro infrarrojo'." },
+            { area: "LECTURA", type: "spa", reading: readingPassage, q: "Se puede inferir del texto que el Webb:", options: ["Sustituirá al sol en el futuro.", "Permitirá conocer mejor el origen del universo.", "Es el primer objeto bañado en oro.", "Solo puede tomar fotos de Marte."], ans: 1, feedback: "Inferencia: al ver galaxias tras el Big Bang, ayuda a entender el origen." }
+        ];
+
+        let currentIdx = 0;
+        let selectedOpt = null;
+        let userAnswers = [];
+        let timerSeconds = 720; // 12 minutos
+        let timerInterval;
+        let aciertos = 0;
+        let errores = 0;
+
+        function startExam() {
+            const name = document.getElementById('user-name').value.trim();
+            if(!name) return alert("Por favor ingresa tu nombre");
+            
+            document.getElementById('screen-welcome').classList.remove('active');
+            document.getElementById('screen-quiz').classList.add('active');
+            
+            startTimer();
+            renderQuestion();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                let mins = Math.floor(timerSeconds / 60);
+                let secs = timerSeconds % 60;
+                document.getElementById('timer').textContent = `${mins}:${secs < 10 ? '0'+secs : secs}`;
+                if(timerSeconds <= 0) finishExam();
+            }, 1000);
+        }
+
+        function renderQuestion() {
+            const q = questions[currentIdx];
+            selectedOpt = null;
+            document.getElementById('next-btn').disabled = true;
+            document.getElementById('next-btn').className = "w-full bg-slate-200 text-slate-400 font-bold py-4 rounded-2xl transition-all cursor-not-allowed";
+            document.getElementById('instant-feedback').classList.add('hidden');
+            
+            document.getElementById('area-label').textContent = q.area;
+            document.getElementById('counter').textContent = `${currentIdx + 1}/12`;
+            document.getElementById('progress-fill').style.width = `${((currentIdx) / 12) * 100}%`;
+            document.getElementById('question-text').textContent = q.q;
+
+            // Manejo de lectura
+            const readCont = document.getElementById('reading-container');
+            if(q.reading) {
+                readCont.classList.remove('hidden');
+                document.getElementById('reading-text').textContent = q.reading;
+            } else {
+                readCont.classList.add('hidden');
+            }
+
+            const optCont = document.getElementById('options-container');
+            optCont.innerHTML = "";
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = "option-btn";
+                btn.textContent = opt;
+                btn.onclick = () => checkAnswer(i, btn);
+                optCont.appendChild(btn);
+            });
+            if(window.MathJax) MathJax.typesetPromise();
+        }
+
+        function checkAnswer(idx, btn) {
+            if (selectedOpt !== null) return; // Evitar múltiples clicks
+            
+            const q = questions[currentIdx];
+            selectedOpt = idx;
+            userAnswers.push(idx);
+
+            const allBtns = document.querySelectorAll('.option-btn');
+            const isCorrect = idx === q.ans;
+            
+            // Actualizar contadores superiores
+            if (isCorrect) {
+                aciertos++;
+                btn.classList.add('ans-correct');
+                document.getElementById('count-hit').textContent = aciertos;
+            } else {
+                errores++;
+                btn.classList.add('ans-wrong');
+                allBtns[q.ans].classList.add('ans-correct'); // Mostrar la correcta
+                document.getElementById('count-miss').textContent = errores;
+            }
+
+            // Bloquear botones
+            allBtns.forEach(b => b.style.cursor = 'default');
+
+            // Habilitar botón Siguiente
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.disabled = false;
+            nextBtn.className = "w-full bg-indigo-600 text-white font-bold py-4 rounded-2xl shadow-lg";
+
+            // Mostrar feedback de texto rápido
+            const instFeed = document.getElementById('instant-feedback');
+            instFeed.classList.remove('hidden');
+            instFeed.textContent = isCorrect ? "¡Correcto! ✨" : "Incorrecto. ❌";
+            instFeed.className = `mt-4 p-3 rounded-xl text-xs font-bold ${isCorrect ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`;
+        }
+
+        function nextQuestion() {
+            if(currentIdx < 11) {
+                currentIdx++;
+                renderQuestion();
+            } else {
+                finishExam();
+            }
+        }
+
+        function finishExam() {
+            clearInterval(timerInterval);
+            document.getElementById('screen-quiz').classList.remove('active');
+            document.getElementById('screen-results').classList.add('active');
+
+            const name = document.getElementById('user-name').value;
+            document.getElementById('res-name-display').textContent = name;
+
+            let correctMat = 0;
+            let correctSpa = 0;
+
+            userAnswers.forEach((ans, i) => {
+                if(ans === questions[i].ans) {
+                    if(questions[i].type === 'mat') correctMat++;
+                    else correctSpa++;
+                }
+            });
+
+            // Escala PAA: (Correctas / TotalArea) * 600 + 200
+            const scoreMat = Math.round((correctMat / 4) * 600) + 200;
+            const scoreSpa = Math.round((correctSpa / 8) * 600) + 200; 
+
+            document.getElementById('score-mat').textContent = scoreMat;
+            document.getElementById('score-spa').textContent = scoreSpa;
+            document.getElementById('res-total-correct').textContent = `${correctMat + correctSpa}/12`;
+            document.getElementById('res-percent').textContent = `${Math.round(((correctMat + correctSpa) / 12) * 100)}%`;
+
+            const feedCont = document.getElementById('feedback-list');
+            feedCont.innerHTML = "";
+            questions.forEach((q, i) => {
+                const isCorrect = userAnswers[i] === q.ans;
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-2xl border ${isCorrect ? 'bg-emerald-50 border-emerald-100' : 'bg-red-50 border-red-100'}`;
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded ${isCorrect ? 'bg-emerald-200 text-emerald-700' : 'bg-red-200 text-red-700'}">${q.area}</span>
+                        <span class="text-xs font-bold">${isCorrect ? '✅ Correcta' : '❌ Incorrecta'}</span>
+                    </div>
+                    <p class="text-sm font-bold text-slate-800 mb-2">${q.q}</p>
+                    <p class="text-xs text-slate-500 mb-1"><b>Tu respuesta:</b> ${q.options[userAnswers[i]] || 'Sin responder'}</p>
+                    ${!isCorrect ? `<p class="text-xs text-emerald-600 mb-1"><b>Correcta:</b> ${q.options[q.ans]}</p>` : ''}
+                    <p class="text-[10px] italic text-slate-400 mt-2 border-t pt-2">${q.feedback}</p>
+                `;
+                feedCont.appendChild(card);
+            });
+            if(window.MathJax) MathJax.typesetPromise();
+        }
+    </script>
+</body>
+</html>
