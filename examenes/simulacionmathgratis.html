@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador PAA Matemáticas N° 5 - Optimizado</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; overflow: hidden; height: 100vh; }
+        .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
+        .ans-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .progress-bar { transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .explanation-box { display: none; margin-top: 0.75rem; animation: fadeIn 0.4s ease; overflow-y: auto; max-height: 25vh; }
+        .explanation-box::-webkit-scrollbar { width: 4px; }
+        .explanation-box::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+
+        /* Ajustes para pantallas pequeñas */
+        @media (max-height: 750px) {
+            .q-card { padding: 1.25rem !important; }
+            .q-title { font-size: 1rem !important; margin-bottom: 0.75rem !important; }
+            .opt-btn { padding: 0.5rem !important; font-size: 0.85rem !important; }
+            .opt-icon { width: 1.75rem !important; height: 1.75rem !important; }
+        }
+    </style>
+</head>
+<body class="flex flex-col">
+
+    <!-- Inicio -->
+    <div id="start-screen" class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-8 text-center border border-slate-100">
+            <div class="w-16 h-16 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl rotate-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-black text-slate-900 mb-2 uppercase tracking-tight">Matemáticas PAA N° 5</h1>
+            <p class="text-slate-500 mb-6 font-medium text-sm">Sesión de 30 Preguntas • Sin Desplazamiento</p>
+            <button onclick="startExam()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-4 rounded-xl shadow-lg transition-all transform hover:scale-[1.02] text-sm uppercase tracking-widest">
+                Iniciar Prueba
+            </button>
+        </div>
+    </div>
+
+    <!-- Examen -->
+    <div id="exam-screen" class="hidden h-screen flex flex-col">
+        <header class="bg-white border-b border-slate-200 px-4 py-2 shrink-0">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <div class="flex gap-4">
+                    <div class="text-center">
+                        <p class="text-[8px] font-black text-slate-400 uppercase">Tiempo</p>
+                        <p id="timer" class="text-base font-mono font-black text-indigo-600">30:00</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-[8px] font-black text-emerald-500 uppercase">Bien</p>
+                        <p id="correct-counter" class="text-base font-black text-emerald-600">0</p>
+                    </div>
+                </div>
+                <div class="flex-1 max-w-xs ml-4">
+                    <p id="progress-text" class="text-[8px] font-black text-slate-500 uppercase text-right mb-1">1 de 30</p>
+                    <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="progress-bar h-full bg-indigo-600 w-0"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-grow flex items-center justify-center p-2 sm:p-4">
+            <div id="question-box" class="max-w-2xl w-full"></div>
+        </main>
+    </div>
+
+    <!-- Resultados -->
+    <div id="result-screen" class="hidden h-screen items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col border border-slate-100">
+            <div class="bg-indigo-900 p-8 text-center text-white">
+                <p class="text-indigo-400 font-black uppercase tracking-[0.4em] text-[8px] mb-2">Puntaje Estimado</p>
+                <div class="flex items-center justify-center gap-1">
+                    <h2 id="final-scale-score" class="text-7xl font-black tracking-tighter leading-none">200</h2>
+                    <p class="text-indigo-400 font-bold text-xl uppercase">pts</p>
+                </div>
+            </div>
+            <div class="p-8">
+                <div class="grid grid-cols-2 gap-4 mb-6 text-center">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Aciertos</p>
+                        <p class="text-xl font-black text-slate-800"><span id="total-correct">0</span>/30</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Efectividad</p>
+                        <p id="total-percent" class="text-xl font-black text-indigo-600">0%</p>
+                    </div>
+                </div>
+                <button onclick="location.reload()" class="w-full bg-indigo-600 text-white font-black py-4 rounded-xl shadow-lg uppercase text-xs tracking-widest">Reiniciar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                id: 1, area: "Aritmética", type: "multiple", 
+                q: "Un estudiante debe resolver la siguiente operación con fracciones: \\( \\frac{2}{3} + \\frac{1}{4} - \\frac{1}{6} \\). ¿Cuál es el resultado simplificado?", 
+                options: ["1/2", "3/4", "5/12", "7/12"], ans: 1,
+                explanation: "¡Paso a paso! 1) Buscamos el Mínimo Común Múltiplo de 3, 4 y 6, que es **12**. 2) Convertimos: \\( \\frac{8}{12} + \\frac{3}{12} - \\frac{2}{12} \\). 3) Operamos los numeradores: \\( 8 + 3 - 2 = 9 \\). 4) Resultado: \\( \\frac{9}{12} \\), que al simplificar entre 3 nos da **3/4**. ¡Excelente dominio de fracciones!"
+            },
+            { 
+                id: 2, area: "Álgebra I", type: "multiple", 
+                q: "Si se sabe que la ecuación lineal \\( 3x - 5 = 16 \\) es verdadera, determine el valor de la expresión \\( x + 4 \\).", 
+                options: ["7", "9", "11", "21"], ans: 2,
+                explanation: "Primero despejamos la variable: sumamos 5 en ambos lados: \\( 3x = 21 \\), luego dividimos por 3: **x = 7**. Pero ¡cuidado!, la pregunta pide \\( x + 4 \\), por lo tanto: \\( 7 + 4 = 11 \\). Siempre lee bien qué te solicita el reactivo."
+            },
+            { 
+                id: 3, area: "Geometría", type: "multiple", 
+                q: "Para un proyecto de ingeniería, se requiere calcular la longitud total (circunferencia) de una pieza circular cuyo radio mide exactamente 5 unidades.", 
+                options: ["5\\(\\pi\\)", "10\\(\\pi\\)", "25\\(\\pi\\)", "50\\(\\pi\\)"], ans: 1,
+                explanation: "Usamos la fórmula fundamental de la circunferencia: \\( C = 2\\pi r \\). Sustituyendo el radio: \\( C = 2 \\times \\pi \\times 5 = 10\\pi \\). Recuerda que el área usa el radio al cuadrado, pero la longitud usa el diámetro (2r)."
+            },
+            { 
+                id: 4, area: "Estadística", type: "multiple", 
+                q: "El promedio de un conjunto de cuatro calificaciones es 15. Si decidimos eliminar de la lista la calificación que vale 21, ¿cuál será el nuevo promedio de los datos restantes?", 
+                options: ["12", "13", "14", "15"], ans: 1,
+                explanation: "¡Lógica de promedios! 1) Si 4 datos promedian 15, la suma total es \\( 4 \\times 15 = 60 \\). 2) Restamos el valor eliminado: \\( 60 - 21 = 39 \\). 3) Ahora tenemos solo 3 datos, así que dividimos: \\( 39 / 3 = 13 \\). ¡El promedio bajó porque eliminamos un valor muy alto!"
+            },
+            { 
+                id: 5, area: "Álgebra II", type: "multiple", 
+                q: "Al realizar la factorización completa de la expresión cuadrática \\( x^2 - 9 \\), ¿cuál de los siguientes términos aparece como un factor?", 
+                options: ["x-9", "x+9", "x-3", "x-1"], ans: 2,
+                explanation: "Estamos ante una **Diferencia de Cuadrados**. La regla dice: \\( a^2 - b^2 = (a-b)(a+b) \\). En este caso: \\( x^2 - 3^2 = (x-3)(x+3) \\). Por lo tanto, (x-3) es un factor válido. ¡Es un tema clave en la PAA!"
+            },
+            { 
+                id: 6, area: "Aritmética", type: "multiple", 
+                q: "Un televisor tiene un precio de lista de \\( \\$80 \\), pero la tienda ofrece una oferta especial con un descuento del 15%. ¿Cuánto deberá pagar el cliente finalmente?", 
+                options: ["\\$65", "\\$68", "\\$72", "\\$75"], ans: 1,
+                explanation: "Calculamos rápido: el 10% de 80 es 8, y el 5% es 4. Sumamos ambos para obtener el 15%: \\( 8 + 4 = 12 \\). Restamos el descuento al precio original: \\( 80 - 12 = 68 \\). ¡Ahorrar siempre es bueno!"
+            },
+            { 
+                id: 7, area: "Geometría", type: "multiple", 
+                q: "Los tres ángulos internos de un triángulo se encuentran en una razón de 1:2:3. Basado en esto, ¿cuál es la medida del ángulo más grande?", 
+                options: ["60°", "90°", "120°", "150°"], ans: 1,
+                explanation: "Sabemos que los ángulos internos suman 180°. La razón total es \\( 1+2+3 = 6 \\) partes. Dividimos el total entre las partes: \\( 180 / 6 = 30^\\circ \\) por cada parte de la razón. El ángulo mayor tiene 3 partes: \\( 3 \\times 30 = 90^\\circ \\). ¡Es un triángulo rectángulo!"
+            },
+            { 
+                id: 8, area: "Probabilidad", type: "multiple", 
+                q: "Si lanzamos una moneda equilibrada y un dado estándar de seis caras al mismo tiempo, ¿cuál es la probabilidad de obtener 'Cara' y, simultáneamente, un número par?", 
+                options: ["1/4", "1/6", "1/12", "1/2"], ans: 0,
+                explanation: "Multiplicamos probabilidades independientes: 1) Probabilidad de Cara = 1/2. 2) Probabilidad de Par (2, 4, 6) = 3/6 o 1/2. Operación: \\( 1/2 \\times 1/2 = 1/4 \\). Hay un 25% de probabilidad de que ocurran ambos."
+            },
+            { 
+                id: 9, area: "Álgebra I", type: "multiple", 
+                q: "En un sistema de ecuaciones donde \\( x + y = 10 \\) y \\( x - y = 4 \\), ¿qué valor debe tomar la variable \\( y \\) para satisfacer ambas condiciones?", 
+                options: ["3", "4", "6", "7"], ans: 0,
+                explanation: "El método más rápido es la resta: \\( (x+y) - (x-y) = 10 - 4 \\). Esto elimina la 'x' y nos deja \\( 2y = 6 \\), por lo tanto **y = 3**. Si lo compruebas: \\( 7+3=10 \\) y \\( 7-3=4 \\). ¡Perfecto!"
+            },
+            { 
+                id: 10, area: "Aritmética", type: "multiple", 
+                q: "Dentro de la clasificación de números naturales, ¿cuál es el número primo más pequeño que es mayor a 20?", 
+                options: ["21", "23", "27", "29"], ans: 1,
+                explanation: "Analizamos: 21 es \\( 3 \\times 7 \\) (compuesto). 22 es par (compuesto). **23** solo se divide por 1 y 23. Por lo tanto, es el primer primo después de 19. 27 también es compuesto (\\( 9 \\times 3 \\))."
+            }
+        ];
+
+        // Rellenar hasta 30 para el demo
+        while(questions.length < 30) {
+            let base = questions[questions.length % 10];
+            questions.push({...base, id: questions.length + 1});
+        }
+
+        let currentIndex = 0, correctCount = 0, timerSeconds = 1800, canAnswer = true, timerInterval;
+
+        function startExam() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            showQuestion();
+            startTimer();
+        }
+
+        function showQuestion() {
+            canAnswer = true;
+            const q = questions[currentIndex];
+            const container = document.getElementById('question-box');
+            document.getElementById('progress-text').innerText = `${currentIndex+1} de 30`;
+            document.getElementById('progress-bar').style.width = `${(currentIndex/30)*100}%`;
+
+            let html = `
+                <div class="q-card bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100 fade-in flex flex-col h-full sm:h-auto overflow-hidden">
+                    <span class="px-3 py-0.5 bg-indigo-50 text-indigo-600 rounded-lg text-[9px] font-black uppercase tracking-widest mb-3 inline-block w-fit">${q.area}</span>
+                    <h2 class="q-title text-base font-bold text-slate-800 mb-6 leading-tight">${q.q}</h2>
+                    <div id="options-grid" class="space-y-2">
+            `;
+
+            if (q.type === 'multiple') {
+                q.options.forEach((opt, i) => {
+                    html += `
+                        <button onclick="checkAnswer(${i})" class="opt-btn w-full text-left p-3 border-2 border-slate-50 rounded-xl hover:border-indigo-200 transition-all flex items-center gap-3 group">
+                            <span class="opt-icon w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center font-black text-slate-400 group-hover:bg-indigo-600 group-hover:text-white transition-all text-xs">${['A','B','C','D'][i]}</span>
+                            <span class="font-bold text-slate-700 text-sm">${opt}</span>
+                        </button>
+                    `;
+                });
+            } else {
+                html += `
+                    <div class="space-y-4">
+                        <input type="text" id="open-ans" placeholder="Valor" class="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl outline-none focus:border-indigo-500 text-4xl font-black text-indigo-700 text-center">
+                        <button onclick="checkAnswerOpen()" class="w-full bg-slate-900 text-white font-black py-4 rounded-xl shadow-lg uppercase text-xs tracking-widest active:scale-95">Confirmar</button>
+                    </div>
+                `;
+            }
+            container.innerHTML = html + `</div><div id="explanation" class="explanation-box p-4 bg-slate-50 border border-slate-100 rounded-2xl">
+                <p class="text-[7px] font-black uppercase text-indigo-600 mb-1">Estrategia y Razonamiento</p>
+                <div id="exp-text" class="text-slate-600 font-medium leading-tight text-xs mb-4"></div>
+                <button onclick="nextQuestion()" class="w-full bg-indigo-600 text-white font-black py-3 rounded-lg text-[10px] uppercase tracking-widest">Siguiente Reactivo</button>
+            </div></div>`;
+            
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function showExplanation(isCorrect, index = -1) {
+            const q = questions[currentIndex];
+            const expBox = document.getElementById('explanation');
+            const expText = document.getElementById('exp-text');
+            const options = document.querySelectorAll('#options-grid button');
+            if (q.type === 'multiple') {
+                options[q.ans].classList.add('ans-correct');
+                if (!isCorrect && index !== -1) options[index].classList.add('ans-wrong');
+                options.forEach(btn => btn.disabled = true);
+            } else {
+                const input = document.getElementById('open-ans');
+                input.classList.add(isCorrect ? 'ans-correct' : 'ans-wrong');
+                input.disabled = true;
+            }
+            expText.innerHTML = q.explanation;
+            expBox.style.display = 'block';
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function checkAnswer(index) {
+            if(!canAnswer) return; canAnswer = false;
+            const q = questions[currentIndex];
+            const isCorrect = (index === q.ans);
+            if(isCorrect) { correctCount++; document.getElementById('correct-counter').innerText = correctCount; }
+            showExplanation(isCorrect, index);
+        }
+
+        function checkAnswerOpen() {
+            if(!canAnswer) return;
+            const input = document.getElementById('open-ans');
+            const val = input.value.trim();
+            if(val === "") return;
+            canAnswer = false;
+            const q = questions[currentIndex];
+            const isCorrect = (val === q.ans);
+            if(isCorrect) { correctCount++; document.getElementById('correct-counter').innerText = correctCount; }
+            showExplanation(isCorrect);
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            if(currentIndex < questions.length) showQuestion(); else finishExam();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => { 
+                if(timerSeconds > 0) { 
+                    timerSeconds--; 
+                    let m = Math.floor(timerSeconds/60), s = timerSeconds%60; 
+                    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`; 
+                } else finishExam(); 
+            }, 1000);
+        }
+
+        function finishExam() {
+            if (timerInterval) clearInterval(timerInterval);
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('result-screen').style.display = 'flex';
+            const score = Math.round((correctCount/30)*600)+200;
+            document.getElementById('final-scale-score').innerText = score;
+            document.getElementById('total-correct').innerText = correctCount;
+            document.getElementById('total-percent').innerText = `${Math.round((correctCount/30)*100)}%`;
+        }
+    </script>
+</body>
+</html>
