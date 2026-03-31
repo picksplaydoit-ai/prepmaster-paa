@@ -2,169 +2,324 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Simulación Ingreso UDG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calculadora de Ingreso UDG - Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            overflow: hidden;
+        :root {
+            --udg-blue: #002b5c;
+            --udg-accent: #004a99;
         }
 
-        .udg-gradient {
-            background: linear-gradient(135deg, #002b5c 0%, #004a99 100%);
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #f1f5f9;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .card {
-            background: white;
-            border-radius: 2rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        .udg-gradient { 
+            background: linear-gradient(135deg, var(--udg-blue) 0%, var(--udg-accent) 100%); 
         }
 
-        input[type=number]::-webkit-inner-spin-button, 
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button { 
             -webkit-appearance: none; 
             margin: 0; 
         }
 
-        .fade-in {
-            animation: fadeIn 0.4s ease-out;
+        .input-focus:focus {
+            border-color: var(--udg-accent);
+            box-shadow: 0 0 0 4px rgba(0, 74, 153, 0.1);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .status-in { 
+            background-color: #f0fdf4; 
+            color: #166534; 
+            border: 2px solid #22c55e; 
         }
+
+        .status-out { 
+            background-color: #fef2f2; 
+            color: #991b1b; 
+            border: 2px solid #ef4444; 
+        }
+
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
     </style>
 </head>
-<body class="h-screen flex items-center justify-center p-4">
+<body class="min-h-screen flex flex-col items-center py-6 px-4 md:py-12">
 
-    <div class="max-w-md w-full">
-        <!-- Encabezado -->
-        <div class="udg-gradient text-white p-5 rounded-t-[2rem] shadow-lg text-center">
-            <h1 class="text-xl font-extrabold uppercase tracking-tight">Simulación UDG</h1>
-            <p class="text-blue-100 text-[10px] opacity-90 uppercase font-bold tracking-widest">Nueva Fórmula: Mate + Lectura + Redacción</p>
-        </div>
+    <div class="w-full max-w-2xl space-y-6 fade-in">
+        <!-- Header con diseño adaptativo -->
+        <header class="udg-gradient text-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl text-center relative overflow-hidden">
+            <div class="relative z-10">
+                <h1 class="text-3xl md:text-4xl font-extrabold uppercase tracking-tighter italic">Calculadora de Ingreso</h1>
+                <div class="h-1 w-16 bg-white/30 mx-auto my-4 rounded-full"></div>
+                <p class="text-blue-100 text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] italic">Red Universitaria · Datos 2023 - 2025</p>
+            </div>
+            <!-- Decoración abstracta -->
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-black/10 rounded-full blur-3xl"></div>
+        </header>
 
-        <!-- Formulario Principal -->
-        <div class="card p-6 rounded-t-none space-y-4">
-            
-            <!-- Promedio de Bachillerato -->
-            <div>
-                <label class="block text-[10px] font-black text-slate-400 uppercase mb-1 ml-1">Promedio de Bachillerato (0-100)</label>
-                <input type="number" id="promedio" placeholder="Ej: 98.5" step="0.01" min="0" max="100" 
-                    class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-xl font-bold text-slate-800">
+        <!-- SECCIÓN 1: CÁLCULO DE PUNTAJE -->
+        <section class="glass-card p-6 md:p-10 rounded-[2.5rem] shadow-xl space-y-8">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-xl udg-gradient flex items-center justify-center text-white font-bold italic shadow-lg">1</div>
+                <h2 class="text-sm md:text-base font-black text-slate-800 uppercase tracking-widest italic">Calcula tu Puntaje Final</h2>
             </div>
 
-            <!-- Sección Examen -->
-            <div class="space-y-3">
-                <h3 class="text-[9px] font-black text-blue-600 uppercase tracking-[0.2em] border-b border-slate-100 pb-1">Resultados PAA (200 - 800)</h3>
-                
-                <div class="grid grid-cols-1 gap-3">
-                    <!-- Matemáticas -->
-                    <div>
-                        <label class="block text-[9px] font-bold text-slate-500 mb-1 uppercase ml-1">Matemáticas</label>
-                        <input type="number" id="matematicas" placeholder="800" min="200" max="800"
-                            class="w-full px-4 py-2 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-blue-400 outline-none font-bold text-lg">
+            <div class="space-y-6">
+                <!-- Promedio -->
+                <div class="group">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-2 ml-1 tracking-wider">Promedio de Bachillerato</label>
+                    <div class="relative">
+                        <input type="number" id="promedio" placeholder="Ej: 94.20" step="0.01"
+                            class="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl outline-none transition-all font-bold text-2xl text-slate-800 input-focus italic">
+                        <span class="absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 font-bold">PTS</span>
                     </div>
+                </div>
 
-                    <!-- Lectura y Redacción -->
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[9px] font-bold text-slate-500 mb-1 uppercase ml-1">Lectura</label>
-                            <input type="number" id="lectura" placeholder="800" min="200" max="800"
-                                class="w-full px-4 py-2 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-blue-400 outline-none font-bold text-lg text-center">
+                <!-- Bloque PAA -->
+                <div class="bg-slate-50 p-6 md:p-8 rounded-[2rem] border border-slate-100 space-y-6">
+                    <div class="flex justify-between items-center">
+                        <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest italic">Puntajes PAA (Escala 200-800)</p>
+                        <span class="text-[10px] font-bold text-slate-400 italic">College Board</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="space-y-2">
+                            <label class="block text-[9px] font-bold text-slate-500 uppercase ml-1">Matemáticas</label>
+                            <input type="number" id="matematicas" placeholder="800" min="200" max="800"
+                                class="w-full px-4 py-4 border-2 border-slate-200 rounded-xl outline-none font-bold text-center italic input-focus text-lg">
                         </div>
-                        <div>
-                            <label class="block text-[9px] font-bold text-slate-500 mb-1 uppercase ml-1">Redacción</label>
+                        <div class="space-y-2">
+                            <label class="block text-[9px] font-bold text-slate-500 uppercase ml-1">Lectura</label>
+                            <input type="number" id="lectura" placeholder="800" min="200" max="800"
+                                class="w-full px-4 py-4 border-2 border-slate-200 rounded-xl outline-none font-bold text-center italic input-focus text-lg">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-[9px] font-bold text-slate-500 uppercase ml-1">Redacción</label>
                             <input type="number" id="redaccion" placeholder="800" min="200" max="800"
-                                class="w-full px-4 py-2 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-blue-400 outline-none font-bold text-lg text-center">
+                                class="w-full px-4 py-4 border-2 border-slate-200 rounded-xl outline-none font-bold text-center italic input-focus text-lg">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Botón Calcular -->
-            <button onclick="calcularPuntajeFinal()" 
-                class="w-full udg-gradient text-white font-black py-4 rounded-2xl shadow-xl hover:brightness-110 active:scale-95 transition-all uppercase text-sm tracking-widest">
-                Calcular Puntaje Total
+            <button onclick="calcularPuntaje()"
+                class="w-full udg-gradient text-white font-black py-5 rounded-2xl shadow-xl hover:brightness-110 active:scale-[0.98] transition-all uppercase text-sm tracking-[0.2em] italic">
+                Obtener Puntaje de Dictamen
             </button>
 
-            <!-- Contenedor de Resultado -->
-            <div id="resultado-container" class="hidden fade-in">
-                <div class="bg-blue-50 border-l-4 border-blue-600 p-4 rounded-r-2xl">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="text-blue-600 text-[9px] font-black uppercase tracking-tighter">Puntaje Final Estimado</p>
-                            <h2 id="total-score" class="text-5xl font-black text-slate-900 leading-none">0.00</h2>
+            <!-- Panel de Resultados -->
+            <div id="resultado-calculo" class="hidden fade-in">
+                <div class="bg-slate-900 text-white p-8 rounded-[2rem] shadow-2xl flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+                    <div>
+                        <p class="text-[10px] font-bold text-blue-400 uppercase tracking-widest opacity-80 mb-1">Tu Puntaje Global</p>
+                        <h2 id="total-score-display" class="text-6xl font-black tracking-tighter">0.00</h2>
+                    </div>
+                    <div class="h-px w-full md:w-px md:h-12 bg-white/10"></div>
+                    <div class="text-center md:text-right">
+                        <p class="text-[9px] text-slate-400 uppercase font-bold">Puntos PAA</p>
+                        <p id="exam-score-display" class="text-2xl font-bold text-blue-300">0.00</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: COMPARATIVA ADAPTATIVA -->
+        <section id="comparativa-section" class="hidden glass-card p-6 md:p-10 rounded-[2.5rem] shadow-xl space-y-8 border-t-8 border-blue-600">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold italic shadow-lg">2</div>
+                <h2 class="text-sm md:text-base font-black text-slate-800 uppercase tracking-widest italic">Análisis de Ingreso por Carrera</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase ml-1 italic">Carrera a Consultar</label>
+                    <div class="relative">
+                        <select id="carrera-select" onchange="evaluarVeredicto()"
+                            class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl outline-none font-bold text-slate-700 text-xs md:text-sm appearance-none cursor-pointer italic input-focus pr-10">
+                            <!-- Inyectado por JS -->
+                        </select>
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </div>
-                        <div class="bg-white p-2 rounded-xl shadow-sm border border-blue-100 text-center">
-                            <span class="block text-[8px] font-bold text-slate-400 uppercase">Examen</span>
-                            <span id="examen-puntos" class="text-sm font-black text-blue-700">0.00</span>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase ml-1 italic">Ciclo de Trámite</label>
+                    <div class="relative">
+                        <select id="calendario-select" onchange="evaluarVeredicto()"
+                            class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl outline-none font-bold text-slate-700 text-xs md:text-sm appearance-none cursor-pointer italic input-focus pr-10">
+                            <option value="scoreB">Calendario B (Agosto)</option>
+                            <option value="scoreA">Calendario A (Enero)</option>
+                        </select>
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Mensaje de Error -->
-            <div id="error-message" class="hidden text-red-600 text-[10px] text-center font-bold bg-red-50 p-3 rounded-xl border border-red-100 uppercase tracking-tighter">
-                Revisa que los datos sean correctos (0-100 / 200-800)
+            <!-- Veredicto Final -->
+            <div id="veredicto-container" class="p-8 md:p-10 rounded-[2.5rem] flex flex-col items-center justify-center text-center space-y-3 border-2 transition-all duration-500 shadow-inner">
+                <p id="veredicto-desc" class="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] opacity-80 italic"></p>
+                <h3 id="veredicto-status" class="text-4xl md:text-6xl font-black italic tracking-tighter uppercase">---</h3>
+                <div class="h-px w-12 bg-current opacity-20 my-2"></div>
+                <p id="veredicto-meta" class="text-xs md:text-sm font-bold italic"></p>
             </div>
-        </div>
 
-        <!-- Nota al pie -->
-        <p class="mt-4 text-center text-slate-400 text-[9px] leading-tight px-6 uppercase font-medium">
-            Fórmula: [ ( ( (Lectura + Redacción) / 2 ) + Mate - 400 ) / 12 ] + Promedio
-        </p>
+            <footer class="bg-slate-50 p-5 rounded-2xl text-[10px] text-slate-500 leading-relaxed text-center border border-slate-100 italic">
+                * Los puntajes mínimos mostrados son promedios de los últimos ciclos (2023-2025). El puntaje final para ser admitido varía cada año según la oferta de cupos y la demanda de los aspirantes.
+            </footer>
+        </section>
+
+        <!-- Mensaje de Error -->
+        <div id="error-message" class="hidden fade-in text-red-600 text-[10px] text-center font-bold bg-red-50 p-5 rounded-[2rem] border-2 border-red-100 uppercase italic shadow-lg">
+            ⚠️ Entrada no válida. Asegúrate de ingresar el promedio (0-100) y puntajes PAA (200-800).
+        </div>
     </div>
 
     <script>
-        function calcularPuntajeFinal() {
-            const promedio = parseFloat(document.getElementById('promedio').value);
-            const matematicas = parseFloat(document.getElementById('matematicas').value);
-            const lectura = parseFloat(document.getElementById('lectura').value);
-            const redaccion = parseFloat(document.getElementById('redaccion').value);
-            
-            const errorDiv = document.getElementById('error-message');
-            const resultDiv = document.getElementById('resultado-container');
+        // Datos calibrados 2023-2025 (50 Carreras con mayor demanda)
+        const carrerasData = [
+            { name: "Médico Cirujano y Partero", center: "CUCS", scoreA: 177.50, scoreB: 184.20 },
+            { name: "Médico Cirujano y Partero", center: "CUTonalá", scoreA: 171.80, scoreB: 177.40 },
+            { name: "Médico Cirujano y Partero", center: "CUTlajomulco", scoreA: 170.20, scoreB: 176.10 },
+            { name: "Médico Cirujano y Partero", center: "CUAltos", scoreA: 172.10, scoreB: 177.80 },
+            { name: "Médico Cirujano y Partero", center: "CUCosta", scoreA: 168.50, scoreB: 174.20 },
+            { name: "Médico Cirujano y Partero", center: "CUSur", scoreA: 167.40, scoreB: 173.80 },
+            { name: "Cirujano Dentista", center: "CUCS", scoreA: 161.20, scoreB: 169.50 },
+            { name: "Abogado", center: "CUCSH", scoreA: 144.50, scoreB: 153.80 },
+            { name: "Abogado", center: "CUSur", scoreA: 132.40, scoreB: 141.20 },
+            { name: "Psicología", center: "CUCS", scoreA: 153.40, scoreB: 162.10 },
+            { name: "Psicología", center: "CUValles", scoreA: 135.20, scoreB: 144.10 },
+            { name: "Arquitectura", center: "CUAAD", scoreA: 155.80, scoreB: 164.50 },
+            { name: "Arquitectura", center: "CUTonalá", scoreA: 145.20, scoreB: 154.30 },
+            { name: "Diseño para la Com. Gráfica", center: "CUAAD", scoreA: 148.50, scoreB: 157.40 },
+            { name: "Diseño de Modas", center: "CUAAD", scoreA: 147.10, scoreB: 156.20 },
+            { name: "Diseño Industrial", center: "CUAAD", scoreA: 146.20, scoreB: 155.40 },
+            { name: "Artes Visuales", center: "CUAAD", scoreA: 142.50, scoreB: 151.10 },
+            { name: "Ing. en Computación", center: "CUCEI", scoreA: 154.20, scoreB: 163.50 },
+            { name: "Ing. Industrial", center: "CUCEI", scoreA: 149.50, scoreB: 158.80 },
+            { name: "Ing. Civil", center: "CUCEI", scoreA: 147.80, scoreB: 156.20 },
+            { name: "Ing. Mecatrónica", center: "CUCEI", scoreA: 153.10, scoreB: 162.40 },
+            { name: "Ing. Química", center: "CUCEI", scoreA: 146.80, scoreB: 155.90 },
+            { name: "Ing. Mecánica Eléctrica", center: "CUCEI", scoreA: 143.20, scoreB: 151.80 },
+            { name: "Q. Farmacéutico Biólogo", center: "CUCEI", scoreA: 158.40, scoreB: 168.10 },
+            { name: "Licenciatura en Física", center: "CUCEI", scoreA: 140.50, scoreB: 150.20 },
+            { name: "Negocios Internacionales", center: "CUCEA", scoreA: 150.20, scoreB: 159.10 },
+            { name: "Administración", center: "CUCEA", scoreA: 142.50, scoreB: 151.20 },
+            { name: "Contaduría Pública", center: "CUCEA", scoreA: 143.40, scoreB: 152.50 },
+            { name: "Mercadotecnia", center: "CUCEA", scoreA: 145.10, scoreB: 154.20 },
+            { name: "Turismo", center: "CUCEA", scoreA: 136.20, scoreB: 145.80 },
+            { name: "Recursos Humanos", center: "CUCEA", scoreA: 137.40, scoreB: 146.50 },
+            { name: "Economía", center: "CUCEA", scoreA: 137.80, scoreB: 147.40 },
+            { name: "Negocios Gastronómicos", center: "CUCEA", scoreA: 145.50, scoreB: 154.80 },
+            { name: "Veterinaria", center: "CUCBA", scoreA: 150.80, scoreB: 159.20 },
+            { name: "Lic. en Biología", center: "CUCBA", scoreA: 139.10, scoreB: 148.50 },
+            { name: "Agrobiotecnología", center: "CUCBA", scoreA: 135.40, scoreB: 144.20 },
+            { name: "Enfermería", center: "CUCS", scoreA: 147.20, scoreB: 156.10 },
+            { name: "Nutrición", center: "CUCS", scoreA: 151.40, scoreB: 160.20 },
+            { name: "Cultura Física y Deporte", center: "CUCS", scoreA: 134.80, scoreB: 144.50 },
+            { name: "Criminología", center: "CUCSH", scoreA: 146.50, scoreB: 155.80 },
+            { name: "Relaciones Internacionales", center: "CUCSH", scoreA: 156.10, scoreB: 165.40 },
+            { name: "Escritura Creativa", center: "CUCSH", scoreA: 151.80, scoreB: 160.20 },
+            { name: "Periodismo", center: "CUCSH", scoreA: 137.20, scoreB: 146.50 },
+            { name: "Sociología", center: "CUCSH", scoreA: 131.50, scoreB: 140.20 },
+            { name: "Trabajo Social", center: "CUCSH", scoreA: 125.80, scoreB: 134.10 },
+            { name: "Letras Hispánicas", center: "CUCSH", scoreA: 145.40, scoreB: 154.20 },
+            { name: "Historia", center: "CUCSH", scoreA: 138.20, scoreB: 147.50 },
+            { name: "Filosofía", center: "CUCSH", scoreA: 140.10, scoreB: 149.20 },
+            { name: "Nanotecnología", center: "CUTonalá", scoreA: 143.50, scoreB: 152.10 },
+            { name: "Ingeniería Fotónica", center: "CUCEI", scoreA: 137.20, scoreB: 146.80 }
+        ];
 
-            // Validación de rangos
-            if (isNaN(promedio) || isNaN(matematicas) || isNaN(lectura) || isNaN(redaccion) ||
-                promedio < 0 || promedio > 100 || 
-                matematicas < 200 || matematicas > 800 ||
-                lectura < 200 || lectura > 800 ||
-                redaccion < 200 || redaccion > 800) {
-                
+        let puntajeFinalGlobal = 0;
+
+        function init() {
+            const select = document.getElementById('carrera-select');
+            carrerasData.sort((a,b) => a.name.localeCompare(b.name)).forEach((c, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.textContent = `${c.name} (${c.center})`;
+                select.appendChild(opt);
+            });
+        }
+
+        function calcularPuntaje() {
+            const promedio     = parseFloat(document.getElementById('promedio').value);
+            const matematicas  = parseFloat(document.getElementById('matematicas').value);
+            const lectura      = parseFloat(document.getElementById('lectura').value);
+            const redaccion    = parseFloat(document.getElementById('redaccion').value);
+            const errorDiv     = document.getElementById('error-message');
+            const resultCalc   = document.getElementById('resultado-calculo');
+            const compSection  = document.getElementById('comparativa-section');
+
+            if (isNaN(promedio)||isNaN(matematicas)||isNaN(lectura)||isNaN(redaccion)||
+                promedio<0||promedio>100||
+                matematicas<200||matematicas>800||
+                lectura<200||lectura>800||
+                redaccion<200||redaccion>800) {
                 errorDiv.classList.remove('hidden');
-                resultDiv.classList.add('hidden');
+                resultCalc.classList.add('hidden');
+                compSection.classList.add('hidden');
                 return;
             }
-
+            
             errorDiv.classList.add('hidden');
+            
+            // Fórmula UDG Escala 100: ( ((L+R)/2) + M - 400 ) / 12 + Promedio
+            const promedioLR       = (lectura + redaccion) / 2;
+            const sumaAjustada     = (promedioLR + matematicas) - 400;
+            const puntosExamen     = sumaAjustada / 12;
+            puntajeFinalGlobal     = puntosExamen + promedio;
 
-            // Nueva Lógica de Cálculo Solicitada:
-            // 1. Promediar Lectura y Redacción
-            const promedioLecturaRedaccion = (lectura + redaccion) / 2;
+            document.getElementById('total-score-display').innerText = puntajeFinalGlobal.toFixed(2);
+            document.getElementById('exam-score-display').innerText = puntosExamen.toFixed(2);
             
-            // 2. Sumar Matemáticas al resultado anterior y restar 400
-            const sumaExamenAjustada = (promedioLecturaRedaccion + matematicas) - 400;
+            resultCalc.classList.remove('hidden');
+            compSection.classList.remove('hidden');
             
-            // 3. Dividir entre 12 para obtener la escala de 100
-            const puntosExamen = sumaExamenAjustada / 12;
-            
-            // 4. Sumar el promedio de bachillerato al final
-            const puntajeTotal = puntosExamen + promedio;
-
-            // Mostrar Resultados
-            document.getElementById('total-score').innerText = puntajeTotal.toFixed(2);
-            document.getElementById('examen-puntos').innerText = puntosExamen.toFixed(2);
-            
-            resultDiv.classList.remove('hidden');
+            evaluarVeredicto();
         }
-    </script>
 
+        function evaluarVeredicto() {
+            const idx = document.getElementById('carrera-select').value;
+            const cal = document.getElementById('calendario-select').value;
+            const carrera = carrerasData[idx];
+            const minimo = carrera[cal];
+            
+            const container = document.getElementById('veredicto-container');
+            const status = document.getElementById('veredicto-status');
+            const desc = document.getElementById('veredicto-desc');
+            const meta = document.getElementById('veredicto-meta');
+
+            if(puntajeFinalGlobal >= minimo) {
+                container.className = "p-8 md:p-10 rounded-[2.5rem] flex flex-col items-center justify-center text-center space-y-3 border-2 status-in transition-all duration-300";
+                status.innerText = "ADMITIDO";
+                desc.innerText = "Veredicto Probable";
+                meta.innerText = `Superas el mínimo de ${minimo.toFixed(2)} pts`;
+            } else {
+                container.className = "p-8 md:p-10 rounded-[2.5rem] flex flex-col items-center justify-center text-center space-y-3 border-2 status-out transition-all duration-300";
+                status.innerText = "NO ADMITIDO";
+                desc.innerText = "Veredicto Probable";
+                meta.innerText = `Te faltan ${(minimo - puntajeFinalGlobal).toFixed(2)} pts para el ingreso`;
+            }
+        }
+
+        window.onload = init;
+    </script>
 </body>
 </html>
