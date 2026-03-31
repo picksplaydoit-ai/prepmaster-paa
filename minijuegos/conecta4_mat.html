@@ -192,19 +192,90 @@
         }
 
         const mathBank = [
-            { q: "¿Cuál es el valor de $\\frac{3}{5} + \\frac{1}{4}$?", o: ["$\\frac{4}{9}$", "$\\frac{17}{20}$", "$\\frac{7}{20}$", "$\\frac{4}{20}$"], a: 1 },
-            { q: "Si $3(x-4) = 12$, ¿cuánto vale $x$?", o: ["$4$", "$8$", "$0$", "$16$"], a: 1 },
-            { q: "Factoriza la expresión $x^2 - 49$:", o: ["$(x-7)^2$", "$(x+7)(x-7)$", "$(x-49)(x+1)$", "$(x+7)^2$"], a: 1 },
-            { q: "Si el $20\\%$ de $x$ es $40$, ¿cuánto vale $x$?", o: ["$80$", "$200$", "$120$", "$400$"], a: 1 },
-            { q: "En un triángulo rectángulo, catetos de $6$ y $8$, la hipotenusa es:", o: ["$10$", "$14$", "$100$", "$7$"], a: 0 },
-            { q: "¿Área de un círculo con radio $3$? (Usa $\\pi$)", o: ["$6\\pi$", "$9\\pi$", "$3\\pi$", "$12\\pi$"], a: 1 },
-            { q: "MCM de $12, 15$ y $20$ es:", o: ["$60$", "$120$", "$30$", "$45$"], a: 0 },
-            { q: "Mediana de: $3, 7, 1, 9, 5$:", o: ["$7$", "$1$", "$5$", "$3$"], a: 2 },
-            { q: "Si $y = 2x^2 + 1$ e $x = -2$, halla $y$:", o: ["$5$", "$9$", "$-7$", "$7$"], a: 1 },
-            { q: "Resuelve: $|x - 5| = 2$:", o: ["$7$", "$3$", "$7$ y $3$", "$-3$"], a: 2 },
-            { q: "Simplifica: $\\sqrt{0.64}$", o: ["$0.08$", "$0.8$", "$8$", "$0.4$"], a: 1 },
-            { q: "¿Cuántos grados suman los ángulos internos de un triángulo?", o: ["$90^o$", "$180^o$", "$360^o$", "$270^o$"], a: 1 }
+            // ── FRACCIONES Y ARITMÉTICA ───────────────────────────────────
+            { q: "Calcula: $\\frac{3}{5} + \\frac{1}{4}$", o: ["$\\frac{4}{9}$", "$\\frac{17}{20}$", "$\\frac{7}{20}$", "$\\frac{4}{20}$"], a: 1 },
+            { q: "Calcula: $\\frac{5}{6} - \\frac{1}{3}$", o: ["$\\frac{4}{6}$", "$\\frac{1}{2}$", "$\\frac{2}{3}$", "$\\frac{1}{6}$"], a: 1 },
+            { q: "Calcula: $\\frac{2}{3} \\times \\frac{3}{4}$", o: ["$\\frac{6}{7}$", "$\\frac{1}{2}$", "$\\frac{5}{12}$", "$\\frac{2}{4}$"], a: 1 },
+            { q: "Calcula: $\\frac{3}{4} \\div \\frac{1}{2}$", o: ["$\\frac{3}{8}$", "$1$", "$\\frac{3}{2}$", "$2$"], a: 2 },
+            { q: "El 20% de cierto número es 40. ¿Cuál es ese número?", o: ["$80$", "$200$", "$120$", "$400$"], a: 1 },
+            { q: "¿Cuánto es el 15% de 200?", o: ["$25$", "$30$", "$40$", "$15$"], a: 1 },
+            { q: "¿Cuál es el MCM (Mínimo Común Múltiplo) de 12, 15 y 20?", o: ["$60$", "$120$", "$30$", "$45$"], a: 0 },
+            { q: "¿Cuál es el MCD (Máximo Común Divisor) de 24 y 36?", o: ["$6$", "$12$", "$8$", "$4$"], a: 1 },
+            { q: "Simplifica la fracción $\\frac{18}{24}$ a su mínima expresión.", o: ["$\\frac{2}{3}$", "$\\frac{3}{4}$", "$\\frac{5}{6}$", "$\\frac{9}{12}$"], a: 1 },
+            { q: "Un estudiante gastó $\\frac{2}{5}$ de su mesada en comida y $\\frac{1}{4}$ en transporte. ¿Qué fracción de su mesada gastó en total?", o: ["$\\frac{3}{9}$", "$\\frac{13}{20}$", "$\\frac{3}{20}$", "$\\frac{1}{2}$"], a: 1 },
+            // ── SUCESIONES Y PATRONES ─────────────────────────────────────
+            { q: "Observa la secuencia: 2, 6, 18, 54, ___ ¿Cuál es el siguiente número?", o: ["$108$", "$162$", "$72$", "$200$"], a: 1 },
+            { q: "Observa la secuencia: 1, 4, 9, 16, ___ ¿Cuál es el siguiente número?", o: ["$20$", "$25$", "$36$", "$18$"], a: 1 },
+            { q: "Observa la secuencia: 5, 7, 10, 14, ___ (los saltos aumentan de 1 en 1). ¿Cuál es el siguiente?", o: ["$18$", "$17$", "$19$", "$20$"], a: 2 },
+            { q: "Observa la secuencia: 1, 3, 7, 15, ___ (cada término se duplica y suma 1). ¿Cuál es el siguiente?", o: ["$30$", "$31$", "$25$", "$32$"], a: 1 },
+            { q: "Observa la secuencia: 3, 6, 12, 24, ___ ¿Cuál es el siguiente número?", o: ["$36$", "$40$", "$48$", "$42$"], a: 2 },
+            { q: "Observa la secuencia: 100, 95, 85, 70, ___ (los saltos aumentan: -5, -10, -15...). ¿Cuál es el siguiente?", o: ["$60$", "$55$", "$50$", "$65$"], a: 2 },
+            // ── EXPONENTES Y RADICALES ───────────────────────────────────
+            { q: "Simplifica la siguiente expresión: $x^5 \\cdot x^2 \\div x^4$", o: ["$x^{11}$", "$x^{3}$", "$x^{10}$", "$x^{1}$"], a: 1 },
+            { q: "Calcula el valor de $(2^2)^3 \\cdot 2^{-4}$", o: ["$16$", "$4$", "$1$", "$8$"], a: 1 },
+            { q: "Simplifica: $\\sqrt{x^6}$", o: ["$x^2$", "$x^3$", "$x^4$", "$x^6$"], a: 1 },
+            { q: "Simplifica la expresión: $\\frac{(x^3)^2}{x^4}$", o: ["$x^8$", "$x^2$", "$x^{10}$", "$x^5$"], a: 1 },
+            { q: "Calcula: $\\sqrt{0.64}$", o: ["$0.08$", "$0.8$", "$8$", "$0.4$"], a: 1 },
+            { q: "¿Cuánto vale $x^0$ si $x$ es cualquier número diferente de cero?", o: ["$0$", "$x$", "$1$", "Indefinido"], a: 2 },
+            // ── ÁLGEBRA Y ECUACIONES ──────────────────────────────────────
+            { q: "Resuelve la ecuación: $3(x - 4) = 12$. ¿Cuánto vale $x$?", o: ["$4$", "$8$", "$0$", "$16$"], a: 1 },
+            { q: "Resuelve: $2x + 5 = 17$. ¿Cuánto vale $x$?", o: ["$7$", "$6$", "$11$", "$5$"], a: 1 },
+            { q: "Factoriza completamente la expresión: $x^2 - 49$", o: ["$(x-7)^2$", "$(x+7)(x-7)$", "$(x-49)(x+1)$", "$(x+7)^2$"], a: 1 },
+            { q: "Si $y = 2x^2 + 1$ y $x = -2$, ¿cuánto vale $y$?", o: ["$5$", "$9$", "$-7$", "$7$"], a: 1 },
+            { q: "Resuelve la ecuación de valor absoluto: $|x - 5| = 2$. ¿Cuáles son los valores de $x$?", o: ["Solo $x = 7$", "Solo $x = 3$", "$x = 7$ y $x = 3$", "$x = -3$ y $x = 7$"], a: 2 },
+            { q: "Resuelve: $5x - 3 = 22$. ¿Cuánto vale $x$?", o: ["$4$", "$5$", "$6$", "$3$"], a: 1 },
+            { q: "Resuelve la inecuación: $-2x > 8$. ¿Cuál es la solución?", o: ["$x > -4$", "$x < -4$", "$x > 4$", "$x < 4$"], a: 1 },
+            { q: "Resuelve: $4x - 2 > 10$. ¿Para qué valores de $x$ se cumple?", o: ["$x > 3$", "$x < 3$", "$x > 2$", "$x > 4$"], a: 0 },
+            // ── SISTEMAS DE ECUACIONES ────────────────────────────────────
+            { q: "En el sistema $x + y = 10$ y $x - y = 2$, ¿cuánto vale $x$?", o: ["$4$", "$6$", "$8$", "$5$"], a: 1 },
+            { q: "En el sistema $2x + y = 7$ y $x - y = 2$, ¿cuánto vale $y$?", o: ["$1$", "$3$", "$5$", "$2$"], a: 0 },
+            { q: "Si $x + y = 8$ y $2x - y = 4$, ¿cuánto vale $x$?", o: ["$3$", "$4$", "$5$", "$6$"], a: 1 },
+            // ── GEOMETRÍA Y VOLÚMENES ─────────────────────────────────────
+            { q: "Un triángulo rectángulo tiene catetos de 6 y 8. ¿Cuánto mide la hipotenusa?", o: ["$10$", "$14$", "$100$", "$7$"], a: 0 },
+            { q: "¿Cuál es el área de un círculo con radio 3? (Expresa tu respuesta en términos de $\\pi$)", o: ["$6\\pi$", "$9\\pi$", "$3\\pi$", "$12\\pi$"], a: 1 },
+            { q: "¿Cuántos grados suman los tres ángulos internos de cualquier triángulo?", o: ["$90°$", "$180°$", "$360°$", "$270°$"], a: 1 },
+            { q: "¿Cuál es el área de un rectángulo que mide 8 de largo por 5 de ancho?", o: ["$26$", "$40$", "$13$", "$30$"], a: 1 },
+            { q: "¿Cuál es el volumen de un cubo cuyo lado mide 3?", o: ["$9$", "$18$", "$27$", "$6$"], a: 2 },
+            { q: "¿Cuál es el volumen de una caja rectangular con dimensiones $2 \\times 4 \\times 5$?", o: ["$11$", "$40$", "$20$", "$30$"], a: 1 },
+            { q: "¿Cuál es el volumen de un cubo cuyo lado mide 5?", o: ["$25$", "$75$", "$125$", "$15$"], a: 2 },
+            { q: "¿Cuál es el perímetro de un cuadrado cuyo lado mide 6?", o: ["$12$", "$36$", "$24$", "$18$"], a: 2 },
+            { q: "¿Cuántos grados suman los ángulos internos de cualquier cuadrilátero?", o: ["$180°$", "$270°$", "$360°$", "$540°$"], a: 2 },
+            // ── PROBABILIDAD Y ESTADÍSTICA ───────────────────────────────
+            { q: "Ordena los datos y encuentra la mediana: 3, 7, 1, 9, 5", o: ["$7$", "$1$", "$5$", "$3$"], a: 2 },
+            { q: "Calcula la media aritmética de: 4, 8, 6, 2, 10", o: ["$5$", "$6$", "$7$", "$8$"], a: 1 },
+            { q: "¿Cuál es la moda del conjunto: 3, 5, 3, 7, 3, 9?", o: ["$5$", "$7$", "$3$", "$9$"], a: 2 },
+            { q: "Si lanzas un dado de 6 caras, ¿cuál es la probabilidad de obtener un número par?", o: ["$\\frac{1}{3}$", "$\\frac{1}{2}$", "$\\frac{2}{3}$", "$\\frac{1}{6}$"], a: 1 },
+            { q: "De una baraja estándar de 52 cartas, ¿cuál es la probabilidad de sacar un as?", o: ["$\\frac{1}{13}$", "$\\frac{1}{52}$", "$\\frac{4}{52}$", "$\\frac{1}{4}$"], a: 0 },
+            { q: "En una bolsa hay 3 canicas rojas y 2 azules. ¿Cuál es la probabilidad de sacar una roja al azar?", o: ["$\\frac{2}{5}$", "$\\frac{3}{5}$", "$\\frac{1}{2}$", "$\\frac{3}{2}$"], a: 1 },
+            // ── DIAGRAMAS DE VENN ─────────────────────────────────────────
+            { q: "De 30 alumnos, 18 juegan fútbol, 12 juegan básquet y 5 practican ambos deportes. ¿Cuántos alumnos no practican ninguno?", o: ["$3$", "$5$", "$7$", "$2$"], a: 1 },
+            { q: "El conjunto $A$ tiene 10 elementos y el conjunto $B$ tiene 8. Si $A \\cap B$ tiene 4 elementos, ¿cuántos tiene $A \\cup B$?", o: ["$18$", "$14$", "$22$", "$16$"], a: 1 },
+            { q: "En una clase, 15 alumnos leen novelas, 10 leen poesía y 4 leen ambas. ¿Cuántos alumnos leen al menos un género?", o: ["$25$", "$21$", "$19$", "$29$"], a: 1 },
+            // ── FUNCIONES ─────────────────────────────────────────────────
+            { q: "Si $f(x) = 3x - 2$, ¿cuánto vale $f(4)$?", o: ["$10$", "$14$", "$12$", "$8$"], a: 0 },
+            { q: "Si $f(x) = x^2 + 1$, ¿cuánto vale $f(3)$?", o: ["$9$", "$10$", "$7$", "$12$"], a: 1 },
+            { q: "¿Para qué valor de $x$ no está definida la función $f(x) = \\frac{1}{x-3}$?", o: ["$x = 0$", "$x = 1$", "$x = 3$", "$x = -3$"], a: 2 },
+            { q: "¿Qué tipo de función es $f(x) = 2x + 5$?", o: ["Cuadrática, porque tiene coeficiente 2", "Lineal, porque el exponente de $x$ es 1", "Exponencial, porque crece rápido", "Racional, porque tiene división"], a: 1 },
+            // ── PROPORCIONES Y REGLA DE 3 ─────────────────────────────────
+            { q: "Si 3 obreros tardan 12 días en terminar una obra, ¿cuántos días tardarían 9 obreros trabajando al mismo ritmo? (Proporción inversa)", o: ["$36$ días", "$4$ días", "$6$ días", "$3$ días"], a: 1 },
+            { q: "Si con $150 pesos puedes comprar 12 cuadernos, ¿cuántos cuadernos podrías comprar con $200 pesos al mismo precio?", o: ["$15$ cuadernos", "$16$ cuadernos", "$18$ cuadernos", "$14$ cuadernos"], a: 1 },
+            { q: "Si 5 boletos de cine cuestan $450, ¿cuánto costarían 8 boletos al mismo precio?", o: ["$600$", "$720$", "$800$", "$650$"], a: 1 },
+            { q: "Un automóvil viajando a 60 km/h tarda 4 horas en llegar a su destino. Si viaja a 80 km/h, ¿cuántas horas tardará? (Proporción inversa)", o: ["$5$ horas", "$3$ horas", "$2$ horas", "$4.5$ horas"], a: 1 },
+            // ── VALOR ABSOLUTO ─────────────────────────────────────────────
+            { q: "Calcula: $|-15| - |5|$", o: ["$-20$", "$0$", "$10$", "$20$"], a: 2 },
+            { q: "Calcula: $|2 - 9| + 5$", o: ["$2$", "$16$", "$12$", "$-2$"], a: 2 },
+            { q: "Si $|x + 2| = 10$, ¿cuáles son los dos valores posibles de $x$?", o: ["Solo $x = 8$", "Solo $x = -12$", "$x = 8$ y $x = -12$", "$x = 10$ y $x = -10$"], a: 2 },
         ];
+
+        // Sistema anti-repetición
+        let usedQuestions = new Set();
+        function getQuestion() {
+            if (usedQuestions.size >= mathBank.length) usedQuestions.clear();
+            let idx;
+            do { idx = Math.floor(Math.random() * mathBank.length); } while (usedQuestions.has(idx));
+            usedQuestions.add(idx);
+            return mathBank[idx];
+        }
 
         const ROWS = 6;
         const COLS = 7;
@@ -270,7 +341,7 @@
             const tokenMini = document.getElementById('player-token-mini');
             const modalTitle = document.getElementById('modal-player-title');
             
-            const q = mathBank[Math.floor(Math.random() * mathBank.length)];
+            const q = getQuestion();
             
             const color = currentPlayer === 1 ? 'var(--p1-color)' : 'var(--p2-color)';
             const name = currentPlayer === 1 ? p1Name : p2Name;
