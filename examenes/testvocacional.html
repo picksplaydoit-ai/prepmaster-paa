@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orientación Profesional UdeG - Reporte de Puntajes A/B</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .udg-blue { background-color: #004a99; }
+        .progress-bar { transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .career-card { transition: all 0.2s ease; border: 1px solid #e2e8f0; }
+        .career-card:hover { border-color: #004a99; transform: scale(1.01); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .bg-gold-light { background-color: #fdf6e3; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+<div class="max-w-2xl w-full">
+    <!-- Pantalla de Inicio -->
+    <div id="start-screen" class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 text-center fade-in border-b-8 border-blue-900">
+        <div class="mb-6 flex justify-center">
+            <div class="p-5 bg-blue-50 rounded-2xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                  <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                </svg>
+            </div>
+        </div>
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-2">Simulador Vocacional <span class="text-blue-700">UdeG</span></h1>
+        <p class="text-gray-500 mb-10 leading-relaxed text-sm">Análisis de aptitudes con proyección de puntajes mínimos (Calendarios 2024 - 2025).</p>
+        
+        <div class="space-y-5 max-w-sm mx-auto text-left">
+            <div>
+                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">Nombre del Aspirante</label>
+                <input type="text" id="user-name" placeholder="Ej. Valeria Jiménez" 
+                       class="w-full px-6 py-4 rounded-2xl border-2 border-gray-100 focus:border-blue-500 outline-none transition-all bg-gray-50 text-lg font-semibold">
+            </div>
+            <button onclick="startTest()" class="w-full udg-blue text-white py-5 rounded-2xl font-bold text-lg shadow-xl hover:bg-blue-900 transition-all active:scale-95">
+                Iniciar Diagnóstico
+            </button>
+        </div>
+    </div>
+
+    <!-- Pantalla de Test -->
+    <div id="quiz-screen" class="hidden bg-white rounded-3xl shadow-2xl p-8 md:p-12 fade-in relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full bg-gray-100 h-2">
+            <div id="progress" class="udg-blue h-full progress-bar" style="width: 0%"></div>
+        </div>
+        
+        <div class="mt-4 flex justify-between items-center text-[10px] font-black text-gray-400 uppercase tracking-widest">
+            <span id="question-number">Reactivo 1 / 15</span>
+            <span id="user-display" class="text-blue-700"></span>
+        </div>
+
+        <div class="my-10">
+            <h2 id="question-text" class="text-2xl font-bold text-gray-800 leading-tight"></h2>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4">
+            <button onclick="handleAnswer(4)" class="w-full p-5 text-left border-2 border-gray-100 rounded-2xl hover:border-blue-500 hover:bg-blue-50 transition-all font-bold group flex items-center">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center mr-4 group-hover:bg-blue-700 group-hover:text-white transition-colors text-lg">4</div>
+                Me identifica totalmente
+            </button>
+            <button onclick="handleAnswer(2)" class="w-full p-5 text-left border-2 border-gray-100 rounded-2xl hover:border-blue-500 hover:bg-blue-50 transition-all font-bold group flex items-center">
+                <div class="w-10 h-10 rounded-xl bg-gray-50 text-gray-400 flex items-center justify-center mr-4 group-hover:bg-gray-700 group-hover:text-white transition-colors text-lg">2</div>
+                Es indiferente para mí
+            </button>
+            <button onclick="handleAnswer(0)" class="w-full p-5 text-left border-2 border-gray-100 rounded-2xl hover:border-blue-500 hover:bg-blue-50 transition-all font-bold group flex items-center">
+                <div class="w-10 h-10 rounded-xl bg-red-50 text-red-700 flex items-center justify-center mr-4 group-hover:bg-red-700 group-hover:text-white transition-colors text-lg">0</div>
+                No me interesa en absoluto
+            </button>
+        </div>
+    </div>
+
+    <!-- Pantalla de Resultados -->
+    <div id="result-screen" class="hidden space-y-6 fade-in mb-10">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-10 border-b-8 border-blue-900">
+            <div class="text-center mb-8">
+                <h2 id="final-greeting" class="text-3xl font-extrabold text-gray-900"></h2>
+                <p class="text-blue-600 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">Perfil Académico Sugerido</p>
+            </div>
+
+            <div class="bg-blue-50/50 p-6 rounded-2xl mb-10 border border-blue-100">
+                <h3 id="profile-name" class="text-xl font-extrabold text-blue-900 mb-3 uppercase italic"></h3>
+                <p id="profile-desc" class="text-gray-700 leading-relaxed text-sm text-justify"></p>
+            </div>
+
+            <div class="mb-4 flex items-center justify-between">
+                <h4 class="text-xs font-black text-gray-400 uppercase tracking-widest">Carreras y Puntajes Históricos</h4>
+                <div class="flex gap-4 text-[9px] font-bold">
+                    <span class="flex items-center"><span class="w-2 h-2 bg-blue-200 rounded-full mr-1"></span> Cal. A (Ene)</span>
+                    <span class="flex items-center"><span class="w-2 h-2 bg-blue-600 rounded-full mr-1"></span> Cal. B (Ago)</span>
+                </div>
+            </div>
+
+            <div id="careers-grid" class="space-y-3">
+                <!-- Inyección Dinámica -->
+            </div>
+
+            <div class="mt-8 p-5 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
+                <p class="text-[10px] text-slate-500 leading-normal">
+                    <strong>Nota sobre los calendarios:</strong> El puntaje del <strong>Calendario B</strong> suele ser más alto debido a la demanda de egresados de bachillerato en verano. El <strong>Calendario A</strong> representa el ingreso de invierno, donde estadísticamente los puntajes mínimos tienden a bajar ligeramente en centros de alta demanda como CUCEI o CUCEA.
+                </p>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button onclick="location.reload()" class="bg-gray-100 text-gray-600 px-6 py-2 rounded-full font-bold text-xs hover:bg-gray-200 transition-colors">Nuevo Test</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentIdx = 0;
+    let name = "";
+    const scores = { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 };
+
+    const questions = [
+        { q: "Me gusta trabajar con máquinas, herramientas o sistemas electrónicos.", cat: "R" },
+        { q: "Siento curiosidad por investigar fenómenos biológicos o químicos.", cat: "I" },
+        { q: "Prefiero crear soluciones visuales o artísticas a problemas comunes.", cat: "A" },
+        { q: "Me motiva enseñar, orientar o cuidar de personas en necesidad.", cat: "S" },
+        { q: "Disfruto el reto de convencer a otros para concretar un negocio.", cat: "E" },
+        { q: "Soy metódico, me gusta el orden y trabajar con bases de datos.", cat: "C" },
+        { q: "Me apasiona resolver problemas de lógica pura o matemáticas avanzadas.", cat: "I" },
+        { q: "Me veo trabajando en entornos industriales o de construcción.", cat: "R" },
+        { q: "Valoro la libertad creativa por encima de un sueldo administrativo.", cat: "A" },
+        { q: "Tengo facilidad para mediar en conflictos y escuchar a los demás.", cat: "S" },
+        { q: "Me gustaría ocupar puestos de liderazgo y toma de decisiones estratégicas.", cat: "E" },
+        { q: "Tengo habilidad natural para la contabilidad y gestión de inventarios.", cat: "C" },
+        { q: "Me interesa el desarrollo de software o la ingeniería de procesos.", cat: "R" },
+        { q: "Me gusta debatir sobre derechos humanos, ética y sociología.", cat: "S" },
+        { q: "Prefiero un trabajo dinámico basado en metas económicas y ventas.", cat: "E" }
+    ];
+
+    const profiles = {
+        I: {
+            name: "Investigador (Analítico)",
+            desc: "Tu perfil destaca por una curiosidad intelectual insaciable. Eres una persona independiente que prefiere los retos abstractos y científicos. Te sientes cómodo analizando datos, investigando en laboratorios o profundizando en la teoría para encontrar soluciones reales.",
+            options: [
+                { career: "Médico Cirujano y Partero", center: "CUCS", scoreA: "179.80", scoreB: "186.10" },
+                { career: "Q. Farmacéutico Biólogo", center: "CUCEI", scoreA: "163.20", scoreB: "172.40" },
+                { career: "Lic. en Física", center: "CUCEI", scoreA: "148.50", scoreB: "158.90" },
+                { career: "Lic. en Biomedicina", center: "CUTlajomulco", scoreA: "165.00", scoreB: "174.50" },
+                { career: "Lic. en Nutrición", center: "CUCS", scoreA: "155.10", scoreB: "163.40" }
+            ]
+        },
+        R: {
+            name: "Realista (Práctico-Técnico)",
+            desc: "Eres una persona orientada a la acción y a los resultados tangibles. Te atrae el funcionamiento de las cosas y prefieres trabajar con objetos, máquinas y tecnología. Tienes una gran inteligencia espacial y una capacidad nata para optimizar procesos físicos y digitales.",
+            options: [
+                { career: "Ing. en Computación", center: "CUCEI", scoreA: "159.40", scoreB: "168.20" },
+                { career: "Ing. Civil", center: "CUCEI", scoreA: "151.10", scoreB: "161.40" },
+                { career: "Ing. Mecatrónica", center: "CULagos", scoreA: "144.50", scoreB: "154.20" },
+                { career: "Ing. Industrial", center: "CUCEI", scoreA: "154.00", scoreB: "164.80" },
+                { career: "Ing. en Nanotecnología", center: "CUTonalá", scoreA: "149.00", scoreB: "158.30" }
+            ]
+        },
+        A: {
+            name: "Artístico (Creativo)",
+            desc: "Tu visión del mundo es estética y emocional. Eres una persona expresiva, intuitiva y sumamente original. Requieres entornos que fomenten la imaginación y detestas las tareas rutinarias o estrictamente reguladas.",
+            options: [
+                { career: "Arquitectura", center: "CUAAD", scoreA: "158.90", scoreB: "168.45" },
+                { career: "Diseño Comunicación Gráfica", center: "CUAAD", scoreA: "152.40", scoreB: "162.10" },
+                { career: "Artes Visuales", center: "CUAAD", scoreA: "148.00", scoreB: "157.00" },
+                { career: "Diseño de Modas", center: "CUAAD", scoreA: "149.20", scoreB: "159.80" },
+                { career: "Artes Escénicas", center: "CUAAD", scoreA: "142.10", scoreB: "152.50" }
+            ]
+        },
+        S: {
+            name: "Social (Humanista)",
+            desc: "Tu motor es la empatía y la vocación de servicio. Eres una persona paciente y generosa que busca impactar positivamente en la vida de los demás. Te orientas a la educación, la salud emocional o la defensa de los derechos humanos.",
+            options: [
+                { career: "Lic. en Psicología", center: "CUCS", scoreA: "157.30", scoreB: "165.90" },
+                { career: "Lic. en Derecho", center: "CUCSH", score: "149.50", scoreA: "149.80", scoreB: "159.20" },
+                { career: "Relaciones Internacionales", center: "CUCSH", scoreA: "159.20", scoreB: "169.10" },
+                { career: "Lic. en Enfermería", center: "CUCS", scoreA: "150.40", scoreB: "158.70" },
+                { career: "Lic. en Trabajo Social", center: "CUCSH", scoreA: "131.00", scoreB: "140.50" }
+            ]
+        },
+        E: {
+            name: "Emprendedor (Estratégico)",
+            desc: "Posees una gran energía y capacidad de persuasión. Eres un líder por naturaleza que disfruta de la competencia y los retos comerciales. Te atrae el riesgo calculado y la gestión de proyectos de alto impacto económico.",
+            options: [
+                { career: "Negocios Internacionales", center: "CUCEA", scoreA: "153.20", scoreB: "162.80" },
+                { career: "Lic. en Mercadotecnia", center: "CUCEA", scoreA: "148.70", scoreB: "158.10" },
+                { career: "Lic. en Administración", center: "CUCEA", scoreA: "146.40", scoreB: "156.20" },
+                { career: "Lic. en Turismo", center: "CUCEA", scoreA: "138.90", scoreB: "149.30" },
+                { career: "Recursos Humanos", center: "CUCEA", scoreA: "140.00", scoreB: "150.40" }
+            ]
+        },
+        C: {
+            name: "Convencional (Organizador)",
+            desc: "Tu fuerte es el orden, la eficiencia y la precisión. Disfrutas trabajando con datos, finanzas y sistemas estructurados. Eres la persona que garantiza que los procesos se cumplan con exactitud y honestidad administrativa.",
+            options: [
+                { career: "Contaduría Pública", center: "CUCEA", scoreA: "148.40", scoreB: "157.90" },
+                { career: "Administración Financiera", center: "CUCEA", scoreA: "151.20", scoreB: "160.80" },
+                { career: "Lic. en Economía", center: "CUCEA", scoreA: "140.30", scoreB: "150.10" },
+                { career: "Sistemas de Información", center: "CUCEA", scoreA: "144.10", scoreB: "153.50" },
+                { career: "Gestión de Negocios", center: "CUCEA", scoreA: "142.00", scoreB: "152.00" }
+            ]
+        }
+    };
+
+    function startTest() {
+        name = document.getElementById('user-name').value.trim();
+        if (!name) {
+            alert("Por favor, ingresa tu nombre para personalizar tu reporte.");
+            return;
+        }
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('quiz-screen').classList.remove('hidden');
+        document.getElementById('user-display').innerText = `Analizando a: ${name}`;
+        updateQuestion();
+    }
+
+    function updateQuestion() {
+        const q = questions[currentIdx];
+        document.getElementById('question-text').innerText = q.q;
+        document.getElementById('question-number').innerText = `Reactivo ${currentIdx + 1} / 15`;
+        document.getElementById('progress').style.width = `${((currentIdx + 1) / questions.length) * 100}%`;
+    }
+
+    function handleAnswer(value) {
+        const cat = questions[currentIdx].cat;
+        scores[cat] += value;
+
+        if (currentIdx < questions.length - 1) {
+            currentIdx++;
+            updateQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function showResults() {
+        document.getElementById('quiz-screen').classList.add('hidden');
+        const resScreen = document.getElementById('result-screen');
+        resScreen.classList.remove('hidden');
+
+        const winner = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+        const profile = profiles[winner];
+
+        document.getElementById('final-greeting').innerText = `¡Listo, ${name}!`;
+        document.getElementById('profile-name').innerText = profile.name;
+        document.getElementById('profile-desc').innerText = profile.desc;
+
+        const grid = document.getElementById('careers-grid');
+        grid.innerHTML = "";
+        
+        profile.options.forEach(opt => {
+            const card = document.createElement('div');
+            card.className = "career-card bg-white p-5 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4";
+            card.innerHTML = `
+                <div class="flex-1">
+                    <p class="text-sm font-black text-blue-600 uppercase tracking-tighter leading-none mb-1">${opt.center}</p>
+                    <p class="text-lg font-extrabold text-gray-800">${opt.career}</p>
+                </div>
+                <div class="flex gap-4 w-full md:w-auto">
+                    <div class="flex-1 md:flex-none text-center bg-blue-50 px-4 py-2 rounded-xl">
+                        <p class="text-[8px] font-black text-blue-400 uppercase leading-none mb-1">Cal. A</p>
+                        <p class="text-lg font-black text-blue-800">${opt.scoreA}</p>
+                    </div>
+                    <div class="flex-1 md:flex-none text-center bg-blue-800 px-4 py-2 rounded-xl">
+                        <p class="text-[8px] font-black text-blue-300 uppercase leading-none mb-1">Cal. B</p>
+                        <p class="text-lg font-black text-white">${opt.scoreB}</p>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
