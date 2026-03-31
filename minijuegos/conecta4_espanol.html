@@ -186,27 +186,79 @@
     <script>
         // --- BANCO DE PREGUNTAS ESPAÑOL PAA ---
         const spanishBank = [
-            { q: "Identifique el sinónimo de la palabra resaltada: 'Su discurso fue **efímero** pero contundente'.", o: ["Eterno", "Pasajero", "Elegante", "Confuso"], a: 1 },
-            { q: "Elija la opción que combina mejor estas ideas: 'El clima era gélido. Decidimos salir sin abrigo'.", o: ["El clima era gélido porque salimos sin abrigo.", "Puesto que el clima era gélido, salimos sin abrigo.", "Aunque el clima era gélido, decidimos salir sin abrigo.", "Salimos sin abrigo si el clima era gélido."], a: 2 },
-            { q: "Identifique el error gramatical en la oración:", o: ["Hubieron muchos invitados.", "Hubo muchos invitados.", "Había muchos niños.", "Han llegado los primos."], a: 0 },
-            { q: "¿Qué figura retórica se utiliza en: 'Tus labios son pétalos de rosa'?", o: ["Símil", "Metáfora", "Hipérbole", "Anáfora"], a: 1 },
-            { q: "Contexto: 'Su argumento fue **inexpugnable**'. Un sinónimo es:", o: ["Vulnerable", "Débil", "Inconmovible", "Breve"], a: 2 },
-            { q: "Identifique el subgénero narrativo que utiliza animales para dar una enseñanza:", o: ["Epopeya", "Mito", "Fábula", "Leyenda"], a: 2 },
-            { q: "Elija el conector de oposición adecuado: 'Estudió poco; ______, aprobó el examen'.", o: ["asimismo", "sin embargo", "por lo tanto", "en consecuencia"], a: 1 },
-            { q: "¿A qué movimiento literario pertenece el énfasis en la libertad y los sentimientos?", o: ["Realismo", "Romanticismo", "Clasicismo", "Surrealismo"], a: 1 },
-            { q: "Elija la forma correcta: 'Si yo ______ las consecuencias, no habría ido'.", o: ["sabría", "supiera", "hubiera sabido", "ha sabido"], a: 2 },
-            { 
-                p: "El descubrimiento de la penicilina en 1928 cambió la medicina. Sin embargo, el uso excesivo de antibióticos ha generado bacterias resistentes.",
-                q: "¿Cuál es la idea principal del texto?", 
-                o: ["Fleming era un gran científico.", "La historia de la medicina antigua.", "El impacto y el reto actual de los antibióticos.", "Las bacterias son invencibles."], 
-                a: 2 
-            },
-            { q: "Identifique el pleonasmo:", o: ["Subir arriba.", "Entrar pronto.", "Salir tarde.", "Correr rápido."], a: 0 },
-            { q: "Antónimo de la palabra **Ocaso**:", o: ["Final", "Atardecer", "Amanecer", "Sombra"], a: 2 },
-            { q: "Significado de la palabra **Fútil**:", o: ["Importante", "Insignificante", "Pesado", "Brillante"], a: 1 },
-            { q: "Identifique la oración impersonal:", o: ["Ellos comen.", "Se vive bien aquí.", "Juan trabaja.", "Nosotros vamos."], a: 1 },
-            { q: "¿Qué es un soneto?", o: ["Un poema de 14 versos.", "Un cuento corto.", "Una obra de teatro.", "Una estrofa de 4 versos."], a: 0 }
+            // ── VOCABULARIO EN CONTEXTO ──────────────────────────────────
+            { q: "Lee la oración y elige el significado correcto de la palabra en negritas: 'Su discurso fue <b>efímero</b>, pero muy contundente.'", o: ["Eterno y duradero", "Breve y pasajero", "Elegante y refinado", "Confuso e impreciso"], a: 1 },
+            { q: "¿Qué significa <b>inexpugnable</b> en esta oración? 'Su argumento fue inexpugnable ante el jurado.'", o: ["Fácil de rebatir", "Imposible de refutar", "Muy extenso", "Poco claro"], a: 1 },
+            { q: "¿Cuál es el antónimo de <b>ocaso</b> en el contexto 'El ocaso de su carrera fue repentino'?", o: ["Final", "Atardecer", "Inicio o auge", "Sombra"], a: 2 },
+            { q: "¿Qué significa <b>fútil</b> en 'Sus esfuerzos resultaron fútiles ante el problema'?", o: ["Muy importantes", "Sin valor ni resultado", "Extremadamente costosos", "Muy brillantes"], a: 1 },
+            { q: "¿Qué significa <b>sopesó</b> en 'El juez sopesó cuidadosamente las pruebas antes de decidir'?", o: ["Ignoró por completo", "Evaluó con atención", "Descartó inmediatamente", "Presentó públicamente"], a: 1 },
+            { q: "¿Qué significa <b>prolijo</b> en 'El informe era tan prolijo que tardaron horas en leerlo'?", o: ["Breve y conciso", "Lleno de detalles y muy extenso", "Confuso e inentendible", "Elegante y formal"], a: 1 },
+            { q: "En la oración 'Decidió <b>cultivar</b> sus relaciones con los editores', ¿qué significa 'cultivar'?", o: ["Sembrar en la tierra", "Fomentar y cuidar", "Ignorar por completo", "Estudiar formalmente"], a: 1 },
+            { q: "¿Cuál es el antónimo de <b>diáfano</b> en 'La explicación fue diáfana para todos'?", o: ["Claro y transparente", "Oscuro e incomprensible", "Brillante y llamativo", "Amplio y espacioso"], a: 1 },
+            { q: "¿Qué significa ser un <b>acérrimo</b> defensor de algo?", o: ["Un defensor débil y poco convencido", "Un defensor casual y esporádico", "Un defensor firme e incondicional", "Un defensor nuevo e inexperto"], a: 2 },
+            { q: "En 'La novela tiene una <b>arquitectura</b> robusta', ¿qué significa 'arquitectura' en este contexto?", o: ["Estructura de un edificio físico", "Estructura interna sólida y bien organizada", "Una novela muy antigua", "Un texto confuso y desordenado"], a: 1 },
+            { q: "¿Qué es un <b>eufemismo</b>?", o: ["Una exageración para dar énfasis", "Una expresión suave que reemplaza algo negativo", "Una comparación entre dos cosas", "Un error gramatical común"], a: 1 },
+            { q: "¿Cuál es el antónimo de <b>tacaño</b>?", o: ["Pobre", "Generoso", "Avaro", "Sencillo"], a: 1 },
+            { q: "En 'El equipo obtuvo un resultado muy <b>pobre</b>', ¿qué significa 'pobre' en este contexto?", o: ["Sin dinero ni recursos", "Escaso en cantidad de puntos", "Insuficiente para lo esperado", "Humilde y modesto"], a: 2 },
+            // ── COMPRENSIÓN DE LECTURA ───────────────────────────────────
+            { p: "La penicilina, descubierta en 1928, revolucionó la medicina moderna. Sin embargo, el uso excesivo de antibióticos ha provocado que muchas bacterias se vuelvan resistentes a ellos.", q: "¿Cuál es la idea principal del texto?", o: ["Alexander Fleming fue un gran científico.", "La historia completa de la medicina antigua.", "Los antibióticos tienen un impacto positivo y un desafío actual.", "Las bacterias son imposibles de eliminar."], a: 2 },
+            { p: "Las abejas son fundamentales para la polinización de plantas. Sin su labor, muchos cultivos desaparecerían y el equilibrio del ecosistema se vería gravemente afectado.", q: "¿Cuál es la idea central del texto?", o: ["Las abejas producen miel de forma natural.", "Las abejas son esenciales para el ecosistema y la agricultura.", "Los cultivos son la base de la economía mundial.", "Los insectos en general son organismos peligrosos."], a: 1 },
+            { p: "Los volcanes pueden causar grandes destrucciones. Sin embargo, también fertilizan los suelos con sus cenizas y generan nuevas islas y territorios.", q: "¿Qué idea expresa mejor el texto?", o: ["Los volcanes solamente causan daño y destrucción.", "Los volcanes tienen efectos tanto negativos como beneficiosos.", "Las cenizas volcánicas son siempre peligrosas.", "La tierra generada por los volcanes nunca es fértil."], a: 1 },
+            { p: "El chocolate negro contiene antioxidantes que ayudan a proteger el corazón. Además, su consumo moderado puede mejorar el estado de ánimo.", q: "¿Cuál es la idea principal del texto?", o: ["El chocolate negro es el dulce más popular del mundo.", "El chocolate negro tiene beneficios comprobados para la salud.", "Los antioxidantes son un tipo de vitamina esencial.", "Comer chocolate regularmente ayuda a bajar de peso."], a: 1 },
+            { p: "Las pirámides de Egipto fueron diseñadas como tumbas para los faraones. Su construcción revela una precisión matemática y arquitectónica que sigue asombrando a los investigadores actuales.", q: "¿Cuál sería el mejor título para este texto?", o: ["Las tumbas más antiguas del mundo.", "Propósito y precisión matemática de las pirámides.", "El poder político de los faraones egipcios.", "Las matemáticas a lo largo de la historia."], a: 1 },
+            { p: "El ser humano ha dependido del fuego desde la prehistoria. Lo usó para calentarse, cocinar alimentos y protegerse de animales. Con el tiempo, el fuego también se convirtió en símbolo de poder y civilización.", q: "¿Cuál es la idea principal del texto?", o: ["El fuego es peligroso si no se controla.", "El fuego ha tenido múltiples funciones esenciales para la humanidad.", "Los animales prehistóricos tenían miedo al fuego.", "Cocinar fue la primera aplicación del fuego."], a: 1 },
+            // ── COMBINACIÓN DE ORACIONES ─────────────────────────────────
+            { q: "Elige la mejor manera de combinar estas dos ideas en una sola oración: 'El sol salió temprano. El día se puso muy caluroso.'", o: ["El día se puso caluroso porque el sol salió temprano.", "El sol salió y el día caluroso también.", "El sol salió, aunque el día caluroso.", "Caluroso fue el sol desde temprano."], a: 0 },
+            { q: "Combina estas ideas en una sola oración correcta y fluida: 'Corrí lo más rápido que pude. No alcancé el autobús.'", o: ["Corrí rápido para no alcanzar el autobús.", "Aunque corrí lo más rápido que pude, no alcancé el autobús.", "Corrí rápido porque el autobús no llegó.", "No alcancé el autobús, sin embargo corrí."], a: 1 },
+            { q: "Combina estas dos oraciones eliminando la repetición innecesaria: 'Ella tiene un gato. El gato duerme todo el día.'", o: ["Ella tiene un gato que duerme todo el día.", "El gato de ella y el gato duerme todo el día.", "Ella y su gato duermen todo el día.", "El gato duerme y ella lo tiene."], a: 0 },
+            { q: "Elige el conector más adecuado para unir estas ideas: 'Estudió muy poco para el examen; ______, logró aprobarlo.'", o: ["asimismo", "sin embargo", "por lo tanto", "en consecuencia"], a: 1 },
+            { q: "Elige el conector más adecuado: 'No trajo el paraguas al salir de casa; ______, terminó completamente mojado.'", o: ["sin embargo", "por consiguiente", "aunque", "asimismo"], a: 1 },
+            { q: "Elige el conector correcto para expresar una relación de causa: 'No pudo asistir a la fiesta ______ se encontraba enfermo.'", o: ["sin embargo", "porque", "aunque", "por lo tanto"], a: 1 },
+            { q: "¿Cuál de estas opciones combina mejor las ideas con una relación de contraste? 'Tenía mucho miedo. Decidió seguir adelante.'", o: ["Tenía mucho miedo, por lo tanto siguió adelante.", "A pesar de tener mucho miedo, decidió seguir adelante.", "Tenía mucho miedo, asimismo siguió adelante.", "Siguió adelante porque tenía miedo."], a: 1 },
+            // ── ELIMINACIÓN DE ENUNCIADOS ────────────────────────────────
+            { p: "(1) El girasol es una planta que sigue la dirección del sol. (2) Sus flores son de color amarillo brillante. (3) Sus pétalos tienen un tono amarillo muy intenso. (4) Es originaria de América del Norte.", q: "¿Cuál enunciado debe eliminarse porque repite una idea ya expresada?", o: ["El enunciado (1)", "El enunciado (2)", "El enunciado (3) — repite el color amarillo del (2)", "El enunciado (4)"], a: 2 },
+            { p: "(1) El desierto de Atacama es el más seco del mundo. (2) Se encuentra en el norte de Chile. (3) Muchos turistas visitan las playas del sur de Chile en verano. (4) En algunas zonas no ha llovido en décadas.", q: "¿Cuál enunciado no pertenece al tema del texto y debe eliminarse?", o: ["El enunciado (1)", "El enunciado (2)", "El enunciado (3) — habla de playas del sur, no del Atacama", "El enunciado (4)"], a: 2 },
+            { p: "(1) La Gran Muralla China fue construida para defender el imperio. (2) Fue declarada Patrimonio de la Humanidad por la UNESCO. (3) Sus muros defensivos servían para frenar invasiones extranjeras. (4) Recibe millones de visitantes cada año.", q: "¿Cuál enunciado es redundante con el enunciado (1)?", o: ["El enunciado (1)", "El enunciado (2)", "El enunciado (3) — repite la función defensiva del (1)", "El enunciado (4)"], a: 2 },
+            { p: "(1) El café es una de las bebidas más consumidas en el mundo. (2) Su producción comienza con la cosecha de granos rojos. (3) A mí personalmente me encanta el café con leche por las mañanas. (4) Luego, los granos se tuestan para desarrollar su aroma.", q: "¿Cuál enunciado debe eliminarse por ser una opinión personal que no aporta al texto?", o: ["El enunciado (1)", "El enunciado (2)", "El enunciado (3) — es una opinión personal fuera del tema", "El enunciado (4)"], a: 2 },
+            // ── FIGURAS RETÓRICAS ─────────────────────────────────────────
+            { q: "¿Qué figura retórica se usa en: 'Tus labios son pétalos de rosa'?", o: ["Símil, porque compara con 'como'", "Metáfora, porque identifica una cosa con otra sin 'como'", "Hipérbole, porque exagera", "Anáfora, porque repite palabras"], a: 1 },
+            { q: "¿Qué figura retórica se usa en: 'Sus ojos son como dos luceros en la noche'?", o: ["Metáfora", "Símil, porque usa 'como' para comparar", "Hipérbole", "Personificación"], a: 1 },
+            { q: "¿Qué figura retórica se usa en: 'Te lo he repetido mil veces y no me escuchas'?", o: ["Anáfora", "Metáfora", "Hipérbole, porque 'mil veces' es una exageración", "Símil"], a: 2 },
+            { q: "¿Qué figura retórica se usa en: 'El viento susurra secretos entre los árboles'?", o: ["Hipérbole", "Personificación, porque le da cualidades humanas al viento", "Metáfora", "Símil"], a: 1 },
+            { q: "¿Qué figura retórica se usa cuando se repite la misma palabra al inicio de varios versos? Por ejemplo: 'Temprano levantó la muerte el vuelo, / temprano madrugó la madrugada.'", o: ["Anáfora", "Hipérbole", "Metáfora", "Símil"], a: 0 },
+            { q: "¿Qué figura retórica es: 'Era tan delgado que podía esconderse detrás de un papel'?", o: ["Metáfora", "Anáfora", "Hipérbole, porque exagera una característica física", "Símil"], a: 2 },
+            // ── GRAMÁTICA ─────────────────────────────────────────────────
+            { q: "¿Cuál de estas oraciones contiene un error gramatical?", o: ["Hubieron muchos invitados en la reunión.", "Hubo muchos invitados en la reunión.", "Había muchos niños en el parque.", "Han llegado los primos de Ana."], a: 0 },
+            { q: "¿Cuál de estas opciones es un pleonasmo (redundancia innecesaria)?", o: ["Subir arriba", "Entrar rápido", "Salir tarde", "Correr velozmente"], a: 0 },
+            { q: "¿Cuál de estas oraciones es impersonal (sin sujeto definido)?", o: ["Ellos comen en casa.", "Se vive muy bien en esta ciudad.", "Juan trabaja de noche.", "Nosotros vamos al cine."], a: 1 },
+            { q: "Elige la forma verbal correcta: 'Si yo ______ las consecuencias, no habría tomado esa decisión.'", o: ["sabría", "supiera", "hubiera sabido", "ha sabido"], a: 2 },
+            { q: "¿Cuál oración tiene concordancia correcta entre sujeto y verbo?", o: ["Los niño juegan en el parque.", "La niña juegan con sus amigos.", "Las niñas juegan en el recreo.", "Los niñas corren juntas."], a: 2 },
+            { q: "¿Cuál oración usa correctamente el gerundio?", o: ["Siendo muy joven, compró una mansión. (imposible en contexto real)", "Saliendo de casa, olvidó el paraguas. (acción simultánea)", "Llegando tarde ayer, lo castigaron mañana. (contradicción temporal)", "Comiendo el lunes, llegó el martes. (mal uso)"], a: 1 },
+            // ── TIPOS DE TEXTO ────────────────────────────────────────────
+            { q: "¿Qué subgénero literario usa animales como personajes para transmitir una enseñanza moral?", o: ["Epopeya", "Mito", "Fábula", "Leyenda"], a: 2 },
+            { q: "¿Qué es un soneto?", o: ["Un poema compuesto de 14 versos divididos en dos cuartetos y dos tercetos.", "Un cuento muy breve con final sorpresivo.", "Una obra de teatro en verso.", "Una estrofa aislada de 4 versos."], a: 0 },
+            { q: "¿A qué movimiento literario corresponde el énfasis en los sentimientos, la libertad individual y la naturaleza?", o: ["Realismo", "Romanticismo", "Clasicismo", "Surrealismo"], a: 1 },
+            { q: "¿Qué tipo de texto narra una serie de eventos en orden cronológico con personajes y conflicto?", o: ["Argumentativo", "Descriptivo", "Narrativo", "Expositivo"], a: 2 },
+            { q: "¿Qué tipo de texto presenta una postura y busca convencer al lector con razones?", o: ["Narrativo", "Descriptivo", "Argumentativo", "Lírico"], a: 2 },
+            { q: "¿Qué tipo de texto tiene como objetivo informar o explicar cómo funciona algo de manera objetiva?", o: ["Argumentativo", "Expositivo", "Narrativo", "Lírico"], a: 1 },
+            // ── ANÁLISIS DUAL ─────────────────────────────────────────────
+            { p: "Texto A: 'El ejercicio por la mañana activa el metabolismo y mejora el rendimiento durante el día.' Texto B: 'Aunque yo prefiero correr de noche, reconozco que ejercitarse temprano sí le da energía a mucha gente.'", q: "¿En qué punto están de acuerdo los dos autores?", o: ["Que correr de noche es la mejor opción.", "Que el ejercicio matutino tiene beneficios energéticos.", "Que el metabolismo no importa para el rendimiento.", "Que no se debe hacer ejercicio sin un médico."], a: 1 },
+            { p: "Texto A: 'Colonizar otros planetas es la única salvación posible para la humanidad.' Texto B: 'Antes de pensar en habitar Marte, debemos resolver los problemas que tenemos en la Tierra.'", q: "¿Cuál es el punto principal de desacuerdo entre los dos autores?", o: ["Si Marte tiene condiciones de vida.", "Si es urgente o no expandirse a otros planetas ahora mismo.", "Si la Tierra tiene recursos naturales suficientes.", "El costo económico de los viajes espaciales."], a: 1 },
+            // ── IDEA PRINCIPAL ────────────────────────────────────────────
+            { p: "Los dispositivos móviles, la inteligencia artificial y la automatización están transformando completamente los mercados laborales, la educación y las formas de comunicación en todo el mundo.", q: "¿Cuál es la idea principal del texto?", o: ["Los celulares se han vuelto indispensables.", "La tecnología está transformando múltiples aspectos de la vida moderna.", "La inteligencia artificial puede ser un peligro para la humanidad.", "La automatización está eliminando empleos masivamente."], a: 1 },
+            { p: "El deporte mejora la salud física, reduce los niveles de estrés y fomenta la disciplina y el trabajo en equipo. Sus beneficios van mucho más allá de lo puramente físico.", q: "¿Cuál es la idea principal del texto?", o: ["El deporte sirve principalmente para reducir el estrés.", "El deporte ofrece beneficios integrales para la persona.", "La disciplina personal es el beneficio más importante del deporte.", "Practicar deporte debería ser obligatorio en todas las escuelas."], a: 1 },
+            { q: "Un texto habla sobre las ventajas de las redes sociales para conectar personas y también sobre los riesgos de la desinformación. ¿Cuál sería el mejor título para ese texto?", o: ["Las redes sociales son una amenaza global.", "Cómo usar correctamente Instagram y TikTok.", "Redes sociales: conexión y riesgos en la era digital.", "El futuro de Internet en el mundo."], a: 2 },
         ];
+
+        // Sistema anti-repetición
+        let usedQuestions = new Set();
+        function getQuestion() {
+            if (usedQuestions.size >= spanishBank.length) usedQuestions.clear();
+            let idx;
+            do { idx = Math.floor(Math.random() * spanishBank.length); } while (usedQuestions.has(idx));
+            usedQuestions.add(idx);
+            return spanishBank[idx];
+        }
 
         const ROWS = 6;
         const COLS = 7;
@@ -271,7 +323,7 @@
             const tokenMini = document.getElementById('player-token-mini');
             const modalTitle = document.getElementById('modal-player-title');
             
-            const q = spanishBank[Math.floor(Math.random() * spanishBank.length)];
+            const q = getQuestion();
             
             const color = currentPlayer === 1 ? 'var(--p1-color)' : 'var(--p2-color)';
             const name = currentPlayer === 1 ? p1Name : p2Name;
