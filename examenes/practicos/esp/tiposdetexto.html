@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Simulador de Comprensión Lectora</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .svg-container { background: #f1f5f9; border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: center; border: 1px solid #e2e8f0; }
+        .reading-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 1.25rem; border-radius: 0.75rem; margin-bottom: 1.25rem; font-style: italic; color: #92400e; line-height: 1.6; font-size: 0.95rem; }
+        nav::-webkit-scrollbar { height: 6px; }
+        nav::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden md:block italic">Simulador de Comprensión Avanzada</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Progreso</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación por Módulos -->
+        <nav class="flex gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto scroll-smooth">
+            <button onclick="showTab('tipos')" id="btn-tipos" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600 flex-shrink-0">
+                1. Tipos de Texto
+            </button>
+            <button onclick="showTab('subtemas')" id="btn-subtemas" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                2. Subtemas
+            </button>
+            <button onclick="showTab('facticas')" id="btn-facticas" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                3. Preguntas Fácticas
+            </button>
+            <button onclick="showTab('puntos')" id="btn-puntos" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                4. Puntos de Vista
+            </button>
+            <button onclick="showTab('inferencias')" id="btn-inferencias" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                5. Inferencias
+            </button>
+            <button onclick="showTab('validacion')" id="btn-validacion" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                6. Validación
+            </button>
+        </nav>
+
+        <!-- Banner Dinámico -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenedores de Preguntas -->
+        <div id="tipos" class="tab-content active space-y-6"></div>
+        <div id="subtemas" class="tab-content space-y-6"></div>
+        <div id="facticas" class="tab-content space-y-6"></div>
+        <div id="puntos" class="tab-content space-y-6"></div>
+        <div id="inferencias" class="tab-content space-y-6"></div>
+        <div id="validacion" class="tab-content space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+            tipos: { title: "Tipos de Texto", desc: "Clasifica lecturas según su intención: Informativa, Argumentativa, Literaria, Científica o Histórica." },
+            subtemas: { title: "Subtemas de una Lectura", desc: "Identifica las ideas secundarias que desarrollan aspectos específicos del tema central." },
+            facticas: { title: "Preguntas Fácticas", desc: "Busca información literal y explícita dentro del texto. No supongas, ¡encuéntralo!" },
+            puntos: { title: "Puntos de Vista y Propósito", desc: "Analiza la intención del autor: ¿Quiere convencer, informar, entretener o criticar?" },
+            inferencias: { title: "Inferencias Lógicas", desc: "Lee entre líneas. ¿Qué conclusiones puedes sacar que no están escritas pero son verdaderas?" },
+            validacion: { title: "Validación de Inferencias", desc: "Encuentra la evidencia textual exacta que respalda una conclusión o juicio." }
+        };
+
+        const data = {
+            tipos: [
+                { text: "Aprovechando las noticias que llegaban, se escribieron luego en Europa historias con el criterio humanista propio de la época. Bastaría con recordar las décadas De orbe novo del célebre Pedro Mártir de Angleria...", q: "¿Qué tipo de texto predomina en la lectura anterior?", o: ["Histórico", "Literario", "Informativo", "Científico"], a: 0, exp: "<b>Análisis:</b> El texto narra hechos reales de la época de los descubrimientos con nombres propios y fechas." },
+                { text: "José Arcadio Buendía, que era el hombre más emprendedor que se vería jamás en la aldea, había dispuesto de tal modo la posición de las casas...", q: "¿A qué categoría pertenece este fragmento?", o: ["Científico", "Argumentativo", "Literario", "Periodístico"], a: 2, exp: "<b>Análisis:</b> Utiliza lenguaje estético y narrativo típico de la novela 'Cien años de soledad'." },
+                { text: "El consumo de tabaco en adolescentes provoca daños irreversibles en el sistema respiratorio. Es urgente implementar campañas de salud en las escuelas.", q: "¿Cuál es el tipo de texto?", o: ["Informativo", "De Prevención", "Literario", "Histórico"], a: 1, exp: "<b>Análisis:</b> Su objetivo directo es evitar una conducta de riesgo y promover la salud." },
+                { text: "Todos los actos que ha realizado usted desde que nació se deben a que quería algo. Incluso una donación se hace por el deseo de ayudar.", q: "¿Qué tipo de texto es?", o: ["Narrativo", "Argumentativo", "Científico", "Descriptivo"], a: 1, exp: "<b>Análisis:</b> El autor defiende una tesis personal (todo acto nace del deseo) mediante argumentos." },
+                { text: "La mitosis es un proceso de duplicación del ADN que ocurre en el núcleo de las células eucariotas...", q: "Identifica el tipo de texto:", o: ["Literario", "Histórico", "Científico", "Narrativo"], a: 2, exp: "<b>Análisis:</b> Utiliza terminología técnica y describe un proceso biológico objetivo." },
+                { text: "El próximo domingo se celebrarán las elecciones municipales en todo el país. Los colegios abrirán a las 8 AM.", q: "Tipo de texto:", o: ["Informativo", "Argumentativo", "Literario", "Poético"], a: 0, exp: "<b>Análisis:</b> Se limita a transmitir datos objetivos sobre un evento futuro." },
+                { text: "La receta para el pastel requiere 3 huevos, harina y azúcar. Se debe batir hasta que quede cremoso.", q: "Tipo de texto:", o: ["Instructivo", "Histórico", "Científico", "Argumentativo"], a: 0, exp: "<b>Análisis:</b> Da órdenes o pasos a seguir para completar una tarea." },
+                { text: "Érase una vez un gigante que vivía en un jardín lleno de flores blancas...", q: "Tipo de texto:", o: ["Informativo", "Narrativo/Literario", "Científico", "Expositivo"], a: 1, exp: "<b>Análisis:</b> Presenta personajes y eventos ficticios en una secuencia temporal." },
+                { text: "El calentamiento global es una realidad innegable. Si no reducimos las emisiones, el nivel del mar subirá 2 metros para 2100.", q: "Tipo de texto:", o: ["Expositivo", "Argumentativo", "Instructivo", "Poético"], a: 1, exp: "<b>Análisis:</b> Intenta persuadir sobre la gravedad de un problema con proyecciones." },
+                { text: "En 1945 terminó la Segunda Guerra Mundial con la firma de los tratados de paz en el Pacífico.", q: "Tipo de texto:", o: ["Histórico", "Literario", "Científico", "De Prevención"], a: 0, exp: "<b>Análisis:</b> Se centra en hechos pasados de relevancia social y política." }
+            ],
+            subtemas: [
+                { text: "'Beach House' es un dúo de dream pop nacido en 2004 en Baltimore... La banda se formó con Alex Scally y Victoria Legrand.", q: "¿Cuál es el subtema principal de la lectura?", o: ["Influencias de la banda", "Estilo de la banda", "Formación de la banda", "Discografía"], a: 2, exp: "<b>Análisis:</b> Se enfoca en cómo y quiénes fundaron el proyecto musical." },
+                { text: "Los científicos consideran el sistema de Plutón como un fósil del Sistema Solar. Se espera que brinde luz sobre el origen del vecindario solar.", q: "¿Qué subtema se desarrolla aquí?", o: ["La sonda New Horizons", "Importancia científica de Plutón", "Mitología de Plutón", "Lunas de Plutón"], a: 1, exp: "<b>Análisis:</b> El texto destaca por qué Plutón es valioso para la investigación astronómica." },
+                { text: "El cerebro humano consume el 20% de la energía del cuerpo. La arqueología cognitiva estudia cómo evolucionó esta capacidad.", q: "¿Subtema de este fragmento?", o: ["Anatomía del corazón", "Relación cerebro-antropología", "Tipos de cirugía", "Historia de la medicina"], a: 1, exp: "<b>Análisis:</b> Menciona el gasto energético y su estudio desde una perspectiva evolutiva/antropológica." },
+                { text: "El Realismo Mágico integra elementos fantásticos en contextos cotidianos. Autores como García Márquez son sus máximos exponentes.", q: "Identifica el subtema:", o: ["Biografía de autores", "Características del Realismo Mágico", "Historia de la imprenta", "Tipos de rima"], a: 1, exp: "<b>Análisis:</b> Define el estilo literario y da ejemplos de su aplicación." },
+                { text: "La New Horizons tardó 10 años en llegar a Plutón. Recorrió 5 mil millones de kilómetros impulsada por gravedad.", q: "Subtema:", o: ["El clima de Plutón", "La trayectoria de la sonda", "Vida en el espacio", "Nombres de científicos"], a: 1, exp: "<b>Análisis:</b> Describe los detalles técnicos del viaje espacial." },
+                { text: "Un cuento tiene principio y fin definidos. Un poema es una idea más general, a veces dictada por una revelación.", q: "Subtema:", o: ["Diferencia entre cuento y poema", "Éxitos editoriales", "Biografía del autor", "Rimas asonantes"], a: 0, exp: "<b>Análisis:</b> Compara las estructuras de dos géneros literarios distintos." },
+                { text: "Las abejas polinizan el 70% de los cultivos mundiales. Sin ellas, la seguridad alimentaria estaría en riesgo.", q: "Subtema:", o: ["Tipos de insectos", "Importancia ecológica de las abejas", "Miel y sus usos", "Anatomía del ala"], a: 1, exp: "<b>Análisis:</b> Resalta la función vital de las abejas para el planeta." },
+                { text: "El impresionismo rompió con el realismo al priorizar la luz y el color sobre la forma definida.", q: "Subtema:", o: ["Pintores famosos", "Ruptura artística del impresionismo", "Técnicas de escultura", "Mercado del arte"], a: 1, exp: "<b>Análisis:</b> Explica el cambio de paradigma que supuso este movimiento." },
+                { text: "La Revolución Industrial comenzó en Inglaterra gracias al carbón y la máquina de vapor.", q: "Subtema:", o: ["Países europeos", "Causas de la Revolución Industrial", "Biografía de Watt", "Tipos de tela"], a: 1, exp: "<b>Análisis:</b> Señala los factores que permitieron el inicio del proceso histórico." },
+                { text: "La energía solar es inagotable pero requiere una alta inversión inicial en paneles fotovoltaicos.", q: "Subtema:", o: ["Tipos de paneles", "Ventajas y retos de la energía solar", "Historia de la electricidad", "Climas soleados"], a: 1, exp: "<b>Análisis:</b> Presenta tanto el beneficio como el obstáculo de esta energía." }
+            ],
+            facticas: [
+                { text: "Anfitrite, consorte de Poseidón, era considerada hija de Nereo según la mayoría de las tradiciones...", q: "Según la lectura, ¿quién es el esposo de Anfitrite?", o: ["Nereo", "Atlas", "Poseidón", "El Delfín"], a: 2, exp: "<b>Análisis:</b> El texto dice explícitamente 'consorte de Poseidón'." },
+                { text: "La energía oscura que provoca la expansión está repeliendo las galaxias. En 100 mil millones de años la Vía Láctea será solitaria.", q: "¿Qué fuerza provoca la expansión del universo según el texto?", o: ["El Big Bang", "La Energía Oscura", "La Gravedad", "La Vía Láctea"], a: 1, exp: "<b>Análisis:</b> Se menciona directamente que la 'energía oscura' provoca la expansión." },
+                { text: "Poseidón declaró sagrado al delfín y elevó su imagen a las estrellas en el hemisferio norte.", q: "¿En qué hemisferio se encuentra la constelación del Delfín?", o: ["Sur", "Este", "Norte", "Oeste"], a: 2, exp: "<b>Análisis:</b> El texto especifica 'hemisferio norte'." },
+                { text: "Christopher McCandless, graduado en 1990 con honores, donó 24 mil dólares a la caridad antes de su viaje.", q: "¿Cuánto dinero donó McCandless?", o: ["10 mil dólares", "15 mil dólares", "22 mil dólares", "24 mil dólares"], a: 3, exp: "<b>Análisis:</b> Dato literal: 'donó... unos 24 mil dólares'." },
+                { text: "La sonda New Horizons fue lanzada en el año 2006 desde Cabo Cañaveral.", q: "¿Desde dónde fue lanzada la sonda?", o: ["Houston", "Cabo Cañaveral", "Moscú", "Florida del Norte"], a: 1, exp: "<b>Análisis:</b> Lugar explícito: Cabo Cañaveral." },
+                { text: "El volcán Popocatépetl tiene una altitud de 5,426 metros sobre el nivel del mar.", q: "¿Cuál es la altitud del volcán?", o: ["4,526 m", "5,426 m", "6,000 m", "5,000 m"], a: 1, exp: "<b>Análisis:</b> Dato numérico literal del texto." },
+                { text: "La ballena azul puede pesar hasta 200 toneladas, siendo el animal más grande del mundo.", q: "¿Cuánto puede pesar una ballena azul?", o: ["100 toneladas", "150 toneladas", "200 toneladas", "300 toneladas"], a: 2, exp: "<b>Análisis:</b> Información directa del fragmento." },
+                { text: "Miguel de Cervantes publicó 'El Quijote' en el año 1605.", q: "¿En qué año se publicó la obra?", o: ["1505", "1605", "1705", "1615"], a: 1, exp: "<b>Análisis:</b> Fecha literal del texto." },
+                { text: "El Amazonas atraviesa Perú, Colombia y Brasil.", q: "¿Qué país NO se menciona como atravesado por el río?", o: ["Perú", "Brasil", "Argentina", "Colombia"], a: 2, exp: "<b>Análisis:</b> Argentina no figura en la lista de países mencionados." },
+                { text: "La luz viaja a una velocidad aproximada de 300,000 km por segundo.", q: "¿A qué velocidad viaja la luz?", o: ["150,000 km/s", "300,000 km/s", "500,000 km/s", "1,000,000 km/s"], a: 1, exp: "<b>Análisis:</b> Dato científico literal expuesto." }
+            ],
+            puntos: [
+                { text: "Gabriel García Márquez alcanzó la fama con Cien años de soledad. En 1982 recibió el Premio Nobel de Literatura.", q: "¿Cuál es el propósito principal del autor al escribir este fragmento?", o: ["Criticar sus obras", "Presentar una reseña biográfica", "Comparar autores", "Vender sus libros"], a: 1, exp: "<b>Análisis:</b> El texto ofrece datos de vida y logros de forma expositiva (biografía)." },
+                { text: "Ricky Starks eligió una especialidad que desafiaba a las demás ramas de la medicina. Eso lo convertía en un intruso atraído por el reto.", q: "¿Qué intención describe mejor el texto anterior?", o: ["Explicar por qué eligió su especialidad", "Atacar la medicina", "Describir un hospital", "Enseñar cardiología"], a: 0, exp: "<b>Análisis:</b> El autor busca justificar la motivación de Starks hacia su área específica." },
+                { text: "¡No pierdas más tiempo! Compra el nuevo detergente X y verás tu ropa como nueva desde la primera lavada.", q: "¿Cuál es el propósito del autor?", o: ["Informar", "Entretener", "Persuadir/Vender", "Narrar una historia"], a: 2, exp: "<b>Análisis:</b> Utiliza exclamaciones y promesas para influir en la decisión de compra." },
+                { text: "Lamentablemente, la corrupción sigue siendo el principal obstáculo para el desarrollo del país. Debemos alzar la voz.", q: "¿Cuál es el tono del autor?", o: ["Optimista", "Crítico/Denuncia", "Indiferente", "Científico"], a: 1, exp: "<b>Análisis:</b> Expresa una opinión negativa y un llamado a la acción social." },
+                { text: "Querida tía, te escribo para contarte que las vacaciones en la playa han sido maravillosas. Te extraño.", q: "¿Propósito del autor?", o: ["Argumentar", "Informar de forma personal", "Instruir", "Científico"], a: 1, exp: "<b>Análisis:</b> Comunicación afectiva para compartir vivencias." },
+                { text: "El ajedrez es un juego de estrategia que ayuda a mejorar la concentración y la paciencia.", q: "Intención del autor:", o: ["Atacar el ajedrez", "Informar sobre beneficios", "Contar un cuento", "Escribir una oda"], a: 1, exp: "<b>Análisis:</b> Presenta ventajas de una actividad de forma objetiva." },
+                { text: "Las leyes deben ser iguales para todos, sin importar su condición social o económica.", q: "Propósito del autor:", o: ["Describir un objeto", "Defender un valor (Justicia)", "Narrar un viaje", "Instruir una receta"], a: 1, exp: "<b>Análisis:</b> Postura ideológica sobre un derecho fundamental." },
+                { text: "En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo...", q: "Intención del autor:", o: ["Informar", "Narrar una ficción", "Persuadir", "Criticar"], a: 1, exp: "<b>Análisis:</b> Iniciar un relato literario para el entretenimiento." },
+                { text: "Se prohíbe fumar en áreas cerradas. Su incumplimiento conlleva una multa de 500 pesos.", q: "Propósito del autor:", o: ["Convencer", "Normar/Regular", "Entretener", "Histórico"], a: 1, exp: "<b>Análisis:</b> Establecer una regla y su consecuencia." },
+                { text: "El 50% de la población mundial vive en ciudades. Este fenómeno crece cada año.", q: "Intención del autor:", o: ["Exponer un dato estadístico", "Persuadir de mudarse", "Contar una broma", "Hacer un poema"], a: 0, exp: "<b>Análisis:</b> Presentar una realidad cuantitativa." }
+            ],
+            inferencias: [
+                { text: "El hombre se bajó hasta la mordedura, quitó las gotitas de sangre. Un dolor agudo nacía de los dos puntitos violetas.", q: "Se puede inferir del texto que:", o: ["El hombre tropezó", "Fue mordido por una serpiente", "Se cortó con un machete", "Tenía una alergia"], a: 1, exp: "<b>Análisis:</b> Los 'dos puntitos' y el color violeta sugieren colmillos de un reptil venenoso." },
+                { text: "La piel del pie parecía adelgazada y a punto de ceder. Quiso llamar a su mujer y la voz se quebró. La sed lo devoraba.", q: "¿Qué se puede concluir sobre el estado del hombre?", o: ["Estaba muy cansado", "Se estaba recuperando", "Su vida corría peligro por el veneno", "Tenía mucha hambre"], a: 2, exp: "<b>Análisis:</b> Los síntomas (hinchazón extrema, pérdida de voz, sed quemante) indican una intoxicación grave." },
+                { text: "Las nubes negras cubrieron el cielo y las aves dejaron de cantar buscando refugio.", q: "¿Qué va a suceder?", o: ["Va a salir el sol", "Va a llover", "Es de noche", "Hay un eclipse"], a: 1, exp: "<b>Análisis:</b> Nubes negras y comportamiento animal de refugio preceden a la lluvia." },
+                { text: "Juan llegó a casa con la ropa mojada y un paraguas en la mano.", q: "¿Qué se infiere?", o: ["Que se bañó con ropa", "Que está lloviendo afuera", "Que su paraguas no sirve", "Que es verano"], a: 1, exp: "<b>Análisis:</b> Los objetos y el estado de la ropa indican el clima externo." },
+                { text: "El examen estaba lleno de tachones y notas rojas del profesor.", q: "¿Cómo le fue al alumno?", o: ["Sacó excelente nota", "No le fue bien", "El profesor es su amigo", "No entregó el examen"], a: 1, exp: "<b>Análisis:</b> Las correcciones excesivas indican errores en el desempeño." },
+                { text: "El perro movía la cola y saltaba frente a la puerta cuando vio a su dueño sacar la correa.", q: "¿Qué infieres?", o: ["El perro tiene miedo", "El perro quiere salir a pasear", "El perro tiene sueño", "El perro está enojado"], a: 1, exp: "<b>Análisis:</b> La correa es el estímulo para el paseo." },
+                { text: "La abuela sacó el abrigo de lana, las bufandas y los guantes del baúl.", q: "¿Qué estación del año comienza?", o: ["Verano", "Primavera", "Invierno/Otoño frío", "Playa"], a: 2, exp: "<b>Análisis:</b> Ropa de abrigo se usa en climas fríos." },
+                { text: "Había restos de pastel y globos desinflados en toda la sala.", q: "¿Qué hubo en la casa?", o: ["Una pelea", "Una fiesta de cumpleaños", "Una remodelación", "Un robo"], a: 1, exp: "<b>Análisis:</b> Pastel y globos son símbolos típicos de celebración." },
+                { text: "La luz de la oficina de Luis seguía encendida a las 11 de la noche.", q: "¿Qué hace Luis?", o: ["Se fue de vacaciones", "Está trabajando horas extra", "Está durmiendo", "La oficina está vacía"], a: 1, exp: "<b>Análisis:</b> La luz encendida tarde sugiere actividad laboral." },
+                { text: "María no ha parado de estornudar y tiene los ojos llorosos.", q: "¿Qué le pasa a María?", o: ["Está muy feliz", "Tiene una alergia o resfriado", "Tiene hambre", "Está nadando"], a: 1, exp: "<b>Análisis:</b> Los síntomas físicos indican una afección respiratoria u ocular." }
+            ],
+            validacion: [
+                { text: "(1) El hombre echó una veloz ojeada a su pie... (3) vio un animal... (5) dos gotitas de sangre engrosaban dificultosamente.", q: "¿Qué línea valida que el hombre detectó la herida?", o: ["Línea 1", "Línea 3", "Línea 5", "Ninguna"], a: 2, exp: "<b>Análisis:</b> La línea 5 describe el síntoma físico de la sangre brotando de la herida." },
+                { text: "(14) Un dolor agudo nacía de los dos puntitos violetas... (16) Apresuradamente se ligó el tobillo con su pañuelo.", q: "¿Qué acción valida que el hombre intentó frenar el veneno?", o: ["El dolor agudo (L. 14)", "Se ligó el tobillo (L. 16)", "Siguió hacia su rancho", "Gritó"], a: 1, exp: "<b>Análisis:</b> El torniquete (ligarse el tobillo) es la acción de primeros auxilios." },
+                { text: "(22) una metálica sequedad de garganta, seguida de sed quemante...", q: "¿Qué frase valida el efecto de deshidratación por veneno?", o: ["Metálica sequedad de garganta", "Nueva juramento", "Movía la pierna", "Llegó al rancho"], a: 0, exp: "<b>Análisis:</b> La sequedad y la sed son evidencias directas del síntoma descrito." },
+                { text: "(2) El animal hundió más la cabeza... (3) pero el machete cayó de lomo, dislocándole las vértebras.", q: "¿Qué línea valida que el animal fue herido?", o: ["Línea 2", "Línea 3", "Ambas", "Ninguna"], a: 1, exp: "<b>Análisis:</b> 'Dislocándole las vértebras' es el resultado del ataque del hombre al animal." },
+                { text: "(10) El hombre se bajó hasta la mordedura... (12) durante un instante contempló.", q: "¿Qué línea valida la observación directa del daño?", o: ["Línea 10", "Línea 12", "Línea 1", "Línea 2"], a: 1, exp: "<b>Análisis:</b> 'Contempló' indica el acto de mirar fijamente la lesión." },
+                { text: "El cielo se puso gris y el viento soplaba con fuerza. Los árboles se doblaban.", q: "¿Qué evidencia valida que hay un vendaval?", o: ["Cielo gris", "Viento con fuerza / árboles se doblaban", "Las aves vuelan", "El sol brilla"], a: 1, exp: "<b>Análisis:</b> La fuerza del viento y el efecto en los árboles son la prueba física." },
+                { text: "Luis no respondió al saludo y siguió caminando con la frente fruncida.", q: "¿Qué valida que Luis está molesto?", o: ["No respondió / frente fruncida", "Siguió caminando", "Su nombre es Luis", "Lleva zapatos"], a: 0, exp: "<b>Análisis:</b> El gesto facial y la falta de cortesía son indicadores de enojo." },
+                { text: "El motor hacía un ruido extraño y salía humo negro del capó.", q: "¿Qué valida que el auto está fallando?", o: ["El color del auto", "Ruido extraño / humo negro", "El conductor está asustado", "La carretera es larga"], a: 1, exp: "<b>Análisis:</b> Los síntomas mecánicos son la evidencia del fallo." },
+                { text: "La cuenta de banco de Ana estaba en ceros y tenía deudas pendientes.", q: "¿Qué valida su mala situación económica?", o: ["Cuenta en ceros / deudas", "Ana es joven", "El banco es grande", "No tiene tarjeta"], a: 0, exp: "<b>Análisis:</b> Los datos numéricos negativos son la prueba financiera." },
+                { text: "Las plantas del jardín estaban amarillas y la tierra estaba agrietada.", q: "¿Qué valida la falta de riego?", o: ["Color de las flores", "Plantas amarillas / tierra agrietada", "Hay mucho sol", "El jardín es bonito"], a: 1, exp: "<b>Análisis:</b> El estado de la tierra y el color de las hojas son signos de sequía." }
+            ]
+        };
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            const info = topicsInfo[tabId];
+            document.getElementById('topic-title').innerText = info.title;
+            document.getElementById('topic-text').innerHTML = info.desc;
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    
+                    let readingHtml = item.text ? `<div class="reading-box">${item.text}</div>` : '';
+                    let svgHtml = item.svg ? `<div class="svg-container">${item.svg}</div>` : '';
+                    
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4 flex justify-between items-center">
+                            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Pregunta ${i+1} de 10</span>
+                        </div>
+                        ${readingHtml}
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        ${svgHtml}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <div class="flex items-center gap-2 mb-2 text-indigo-800 font-bold text-xs uppercase tracking-wider">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                                Retroalimentación PrepMaster
+                            </div>
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { 
+                btn.classList.add('correct-opt', 'shadow-md'); 
+                score += 10; 
+            } else { 
+                btn.classList.add('incorrect-opt'); 
+                box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); 
+            }
+            hint.style.display = 'block';
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { 
+            if(confirm('¿Deseas reiniciar este simulador?')) { 
+                score = 0; 
+                document.getElementById('global-score').innerText = 0; 
+                render(); 
+                showTab('tipos'); 
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } 
+        }
+
+        window.onload = () => { render(); showTab('tipos'); };
+    </script>
+</body>
+</html>

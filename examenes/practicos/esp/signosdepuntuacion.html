@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Simulador de Comprensión y Redacción</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .svg-container { background: #f1f5f9; border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: center; border: 1px solid #e2e8f0; }
+        .reading-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 1.25rem; border-radius: 0.75rem; margin-bottom: 1.25rem; font-style: italic; color: #92400e; line-height: 1.6; font-size: 0.95rem; }
+        nav::-webkit-scrollbar { height: 6px; }
+        nav::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+        .table-data { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1rem; }
+        .table-data th, .table-data td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; }
+        .table-data th { background: #f1f5f9; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden md:block italic">Simulador Integral de Examen</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación Extendida -->
+        <div class="mb-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">Módulos en Español</div>
+        <nav class="flex gap-2 mb-8 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto scroll-smooth no-scrollbar">
+            <button onclick="showTab('tablas')" id="btn-tablas" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600 flex-shrink-0">
+                3.1 Tablas
+            </button>
+            <button onclick="showTab('puntuacion')" id="btn-puntuacion" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                3.1 Puntuación
+            </button>
+            <button onclick="showTab('graficas')" id="btn-graficas" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                3.2 Gráficas
+            </button>
+            <button onclick="showTab('contexto_out')" id="btn-contexto_out" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                3.2 Fuera de Contexto
+            </button>
+            <button onclick="showTab('parrafo')" id="btn-parrafo" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                3.3 Cambio Párrafo
+            </button>
+            <button onclick="showTab('interpretacion')" id="btn-interpretacion" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                3.3 Interpretación
+            </button>
+            <button onclick="showTab('lineas')" id="btn-lineas" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                3.4 Combinación
+            </button>
+            <button onclick="showTab('correccion')" id="btn-correccion" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                3.5 Corrección
+            </button>
+        </nav>
+
+        <!-- Banner Dinámico -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenedores de Preguntas -->
+        <div id="tablas" class="tab-content active space-y-6"></div>
+        <div id="puntuacion" class="tab-content space-y-6"></div>
+        <div id="graficas" class="tab-content space-y-6"></div>
+        <div id="contexto_out" class="tab-content space-y-6"></div>
+        <div id="parrafo" class="tab-content space-y-6"></div>
+        <div id="interpretacion" class="tab-content space-y-6"></div>
+        <div id="lineas" class="tab-content space-y-6"></div>
+        <div id="correccion" class="tab-content space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+            tablas: { title: "Análisis de Tablas", desc: "Extrae información precisa de tablas de datos, ingredientes, temperaturas y estadísticas deportivas." },
+            puntuacion: { title: "Signos de Puntuación", desc: "Uso correcto de comas, paréntesis, puntos y guiones para dar coherencia y claridad al texto." },
+            graficas: { title: "Tipos de Gráficas", desc: "Identifica tendencias y datos clave en diagramas de barras y circulares sobre diversos temas." },
+            contexto_out: { title: "Oración fuera de Contexto", desc: "Encuentra la frase intrusa que rompe la unidad temática y la lógica de un párrafo." },
+            parrafo: { title: "Cambio de Párrafo", desc: "Determina el momento ideal para separar ideas y dar estructura a la redacción." },
+            interpretacion: { title: "Interpretación de Datos", desc: "Análisis de producciones, gustos y comportamientos sociales a través de visualizaciones." },
+            lineas: { title: "Combinación de Enunciados", desc: "Une oraciones simples mediante conectores adecuados para mejorar la fluidez del discurso." },
+            correccion: { title: "Corrección Gramatical", desc: "Detecta y corrige errores de concordancia, tiempos verbales y sintaxis en la escritura." }
+        };
+
+        const data = {
+            tablas: [
+                { 
+                    table: `<tr><th>Pastel</th><th>Azúcar (g)</th><th>Harina (g)</th><th>Huevo</th><th>Leche (taza)</th></tr>
+                            <tr><td>1</td><td>175</td><td>170</td><td>3</td><td>1</td></tr>
+                            <tr><td>2</td><td>350</td><td>340</td><td>6</td><td>2</td></tr>
+                            <tr><td>3</td><td>525</td><td>510</td><td>9</td><td>3</td></tr>`,
+                    q: "¿Cuál es el ingrediente que mantiene la misma proporción unitaria respecto al número de pasteles?", o: ["Harina", "Leche", "Azúcar", "Huevo"], a: 1, exp: "<b>Análisis:</b> La leche aumenta de 1 en 1, exactamente igual que el número de pasteles (proporción 1:1)." 
+                },
+                { q: "¿Cuántos huevos se necesitarían aproximadamente para hacer 10 pasteles según la tabla?", o: ["20", "25", "30", "35"], a: 2, exp: "<b>Análisis:</b> Si un pastel requiere 3 huevos, 10 pasteles requieren 30." },
+                { 
+                    table: `<tr><th>Ciudad</th><th>Temp (°C)</th><th>Latitud</th></tr>
+                            <tr><td>Atenas</td><td>24</td><td>37</td></tr>
+                            <tr><td>París</td><td>19</td><td>49</td></tr>
+                            <tr><td>Roma</td><td>22</td><td>42</td></tr>
+                            <tr><td>Oaxaca</td><td>16</td><td>30</td></tr>`,
+                    q: "De acuerdo a la tabla, ¿qué ciudad tiene la temperatura más baja?", o: ["Roma", "París", "Oaxaca", "Atenas"], a: 2, exp: "<b>Análisis:</b> Oaxaca registra 16°C, que es el valor más bajo de la lista." 
+                },
+                { q: "¿Qué ingrediente en gramos se usa en mayor proporción para 2 pasteles?", o: ["Azúcar", "Harina", "Huevo", "Leche"], a: 0, exp: "<b>Análisis:</b> 350g de azúcar es mayor que 340g de harina." },
+                { q: "En la tabla de ciudades, ¿qué relación se observa entre latitud y temperatura?", o: ["A mayor latitud, mayor calor", "No hay relación proporcional directa", "A menor latitud, menor temperatura", "La latitud no afecta"], a: 1, exp: "<b>Análisis:</b> Aunque Oaxaca tiene latitud baja, no es la temperatura más alta ni baja de forma regular." },
+                { q: "Si para 1 pastel se usan 150g de mantequilla, ¿cuánta se usa para 3?", o: ["300g", "400g", "450g", "500g"], a: 2, exp: "<b>Análisis:</b> Es una proporción directa de $150 \\times 3 = 450$." },
+                { q: "Si el equipo Camotes tiene 5 empates, Cabras 2 y Chitas 3, ¿quién empató más?", o: ["Chitas", "Cabras", "Camotes", "Zorrillos"], a: 2, exp: "<b>Análisis:</b> Camotes lidera con 5 empates." },
+                { q: "Si un equipo anotó 12 goles y recibió 12, ¿cuál es su diferencia de goles?", o: ["12", "1", "0", "-12"], a: 2, exp: "<b>Análisis:</b> $12 - 12 = 0$." },
+                { q: "¿Qué ciudad de la tabla se encuentra a la latitud más alta?", o: ["Atenas", "París", "Roma", "Oaxaca"], a: 1, exp: "<b>Análisis:</b> París tiene el valor más alto en la columna de latitud (49)." },
+                { q: "Si duplicamos los ingredientes del pastel número 3, ¿cuánta harina se necesitará?", o: ["680g", "1020g", "1100g", "1500g"], a: 1, exp: "<b>Análisis:</b> El pastel 3 usa 510g, el doble es 1020g." }
+            ],
+            puntuacion: [
+                { text: "(1) Esta es una festividad alegre ---aunque celebra la muerte---.", q: "Selecciona el signo de puntuación CORRECTO para los espacios en blanco:", o: ["Comas", "Signos de exclamación", "Paréntesis", "Dos puntos"], a: 2, exp: "<b>Análisis:</b> Los paréntesis se usan para insertar información aclaratoria o adicional que no es esencial para la frase." },
+                { text: "(3) Reconocido como el ---Padre de la Patología--- Virchow realizó grandes avances...", q: "¿Qué signo de puntuación se requiere para resaltar el título?", o: ["Signos de interrogación", "Comillas", "Comas", "Puntos y comas"], a: 1, exp: "<b>Análisis:</b> Las comillas se utilizan para destacar títulos, apodos o frases citadas." },
+                { text: "(1) Tener un perro es un gran compromiso --- por eso, antes de decidirte...", q: "Selecciona el signo correcto para el espacio en blanco:", o: ["Coma", "Signo de interrogación", "Signo de admiración", "Dos puntos"], a: 0, exp: "<b>Análisis:</b> La coma separa la idea principal del conector explicativo." },
+                { text: "Marie Curie descubrió la radiactividad --- y junto con su esposo Pierre...", q: "¿Qué signo debe ir en el espacio?", o: ["Coma", "Punto final", "Signo de interrogación", "Guion"], a: 0, exp: "<b>Análisis:</b> Se usa coma antes de la conjunción 'y' cuando las oraciones son largas o tienen sujetos distintos." },
+                { text: "Comenzó como perro de carruajes pero ha servido en otras áreas --- incluyendo la caza...", q: "Puntuación correcta:", o: ["Coma", "Guion largo", "Exclamación", "Interrogación"], a: 0, exp: "<b>Análisis:</b> La coma introduce una explicación o lista adicional." },
+                { q: "¿Cuál es el uso principal de los dos puntos?", o: ["Terminar un texto", "Iniciar una enumeración o cita", "Hacer una pregunta", "Separar párrafos"], a: 1, exp: "<b>Análisis:</b> Se usan para anunciar que lo que sigue es una lista, ejemplo o cita." },
+                { q: "El punto y coma se utiliza para:", o: ["Cerrar una pregunta", "Separar elementos en listas complejas", "Expresar sorpresa", "Indicar el final de un libro"], a: 1, exp: "<b>Análisis:</b> Jerarquiza la información cuando los elementos de la lista ya contienen comas." },
+                { q: "Los signos de interrogación se colocan:", o: ["Solo al final", "Solo al principio", "Al principio y al final", "Nunca en español"], a: 2, exp: "<b>Análisis:</b> En español es obligatorio abrir (¿) y cerrar (?) los signos." },
+                { q: "Para indicar que se ha omitido una parte de una cita textual se usan:", o: ["Comas", "Puntos suspensivos entre corchetes", "Guiones bajos", "Asteriscos"], a: 1, exp: "<b>Análisis:</b> Los puntos suspatensivos [...] indican omisión intencional." },
+                { q: "El guion largo (raya) se utiliza en los diálogos para:", o: ["Terminar la charla", "Indicar el cambio de interlocutor", "Hacer una pregunta", "Gritar"], a: 1, exp: "<b>Análisis:</b> Marca las intervenciones de cada personaje en una conversación escrita." }
+            ],
+            graficas: [
+                { q: "Gráfica de idiomas: Chino (1.2 mil M), Español (329 M), Inglés (328 M). ¿Qué conclusión es correcta?", o: ["Inglés es el más hablado", "Chino es casi el cuádruple del español", "La diferencia español-inglés es mínima", "Nadie habla otros idiomas"], a: 2, exp: "<b>Análisis:</b> La diferencia es de solo 1 millón, lo cual es mínimo en términos globales." },
+                { q: "¿Cuántas veces aproximadamente supera el Chino al Inglés según los datos?", o: ["2 veces", "3 veces", "4 veces", "10 veces"], a: 2, exp: "<b>Análisis:</b> $1.2$ mil millones dividido entre $328$ millones es aproximadamente $3.6$ (casi 4)." },
+                { q: "Ventas: Libro A (400M), Libro B (80M). ¿Qué porcentaje del Libro A representa el B?", o: ["10%", "20%", "50%", "80%"], a: 1, exp: "<b>Análisis:</b> $80/400 = 0.20$ o $20\\%$." },
+                { q: "¿Cuál es el propósito de una gráfica circular (de pay)?", o: ["Ver cambios en el tiempo", "Comparar partes de un todo (100%)", "Ver correlación de puntos", "Medir velocidad"], a: 1, exp: "<b>Análisis:</b> Divide un círculo en sectores proporcionales a las frecuencias." },
+                { q: "En una gráfica lineal, una línea que baja de izquierda a derecha indica:", o: ["Aumento", "Disminución", "Estabilidad", "Error de datos"], a: 1, exp: "<b>Análisis:</b> Representa una tendencia decreciente o negativa." },
+                { q: "¿Qué eje representa normalmente las categorías en una gráfica de barras vertical?", o: ["Eje Y (Vertical)", "Eje X (Horizontal)", "El título", "La leyenda"], a: 1, exp: "<b>Análisis:</b> Las categorías van en el eje X y las frecuencias en el eje Y." },
+                { q: "Si el 15% de una población de 200 personas tiene mascota, ¿cuántas personas son?", o: ["15", "20", "30", "45"], a: 2, exp: "<b>Análisis:</b> $200 \\times 0.15 = 30$." },
+                { q: "Una infografía combina:", o: ["Solo números", "Solo dibujos", "Imágenes y textos breves", "Solo códigos de barras"], a: 2, exp: "<b>Análisis:</b> Su meta es hacer la información visual y fácil de digerir." },
+                { q: "Para comparar el crecimiento de ventas año tras año, la mejor gráfica es:", o: ["De barras", "Circular", "Lineal", "De puntos"], a: 2, exp: "<b>Análisis:</b> La lineal permite ver la evolución temporal claramente." },
+                { q: "En una encuesta, el 60% prefiere café y el 40% té. En una gráfica circular, el café ocupará:", o: ["Menos de la mitad", "Exactamente la mitad", "Más de la mitad", "Todo el círculo"], a: 2, exp: "<b>Análisis:</b> Al ser mayor al 50%, ocupa la mayoría del círculo." }
+            ],
+            contexto_out: [
+                { text: "(1) Marie Curie descubrió la radiactividad... (2) Fascinada con el trabajo de Henri Becquerel... (3) Reconocido como el 'Padre de la Patología', Virchow realizó avances en salud pública... (4) Curie realizó sus propios experimentos con rayos de uranio...", q: "¿Qué oración NO pertenece al texto?", o: ["1", "2", "3", "4"], a: 2, exp: "<b>Análisis:</b> El texto trata sobre Marie Curie. La oración 3 habla sobre Virchow, rompiendo la unidad temática." },
+                { text: "(1) Tener un perro es un gran compromiso... (2) Hay que decidir quién será el cuidador principal... (3) Tenemos muchos gatos encantadores para adopción en el refugio... (4) Se deben establecer reglas en casa...", q: "¿Qué oración está fuera de contexto?", o: ["1", "2", "3", "4"], a: 2, exp: "<b>Análisis:</b> Todo el párrafo se enfoca en perros. Mencionar gatos para adopción es una idea intrusa." },
+                { text: "(1) El Samhain era el Día de los Muertos pagano. (2) Muchos lo celebran hoy en día. (5) Las iglesias luteranas celebran la Reforma el 2 de noviembre.", q: "¿Qué oración no pertenece?", o: ["1", "2", "5", "7"], a: 2, exp: "<b>Análisis:</b> Se desvía del tema central (Samhain) para hablar de otra festividad religiosa diferente." },
+                { text: "(1) Los dálmatas fueron perros de carruajes. (2) Servían como perros de bomberos. (3) Yo adopté un dálmata ayer. (4) Son conocidos por su energía.", q: "Oración fuera de contexto:", o: ["1", "2", "3", "4"], a: 2, exp: "<b>Análisis:</b> El texto es informativo general. La frase 3 es una anécdota personal que no encaja con el estilo." },
+                { q: "¿A qué se refiere la 'coherencia' de un texto?", o: ["A usar palabras bonitas", "A que todas las ideas se relacionen con el tema central", "A que no tenga errores de ortografía", "A que sea muy largo"], a: 1, exp: "<b>Análisis:</b> Es la relación lógica y unidad de sentido entre las partes del texto." },
+                { q: "Una oración 'intrusa' es aquella que:", o: ["Es muy corta", "No tiene nada que ver con el tema principal", "Está al principio", "Usa muchos verbos"], a: 1, exp: "<b>Análisis:</b> Rompe el hilo conductor de la lectura." },
+                { q: "En un texto sobre 'Astronomía', una frase sobre 'Recetas de Cocina' sería:", o: ["Un subtema", "La conclusión", "Una oración fuera de contexto", "Una metáfora"], a: 2, exp: "<b>Análisis:</b> No hay relación temática entre ambos conceptos." },
+                { q: "Para detectar estas oraciones, lo más importante es:", o: ["Contar las palabras", "Identificar el tema central del párrafo", "Buscar errores ortográficos", "Mirar la fecha"], a: 1, exp: "<b>Análisis:</b> Al saber de qué se habla, lo ajeno resalta de inmediato." },
+                { q: "Un párrafo tiene unidad si:", o: ["Solo tiene una oración", "Todas sus frases apoyan una sola idea principal", "Tiene muchos adjetivos", "Está escrito en cursiva"], a: 1, exp: "<b>Análisis:</b> La unidad garantiza que no haya distracciones temáticas." },
+                { q: "En una biografía de Messi, una frase que explique 'cómo se fabrica un balón' es:", o: ["Necesaria", "Interesante", "Fuera de contexto", "La tesis"], a: 2, exp: "<b>Análisis:</b> Se aleja del sujeto de la biografía (Messi)." }
+            ],
+            parrafo: [
+                { text: "(1) La malaria es una enfermedad transmitida por mosquitos... (2) Los síntomas incluyen fiebre y cansancio... (5) Si no se trata adecuadamente, la gente puede tener recaídas meses después...", q: "¿Qué oración es la mejor para iniciar un segundo párrafo?", o: ["2", "3", "5", "6"], a: 2, exp: "<b>Análisis:</b> La oración 5 cambia el enfoque de los 'síntomas' al 'tratamiento y efectos a largo plazo'." },
+                { text: "(1) La depresión mayor se caracteriza por tristeza persistente... (2) El término unipolar indica una diferencia... (3) El trastorno bipolar se refiere a estados oscilantes... (4) En cambio, la unipolar se centra en los bajos.", q: "¿Cuál inicia un segundo párrafo?", o: ["1", "2", "3", "4"], a: 2, exp: "<b>Análisis:</b> La oración 3 introduce un concepto nuevo (bipolar) para compararlo con el anterior." },
+                { text: "(1) La abeja es una máquina voladora maravillosa... (3) El diseño de los aviones no se compara... (5) Cuando sus sacos de néctar están llenos, regresa a la colmena.", q: "¿Dónde debería empezar el segundo párrafo?", o: ["2", "3", "4", "5"], a: 3, exp: "<b>Análisis:</b> La oración 5 pasa de la analogía mecánica al proceso biológico de recolección." },
+                { q: "¿Qué marca el inicio de un nuevo párrafo?", o: ["Un punto y seguido", "Una coma", "Un punto y aparte", "Dos puntos"], a: 2, exp: "<b>Análisis:</b> El punto y aparte separa bloques de ideas o subtemas." },
+                { q: "El propósito de un párrafo de transición es:", o: ["Terminar el libro", "Conectar una idea anterior con una nueva", "Dar muchos ejemplos", "Pedir permiso"], a: 1, exp: "<b>Análisis:</b> Sirve de puente lógico entre dos secciones del texto." },
+                { q: "Un texto con un solo párrafo gigante es:", o: ["Mejor porque no se pierde tiempo", "Difícil de leer y cansa la vista", "Más poético", "Científicamente correcto"], a: 1, exp: "<b>Análisis:</b> Los párrafos ayudan a organizar el pensamiento del lector." },
+                { q: "El párrafo de conclusión suele:", o: ["Presentar el tema", "Sintetizar los puntos clave y cerrar", "Hacer preguntas nuevas", "No tener sentido"], a: 1, exp: "<b>Análisis:</b> Ofrece un cierre lógico a todo lo expuesto anteriormente." },
+                { q: "La extensión ideal de un párrafo es:", o: ["Siempre 10 líneas", "Lo que sea necesario para desarrollar una idea completa", "Una sola palabra", "Dos páginas"], a: 1, exp: "<b>Análisis:</b> No hay medida fija, pero debe ser equilibrada y coherente." },
+                { q: "¿Qué se debe evitar al cambiar de párrafo?", o: ["Usar sangría", "Dejar un espacio en blanco", "Repetir exactamente la misma idea", "Usar conectores"], a: 2, exp: "<b>Análisis:</b> Cada párrafo debe aportar un matiz o información nueva." },
+                { q: "El primer párrafo de una noticia se llama:", o: ["Desenlace", "Lead o Entradilla", "Epílogo", "Indice"], a: 1, exp: "<b>Análisis:</b> Contiene lo más importante (quién, qué, dónde, cuándo y por qué)." }
+            ],
+            interpretacion: [
+                { q: "Aguacate: Michoacán (89k), Jalisco (31k). ¿Quién produce menos que Jalisco?", o: ["Michoacán", "Nayarit (22k)", "Puebla (27k)", "Veracruz (20k)"], a: 3, exp: "<b>Análisis:</b> Basado en los datos, Veracruz es el menor de la lista con 20k." },
+                { q: "¿Qué dos estados juntos casi igualan la superficie de Jalisco (31k)?", o: ["Puebla y Veracruz", "Nayarit (22k) y Chiapas (10k)", "Michoacán solo", "Nadie"], a: 1, exp: "<b>Análisis:</b> $22k + 10k = 32k$, que es el valor más cercano a 31k." },
+                { q: "Gustos (300 pers): Pop (23%), Rock (18%), Cumbia (30%). ¿Cuántos prefieren Cumbia?", o: ["30", "60", "90", "120"], a: 2, exp: "<b>Análisis:</b> $300 \\times 0.30 = 90$ personas." },
+                { q: "¿Cuál es el género musical favorito de la muestra?", o: ["Pop", "Banda", "Cumbia", "Rock"], a: 2, exp: "<b>Análisis:</b> La Cumbia tiene el mayor porcentaje (30%)." },
+                { q: "Relación Redes-Notas: 120 min redes = 70 nota. 10 min redes = 95 nota. ¿Qué ocurre?", o: ["No hay relación", "A más tiempo en redes, menor calificación", "A más redes, mejor nota", "Las notas son al azar"], a: 1, exp: "<b>Análisis:</b> Hay una correlación negativa entre ambas variables." },
+                { q: "Si Michoacán produce 89k y Puebla 27k, ¿Puebla es cuántas veces menor aprox?", o: ["2 veces", "3 veces", "4 veces", "5 veces"], a: 1, exp: "<b>Análisis:</b> $27 \\times 3 = 81$. Es aproximadamente 3 veces menor." },
+                { q: "¿Qué estado tiene el menor territorio de plantación?", o: ["Puebla", "Chiapas", "Veracruz", "Nayarit"], a: 1, exp: "<b>Análisis:</b> Chiapas tiene el valor más bajo en superficie." },
+                { q: "Si encuestamos a 1000 personas y el 23% prefiere Pop, ¿cuántos son?", o: ["23", "123", "230", "2300"], a: 2, exp: "<b>Análisis:</b> $1000 \\times 0.23 = 230$." },
+                { q: "En la tabla de notas, la calificación más alta es:", o: ["80", "95", "98", "100"], a: 2, exp: "<b>Análisis:</b> El valor máximo registrado es 98." },
+                { q: "¿Qué dato NO aparece en una gráfica de producción por estado?", o: ["Nombre del estado", "Tonelaje", "Color favorito de los agricultores", "Superficie"], a: 2, exp: "<b>Análisis:</b> Los datos subjetivos como gustos no suelen ir en tablas de producción." }
+            ],
+            lineas: [
+                { q: "Combina: A: Él prometió algo. B: Dijo 'El error no volverá a ocurrir'.", o: ["Él prometió con que el error no ocurre", "Él prometió que el error no volvería a ocurrir", "Dijo que prometió errores", "El error ocurrió y él prometió"], a: 1, exp: "<b>Análisis:</b> El conector 'que' introduce correctamente el objeto de la promesa." },
+                { q: "Combina: A: Amo a los animales. B: No tengo ninguna mascota.", o: ["Amo animales así que no tengo", "Amo a los animales, pero no tengo ninguna mascota", "Amo y no tengo", "Porque amo no tengo"], a: 1, exp: "<b>Análisis:</b> 'Pero' es el nexo de contraste ideal para esta contradicción." },
+                { q: "Combina: A: Ella no quiere comer. B: Yo no quiero comer.", o: ["Ni ella ni yo queremos comer", "Ella no quiere y yo también", "No queremos", "Ella no quiere y me too"], a: 0, exp: "<b>Análisis:</b> 'Ni/ni' es la estructura correcta para unir dos negaciones." },
+                { q: "Combina: A: Pensé que estabas feliz. B: Siempre estabas sonriendo.", o: ["Sonreías así que feliz", "Pensé que estabas feliz, ya que siempre estabas sonriendo", "Sonriente feliz", "Aunque sonreías eras feliz"], a: 1, exp: "<b>Análisis:</b> 'Ya que' explica la causa de mi pensamiento." },
+                { q: "Combina: A: Decía ser humilde. B: Tiene tres autos de lujo.", o: ["Es humilde y tiene autos", "Decía ser humilde; sin embargo, tiene tres autos de lujo", "Como tiene autos es humilde", "Humilde pero autos"], a: 1, exp: "<b>Análisis:</b> 'Sin embargo' resalta la oposición entre lo que dice y lo que tiene." },
+                { q: "¿Qué tipo de conector es 'Por lo tanto'?", o: ["De causa", "De consecuencia", "De tiempo", "De duda"], a: 1, exp: "<b>Análisis:</b> Introduce el resultado lógico de una acción previa." },
+                { q: "Une: 'Estudió mucho' + 'Aprobó el examen'.", o: ["Estudió mucho, por consiguiente aprobó", "Estudió mucho pero aprobó", "Aprobó aunque estudió", "Estudió o aprobó"], a: 0, exp: "<b>Análisis:</b> Indica que aprobar fue el resultado de estudiar." },
+                { q: "Une: 'Llegó tarde' + 'Había mucho tráfico'.", o: ["Llegó tarde aunque había tráfico", "Llegó tarde debido a que había mucho tráfico", "Llegó tarde pero tráfico", "Tráfico y tarde"], a: 1, exp: "<b>Análisis:</b> 'Debido a que' explica la razón de la tardanza." },
+                { q: "El nexo 'Además' sirve para:", o: ["Restar ideas", "Añadir información similar", "Indicar el final", "Hacer una pregunta"], a: 1, exp: "<b>Análisis:</b> Es un conector aditivo." },
+                { q: "Une: 'Quería ir al cine' + 'No tenía dinero'.", o: ["Quería ir al cine y no tenía", "Quería ir al cine; no obstante, no tenía dinero", "Tenía dinero para el cine", "Cine porque dinero"], a: 1, exp: "<b>Análisis:</b> 'No obstante' marca el obstáculo para su deseo." }
+            ],
+            correccion: [
+                { q: "Corrige: 'Yo estoy hago mi tarea.'", o: ["Yo estoy haciendo mi tarea", "Yo estoy hice mi tarea", "Yo estoy hecho tarea", "NO HAY CAMBIO"], a: 0, exp: "<b>Análisis:</b> El presente continuo requiere el gerundio (-ando, -iendo)." },
+                { q: "Corrige: 'Él se rompió dos de su diente.'", o: ["Él se rompió dos de sus dientes", "Él se rompió dos de él dientes", "Él se rompió dos de su dientes", "NO HAY CAMBIO"], a: 0, exp: "<b>Análisis:</b> 'Sus' es el posesivo plural y 'dientes' es el plural de 'diente'." },
+                { q: "Corrige: '¿Verdad que tú vienes, no?'", o: ["¿vienes, verdad?", "vienes, no es?", "vienes, ¿verdad?", "NO HAY CAMBIO"], a: 2, exp: "<b>Análisis:</b> La muletilla de confirmación debe ir entre signos de interrogación si se desea enfatizar." },
+                { q: "Corrige: 'No tenemos dinero suficiente.'", o: ["No tenemos suficiente dinero", "No tenemos dinero suficiento", "No tenemos dinero asaz", "NO HAY CAMBIO"], a: 3, exp: "<b>Análisis:</b> La frase original es correcta gramaticalmente en español." },
+                { q: "Corrige: '¿A ella le pagaron por eso?'", o: ["¿Le pagaron ella?", "¿A ella pagáronle?", "¿A ella le pagaron?", "NO HAY CAMBIO"], a: 3, exp: "<b>Análisis:</b> La estructura es correcta y natural." },
+                { q: "Corregir: 'Hubieron muchas fiestas el fin de semana'.", o: ["Hubo muchas fiestas", "Habían muchas fiestas", "Había muchas fiestas", "NO HAY CAMBIO"], a: 0, exp: "<b>Análisis:</b> El verbo haber como impersonal (existencia) siempre se conjuga en singular." },
+                { q: "Corregir: 'La gente están muy contentas'.", o: ["La gente está muy contenta", "Las gentes están contentas", "La gente es contenta", "NO HAY CAMBIO"], a: 0, exp: "<b>Análisis:</b> 'Gente' es un sustantivo colectivo que requiere verbo en singular." },
+                { q: "Corregir: 'Vi a tu hermano y le dije que venga'.", o: ["que viniera", "que viniese", "Ambas son correctas", "NO HAY CAMBIO"], a: 2, exp: "<b>Análisis:</b> En oraciones subordinadas de pasado se requiere el pretérito imperfecto de subjuntivo." },
+                { q: "Corregir: 'Pienso de que no es buena idea'.", o: ["Pienso que", "Pienso de que", "Opino de que", "NO HAY CAMBIO"], a: 0, exp: "<b>Análisis:</b> Es un caso de 'dequeísmo'. El verbo pensar no rige la preposición 'de'." },
+                { q: "Corregir: 'Hazlo rápido, sino no llegaremos'.", o: ["si no", "sino que", "sinó", "NO HAY CAMBIO"], a: 0, exp: "<b>Análisis:</b> 'Si no' (condicional + negación) se escribe separado. 'Sino' junto es adversativo." }
+            ]
+        };
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            const info = topicsInfo[tabId];
+            document.getElementById('topic-title').innerText = info.title;
+            document.getElementById('topic-text').innerHTML = info.desc;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    
+                    let tableHtml = item.table ? `<table class="table-data">${item.table}</table>` : '';
+                    let readingHtml = item.text ? `<div class="reading-box">${item.text}</div>` : '';
+                    
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4 flex justify-between items-center">
+                            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Desafío ${i+1} / 10</span>
+                        </div>
+                        ${tableHtml}
+                        ${readingHtml}
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { 
+                btn.classList.add('correct-opt', 'shadow-md'); 
+                score += 10; 
+            } else { 
+                btn.classList.add('incorrect-opt'); 
+                box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); 
+            }
+            hint.style.display = 'block';
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { 
+            if(confirm('¿Deseas reiniciar tu progreso en todos los temas?')) { 
+                score = 0; 
+                document.getElementById('global-score').innerText = 0; 
+                render(); 
+                showTab('tablas'); 
+            } 
+        }
+
+        window.onload = () => { render(); showTab('tablas'); };
+    </script>
+</body>
+</html>

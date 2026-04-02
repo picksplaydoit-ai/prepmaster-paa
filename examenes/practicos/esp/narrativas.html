@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Comprensión Lectora Avanzada</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .reading-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 1.25rem; border-radius: 0.75rem; margin-bottom: 1.25rem; font-style: italic; color: #92400e; line-height: 1.6; font-size: 0.95rem; }
+        nav::-webkit-scrollbar { height: 6px; }
+        nav::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden md:block italic">Módulo de Comprensión Lectora</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Aciertos</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación de Temas Específicos -->
+        <div class="mb-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">Temas Seleccionados (4.1 - 4.6)</div>
+        <nav class="flex gap-2 mb-8 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto scroll-smooth no-scrollbar">
+            <button onclick="showTab('narracion')" id="btn-narracion" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">Narración</button>
+            <button onclick="showTab('descripcion')" id="btn-descripcion" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">Descripción</button>
+            <button onclick="showTab('exposicion')" id="btn-exposicion" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">Exposición</button>
+            <button onclick="showTab('argumentacion')" id="btn-argumentacion" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">Argumentación</button>
+            <button onclick="showTab('inferencias')" id="btn-inferencias" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">Inferencias</button>
+            <button onclick="showTab('facticas')" id="btn-facticas" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">Fácticas</button>
+        </nav>
+
+        <!-- Banner Dinámico -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenedores de Preguntas -->
+        <div id="narracion" class="tab-content active space-y-6"></div>
+        <div id="descripcion" class="tab-content space-y-6"></div>
+        <div id="exposicion" class="tab-content space-y-6"></div>
+        <div id="argumentacion" class="tab-content space-y-6"></div>
+        <div id="inferencias" class="tab-content space-y-6"></div>
+        <div id="facticas" class="tab-content space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+            narracion: { title: "Discurso Narrativo (4.1)", desc: "Relatos de sucesos, acciones y personajes en una secuencia temporal lógica." },
+            descripcion: { title: "Discurso Descriptivo (4.2)", desc: "Representación detallada de rasgos, características y detalles de objetos, personas o lugares." },
+            exposicion: { title: "Discurso Expositivo (4.3)", desc: "Transmisión objetiva de información, datos y conceptos sin emitir juicios de valor." },
+            argumentacion: { title: "Discurso Argumentativo (4.4)", desc: "Defensa de una tesis mediante razonamientos para convencer o persuadir al receptor." },
+            inferencias: { title: "Inferencias de Lectura (4.5)", desc: "Habilidad para deducir información implícita basada en pistas y el contexto del texto." },
+            facticas: { title: "Preguntas Fácticas (4.6)", desc: "Identificación de datos explícitos, literales, fechas y hechos específicos dentro de la lectura." }
+        };
+
+        const data = {
+            narracion: [
+                { text: "Las noches aquí son largas algunas veces, muy largas; pero nada son en comparación con las inquietas noches y terribles ensueños de aquel tiempo. Su recuerdo me estremece...", q: "¿Qué tipo de discurso predomina en el fragmento anterior?", o: ["Descriptivo", "Expositivo", "Narrativo", "Argumentativo"], a: 2, exp: "<b>Análisis:</b> Se relatan sensaciones y recuerdos vinculados a sucesos en el tiempo." },
+                { q: "El elemento indispensable del discurso narrativo es:", o: ["La adjetivación", "La acción o suceso", "La tesis", "La definición"], a: 1, exp: "<b>Análisis:</b> La narración requiere un cambio de estado o evento para existir." },
+                { q: "Un ejemplo clásico de texto narrativo es:", o: ["Una receta", "Un poema lírico", "Una crónica", "Un diccionario"], a: 2, exp: "<b>Análisis:</b> La crónica cuenta hechos reales en orden cronológico." },
+                { q: "La función principal de la narración es:", o: ["Explicar un concepto", "Contar una historia", "Convencer al lector", "Describir un paisaje"], a: 1, exp: "<b>Análisis:</b> Narrar es, esencialmente, contar una historia." },
+                { q: "El narrador homodiegético se caracteriza por:", o: ["Saber todo", "Estar fuera de la historia", "Ser un personaje dentro de la obra", "Ser el autor real"], a: 2, exp: "<b>Análisis:</b> 'Homo' (igual) indica que el narrador está al mismo nivel que los personajes." },
+                { q: "En un cuento, el clímax es:", o: ["El inicio del relato", "El punto de mayor tensión", "El final feliz", "La descripción del héroe"], a: 1, exp: "<b>Análisis:</b> Es el momento culminante antes del desenlace." },
+                { q: "La estructura básica de la narración consiste en:", o: ["Tesis y argumentos", "Inicio, nudo y desenlace", "Premisa y conclusión", "Título y datos"], a: 1, exp: "<b>Análisis:</b> Es la organización temporal lógica del relato." },
+                { q: "Un narrador omnisciente se distingue porque:", o: ["Solo sabe lo que ve", "Es el protagonista", "Conoce los pensamientos de todos los personajes", "Es un testigo lejano"], a: 2, exp: "<b>Análisis:</b> Tiene conocimiento total (como un dios) de la historia." },
+                { q: "La leyenda se diferencia del mito porque:", o: ["No tiene personajes", "Tiene base en hechos históricos reales", "Es muy corta", "No se escribe"], a: 1, exp: "<b>Análisis:</b> La leyenda parte de un núcleo real transformado por la tradición." },
+                { q: "El tiempo verbal predominante en la narración suele ser:", o: ["Presente de indicativo", "Pretérito (pasado)", "Futuro", "Imperativo"], a: 1, exp: "<b>Análisis:</b> Generalmente se narran hechos que ya han sucedido." }
+            ],
+            descripcion: [
+                { q: "¿Qué categoría gramatical es central en el discurso descriptivo?", o: ["Verbos de acción", "Adjetivos calificativos", "Conjunciones", "Preposiciones"], a: 1, exp: "<b>Análisis:</b> Los adjetivos permiten detallar las cualidades de lo que se describe." },
+                { q: "La descripción de los rasgos físicos de una persona se denomina:", o: ["Etopeya", "Prosopografía", "Retrato", "Topografía"], a: 1, exp: "<b>Análisis:</b> La prosopografía se centra exclusivamente en el aspecto exterior." },
+                { q: "La descripción de los rasgos psicológicos y morales se llama:", o: ["Etopeya", "Prosopografía", "Cronografía", "Retrato"], a: 0, exp: "<b>Análisis:</b> La etopeya describe el carácter, valores y alma de la persona." },
+                { q: "Si describimos un paisaje o lugar, realizamos una:", o: ["Cronografía", "Topografía", "Etopeya", "Biografía"], a: 1, exp: "<b>Análisis:</b> 'Topos' significa lugar en griego." },
+                { text: "Era un hombre de unos cincuenta años, de estatura media, con una mirada profunda y una cicatriz que le cruzaba la mejilla izquierda.", q: "¿Qué tipo de descripción predomina aquí?", o: ["Etopeya", "Prosopografía", "Cronografía", "Topografía"], a: 1, exp: "<b>Análisis:</b> Se listan rasgos físicos visibles del sujeto." },
+                { q: "El 'Retrato' literario es la combinación de:", o: ["Lugar y tiempo", "Prosopografía y etopeya", "Acción y diálogo", "Inicio y fin"], a: 1, exp: "<b>Análisis:</b> Describe tanto el físico como la personalidad." },
+                { q: "La descripción técnica se caracteriza por ser:", o: ["Subjetiva", "Objetiva y precisa", "Poética", "Ficticia"], a: 1, exp: "<b>Análisis:</b> Busca informar con exactitud sin opiniones personales." },
+                { q: "La descripción literaria suele ser:", o: ["Aburrida", "Subjetiva y estética", "Solo para niños", "Sin adjetivos"], a: 1, exp: "<b>Análisis:</b> El autor busca un efecto artístico y usa su propia visión." },
+                { q: "Describir una época o tiempo histórico se denomina:", o: ["Cronografía", "Topografía", "Etopeya", "Prosopografía"], a: 0, exp: "<b>Análisis:</b> 'Crono' significa tiempo." },
+                { q: "La caricatura es un tipo de descripción que:", o: ["Es muy realista", "Exagera o deforma los rasgos", "No usa palabras", "Es solo para dibujos"], a: 1, exp: "<b>Análisis:</b> Resalta rasgos para criticar o causar humor." }
+            ],
+            exposicion: [
+                { q: "El objetivo principal del discurso expositivo es:", o: ["Persuadir", "Narrar una aventura", "Informar y explicar un tema", "Entretener"], a: 2, exp: "<b>Análisis:</b> Su meta es que el receptor adquiera nuevos conocimientos de forma clara." },
+                { q: "Una característica fundamental de la exposición es la:", o: ["Subjetividad", "Objetividad", "Ficción", "Ambigüedad"], a: 1, exp: "<b>Análisis:</b> Debe basarse en hechos y datos comprobables." },
+                { q: "Un ejemplo de texto expositivo es:", o: ["Una novela", "Un editorial", "Un artículo científico", "Una oda"], a: 2, exp: "<b>Análisis:</b> El artículo científico explica teorías y descubrimientos objetivamente." },
+                { q: "La función de la lengua predominante en la exposición es:", o: ["Apelativa", "Referencial", "Poética", "Fática"], a: 1, exp: "<b>Análisis:</b> Se centra en el mensaje y la realidad externa (referente)." },
+                { text: "El agua es una sustancia formada por dos átomos de hidrógeno y uno de oxígeno...", q: "Este fragmento es un discurso:", o: ["Narrativo", "Expositivo", "Argumentativo", "Descriptivo"], a: 1, exp: "<b>Análisis:</b> Define un concepto químico de manera objetiva." },
+                { q: "Para que una exposición sea eficaz, debe ser:", o: ["Confusa", "Clara y ordenada", "Muy larga", "Llena de opiniones"], a: 1, exp: "<b>Análisis:</b> La claridad es vital para la función informativa." },
+                { q: "La estructura clásica de un texto expositivo incluye:", o: ["Introducción, desarrollo y conclusión", "Verso y estrofa", "Diálogos e interacciones", "Solo gráficos"], a: 0, exp: "<b>Análisis:</b> Es el esquema lógico para presentar un tema." },
+                { q: "Los textos divulgativos son aquellos que:", o: ["Son para expertos", "Son para el público general", "Nadie entiende", "No tienen autor"], a: 1, exp: "<b>Análisis:</b> Adaptan temas complejos para que cualquier persona los entienda." },
+                { q: "En la exposición se suelen usar verbos en:", o: ["Imperativo", "Presente de indicativo", "Subjuntivo", "Pasado lejano"], a: 1, exp: "<b>Análisis:</b> El presente da un carácter atemporal y verdadero a los hechos." },
+                { q: "Un manual de usuario es un ejemplo de:", o: ["Narración", "Exposición instructiva", "Argumentación", "Poesía"], a: 1, exp: "<b>Análisis:</b> Explica el funcionamiento de algo paso a paso." }
+            ],
+            argumentacion: [
+                { q: "El propósito del discurso argumentativo es:", o: ["Informar", "Convencer o persuadir", "Describir", "Contar historias"], a: 1, exp: "<b>Análisis:</b> Busca que el receptor acepte una idea o cambie de opinión." },
+                { q: "La 'Tesis' en un texto argumentativo es:", o: ["El resumen", "La idea principal o postura a defender", "Los datos estadísticos", "El final"], a: 1, exp: "<b>Análisis:</b> Es el núcleo que se intenta demostrar con argumentos." },
+                { q: "Un argumento de 'autoridad' es aquel que:", o: ["Usa la fuerza", "Cita a un experto o institución reconocida", "Es muy antiguo", "No tiene pruebas"], a: 1, exp: "<b>Análisis:</b> Se apoya en el prestigio de alguien que sabe mucho del tema." },
+                { q: "Un ejemplo de texto argumentativo es:", o: ["Una noticia", "Un ensayo", "Una receta", "Un diccionario"], a: 1, exp: "<b>Análisis:</b> El ensayo propone una visión personal defendida con lógica." },
+                { text: "Considero que prohibir las redes sociales a los hijos es un error, ya que genera curiosidad negativa...", q: "Este fragmento es:", o: ["Expositivo", "Argumentativo", "Narrativo", "Descriptivo"], a: 1, exp: "<b>Análisis:</b> Presenta una postura clara seguida de un 'ya que' (argumento)." },
+                { q: "La función de la lengua predominante es:", o: ["Referencial", "Apelativa o conativa", "Metalingüística", "Fática"], a: 1, exp: "<b>Análisis:</b> Intenta influir en el pensamiento o conducta del lector." },
+                { q: "Un contraargumento sirve para:", o: ["Dar la razón al oponente", "Invalidar una postura contraria", "Terminar el texto", "Hacer amigos"], a: 1, exp: "<b>Análisis:</b> Refuerza la tesis al demostrar los fallos de la opinión opuesta." },
+                { q: "¿En qué parte suele aparecer la tesis?", o: ["Solo al final", "En la introducción", "En los agradecimientos", "Nunca se escribe"], a: 1, exp: "<b>Análisis:</b> Se plantea al inicio para que el lector sepa qué se va a defender." },
+                { q: "La conclusión en la argumentación sirve para:", o: ["Abrir otro tema", "Reafirmar la tesis y cerrar", "Pedir perdón", "No escribir más"], a: 1, exp: "<b>Análisis:</b> Sintetiza lo expuesto y deja una reflexión final." },
+                { q: "Los editoriales de periódicos son:", o: ["Textos narrativos", "Textos argumentativos", "Poemas", "Listas de precios"], a: 1, exp: "<b>Análisis:</b> Expresan la opinión institucional del medio sobre un hecho." }
+            ],
+            inferferences: [
+                { text: "Pigmalión construía estatuas tan perfectas que solo les faltaba hablar. Una vez terminadas, les enseñaba literatura, música y hasta chistes.", q: "¿Qué se puede inferir sobre el concepto de 'poeta' en la antigua Grecia según el texto?", o: ["Solo escribían versos", "Designaba a varios tipos de artistas (incluyendo escultores)", "Eran magos", "No existían"], a: 1, exp: "<b>Análisis:</b> El texto llama poeta a alguien que esculpe, sugiriendo una definición amplia de 'creador'." },
+                { text: "El hombre sintió dos puntitos violeta en el pie y un dolor agudo que comenzaba a invadir su pierna...", q: "Se puede inferir que el hombre fue atacado por:", o: ["Un mosquito", "Una serpiente", "Un clavo oxidado", "Un perro"], a: 1, exp: "<b>Análisis:</b> Los 'dos puntitos' y la rápida invasión del dolor sugieren una mordedura de serpiente." },
+                { text: "El mayor Tom está en su cápsula. La Tierra pierde contacto con él y termina perdido en el espacio.", q: "Se puede inferir que el personaje de la canción:", o: ["Regresó a casa sano", "Murió o quedó a la deriva perpetua", "Se fue de vacaciones", "Está feliz"], a: 1, exp: "<b>Análisis:</b> 'Perder contacto' y 'quedar perdido en el espacio' implica un desenlace fatal." },
+                { q: "Inferir en la lectura significa:", o: ["Copiar el texto tal cual", "Deducir información no explícita usando pistas", "Leer muy rápido", "Aprenderse nombres de memoria"], a: 1, exp: "<b>Análisis:</b> Es el proceso de 'leer entre líneas'." },
+                { text: "Al ver la nube negra y sentir el viento frío, María sacó su paraguas.", q: "¿Qué se infiere de la acción de María?", o: ["Ya está lloviendo fuerte", "Cree que va a llover pronto", "María perdió el paraguas", "Es pleno verano"], a: 1, exp: "<b>Análisis:</b> Sus observaciones climáticas le permiten deducir la lluvia inminente." },
+                { q: "Una inferencia es válida solo si:", o: ["Es mi opinión personal", "Se basa en evidencia del texto", "Es lo que yo haría", "Es graciosa"], a: 1, exp: "<b>Análisis:</b> Debe haber 'pistas' en la lectura que la justifiquen." },
+                { text: "Juan llegó a casa con el uniforme manchado de lodo y las rodillas raspadas.", q: "¿Qué se puede inferir?", o: ["Juan estuvo durmiendo", "Juan tuvo una actividad física intensa o una caída", "Juan fue al cine", "Juan estaba limpio"], a: 1, exp: "<b>Análisis:</b> El estado de su ropa y piel son consecuencias de una actividad física o accidente." },
+                { text: "A pesar de estudiar 5 horas, Pedro no se sentía seguro antes del examen.", q: "Se infiere que Pedro es:", o: ["Un genio", "Inseguro o muy exigente consigo mismo", "Un estudiante flojo", "Sordo"], a: 1, exp: "<b>Análisis:</b> El esfuerzo no calmó su duda, sugiriendo un rasgo de personalidad." },
+                { q: "En la frase 'El autor sugiere que...', el lector debe realizar una:", o: ["Copia", "Inferencia", "Pregunta fáctica", "Mímica"], a: 1, exp: "<b>Análisis:</b> 'Sugerir' es la clave de lo implícito." },
+                { text: "El perro movía la cola y saltaba al ver que su dueño tomaba la correa.", q: "¿Qué se infiere?", o: ["El perro tiene miedo", "El perro asocia la correa con el paseo", "El perro tiene hambre", "El dueño se va de viaje"], a: 1, exp: "<b>Análisis:</b> Su lenguaje corporal indica entusiasmo por una actividad conocida." }
+            ],
+            facticas: [
+                { text: "Marie Curie donó sus ahorros de 24 mil dólares a la caridad en 1990.", q: "¿Cuánto dinero donó Marie según el texto?", o: ["10 mil dólares", "20 mil dólares", "24 mil dólares", "50 mil dólares"], a: 2, exp: "<b>Análisis:</b> Es un dato numérico que aparece exactamente así en la lectura." },
+                { text: "La Declaración de Cambridge sobre la consciencia fue acordada en 2012.", q: "¿En qué año se acordó dicha declaración?", o: ["2010", "2012", "2014", "1990"], a: 1, exp: "<b>Análisis:</b> Dato cronológico explícito." },
+                { text: "La tritanopia afecta los conos S (longitudes de onda cortas).", q: "¿Qué tipo de conos afecta la tritanopia?", o: ["Conos M", "Conos L", "Conos S", "Conos X"], a: 2, exp: "<b>Análisis:</b> Es una información técnica literal del texto." },
+                { q: "Una pregunta fáctica tiene como respuesta:", o: ["Una opinión del lector", "Información que está escrita literalmente", "Un final inventado", "Un dibujo"], a: 1, exp: "<b>Análisis:</b> Se responde con los 'hechos' (factos) del texto." },
+                { text: "Michoacán produjo 89,187 toneladas de aguacate.", q: "¿Qué estado produjo esa cantidad según los datos?", o: ["Jalisco", "Michoacán", "Puebla", "Veracruz"], a: 1, exp: "<b>Análisis:</b> Localización de datos estadísticos directos." },
+                { text: "El daltonismo tricromático anómalo permite ver colores, pero los receptores están alterados.", q: "¿Qué caracteriza a este daltonismo según el texto?", o: ["No ven nada", "Ven colores pero los confunden", "Solo ven rojo", "Es total"], a: 1, exp: "<b>Análisis:</b> Hecho literal mencionado en el párrafo." },
+                { q: "Para responder una pregunta fáctica debes:", o: ["Imaginar", "Localizar la información exacta en el texto", "Adivinar", "Preguntar al vecino"], a: 1, exp: "<b>Análisis:</b> Requiere técnica de búsqueda de palabras clave." },
+                { text: "El sistema de Plutón es considerado un fósil de hace 4,600 millones de años.", q: "¿Qué edad se le atribuye?", o: ["1,000 millones", "4,600 millones", "2,000 millones", "100 años"], a: 1, exp: "<b>Análisis:</b> Dato cronológico explícito." },
+                { text: "César Aira afirma que 'el mejor Cortázar es un mal Borges'.", q: "¿A qué autor prefiere Aira según esta frase?", o: ["Cortázar", "Borges", "A ninguno", "A sí mismo"], a: 1, exp: "<b>Análisis:</b> Al decir que el mejor de uno es el peor del otro, prioriza la calidad de Borges." },
+                { text: "La tiranopia causa dificultad al distinguir azul y amarillo.", q: "¿Qué colores confunde alguien con tritanopia?", o: ["Rojo y Verde", "Azul y Amarillo", "Blanco y Negro", "Naranja y Gris"], a: 1, exp: "<b>Análisis:</b> Hecho literal extraído del texto médico." }
+            ]
+        };
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            
+            const info = topicsInfo[tabId];
+            document.getElementById('topic-title').innerText = info.title;
+            document.getElementById('topic-text').innerHTML = info.desc;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    
+                    let readingHtml = item.text ? `<div class="reading-box">${item.text}</div>` : '';
+                    
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4 flex justify-between items-center">
+                            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Pregunta ${i+1} / ${data[cat].length}</span>
+                        </div>
+                        ${readingHtml}
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            if (box.dataset.answered === "true") return;
+            box.dataset.answered = "true";
+            
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { 
+                btn.classList.add('correct-opt', 'shadow-md'); 
+                score++; 
+            } else { 
+                btn.classList.add('incorrect-opt'); 
+                box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); 
+            }
+            hint.style.display = 'block';
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { 
+            if(confirm('¿Deseas reiniciar tu progreso en estos temas?')) { 
+                score = 0; 
+                document.getElementById('global-score').innerText = 0; 
+                render(); 
+                showTab('narracion'); 
+            } 
+        }
+
+        window.onload = () => { render(); showTab('narracion'); };
+    </script>
+</body>
+</html>

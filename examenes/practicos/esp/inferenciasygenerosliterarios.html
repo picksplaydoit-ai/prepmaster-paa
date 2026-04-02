@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Comprensión Lectora y Poesía</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .reading-box { background: #f8fafc; border-left: 4px solid #6366f1; padding: 1.25rem; border-radius: 0.75rem; margin-bottom: 1.25rem; font-style: italic; color: #1e293b; line-height: 1.6; font-size: 0.95rem; }
+        
+        .custom-scroll::-webkit-scrollbar { height: 8px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; border: 2px solid #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #6366f1; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden md:block italic">Lectura y Poesía</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación de Temas -->
+        <div class="mb-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">Desliza para ver los módulos (10.1 - 10.7)</div>
+        <nav class="flex gap-2 mb-8 bg-slate-200/50 p-2 rounded-2xl overflow-x-auto scroll-smooth custom-scroll">
+            <button onclick="showTab('inferencias')" id="btn-inferencias" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">10.1 Inferencias</button>
+            <button onclick="showTab('semejanzas')" id="btn-semejanzas" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">10.2 Semejanzas</button>
+            <button onclick="showTab('diferencias')" id="btn-diferencias" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">10.3 Diferencias</button>
+            <button onclick="showTab('generos')" id="btn-generos" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">10.4 Géneros Lit.</button>
+            <button onclick="showTab('estructura')" id="btn-estructura" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">10.5 Estructura Poética</button>
+            <button onclick="showTab('rimas')" id="btn-rimas" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">10.6 Rimas</button>
+            <button onclick="showTab('interpretacion')" id="btn-interpretacion" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">10.7 Interpretación</button>
+        </nav>
+
+        <!-- Banner Dinámico -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenedores de Preguntas -->
+        <div id="inferencias" class="tab-content space-y-6"></div>
+        <div id="semejanzas" class="tab-content space-y-6"></div>
+        <div id="diferencias" class="tab-content space-y-6"></div>
+        <div id="generos" class="tab-content space-y-6"></div>
+        <div id="estructura" class="tab-content space-y-6"></div>
+        <div id="rimas" class="tab-content space-y-6"></div>
+        <div id="interpretacion" class="tab-content space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+            inferencias: { title: "Inferencias (10.1)", desc: "Deduce información no explícita en el texto a partir de las pistas proporcionadas por el autor." },
+            semejanzas: { title: "Comparación: Semejanzas (10.2)", desc: "Identifica puntos de encuentro, temas compartidos o visiones similares entre dos textos distintos." },
+            diferencias: { title: "Comparación: Diferencias (10.3)", desc: "Encuentra discrepancias, enfoques opuestos o datos únicos que distinguen a un texto de otro." },
+            generos: { title: "Géneros Literarios (10.4)", desc: "Clasifica textos según su intención y forma: Narrativo, Lírico (Poesía), Dramático (Teatro) o Ensayístico." },
+            estructura: { title: "Estructura del Poema (10.5)", desc: "Análisis de la composición externa del poema: versos, estrofas y tipos de estrofas (cuartetos, tercetos)." },
+            rimas: { title: "Rimas y Métrica (10.6)", desc: "Identificación de rimas consonantes (perfectas) y asonantes (imperfectas), así como versos libres." },
+            interpretacion: { title: "Interpretación Poética (10.7)", desc: "Descifra el sentido figurado, sentimientos y mensajes ocultos detrás de las metáforas de un poema." }
+        };
+
+        const data = {
+            inferencias: [
+                { text: "En la antigua Grecia existió un poeta llamado Pigmalión que construía estatuas tan perfectas que solo les faltaba hablar. Les enseñaba literatura, política y música. Cuando juzgaba que estaban listas, las hacía hablar y ellas se iban a la calle a conversar.", q: "Del texto se puede inferir que en la antigua Grecia...", o: ["Los griegos llamaban poesía a la escultura", "Pigmalión no era realmente un poeta", "La palabra 'poeta' designaba a varios tipos de artistas", "Las estatuas eran seres humanos disfrazados"], a: 2, exp: "Se deduce porque el texto llama 'poeta' a alguien que se dedica a la escultura." },
+                { text: "David Bowie cuenta la historia del Mayor Tom, un astronauta que despega, habla con la torre y finalmente pierde contacto, quedando perdido en el espacio. Sus seguidores ven en esto una analogía al viaje de un drogadicto con psicotrópicos.", q: "Es posible inferir del texto que...", o: ["Los psicotrópicos inspiran mejores canciones", "Bowie era un artista polémico", "Una canción no siempre tiene un sentido explícito", "El Mayor Tom es un personaje real"], a: 2, exp: "La existencia de múltiples interpretaciones (astronauta vs drogadicto) confirma que el sentido no es único ni explícito." },
+                { text: "El daltonismo tiene muchas variantes. Unas son más limitantes que otras, pero con un buen aprendizaje tras el diagnóstico, los pacientes pueden realizar su vida diaria adecuadamente.", q: "De la lectura es posible inferir que...", o: ["El daltonismo se cura con medicamentos", "La gente daltónica se queda ciega", "Un daltónico puede compensar su condición con educación", "Los daltónicos confunden sonidos"], a: 2, exp: "El texto menciona que con 'aprendizaje' pueden vivir sin limitaciones." },
+                { text: "El pulque es una bebida de origen prehispánico. A los conquistadores españoles les pareció una bebida extraña, pero con el tiempo se convirtió en un pilar de la economía colonial.", q: "Se infiere que el pulque...", o: ["Era rechazado por los indígenas", "No era del gusto inicial de los españoles", "Es una bebida moderna", "Solo lo bebían los reyes"], a: 1, exp: "Dice que les pareció 'extraña', lo que implica una falta de gusto o familiaridad inicial." },
+                { text: "Si un animal siente dolor consciente, entonces es titular de derechos. La mayoría de la ciencia apoya esta idea, aunque no hay unanimidad total.", q: "¿Qué se puede inferir sobre el estatus legal de los animales?", o: ["Ya tienen todos los derechos humanos", "Su derecho depende del consenso científico sobre su capacidad de sentir", "La ciencia niega que sientan dolor", "Las leyes no consideran a la ciencia"], a: 1, exp: "El texto vincula la titularidad de derechos directamente con la capacidad de sentir dolor consciente." },
+                { text: "McCandless donó sus ahorros de 24 mil dólares a la caridad y decidió vivir lejos de la sociedad sin dinero.", q: "Se infiere que para McCandless...", o: ["El dinero era un obstáculo para su libertad espiritual", "No sabía el valor del dinero", "Quería ser famoso", "Odiaba a su familia"], a: 0, exp: "Donar todo y vivir sin dinero para buscar una 'aventura espiritual' indica que valoraba más lo inmaterial." },
+                { text: "La NASA lanzó New Horizons en 2006 para un viaje de 10 años hacia Plutón. Se espera que brinde luz sobre el origen del sistema solar.", q: "¿Qué se infiere de la misión New Horizons?", o: ["Es el primer viaje al sol", "Plutón contiene fósiles biológicos", "Plutón conserva información primitiva del sistema solar", "La misión falló en 2016"], a: 2, exp: "Al llamar al sistema de Plutón un 'fósil', se infiere que guarda datos de los comienzos del sistema." },
+                { text: "El sistema de escritura requiere que el autor descubra qué sucede entre el principio y el fin de un cuento.", q: "Se infiere que el proceso creativo...", o: ["Es totalmente mecánico", "Es un proceso de descubrimiento e incertidumbre", "Ya está todo escrito desde el inicio", "No requiere de esfuerzo"], a: 1, exp: "El autor menciona que debe 'descubrir' lo que sucede en medio, implicando que no lo sabe todo de antemano." }
+            ],
+            semejanzas: [
+                { text: "Texto A: El té verde es benéfico por sus antioxidantes. Texto B: El té negro contiene cafeína y flavonoides que ayudan al corazón.", q: "Un tema presente en ambas lecturas es...", o: ["El vegetal del que provienen", "Su consumo social", "Sus componentes químicos y beneficios", "La temperatura de cultivo"], a: 2, exp: "Ambos textos mencionan sustancias químicas (antioxidantes, flavonoides) y sus efectos positivos." },
+                { text: "Texto A: La abeja gigante de Wallace fue redescubierta tras 40 años. Texto B: Científicos encontraron nidos de la Megachile Pluto en Indonesia.", q: "En ambas lecturas se menciona...", o: ["El nombre científico de la abeja", "Que la abeja es una plaga", "Que la abeja está extinta", "El color de la abeja"], a: 0, exp: "Ambas se refieren a la misma especie, utilizando su nombre científico o común." },
+                { text: "Texto A: El ejercicio aeróbico mejora la capacidad pulmonar. Texto B: Correr diariamente reduce el estrés y fortalece el corazón.", q: "Ambos textos coinciden en que...", o: ["Correr es mejor que nadar", "La actividad física aporta beneficios a la salud", "Solo los jóvenes deben ejercitarse", "El ejercicio debe ser nocturno"], a: 1, exp: "Ambos describen mejoras físicas o mentales derivadas del esfuerzo físico." },
+                { text: "Texto A: La energía oscura expande el universo. Texto B: El Big Bang sigue ocurriendo a través de la expansión galáctica.", q: "En ambos textos se trata...", o: ["El fin del mundo", "La expansión del universo", "La vida en otros planetas", "El calor del sol"], a: 1, exp: "La expansión es el eje central de las dos explicaciones astronómicas." },
+                { text: "Texto A: El feminismo liberal busca la igualdad legal. Texto B: Las críticas al feminismo señalan que el sufragio es insuficiente.", q: "Ambas lecturas mencionan el concepto de...", o: ["Derechos de los hombres", "El feminismo y sus alcances", "La moda femenina", "La educación primaria"], a: 1, exp: "El tema central en ambos casos es el movimiento feminista." },
+                { text: "Texto A: Los smartphones distraen a los alumnos. Texto B: El uso de apps educativas en clase puede ser contraproducente si no se supervisa.", q: "Un punto en común es...", o: ["El precio de los teléfonos", "La tecnología en el ámbito educativo", "La historia de internet", "La programación de software"], a: 1, exp: "Ambos relacionan dispositivos tecnológicos con el entorno escolar." },
+                { text: "Texto A: El arte barroco destaca por su ornamentación. Texto B: Las iglesias coloniales muestran un estilo cargado y detallista.", q: "Ambas lecturas se enfocan en...", o: ["La arquitectura moderna", "Características estéticas de un periodo", "La vida de los pintores", "El costo de las obras"], a: 1, exp: "Ambos textos describen el estilo visual 'cargado' u 'ornamentado'." },
+                { text: "Texto A: Los perros necesitan rutinas de paseo. Texto B: Un canino aburrido puede destruir muebles por falta de actividad.", q: "Ambos textos sugieren...", o: ["Vender a las mascotas", "La importancia del ejercicio para los perros", "Que los perros odian las casas", "Comprar comida cara"], a: 1, exp: "Se enfatiza la necesidad de actividad física para el bienestar animal." }
+            ],
+            diferencias: [
+                { text: "Texto A: El té es la bebida más antigua. Texto B: El té verde previene el cáncer debido a sus catequinas.", q: "Una diferencia entre las lecturas es que...", o: ["Solo el Texto A es informativo", "Solo el Texto B menciona beneficios específicos para la salud", "El Texto A habla de marcas", "El Texto B es un poema"], a: 1, exp: "El texto B profundiza en la parte médica/biológica, mientras que el A es más histórico." },
+                { text: "Texto A: La abeja de Wallace mide 4 cm. Texto B: La expedición para hallar la abeja duró dos semanas en Indonesia.", q: "Un tema que solo se presenta en el Texto B es...", o: ["El tamaño de la abeja", "La alimentación de la abeja", "Los detalles de la expedición científica", "El hábitat de la abeja"], a: 2, exp: "El texto B narra el proceso de búsqueda, algo que el A omite." },
+                { text: "Texto A: El café se originó en Etiopía. Texto B: El exceso de cafeína provoca insomnio y taquicardia.", q: "La principal diferencia de enfoque es...", o: ["Origen vs. Efectos negativos", "Precio vs. Sabor", "Cosecha vs. Preparación", "Color vs. Aroma"], a: 0, exp: "El A es histórico/geográfico y el B es médico/fisiológico." },
+                { text: "Texto A: El fútbol es pasión de multitudes. Texto B: Un estudio con 60 personas mostró que el 80% es feliz cuando su equipo anota.", q: "El Texto B se diferencia por...", o: ["Ser más breve", "Presentar datos estadísticos y de investigación", "Hablar de béisbol", "Ser un texto literario"], a: 1, exp: "El uso de cifras y mención de una psicóloga le da un enfoque científico-expositivo." },
+                { text: "Texto A: La Luna no tiene luz propia. Texto B: La Luna influye en las mareas terrestres y ciclos biológicos.", q: "El Texto B aporta información sobre...", o: ["La distancia al sol", "La influencia de la Luna en la Tierra", "La composición del polvo lunar", "Los cráteres lunares"], a: 1, exp: "El texto B se centra en la relación Tierra-Luna, a diferencia del dato físico simple del A." },
+                { text: "Texto A: Cervantes escribió el Quijote. Texto B: El Quijote es una parodia de los libros de caballería.", q: "A diferencia del A, el Texto B presenta...", o: ["La fecha de publicación", "Un análisis crítico del género de la obra", "La biografía del autor", "El número de páginas"], a: 1, exp: "El B explica 'qué es' la obra literariamente hablando." },
+                { text: "Texto A: El reciclaje ahorra energía. Texto B: El plástico tarda 500 años en degradarse en el océano.", q: "El Texto B pone énfasis en...", o: ["El proceso de fundición", "El impacto ambiental negativo y la durabilidad del residuo", "La ganancia económica", "La educación escolar"], a: 1, exp: "Se enfoca en la persistencia del contaminante." },
+                { text: "Texto A: El sol es una estrella enana amarilla. Texto B: El sol produce energía mediante la fusión nuclear de hidrógeno.", q: "El Texto B explica...", o: ["El color del sol", "El proceso interno de generación de energía", "La distancia a la tierra", "Los mitos solares"], a: 1, exp: "El texto B es técnico sobre la física solar." }
+            ],
+            generos: [
+                { text: "Llevábamos tres años de matrimonio, vivíamos en un pueblo pequeño. No pude reprimir un grito de horror cuando lo vi por primera vez.", q: "¿A qué género literario pertenece el fragmento?", o: ["Cuento (Narrativo)", "Poesía (Lírico)", "Drama (Teatral)", "Ensayo (Ensayístico)"], a: 0, exp: "Presenta un narrador que relata sucesos y personajes en un tiempo y espacio." },
+                { text: "Asume tus errores / Visto para sentencia queda el tiempo / de las manzanas y la luna blanca.", q: "¿A qué género literario pertenece este texto?", o: ["Fábula", "Poesía (Lírico)", "Epopeya", "Leyenda"], a: 1, exp: "Usa versos y lenguaje figurado para expresar sentimientos o visiones del mundo." },
+                { text: "La verdad es que nadie sabe cómo debe ser un cuento. El escritor que lo sabe es un mal cuentista. Hay que ser sabio para no dejarse tentar por el saber.", q: "Este fragmento, que reflexiona sobre el arte de escribir, es propio de un...", o: ["Cuento", "Poema", "Ensayo", "Libreto"], a: 2, exp: "Es una reflexión subjetiva y analítica sobre un tema (la escritura)." },
+                { text: "MENDIGO: (A voces) ¡Una limosna por el amor de Dios! / CIEGO: ¿Quién anda ahí? ¿Eres tú, Lázaro?", q: "Por su estructura de diálogos y nombres de personajes, pertenece al género...", o: ["Narrativo", "Dramático", "Lírico", "Didáctico"], a: 1, exp: "Los diálogos directos y acotaciones son la base del género teatral o dramático." },
+                { text: "El león, viendo que el ratón le había salvado la vida, prometió no menospreciar nunca a los seres pequeños. Moraleja: No ignores al débil.", q: "Este texto es una...", o: ["Novela", "Fábula", "Tragedia", "Oda"], a: 1, exp: "Personajes animales y presencia de una moraleja definen la fábula." },
+                { text: "Canto a la bandera que ondea en el cielo, símbolo de patria y de mi anhelo.", q: "¿A qué género pertenece?", o: ["Narrativo", "Lírico", "Ensayístico", "Dramático"], a: 1, exp: "Expresión de sentimientos patrios a través del verso." },
+                { text: "En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo...", q: "Este inicio de novela pertenece al género...", o: ["Lírico", "Dramático", "Narrativo", "Didáctico"], a: 2, exp: "La novela es la forma más extensa del género narrativo." },
+                { text: "La libertad no es un fin, sino un medio para desarrollar nuestras facultades. Es necesario que el Estado garantice...", q: "Este texto que defiende una postura es un...", o: ["Poema", "Cuento", "Ensayo", "Mito"], a: 2, exp: "Desarrolla una tesis u opinión argumentada sobre un tema social." }
+            ],
+            estructura: [
+                { text: "Cuando mi error y tu vileza veo, / contemplo, Silvio, de mi amor errado, / cuán grave es la malicia del pecado, / cuán violenta la fuerza de un deseo.", q: "¿Cómo se llama la estrofa de 4 versos?", o: ["Terceto", "Cuarteto", "Quintilla", "Pareado"], a: 1, exp: "Una estrofa de cuatro versos de arte mayor suele llamarse cuarteto (si rima ABBA)." },
+                { q: "Si un poema tiene dos cuartetos y dos tercetos, se trata de un...", o: ["Romance", "Soneto", "Silva", "Décima"], a: 1, exp: "El soneto es la estructura clásica de 14 versos organizados en 4, 4, 3 y 3." },
+                { text: "Se oye: / el canto de las mujeres / que mondan las legumbres / del puchero de pasado mañana;", q: "¿Cuántos versos tiene esta estrofa?", o: ["2", "3", "4", "5"], a: 2, exp: "Basta con contar las líneas de texto que componen la unidad." },
+                { q: "¿Cómo se llama el verso de 8 sílabas?", o: ["Endecasílabo", "Octosílabo", "Alejandrino", "Heptasílabo"], a: 1, exp: "Octo (ocho) + sílabo." },
+                { q: "¿Cómo se llama la estrofa de 3 versos?", o: ["Terceto", "Cuarteto", "Lira", "Octava"], a: 0, exp: "Terceto viene de 'tres'." },
+                { q: "Un verso de 11 sílabas es...", o: ["Arte menor", "Arte mayor", "Verso libre", "Verso blanco"], a: 1, exp: "A partir de 9 sílabas se consideran versos de arte mayor." },
+                { q: "La 'estanza' o 'estrofa' es...", o: ["Una línea del poema", "El conjunto de versos", "La rima final", "El título del poema"], a: 1, exp: "Es la unidad superior al verso, un grupo de versos con rima y ritmo." },
+                { q: "Si un verso termina en palabra aguda, para el conteo silábico...", o: ["Se resta una sílaba", "Se suma una sílaba", "Se queda igual", "Se multiplica por dos"], a: 1, exp: "Es la ley del acento final en métrica española." }
+            ],
+            rimas: [
+                { text: "Siento una grave agonía (-ía) / por lograr un devaneo (-eo) / que empieza como deseo (-eo) / y para en melancolía (-ía)", q: "¿Qué tipo de rima se observa entre los versos 2 y 3?", o: ["Asonante", "Consonante", "Libre", "Blanca"], a: 1, exp: "Coinciden vocales y consonantes desde la última vocal tónica (-eo)." },
+                { text: "El pájaro es una astilla / que canta y se quema viva / en una nota amarilla.", q: "¿Qué rima hay entre 'astilla' y 'amarilla'?", o: ["Asonante", "Consonante", "No riman", "Libre"], a: 1, exp: "La terminación '-illa' es idéntica en ambos." },
+                { q: "La rima donde solo coinciden las vocales se llama...", o: ["Consonante", "Asonante", "Pareado", "Cruzada"], a: 1, exp: "Asonancia es la rima imperfecta (solo vocales)." },
+                { text: "Verso 1: Rama / Verso 2: Canta / Verso 3: Nada", q: "Estos versos presentan rima...", o: ["Consonante", "Asonante", "Perfecta", "Ninguna"], a: 1, exp: "Coinciden solo las vocales 'a-a', pero no las consonantes." },
+                { q: "Los versos que no tienen rima pero sí métrica se llaman...", o: ["Versos libres", "Versos blancos", "Versos sueltos", "Ripios"], a: 1, exp: "El verso blanco respeta la medida pero no rima." },
+                { q: "Si la rima es ABBA, se le conoce como rima...", o: ["Cruzada", "Abrazada", "Encadenada", "Continua"], a: 1, exp: "Los versos exteriores 'abrazan' a los interiores." },
+                { text: "Cielo / Lucero", q: "¿Qué rima tienen estas palabras?", o: ["Consonante", "Asonante", "No riman", "Métrica"], a: 1, exp: "Coinciden las vocales 'e-o' (i-e-l-o / e-r-o)." },
+                { q: "La rima consonante también se conoce como rima...", o: ["Perfecta", "Imperfecta", "Pobre", "Visual"], a: 0, exp: "Porque la coincidencia de sonidos es total." }
+            ],
+            interpretacion: [
+                { text: "¡Inteligencia, dame / el nombre exacto de las cosas! / Que mi palabra sea / la cosa misma.", q: "La voz del poema busca...", o: ["Hablar con los objetos", "Que las palabras capturen la esencia real de lo que nombran", "Aprender nuevos idiomas", "Olvidar los nombres de las cosas"], a: 1, exp: "El deseo de que la palabra sea 'la cosa misma' indica una búsqueda de verdad y precisión absoluta." },
+                { text: "Los crisantemos / se incorporan, etéreos, / tras el chubasco.", q: "Un significado posible del poema es...", o: ["La lluvia destruye las flores", "Tras las dificultades se recupera la paz o normalidad", "Los crisantemos vuelan", "El agua es mala para el jardín"], a: 1, exp: "La acción de 'incorporarse' (levantarse) tras el 'chubasco' (tormenta) es una metáfora de superación." },
+                { text: "Me llamo pájaro Pablo / ave de una sola pluma / volador de sombra clara.", q: "¿Qué sentimiento proyecta la voz del poema?", o: ["Miedo", "Soledad y fragilidad", "Enojo", "Aburrimiento"], a: 1, exp: "Ser 'ave de una sola pluma' evoca una condición precaria y solitaria." },
+                { text: "Tengo pena de ser en esta orilla / tronco sin ramas.", q: "La expresión 'tronco sin ramas' simboliza...", o: ["Un árbol viejo", "La falta de descendencia o de esperanza", "Que tiene frío", "Que es muy alto"], a: 1, exp: "En poesía, las ramas suelen ser los frutos, hijos o proyectos; un tronco sin ellas es alguien vacío o solo." },
+                { text: "La solitaria rosa de tu aliento.", q: "Se interpreta que el aliento de la persona es...", o: ["Rojo y con espinas", "Agradable y perfumado", "Malo y fuerte", "Invisible"], a: 1, exp: "Compara el aliento con una rosa por su fragancia o belleza." },
+                { text: "Soy el pájaro furioso / de la tempestad tranquila.", q: "¿Qué figura utiliza el autor para describir su estado emocional?", o: ["Metáfora", "Paradoja/Oxímoron", "Símil", "Onomatopeya"], a: 1, exp: "Unir 'tempestad' con 'tranquila' muestra una contradicción interna." },
+                { text: "El pájaro es una astilla / que canta y se quema viva.", q: "¿Qué sugiere la imagen de que el pájaro se 'quema vivo'?", o: ["Que el pájaro tiene fuego", "La intensidad y el sacrificio del canto o la pasión", "Que hace mucho calor", "Que el pájaro va a morir"], a: 1, exp: "Asociar el canto con quemarse implica una entrega total y dolorosa." },
+                { text: "Gusano de mi sufrimiento.", q: "Esta metáfora describe el dolor como algo que...", o: ["Es pequeño e insignificante", "Corroe y consume por dentro lentamente", "Es verde y largo", "Se convertirá en mariposa"], a: 1, exp: "El gusano evoca algo que carcome desde el interior." }
+            ]
+        };
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            
+            const info = topicsInfo[tabId];
+            document.getElementById('topic-title').innerText = info.title;
+            document.getElementById('topic-text').innerHTML = info.desc;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    
+                    let readingHtml = item.text ? `<div class="reading-box">${item.text}</div>` : '';
+                    
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4 flex justify-between items-center">
+                            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Ejercicio ${i+1} / ${data[cat].length}</span>
+                        </div>
+                        ${readingHtml}
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic"><b>Respuesta correcta:</b> ${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            if (box.dataset.answered === "true") return;
+            box.dataset.answered = "true";
+            
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { 
+                btn.classList.add('correct-opt', 'shadow-md'); 
+                score += 10; 
+            } else { 
+                btn.classList.add('incorrect-opt'); 
+                box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); 
+            }
+            hint.style.display = 'block';
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { 
+            if(confirm('¿Deseas reiniciar tu progreso?')) { 
+                score = 0; 
+                document.getElementById('global-score').innerText = 0; 
+                render(); 
+                showTab('inferencias'); 
+            } 
+        }
+
+        window.onload = () => { render(); showTab('inferencias'); };
+    </script>
+</body>
+</html>

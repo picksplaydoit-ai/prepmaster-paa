@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Banco Total de Reactivos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .reading-box { background: #f8fafc; border-left: 4px solid #6366f1; padding: 1.25rem; border-radius: 0.75rem; margin-bottom: 1.25rem; font-style: italic; color: #1e293b; line-height: 1.6; font-size: 0.95rem; }
+        
+        .custom-scroll::-webkit-scrollbar { height: 8px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; border: 2px solid #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #6366f1; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden md:block italic">Banco de Reactivos Completo</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación de Temas -->
+        <div class="mb-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">Desliza para ver los 16 módulos de práctica</div>
+        <nav class="flex gap-2 mb-8 bg-slate-200/50 p-2 rounded-2xl overflow-x-auto scroll-smooth custom-scroll">
+            <button onclick="showTab('metafora')" id="btn-metafora" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">10.1 Metáfora</button>
+            <button onclick="showTab('simil')" id="btn-simil" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">10.2 Símil</button>
+            <button onclick="showTab('personificacion')" id="btn-personificacion" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">10.3 Pers.</button>
+            <button onclick="showTab('paradoja')" id="btn-paradoja" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">10.4 Parad/Oxím</button>
+            <button onclick="showTab('ironia')" id="btn-ironia" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">10.5 Ironía</button>
+            <button onclick="showTab('hiperbole')" id="btn-hiperbole" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">10.6 Hipérbole</button>
+            <button onclick="showTab('metonimia')" id="btn-metonimia" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">10.7 Metonim.</button>
+            <button onclick="showTab('onomatopeya')" id="btn-onomatopeya" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">10.8 Onomatop.</button>
+            <button onclick="showTab('sensoriales')" id="btn-sensoriales" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">10.9 Sinestesia</button>
+            <button onclick="showTab('inferencias')" id="btn-inferencias" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">5. Inferencias</button>
+            <button onclick="showTab('semejanzas')" id="btn-semejanzas" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">5.1 Semejanzas</button>
+            <button onclick="showTab('diferencias')" id="btn-diferencias" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">5.2 Diferencias</button>
+            <button onclick="showTab('generos')" id="btn-generos" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">8. Géneros Lit.</button>
+            <button onclick="showTab('estructura')" id="btn-estructura" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">8.1 Estructura</button>
+            <button onclick="showTab('rimas')" id="btn-rimas" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">8.3 Rimas</button>
+            <button onclick="showTab('interpretacion')" id="btn-interpretacion" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">8.2 Interp.</button>
+        </nav>
+
+        <!-- Banner Dinámico -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenedores de Preguntas -->
+        <div id="metafora" class="tab-content space-y-6"></div>
+        <div id="simil" class="tab-content space-y-6"></div>
+        <div id="personificacion" class="tab-content space-y-6"></div>
+        <div id="paradoja" class="tab-content space-y-6"></div>
+        <div id="ironia" class="tab-content space-y-6"></div>
+        <div id="hiperbole" class="tab-content space-y-6"></div>
+        <div id="metonimia" class="tab-content space-y-6"></div>
+        <div id="onomatopeya" class="tab-content space-y-6"></div>
+        <div id="sensoriales" class="tab-content space-y-6"></div>
+        <div id="inferencias" class="tab-content space-y-6"></div>
+        <div id="semejanzas" class="tab-content space-y-6"></div>
+        <div id="diferencias" class="tab-content space-y-6"></div>
+        <div id="generos" class="tab-content space-y-6"></div>
+        <div id="estructura" class="tab-content space-y-6"></div>
+        <div id="rimas" class="tab-content space-y-6"></div>
+        <div id="interpretacion" class="tab-content space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+            metafora: { title: "Metáfora", desc: "Comparación implícita que traslada el sentido de una palabra a otra por semejanza." },
+            simil: { title: "Símil", desc: "Comparación explícita usando nexos (como, cual, tal como)." },
+            personificacion: { title: "Personificación", desc: "Atribuir cualidades humanas a objetos o seres irracionales." },
+            paradoja: { title: "Paradoja/Oxímoron", desc: "Contradicciones lógicas que encierran una verdad o términos opuestos adyacentes." },
+            ironia: { title: "Ironía", desc: "Decir lo contrario de lo que se piensa, generalmente como burla fina." },
+            hiperbole: { title: "Hipérbole", desc: "Exageración desmesurada de la realidad para aumentar la expresividad." },
+            metonimia: { title: "Metonimia/Sinécdoque", desc: "Designar una cosa con el nombre de otra por relación de causa o parte-todo." },
+            onomatopeya: { title: "Onomatopeya", desc: "Representación de sonidos mediante palabras." },
+            sensoriales: { title: "Sinestesia/Sensorial", desc: "Mezcla de sensaciones de distintos sentidos o evocación de los mismos." },
+            inferencias: { title: "Inferencias", desc: "Deduce información no explícita a partir de las pistas del autor." },
+            semejanzas: { title: "Semejanzas", desc: "Identifica puntos de encuentro entre dos lecturas distintas." },
+            diferencias: { title: "Diferencias", desc: "Encuentra discrepancias o enfoques opuestos entre textos." },
+            generos: { title: "Géneros Literarios", desc: "Clasificación de textos por intención y forma (Narrativo, Lírico, etc.)." },
+            estructura: { title: "Estructura Poética", desc: "Análisis de versos, estrofas y tipos de estrofas (sonetos, cuartetos)." },
+            rimas: { title: "Rimas", desc: "Identificación de rimas consonantes, asonantes y versos libres." },
+            interpretacion: { title: "Interpretación", desc: "Descifra el sentido figurado y sentimientos en textos literarios." }
+        };
+
+        const data = {
+            metafora: [
+                { q: "¿Cuál es una metáfora?", o: ["El abuelo es un pozo de sabiduría", "El aire está enfermo", "Bebió copas", "Bartolomé era gentil"], a: 0, exp: "Identifica directamente al abuelo con la profundidad del pozo." },
+                { q: "Identifica la metáfora:", o: ["Los retratos cuentan momentos", "Juana es el sol de mis mañanas", "Ángela habla mucho", "Melodía hermosa"], a: 1, exp: "Sustituye la importancia de Juana con la imagen del Sol." },
+                { q: "¿Qué opción es metáfora?", o: ["Meche muestra sus rubíes", "La cruz no salvó a todos", "Bella como una flor", "Duele el aliento"], a: 0, exp: "'Rubíes' representa los labios por su color rojo." },
+                { q: "Selecciona la metáfora:", o: ["Corazón de titanio", "Ciega como topo", "Cara de ángel", "Tiempo corre deprisa"], a: 0, exp: "Atribuye la dureza del metal al sentimiento." },
+                { q: "Frase con metáfora:", o: ["Perlas de tu boca", "Dientes como perlas", "Mar de lágrimas", "Perro fiel"], a: 0, exp: "Uso poético de 'perlas' para referirse a los dientes." },
+                { q: "¿Cuál es metáfora?", o: ["El estadio era un hervidero", "Sol brillante", "Tengo mucha hambre", "Frío como hielo"], a: 0, exp: "Comparación implícita de agitación." },
+                { q: "Identifica la metáfora:", o: ["Tus cabellos de oro", "Pelo rubio", "Oro que brilla", "Cabello largo"], a: 0, exp: "Identificación directa de color y valor con el cabello." },
+                { q: "Ejemplo de metáfora:", o: ["El examen fue un regalo", "Estudié mucho", "Regalo sorpresa", "Examen difícil"], a: 0, exp: "Describe la facilidad del examen mediante un objeto ajeno." },
+                { q: "Identifica la metáfora:", o: ["Eres la luz de mi vida", "Tu mirada es fría", "Vuelo sin alas", "Mundo pequeño"], a: 0, exp: "La persona es fuente de guía y esperanza." },
+                { q: "Selecciona la metáfora:", o: ["Su voz es música", "Canta bien", "Voz alta", "Me gusta su voz"], a: 0, exp: "Atribuye cualidad musical a la voz." }
+            ],
+            simil: [
+                { q: "¿Cuál es un símil?", o: ["Su piel era suave como un pétalo", "Sus perlas sobresalían", "Eduardo era infame", "Entró en la red"], a: 0, exp: "El nexo 'como' establece la comparación explícita." },
+                { q: "Identifica el símil:", o: ["Igual que la de un caballo", "Limpian la habitación", "Millón de veces", "Cuidó el brazo"], a: 0, exp: "Uso de 'igual que' como nexo comparativo." },
+                { q: "Selecciona el símil:", o: ["Tan fresco que parece brisa", "Velocidad de la luz", "Bella respuesta", "Tomaron una copa"], a: 0, exp: "Establece semejanza explícita con 'parece'." },
+                { q: "¿Qué frase es un símil?", o: ["Cual mariposa en una flor", "Es un violín", "Comida rica", "Talaron madera"], a: 0, exp: "El nexo 'cual' indica símil." },
+                { q: "Identifica el símil:", o: ["Fuerte como una viga", "Héctor es una viga", "Mucha fuerza", "Viga de metal"], a: 0, exp: "Comparación explícita de fuerza." },
+                { q: "¿Cuál es símil?", o: ["Ojos como luceros", "Ojos brillantes", "Dos luceros", "Miró fijamente"], a: 0, exp: "Uso de 'como' para comparar ojos con astros." },
+                { q: "Ejemplo de símil:", o: ["Frío como un témpano", "Corazón de piedra", "Eres un sol", "Casa vieja"], a: 0, exp: "Compara la temperatura/carácter con un nexo." },
+                { q: "Identifica el símil:", o: ["Lento cual tortuga", "Tiempo vuela", "Dura realidad", "Paso de gigante"], a: 0, exp: "Uso de 'cual' para enfatizar lentitud." },
+                { q: "Selecciona el símil:", o: ["Suaves como la seda", "Manos de seda", "Seda fina", "Manos tersas"], a: 0, exp: "Compara textura con la tela." },
+                { q: "¿Qué opción es símil?", o: ["Murió como un valiente", "Fue valiente", "Valentía pura", "Muerte digna"], a: 0, exp: "Compara la forma de la acción." }
+            ],
+            personificacion: [
+                { q: "¿Cuál es personificación?", o: ["Las estrellas hablaban", "Julia es linda", "Día parece siglo", "Nunca entenderás"], a: 0, exp: "Atribuye el habla humana a los astros." },
+                { q: "Identifica personificación:", o: ["Ventanas miraban", "Leí a Benedetti", "Magnífico pincel", "Igual al alma"], a: 0, exp: "Mirar es acción humana dada a un objeto." },
+                { q: "Selecciona personificación:", o: ["El señor sol sonreirá", "Labios de azúcar", "Cientos de ojos", "Diamantes en rostro"], a: 0, exp: "La sonrisa es un rasgo humano." },
+                { q: "¿Qué frase es personificación?", o: ["Otoño pintó el bosque", "Lenta como caracol", "Comparte un Ferrari", "Dolor de siglo"], a: 0, exp: "Pintar requiere intención humana." },
+                { q: "Identifica personificación:", o: ["La casa guarda secretos", "Regresa como colibrí", "Es relámpago", "Luis es alto"], a: 0, exp: "Guardar secretos implica conciencia." },
+                { q: "¿Cuál es personificación?", o: ["La luna dormía", "Marisol ama", "Gran tormento", "Mundo entero"], a: 0, exp: "Dormir es acción vital humana." },
+                { q: "Ejemplo de personificación:", o: ["Árboles se desvistieron", "Rosas en jardín", "Luz y oscuridad", "Día común"], a: 0, exp: "Desvestirse (perder hojas) es acto humano." },
+                { q: "Identifica personificación:", o: ["Corriente cantaba", "Estrellas en caja", "Mil lunas", "Señora de décadas"], a: 0, exp: "Cantar es expresión vocal humana." },
+                { q: "Selecciona personificación:", o: ["Viento acariciaba", "Viento fuerte", "Sentí viento", "Viento de tarde"], a: 0, exp: "Acariciar implica tacto e intención." },
+                { q: "¿Qué opción es personificación?", o: ["La ciudad nunca duerme", "Ciudad grande", "Gente en ciudad", "Luces de ciudad"], a: 0, exp: "Atribuye la falta de descanso a la ciudad." }
+            ],
+            paradoja: [
+                { q: "¿Cuál es oxímoron?", o: ["Copia original", "Magia con palabras", "Sopa instantánea", "Ojos de Raquel"], a: 0, exp: "Une términos contradictorios." },
+                { q: "Identifica oxímoron:", o: ["Intenso desinterés", "Nadie te poseerá", "Compré un Quiroz", "Bailar de puerta"], a: 0, exp: "El desinterés no suele ser intenso." },
+                { q: "Selecciona oxímoron:", o: ["Gentil descortesía", "Gesto de bondad", "Cubo de esquinas", "Perla del pacífico"], a: 0, exp: "Combinación de opuestos adyacentes." },
+                { q: "Frase con paradoja:", o: ["Solo sé que no sé nada", "Copia original", "Luz oscura", "Día nublado"], a: 0, exp: "Afirmación que parece falsa pero es una verdad lógica." },
+                { q: "Identifica la paradoja:", o: ["Si quieres paz, prepárate para la guerra", "Paz interior", "Guerra mundial", "Soldado de paz"], a: 0, exp: "Ideas opuestas con sentido profundo." },
+                { q: "¿Cuál es oxímoron?", o: ["Hielo abrasador", "Hielo frío", "Cubo de hielo", "Mucho hielo"], a: 0, exp: "Hielo (frío) y abrasador (calor)." },
+                { q: "Selecciona la paradoja:", o: ["Prohibido prohibir", "No entrar", "Entrada libre", "Orden estricto"], a: 0, exp: "Usa la acción para anularse a sí misma." },
+                { q: "Identifica el oxímoron:", o: ["Silencio atronador", "Silencio total", "Mucho silencio", "Sin ruido"], a: 0, exp: "El silencio no hace ruido (atrona)." },
+                { q: "Ejemplo de paradoja:", o: ["Vivo sin vivir en mí", "Vivir la vida", "Vida larga", "Vida de perros"], a: 0, exp: "Contradicción de existencia espiritual." },
+                { q: "¿Qué es oxímoron?", o: ["Muerto viviente", "Hombre muerto", "Gran vida", "Vivir mucho"], a: 0, exp: "Estados biológicos opuestos." }
+            ],
+            ironia: [
+                { q: "¿Cuál es situación irónica?", o: ["Jugó como campeón y perdió como novato", "Róbame el tiempo", "Estupidez vista", "Mi mejor amigo"], a: 0, exp: "Contraste entre expectativa y realidad." },
+                { q: "Identifica comentario irónico:", o: ["Te explotó el boiler", "Te ves muy bien", "Llegaste tarde", "No me gustas"], a: 0, exp: "Halago falso para señalar desorden." },
+                { q: "Selecciona la ironía:", o: ["Zapatero sin zapatos", "Zapatero hace zapatos", "Zapatos nuevos", "Venta de calzado"], a: 0, exp: "Experto que carece de su propio producto." },
+                { q: "¿Qué frase es irónica?", o: ["¡Qué puntual eres! (tarde)", "Llegaste tarde", "Eres puntual", "No llegues tarde"], a: 0, exp: "Sarcasmo puro." },
+                { q: "Identifica la ironía:", o: ["Gracias por la ayuda (estorbó)", "Gracias de verdad", "No me ayudes", "Ayuda mutua"], a: 0, exp: "Agradece un perjuicio de forma sarcástica." },
+                { q: "Selecciona la ironía:", o: ["Estudié medicina y administro vinatería", "Soy doctor", "Médico general", "Venta de vinos"], a: 0, exp: "Contraste entre formación y ocupación." },
+                { q: "¿Cuál es frase irónica?", o: ["Valiente (huyó)", "Eres un héroe", "Tuviste miedo", "No seas miedoso"], a: 0, exp: "Uso de virtud para marcar cobardía." },
+                { q: "Identifica la ironía:", o: ["¡Clima agradable! (tormenta)", "Hace calor", "Va a llover", "Está lloviendo"], a: 0, exp: "Califica positivamente lo hostil." },
+                { q: "Ejemplo de ironía:", o: ["Lo que me faltaba (malo)", "Me falta dinero", "Tengo todo", "Qué suerte"], a: 0, exp: "Expresa el máximo disgusto." },
+                { q: "Identifica la ironía:", o: ["Es tan propio que dice groserías", "Es educado", "Groserías dice", "Habla mucho"], a: 0, exp: "Contradicción entre etiqueta y conducta." }
+            ],
+            hiperbole: [
+                { q: "¿Cuál es una hipérbole?", o: ["Más viejo que las colinas", "Casa mejor", "Sol sonrió", "Volverán golondrinas"], a: 0, exp: "Exageración temporal extrema." },
+                { q: "Identifica la hipérbole:", o: ["Comería una vaca", "Espalda pierde nombre", "Silencio susurra", "Tiempo era oro"], a: 0, exp: "Magnificación del hambre." },
+                { q: "Selecciona hipérbole:", o: ["Infinito y más allá", "Te quiero mucho", "Amor grande", "Eres mi amor"], a: 0, exp: "Amor medido en términos astronómicos." },
+                { q: "¿Qué frase es hipérbole?", o: ["Río de lágrimas", "Lloré un poco", "Estoy triste", "Ojos rojos"], a: 0, exp: "Cantidad imposible de llanto." },
+                { q: "Identifica la hipérbole:", o: ["Hice mil cosas hoy", "Mucho trabajo", "Día ocupado", "Terminé tareas"], a: 0, exp: "Uso del 'mil' para indicar cantidad subjetiva." },
+                { q: "Ejemplo de hipérbole:", o: ["Escribió mil poemas en un minuto", "Escribe poemas", "Poeta prolífico", "Muchos versos"], a: 0, exp: "Imposibilidad física por velocidad." },
+                { q: "¿Cuál es hipérbole?", o: ["Pesas menos que una pluma", "Eres delgado", "Estás flaco", "Casi no pesas"], a: 0, exp: "Resalta ligereza de forma extrema." },
+                { q: "Selecciona hipérbole:", o: ["Tardó un siglo", "Mucho tiempo", "No rápido", "Esperé horas"], a: 0, exp: "Magnifica el tiempo de espera." },
+                { q: "Identifica hipérbole:", o: ["De oreja a oreja", "Sonrió mucho", "Estaba feliz", "Gran sonrisa"], a: 0, exp: "Descripción anatómica exagerada." },
+                { q: "Selecciona la hipérbole:", o: ["Me muero de sueño", "Tengo sueño", "Quiero dormir", "Estoy cansado"], a: 0, exp: "Exagera cansancio mediante la muerte." }
+            ],
+            metonimia: [
+                { q: "¿Cuál es metonimia?", o: ["La pinta da leche", "Meseta con flores", "Vacaciones verano", "Globos rojos"], a: 0, exp: "'La pinta' (vaca) por su producto." },
+                { q: "Identifica metonimia:", o: ["Bebió copas", "Bebió vino", "Tenía sed", "Copas cristal"], a: 0, exp: "Continente por contenido." },
+                { q: "Selecciona metonimia:", o: ["Compré un Picasso", "Compré cuadro", "Picasso pintor", "Cuadro de Picasso"], a: 0, exp: "Autor por la obra." },
+                { q: "Frase con metonimia:", o: ["Primer espada", "Buen torero", "Usa espada", "Espada afilada"], a: 0, exp: "Instrumento por la profesión." },
+                { q: "Identifica metonimia:", o: ["Lealtad a la bandera", "Bandera tela", "Bandera patria", "Amo bandera"], a: 0, exp: "Símbolo por la nación." },
+                { q: "Selecciona sinécdoque:", o: ["Cinco bocas que alimentar", "Cinco hijos", "Mucha gente", "Hambre familia"], a: 0, exp: "Parte por el todo." },
+                { q: "Identifica metonimia:", o: ["Le pidió la mano", "Se casó", "Compromiso", "Mano derecha"], a: 0, exp: "Parte del cuerpo por la unión." },
+                { q: "Selecciona sinécdoque:", o: ["Quince abriles", "Quince años", "Quince primaveras", "Años vida"], a: 0, exp: "Parte del año por el año completo." },
+                { q: "Identifica metonimia:", o: ["Respetar las canas", "Respetar viejos", "Tener canas", "Pelo blanco"], a: 0, exp: "Rasgo físico por la vejez." },
+                { q: "¿Qué opción es metonimia?", o: ["Estadio aplaudió", "Gente aplaudió", "Aplausos fuertes", "Gran estadio"], a: 0, exp: "Lugar por las personas." }
+            ],
+            onomatopeya: [
+                { q: "¿Qué es onomatopeya?", o: ["Tolón, tolón", "Gato sonreía", "Cuernos iguales", "Labios carmesí"], a: 0, exp: "Imitación del sonido de campanas." },
+                { q: "Identifica onomatopeya:", o: ["¡Cronch! del suelo", "Perfume distorsiona", "Cielo e infierno", "Mundo mágico"], a: 0, exp: "Sonido de algo crujiendo." },
+                { q: "Selecciona onomatopeya:", o: ["Tic, toc del reloj", "Hojas hablaban", "Silencio total", "Dentro aula"], a: 0, exp: "Sonido rítmico del tiempo." },
+                { q: "Identifica onomatopeya:", o: ["Cuac, cuac de patos", "Vete despacio", "Huesos cuerpo", "Quién quiere"], a: 0, exp: "Sonido del ave." },
+                { q: "Selecciona onomatopeya:", o: ["Zas, zas, el agua", "Voces eco", "Agua clara", "Niños corrían"], a: 0, exp: "Sonido del impacto con agua." },
+                { q: "Identifica onomatopeya:", o: ["Muu, muu vaca", "Multitud", "Cabellera", "Espectáculo"], a: 0, exp: "Sonido del ganado." },
+                { q: "Selecciona onomatopeya:", o: ["¡Boom! estalló", "Explosión", "Mucho ruido", "Fuego artificial"], a: 0, exp: "Sonido de estallido." },
+                { q: "Identifica onomatopeya:", o: ["Miau del gato", "Gato negro", "Mascota", "Maullido"], a: 0, exp: "Sonido felino." },
+                { q: "Selecciona onomatopeya:", o: ["Ring, ring teléfono", "Llamada", "Aparato", "Teléfono viejo"], a: 0, exp: "Sonido de timbre." },
+                { q: "Identifica onomatopeya:", o: ["Achís estornudo", "Estornudo fuerte", "Enfermo", "Salud"], a: 0, exp: "Sonido del estornudo." }
+            ],
+            sensoriales: [
+                { q: "¿Cuál es sinestesia?", o: ["Hedor de tu desprecio", "Cual cochinos", "Te busqué", "Hijos luz"], a: 0, exp: "Mezcla olfato con valor moral." },
+                { q: "Identifica sinestesia:", o: ["Amarillo chillón", "Sordo como roca", "Colinas mar", "Tomó seda"], a: 0, exp: "Mezcla vista con oído." },
+                { q: "Selecciona sinestesia:", o: ["Luz tenue fría", "Escoba quehacer", "Derrumbó", "Hambre vaca"], a: 0, exp: "Mezcla vista con tacto." },
+                { q: "Identifica sinestesia:", o: ["Aroma agudo", "Postrada", "Compré", "Me canso"], a: 0, exp: "Mezcla olfato con tacto/oído." },
+                { q: "Imagen sensorial auditiva:", o: ["Rechinido constante", "Cataratas", "Granos", "Temporada"], a: 0, exp: "Evoca el oído." },
+                { q: "Imagen sensorial gustativa:", o: ["Sabor del café", "Señal", "Últimos", "Mejor"], a: 0, exp: "Evoca el gusto." },
+                { q: "Imagen sensorial táctil:", o: ["Tersas manos", "Palabras", "Pinta", "Escondido"], a: 0, exp: "Evoca la textura." },
+                { q: "Imagen olfativa:", o: ["Perfume flores", "Flores rojas", "Sala", "Mesa"], a: 0, exp: "Se centra en el aroma." },
+                { q: "Identifica sinestesia:", o: ["Canto dulce", "Voz alta", "Grito sordo", "Suave murmullo"], a: 0, exp: "Mezcla gusto con oído." },
+                { q: "Imagen visual:", o: ["Rojo intenso", "Ruido", "Piel suave", "Olor"], a: 0, exp: "Evoca la vista." }
+            ],
+            inferencias: [
+                { text: "Pigmalión construía estatuas perfectas que hablaban y les enseñaba literatura.", q: "Se infiere que en la antigua Grecia...", o: ["Los griegos llamaban poesía a la escultura", "Pigmalión no era realmente poeta", "La palabra poeta designaba a varios artistas", "Las estatuas eran humanos"], a: 2, exp: "El texto llama poeta a un escultor." },
+                { text: "Space Oddity cuenta la historia del Mayor Tom perdido en el espacio. Otros ven un viaje de drogas.", q: "Se infiere que...", o: ["Drogas inspiran mejor", "Bowie era polémico", "Una canción no siempre tiene sentido explícito", "Mayor Tom es real"], a: 2, exp: "Existen múltiples interpretaciones válidas." },
+                { text: "Daltónicos pueden compensar su condición con educación y aprendizaje tras diagnóstico.", q: "Se infiere que...", o: ["Se cura con pastillas", "Se quedan ciegos", "Pueden compensar su condición con educación", "Confunden sonidos"], a: 2, exp: "El aprendizaje les permite vida normal." },
+                { text: "Pulque es prehispánico. A españoles les pareció extraño pero luego fue pilar económico.", q: "Se infiere que...", o: ["Era rechazado por indígenas", "No era del gusto inicial de españoles", "Es bebida moderna", "Solo para reyes"], a: 1, exp: "Dice que les pareció 'extraño', indicando extrañeza inicial." },
+                { text: "Si un animal siente dolor consciente, entonces es titular de derechos.", q: "Se infiere que...", o: ["Tienen derechos humanos", "Su derecho depende del consenso sobre su sentir", "Ciencia niega dolor", "Leyes ignoran ciencia"], a: 1, exp: "Vincula estatus legal con capacidad sensorial." },
+                { text: "McCandless donó sus ahorros y vivió sin dinero lejos de la sociedad.", q: "Se infiere que...", o: ["Dinero era obstáculo espiritual", "No sabía el valor del dinero", "Quería fama", "Odiaba a su familia"], a: 0, exp: "La donación muestra prioridad por lo espiritual." },
+                { text: "New Horizons viajó 10 años a Plutón para dar luz al origen del sistema solar.", q: "Se infiere que...", o: ["Primer viaje al sol", "Plutón tiene fósiles biológicos", "Plutón conserva información primitiva", "Misión falló"], a: 2, exp: "Se estudia como 'fósil' del origen del sistema." },
+                { text: "Escribir requiere que el autor descubra qué sucede entre principio y fin.", q: "Se infiere que...", o: ["Es mecánico", "Es proceso de descubrimiento", "Todo está escrito antes", "No requiere esfuerzo"], a: 1, exp: "El autor debe 'descubrir' lo que ocurre." },
+                { text: "La arqueología cognitiva es un enfoque multidisciplinar aún en sus inicios.", q: "Se infiere que...", o: ["La arqueología sola era insuficiente", "No hay avances", "Es rama de medicina", "Cerebro no es biológico"], a: 0, exp: "Si es multidisciplinar es que requiere varias áreas." },
+                { text: "Pacientes con tritanopia confunden azul y amarillo.", q: "Se infiere que el daltonismo...", o: ["Tiene variantes específicas", "Es ceguera total", "No afecta la vida", "Es genético"], a: 0, exp: "Existen tipos con confusiones de colores específicos." }
+            ],
+            semejanzas: [
+                { text: "Texto A: Té verde benéfico. Texto B: Té negro ayuda al corazón.", q: "Tema común:", o: ["Vegetal de origen", "Consumo social", "Componentes y beneficios", "Temperatura cultivo"], a: 2, exp: "Ambos citan beneficios químicos." },
+                { text: "Texto A: Abeja gigante redescubierta. Texto B: Científicos hallaron nidos en Indonesia.", q: "Ambos mencionan:", o: ["Nombre científico", "Es plaga", "Está extinta", "Color"], a: 0, exp: "Referencia a Megachile Pluto." },
+                { text: "Texto A: Ejercicio mejora pulmones. Texto B: Correr reduce estrés.", q: "Coinciden en:", o: ["Correr mejor que nadar", "Actividad física aporta salud", "Solo para jóvenes", "Ejercicio nocturno"], a: 1, exp: "Enfoque en bienestar por esfuerzo físico." },
+                { text: "Texto A: Energía oscura expande universo. Texto B: Big Bang sigue por expansión.", q: "Tratan sobre:", o: ["Fin del mundo", "Expansión del universo", "Vida alienígena", "Calor solar"], a: 1, exp: "Eje central: expansión astronómica." },
+                { text: "Texto A: Feminismo liberal igualdad legal. Texto B: Críticas dicen sufragio insuficiente.", q: "Mencionan:", o: ["Derechos hombres", "Feminismo y alcances", "Moda", "Educación"], a: 1, exp: "Tema central: movimiento feminista." },
+                { text: "Texto A: Smartphone distrae. Texto B: Apps educativas contraproducentes sin supervisión.", q: "Punto común:", o: ["Precio", "Tecnología en educación", "Historia internet", "Software"], a: 1, exp: "Relacionan dispositivos con escuela." },
+                { text: "Texto A: Arte barroco ornamentado. Texto B: Iglesias estilo cargado.", q: "Enfoque en:", o: ["Arquitectura moderna", "Características estéticas periodo", "Pintores", "Costo"], a: 1, exp: "Descripción visual de estilo cargado." },
+                { text: "Texto A: Perros necesitan rutinas. Texto B: Perro aburrido destruye.", q: "Sugieren:", o: ["Vender mascotas", "Importancia ejercicio animal", "Odian casas", "Comida cara"], a: 1, exp: "Enfatizan necesidad de actividad física." },
+                { text: "Texto A: El sol es enana amarilla. Texto B: El sol genera energía nuclear.", q: "Hablan de:", o: ["El Sol", "La Luna", "Marte", "Estrellas lejanas"], a: 0, exp: "Ambos se centran en el astro rey." },
+                { text: "Texto A: Quijote parodia caballería. Texto B: Cervantes burló caballeros.", q: "Semejanza:", o: ["Propósito burlesco de obra", "Año edición", "Precio libro", "Muerte autor"], a: 0, exp: "Ambos explican el sentido paródico." }
+            ],
+            diferencias: [
+                { text: "Texto A: Té bebida antigua. Texto B: Té verde previene cáncer.", q: "Diferencia:", o: ["A informativo", "B beneficios específicos salud", "A marcas", "B poema"], a: 1, exp: "B es médico/biológico; A histórico." },
+                { text: "Texto A: Abeja mide 4 cm. Texto B: Expedición duró dos semanas.", q: "Solo en B:", o: ["Tamaño", "Alimentación", "Detalles expedición", "Hábitat"], a: 2, exp: "B narra el proceso de búsqueda." },
+                { text: "Texto A: Café originó Etiopía. Texto B: Exceso cafeína insomnio.", q: "Diferencia enfoque:", o: ["Origen vs Efectos", "Precio vs Sabor", "Cosecha vs Preparación", "Color vs Aroma"], a: 0, exp: "A es histórico; B es médico." },
+                { text: "Texto A: Fútbol pasión multitudes. Texto B: Estudio 80% feliz con gol.", q: "B se diferencia por:", o: ["Brevedad", "Datos estadísticos", "Béisbol", "Literatura"], a: 1, exp: "Uso de cifras e investigación." },
+                { text: "Texto A: Luna no luz propia. Texto B: Luna influye mareas.", q: "B aporta sobre:", o: ["Distancia sol", "Influencia Luna en Tierra", "Polvo lunar", "Cráteres"], a: 1, exp: "B trata relación Tierra-Luna." },
+                { text: "Texto A: Cervantes escribió Quijote. Texto B: Quijote parodia libros.", q: "B presenta:", o: ["Fecha", "Análisis crítico género", "Biografía", "Páginas"], a: 1, exp: "B explica la naturaleza literaria." },
+                { text: "Texto A: Reciclaje ahorra energía. Texto B: Plástico tarda 500 años.", q: "B enfatiza:", o: ["Fundición", "Impacto negativo y durabilidad", "Ganancia", "Educación"], a: 1, exp: "Persistencia del contaminante." },
+                { text: "Texto A: Sol enana amarilla. Texto B: Sol energía fusión nuclear.", q: "B explica:", o: ["Color", "Proceso interno generación", "Distancia", "Mitos"], a: 1, exp: "B es técnico sobre física solar." },
+                { text: "Texto A: 100ml sal 4.5mg. Texto B: Pacientes daltónicos confundirán.", q: "Enfoque:", o: ["Química vs Oftalmología", "Sal vs Azúcar", "Mar vs Tierra", "Luz vs Oscuro"], a: 0, exp: "Temas totalmente distintos en cada texto." },
+                { text: "Texto A: NASA lanzó New Horizons. Texto B: Plutón dios romano.", q: "Diferencia:", o: ["Ciencia vs Mitología", "Plutón vs Júpiter", "Viaje vs Estático", "EEUU vs Roma"], a: 0, exp: "A es astronómico actual; B mitológico." }
+            ],
+            generos: [
+                { text: "Llevábamos tres años casados... grito de horror al verlo.", q: "Género:", o: ["Cuento", "Poesía", "Drama", "Ensayo"], a: 0, exp: "Narrador y relato de sucesos." },
+                { text: "Asume tus errores / Visto para sentencia tiempo...", q: "Género:", o: ["Fábula", "Poesía", "Epopeya", "Leyenda"], a: 1, exp: "Versos y lenguaje figurado." },
+                { text: "Nadie sabe cómo debe ser un cuento. El escritor que sabe es mal cuentista.", q: "Propio de:", o: ["Cuento", "Poema", "Ensayo", "Libreto"], a: 2, exp: "Reflexión subjetiva analítica." },
+                { text: "MENDIGO: ¡Limosna! / CIEGO: ¿Lázaro?", q: "Género:", o: ["Narrativo", "Dramático", "Lírico", "Didáctico"], a: 1, exp: "Diálogos y acotaciones teatrales." },
+                { text: "El león... Moraleja: No ignores al débil.", q: "Texto es:", o: ["Novela", "Fábula", "Tragedia", "Oda"], a: 1, exp: "Animales y enseñanza moral." },
+                { text: "Canto a la bandera que ondea...", q: "Género:", o: ["Narrativo", "Lírico", "Ensayístico", "Dramático"], a: 1, exp: "Sentimiento patrio en verso." },
+                { text: "En un lugar de la Mancha...", q: "Género:", o: ["Lírico", "Dramático", "Narrativo", "Didáctico"], a: 2, exp: "Novela (forma narrativa extensa)." },
+                { text: "La libertad no es un fin, sino un medio...", q: "Texto es:", o: ["Poema", "Cuento", "Ensayo", "Mito"], a: 2, exp: "Defiende tesis u opinión." },
+                { text: "ACTO I: Se abre el telón, casa vacía.", q: "Género:", o: ["Lírico", "Dramático", "Narrativo", "Didáctico"], a: 1, exp: "Estructura escénica." },
+                { text: "Había una vez en un lejano país...", q: "Género:", o: ["Narrativo", "Lírico", "Drama", "Ensayo"], a: 0, exp: "Inicio clásico de cuento." }
+            ],
+            estructura: [
+                { text: "Cuando mi error y tu vileza veo...", q: "Estrofa 4 versos:", o: ["Terceto", "Cuarteto", "Quintilla", "Pareado"], a: 1, exp: "Estructura de 4 versos." },
+                { q: "Poema 2 cuartetos y 2 tercetos:", o: ["Romance", "Soneto", "Silva", "Décima"], a: 1, exp: "Estructura clásica del soneto." },
+                { text: "Se oye: / el canto...", q: "Versos estrofa:", o: ["2", "3", "4", "5"], a: 2, exp: "Conteo directo de líneas." },
+                { q: "Verso 8 sílabas:", o: ["Endecasílabo", "Octosílabo", "Alejandrino", "Heptasílabo"], a: 1, exp: "Métrica de 8." },
+                { q: "Estrofa 3 versos:", o: ["Terceto", "Cuarteto", "Lira", "Octava"], a: 0, exp: "Terceto (tres)." },
+                { q: "Verso 11 sílabas:", o: ["Arte menor", "Arte mayor", "Verso libre", "Verso blanco"], a: 1, exp: "Métrica superior a 8 sílabas." },
+                { q: "La estrofa es:", o: ["Una línea", "Conjunto versos", "Rima final", "Título"], a: 1, exp: "Grupo organizado de versos." },
+                { q: "Verso termina en aguda:", o: ["Resta 1", "Suma 1", "Igual", "x2"], a: 1, exp: "Regla del acento final." },
+                { q: "Versos 14 sílabas:", o: ["Alejandrino", "Decasílabo", "Octava", "Soneto"], a: 0, exp: "Versos de 14 sílabas." },
+                { q: "Verso termina en esdrújula:", o: ["Suma 1", "Resta 1", "Igual", "x3"], a: 1, exp: "Regla métrica." }
+            ],
+            rimas: [
+                { text: "Agonía / devaneo / deseo / melancolía", q: "Rima 2 y 3:", o: ["Asonante", "Consonante", "Libre", "Blanca"], a: 1, exp: "Coincidencia total de sonidos." },
+                { text: "Astilla / viva / amarilla", q: "Rima astilla-amarilla:", o: ["Asonante", "Consonante", "No rima", "Libre"], a: 1, exp: "Terminación idéntica '-illa'." },
+                { q: "Coinciden solo vocales:", o: ["Consonante", "Asonante", "Pareado", "Cruzada"], a: 1, exp: "Definición de asonancia." },
+                { text: "Rama / Canta / Nada", q: "Rima:", o: ["Consonante", "Asonante", "Perfecta", "Ninguna"], a: 1, exp: "Solo vocales 'a-a'." },
+                { q: "Versos sin rima pero con medida:", o: ["Libres", "Blancos", "Sueltos", "Ripios"], a: 1, exp: "Definición verso blanco." },
+                { q: "Rima ABBA:", o: ["Cruzada", "Abrazada", "Encadenada", "Continua"], a: 1, exp: "Esquema abrazado." },
+                { text: "Cielo / Lucero", q: "Rima:", o: ["Consonante", "Asonante", "No", "Métrica"], a: 1, exp: "Vocales 'e-o'." },
+                { q: "Rima consonante es:", o: ["Perfecta", "Imperfecta", "Pobre", "Visual"], a: 0, exp: "Igualdad total de sonidos." },
+                { q: "Versos sin rima ni medida:", o: ["Blancos", "Libres", "Sueltos", "Pareados"], a: 1, exp: "Poesía contemporánea libre." },
+                { q: "Nomenclatura rima letra mayúscula:", o: ["Arte menor", "Arte mayor", "Verso libre", "Rima rica"], a: 1, exp: "Indica versos de más de 8 sílabas." }
+            ],
+            interpretacion: [
+                { text: "¡Inteligencia, dame el nombre exacto!", q: "La voz busca:", o: ["Hablar objetos", "Capturar esencia real", "Aprender idiomas", "Olvidar nombres"], a: 1, exp: "Busca precisión absoluta." },
+                { text: "Crisantemos se incorporan tras chubasco.", q: "Significado:", o: ["Lluvia destruye", "Superación tras dificultad", "Vuelan", "Agua mala"], a: 1, exp: "Metáfora de recuperación." },
+                { text: "Ave de una sola pluma.", q: "Sentimiento:", o: ["Miedo", "Soledad y fragilidad", "Enojo", "Aburrimiento"], a: 1, exp: "Evoca condición precaria." },
+                { text: "Tronco sin ramas.", q: "Simboliza:", o: ["Árbol viejo", "Falta esperanza/hijos", "Frío", "Altura"], a: 1, exp: "Vacío o soledad." },
+                { text: "Rosa de tu aliento.", q: "Se interpreta como:", o: ["Rojo", "Agradable/perfumado", "Malo", "Invisible"], a: 1, exp: "Fragancia del aliento." },
+                { text: "Tempestad tranquila.", q: "Figura:", o: ["Metáfora", "Paradoja/Oxímoron", "Símil", "Onomatopeya"], a: 1, exp: "Contradicción interna." },
+                { text: "Pájaro se quema vivo.", q: "Sugiere:", o: ["Fuego", "Intensidad y entrega", "Calor", "Muerte"], a: 1, exp: "Entrega total apasionada." },
+                { text: "Gusano de mi sufrimiento.", q: "Describe dolor que:", o: ["Insignificante", "Corroe por dentro", "Verde", "Mariposa"], a: 1, exp: "Carcomido interior." },
+                { text: "Mariposa de mi sueño.", q: "Significa:", o: ["Insecto", "Fragilidad del sueño", "Vuelo", "Naturaleza"], a: 1, exp: "Naturaleza efímera del sueño." },
+                { text: "Espada desnuda (referido a un ave).", q: "Imagen de:", o: ["Peligro", "Forma y elegancia", "Armas", "Guerra"], a: 1, exp: "Describe la silueta del ave." }
+            ]
+        };
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            
+            const info = topicsInfo[tabId];
+            document.getElementById('topic-title').innerText = info.title;
+            document.getElementById('topic-text').innerHTML = info.desc;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    
+                    let readingHtml = item.text ? `<div class="reading-box">${item.text}</div>` : '';
+                    
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4 flex justify-between items-center">
+                            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Reactivo ${i+1} / ${data[cat].length}</span>
+                        </div>
+                        ${readingHtml}
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic"><b>Respuesta correcta:</b> ${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            if (box.dataset.answered === "true") return;
+            box.dataset.answered = "true";
+            
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { 
+                btn.classList.add('correct-opt', 'shadow-md'); 
+                score += 10; 
+            } else { 
+                btn.classList.add('incorrect-opt'); 
+                box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); 
+            }
+            hint.style.display = 'block';
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { 
+            if(confirm('¿Deseas reiniciar tu progreso?')) { 
+                score = 0; 
+                document.getElementById('global-score').innerText = 0; 
+                render(); 
+                showTab('metafora'); 
+            } 
+        }
+
+        window.onload = () => { render(); showTab('metafora'); };
+    </script>
+</body>
+</html>
