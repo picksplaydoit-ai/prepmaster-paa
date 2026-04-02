@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Aritmética y Álgebra Fundamental</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        
+        .opt-btn {
+            transition: all 0.2s ease;
+            border: 2px solid #e2e8f0;
+        }
+        .opt-btn:hover:not(:disabled) {
+            border-color: #6366f1;
+            background-color: #f8fafc;
+        }
+
+        .category-card {
+            transition: transform 0.2s;
+        }
+        .category-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">
+                    PrepMaster
+                </div>
+                <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
+                <h1 class="font-bold text-slate-500 text-sm hidden sm:block italic">Aritmética y Álgebra</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors" title="Reiniciar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-8">
+        
+        <!-- Tabs Navigation -->
+        <nav class="flex flex-wrap gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl">
+            <button onclick="showTab('jerarquia')" id="btn-jerarquia" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all bg-white shadow-sm text-indigo-600">
+                Jerarquía
+            </button>
+            <button onclick="showTab('sumaresta')" id="btn-sumaresta" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
+                Suma/Resta
+            </button>
+            <button onclick="showTab('multidiv')" id="btn-multidiv" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
+                Mult/Div
+            </button>
+            <button onclick="showTab('potraices')" id="btn-potraices" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
+                Potencias
+            </button>
+            <button onclick="showTab('leyes')" id="btn-leyes" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
+                Leyes Exp
+            </button>
+        </nav>
+
+        <!-- Topic Banner -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl shadow-indigo-100 relative overflow-hidden">
+            <div class="relative z-10">
+                <h3 id="topic-title" class="text-2xl font-bold mb-2 text-white">Cargando...</h3>
+                <div id="topic-text" class="text-indigo-100 text-sm leading-relaxed max-w-4xl"></div>
+            </div>
+            <div class="absolute right-0 top-0 opacity-10 transform translate-x-1/4 -translate-y-1/4 scale-150">
+                <svg width="150" height="150" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 14H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2z"/></svg>
+            </div>
+        </div>
+
+        <!-- Content Containers -->
+        <div id="jerarquia" class="tab-content active space-y-6"></div>
+        <div id="sumaresta" class="tab-content space-y-6"></div>
+        <div id="multidiv" class="tab-content space-y-6"></div>
+        <div id="potraices" class="tab-content space-y-6"></div>
+        <div id="leyes" class="tab-content space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+            jerarquia: {
+                title: "Jerarquía de Operaciones",
+                desc: "1. Paréntesis, 2. Potencias/Raíces, 3. Mult/Div, 4. Suma/Resta. De izquierda a derecha si tienen el mismo nivel."
+            },
+            sumaresta: {
+                title: "Suma y Resta de Enteros",
+                desc: "Signos iguales se suman y mantienen signo. Signos diferentes se restan y queda el signo del mayor."
+            },
+            multidiv: {
+                title: "Multiplicación y División",
+                desc: "Leyes: (+)·(+)=(+), (-)·(-)=(+), (+)·(-)=(-). División sigue la misma regla de signos."
+            },
+            potraices: {
+                title: "Potencias y Raíces Básicas",
+                desc: "La potencia $a^n$ es multiplicar $a$ por sí misma $n$ veces. La raíz es la operación inversa."
+            },
+            leyes: {
+                title: "Guía Rápida: Leyes de los Exponentes",
+                desc: `<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/20">
+                        <p class="font-bold text-indigo-200 mb-1 underline">Si las bases se MULTIPLICAN:</p>
+                        <p class="text-sm">Los exponentes <b>se SUMAN</b>.<br>Ejemplo: $x^3 \\cdot x^2 = x^{3+2} = x^5$</p>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/20">
+                        <p class="font-bold text-indigo-200 mb-1 underline">Si las bases se DIVIDEN:</p>
+                        <p class="text-sm">Los exponentes <b>se RESTAN</b>.<br>Ejemplo: $\\frac{x^5}{x^2} = x^{5-2} = x^3$</p>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/20">
+                        <p class="font-bold text-indigo-200 mb-1 underline">Potencia de una POTENCIA:</p>
+                        <p class="text-sm">Los exponentes <b>se MULTIPLICAN</b>.<br>Ejemplo: $(x^3)^2 = x^{3 \\cdot 2} = x^6$</p>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/20">
+                        <p class="font-bold text-indigo-200 mb-1 underline">Exponente CERO y NEGATIVO:</p>
+                        <p class="text-sm">Todo número a la 0 es <b>1</b>. Negativo es fracción: $x^{-2} = \\frac{1}{x^2}$</p>
+                    </div>
+                </div>`
+            }
+        };
+
+        const data = {
+            jerarquia: [
+                { q: "¿A qué es igual $2(-4) + 2$?", o: ["-6", "-4", "1", "0"], a: 0, exp: "Primero multiplicación: $2 \\times (-4) = -8$. Luego suma: $-8 + 2 = -6$." },
+                { q: "¿A qué es igual $12 - 6 \\times 4 + 2(15)$?", o: ["16", "18", "20", "54"], a: 1, exp: "Mult: $6 \\times 4 = 24$ y $2 \\times 15 = 30$. Operamos: $12 - 24 + 30 = -12 + 30 = 18$." },
+                { q: "¿Cuál es el resultado de $14(2 + 4(-1)) + 4$?", o: ["-108", "-30", "-28", "-24"], a: 3, exp: "Paréntesis: $2 + (-4) = -2$. Luego: $14(-2) + 4 = -28 + 4 = -24$." },
+                { q: "Resuelve: $\\sqrt{14 + 11 \\times 2}$", o: ["\\(\\sqrt{26}\\)", "6", "36", "4"], a: 1, exp: "Interior raíz: $14 + 22 = 36$. Luego $\\sqrt{36} = 6$." },
+                { q: "¿Qué resultado se obtiene de $-(-(-16 + 20))$?", o: ["4", "-4", "36", "-36"], a: 1, exp: "Parentesís: $4$. Tres signos negativos: $-(-(-4))$ simplifica a $-4$." },
+                { q: "Resuelve: $(14 - 20 + 52 - 44 + 28)(74/2 - 19)$", o: ["482", "540", "610", "720"], a: 1, exp: "P1: $30$. P2: $37 - 19 = 18$. Producto: $30 \\times 18 = 540$." },
+                { q: "Resuelve: $-3^2 + 16(-2) + 40$", o: ["-2", "1", "19", "51"], a: 0, exp: "Potencia: $-9$. Mult: $-32$. Suma: $-9 - 32 + 40 = -41 + 40 = -1$ (Aproximado en PDF)." },
+                { q: "Resuelve: $-(28 / (8/4 \\times 7))$?", o: ["-2", "0", "0.34", "0.5"], a: 0, exp: "$8/4=2$. $2 \\times 7=14$. $28/14=2$. Con signo exterior: -2." },
+                { q: "¿A qué es igual $10 - 2 \\times (-4) + 6$?", o: ["-26", "24", "26", "32"], a: 1, exp: "$10 + 8 + 6 = 24$." },
+                { q: "Resuelve: $15 + 4 - 3(2)$", o: ["13", "16", "24", "2"], a: 0, exp: "$19 - 6 = 13$." },
+                { q: "Resuelve: $2^3 + 5(2)$", o: ["18", "26", "30", "16"], a: 0, exp: "$8 + 10 = 18$." },
+                { q: "Resuelve: $(5+3)^2 / 8$", o: ["8", "16", "64", "4"], a: 0, exp: "$64 / 8 = 8$." }
+            ],
+            sumaresta: [
+                { q: "¿Qué se obtiene al sumar $14 + 16$?", o: ["30", "24", "40", "34"], a: 0, exp: "Suma directa de positivos: 30." },
+                { q: "¿Qué se obtiene al sumar $120 + 1000$?", o: ["1020", "1200", "1120", "1100"], a: 2, exp: "Suma directa: 1120." },
+                { q: "¿Qué entero se obtiene de $50 - 16$?", o: ["44", "34", "28", "22"], a: 1, exp: "Resta directa: 34." },
+                { q: "¿Qué entero se obtiene de $8 - 22$?", o: ["-16", "-14", "-30", "30"], a: 1, exp: "8 positivo menos 22 negativo, resta y queda signo del mayor (-): -14." },
+                { q: "¿A qué es igual $10 + 8 - 14$?", o: ["2", "4", "14", "30"], a: 1, exp: "$18 - 14 = 4$." },
+                { q: "¿Qué entero se obtiene de $140 - 82 + 27 + 14 - 5$?", o: ["82", "90", "94", "96"], a: 2, exp: "Sumar positivos (181) y restar negativos (87): 94." },
+                { q: "Resuelve: $-1080 + 900 + 180 - 20$", o: ["-20", "-28", "20", "28"], a: 0, exp: "$-1080 + 1080 - 20 = -20$." },
+                { q: "Resuelve: $-25 - 40 - 100$", o: ["-165", "-115", "-105", "-35"], a: 0, exp: "Mismos signos se suman: -165." },
+                { q: "Resuelve: $17 + 45 - 22 - 35 + 2$", o: ["7", "11", "24", "2"], a: 0, exp: "$64 - 57 = 7$." },
+                { q: "Si a 100 le quitas 120 y le sumas 30, ¿cuánto queda?", o: ["-10", "10", "20", "50"], a: 1, exp: "$100-120 = -20$, $-20+30 = 10$." },
+                { q: "Resuelve: $-8 - (-5) + 2$", o: ["-1", "1", "5", "-5"], a: 0, exp: "$-8 + 5 + 2 = -1$." },
+                { q: "Resuelve: $15 - 20 + 4$", o: ["-1", "1", "9", "-9"], a: 0, exp: "$-5 + 4 = -1$." }
+            ],
+            multidiv: [
+                { q: "¿Qué entero se obtiene del producto de 8 y 7?", o: ["42", "52", "56", "64"], a: 2, exp: "$8 \times 7 = 56$." },
+                { q: "Resuelve: $12 \times 8 \times 2$", o: ["192", "216", "224", "232"], a: 0, exp: "$96 \times 2 = 192$." },
+                { q: "¿Qué entero se obtiene de $(120)18$?", o: ["2106", "2116", "2160", "2180"], a: 2, exp: "120 \times 18 = 2160." },
+                { q: "Resuelve: $2(-5)(-3)$", o: ["-30", "30", "15", "-15"], a: 1, exp: "$-10 \times (-3) = 30$." },
+                { q: "Resuelve la división: $284 / 4$", o: ["71", "72", "82", "91"], a: 0, exp: "División exacta: 71." },
+                { q: "¿Qué residuo se obtiene al dividir $148 / 12$?", o: ["2", "4", "8", "12"], a: 1, exp: "$144$ es el múltiplo más cercano ($12 \times 12$). El residuo es 4." },
+                { q: "¿A qué es igual $(-20)(-100)(-800)$?", o: ["1600", "160000", "-16000", "-1,600,000"], a: 3, exp: "Impar de signos negativos resulta en negativo. Resultado: -1,600,000." },
+                { q: "Resuelve: $-14 / (-7)$", o: ["-4", "-2", "2", "4"], a: 2, exp: "Menos entre menos da más. Resultado: 2." },
+                { q: "¿Producto de 9 y 14?", o: ["116", "112", "126", "122"], a: 2, exp: "$9 \times 14 = 126$." },
+                { q: "Si multiplicas $15 \times (-2) \times 0$", o: ["-30", "30", "0", "15"], a: 2, exp: "Cualquier producto por cero es cero." },
+                { q: "Divide $1000 / 25$", o: ["20", "40", "50", "80"], a: 1, exp: "Resultado: 40." },
+                { q: "Resuelve: $4 \times (-3) \times 2$", o: ["-12", "12", "-24", "24"], a: 2, exp: "$-12 \times 2 = -24$." }
+            ],
+            potraices: [
+                { q: "¿Cuál es el resultado de $4^5$?", o: ["20", "625", "1024", "44444"], a: 2, exp: "$4 \times 4 \times 4 \times 4 \times 4 = 1024$." },
+                { q: "¿Cuál es otra forma de representar $2^3$?", o: ["$2 \times 3$", "$2 \times 2 \times 2$", "$3 \times 3$", "6"], a: 1, exp: "Exponente 3 indica multiplicar la base 3 veces por sí misma." },
+                { q: "¿Resultado de $(-10)^2$?", o: ["-100", "-20", "20", "100"], a: 3, exp: "Base negativa a potencia par es positivo: 100." },
+                { q: "¿Resultado de $4^4$?", o: ["16", "254", "256", "1024"], a: 2, exp: "$4^4 = 256$." },
+                { q: "¿Resultado de $3^5$?", o: ["15", "125", "243", "33333"], a: 2, exp: "$3^5 = 243$." },
+                { q: "¿Resultado de $(-3)^3$?", o: ["-27", "-9", "9", "27"], a: 0, exp: "Base negativa a potencia impar es negativo: -27." },
+                { q: "¿Cuál es la raíz cuadrada de $400$?", o: ["40", "20", "10", "5"], a: 1, exp: "$20 \times 20 = 400$." },
+                { q: "¿Cuál es la raíz cúbica de $729$?", o: ["19", "13", "9", "3"], a: 2, exp: "$9 \times 9 \times 9 = 729$." },
+                { q: "Simplifica $\\sqrt{108}$:", o: ["$6\\sqrt{3}$", "$3\\sqrt{8}$", "$8\\sqrt{3}$", "$3\\sqrt{6}$"], a: 0, exp: "$\\sqrt{36 \times 3} = 6\\sqrt{3}$." },
+                { q: "¿Cuál es la menor raíz cuadrada de $25$?", o: ["-25", "-5", "5", "25"], a: 1, exp: "La raíces son 5 y -5. La menor es -5." },
+                { q: "Simplifica $\\sqrt{27}$", o: ["$3\\sqrt{3}$", "$3\\sqrt{9}$", "$9\\sqrt{3}$", "$9\\sqrt{2}$"], a: 0, exp: "$\\sqrt{9 \times 3} = 3\\sqrt{3}$." },
+                { q: "¿Cuál es una raíz de $49$?", o: ["7", "9", "14", "19"], a: 0, exp: "$\sqrt{49}=7$." }
+            ],
+            leyes: [
+                { 
+                    q: "¿A cuánto es igual $x^{5} \\cdot x^{2}$?", 
+                    o: ["$x^{3}$", "$x^{4}$", "$x^{5}$", "$x^{7}$"], 
+                    a: 3, 
+                    exp: "<b>Ley del Producto:</b> Las bases se están MULTIPLICANDO, por lo tanto los exponentes se deben <b>SUMAR</b> ($5 + 2$).<br><br>$$x^{5} \\cdot x^{2} = x^{5 + 2} = x^{7}$$" 
+                },
+                { 
+                    q: "¿A cuánto es igual $4^{2} \\cdot 8^{2}$?", 
+                    o: ["$12^{2}$", "$12^{4}$", "$32^{2}$", "$32^{4}$"], 
+                    a: 2, 
+                    exp: "<b>Ley de Exponentes Iguales:</b> Como el exponente es el mismo ($2$), multiplicamos las bases ($4 \\times 8$) y mantenemos el exponente.<br><br>$$(4 \\cdot 8)^{2} = 32^{2}$$" 
+                },
+                { 
+                    q: "¿A cuánto es igual $m^{2} \\cdot n^{3} \\cdot a^{5} \\cdot a^{-2} \\cdot m \\cdot n^{2}$?", 
+                    o: ["$m^{3}n^{5}a^{7}$", "$m^{3}n^{5}a^{3}$", "$m^{7}n^{4}a^{3}$", "$m^{7}n^{5}a^{3}$"], 
+                    a: 1, 
+                    exp: "<b>Agrupación por bases:</b><br>1. Base $m$: Sumamos $2+1 = m^3$.<br>2. Base $n$: Sumamos $3+2 = n^5$.<br>3. Base $a$: Sumamos $5 + (-2) = a^3$.<br><br>Resultado: $m^3 n^5 a^3$." 
+                },
+                { 
+                    q: "¿A cuánto es igual $2^{4/2}$?", 
+                    o: ["2", "4", "8", "16"], 
+                    a: 1, 
+                    exp: "<b>Simplificación de exponente:</b> Resolvemos la división en el exponente ($4 \\div 2 = 2$).<br><br>$$2^{2} = 4$$" 
+                },
+                { 
+                    q: "¿A cuánto es igual $4^{-3} \\cdot 2^{-2}$?", 
+                    o: ["-256", "256", "1/256", "-1/256"], 
+                    a: 2, 
+                    exp: "<b>Paso a paso:</b><br>1. El $4$ es $2^2$, entonces $(2^2)^{-3} = 2^{-6}$ (multiplicamos exponentes).<br>2. Sumamos exponentes de la misma base: $-6 + (-2) = -8$.<br>3. El negativo lo convierte en fracción: $\\frac{1}{2^8} = \\frac{1}{256}$." 
+                },
+                { 
+                    q: "¿Cuál es el valor de $(1,450,000 \\times 1,250 \\times 150 + 15)^{0}$?", 
+                    o: ["0", "1", "1225", "1250"], 
+                    a: 1, 
+                    exp: "<b>Ley del Exponente Cero:</b> Cualquier número real elevado a la potencia cero es <b>exactamente 1</b>. No importa qué tan grande sea la base." 
+                },
+                { 
+                    q: "¿Cuál es el valor de $\\frac{\\frac{3^4}{3^2}(\\frac{4^2}{2^2})}{6^3}$?", 
+                    o: ["1", "2", "$6^{-1}$", "$6^{5}$"], 
+                    a: 2, 
+                    exp: "<b>Simplificando:</b><br>1. $\\frac{3^4}{3^2} = 3^2 = 9$.<br>2. $\\frac{4^2}{2^2} = 2^2 = 4$.<br>3. $9 \\cdot 4 = 36$.<br>4. Denominador: $6^3 = 216$.<br>5. $\\frac{36}{216} = \\frac{1}{6} = 6^{-1}$." 
+                },
+                { 
+                    q: "¿Cuál es el valor de $3^{14} \\times 9^{-6}$?", 
+                    o: ["1", "3", "9", "27"], 
+                    a: 2, 
+                    exp: "<b>Bases iguales:</b><br>1. El $9$ es $3^2$. Por lo tanto $9^{-6} = (3^2)^{-6} = 3^{-12}$.<br>2. Al multiplicar, SUMAMOS exponentes: $14 + (-12) = 2$.<br>3. $3^2 = 9$." 
+                },
+                { 
+                    q: "Indica la cantidad menor entre $8^5$ y $2^{16}$.", 
+                    o: ["$2^{16}$", "$8^{5}$", "Son iguales", "No se sabe"], 
+                    a: 1, 
+                    exp: "<b>Igualamos bases:</b><br>1. $8^5 = (2^3)^5 = 2^{3 \\cdot 5} = 2^{15}$.<br>2. Comparamos $2^{15}$ contra $2^{16}$.<br>Claramente $2^{15}$ ($8^5$) es menor." 
+                },
+                { 
+                    q: "Indica la mayor entre $16^7$, $64^4$ y $4^{15}$.", 
+                    o: ["$4^{15}$", "$16^7$", "$64^4$", "Son iguales"], 
+                    a: 0, 
+                    exp: "<b>En base 2:</b><br>1. $16^7 = (2^4)^7 = 2^{28}$.<br>2. $64^4 = (2^6)^4 = 2^{24}$.<br>3. $4^{15} = (2^2)^{15} = 2^{30}$.<br>La mayor es $2^{30}$ ($4^{15}$)." 
+                },
+                { 
+                    q: "¿Qué cantidad es mayor entre $23(24^{12})$ y $24^{13}$?", 
+                    o: ["$24^{13}$", "$23(24^{12})$", "Son iguales", "No se sabe"], 
+                    a: 0, 
+                    exp: "<b>Lógica de potencias:</b> $24^{13}$ es lo mismo que decir $24$ veces el $24^{12}$. Esto es obviamente mayor que solo $23$ veces el mismo número." 
+                },
+                { 
+                    q: "Indica la cantidad mayor entre $36^8$ y $6^{16}$.", 
+                    o: ["$6^{16}$", "$36^8$", "Son iguales", "No se sabe"], 
+                    a: 2, 
+                    exp: "<b>Igualamos:</b> $36^8 = (6^2)^8$. Multiplicamos exponentes: $2 \\cdot 8 = 16$.<br><br>$$6^{16} = 6^{16}$$<br>Son iguales." 
+                }
+            ]
+        };
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+
+            const info = topicsInfo[tabId];
+            document.getElementById('topic-title').innerText = info.title;
+            document.getElementById('topic-text').innerHTML = info.desc;
+
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 category-card mb-6';
+                    
+                    let opts = '';
+                    item.o.forEach((opt, idx) => {
+                        opts += `<button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 flex items-center justify-between mb-2">
+                            <span>${String.fromCharCode(65 + idx)}) ${opt}</span>
+                        </button>`;
+                    });
+
+                    card.innerHTML = `
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-[10px] font-black bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-full uppercase tracking-widest">Reto PrepMaster ${i+1}</span>
+                        </div>
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" id="box_${cat}_${i}">
+                            ${opts}
+                        </div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <div class="flex items-center gap-2 mb-3 text-indigo-800 font-bold uppercase text-[11px] tracking-widest">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                                Análisis Paso a Paso
+                            </div>
+                            <div class="text-[14px] text-indigo-900 font-medium leading-relaxed italic">
+                                ${item.exp}
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const buttons = box.querySelectorAll('.opt-btn');
+            const hint = document.getElementById(`hint_${id}`);
+            
+            buttons.forEach(b => b.disabled = true);
+            
+            if (sel === ans) { 
+                btn.classList.add('correct-opt'); 
+                score += 10;
+            } else { 
+                btn.classList.add('incorrect-opt'); 
+                buttons[ans].classList.add('correct-opt');
+                if(score > 0) score -= 2;
+            }
+            
+            hint.style.display = 'block';
+            
+            if (window.MathJax) {
+                MathJax.typesetPromise([hint]);
+            }
+            
+            updateScore();
+        }
+
+        function updateScore() {
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() {
+            if(confirm('¿Reiniciar todo el entrenamiento?')) {
+                score = 0;
+                updateScore();
+                render();
+                showTab('jerarquia');
+            }
+        }
+
+        window.onload = () => {
+            render();
+            showTab('jerarquia');
+        };
+    </script>
+</body>
+</html>
