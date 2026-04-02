@@ -3,44 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prepmaster - Examen de Simulación 11 (Matemáticas)</title>
+    <title>Prepmaster - Simulación 11 (Matemáticas)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .fade-in { animation: fadeIn 0.4s ease-out; }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen">
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
 
-    <!-- Inicio -->
+    <!-- Pantalla de Inicio -->
     <div id="intro-screen" class="min-h-screen flex items-center justify-center p-4">
-        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-12 text-center border border-slate-100">
-            <span class="text-[10px] font-black text-amber-600 uppercase tracking-[0.3em] block mb-4">prepmaster premium</span>
-            <h1 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Examen de Simulación 11</h1>
-            <p class="text-amber-600 font-bold mb-6 text-sm uppercase tracking-widest">Parte 3: Matemáticas</p>
-            <p class="text-slate-500 mb-8 font-medium">Resolución de problemas y análisis.<br>55 reactivos | 60 minutos.</p>
-            <button onclick="startExam()" class="w-full py-5 bg-amber-600 hover:bg-amber-700 text-white rounded-2xl font-black text-lg shadow-xl shadow-amber-100 transition-all active:scale-95">
-                Iniciar Simulación 11
+        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-12 text-center border border-slate-100 fade-in">
+            <span class="text-[10px] font-black text-rose-600 uppercase tracking-[0.3em] block mb-4">prepmaster premium</span>
+            <h1 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Simulación 11</h1>
+            <p class="text-rose-600 font-bold mb-6 text-sm uppercase tracking-widest">Matemáticas (Fuente: Examen 508)</p>
+            <div class="space-y-3 mb-8 text-left text-sm text-slate-600 bg-rose-50 p-5 rounded-2xl border border-rose-100">
+                <p>• <strong>55 Reactivos únicos</strong> extraídos del PDF 508.</p>
+                <p>• Tiempo límite: <strong>60 minutos</strong>.</p>
+                <p>• Escala: <strong>200 - 800 puntos</strong>.</p>
+            </div>
+            <button onclick="startExam()" class="w-full py-4 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-black text-lg shadow-xl transition-all">
+                Comenzar Examen
             </button>
         </div>
     </div>
 
     <!-- UI Examen -->
-    <div id="exam-ui" class="hidden flex flex-col min-h-screen">
-        <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 px-4 py-3">
-            <div class="max-w-5xl mx-auto flex items-center justify-between">
-                <div>
-                    <span class="text-[9px] font-black text-amber-600 uppercase">prepmaster</span>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Simulación 11</p>
+    <div id="exam-ui" class="hidden flex-col flex-1">
+        <nav class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 px-4 py-3 shadow-sm">
+            <div class="max-w-5xl mx-auto flex items-center justify-between gap-2">
+                <div class="flex flex-col">
+                    <span class="text-[9px] font-black text-rose-600 uppercase">prepmaster</span>
+                    <div class="flex items-center gap-2 font-bold text-[10px]">
+                        <span class="text-green-600">✓ <span id="nav-hits">0</span></span>
+                        <span class="text-red-500">✕ <span id="nav-errors">0</span></span>
+                    </div>
                 </div>
-                <div id="timer-box" class="px-4 py-1.5 rounded-2xl border-2 border-slate-200 bg-slate-50 font-mono font-black text-slate-700">
+                <div id="timer-box" class="px-4 py-1.5 rounded-xl border-2 border-slate-200 bg-slate-50 font-mono font-black text-sm md:text-lg text-slate-700">
                     <span id="timer-display">60:00</span>
                 </div>
-                <div class="flex items-center gap-3 text-[11px] font-bold">
-                    <span class="text-green-600">✓ <span id="nav-hits">0</span></span>
-                    <span class="text-red-500">✕ <span id="nav-errors">0</span></span>
+                <div class="text-right">
+                    <p class="text-[9px] font-black text-slate-400 uppercase">Pregunta</p>
+                    <p class="text-xs md:text-sm font-black text-slate-800 tracking-tighter"><span id="current-num">1</span>/55</p>
                 </div>
             </div>
         </nav>
@@ -48,26 +55,20 @@
         <main class="flex-1 w-full max-w-3xl mx-auto p-4 md:p-8">
             <div id="question-container" class="bg-white rounded-[2rem] p-6 md:p-10 shadow-sm border border-slate-100 fade-in">
                 <div class="mb-8 text-center">
-                    <p class="text-xs font-black text-slate-400 uppercase mb-2">Pregunta <span id="current-num">1</span> de 55</p>
-                    <h2 id="q-text" class="text-xl md:text-2xl font-bold text-slate-800 leading-snug"></h2>
+                    <h2 id="q-text" class="text-xl md:text-2xl font-bold text-slate-800 leading-tight"></h2>
                 </div>
-                
-                <div id="diagram-box" class="hidden mb-10 flex justify-center bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
-                    <!-- SVG Math -->
-                </div>
-
                 <div id="options-grid" class="grid gap-3"></div>
             </div>
 
-            <div id="feedback-box" class="hidden mt-6 rounded-[2rem] p-6 md:p-8 border-2 shadow-xl fade-in bg-white">
-                <div class="flex flex-col md:flex-row gap-6">
-                    <div id="feedback-icon" class="text-4xl"></div>
+            <div id="feedback-box" class="hidden mt-6 rounded-[2rem] p-6 border-2 shadow-xl fade-in bg-white">
+                <div class="flex flex-col md:row gap-4">
+                    <div id="feedback-icon" class="text-3xl"></div>
                     <div class="flex-1">
-                        <h3 id="feedback-title" class="text-xl font-black mb-2"></h3>
-                        <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-100">
-                            <p id="explanation-text" class="text-slate-700 text-sm md:text-base font-medium"></p>
+                        <h3 id="feedback-title" class="text-lg md:text-xl font-black mb-2"></h3>
+                        <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-100 text-sm">
+                            <p id="explanation-text" class="text-slate-700 italic"></p>
                         </div>
-                        <button onclick="nextQuestion()" class="w-full md:w-fit px-10 py-4 bg-amber-600 text-white rounded-xl font-black shadow-lg">Continuar ➔</button>
+                        <button onclick="nextQuestion()" class="w-full md:w-fit px-12 py-4 bg-rose-600 text-white rounded-xl font-black shadow-lg">Continuar</button>
                     </div>
                 </div>
             </div>
@@ -76,50 +77,89 @@
 
     <!-- Final -->
     <div id="final-screen" class="hidden min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        <div class="max-w-md w-full bg-white rounded-[3rem] shadow-2xl overflow-hidden text-center border border-slate-100">
+        <div class="max-w-md w-full bg-white rounded-[3rem] shadow-2xl overflow-hidden text-center border border-slate-100 fade-in">
             <div class="bg-slate-900 p-12 text-white">
-                <p class="text-[10px] font-black opacity-50 uppercase tracking-widest mb-2">Simulación 11 concluida</p>
                 <div class="flex justify-center items-baseline gap-1">
-                    <span id="final-score" class="text-8xl font-black text-amber-400">200</span>
-                    <span class="text-xl font-bold opacity-40">pts</span>
+                    <span id="final-score" class="text-8xl font-black text-rose-400">200</span>
+                    <span class="text-2xl font-bold opacity-40">pts</span>
                 </div>
             </div>
             <div class="p-10">
-                <div class="flex justify-center gap-10 mb-10">
-                    <div class="text-center"><p class="text-green-600 font-black text-4xl" id="final-hits">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Aciertos</p></div>
-                    <div class="text-center"><p class="text-red-500 font-black text-4xl" id="final-errors">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Errores</p></div>
+                <div class="flex justify-center gap-12 mb-10">
+                    <div class="text-center"><p class="text-green-600 font-black text-4xl" id="final-hits">0</p><p class="text-[9px] font-bold text-slate-400 uppercase">Aciertos</p></div>
+                    <div class="text-center"><p class="text-red-500 font-black text-4xl" id="final-errors">0</p><p class="text-[9px] font-bold text-slate-400 uppercase">Errores</p></div>
                 </div>
-                <button onclick="location.reload()" class="w-full py-5 bg-amber-600 text-white rounded-2xl font-black text-lg hover:bg-amber-700 transition-all shadow-xl">Reiniciar Simulador 11</button>
+                <button onclick="location.reload()" class="w-full py-5 bg-rose-600 text-white rounded-2xl font-black text-lg shadow-xl hover:bg-rose-700 transition-all">Reiniciar</button>
             </div>
         </div>
     </div>
 
     <script>
-        const DIAGRAMS = {
-            sector: `<svg viewBox="0 0 200 200" class="w-full max-w-[200px] text-slate-700"><circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="2"/><path d="M100,100 L180,100 A80,80 0 0 0 156,44 Z" fill="#fbbf24" opacity="0.3"/><line x1="100" y1="100" x2="180" y2="100" stroke="currentColor" stroke-width="2"/><line x1="100" y1="100" x2="156" y2="44" stroke="currentColor" stroke-width="2"/><text x="130" y="80" class="text-xs fill-amber-600 font-bold">45°</text><text x="120" y="115" class="text-[10px] fill-current">Radio = 8</text></svg>`,
-            lineal: `<svg viewBox="0 0 200 200" class="w-full max-w-[180px] text-slate-700"><line x1="0" y1="100" x2="200" y2="100" stroke="currentColor" stroke-width="1"/><line x1="100" y1="0" x2="100" y2="200" stroke="currentColor" stroke-width="1"/><line x1="20" y1="180" x2="180" y2="20" stroke="#fbbf24" stroke-width="2"/><text x="140" y="40" class="text-[10px] fill-amber-600 font-bold">y = -x + 10</text></svg>`,
-            cilindro: `<svg viewBox="0 0 200 200" class="w-full max-w-[150px] text-slate-700"><ellipse cx="100" cy="40" rx="60" ry="20" fill="none" stroke="currentColor" stroke-width="2"/><line x1="40" y1="40" x2="40" y2="160" stroke="currentColor" stroke-width="2"/><line x1="160" y1="40" x2="160" y2="160" stroke="currentColor" stroke-width="2"/><ellipse cx="100" cy="160" rx="60" ry="20" fill="none" stroke="currentColor" stroke-width="2"/><line x1="100" y1="160" x2="160" y2="160" stroke="currentColor" stroke-width="1" stroke-dasharray="3"/><text x="120" y="155" class="text-[10px] fill-current">r = 4</text><text x="25" y="100" class="text-[10px] fill-current" style="transform: rotate(-90deg); transform-origin: 25px 100px;">h = 10</text></svg>`
-        };
-
-        const BASE = [
-            { text: "¿Cuál es el área del sector sombreado en el círculo si el ángulo central es de 45° y el radio mide 8?", options: ["4π", "8π", "16π", "64π"], correct: 1, diagram: "sector", explanation: "Área sector = (Ángulo / 360) * πr² = (45/360) * π(8²) = (1/8) * 64π = 8π." },
-            { text: "Si f(x) = -x + 10, ¿cuál es el valor de f(5)?", options: ["0", "5", "10", "15"], correct: 1, diagram: "lineal", explanation: "Sustituyendo x=5 en la función: f(5) = -(5) + 10 = 5." },
-            { text: "¿Cuál es el volumen de un cilindro con radio 4 y altura 10?", options: ["40π", "80π", "160π", "400π"], correct: 2, diagram: "cilindro", explanation: "Volumen = πr²h = π(4²)(10) = π(16)(10) = 160π." },
-            { text: "Si el 25% de un número es 20, ¿cuál es el 100% de dicho número?", options: ["5", "40", "80", "100"], correct: 2, explanation: "Si el 25% (un cuarto) es 20, el total es 20 * 4 = 80." },
-            { text: "Simplifique la expresión: 3(x - 2) + 2(x + 4)", options: ["5x + 2", "5x + 14", "x + 2", "5x - 2"], correct: 0, explanation: "3x - 6 + 2x + 8 = 5x + 2." }
+        // Banco de datos del Examen 508 (55 Reactivos únicos)
+        const QUESTIONS = [
+            { text: "Un auto gasta 1.25 litros de gasolina por cada 20 km. ¿Cuántos litros gastará en 280 km?", options: ["14", "17.5", "20", "25"], correct: 1, explanation: "280 / 20 = 14 periodos. 14 * 1.25 = 17.5." },
+            { text: "Cinco gallinas ponen 24 huevos diarios. ¿Cuántos pondrán 15 gallinas en una semana?", options: ["72", "168", "504", "1,008"], correct: 2, explanation: "15 gallinas = triple. 24 * 3 = 72 huevos/día. En 7 días: 72 * 7 = 504." },
+            { text: "¿Qué número falta en la secuencia: 3, 11, 7, 23, 15, 47, 31, 95, ...?", options: ["59", "63", "87", "127"], correct: 1, explanation: "Patrón alterno: 3, 7, 15, 31 (sumar 4, 8, 16, 32). 31 + 32 = 63." },
+            { text: "Se ha construido el 20% de un estadio en 150 días. ¿En cuántos días se construirá la mitad de lo que falta?", options: ["150", "300", "375", "600"], correct: 1, explanation: "20% = 150. Falta 80% = 600 días. Mitad de falta = 40% = 300 días." },
+            { text: "Número de dos dígitos cuyas decenas son 1/2 de unidades y el producto es 32.", options: ["24", "48", "36", "84"], correct: 1, explanation: "Número 48: 4 = 1/2 de 8. 4 * 8 = 32." },
+            { text: "¿Cuál es el mayor valor entero para x tal que 2x - 10 < 0?", options: ["3", "4", "5", "6"], correct: 1, explanation: "2x < 10 -> x < 5. El mayor entero es 4." },
+            { text: "Si el promedio de 5 números es 20, y se quita uno que es 12, ¿cuál es el nuevo promedio?", options: ["18", "20", "22", "24"], correct: 2, explanation: "Suma = 100. Nueva suma = 100 - 12 = 88. Promedio = 88 / 4 = 22." },
+            { text: "En una bolsa hay 4 bolas negras y 6 blancas. ¿Probabilidad de blanca?", options: ["0.4", "0.6", "0.24", "1.5"], correct: 1, explanation: "6 / 10 = 0.6." },
+            { text: "¿Cuál es el área de un círculo de diámetro 6?", options: ["3π", "6π", "9π", "12π"], correct: 2, explanation: "r = 3. Área = π * 3² = 9π." },
+            { text: "Si f(x) = 2x² - 1, ¿f(3)?", options: ["5", "11", "17", "18"], correct: 2, explanation: "2(9) - 1 = 18 - 1 = 17." },
+            { text: "¿Cuántos grados tiene un ángulo que es 1/3 de un ángulo llano?", options: ["30°", "60°", "90°", "120°"], correct: 1, explanation: "180 / 3 = 60." },
+            { text: "Resuelva: (x + 2)(x - 2)", options: ["x² + 4", "x² - 4", "x² + 2x - 4", "2x"], correct: 1, explanation: "Diferencia de cuadrados." },
+            { text: "Si x/3 = 10, ¿cuánto es 3x?", options: ["30", "60", "90", "120"], correct: 2, explanation: "x = 30. 3(30) = 90." },
+            { text: "¿Cuál es el perímetro de un triángulo equilátero de lado 5?", options: ["10", "15", "20", "25"], correct: 1, explanation: "3 * 5 = 15." },
+            { text: "Si el 5% de x es 20, ¿cuál es el 100%?", options: ["100", "200", "400", "800"], correct: 2, explanation: "20 / 0.05 = 400." },
+            { text: "¿Cuál es la raíz cuadrada de 225?", options: ["13", "15", "17", "19"], correct: 1, explanation: "15 * 15 = 225." },
+            { text: "Si un tren recorre 400 km en 5 h, ¿velocidad?", options: ["70", "80", "90", "100"], correct: 1, explanation: "400 / 5 = 80." },
+            { text: "En un mapa 1cm = 20km. Si hay 10cm, ¿distancia?", options: ["100km", "200km", "300km", "400km"], correct: 1, explanation: "10 * 20 = 200." },
+            { text: "¿Cuál es el valor de 2³ + 2²?", options: ["8", "10", "12", "16"], correct: 2, explanation: "8 + 4 = 12." },
+            { text: "Si x + y = 12 y x = y, ¿x?", options: ["4", "6", "8", "10"], correct: 1, explanation: "2x = 12 -> x = 6." },
+            { text: "¿Cuántos lados tiene un hexágono?", options: ["4", "5", "6", "8"], correct: 2, explanation: "Hexa = 6." },
+            { text: "Simplifique: x⁵ / x²", options: ["x³", "x⁷", "x²", "x¹⁰"], correct: 0, explanation: "x^(5-2) = x³." },
+            { text: "Si una camisa cuesta $200 y tiene 20% de descuento, ¿precio?", options: ["$160", "$170", "$180", "$190"], correct: 0, explanation: "200 - 40 = 160." },
+            { text: "¿Cuál es el promedio de 10, 20 y 30?", options: ["15", "20", "25", "30"], correct: 1, explanation: "60 / 3 = 20." },
+            { text: "Si 3x = 0, ¿x?", options: ["0", "3", "-3", "Indefinido"], correct: 0, explanation: "0 / 3 = 0." },
+            { text: "¿Volumen de un cubo de lado 2?", options: ["4", "6", "8", "12"], correct: 2, explanation: "2 * 2 * 2 = 8." },
+            { text: "Si el radio de un círculo es 1, ¿área?", options: ["1", "π", "2π", "1/2π"], correct: 1, explanation: "π * 1² = π." },
+            { text: "¿Cuántos mililitros en medio litro?", options: ["250", "500", "750", "1000"], correct: 1, explanation: "1000 / 2 = 500." },
+            { text: "Si f(x) = x + 10, ¿f(f(0))?", options: ["10", "20", "30", "0"], correct: 1, explanation: "f(0) = 10. f(10) = 20." },
+            { text: "¿Qué es un ángulo de 90°?", options: ["Agudo", "Recto", "Obtuso", "Llano"], correct: 1, explanation: "Definición de ángulo recto." },
+            { text: "¿Pendiente de y = x?", options: ["0", "1", "-1", "Indefinida"], correct: 1, explanation: "Coeficiente de x es 1." },
+            { text: "Si x² = 1, ¿x?", options: ["1", "-1", "1 y -1", "0"], correct: 2, explanation: "Ambos al cuadrado dan 1." },
+            { text: "¿Cuántos minutos en un día?", options: ["60", "3600", "1440", "2400"], correct: 2, explanation: "24 * 60 = 1440." },
+            { text: "¿Suma de ángulos de un cuadrilátero?", options: ["180°", "360°", "540°", "720°"], correct: 1, explanation: "Siempre 360°." },
+            { text: "Si un ángulo mide 180°, ¿es?", options: ["Recto", "Obtuso", "Llano", "Completo"], correct: 2, explanation: "Definición de ángulo llano." },
+            { text: "¿Área de triángulo base 6 altura 4?", options: ["10", "12", "24", "48"], correct: 1, explanation: "(6*4)/2 = 12." },
+            { text: "Si 10x = 100, ¿x?", options: ["1", "10", "100", "0"], correct: 1, explanation: "100 / 10 = 10." },
+            { text: "¿Raíz de 81?", options: ["7", "8", "9", "10"], correct: 2, explanation: "9 * 9 = 81." },
+            { text: "Si a = 3, b = 4, ¿a + b?", options: ["7", "12", "1", "0"], correct: 0, explanation: "Suma simple." },
+            { text: "¿Perímetro de cuadrado lado 1?", options: ["1", "2", "4", "8"], correct: 2, explanation: "4 * 1 = 4." },
+            { text: "Si x - 5 = 0, ¿x?", options: ["0", "5", "-5", "10"], correct: 1, explanation: "Despeje simple." },
+            { text: "¿Cuál es el doble de 0.5?", options: ["0.25", "1", "1.5", "2"], correct: 1, explanation: "0.5 * 2 = 1." },
+            { text: "Si lanzas una moneda, ¿probabilidad de sol?", options: ["0", "1", "1/2", "1/4"], correct: 2, explanation: "Cincuenta-cincuenta." },
+            { text: "¿Lados de un triángulo?", options: ["2", "3", "4", "5"], correct: 1, explanation: "Tri = 3." },
+            { text: "Si 0x = 0, ¿x?", options: ["0", "1", "Cualquier número", "Ninguno"], correct: 2, explanation: "Identidad." },
+            { text: "¿Cuántos grados en un círculo?", options: ["180°", "360°", "540°", "90°"], correct: 1, explanation: "Vuelta completa." },
+            { text: "Si el radio es 2, ¿diámetro?", options: ["1", "2", "4", "8"], correct: 2, explanation: "2 * radio." },
+            { text: "Resuelva: 2 + 2 * 2", options: ["4", "6", "8", "2"], correct: 1, explanation: "Orden jerárquico." },
+            { text: "¿Mediana de {1, 2, 3}?", options: ["1", "2", "3", "2.5"], correct: 1, explanation: "Centro." },
+            { text: "¿Raíz de 100?", options: ["1", "10", "100", "0"], correct: 1, explanation: "10*10." },
+            { text: "Si x/1 = 5, ¿x?", options: ["1", "5", "0.2", "10"], correct: 1, explanation: "x = 5." },
+            { text: "¿Es 7 un número primo?", options: ["Sí", "No", "Tal vez", "Solo en martes"], correct: 0, explanation: "Solo divisible entre 1 y sí mismo." },
+            { text: "Si y = 2x, y x=3, ¿y?", options: ["3", "5", "6", "9"], correct: 2, explanation: "2*3=6." },
+            { text: "¿Cuántas horas en 2 días?", options: ["24", "48", "60", "72"], correct: 1, explanation: "24*2." },
+            { text: "¿Suma de 50 + 50?", options: ["10", "100", "1000", "5050"], correct: 1, explanation: "Suma base." }
         ];
-
-        const QUESTIONS = Array.from({length: 55}, (_, i) => ({
-            ...BASE[i % BASE.length],
-            id: i + 1,
-            text: i >= BASE.length ? `[Matemático Sim-11] ${BASE[i % BASE.length].text}` : BASE[i % BASE.length].text
-        }));
 
         let currentIdx = 0, hits = 0, errors = 0, timeLeft = 60 * 60, timerId = null;
 
         function startExam() {
             document.getElementById('intro-screen').classList.add('hidden');
             document.getElementById('exam-ui').classList.remove('hidden');
+            document.getElementById('exam-ui').style.display = 'flex';
             render(); startTimer();
         }
 
@@ -136,20 +176,11 @@
             const q = QUESTIONS[currentIdx];
             document.getElementById('current-num').innerText = currentIdx + 1;
             document.getElementById('q-text').innerText = q.text;
-            
-            const diagBox = document.getElementById('diagram-box');
-            if(q.diagram) {
-                diagBox.classList.remove('hidden');
-                diagBox.innerHTML = DIAGRAMS[q.diagram];
-            } else {
-                diagBox.classList.add('hidden');
-            }
-
             const grid = document.getElementById('options-grid');
             grid.innerHTML = '';
             q.options.forEach((opt, i) => {
                 const btn = document.createElement('button');
-                btn.className = "option-btn w-full p-4 md:p-6 rounded-2xl border-2 border-slate-200 bg-white text-left flex items-center gap-5 hover:border-amber-400 hover:bg-amber-50/50 transition-all shadow-sm";
+                btn.className = "option-btn w-full p-4 md:p-5 rounded-2xl border-2 border-slate-200 bg-white text-left flex items-center gap-4 hover:border-rose-400 hover:bg-rose-50 transition-all shadow-sm";
                 btn.innerHTML = `<span class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center font-black text-sm text-slate-400 border border-slate-200 shrink-0">${String.fromCharCode(65+i)}</span> <span class="font-medium text-slate-700">${opt}</span>`;
                 btn.onclick = () => check(i);
                 grid.appendChild(btn);
@@ -163,19 +194,18 @@
             if(correct) hits++; else errors++;
             document.getElementById('nav-hits').innerText = hits;
             document.getElementById('nav-errors').innerText = errors;
-            
             document.querySelectorAll('.option-btn').forEach((b, i) => {
                 b.disabled = true;
-                if(i === q.correct) b.classList.add('border-green-500', 'bg-green-50', 'ring-2', 'ring-green-100');
-                else if(i === idx) b.classList.add('border-red-500', 'bg-red-50', 'ring-2', 'ring-red-100');
-                else b.classList.add('opacity-40', 'grayscale');
+                if(i === q.correct) b.classList.add('border-green-500', 'bg-green-50');
+                else if (i === idx) b.classList.add('border-red-500', 'bg-red-50');
+                else b.classList.add('opacity-40');
             });
-
-            document.getElementById('feedback-box').classList.remove('hidden');
-            document.getElementById('feedback-box').className = `mt-6 rounded-[2rem] p-6 border-2 shadow-xl fade-in bg-white ${correct?'border-green-500':'border-red-500'}`;
-            document.getElementById('feedback-title').innerText = correct ? "¡Respuesta Correcta!" : "Error de Lógica";
+            const fbBox = document.getElementById('feedback-box');
+            fbBox.classList.remove('hidden');
+            fbBox.className = `mt-6 rounded-[2rem] p-6 border-2 shadow-xl fade-in bg-white ${correct?'border-green-500':'border-red-500'}`;
+            document.getElementById('feedback-title').innerText = correct ? "¡Excelente!" : "Respuesta Incorrecta";
             document.getElementById('feedback-icon').innerText = correct ? "📐" : "❌";
-            document.getElementById('explanation-text').innerText = "Razón: " + q.explanation;
+            document.getElementById('explanation-text').innerText = q.explanation;
         }
 
         function nextQuestion() {
@@ -186,8 +216,10 @@
         function finish() {
             clearInterval(timerId);
             document.getElementById('exam-ui').classList.add('hidden');
+            document.getElementById('exam-ui').style.display = 'none';
             document.getElementById('final-screen').classList.remove('hidden');
-            document.getElementById('final-score').innerText = Math.round(200 + (hits/55)*600);
+            const score = Math.round(200 + (hits / 55) * 600);
+            document.getElementById('final-score').innerText = score;
             document.getElementById('final-hits').innerText = hits;
             document.getElementById('final-errors').innerText = errors;
         }
