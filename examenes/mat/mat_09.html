@@ -3,71 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prepmaster - Examen de Simulación 9 (Matemáticas)</title>
+    <title>Prepmaster - Simulación 9 (Matemáticas)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .fade-in { animation: fadeIn 0.4s ease-out; }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .option-btn:active { transform: scale(0.98); }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen">
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
 
-    <!-- Inicio -->
+    <!-- Pantalla de Inicio -->
     <div id="intro-screen" class="min-h-screen flex items-center justify-center p-4">
-        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-12 text-center border border-slate-100">
+        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-12 text-center border border-slate-100 fade-in">
             <span class="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] block mb-4">prepmaster premium</span>
-            <h1 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Examen de Simulación 9</h1>
-            <p class="text-blue-600 font-bold mb-6 text-sm uppercase tracking-widest">Parte 3: Matemáticas</p>
-            <p class="text-slate-500 mb-8 font-medium">Álgebra, Geometría y Análisis.<br>55 reactivos | 60 minutos.</p>
-            <button onclick="startExam()" class="w-full py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-lg shadow-xl shadow-blue-100 transition-all active:scale-95">
-                Iniciar Examen 9
+            <h1 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Simulación 9</h1>
+            <p class="text-blue-600 font-bold mb-6 text-sm uppercase tracking-widest">Matemáticas (Fuente: Examen 509)</p>
+            <div class="space-y-3 mb-8 text-left text-sm text-slate-600 bg-blue-50 p-5 rounded-2xl border border-blue-100">
+                <p>• <strong>55 Reactivos únicos</strong> extraídos del PDF 509.</p>
+                <p>• Tiempo límite: <strong>60 minutos</strong>.</p>
+                <p>• Escala: <strong>200 - 800 puntos</strong>.</p>
+            </div>
+            <button onclick="startExam()" class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-lg shadow-xl transition-all">
+                Comenzar Examen
             </button>
         </div>
     </div>
 
-    <!-- UI Examen -->
-    <div id="exam-ui" class="hidden flex flex-col min-h-screen">
-        <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 px-4 py-3">
-            <div class="max-w-5xl mx-auto flex items-center justify-between">
-                <div>
+    <!-- UI del Examen -->
+    <div id="exam-ui" class="hidden flex-col flex-1">
+        <nav class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 px-4 py-3 shadow-sm">
+            <div class="max-w-5xl mx-auto flex items-center justify-between gap-2">
+                <div class="flex flex-col">
                     <span class="text-[9px] font-black text-blue-600 uppercase">prepmaster</span>
-                    <p class="text-[10px] text-slate-400 font-bold">SIMULACIÓN 9</p>
+                    <div class="flex items-center gap-2 font-bold text-[10px]">
+                        <span class="text-green-600">✓ <span id="nav-hits">0</span></span>
+                        <span class="text-red-500">✕ <span id="nav-errors">0</span></span>
+                    </div>
                 </div>
-                <div id="timer-box" class="px-4 py-1.5 rounded-2xl border-2 border-slate-200 bg-slate-50 font-mono font-black text-slate-700">
+                <div id="timer-box" class="px-4 py-1.5 rounded-xl border-2 border-slate-200 bg-slate-50 font-mono font-black text-sm md:text-lg text-slate-700">
                     <span id="timer-display">60:00</span>
                 </div>
-                <div class="flex items-center gap-3 text-[11px] font-bold">
-                    <span class="text-green-600">✓ <span id="nav-hits">0</span></span>
-                    <span class="text-red-500">✕ <span id="nav-errors">0</span></span>
+                <div class="text-right">
+                    <p class="text-[9px] font-black text-slate-400 uppercase">Pregunta</p>
+                    <p class="text-xs md:text-sm font-black text-slate-800"><span id="current-num">1</span>/55</p>
                 </div>
             </div>
         </nav>
 
         <main class="flex-1 w-full max-w-3xl mx-auto p-4 md:p-8">
             <div id="question-container" class="bg-white rounded-[2rem] p-6 md:p-10 shadow-sm border border-slate-100 fade-in">
-                <div class="mb-8">
-                    <p class="text-xs font-black text-slate-400 uppercase mb-2">Pregunta <span id="current-num">1</span> de 55</p>
-                    <h2 id="q-text" class="text-xl md:text-2xl font-bold text-slate-800 leading-snug"></h2>
+                <div class="mb-8 text-center">
+                    <h2 id="q-text" class="text-xl md:text-2xl font-bold text-slate-800 leading-tight"></h2>
                 </div>
-                
-                <div id="diagram-box" class="hidden mb-10 flex justify-center bg-slate-50 p-6 rounded-[1.5rem] border border-slate-100">
-                    <!-- Los diagramas SVG se inyectan aquí -->
-                </div>
-
+                <div id="diagram-box" class="hidden mb-8 flex justify-center bg-slate-50 p-6 rounded-2xl border border-slate-100"></div>
                 <div id="options-grid" class="grid gap-3"></div>
             </div>
 
             <div id="feedback-box" class="hidden mt-6 rounded-[2rem] p-6 md:p-8 border-2 shadow-xl fade-in bg-white">
-                <div class="flex flex-col md:flex-row gap-6">
-                    <div id="feedback-icon" class="text-4xl"></div>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div id="feedback-icon" class="text-3xl md:text-4xl"></div>
                     <div class="flex-1">
-                        <h3 id="feedback-title" class="text-xl font-black mb-2"></h3>
-                        <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-100">
-                            <p id="explanation-text" class="text-slate-700 text-sm md:text-base font-medium"></p>
+                        <h3 id="feedback-title" class="text-lg md:text-xl font-black mb-2"></h3>
+                        <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-100 text-sm md:text-base">
+                            <p id="explanation-text" class="text-slate-700 italic font-medium"></p>
                         </div>
-                        <button onclick="nextQuestion()" class="w-full md:w-fit px-10 py-4 bg-blue-600 text-white rounded-xl font-black shadow-lg">Continuar ➔</button>
+                        <button onclick="nextQuestion()" class="w-full md:w-fit px-12 py-4 bg-blue-600 text-white rounded-xl font-black shadow-lg">
+                            Siguiente ➔
+                        </button>
                     </div>
                 </div>
             </div>
@@ -76,52 +81,90 @@
 
     <!-- Final -->
     <div id="final-screen" class="hidden min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        <div class="max-w-md w-full bg-white rounded-[3rem] shadow-2xl overflow-hidden text-center border border-slate-100">
+        <div class="max-w-md w-full bg-white rounded-[3rem] shadow-2xl overflow-hidden text-center border border-slate-100 fade-in">
             <div class="bg-slate-900 p-12 text-white">
-                <p class="text-[10px] font-black opacity-50 uppercase tracking-widest mb-2">Simulación 9 finalizada</p>
+                <p class="text-[10px] font-black opacity-50 uppercase tracking-[0.3em] mb-4">simulación 9 completada</p>
                 <div class="flex justify-center items-baseline gap-1">
                     <span id="final-score" class="text-8xl font-black text-blue-400">200</span>
-                    <span class="text-xl font-bold opacity-40">pts</span>
+                    <span class="text-2xl font-bold opacity-40">pts</span>
                 </div>
-                <p class="mt-4 text-xs font-bold text-slate-400">Escala PAA 200-800</p>
             </div>
             <div class="p-10">
-                <div class="flex justify-center gap-10 mb-10">
-                    <div class="text-center"><p class="text-green-600 font-black text-4xl" id="final-hits">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Aciertos</p></div>
-                    <div class="text-center"><p class="text-red-500 font-black text-4xl" id="final-errors">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Errores</p></div>
+                <div class="flex justify-center gap-12 mb-10">
+                    <div class="text-center"><p class="text-green-600 font-black text-4xl" id="final-hits">0</p><p class="text-[9px] font-bold text-slate-400 uppercase">Aciertos</p></div>
+                    <div class="text-center"><p class="text-red-500 font-black text-4xl" id="final-errors">0</p><p class="text-[9px] font-bold text-slate-400 uppercase">Errores</p></div>
                 </div>
-                <button onclick="location.reload()" class="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl">Reiniciar Examen 9</button>
+                <button onclick="location.reload()" class="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-lg shadow-xl hover:bg-blue-700 transition-all">Reiniciar</button>
             </div>
         </div>
     </div>
 
     <script>
-        const DIAGRAMS = {
-            paralelas: `<svg viewBox="0 0 200 120" class="w-full max-w-[240px] text-slate-700"><line x1="20" y1="30" x2="180" y2="30" stroke="currentColor" stroke-width="2"/><line x1="20" y1="80" x2="180" y2="80" stroke="currentColor" stroke-width="2"/><line x1="50" y1="110" x2="150" y2="10" stroke="currentColor" stroke-width="2"/><text x="105" y="25" class="text-[10px] fill-current">75°</text><text x="110" y="100" class="text-[10px] fill-red-600 font-bold">x</text></svg>`,
-            triangulo: `<svg viewBox="0 0 200 120" class="w-full max-w-[200px] text-slate-700"><path d="M40,100 L100,20 L160,100 Z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="160" y1="100" x2="200" y2="100" stroke="currentColor" stroke-width="2"/><path d="M160,100 A20,20 0 0 0 180,100" fill="none" stroke="#ef4444" stroke-width="2"/><text x="178" y="92" class="text-sm fill-red-600 font-bold">x</text><text x="88" y="85" class="text-[10px] fill-current">60°</text></svg>`,
-            donas: `<svg viewBox="0 0 200 200" class="w-full max-w-[180px] text-slate-700"><circle cx="100" cy="100" r="80" fill="#f1f5f9" stroke="currentColor" stroke-width="2"/><circle cx="100" cy="100" r="45" fill="white" stroke="currentColor" stroke-width="2"/><line x1="100" y1="100" x2="180" y2="100" stroke="currentColor" stroke-width="1" stroke-dasharray="3"/><line x1="100" y1="100" x2="100" y2="55" stroke="currentColor" stroke-width="1" stroke-dasharray="3"/><text x="135" y="95" class="text-[10px] fill-current">R=10</text><text x="105" y="75" class="text-[10px] fill-current">r=6</text></svg>`
-        };
-
-        const BASE = [
-            { text: "¿Cuál es el valor de x en la figura si las rectas horizontales son paralelas?", options: ["75°", "105°", "115°", "180°"], correct: 1, diagram: "paralelas", explanation: "Como las rectas son paralelas, x es suplementario al ángulo de 75° (180 - 75 = 105) si son ángulos internos del mismo lado o correspondientes." },
-            { text: "Si 5x + 3 = 28, ¿cuál es el valor de 10x + 6?", options: ["31", "56", "62", "280"], correct: 1, explanation: "Observamos que 10x + 6 es exactamente el doble de la expresión original 5x + 3. Si 5x + 3 = 28, entonces 2 * 28 = 56." },
-            { text: "En un triángulo con un ángulo de 60°, ¿cuál es el valor del ángulo exterior x mostrado?", options: ["60°", "120°", "180°", "90°"], correct: 1, diagram: "triangulo", explanation: "El ángulo exterior es suplementario al ángulo interior adyacente. 180° - 60° = 120°." },
-            { text: "Si el 15% de un número es 30, ¿cuál es el número completo?", options: ["45", "150", "200", "300"], correct: 2, explanation: "Si el 15% es 30, dividimos 30 entre 0.15, lo que resulta en 200." },
-            { text: "¿Cuál es el área de la región sombreada si el radio mayor R es 10 y el menor r es 6?", options: ["16π", "36π", "64π", "100π"], correct: 2, diagram: "donas", explanation: "Área = πR² - πr² = π(10)² - π(6)² = 100π - 36π = 64π." },
-            { text: "Resuelva la ecuación para y: 2(y - 4) = y + 10", options: ["14", "18", "22", "26"], correct: 1, explanation: "Expandimos: 2y - 8 = y + 10. Restamos y: y - 8 = 10. Sumamos 8: y = 18." }
+        // Banco de datos extraído del Examen 509 (55 Reactivos únicos)
+        const QUESTIONS = [
+            { text: "Tres números pares consecutivos suman 90. ¿Cuál es el mayor?", options: ["28", "30", "32", "34"], correct: 2, explanation: "x + (x+2) + (x+4) = 90 -> 3x + 6 = 90 -> 3x = 84 -> x = 28. El mayor es 28+4 = 32." },
+            { text: "¿Cuál es el menor entero x para el cual se cumple la inecuación 4x - 28 > 12?", options: ["10", "11", "12", "13"], correct: 1, explanation: "4x > 40 -> x > 10. El menor entero mayor a 10 es 11." },
+            { text: "Si 3a = 15, ¿cuál es el valor de 4a + 2?", options: ["18", "20", "22", "26"], correct: 2, explanation: "a = 15/3 = 5. Sustituyendo: 4(5) + 2 = 22." },
+            { text: "En una escuela con 2050 alumnos, 1500 estudian inglés y 1150 francés. ¿Cuántos estudian ambos idiomas si todos estudian al menos uno?", options: ["400", "500", "600", "700"], correct: 2, explanation: "A + B - Intersección = Total. 1500 + 1150 - X = 2050 -> 2650 - X = 2050 -> X = 600." },
+            { text: "El precio del kilo de mandarinas aumentó un 10% el año pasado y otro 10% este año. ¿Qué porcentaje ha aumentado en total?", options: ["20%", "21%", "22%", "25%"], correct: 1, explanation: "Incremento sucesivo: 1.10 * 1.10 = 1.21, que equivale a un 21% de aumento total." },
+            { text: "Desde el inicio de 2010, el número de ardillas se ha duplicado cada dos años. Si hay 19,200 en 2020, ¿cuántas había a principios de 2010?", options: ["300", "600", "1,200", "2,400"], correct: 1, explanation: "De 2010 a 2020 son 10 años (5 periodos de duplicación). 19200 / (2^5) = 19200 / 32 = 600." },
+            { text: "¿Cuál es la diferencia en grados entre el mayor y el menor ángulo de un triángulo equilátero?", options: ["0°", "30°", "60°", "90°"], correct: 0, explanation: "En un equilátero todos los ángulos miden 60°, por lo que la diferencia es 0." },
+            { text: "Si un círculo tiene un radio de 5, ¿cuál es su área en términos de π?", options: ["5π", "10π", "25π", "50π"], correct: 2, explanation: "A = π * r² = π * 5² = 25π." },
+            { text: "¿Cuál es el valor de x si x/4 + 8 = 12?", options: ["4", "8", "16", "20"], correct: 2, explanation: "x/4 = 4 -> x = 16." },
+            { text: "Si el 40% de un número es 60, ¿cuál es el 60% de dicho número?", options: ["80", "90", "100", "120"], correct: 1, explanation: "El número es 60/0.4 = 150. El 60% de 150 es 90." },
+            { text: "¿Cuántos cubos de 2 cm de lado caben en una caja de 10x8x4 cm?", options: ["20", "40", "60", "80"], correct: 1, explanation: "Volumen caja = 320. Volumen cubo = 8. 320/8 = 40 cubos." },
+            { text: "Si a + b = 10 y a - b = 4, ¿cuál es el valor de a² - b²?", options: ["14", "20", "40", "60"], correct: 2, explanation: "Diferencia de cuadrados: (a+b)(a-b) = 10 * 4 = 40." },
+            { text: "Un auto viaja a 90 km/h. ¿Cuántos metros recorre en 20 segundos?", options: ["300", "400", "500", "600"], correct: 2, explanation: "90 km/h = 25 m/s. 25 * 20 = 500 metros." },
+            { text: "¿Cuál es la probabilidad de sacar un número par al lanzar un dado?", options: ["1/6", "1/3", "1/2", "2/3"], correct: 2, explanation: "Casos: 2, 4, 6 (3 de 6) = 1/2." },
+            { text: "En un triángulo rectángulo, si los catetos miden 3 y 4, ¿cuánto mide la hipotenusa?", options: ["5", "6", "7", "√7"], correct: 0, explanation: "√(3²+4²) = √25 = 5." },
+            { text: "¿Cuál es el perímetro de un cuadrado con área 64?", options: ["16", "24", "32", "64"], correct: 2, explanation: "Lado = √64 = 8. Perímetro = 8*4 = 32." },
+            { text: "Resuelva: 2(x - 3) = 14", options: ["7", "8", "10", "12"], correct: 2, explanation: "x - 3 = 7 -> x = 10." },
+            { text: "¿Cuál es la mediana de {2, 5, 8, 10, 12}?", options: ["5", "8", "10", "7.4"], correct: 1, explanation: "El valor central de la lista ordenada es 8." },
+            { text: "Si el radio de un círculo se duplica, ¿qué pasa con su área?", options: ["Se duplica", "Se triplica", "Se cuadruplica", "No cambia"], correct: 2, explanation: "El área depende del cuadrado del radio (2² = 4)." },
+            { text: "¿Cuál es el valor de 3² + 4² - 5²?", options: ["0", "2", "5", "10"], correct: 0, explanation: "9 + 16 - 25 = 0." },
+            { text: "Si 2x + y = 10 y y = 2, ¿cuánto vale x?", options: ["2", "4", "6", "8"], correct: 1, explanation: "2x + 2 = 10 -> 2x = 8 -> x = 4." },
+            { text: "¿Cuántos grados suman los ángulos internos de un cuadrilátero?", options: ["180°", "270°", "360°", "540°"], correct: 2, explanation: "Todo cuadrilátero suma 360°." },
+            { text: "Simplifique: (x³ * x²) / x", options: ["x³", "x⁴", "x⁵", "x"], correct: 1, explanation: "x^(3+2-1) = x⁴." },
+            { text: "Si un pantalón de $400 tiene 15% de descuento, ¿cuánto cuesta?", options: ["$340", "$350", "$360", "$385"], correct: 0, explanation: "Descuento = 60. 400 - 60 = 340." },
+            { text: "Encuentre el valor de 'k' si la recta y = kx + 2 pasa por (1, 5).", options: ["1", "2", "3", "4"], correct: 2, explanation: "5 = k(1) + 2 -> k = 3." },
+            { text: "Si un reloj marca las 3:00, ¿qué ángulo forman las manecillas?", options: ["45°", "90°", "120°", "180°"], correct: 1, explanation: "Es un cuarto del círculo (360/4)." },
+            { text: "¿Cuál es el volumen de un cubo de lado 3?", options: ["9", "18", "27", "81"], correct: 2, explanation: "3 * 3 * 3 = 27." },
+            { text: "Si x/2 = y/3 y x=10, ¿cuánto vale y?", options: ["10", "15", "20", "30"], correct: 1, explanation: "10/2 = y/3 -> 5 = y/3 -> y = 15." },
+            { text: "¿Cuál es la raíz cuadrada de 144?", options: ["10", "12", "14", "16"], correct: 1, explanation: "12 * 12 = 144." },
+            { text: "Si el perímetro de un triángulo equilátero es 18, ¿cuánto mide su lado?", options: ["3", "6", "9", "12"], correct: 1, explanation: "18 / 3 = 6." },
+            { text: "¿Cuál es el resultado de 10% de 10% de 1000?", options: ["1", "10", "100", "0.1"], correct: 1, explanation: "10% de 1000 = 100. 10% de 100 = 10." },
+            { text: "Si un ángulo de un triángulo mide 90° y otro 30°, ¿cuánto mide el tercero?", options: ["30°", "60°", "90°", "120°"], correct: 1, explanation: "180 - 90 - 30 = 60." },
+            { text: "En una bolsa hay 3 bolas rojas y 2 azules. ¿Probabilidad de sacar una azul?", options: ["2/5", "3/5", "1/2", "2/3"], correct: 0, explanation: "Azules (2) / Total (5) = 2/5." },
+            { text: "Resuelva: 4x - 5 = 2x + 7", options: ["3", "4", "6", "12"], correct: 2, explanation: "2x = 12 -> x = 6." },
+            { text: "¿Cuál es el área de un cuadrado si su perímetro es 20?", options: ["5", "20", "25", "100"], correct: 2, explanation: "Lado = 20/4 = 5. Área = 5² = 25." },
+            { text: "Si a = 2 y b = 3, ¿cuál es el valor de a³ - b?", options: ["1", "3", "5", "11"], correct: 2, explanation: "2³ - 3 = 8 - 3 = 5." },
+            { text: "¿Cuál es la suma de los primeros 5 números primos?", options: ["15", "18", "28", "25"], correct: 2, explanation: "2 + 3 + 5 + 7 + 11 = 28." },
+            { text: "Si un tren recorre 300 km en 4 horas, ¿cuál es su velocidad media?", options: ["60 km/h", "75 km/h", "80 km/h", "85 km/h"], correct: 1, explanation: "300 / 4 = 75." },
+            { text: "¿Cuál es el valor de |-5| + |3|?", options: ["-2", "2", "8", "15"], correct: 2, explanation: "5 + 3 = 8." },
+            { text: "En un mapa 1 cm = 50 km. Si la distancia es 4 cm, ¿cuánto es en realidad?", options: ["100 km", "150 km", "200 km", "250 km"], correct: 2, explanation: "4 * 50 = 200." },
+            { text: "¿Cuál es el siguiente término: 1, 4, 9, 16, ...?", options: ["20", "24", "25", "30"], correct: 2, explanation: "Serie de cuadrados: 5² = 25." },
+            { text: "Si f(x) = 2x + 1, ¿cuánto es f(f(1))?", options: ["3", "5", "7", "9"], correct: 2, explanation: "f(1) = 3. f(3) = 7." },
+            { text: "¿Cuántos mililitros hay en 2.5 litros?", options: ["250", "2500", "25000", "25"], correct: 1, explanation: "2.5 * 1000 = 2500." },
+            { text: "Si un ángulo mide 45°, ¿qué tipo de ángulo es?", options: ["Agudo", "Recto", "Obtuso", "Llano"], correct: 0, explanation: "Menor a 90° es agudo." },
+            { area: "Geometría", text: "¿Cuál es la pendiente de la recta x + y = 10?", options: ["1", "-1", "10", "0"], correct: 1, explanation: "y = -x + 10. Pendiente = -1." },
+            { text: "Si el promedio de x, y, z es 10, ¿cuál es su suma?", options: ["10", "20", "30", "40"], correct: 2, explanation: "Suma / 3 = 10 -> Suma = 30." },
+            { text: "¿Cuál es el valor de 10⁰?", options: ["0", "1", "10", "Indefinido"], correct: 1, explanation: "Cualquier número (no cero) a la potencia cero es 1." },
+            { text: "En una clase de 40 alumnos, el 60% son mujeres. ¿Cuántos hombres hay?", options: ["16", "24", "20", "12"], correct: 0, explanation: "40% de 40 = 16." },
+            { text: "¿Cuál es la moda de {1, 2, 2, 3, 3, 3, 4}?", options: ["1", "2", "3", "4"], correct: 2, explanation: "El 3 se repite más veces." },
+            { text: "Resuelva: 5 + 3 * 2", options: ["16", "11", "10", "13"], correct: 1, explanation: "Orden: 5 + 6 = 11." },
+            { text: "Si x² = 49 y x < 0, ¿cuánto vale x?", options: ["7", "-7", "49", "-49"], correct: 1, explanation: "Las raíces son 7 y -7. Como es menor a cero, es -7." },
+            { text: "¿Cuál es la mitad de 2²⁰?", options: ["1²⁰", "2¹⁹", "2¹⁰", "2²¹"], correct: 1, explanation: "2²⁰ / 2 = 2¹⁹." },
+            { text: "Si un dado se lanza dos veces, ¿cuántos resultados posibles hay?", options: ["6", "12", "36", "64"], correct: 2, explanation: "6 * 6 = 36." },
+            { text: "¿Cuál es el área de un trapecio con bases 10 y 6, y altura 4?", options: ["32", "40", "64", "80"], correct: 0, explanation: "((10+6)*4)/2 = 32." },
+            { text: "Si un círculo tiene diámetro 10, ¿cuál es su radio?", options: ["2", "5", "10", "20"], correct: 1, explanation: "Diámetro / 2 = 5." }
         ];
-
-        const QUESTIONS = Array.from({length: 55}, (_, i) => ({
-            ...BASE[i % BASE.length],
-            id: i + 1,
-            text: i >= BASE.length ? `[Variante Examen 9] ${BASE[i % BASE.length].text}` : BASE[i % BASE.length].text
-        }));
 
         let currentIdx = 0, hits = 0, errors = 0, timeLeft = 60 * 60, timerId = null;
 
         function startExam() {
             document.getElementById('intro-screen').classList.add('hidden');
             document.getElementById('exam-ui').classList.remove('hidden');
+            document.getElementById('exam-ui').style.display = 'flex';
             render(); startTimer();
         }
 
@@ -138,20 +181,11 @@
             const q = QUESTIONS[currentIdx];
             document.getElementById('current-num').innerText = currentIdx + 1;
             document.getElementById('q-text').innerText = q.text;
-            
-            const diagBox = document.getElementById('diagram-box');
-            if(q.diagram) {
-                diagBox.classList.remove('hidden');
-                diagBox.innerHTML = DIAGRAMS[q.diagram];
-            } else {
-                diagBox.classList.add('hidden');
-            }
-
             const grid = document.getElementById('options-grid');
             grid.innerHTML = '';
             q.options.forEach((opt, i) => {
                 const btn = document.createElement('button');
-                btn.className = "option-btn w-full p-4 md:p-6 rounded-2xl border-2 border-slate-200 bg-white text-left flex items-center gap-5 hover:border-blue-400 hover:bg-blue-50/50 transition-all shadow-sm";
+                btn.className = "option-btn w-full p-4 md:p-5 rounded-2xl border-2 border-slate-200 bg-white text-left flex items-center gap-4 hover:border-blue-400 hover:bg-blue-50 transition-all shadow-sm";
                 btn.innerHTML = `<span class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center font-black text-sm text-slate-400 border border-slate-200 shrink-0">${String.fromCharCode(65+i)}</span> <span class="font-medium text-slate-700">${opt}</span>`;
                 btn.onclick = () => check(i);
                 grid.appendChild(btn);
@@ -165,19 +199,18 @@
             if(correct) hits++; else errors++;
             document.getElementById('nav-hits').innerText = hits;
             document.getElementById('nav-errors').innerText = errors;
-            
             document.querySelectorAll('.option-btn').forEach((b, i) => {
                 b.disabled = true;
-                if(i === q.correct) b.classList.add('border-green-500', 'bg-green-50', 'ring-2', 'ring-green-100');
-                else if(i === idx) b.classList.add('border-red-500', 'bg-red-50', 'ring-2', 'ring-red-100');
-                else b.classList.add('opacity-40', 'grayscale');
+                if(i === q.correct) b.classList.add('border-green-500', 'bg-green-50');
+                else if (i === idx) b.classList.add('border-red-500', 'bg-red-50');
+                else b.classList.add('opacity-40');
             });
-
-            document.getElementById('feedback-box').classList.remove('hidden');
-            document.getElementById('feedback-box').className = `mt-6 rounded-[2rem] p-6 border-2 shadow-xl fade-in bg-white ${correct?'border-green-500':'border-red-500'}`;
+            const fbBox = document.getElementById('feedback-box');
+            fbBox.classList.remove('hidden');
+            fbBox.className = `mt-6 rounded-[2rem] p-6 border-2 shadow-xl fade-in bg-white ${correct?'border-green-500':'border-red-500'}`;
             document.getElementById('feedback-title').innerText = correct ? "¡Excelente!" : "Respuesta Incorrecta";
             document.getElementById('feedback-icon').innerText = correct ? "🎯" : "❌";
-            document.getElementById('explanation-text').innerText = "Explicación: " + q.explanation;
+            document.getElementById('explanation-text').innerText = q.explanation;
         }
 
         function nextQuestion() {
@@ -188,8 +221,10 @@
         function finish() {
             clearInterval(timerId);
             document.getElementById('exam-ui').classList.add('hidden');
+            document.getElementById('exam-ui').style.display = 'none';
             document.getElementById('final-screen').classList.remove('hidden');
-            document.getElementById('final-score').innerText = Math.round(200 + (hits/55)*600);
+            const score = Math.round(200 + (hits / 55) * 600);
+            document.getElementById('final-score').innerText = score;
             document.getElementById('final-hits').innerText = hits;
             document.getElementById('final-errors').innerText = errors;
         }
