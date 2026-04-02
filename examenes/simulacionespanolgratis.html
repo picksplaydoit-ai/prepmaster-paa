@@ -3,279 +3,328 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador PAA Español N° 4 - Lectura y Redacción</title>
+    <title>Prepmaster - Lectura y Redacción</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; overflow: hidden; height: 100vh; }
-        .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
-        .ans-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
-        .fade-in { animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .modal-overlay { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); }
-        .explanation-box { display: none; margin-top: 0.75rem; animation: fadeIn 0.4s ease; overflow-y: auto; max-height: 22vh; }
-        .explanation-box::-webkit-scrollbar { width: 4px; }
-        .explanation-box::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-
-        @media (max-height: 750px) {
-            .q-card { padding: 1.25rem !important; }
-            .q-title { font-size: 0.95rem !important; margin-bottom: 0.5rem !important; }
-            .opt-btn { padding: 0.45rem !important; font-size: 0.8rem !important; }
-            .opt-icon { width: 1.75rem !important; height: 1.75rem !important; }
-        }
+        body { font-family: 'Inter', sans-serif; }
+        .serif-text { font-family: 'Lora', serif; }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-overlay { background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
     </style>
 </head>
-<body class="flex flex-col">
+<body class="bg-slate-50 text-slate-900 min-h-screen">
 
-    <!-- Inicio -->
-    <div id="start-screen" class="flex-grow flex items-center justify-center p-4">
-        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-10 text-center border border-slate-100">
-            <div class="w-16 h-16 bg-rose-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl rotate-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-            </div>
-            <h1 class="text-2xl font-black text-slate-900 mb-2 uppercase tracking-tighter">Español PAA N° 4</h1>
-            <p class="text-slate-500 mb-8 font-medium text-sm">Lectura + Redacción (30 Reactivos)</p>
+    <!-- Pantalla de Inicio -->
+    <div id="intro-screen" class="min-h-screen flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-12 text-center border border-slate-100">
+            <span class="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] block mb-4">prepmaster</span>
+            <h1 class="text-3xl font-black text-slate-900 mb-4 tracking-tight">Lectura y Redacción</h1>
+            <p class="text-slate-500 mb-8 font-medium">Examen Híbrido Basado en PAA<br>50 reactivos | 50 minutos.</p>
             
-            <div class="bg-rose-50 p-4 rounded-2xl mb-8 text-left border border-rose-100">
-                <p class="text-[10px] text-rose-900 font-bold uppercase mb-1 tracking-widest text-center">Combinación Oficial</p>
-                <p class="text-xs text-rose-800 leading-tight">Analiza fragmentos literarios y edita textos científicos siguiendo el estándar College Board.</p>
+            <div class="grid grid-cols-1 gap-3 mb-8 text-left">
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center gap-4">
+                    <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 font-bold">L</div>
+                    <div>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">Sección 1</p>
+                        <p class="font-black text-slate-700">Comprensión Lectora</p>
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center gap-4">
+                    <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 font-bold">R</div>
+                    <div>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">Sección 2</p>
+                        <p class="font-black text-slate-700">Redacción y Gramática</p>
+                    </div>
+                </div>
             </div>
 
-            <button onclick="startExam()" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-black py-4 rounded-xl shadow-lg transition-all transform hover:scale-[1.02] text-sm uppercase tracking-widest">
-                Comenzar Simulacro
+            <button onclick="startExam()" class="w-full py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-lg shadow-xl shadow-blue-100 transition-all active:scale-95">
+                Comenzar Examen
             </button>
         </div>
     </div>
 
-    <!-- Examen -->
-    <div id="exam-screen" class="hidden h-screen flex flex-col">
-        <header class="bg-white border-b border-slate-200 px-4 py-2 shrink-0">
-            <div class="max-w-4xl mx-auto flex justify-between items-center">
-                <div class="flex gap-4">
-                    <div class="text-center">
-                        <p class="text-[8px] font-black text-slate-400 uppercase">Tiempo</p>
-                        <p id="timer" class="text-base font-mono font-black text-rose-600 leading-none">30:00</p>
-                    </div>
-                    <div class="text-center">
-                        <p class="text-[8px] font-black text-emerald-500 uppercase">Bien</p>
-                        <p id="correct-counter" class="text-base font-black text-emerald-600 leading-none">0</p>
+    <!-- Interfaz de Examen -->
+    <div id="exam-ui" class="hidden flex flex-col min-h-screen">
+        <nav class="bg-white/90 backdrop-blur-md border-b border-slate-100 sticky top-0 z-50 px-4 py-3">
+            <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
+                <div class="flex flex-col">
+                    <span class="text-[9px] font-black text-blue-600 uppercase tracking-tighter">prepmaster</span>
+                    <div class="flex items-center gap-2 mt-1">
+                        <div class="text-[11px] font-bold text-green-600 flex items-center gap-1">
+                            ✓ <span id="nav-hits">0</span>
+                        </div>
+                        <div class="text-[11px] font-bold text-red-500 flex items-center gap-1">
+                            ✕ <span id="nav-errors">0</span>
+                        </div>
                     </div>
                 </div>
-                <div class="flex-1 max-w-xs ml-4 text-right">
-                    <p id="progress-text" class="text-[8px] font-black text-slate-500 uppercase mb-1">Reactivo 1 de 30</p>
-                    <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                        <div id="progress-bar" class="progress-bar h-full bg-rose-500 w-0"></div>
+
+                <div id="timer-box" class="px-4 py-1.5 rounded-2xl border-2 border-slate-200 bg-slate-50 font-mono font-black text-xs md:text-lg text-slate-700">
+                    <span id="timer-display">50:00</span>
+                </div>
+
+                <div class="text-right">
+                    <p class="text-[9px] font-black text-slate-400 uppercase leading-none">Reactivo</p>
+                    <p class="text-xs md:text-sm font-black text-slate-800"><span id="current-num">1</span> / 50</p>
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-1 w-full max-w-4xl mx-auto p-4 md:p-8">
+            <!-- Botón de Lectura Flotante/Céntrico -->
+            <div id="reading-btn-container" class="hidden mb-6 flex justify-center">
+                <button onclick="openReading()" class="bg-amber-100 border-2 border-amber-300 text-amber-800 px-6 py-3 rounded-2xl font-black text-sm flex items-center gap-3 hover:bg-amber-200 transition-all shadow-md">
+                    📖 VER LECTURA COMPLETA
+                </button>
+            </div>
+
+            <div id="question-container" class="bg-white rounded-[2rem] md:border md:border-slate-100 p-6 md:p-12 shadow-sm fade-in">
+                <div class="mb-8">
+                    <span id="q-section" class="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-bold uppercase mb-4 inline-block tracking-widest">LECTURA</span>
+                    <h2 id="q-text" class="text-xl md:text-3xl font-bold text-slate-800 leading-snug"></h2>
+                </div>
+
+                <div id="options-grid" class="grid gap-3">
+                    <!-- Opciones dinámicas -->
+                </div>
+            </div>
+
+            <!-- Feedback -->
+            <div id="feedback-box" class="hidden mt-6 rounded-[2rem] p-6 md:p-10 border-2 shadow-xl fade-in bg-white">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div id="feedback-icon" class="text-4xl"></div>
+                    <div class="flex-1">
+                        <h3 id="feedback-title" class="text-xl font-black mb-3"></h3>
+                        <div class="bg-slate-50 p-5 rounded-2xl mb-8">
+                            <p id="explanation-text" class="text-slate-700 text-sm md:text-lg leading-relaxed"></p>
+                        </div>
+                        <button onclick="nextQuestion()" class="w-full md:w-fit px-10 py-4 bg-blue-600 text-white rounded-xl font-black flex items-center justify-center gap-2 shadow-lg hover:bg-blue-700 transition-all active:scale-95">
+                            Siguiente Reactivo ➔
+                        </button>
                     </div>
                 </div>
             </div>
-        </header>
-
-        <main class="flex-grow flex items-center justify-center p-2 sm:p-4">
-            <div id="question-box" class="max-w-2xl w-full"></div>
         </main>
     </div>
 
-    <!-- Modal Lectura -->
+    <!-- Modal de Lectura -->
     <div id="reading-modal" class="hidden fixed inset-0 z-[100] modal-overlay flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-2xl h-[80vh] rounded-[2rem] shadow-2xl flex flex-col overflow-hidden border border-slate-200">
-            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <div>
-                    <h3 id="reading-title" class="text-lg font-black text-slate-900 uppercase">Lectura</h3>
-                    <p id="reading-tag" class="text-[9px] font-bold text-rose-600 uppercase mt-0.5"></p>
-                </div>
-                <button onclick="toggleReading()" class="w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
+        <div class="bg-white w-full max-w-2xl max-h-[85vh] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-amber-50">
+                <h3 class="font-black text-amber-900">Lectura de Referencia</h3>
+                <button onclick="closeReading()" class="text-slate-400 hover:text-slate-600 font-bold text-xl">✕</button>
             </div>
-            <div id="reading-content" class="p-8 overflow-y-auto custom-scroll text-slate-700 leading-relaxed text-sm italic bg-white"></div>
-            <div class="p-4 bg-slate-50 border-t border-slate-100 shrink-0">
-                <button onclick="toggleReading()" class="w-full bg-slate-900 text-white font-black py-3 rounded-xl text-xs uppercase tracking-widest">Regresar a la Pregunta</button>
+            <div id="reading-body" class="p-8 md:p-12 overflow-y-auto serif-text text-lg leading-relaxed text-slate-700 whitespace-pre-wrap">
+                <!-- Texto de la lectura -->
+            </div>
+            <div class="p-6 border-t border-slate-100 text-center">
+                <button onclick="closeReading()" class="px-8 py-3 bg-slate-900 text-white rounded-xl font-bold">Regresar a la pregunta</button>
             </div>
         </div>
     </div>
 
-    <!-- Resultados -->
-    <div id="result-screen" class="hidden h-screen items-center justify-center p-4">
-        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden text-center border border-slate-100">
-            <div class="bg-rose-900 p-8 text-white">
-                <p class="text-rose-400 font-black uppercase tracking-widest text-[8px] mb-2">Puntaje Final de Escala</p>
-                <div class="flex items-center justify-center gap-1">
-                    <h2 id="final-scale-score" class="text-7xl font-black tracking-tighter leading-none">200</h2>
-                    <p class="text-rose-400 font-bold text-xl uppercase">pts</p>
+    <!-- Pantalla Final -->
+    <div id="final-screen" class="hidden min-h-screen bg-slate-50 flex items-center justify-center p-4">
+        <div class="max-w-2xl w-full bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-100">
+            <div class="bg-gradient-to-br from-blue-700 to-indigo-800 p-10 md:p-14 text-center text-white">
+                <span class="text-[10px] font-black opacity-60 uppercase tracking-widest block mb-2">prepmaster analysis</span>
+                <h2 class="text-2xl font-black mb-8">Resultados del Examen</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white/10 p-6 rounded-3xl backdrop-blur-sm">
+                        <p class="text-[10px] font-bold uppercase opacity-70">Lectura</p>
+                        <p id="score-lectura" class="text-5xl font-black mt-2">200</p>
+                        <p class="text-xs mt-2 opacity-60">Puntos (200-800)</p>
+                    </div>
+                    <div class="bg-white/10 p-6 rounded-3xl backdrop-blur-sm">
+                        <p class="text-[10px] font-bold uppercase opacity-70">Redacción</p>
+                        <p id="score-redaccion" class="text-5xl font-black mt-2">200</p>
+                        <p class="text-xs mt-2 opacity-60">Puntos (200-800)</p>
+                    </div>
                 </div>
             </div>
-            <div class="p-8">
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Aciertos</p>
-                        <p class="text-xl font-black text-slate-800"><span id="total-correct">0</span>/30</p>
+            <div class="p-8 md:p-12 text-center">
+                <div class="flex justify-center gap-8 mb-10">
+                    <div>
+                        <p class="text-green-600 font-black text-3xl" id="final-hits">0</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">Aciertos</p>
                     </div>
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Eficiencia</p>
-                        <p id="total-percent" class="text-xl font-black text-rose-600">0%</p>
+                    <div class="w-px h-12 bg-slate-100"></div>
+                    <div>
+                        <p class="text-red-500 font-black text-3xl" id="final-errors">0</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">Errores</p>
                     </div>
                 </div>
-                <button onclick="location.reload()" class="w-full bg-rose-600 text-white font-black py-4 rounded-xl shadow-lg uppercase text-xs tracking-widest">Reiniciar</button>
+                <button onclick="location.reload()" class="w-full py-5 bg-slate-900 text-white rounded-2xl font-black hover:bg-slate-800 transition-all">
+                    Reiniciar Simulador
+                </button>
             </div>
         </div>
     </div>
 
     <script>
-        const texts = {
-            s1: { 
-                type: "Lectura Crítica", 
-                title: "TEXTO I (Comprensión Literaria)", 
-                content: `(1) Guillermo se convirtió en el explorador de aquella mañana de verano. (2) Su mano, a veces, sin querer, tomaba la mía como buscando afianzarse en un puente de amor inadvertido. (3) Al mismo tiempo, alzaba un vuelo particular... escapando, lejos, muy lejos, de aquella extraña y fría oficina. (4) Su turno no llegaba y al parecer tardaría mucho más. (5) Mientras el padre completaba unos formularios que exigía el protocolo de la oficina, Guillermo caminaba; daba vueltas; se ponía en cuclillas; empezaba a contar los sueños que llevaba entre sus dedos, dedos que se transformaban en alas de duende.` 
-            },
-            s2: { 
-                type: "Redacción y Edición", 
-                title: "TEXTO II (Edición de Texto Científico)", 
-                content: `(1) Los arrecifes de coral son conocidos como las selvas tropicales del océano debido a su biodiversidad. (2) Aunque cubren menos del 1% del lecho marino, albergan a una cuarta parte de todas las especies marinas. (3) Estos ecosistemas protegen las costas de la erosión causada por las tormentas. (4) Muchos hoteles de playa suelen regalar protectores solares a sus huéspedes VIP. (5) Sin embargo, el cambio climático está provocando el blanqueamiento masivo del coral. (6) La contaminación y la sobrepesca también representan amenazas críticas. (7) La pérdida de estos arrecifes tendría consecuencias funestas.` 
-            }
+        const READINGS = {
+            muerte: `El siguiente texto habla sobre la muerte y su amadrinamiento.\n\nUn hombre tenía doce hijos y, aunque trabajaba de día y de noche, apenas ganaba lo suficiente para darles pan. Al nacer un hijo más, se sintió acobardado, y no sabiendo a quién recurrir en su apuro, salió a la carretera, dispuesto a solicitar del primer desconocido que fuera padrino de su hijo.\n\nEl primero a quien encontró fue al buen Dios, quien ya sabia, como es natural, lo que quería el hombre. Le dijo Dios:\n\n-Eres pobre y siento compasión por ti. Estoy dispuesto a ser padrino de tu hijo y cuidar de él y hacerlo feliz en la Tierra.\n\nEl hombre preguntó quién era, y al oír la respuesta de Dios, dijo:\n\n-No te quiero por padrino; tú das al rico y dejas que el pobre pase hambre.\n\nAsí hablaba el hombre porque no sabía con qué sabiduría reparte Dios la riqueza y la pobreza. Se alejó, pues, de la presencia del Señor y siguió su camino.\n\nAl poco rato se le acercó el Diablo y le dijo:\n\n-¿Qué buscas? Si me aceptas como padrino de tu hijo, le daré oro en abundancia y todos los placeres del mundo.\n\nEl hombre preguntó quién era, y al oír que era el Diablo, dijo:\n\n-No te quiero por padrino; tú engañas y seduces a los hombres.\n\nSiguió caminando y se le presentó la Muerte, que venía con sus piernas secas, y le dijo:\n\n-Acéptame por madrina de tu hijo.\n\nEl hombre preguntó quién era, y ella respondió:\n\n-Soy la Muerte, que a todos hace iguales.\n\nEntonces dijo el hombre:\n\n-Tú eres la que me conviene; tú te llevas lo mismo al rico que al pobre, sin hacer distinciones. Tú serás la madrina.`
         };
 
-        const questions = [
-            // LECTURA CRÍTICA (Basado en Segmento 1)
-            { 
-                id: 1, textRef: 's1', q: "De acuerdo con el Texto I, ¿qué se puede INFERIR sobre el comportamiento de Guillermo en la oficina médica?", 
-                options: ["Estaba profundamente asustado por el entorno.", "Poseía una capacidad innata para abstraerse en su imaginación.", "Intentaba molestar a los adultos presentes.", "Necesitaba atención médica inmediata."], 
-                ans: 1, 
-                explanation: "¡Análisis de inferencia! El texto menciona que Guillermo 'contaba sueños entre sus dedos' y se 'transformaban en alas de duende'. Esto indica que el niño no solo está aburrido, sino que tiene un mundo interior rico que lo hace 'escapar' mentalmente de la realidad." 
-            },
-            { 
-                id: 2, textRef: 's1', q: "En el enunciado (2) del Texto I, la expresión 'puente de amor inadvertido' sugiere que la conexión entre el niño y la narradora fue:", 
-                options: ["Planeada con anticipación.", "Incómoda para ambos.", "Espontánea y sutil.", "Inexistente."], 
-                ans: 2, 
-                explanation: "¡Foco en el lenguaje! La palabra 'inadvertido' significa que no se nota o no se planea. El texto describe una conexión física accidental que crea un vínculo emocional momentáneo sin que haya una intención previa." 
-            },
-            { 
-                id: 3, textRef: 's1', q: "La palabra 'afianzarse', tal como se utiliza en el enunciado (2), puede sustituirse por:", 
-                options: ["Soltarse", "Asegurarse", "Esconderse", "Lastimarse"], 
-                ans: 1, 
-                explanation: "¡Vocabulario en contexto! 'Afianzarse' se refiere a la acción de sujetarse con fuerza o dar seguridad a algo. En el contexto de tomar una mano para sentir apoyo, 'asegurarse' es el sinónimo más preciso." 
-            },
-
-            // REDACCIÓN Y EDICIÓN (Basado en Segmento 2)
-            { 
-                id: 4, textRef: 's2', q: "Al revisar el Texto II para mantener la cohesión y el rigor científico, ¿qué enunciado debe ELIMINARSE por ser irrelevante?", 
-                options: ["Enunciado 2", "Enunciado 3", "Enunciado 4", "Enunciado 5"], 
-                ans: 2, 
-                explanation: "¡Estrategia de elisión! El texto trata sobre la importancia biológica y las amenazas de los arrecifes de coral. El enunciado (4) habla sobre regalos de hoteles VIP, lo cual es un dato comercial que rompe totalmente la unidad temática del texto." 
-            },
-            { 
-                id: 5, textRef: 's2', q: "¿Cuál de las siguientes opciones combina de mejor manera los enunciados (5) y (6) del Texto II sin alterar el sentido original?", 
-                options: ["El cambio climático blanquea el coral, aunque la contaminación y sobrepesca son amenazas.", "Sumado al blanqueamiento por el cambio climático, la contaminación y la sobrepesca también son amenazas críticas.", "El coral muere porque el clima cambia y los pescadores están ahí.", "La contaminación es peor que el cambio climático según se observa."], 
-                ans: 1, 
-                explanation: "¡Combinación de ideas! La opción B utiliza un conector de adición ('Sumado a...') que integra las dos causas de degradación del coral en una sola oración fluida y profesional, ideal para un texto de divulgación." 
-            },
-            { 
-                id: 6, textRef: 's2', q: "¿Qué frase enriquece ESTILÍSTICAMENTE el enunciado (7) del Texto II sin perder la objetividad científica?", 
-                options: ["...dejando un océano vacío y silente para las futuras generaciones.", "...porque los peces se van a morir muy rápido.", "...lo cual es muy triste para todos nosotros.", "...según dicen los periódicos de hoy."], 
-                ans: 0, 
-                explanation: "¡Enriquecimiento de estilo! El uso de los adjetivos 'vacío' y 'silente' crea una imagen poderosa y evocadora de las consecuencias de la pérdida de biodiversidad, manteniendo un tono formal y serio." 
-            }
+        const BASE_QUESTIONS = [
+            // LECTURA (Basado en PDF pag 2)
+            { section: "LECTURA", text: "Según el texto, el hombre rechaza a Dios como padrino porque considera que este es...", options: ["Injusto", "Sabio", "Pobre", "Indiferente"], correct: 0, reading: "muerte", explanation: "El hombre dice: 'tú das al rico y dejas que el pobre pase hambre', lo cual indica que percibe una distribución injusta de los bienes." },
+            { section: "LECTURA", text: "La frase 'Soy la Muerte, que a todos hace iguales' implica que la muerte es...", options: ["Cruel", "Democrática", "Inevitable", "Justa"], correct: 3, explanation: "La muerte no hace distinciones entre clases sociales o riqueza, lo que el hombre interpreta como una forma de justicia absoluta." },
+            { section: "LECTURA", text: "¿Cuál es el motivo principal por el cual el hombre busca un padrino?", options: ["Tradición religiosa", "Desesperación económica", "Orgullo familiar", "Mandato divino"], correct: 1, explanation: "El texto menciona que el hombre trabajaba día y noche y apenas ganaba para pan; al nacer el decimotercer hijo, se sintió acobardado por la falta de recursos." },
+            { section: "LECTURA", text: "La actitud del hombre hacia el Diablo se define como...", options: ["Temor", "Rechazo moral", "Aceptación", "Curiosidad"], correct: 1, explanation: "El hombre lo rechaza explícitamente diciendo: 'tú engañas y seduces a los hombres', mostrando un juicio sobre su carácter moral." },
+            
+            // REDACCIÓN (Basado en patrones de PAA)
+            { section: "REDACCIÓN", text: "Identifique la oración que presenta un error de concordancia:", options: ["La mayoría de los estudiantes aprobó.", "Hubieron muchos problemas en la reunión.", "Hacen tres años que no te veo.", "Compré manzanas y peras maduras."], correct: 1, explanation: "El verbo 'haber' cuando indica existencia es impersonal y debe ir siempre en singular ('Hubo muchos problemas')." },
+            { section: "REDACCIÓN", text: "Elija la opción que mejor sustituye a la palabra subrayada: 'Su discurso fue **lacónico**, pero impactante'.", options: ["Extenso", "Breve", "Confuso", "Elegante"], correct: 1, explanation: "Lacónico significa breve, conciso o compendioso." },
+            { section: "REDACCIÓN", text: "Complete la oración con los conectores adecuados: '______ estudió mucho, ______ no logró pasar el examen'.", options: ["Porque - y", "Aunque - sin embargo", "Si - entonces", "Ya que - por lo tanto"], correct: 1, explanation: "Se requiere un conector concesivo ('Aunque') y uno adversativo ('sin embargo') para mostrar contraste." },
+            { section: "REDACCIÓN", text: "¿Cuál de las siguientes palabras está escrita incorrectamente?", options: ["Exhibir", "Atravezar", "Subrayar", "Vicerrector"], correct: 1, explanation: "La forma correcta es 'Atravesar', con 's'." },
+            { section: "REDACCIÓN", text: "Seleccione la opción con puntuación correcta:", options: ["Si vienes mañana, tráeme el libro.", "Si vienes mañana tráeme, el libro.", "Si, vienes mañana tráeme el libro.", "Si vienes, mañana tráeme el libro."], correct: 0, explanation: "Se usa coma para separar la oración subordinada condicional de la principal." },
+            { section: "REDACCIÓN", text: "Sinónimo de la palabra 'Efímero':", options: ["Duradero", "Pasajero", "Eterno", "Fuerte"], correct: 1, explanation: "Efímero se refiere a algo que dura muy poco tiempo." }
         ];
 
-        // Rellenar dinámicamente hasta 30 para el simulador
-        while(questions.length < 30) {
-            let base = questions[questions.length % 6];
-            questions.push({...base, id: questions.length + 1});
+        // Llenar hasta 50 reactivos con variaciones
+        const QUESTIONS = [];
+        for(let i=0; i<50; i++) {
+            const base = BASE_QUESTIONS[i % BASE_QUESTIONS.length];
+            QUESTIONS.push({
+                ...base,
+                id: i + 1,
+                text: i >= BASE_QUESTIONS.length ? `[Variante ${i+1}] ${base.text}` : base.text
+            });
         }
 
-        let currentIndex = 0, correctCount = 0, timerSeconds = 1800, canAnswer = true, timerInterval;
+        let currentIdx = 0;
+        let stats = { hits: 0, errors: 0, lecturaHits: 0, redaccionHits: 0 };
+        let timeLeft = 50 * 60;
+        let timerId = null;
 
         function startExam() {
-            document.getElementById('start-screen').classList.add('hidden');
-            document.getElementById('exam-screen').classList.remove('hidden');
-            showQuestion();
+            document.getElementById('intro-screen').classList.add('hidden');
+            document.getElementById('exam-ui').classList.remove('hidden');
+            renderQuestion();
             startTimer();
         }
 
-        function toggleReading() {
-            const modal = document.getElementById('reading-modal');
-            if (modal.classList.contains('hidden')) {
-                const q = questions[currentIndex], textData = texts[q.textRef];
-                document.getElementById('reading-title').innerText = textData.title;
-                document.getElementById('reading-tag').innerText = textData.type;
-                document.getElementById('reading-content').innerText = textData.content;
-                modal.classList.remove('hidden');
-            } else modal.classList.add('hidden');
-        }
-
-        function showQuestion() {
-            canAnswer = true;
-            const q = questions[currentIndex], container = document.getElementById('question-box');
-            document.getElementById('progress-text').innerText = `Reactivo ${currentIndex + 1} de 30`;
-            document.getElementById('progress-bar').style.width = `${((currentIndex) / 30) * 100}%`;
-
-            let html = `
-                <div class="q-card bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100 fade-in flex flex-col h-full sm:h-auto overflow-hidden">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="px-2 py-0.5 bg-rose-50 text-rose-600 rounded-lg text-[8px] font-black uppercase tracking-widest">${texts[q.textRef].type}</span>
-                        <button onclick="toggleReading()" class="bg-slate-900 text-white text-[8px] font-black px-4 py-2 rounded-lg flex items-center gap-2 uppercase tracking-widest active:scale-95 shadow-md">
-                            Ver Lectura
-                        </button>
-                    </div>
-                    <h2 class="q-title text-base font-bold text-slate-800 mb-6 leading-tight">${q.q}</h2>
-                    <div id="options-grid" class="grid grid-cols-1 gap-2">
-            `;
-
-            q.options.forEach((opt, i) => {
-                html += `
-                    <button onclick="checkAnswer(${i})" class="opt-btn w-full text-left p-3 border-2 border-slate-50 rounded-xl hover:border-rose-200 flex items-center gap-3 group transition-all">
-                        <span class="opt-icon w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center font-black text-slate-400 group-hover:bg-rose-600 group-hover:text-white transition-all text-[10px]">${['A','B','C','D'][i]}</span>
-                        <span class="font-bold text-slate-700 text-xs">${opt}</span>
-                    </button>
-                `;
-            });
-
-            container.innerHTML = html + `</div><div id="explanation" class="explanation-box p-4 bg-slate-50 border border-slate-100 rounded-2xl mt-4">
-                <p class="text-[7px] font-black uppercase text-rose-600 mb-1">Análisis Crítico</p>
-                <div id="exp-text" class="text-slate-600 font-medium leading-tight text-[11px] mb-4"></div>
-                <button onclick="nextQuestion()" class="w-full bg-rose-600 text-white font-black py-3 rounded-xl text-[10px] uppercase tracking-widest">Siguiente Pregunta</button>
-            </div></div>`;
-        }
-
-        function checkAnswer(index) {
-            if(!canAnswer) return; canAnswer = false;
-            const q = questions[currentIndex], isCorrect = (index === q.ans);
-            if(isCorrect) { correctCount++; document.getElementById('correct-counter').innerText = correctCount; }
-            const btns = document.querySelectorAll('#options-grid button');
-            btns[q.ans].classList.add('ans-correct');
-            if(!isCorrect) btns[index].classList.add('ans-wrong');
-            btns.forEach(b => b.disabled = true);
-            document.getElementById('exp-text').innerText = q.explanation;
-            document.getElementById('explanation').style.display = 'block';
-        }
-
-        function nextQuestion() {
-            currentIndex++;
-            if(currentIndex < questions.length) showQuestion(); else finishExam();
-        }
-
         function startTimer() {
-            timerInterval = setInterval(() => { 
-                if(timerSeconds > 0) { 
-                    timerSeconds--; 
-                    let m = Math.floor(timerSeconds/60), s = timerSeconds%60; 
-                    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`; 
-                } else finishExam(); 
+            timerId = setInterval(() => {
+                timeLeft--;
+                const mins = Math.floor(timeLeft / 60);
+                const secs = timeLeft % 60;
+                document.getElementById('timer-display').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+                if(timeLeft <= 0) finishExam();
             }, 1000);
         }
 
+        function renderQuestion() {
+            const q = QUESTIONS[currentIdx];
+            document.getElementById('current-num').innerText = currentIdx + 1;
+            document.getElementById('q-section').innerText = q.section;
+            document.getElementById('q-text').innerText = q.text;
+            
+            // Lógica botón lectura
+            const btnReading = document.getElementById('reading-btn-container');
+            if(q.reading) btnReading.classList.remove('hidden');
+            else btnReading.classList.add('hidden');
+
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = "option-btn w-full p-4 md:p-6 rounded-2xl border-2 border-slate-200 bg-white text-left transition-all flex items-center gap-4 hover:border-blue-300 hover:bg-blue-50/30";
+                btn.innerHTML = `<span class="w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs bg-slate-100 text-slate-500 border-2 border-slate-200 shrink-0">${String.fromCharCode(65+i)}</span> <span class="text-sm md:text-lg font-medium">${opt}</span>`;
+                btn.onclick = () => checkAnswer(i);
+                grid.appendChild(btn);
+            });
+            
+            document.getElementById('feedback-box').classList.add('hidden');
+            document.getElementById('question-container').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function checkAnswer(idx) {
+            const q = QUESTIONS[currentIdx];
+            const correct = idx === q.correct;
+            const buttons = document.querySelectorAll('.option-btn');
+            
+            buttons.forEach((btn, i) => {
+                btn.disabled = true;
+                if(i === q.correct) {
+                    btn.className = "option-btn w-full p-4 md:p-6 rounded-2xl border-2 border-green-500 bg-green-50 text-green-800 font-bold flex items-center gap-4";
+                    btn.querySelector('span').className = "w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs bg-green-500 text-white border-2 border-green-500 shrink-0";
+                } else if (i === idx) {
+                    btn.className = "option-btn w-full p-4 md:p-6 rounded-2xl border-2 border-red-500 bg-red-50 text-red-800 font-bold flex items-center gap-4";
+                    btn.querySelector('span').className = "w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs bg-red-500 text-white border-2 border-red-500 shrink-0";
+                } else {
+                    btn.classList.add('opacity-30', 'grayscale');
+                }
+            });
+
+            if(correct) {
+                stats.hits++;
+                if(q.section === "LECTURA") stats.lecturaHits++;
+                else stats.redaccionHits++;
+            } else {
+                stats.errors++;
+            }
+            
+            updateNav();
+            showFeedback(correct, q.explanation);
+        }
+
+        function updateNav() {
+            document.getElementById('nav-hits').innerText = stats.hits;
+            document.getElementById('nav-errors').innerText = stats.errors;
+        }
+
+        function showFeedback(isCorrect, explanation) {
+            const box = document.getElementById('feedback-box');
+            box.classList.remove('hidden', 'border-green-500', 'border-red-500');
+            box.classList.add(isCorrect ? 'border-green-500' : 'border-red-500');
+            
+            document.getElementById('feedback-title').innerText = isCorrect ? "¡Correcto!" : "Incorrecto";
+            document.getElementById('feedback-title').className = `text-xl font-black ${isCorrect ? 'text-green-700' : 'text-red-700'}`;
+            document.getElementById('feedback-icon').innerText = isCorrect ? "✅" : "❌";
+            document.getElementById('explanation-text').innerText = explanation;
+        }
+
+        function nextQuestion() {
+            currentIdx++;
+            if(currentIdx < QUESTIONS.length) renderQuestion();
+            else finishExam();
+        }
+
         function finishExam() {
-            if (timerInterval) clearInterval(timerInterval);
-            document.getElementById('exam-screen').classList.add('hidden');
-            document.getElementById('result-screen').style.display = 'flex';
-            const score = Math.round((correctCount/30)*600)+200;
-            document.getElementById('final-scale-score').innerText = score;
-            document.getElementById('total-correct').innerText = correctCount;
-            document.getElementById('total-percent').innerText = `${Math.round((correctCount/30)*100)}%`;
+            clearInterval(timerId);
+            document.getElementById('exam-ui').classList.add('hidden');
+            document.getElementById('final-screen').classList.remove('hidden');
+            
+            // Escala 200-800 (basado en 25 preguntas por sección aprox)
+            const calcScale = (hits, total) => Math.round(200 + (hits / total) * 600);
+            
+            document.getElementById('score-lectura').innerText = calcScale(stats.lecturaHits, 25);
+            document.getElementById('score-redaccion').innerText = calcScale(stats.redaccionHits, 25);
+            document.getElementById('final-hits').innerText = stats.hits;
+            document.getElementById('final-errors').innerText = stats.errors;
+        }
+
+        // Modal Reading
+        function openReading() {
+            const q = QUESTIONS[currentIdx];
+            if(q.reading) {
+                document.getElementById('reading-body').innerText = READINGS[q.reading];
+                document.getElementById('reading-modal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        function closeReading() {
+            document.getElementById('reading-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
         }
     </script>
 </body>
