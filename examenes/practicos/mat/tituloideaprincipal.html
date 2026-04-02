@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Comprensión Lectora y Lenguaje</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .svg-container { background: #f1f5f9; border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: center; border: 1px solid #e2e8f0; }
+        .reading-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1.5rem; font-style: italic; color: #92400e; line-height: 1.6; }
+        nav::-webkit-scrollbar { height: 4px; }
+        nav::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden sm:block italic">Dominio del Lenguaje y Comprensión</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Progreso</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación -->
+        <nav class="flex flex-wrap gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto whitespace-nowrap">
+            <button onclick="showTab('lectura')" id="btn-lectura" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600">
+                1. Estructura del Texto
+            </button>
+            <button onclick="showTab('contexto')" id="btn-contexto" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                2. Vocabulario en Contexto
+            </button>
+            <button onclick="showTab('etimologia')" id="btn-etimologia" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                3. Etimologías
+            </button>
+        </nav>
+
+        <!-- Banner Informativo -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenidos -->
+        <div id="lectura" class="tab-content active space-y-6"></div>
+        <div id="contexto" class="tab-content space-y-6"></div>
+        <div id="etimologia" class="tab-content space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+            lectura: { title: "Idea Principal, Subtema y Título", desc: "La habilidad de identificar de qué trata un texto (tema), qué se afirma de él (idea principal) y cómo se divide (subtemas)." },
+            contexto: { title: "Análisis del Contexto y Polisemia", desc: "Las palabras no son estáticas. Su significado puede cambiar dependiendo de las palabras que las rodean o la intención del autor." },
+            etimologia: { title: "Raíces Etimológicas", desc: "Desarma las palabras para entender su origen. Los prefijos y sufijos griegos o latinos son la llave para entender palabras desconocidas." }
+        };
+
+        // Generadores SVG Dinámicos
+        const drawWordStructure = (pref, root, suf) => `
+            <svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+                <rect x="10" y="20" width="80" height="40" rx="8" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+                <text x="50" y="45" font-size="12" text-anchor="middle" font-weight="bold" fill="#4338ca">${pref}</text>
+                <rect x="100" y="20" width="80" height="40" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+                <text x="140" y="45" font-size="12" text-anchor="middle" font-weight="bold" fill="#92400e">${root}</text>
+                <rect x="190" y="20" width="80" height="40" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+                <text x="230" y="45" font-size="12" text-anchor="middle" font-weight="bold" fill="#166534">${suf}</text>
+                <text x="50" y="75" font-size="8" text-anchor="middle" fill="#64748b">Prefijo</text>
+                <text x="140" y="75" font-size="8" text-anchor="middle" fill="#64748b">Raíz</text>
+                <text x="230" y="75" font-size="8" text-anchor="middle" fill="#64748b">Sufijo</text>
+            </svg>
+        `;
+
+        const drawTextHierarchy = () => `
+            <svg width="250" height="120" viewBox="0 0 250 120" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="125" cy="30" r="25" fill="#6366f1" />
+                <text x="125" y="34" font-size="10" text-anchor="middle" fill="white" font-weight="bold">TÍTULO</text>
+                <line x1="125" y1="55" x2="80" y2="80" stroke="#cbd5e1" stroke-width="2" />
+                <line x1="125" y1="55" x2="170" y2="80" stroke="#cbd5e1" stroke-width="2" />
+                <rect x="40" y="80" width="80" height="25" rx="5" fill="#818cf8" />
+                <text x="80" y="96" font-size="8" text-anchor="middle" fill="white">Idea Principal</text>
+                <rect x="130" y="80" width="80" height="25" rx="5" fill="#a5b4fc" />
+                <text x="170" y="96" font-size="8" text-anchor="middle" fill="white">Subtemas</text>
+            </svg>
+        `;
+
+        const data = {
+            lectura: [
+                { 
+                    text: "La sonda New Horizons fue lanzada en 2006 desde Cabo Cañaveral para un viaje de casi 10 años y recorrer 5,000 millones de kilómetros. Una vez que la sonda haya alcanzado su misión de observación de Plutón y Caronte, podría proseguir su periplo por el Cinturón de Kuiper.",
+                    q: "¿Cuál sería el mejor título para el texto anterior?",
+                    svg: drawTextHierarchy(),
+                    o: ["El planeta Plutón", "Plutón, el dios romano", "¿Planeta o no? El caso de Plutón", "Una expedición al planeta Plutón"],
+                    a: 3, 
+                    exp: "<b>Análisis:</b> El texto no se centra solo en Plutón como objeto, sino en la misión técnica y el viaje de la sonda New Horizons hacia él." 
+                },
+                { 
+                    text: "Empiezo por una suerte de revelación. De pronto sé que va a ocurrir algo y eso puede ser, en el caso de un cuento, el principio y el fin. En el caso de un poema, no: es una idea más general. Algo me es dado y luego intervengo yo.",
+                    q: "¿Cuál es el subtema de esta lectura?",
+                    o: ["La biografía del autor", "El proceso de creación literaria", "La diferencia entre prosa y verso", "El éxito de las publicaciones"],
+                    a: 1, 
+                    exp: "<b>Análisis:</b> El autor describe cómo nace la idea de escribir (revelación) y cómo interviene él después. Trata sobre 'cómo se escribe'." 
+                },
+                {
+                    text: "Las críticas al feminismo liberal sostienen que asumir posiciones individualistas hace difícil ver las maneras en que las estructuras sociales generan desventajas. Argumentan que incluso si las mujeres no dependen de hombres individualmente, siguen dependiendo de un estado patriarcal.",
+                    q: "¿Cuál es la idea principal de este fragmento?",
+                    o: ["El objetivo de las feministas liberales", "El feminismo liberal desacredita la comunidad", "Los argumentos de las críticas al feminismo liberal", "La historia del racismo en el feminismo"],
+                    a: 2,
+                    exp: "<b>Análisis:</b> El texto se enfoca en exponer cuáles son los puntos o argumentos que se usan para criticar esa corriente específica."
+                },
+                {
+                    text: "Los científicos consideran el sistema de Plutón como un fósil de los comienzos del Sistema Solar. Se espera que la investigación brinde alguna luz sobre cómo se formó el vecindario que rodea al Sol.",
+                    q: "¿Qué subtema se aborda en este párrafo?",
+                    o: ["La sonda New Horizons", "La importancia científica de Plutón", "El origen de los nombres romanos", "Los satélites naturales"],
+                    a: 1,
+                    exp: "<b>Análisis:</b> Se menciona el valor de Plutón para entender el pasado del Sistema Solar, es decir, su relevancia para la ciencia."
+                },
+                { q: "¿Qué pregunta responde la 'Idea Principal' de un texto?", o: ["¿De qué trata?", "¿Qué se dice de lo que se trata?", "¿Quién es el autor?", "¿Cuál es el nombre del texto?"], a: 1, exp: "El tema es '¿de qué trata?'. La idea principal es la afirmación central: '¿qué se dice del tema?'." },
+                { q: "Un buen título debe ser:", o: ["Muy largo y explicativo", "Breve y carente de relación", "Atractivo y englobar el tema", "Solo una palabra"], a: 2, exp: "El título debe invitar a la lectura y dar una idea clara pero concisa del contenido." }
+            ],
+            contexto: [
+                { q: "En la oración: 'Con la <b>sierra</b> partió el roble que estaba en el patio', ¿qué significado tiene la palabra resaltada?", o: ["Conjunto de montañas", "Herramienta de corte", "Pez marino", "Lugar de clima frío"], a: 1, exp: "Por el contexto (partir un roble), se refiere claramente a la herramienta." },
+                { q: "La palabra 'obrar' en: 'Cristina tuvo que <b>obrar</b> de emergencia, no encontraba dónde', significa:", o: ["Trabajar", "Hacer una construcción", "Defecar", "Ejercitarse"], a: 2, exp: "En este contexto coloquial y de urgencia fisiológica, 'obrar' es sinónimo de evacuar." },
+                { q: "Analiza: 'El capitán vio varios <b>cabos</b> heridos'. Aquí cabos se refiere a:", o: ["Cuerdas gruesas", "Extremos de tierra en el mar", "Grado militar", "Hilos sueltos"], a: 2, exp: "Al hablar de un capitán y personas 'heridas', se refiere al rango militar intermedio." },
+                { q: "Uso de 'clavos' en: 'Tenía en la cocina y los usaría para la cena'.", o: ["Pieza metálica con punta", "Condimento aromático", "Acción de clavar", "Problema difícil"], a: 1, exp: "Al estar en la cocina y usarse para la cena, se refiere al clavo de olor (especia)." },
+                { q: "En el texto sobre Supertramp: 'La palabra <b>vacuos</b> se utiliza con el sentido de...'", o: ["Relevantes", "Profundos", "Vacíos/sin contenido", "Llenos de emoción"], a: 2, exp: "Vacuo proviene de 'vacío'. Se usa para describir vidas o discursos sin sentido real." },
+                { q: "El término 'agrestes' en: 'Sus modales son agrestes, no hay educación allí'.", o: ["Finos", "Fuertes", "Toscos/rústicos", "Divertidos"], a: 2, exp: "Agreste viene del campo; en contexto social, describe a alguien sin refinamiento o tosco." },
+                { q: "La palabra 'negligentes' en: 'Los operadores son negligentes, ponen vidas en peligro'.", o: ["Dañinos", "Imprudentes/descuidados", "Perezosos", "Rápidos"], a: 1, exp: "La negligencia es la falta de cuidado o aplicación en una tarea debida." },
+                { q: "En 'La abacería estaba en paro', abacería significa:", o: ["Tienda de abarrotes", "Fábrica de vinos", "Bodega de madera", "Escuela de arte"], a: 0, exp: "Históricamente, una abacería es un puesto o tienda donde se venden víveres al por menor." }
+            ],
+            etimologia: [
+                { q: "En la palabra 'Antropofagia', ¿qué significa el prefijo <b>Antro-</b>?", svg: drawWordStructure("Antro-", "fagia", ""), o: ["Vampiro", "Asesino", "Humano", "Comida"], a: 2, exp: "Antro- (del griego Anthropos) significa humano o hombre." },
+                { q: "En la palabra 'Heterogénea', el prefijo <b>Hetero-</b> significa:", svg: drawWordStructure("Hetero-", "génea", ""), o: ["Igual", "Distinto", "Parecido", "Mujer"], a: 1, exp: "Hetero- significa diferente o distinto (ej. Heterosexual, Heterodoxo)." },
+                { q: "Si 'Algia' significa dolor, ¿qué es una <b>Neuralgia</b>?", o: ["Dolor de cabeza", "Dolor de nervios", "Dolor de estómago", "Dolor de muelas"], a: 1, exp: "Neuro (nervio) + Algia (dolor). Es un dolor intenso a lo largo de un nervio." },
+                { q: "La palabra 'Omnívoro' usa el prefijo <b>Omni-</b>, que significa:", o: ["Carne", "Vegetales", "Todo", "Mucho"], a: 2, exp: "Omni- es un prefijo latino que significa 'todo' (Omnipresente, Omnisciente)." },
+                { q: "Un 'Pentágono' recibe su nombre por tener cinco lados. ¿Qué significa <b>-gono</b>?", o: ["Línea", "Lado", "Ángulo", "Figura"], a: 2, exp: "Gono (del griego gonia) significa ángulo (literalmente 'rodilla', por la flexión)." },
+                { q: "El prefijo <b>Poli-</b> en 'Polígono' significa:", o: ["Muchos/Varios", "Uno solo", "Circular", "Recto"], a: 0, exp: "Poli- significa abundancia o multiplicidad (Políglota, Policromía)." },
+                { q: "En 'Mamíferos', el prefijo <b>Mami-</b> se refiere a:", o: ["Tener mamá", "Glándulas mamarias", "Ser madre", "Amamantar"], a: 1, exp: "Se refiere a las glándulas que producen leche para las crías." },
+                { q: "La raíz 'Homo' en 'Homogéneo' significa:", o: ["Hombre", "Persona", "Igual", "Mezcla"], a: 2, exp: "Homo- (griego) significa igual (Homónimo, Homólogo)." }
+            ]
+        };
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            const info = topicsInfo[tabId];
+            document.getElementById('topic-title').innerText = info.title;
+            document.getElementById('topic-text').innerHTML = info.desc;
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    
+                    let readingHtml = item.text ? `<div class="reading-box">${item.text}</div>` : '';
+                    let svgHtml = item.svg ? `<div class="svg-container">${item.svg}</div>` : '';
+                    
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4 flex justify-between items-center">
+                            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Desafío ${i+1}</span>
+                        </div>
+                        ${readingHtml}
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        ${svgHtml}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <div class="flex items-center gap-2 mb-2 text-indigo-800 font-bold text-xs uppercase tracking-wider">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                                Análisis PrepMaster
+                            </div>
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { 
+                btn.classList.add('correct-opt', 'shadow-md'); 
+                score += 10; 
+            } else { 
+                btn.classList.add('incorrect-opt'); 
+                box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); 
+            }
+            hint.style.display = 'block';
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { 
+            if(confirm('¿Deseas reiniciar el entrenamiento de español?')) { 
+                score = 0; 
+                document.getElementById('global-score').innerText = 0; 
+                render(); 
+                showTab('lectura'); 
+            } 
+        }
+
+        window.onload = () => { render(); showTab('lectura'); };
+    </script>
+</body>
+</html>
