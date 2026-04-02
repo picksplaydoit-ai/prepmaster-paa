@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Geometría y Álgebra Lineal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .svg-container { background: #f8fafc; border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: center; border: 1px solid #e2e8f0; }
+        nav::-webkit-scrollbar { height: 4px; }
+        nav::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden sm:block italic">Geometría Analítica y Pendientes</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación -->
+        <nav class="flex flex-wrap gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto whitespace-nowrap">
+            <button onclick="showTab('plano')" id="btn-plano" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600">
+                3.12 Plano Cartesiano
+            </button>
+            <button onclick="showTab('pendiente')" id="btn-pendiente" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                3.13 Pendiente
+            </button>
+            <button onclick="showTab('valor')" id="btn-valor" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                Valor Absoluto (Repaso)
+            </button>
+        </nav>
+
+        <!-- Banner Informativo -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenidos -->
+        <div id="plano" class="tab-content active space-y-6"></div>
+        <div id="pendiente" class="tab-content space-y-6"></div>
+        <div id="valor" class="tab-content space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+            plano: { title: "3.12 Plano Cartesiano", desc: "Aprende a localizar puntos, calcular distancias y realizar traslaciones o reflexiones (espejos) en el sistema de coordenadas bidimensional." },
+            pendiente: { title: "3.13 Pendiente de la Recta", desc: "La pendiente ($m$) mide la inclinación de una línea. Indica cuánto cambia 'y' por cada unidad que cambia 'x'. ¡Es fundamental en funciones lineales!" },
+            valor: { title: "Ecuaciones e Inecuaciones $|x|$", desc: "Repaso de distancias absolutas y rangos de tolerancia en contextos industriales y científicos." }
+        };
+
+        // Generadores SVG Dinámicos
+        const drawGridPoint = (x, y, label = "P") => {
+            const centerX = 125 + (x * 10);
+            const centerY = 75 - (y * 10);
+            return `<svg width="250" height="150" viewBox="0 0 250 150" xmlns="http://www.w3.org/2000/svg">
+                <defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="#e2e8f0" stroke-width="0.5"/></pattern></defs>
+                <rect width="250" height="150" fill="url(#grid)" />
+                <line x1="0" y1="75" x2="250" y2="75" stroke="#94a3b8" stroke-width="1" />
+                <line x1="125" y1="0" x2="125" y2="150" stroke="#94a3b8" stroke-width="1" />
+                <circle cx="${centerX}" cy="${centerY}" r="4" fill="#6366f1" />
+                <text x="${centerX + 6}" y="${centerY - 6}" font-size="10" font-weight="bold" fill="#4338ca">${label}(${x}, ${y})</text>
+            </svg>`;
+        };
+
+        const drawSlopeLine = (m) => {
+            const x1 = 50, y1 = 100;
+            const x2 = 200, y2 = 100 - (m * 50);
+            return `<svg width="250" height="150" viewBox="0 0 250 150">
+                <line x1="20" y1="130" x2="230" y2="130" stroke="#cbd5e1" stroke-width="1" />
+                <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#6366f1" stroke-width="3" stroke-linecap="round" />
+                <text x="20" y="20" font-size="10" fill="#6366f1" font-weight="bold">Inclinación m = ${m}</text>
+            </svg>`;
+        };
+
+        const data = {
+            plano: [
+                { q: "Un dron de reconocimiento se encuentra en el punto $(2, -6)$. Si el operador lo traslada 2 posiciones al este (derecha) y 3 al norte (arriba), ¿cuál será su nueva coordenada de aterrizaje?", svg: drawGridPoint(2, -6, "Dron"), o: ["$(4, -9)$", "$(2, -3)$", "$(4, -3)$", "$(0, -3)$"], a: 2, exp: "<b>Análisis:</b> Sumamos a las coordenadas originales: $x = 2 + 2 = 4$ y $y = -6 + 3 = -3$. Nueva posición: $(4, -3)$." },
+                { q: "En un software de diseño, el punto $B$ está en $(-2, 6)$. Si aplicas una <b>reflexión en el eje y</b> (espejo vertical) y luego una <b>reflexión en el eje x</b> (espejo horizontal), ¿dónde queda el punto?", o: ["$(2, 6)$", "$(-2, -6)$", "$(2, -6)$", "$(-2, 6)$"], a: 2, exp: "<b>Análisis:</b> Reflexión en $y$ cambia el signo de $x$: $(-2, 6) \\rightarrow (2, 6)$. Reflexión en $x$ cambia el signo de $y$: $(2, 6) \\rightarrow (2, -6)$." },
+                { q: "Calcula la distancia directa entre dos estaciones de radar ubicadas en $B(-2, 6)$ y $C(1, 10)$.", o: ["4 unidades", "5 unidades", "6 unidades", "8 unidades"], a: 1, exp: "<b>Análisis:</b> Usamos la fórmula: $d = \\sqrt{(1 - (-2))^2 + (10 - 6)^2} = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5$." },
+                { q: "En un mapa de logística, la distancia entre el punto $A(x, -3)$ y el punto $B(8, 6)$ es igual a $\\sqrt{90}$. ¿Cuál es el valor de la coordenada $x$?", o: ["3", "5", "7", "9"], a: 3, exp: "<b>Análisis:</b> $(8-x)^2 + (6 - (-3))^2 = 90 \\rightarrow (8-x)^2 + 81 = 90 \\rightarrow (8-x)^2 = 9 \\rightarrow 8-x = -1$ (si x=9) o $8-x=3$." },
+                { q: "Determina la distancia entre los puntos de control $D(2, 3)$ y $E(7, 7)$. Expresa el resultado como raíz cuadrada.", o: ["$\\sqrt{18}$", "$\\sqrt{27}$", "$\\sqrt{35}$", "$\\sqrt{41}$"], a: 3, exp: "<b>Análisis:</b> $d = \\sqrt{(7-2)^2 + (7-3)^2} = \\sqrt{5^2 + 4^2} = \\sqrt{25 + 16} = \\sqrt{41}$." },
+                { q: "Un proyectil se desplaza desde $(-1, -1)$ hasta $(1, 5)$. ¿Cuál es la distancia total recorrida?", o: ["$\\sqrt{15}$", "$\\sqrt{20}$", "$\\sqrt{40}$", "$\\sqrt{50}$"], a: 2, exp: "<b>Análisis:</b> $d = \\sqrt{(1 - (-1))^2 + (5 - (-1))^2} = \\sqrt{2^2 + 6^2} = \\sqrt{4 + 36} = \\sqrt{40}$." },
+                { q: "Si un punto $(-5, 12)$ sufre una <b>reflexión en el eje x</b>, ¿cuál es su nueva ubicación?", svg: drawGridPoint(-5, 12), o: ["$(-5, -12)$", "$(5, 12)$", "$(5, -12)$", "$(-5, 12)$"], a: 0, exp: "<b>Análisis:</b> La reflexión en el eje $x$ invierte el signo de la ordenada ($y$). El punto pasa de $12$ a $-12$." },
+                { q: "¿Cuál es la distancia entre los puntos $(-4, 2)$ y $(5, 2)$ en una cuadrícula plana?", o: ["5", "7", "9", "11"], a: 2, exp: "<b>Análisis:</b> Como tienen la misma 'y', solo restamos las 'x': $5 - (-4) = 9$." },
+                { q: "Si el punto $A$ está en $(6, 4)$ y el punto $B$ está en $(6, -3)$, ¿qué distancia los separa?", o: ["4", "7", "10", "12"], a: 1, exp: "<b>Análisis:</b> Tienen la misma 'x', restamos las 'y': $4 - (-3) = 7$." },
+                { q: "Un barco se mueve del punto $(0,0)$ al $(3,4)$. ¿Qué distancia recorrió?", o: ["3", "4", "5", "7"], a: 2, exp: "<b>Análisis:</b> Triángulo notable 3-4-5. $\\sqrt{3^2 + 4^2} = 5$." },
+                { q: "Encuentra el punto medio entre $(2, 8)$ y $(4, 10)$.", o: ["$(3, 9)$", "$(1, 1)$", "$(6, 18)$", "$(3, 10)$"], a: 0, exp: "<b>Análisis:</b> Promedio de x: $(2+4)/2=3$. Promedio de y: $(8+10)/2=9$." },
+                { q: "Reflexión del punto $(3, 4)$ respecto al origen $(0,0)$.", o: ["$(-3, 4)$", "$(3, -4)$", "$(-3, -4)$", "$(0, 0)$"], a: 2, exp: "<b>Análisis:</b> Ambos signos cambian en una reflexión respecto al origen." }
+            ],
+            pendiente: [
+                { q: "Calcula la pendiente ($m$) de una rampa que conecta los puntos $(2, 10)$ y $(-1, -2)$.", svg: drawSlopeLine(4), o: ["1", "2", "3", "4"], a: 3, exp: "<b>Análisis:</b> $m = \\frac{-2 - 10}{-1 - 2} = \\frac{-12}{-3} = 4$. La pendiente es positiva (sube)." },
+                { q: "Una carretera desciende desde el punto $(3, 3)$ hasta $(6, -9)$. ¿Cuál es su pendiente de inclinación?", svg: drawSlopeLine(-4), o: ["-4", "-3", "-2", "-1"], a: 0, exp: "<b>Análisis:</b> $m = \\frac{-9 - 3}{6 - 3} = \\frac{-12}{3} = -4$. Pendiente negativa (baja)." },
+                { q: "Calcula la pendiente de la recta que pasa por $(-3, 4)$ y $(6, -2)$.", o: ["$-1/4$", "$-1/2$", "$-2/3$", "$-3/4$"], a: 2, exp: "<b>Análisis:</b> $m = \\frac{-2 - 4}{6 - (-3)} = \\frac{-6}{9} = -2/3$." },
+                { q: "Determina la pendiente de la función lineal expresada como: $y = x + 1$.", o: ["0", "1", "2", "Depende de x"], a: 1, exp: "<b>Análisis:</b> En la forma $y = mx + b$, el coeficiente de $x$ es la pendiente. Aquí $m = 1$." },
+                { q: "Halla la pendiente de la recta cuya ecuación es $y - x = 5$.", o: ["-1", "0", "1", "5"], a: 2, exp: "<b>Análisis:</b> Despejamos $y$: $y = x + 5$. La pendiente es $1$." },
+                { q: "Calcula la pendiente de la recta definida por la función: $2(x - 1) = -y$.", o: ["-8", "-4", "-2", "0"], a: 2, exp: "<b>Análisis:</b> Despejamos $y$: $y = -2(x - 1) = -2x + 2$. La pendiente es $-2$." },
+                { q: "En un plano de ingeniería, una tubería sigue la función $3(x + 2) + y = 4$. ¿Cuál es su pendiente?", o: ["-4", "-3", "-2", "-1"], a: 1, exp: "<b>Análisis:</b> $3x + 6 + y = 4 \\rightarrow y = -3x - 2$. La pendiente es $-3$." },
+                { q: "Calcula la pendiente de la recta: $-10x - 4 + 2y = 0$.", o: ["2", "3", "4", "5"], a: 3, exp: "<b>Análisis:</b> $2y = 10x + 4 \\rightarrow y = 5x + 2$. La pendiente es $5$." },
+                { q: "Si una recta es totalmente horizontal (paralela al eje x), ¿cuál es su pendiente?", svg: drawSlopeLine(0), o: ["0", "1", "Infinita", "No existe"], a: 0, exp: "<b>Análisis:</b> En una recta horizontal no hay cambio en 'y' ($y_2 - y_1 = 0$), por lo que $m = 0$." },
+                { q: "Pendiente de la recta que pasa por $(0, -1)$ y $(2, 3)$.", o: ["1", "2", "3", "4"], a: 1, exp: "<b>Análisis:</b> $m = \\frac{3 - (-1)}{2 - 0} = \\frac{4}{2} = 2$." },
+                { q: "¿Cuál es la pendiente de la recta $y = -2x/5 + 1$?", o: ["2/5", "-2/5", "1", "-2"], a: 1, exp: "<b>Análisis:</b> El valor que acompaña a $x$ es $-2/5$." },
+                { q: "Calcula la pendiente entre $(-2, -14)$ y $(2, 6)$.", o: ["3", "4", "5", "6"], a: 2, exp: "<b>Análisis:</b> $m = \\frac{6 - (-14)}{2 - (-2)} = \\frac{20}{4} = 5$." }
+            ],
+            valor: [
+                { q: "Un termómetro industrial tiene un error. La temperatura real $x$ cumple $|x + 5| = 5$. ¿Qué valores podría marcar?", o: ["$0, -10$", "$5, -10$", "$0, 10$", "$-5, 5$"], a: 0, exp: "<b>Análisis:</b> $x+5=5 \\rightarrow 0$ y $x+5=-5 \\rightarrow -10$." },
+                { q: "Tolerancia de una pieza mecánica: $|x - 3| < 2$. ¿Rango aceptable?", o: ["$1 < x < 5$", "$-1 < x < 9$", "$3 < x < 8$", "$4 < x < 7$"], a: 0, exp: "<b>Análisis:</b> $-2 < x-3 < 2 \\rightarrow 1 < x < 5$." },
+                { q: "Boletos de concierto cuestan entre $800$ y $1600$. ¿Inecuación correcta?", o: ["$|x-1200|<400$", "$|x+1200|<400$", "$|x-1000|<400$", "$|x-1300|<400$"], a: 0, exp: "<b>Análisis:</b> Centro 1200, Radio 400." }
+            ]
+        };
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            const info = topicsInfo[tabId];
+            document.getElementById('topic-title').innerText = info.title;
+            document.getElementById('topic-text').innerHTML = info.desc;
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    let svgHtml = item.svg ? `<div class="svg-container">${item.svg}</div>` : '';
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4"><span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Reto ${i+1}</span></div>
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        ${svgHtml}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { btn.classList.add('correct-opt'); score += 10; }
+            else { btn.classList.add('incorrect-opt'); box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); }
+            hint.style.display = 'block';
+            if (window.MathJax) MathJax.typesetPromise([hint]);
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { if(confirm('¿Reiniciar progreso?')) { score = 0; document.getElementById('global-score').innerText = 0; render(); showTab('plano'); } }
+
+        window.onload = () => { render(); showTab('plano'); };
+    </script>
+</body>
+</html>

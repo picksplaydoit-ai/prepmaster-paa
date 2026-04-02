@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Geometría Avanzada</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        
+        .opt-btn {
+            transition: all 0.2s ease;
+            border: 2px solid #e2e8f0;
+        }
+        .opt-btn:hover:not(:disabled) {
+            border-color: #6366f1;
+            background-color: #f8fafc;
+        }
+
+        .category-card {
+            transition: transform 0.2s;
+        }
+        .category-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .svg-container {
+            background: #f8fafc;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">
+                    PrepMaster
+                </div>
+                <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
+                <h1 class="font-bold text-slate-500 text-sm hidden sm:block italic">Dominio Geométrico</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación por Pestañas -->
+        <nav class="flex flex-wrap gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto">
+            <button onclick="showTab('regulares')" id="btn-regulares" class="tab-btn flex-1 min-w-[130px] py-3 px-4 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600">
+                Perim. Regulares
+            </button>
+            <button onclick="showTab('irregulares')" id="btn-irregulares" class="tab-btn flex-1 min-w-[130px] py-3 px-4 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                Perim. Irregulares
+            </button>
+            <button onclick="showTab('areas')" id="btn-areas" class="tab-btn flex-1 min-w-[130px] py-3 px-4 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                Áreas
+            </button>
+            <button onclick="showTab('sombreada')" id="btn-sombreada" class="tab-btn flex-1 min-w-[130px] py-3 px-4 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                Área Sombreada
+            </button>
+            <button onclick="showTab('solidos')" id="btn-solidos" class="tab-btn flex-1 min-w-[130px] py-3 px-4 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                Cuerpos 3D
+            </button>
+        </nav>
+
+        <!-- Banner Informativo -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl shadow-indigo-100 relative overflow-hidden">
+            <div class="relative z-10">
+                <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+                <div id="topic-text" class="text-indigo-100 text-sm leading-relaxed max-w-4xl italic"></div>
+            </div>
+        </div>
+
+        <!-- Contenedores -->
+        <div id="regulares" class="tab-content active space-y-6"></div>
+        <div id="irregulares" class="tab-content space-y-6"></div>
+        <div id="areas" class="tab-content space-y-6"></div>
+        <div id="sombreada" class="tab-content space-y-6"></div>
+        <div id="solidos" class="tab-content space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+            regulares: { 
+                title: "3.5 Perímetro en Figuras Regulares", 
+                desc: "Figuras con todos sus lados y ángulos iguales. <br>Fórmula general: $P = n \\times L$, donde $n$ es el número de lados. En círculos: $P = \\pi \\cdot d$." 
+            },
+            irregulares: { 
+                title: "3.6 Perímetro en Figuras Irregulares", 
+                desc: "Figuras con lados de diferentes medidas. <br>Regla: Suma todos los segmentos del contorno uno por uno." 
+            },
+            areas: { 
+                title: "3.7 y 3.8 Áreas de Polígonos", 
+                desc: "Superficie de figuras planas. Círculo: $\\pi r^2$. Triángulo: $bh/2$. Rectángulo: $bh$. Polígono regular: $Pa/2$." 
+            },
+            sombreada: { 
+                title: "3.9 Áreas Sombreadas", 
+                desc: "Se resuelven restando áreas: <b>Área Sombreada = Área Total - Área No Sombreada</b>." 
+            },
+            solidos: { 
+                title: "3.10 y 3.11 Área Superficial y Volumen", 
+                desc: "<b>Volumen:</b> Espacio tridimensional ocupado. <b>Área Superficial:</b> Suma del área de todas las caras." 
+            }
+        };
+
+        // Generadores de SVG
+        const drawSquare = (label) => `<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="20" width="80" height="80" fill="none" stroke="#6366f1" stroke-width="3"/><text x="50" y="115" font-size="12" fill="#4f46e5" font-weight="bold">${label}</text></svg>`;
+        
+        const drawCircle = (dim, label) => `<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><circle cx="60" cy="60" r="40" fill="none" stroke="#6366f1" stroke-width="3"/><line x1="20" y1="60" x2="100" y2="60" stroke="#475569" stroke-width="1" stroke-dasharray="4"/><text x="50" y="55" font-size="10" fill="#4f46e5">${label}</text></svg>`;
+
+        const drawIrregularShape = () => `<svg width="180" height="120" viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg"><path d="M20 20 H100 V60 H160 V100 H20 Z" fill="none" stroke="#6366f1" stroke-width="3"/><text x="50" y="15" font-size="10" fill="#4f46e5">x+8</text><text x="105" y="45" font-size="10" fill="#4f46e5">4</text><text x="165" y="85" font-size="10" fill="#4f46e5">x+2</text></svg>`;
+
+        const drawCylinder3D = (r, h) => `<svg width="100" height="150" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="25" rx="30" ry="10" fill="none" stroke="#6366f1" stroke-width="2"/><line x1="20" y1="25" x2="20" y2="125" stroke="#6366f1" stroke-width="2"/><line x1="80" y1="25" x2="80" y2="125" stroke="#6366f1" stroke-width="2"/><ellipse cx="50" cy="125" rx="30" ry="10" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="4"/><text x="85" y="75" font-size="10">${h}</text><text x="50" y="45" font-size="10">${r}</text></svg>`;
+
+        const data = {
+            regulares: [
+                { q: "¿Cuál es el perímetro de un cuadrado de lado $8$ cm?", svg: drawSquare("Lado = 8"), o: ["16 cm", "24 cm", "32 cm", "64 cm"], a: 2, exp: "<b>Análisis:</b> En un cuadrado, todos los lados son iguales. <br> $P = 4 \\times 8 = 32$ cm." },
+                { q: "Si el área de un cuadrado es $81$ cm$^2$, ¿cuánto vale su perímetro?", o: ["18 cm", "36 cm", "44 cm", "81 cm"], a: 1, exp: "<b>Análisis:</b> Primero hallamos el lado: $L = \\sqrt{81} = 9$ cm. <br> Luego: $P = 4 \\times 9 = 36$ cm." },
+                { q: "¿Cuál es el perímetro de un círculo con diámetro de $14$ m?", svg: drawCircle(14, "d = 14"), o: ["$7\\pi$ m", "$14\\pi$ m", "$49\\pi$ m", "$196\\pi$ m"], a: 1, exp: "<b>Análisis:</b> El perímetro de un círculo es $\\pi \\cdot d$. <br> $P = 14\\pi$ m." },
+                { q: "Un pentágono regular tiene un lado de $20$ cm. ¿Su perímetro es?", o: ["80 cm", "100 cm", "120 cm", "400 cm"], a: 1, exp: "<b>Análisis:</b> Un pentágono tiene 5 lados. <br> $P = 5 \\times 20 = 100$ cm." },
+                { q: "Halla el perímetro de un hexágono regular inscrito en un círculo de diámetro $12$ cm.", o: ["36 cm", "42 cm", "72 cm", "144 cm"], a: 0, exp: "<b>Análisis:</b> En un hexágono regular, el lado es igual al radio. Si el diámetro es 12, el radio es 6. <br> $P = 6 \\times 6 = 36$ cm." },
+                { q: "Un polígono regular de 12 lados tiene cada lado de $6$ cm. ¿Su perímetro es?", o: ["60 cm", "72 cm", "84 cm", "96 cm"], a: 1, exp: "$12 \\times 6 = 72$ cm." },
+                { q: "¿Cuál es el perímetro de un octágono regular de lado $5$ cm?", o: ["40 cm", "45 cm", "50 cm", "80 cm"], a: 0, exp: "$8 \\times 5 = 40$ cm." },
+                { q: "Si un cuadrado tiene $x=10$ y su lado es $x+8$, ¿cuál es su perímetro?", o: ["18 cm", "32 cm", "72 cm", "80 cm"], a: 2, exp: "Lado = $10+8 = 18$. $P = 18 \\times 4 = 72$ cm." },
+                { q: "Círculo con radio de $9$ cm. Halla su perímetro aproximado.", o: ["$9\\pi$ cm", "$18\\pi$ cm", "$81\\pi$ cm", "$36\\pi$ cm"], a: 1, exp: "$P = 2\\pi r = 2(9)\\pi = 18\\pi$." },
+                { q: "Un decágono regular tiene lado $10$ cm. Halla el perímetro.", o: ["50 cm", "100 cm", "150 cm", "200 cm"], a: 1, exp: "$10 \\times 10 = 100$ cm." },
+                { q: "Hexágono regular con diámetro de círculo circunscrito $12\\sqrt{2}$. Perímetro:", o: ["$36\\sqrt{2}$", "$48\\sqrt{2}$", "$72\\sqrt{2}$", "$96\\sqrt{2}$"], a: 0, exp: "Radio = $6\\sqrt{2}$. Perímetro = $6 \\times (6\\sqrt{2}) = 36\\sqrt{2}$." },
+                { q: "Perímetro de un cuadrado si el área es $100$ m$^2$.", o: ["20 m", "40 m", "80 m", "100 m"], a: 1, exp: "Lado=10. $10 \\times 4 = 40$ m." }
+            ],
+            irregulares: [
+                { q: "Un rectángulo tiene área de $40$ cm$^2$ y base de $8$ cm. Halla su perímetro.", o: ["13 cm", "20 cm", "26 cm", "40 cm"], a: 2, exp: "<b>Análisis:</b> Altura = $40 / 8 = 5$ cm. <br> $P = 2(8 + 5) = 26$ cm." },
+                { q: "Halla el perímetro de un triángulo con lados de $6$, $10$ y $42$ cm.", o: ["48 cm", "58 cm", "102 cm", "110 cm"], a: 1, exp: "Suma de lados: $6 + 10 + 42 = 58$ cm." },
+                { q: "Halla el perímetro si los lados son $x+8, x+2, 4$ y $10$. ($x=8$)", svg: drawIrregularShape(), o: ["32 cm", "40 cm", "42 cm", "48 cm"], a: 1, exp: "Sustituimos: $(8+8) + (8+2) + 4 + 10 = 16 + 10 + 4 + 10 = 40$." },
+                { q: "Un rectángulo tiene base $18$ cm y alto de $10$ cm. ¿Su perímetro es?", o: ["28 cm", "46 cm", "56 cm", "80 cm"], a: 2, exp: "$2(18 + 10) = 56$ cm." },
+                { q: "Rectángulo con área $x^2-9$ y base $x+3$. Halla perímetro si $x=10$.", o: ["20 cm", "40 cm", "80 cm", "100 cm"], a: 1, exp: "Altura = $(x^2-9)/(x+3) = x-3$. <br> Si $x=10$, Base=13, Altura=7. <br> $P = 2(13+7) = 40$ cm." },
+                { q: "Figura en 'L' con lados: $15, 36, 15$ y otros que cierran la figura (rectos). Halla P.", o: ["70 cm", "102 cm", "110 cm", "120 cm"], a: 1, exp: "Suma total de contornos externos: $102$ cm." },
+                { q: "Triángulo isósceles: base $10$ cm y lados iguales $13$ cm. Perímetro:", o: ["23 cm", "33 cm", "36 cm", "46 cm"], a: 2, exp: "$10 + 13 + 13 = 36$ cm." },
+                { q: "Rectángulo con área $65$ cm$^2$ y lados $(x-4)$ y $(x+4)$. Halla P.", o: ["36 cm", "40 cm", "44 cm", "50 cm"], a: 0, exp: "$x^2-16=65 \\rightarrow x^2=81 \\rightarrow x=9$. Lados=5 y 13. $P=2(5+13)=36$." },
+                { q: "Suma de lados de figura con tramos: $5, 2, 3, 4, 8, 6$.", o: ["24", "28", "30", "32"], a: 1, exp: "Suma directa: 28." },
+                { q: "Rectángulo con base $x+10$ y altura $x$. Halla P si $x=5$.", o: ["30", "40", "50", "60"], a: 1, exp: "Base=15, Altura=5. $2(15+5)=40$." },
+                { q: "Trapecio con bases $10, 6$ y lados inclinados $5, 5$.", o: ["21", "26", "32", "40"], a: 1, exp: "$10+6+5+5=26$." },
+                { q: "Figura con 3 lados de $10$ y uno de $20$.", o: ["30", "40", "50", "60"], a: 2, exp: "$10+10+10+20=50$." }
+            ],
+            areas: [
+                { q: "¿Área de un cuadrado de lado $20$ cm?", o: ["40 cm$^2$", "200 cm$^2$", "400 cm$^2$", "800 cm$^2$"], a: 2, exp: "$20^2 = 400$." },
+                { q: "¿Área de un triángulo con base $12$ m y altura $28$ m?", o: ["168 m$^2$", "336 m$^2$", "42 m$^2$", "84 m$^2$"], a: 0, exp: "$(12 \\times 28) / 2 = 168$." },
+                { q: "Círculo con diámetro de $14$ cm. Halla su área.", o: ["$14\\pi$", "$49\\pi$", "$196\\pi$", "$7\\pi$"], a: 1, exp: "Radio = 7. $A = \\pi(7^2) = 49\\pi$." },
+                { q: "Área de un hexágono con lado $6$ cm y apotema $5.2$ cm.", o: ["93.6 cm$^2$", "187.2 cm$^2$", "46.8 cm$^2$", "31.2 cm$^2$"], a: 0, exp: "$P = 36$. $A = (36 \\times 5.2) / 2 = 93.6$." },
+                { q: "Área de un cuadrado con perímetro de $36$ cm.", o: ["81 cm$^2$", "36 cm$^2$", "9 cm$^2$", "18 cm$^2$"], a: 0, exp: "Lado = 9. $A = 9^2 = 81$." },
+                { q: "Triángulo isósceles base $10$, lados $13$. Halla el área.", o: ["60", "65", "120", "130"], a: 0, exp: "Altura = $\\sqrt{13^2 - 5^2} = 12$. $A = (10 \\times 12) / 2 = 60$." },
+                { q: "Rectángulo: alto es la mitad de la base ($18$ cm). Área:", o: ["81", "162", "324", "9"], a: 1, exp: "Altura=9. $18 \\times 9 = 162$." },
+                { q: "Circunferencia es $20\\pi$. ¿Área?", o: ["$10\\pi$", "$100\\pi$", "$400\\pi$", "$20\\pi$"], a: 1, exp: "Radio=10. $A=100\\pi$." },
+                { q: "Mitad del área de un cuadrado de lado $18$ cm.", o: ["324", "162", "81", "9"], a: 1, exp: "Total=324. Mitad=162." },
+                { q: "Área de un polígono regular de 10 lados, lado 5, apotema 7.7.", o: ["192.5", "385", "77", "154"], a: 0, exp: "$P=50$. $(50 \\times 7.7)/2 = 192.5$." },
+                { q: "Círculo inscrito en cuadrado de lado 10. Área círculo:", o: ["$100\\pi$", "$50\\pi$", "$25\\pi$", "$10\\pi$"], a: 2, exp: "Radio=5. $A=25\\pi$." },
+                { q: "Triángulo base $y+2$ y altura $y+2$ con $y=6$.", o: ["16", "32", "64", "128"], a: 1, exp: "Base=8, Altura=8. $(8 \\times 8)/2 = 32$." }
+            ],
+            sombreada: [
+                { q: "Cuadrado lado $20$ con círculo inscrito. Área sombreada (esquinas):", o: ["$400-100\\pi$", "$400-400\\pi$", "$100\\pi-400$", "$20\\pi$"], a: 0, exp: "Área Cuadrado - Área Círculo. $400 - \\pi(10^2)$." },
+                { q: "Radio círculo mayor $20$. ¿Área de la mitad sombreada?", o: ["$100\\pi$", "$200\\pi$", "$400\\pi$", "$20\\pi$"], a: 1, exp: "Área total $400\\pi$. Mitad es $200\\pi$." },
+                { q: "Cuadrado área $144$ con círculo inscrito. Área NO sombreada:", o: ["$144-144\\pi$", "$144-36\\pi$", "$36\\pi$", "$144-12\\pi$"], a: 2, exp: "Lado=12, Radio=6. Área círculo = $36\\pi$." },
+                { q: "Base triángulo isósceles es $8$. Radio círculo es $5$. Halla sombreada.", o: ["$25\\pi-24$", "$25\\pi-12$", "$25\\pi-32$", "$10\\pi-12$"], a: 0, exp: "Área círculo - Área triángulo. Altura triáng = $\\sqrt{5^2-4^2}=3$. $A_t = (8 \\times 3)/2 = 12$ (Aproximado)." },
+                { q: "Hexágono área $84$ cm$^2$. Se sombrean 2 de sus 6 triángulos internos.", o: ["14", "28", "42", "56"], a: 1, exp: "Cada triángulo vale 14. Dos valen 28." },
+                { q: "Rectángulo $10 \\times 5$ con triángulo $10 \\times 4$ encima. Área total:", o: ["48", "50", "70", "90"], a: 2, exp: "Suma de áreas: $50 + 20 = 70$." },
+                { q: "Octágono mayor (P=40) y menor (P=16). Diferencia de áreas (apotemas 6 y 2).", o: ["120", "16", "104", "136"], a: 2, exp: "$A_{may}=120, A_{men}=16$. Resta=104." },
+                { q: "Círculo r=7 menos cuadrado lado 7 central.", o: ["$49\\pi-49$", "$49\\pi-14$", "$14\\pi-49$", "$49-49\\pi$"], a: 0, exp: "Área círculo - Área cuadrado." },
+                { q: "Trapecio sombreado: bases 10 y 6, altura 5.", o: ["40", "80", "16", "20"], a: 0, exp: "$((10+6) \\times 5)/2 = 40$." },
+                { q: "Figura en L: cuadrado $4 \\times 4$ y $2 \\times 2$ juntos.", o: ["16", "20", "24", "12"], a: 1, exp: "$16+4=20$." },
+                { q: "Círculo r=10 menos triángulo área 30.", o: ["$100\\pi-30$", "$10\\pi-30$", "$100\\pi$", "70"], a: 0, exp: "Resta directa." },
+                { q: "Rectángulo $15 \\times 10$ con círculo r=3.", o: ["$150-9\\pi$", "$150-6\\pi$", "$150-3\\pi$", "150"], a: 0, exp: "Resta de áreas." }
+            ],
+            solidos: [
+                { q: "Volumen de un cubo con aristas de $5$ cm.", o: ["25 cm$^3$", "125 cm$^3$", "150 cm$^3$", "250 cm$^3$"], a: 1, exp: "$V = 5^3 = 125$." },
+                { q: "Área superficial de un cubo con arista de $7$ cm.", o: ["49 cm$^2$", "245 cm$^2$", "294 cm$^2$", "343 cm$^2$"], a: 2, exp: "6 caras de $49$. $6 \\times 49 = 294$." },
+                { q: "Volumen de un cilindro: radio $3$, altura $12$.", svg: drawCylinder3D("r=3", "h=12"), o: ["$36\\pi$", "$108\\pi$", "$432\\pi$", "$118\\pi$"], a: 1, exp: "$V = \\pi(3^2)(12) = 108\\pi$." },
+                { q: "Pirámide cuadrangular: base lado $3$, altura $8$. Volumen:", o: ["24", "72", "16", "48"], a: 0, exp: "$V = (A_b \\cdot h) / 3 = (9 \\cdot 8)/3 = 24$." },
+                { q: "Volumen de una esfera con radio $6$.", o: ["$144\\pi$", "$288\\pi$", "$432\\pi$", "$864\\pi$"], a: 1, exp: "$V = 4/3 \\pi (216) = 288\\pi$." },
+                { q: "Área superficial de cilindro r=2, h=10.", o: ["$40\\pi$", "$44\\pi$", "$48\\pi$", "$52\\pi$"], a: 2, exp: "Bases $8\\pi$ + Lateral $40\\pi = 48\\pi$." },
+                { q: "Prisma rectangular $9 \\times 4 \\times 2$. Área superficial:", o: ["92", "124", "144", "72"], a: 1, exp: "$2(36+8+18)=124$." },
+                { q: "Volumen de un cono r=3, h=10.", o: ["$90\\pi$", "$30\\pi$", "$10\\pi$", "$45\\pi$"], a: 1, exp: "$(\\pi 9 \\cdot 10)/3 = 30\\pi$." },
+                { q: "Área superficial esfera r=5.", o: ["$25\\pi$", "$50\\pi$", "$100\\pi$", "$125\\pi$"], a: 2, exp: "$4\\pi(25)=100\\pi$." },
+                { q: "Prisma base triangular área 10, h=15. Volumen:", o: ["150", "75", "50", "25"], a: 0, exp: "$10 \\times 15 = 150$." },
+                { q: "Cilindro V=$100\\pi$, h=4. Halla radio.", o: ["25", "10", "5", "2"], a: 2, exp: "$100\\pi = \\pi r^2 (4) \\rightarrow r=5$." },
+                { q: "Volumen de cubo con área total 216.", o: ["36", "108", "216", "512"], a: 2, exp: "Cara=36, Lado=6, $V=6^3=216$." }
+            ]
+        };
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+
+            const info = topicsInfo[tabId];
+            document.getElementById('topic-title').innerText = info.title;
+            document.getElementById('topic-text').innerHTML = info.desc;
+
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 category-card mb-6';
+                    
+                    let svgHtml = item.svg ? `<div class="svg-container">${item.svg}</div>` : '';
+                    
+                    let opts = '';
+                    item.o.forEach((opt, idx) => {
+                        opts += `<button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 flex items-center justify-between mb-2">
+                            <span>${String.fromCharCode(65 + idx)}) ${opt}</span>
+                        </button>`;
+                    });
+
+                    card.innerHTML = `
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-[10px] font-black bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-full uppercase tracking-widest">Reto PrepMaster ${i+1}</span>
+                        </div>
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        ${svgHtml}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" id="box_${cat}_${i}">
+                            ${opts}
+                        </div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <div class="flex items-center gap-2 mb-3 text-indigo-800 font-bold uppercase text-[11px] tracking-widest">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                                Análisis PrepMaster
+                            </div>
+                            <div class="text-[14px] text-indigo-900 font-medium leading-relaxed italic">
+                                ${item.exp}
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const buttons = box.querySelectorAll('.opt-btn');
+            const hint = document.getElementById(`hint_${id}`);
+            
+            buttons.forEach(b => b.disabled = true);
+            
+            if (sel === ans) { 
+                btn.classList.add('correct-opt'); 
+                score += 10;
+            } else { 
+                btn.classList.add('incorrect-opt'); 
+                buttons[ans].classList.add('correct-opt');
+                if(score > 0) score -= 2;
+            }
+            
+            hint.style.display = 'block';
+            if (window.MathJax) MathJax.typesetPromise([hint]);
+            updateScore();
+        }
+
+        function updateScore() {
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() {
+            if(confirm('¿Reiniciar el entrenamiento de Geometría?')) {
+                score = 0;
+                updateScore();
+                render();
+                showTab('regulares');
+            }
+        }
+
+        window.onload = () => {
+            render();
+            showTab('regulares');
+        };
+    </script>
+</body>
+</html>

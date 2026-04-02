@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Estadística y Probabilidad</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        
+        .opt-btn {
+            transition: all 0.2s ease;
+            border: 2px solid #e2e8f0;
+        }
+        .opt-btn:hover:not(:disabled) {
+            border-color: #6366f1;
+            background-color: #f8fafc;
+        }
+
+        .category-card {
+            transition: transform 0.2s;
+        }
+        .category-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .svg-container {
+            background: #f8fafc;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">
+                    PrepMaster
+                </div>
+                <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
+                <h1 class="font-bold text-slate-500 text-sm hidden sm:block italic">Módulo de Análisis de Datos</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación por Pestañas -->
+        <nav class="flex flex-wrap gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto">
+            <button onclick="showTab('basica')" id="btn-basica" class="tab-btn flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600">
+                4.1 Estadística Básica
+            </button>
+            <button onclick="showTab('avanzada')" id="btn-avanzada" class="tab-btn flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                4.2 Estadística Avanzada
+            </button>
+            <button onclick="showTab('simple')" id="btn-simple" class="tab-btn flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                4.3 Probabilidad Simple
+            </button>
+            <button onclick="showTab('acumulada')" id="btn-acumulada" class="tab-btn flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                4.4 Prob. Acumulada
+            </button>
+            <button onclick="showTab('venn')" id="btn-venn" class="tab-btn flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                4.8 Diagramas de Venn
+            </button>
+        </nav>
+
+        <!-- Banner Informativo -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl shadow-indigo-100 relative overflow-hidden">
+            <div class="relative z-10">
+                <h3 id="topic-title" class="text-2xl font-bold mb-2 text-white">Cargando...</h3>
+                <div id="topic-text" class="text-indigo-100 text-sm leading-relaxed max-w-4xl italic"></div>
+            </div>
+        </div>
+
+        <!-- Contenedores -->
+        <div id="basica" class="tab-content active space-y-6"></div>
+        <div id="avanzada" class="tab-content space-y-6"></div>
+        <div id="simple" class="tab-content space-y-6"></div>
+        <div id="acumulada" class="tab-content space-y-6"></div>
+        <div id="venn" class="tab-content space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+            basica: { title: "4.1 Estadística Básica", desc: "Domina las medidas de tendencia central: <b>Media</b> (promedio), <b>Mediana</b> (valor central ordenado) y <b>Moda</b> (valor más frecuente)." },
+            avanzada: { title: "4.2 Estadística Avanzada", desc: "Estudio de la dispersión de datos: <b>Rango</b> (Diferencia entre Máximo y Mínimo) y <b>Desviación Estándar</b> (qué tan lejos están los datos de la media)." },
+            simple: { title: "4.3 Probabilidad Simple", desc: "La probabilidad de que ocurra un evento: $P = \\frac{\\text{Casos Favorables}}{\\text{Casos Totales}}$. Siempre es un valor entre 0 y 1 (o 0% y 100%)." },
+            acumulada: { title: "4.4 Probabilidad Acumulada", desc: "Eventos combinados: Si los eventos son independientes, las probabilidades se <b>multiplican</b>. Incluye diagramas de árbol y combinaciones." },
+            venn: { title: "4.8 Diagramas de Venn", desc: "Representación visual de conjuntos y sus intersecciones. Útil para resolver problemas de encuestas y grupos con características compartidas." }
+        };
+
+        // Generadores de Dibujos Dinámicos
+        const drawDice = () => `<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="50" height="50" rx="10" fill="white" stroke="#6366f1" stroke-width="3"/><circle cx="30" cy="30" r="4" fill="#6366f1"/></svg>`;
+        
+        const drawVenn2 = (l1, l2, v1, inter, v2, out = "") => {
+            return `<svg width="240" height="160" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
+                <rect x="5" y="5" width="230" height="150" fill="none" stroke="#cbd5e1" stroke-width="2" rx="10" />
+                <text x="15" y="25" font-size="10" fill="#94a3b8" font-weight="bold">U</text>
+                <circle cx="90" cy="85" r="55" fill="rgba(99, 102, 241, 0.15)" stroke="#6366f1" stroke-width="2"/>
+                <circle cx="150" cy="85" r="55" fill="rgba(244, 63, 94, 0.15)" stroke="#f43f5e" stroke-width="2"/>
+                <text x="65" y="85" font-size="12" font-weight="bold" fill="#4338ca">${v1}</text>
+                <text x="115" y="85" font-size="12" font-weight="bold" fill="#1e293b">${inter}</text>
+                <text x="165" y="85" font-size="12" font-weight="bold" fill="#be123c">${v2}</text>
+                <text x="80" y="25" font-size="10" font-weight="bold" fill="#6366f1">${l1}</text>
+                <text x="140" y="25" font-size="10" font-weight="bold" fill="#f43f5e">${l2}</text>
+                <text x="210" y="145" font-size="10" fill="#64748b">${out}</text>
+            </svg>`;
+        };
+
+        const drawVenn3 = (l1, l2, l3, vals) => {
+            // vals order: center, inter12, inter23, inter13, only1, only2, only3, out
+            return `<svg width="240" height="220" viewBox="0 0 240 220" xmlns="http://www.w3.org/2000/svg">
+                <rect x="5" y="5" width="230" height="210" fill="none" stroke="#cbd5e1" stroke-width="2" rx="10" />
+                <circle cx="120" cy="85" r="60" fill="rgba(99, 102, 241, 0.1)" stroke="#6366f1" stroke-width="2"/>
+                <circle cx="85" cy="145" r="60" fill="rgba(244, 63, 94, 0.1)" stroke="#f43f5e" stroke-width="2"/>
+                <circle cx="155" cy="145" r="60" fill="rgba(34, 197, 94, 0.1)" stroke="#22c55e" stroke-width="2"/>
+                <text x="115" y="70" font-size="10" fill="#4338ca">${vals.only1}</text>
+                <text x="70" y="150" font-size="10" fill="#be123c">${vals.only2}</text>
+                <text x="165" y="150" font-size="10" fill="#15803d">${vals.only3}</text>
+                <text x="115" y="130" font-size="10" fill="#1e293b" font-weight="bold">${vals.center}</text>
+                <text x="90" y="105" font-size="9" fill="#1e293b">${vals.inter12}</text>
+                <text x="145" y="105" font-size="9" fill="#1e293b">${vals.inter13}</text>
+                <text x="120" y="165" font-size="9" fill="#1e293b">${vals.inter23}</text>
+                <text x="110" y="20" font-size="9" font-weight="bold" fill="#6366f1">${l1}</text>
+                <text x="35" y="195" font-size="9" font-weight="bold" fill="#f43f5e">${l2}</text>
+                <text x="185" y="195" font-size="9" font-weight="bold" fill="#22c55e">${l3}</text>
+            </svg>`;
+        };
+
+        const drawBellCurve = (label) => `<svg width="200" height="100" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg"><path d="M10 90 Q 100 -20 190 90" fill="none" stroke="#6366f1" stroke-width="3"/><line x1="100" y1="10" x2="100" y2="90" stroke="#f43f5e" stroke-dasharray="4"/><text x="85" y="100" font-size="10">${label}</text></svg>`;
+
+        const data = {
+            basica: [
+                { q: "Determina la moda del conjunto: {12, 8, 9, 4, 3, 2, 8, 10}", o: ["4", "8", "9", "16"], a: 1, exp: "La <b>Moda</b> es el valor que más se repite. En este conjunto, el 8 aparece 2 veces, más que cualquier otro." },
+                { q: "Cinco números consecutivos suman 55. ¿Cuál es su moda?", o: ["11", "27", "28", "No tiene moda"], a: 3, exp: "Si son consecutivos ($x, x+1, x+2...$), ninguno se repite. Por lo tanto, no hay moda." },
+                { q: "¿Cuál es la mediana de un conjunto con 5 enteros consecutivos que promedian 11?", o: ["5", "8", "11", "13"], a: 2, exp: "En una serie consecutiva impar, la media y la mediana son iguales. Si el promedio es 11, el número central es 11." },
+                { q: "Halla la mediana de: {22, 10, 8, 23, 16, 7, 25}", o: ["10", "16", "22", "23"], a: 1, exp: "Ordenamos: 7, 8, 10, <b>16</b>, 22, 23, 25. El valor central es 16." },
+                { q: "¿Cuál es la suma de 8 enteros que promedian 40?", o: ["320", "400", "420", "500"], a: 0, exp: "Suma = Promedio $\\times$ Cantidad. $40 \\times 8 = 320$." },
+                { q: "Cuatro números promedian 20 y otros seis promedian 10. ¿Promedio de los diez?", o: ["14", "15", "20", "24"], a: 0, exp: "Suma total: $(4 \\times 20) + (6 \\times 10) = 80 + 60 = 140$. <br> Promedio: $140 / 10 = 14$." },
+                { q: "La media de 4 enteros es 12. Si dos de ellos suman 18, ¿cuánto sumarán los otros dos?", o: ["25", "28", "30", "48"], a: 2, exp: "Suma total: $12 \\times 4 = 48$. <br> Restamos conocidos: $48 - 18 = 30$." },
+                { q: "¿Cuál es la mediana de {2, 3, 3, 4, 6, 7, 8, 9}?", o: ["4", "5", "6", "10"], a: 1, exp: "Conjunto par. Promedio de los dos centrales (4 y 6): $(4+6)/2 = 5$." },
+                { q: "Si el promedio de $x, 10, 15, 25$ es 20, halla $x$.", o: ["20", "25", "30", "40"], a: 2, exp: "Suma total debe ser $20 \\times 4 = 80$. <br> $x + 50 = 80 \\rightarrow x = 30$." },
+                { q: "Un ciclista recorre 60 km en 2 horas y 30 km en 1 hora. ¿Velocidad promedio?", o: ["25 km/h", "30 km/h", "45 km/h", "90 km/h"], a: 1, exp: "Distancia total: 90 km. Tiempo total: 3h. <br> $90 / 3 = 30$ km/h." },
+                { q: "Encuentra la media de {10, 20, 30, 40, 50}", o: ["25", "30", "35", "40"], a: 1, exp: "Suma=150. $150 / 5 = 30$." },
+                { q: "Valor de $x$ para que la mediana de {5, 8, 12, x} sea 10:", o: ["10", "11", "12", "14"], a: 2, exp: "Para que el promedio de 8 y $x$ sea 10, $x$ debe ser 12." }
+            ],
+            avanzada: [
+                { q: "Halla el rango de los promedios: 60, 87, 90, 99, 80 y 81.", o: ["39", "40", "60", "99"], a: 0, exp: "Rango = Máximo - Mínimo. $99 - 60 = 39$." },
+                { q: "El promedio de 21 números consecutivos es 52. ¿Cuál es su rango?", o: ["20", "21", "26", "52"], a: 0, exp: "En $n$ números consecutivos, el rango es siempre $n-1$. $21 - 1 = 20$." },
+                { q: "Si el precio más alto es 6550 y el rango es 2000, ¿cuál es el precio más bajo?", o: ["4500", "4550", "8550", "2000"], a: 1, exp: "Mínimo = Máximo - Rango. $6550 - 2000 = 4550$." },
+                { q: "Lectura de 35 y rango de 4. ¿Cuál podría ser el otro extremo?", o: ["31", "39", "A y B son posibles", "No se sabe"], a: 2, exp: "El 35 puede ser el máximo (35-4=31) o el mínimo (35+4=39)." },
+                { q: "Media 4.5 mg, desv. estándar 0.7 mg. Valor 2 desviaciones abajo:", svg: drawBellCurve("Media 4.5"), o: ["3.1 mg", "3.8 mg", "5.2 mg", "5.9 mg"], a: 0, exp: "$4.5 - 2(0.7) = 4.5 - 1.4 = 3.1$ mg." },
+                { q: "Ingreso de $5600$ es una desv. estándar debajo de la media ($700$). ¿Media?", o: ["4900", "5600", "6300", "7000"], a: 2, exp: "Media = Valor + Desv. $5600 + 700 = 6300$." },
+                { q: "Rango de {10, 10, 10, 10, 10}:", o: ["0", "1", "10", "50"], a: 0, exp: "No hay diferencia entre el máximo y el mínimo." },
+                { q: "Si sumamos 5 a todos los datos, ¿qué pasa con el rango?", o: ["Aumenta 5", "Disminuye 5", "Se mantiene igual", "Se duplica"], a: 2, exp: "El rango no cambia si sumas la misma cantidad a todos los valores." },
+                { q: "Desviación estándar de un conjunto donde todos los datos son iguales:", o: ["0", "1", "10", "Depende del dato"], a: 0, exp: "Si no hay variación, la desviación es cero." },
+                { q: "Rango de los primeros 10 números naturales (1 al 10):", o: ["9", "10", "11", "1"], a: 0, exp: "$10 - 1 = 9$." },
+                { q: "Precio promedio $3000$, desv. est. $200$. Rango entre -2 y +2 desviaciones:", o: ["2000 a 4000", "2600 a 3400", "2800 a 3200", "3000 a 4000"], a: 1, exp: "$3000 \pm 2(200) \rightarrow 3000 \pm 400 = 2600$ a $3400$." },
+                { q: "Si el rango es 50 y el mínimo es 20, ¿máximo?", o: ["30", "50", "70", "100"], a: 2, exp: "$20 + 50 = 70$." }
+            ],
+            simple: [
+                { q: "Salón con 4 asiáticos, 3 europeos y 16 mexicanos. Prob. de un asiático:", o: ["2/23", "4/23", "16/23", "19/23"], a: 1, exp: "Total = $4+3+16=23$. Favorables = 4. Prob = $4/23$." },
+                { q: "Dado: Probabilidad de sacar un número mayor a 4.", svg: drawDice(), o: ["1/6", "1/3", "1/2", "2/3"], a: 1, exp: "Favorables: 5 y 6 (2 casos). Totales: 6. $2/6 = 1/3$." },
+                { q: "Bolsa con 12 playeras (Marvin), 10 prendas (Melvin) y 2 (Antonio). Prob. Melvin:", o: ["4/7", "5/14", "5/12", "1/2"], a: 1, exp: "Total = $12+4+5+5+2 = 28$. Melvin aportó 10. $10/28 = 5/14$." },
+                { q: "En 42 alumnos, 1/3 sacó 80. Prob. de sacar a alguien con 80:", o: ["1/42", "1/3", "14/42", "B y C son correctas"], a: 3, exp: "Es una prob. directa: un tercio de los alumnos." },
+                { q: "Urna: Prob. azul 2/8, negra 3/12. ¿Prob. blanca?", o: ["1/4", "1/2", "3/4", "1/8"], a: 1, exp: "$2/8=1/4$, $3/12=1/4$. Azul+Negra = $1/2$. Blanca = $1 - 1/2 = 1/2$." },
+                { q: "Prob. de elegir un día que empiece con 'M' (Lunes a Viernes):", o: ["1/5", "2/5", "3/5", "0"], a: 1, exp: "Martes y Miércoles (2 días). Total 5. Prob = $2/5$." },
+                { q: "Prob. de sacar una carta Roja de una baraja de 52 cartas:", o: ["1/4", "1/2", "13/52", "26"], a: 1, exp: "Hay 26 rojas y 26 negras. $26/52 = 1/2$." },
+                { q: "Lanzar moneda: Prob. de caer Águila.", o: ["0.25", "0.5", "0.75", "1"], a: 1, exp: "1 caso favorable de 2 totales." },
+                { q: "Ruleta 1 al 10. Prob. de número Par:", o: ["1/10", "1/2", "1/5", "5"], a: 1, exp: "Pares: 2, 4, 6, 8, 10 (5 casos). $5/10 = 1/2$." },
+                { q: "Prob. de que mañana NO sea Domingo (hoy es Viernes):", o: ["0", "1/7", "1", "0.5"], a: 2, exp: "Mañana es Sábado. El evento es seguro (Probabilidad 1)." },
+                { q: "Caja con 5 dulces rojos y 5 verdes. Prob. Rojo:", o: ["1/2", "1/10", "5", "1"], a: 0, exp: "$5/10 = 1/2$." },
+                { q: "Dado: Prob. de sacar un 7.", o: ["1/6", "1/12", "1", "0"], a: 3, exp: "Evento imposible en un dado de 6 caras." }
+            ],
+            acumulada: [
+                { q: "Lanzar dos dados: Prob. de que el número sea el mismo en ambos.", o: ["1/6", "1/3", "1/12", "1/36"], a: 0, exp: "Casos: (1,1), (2,2)... (6,6) = 6 casos. Totales: $6 \\times 6 = 36$. $6/36 = 1/6$." },
+                { q: "Urna (4n, 6b, 2az). Prob. de dos blancas seguidas (sin reemplazo):", o: ["7/12", "3/22", "5/22", "12/22"], a: 2, exp: "1era: 6/12. 2da: 5/11. $(6/12) \\times (5/11) = (1/2) \\times (5/11) = 5/22$." },
+                { q: "Moneda 3 veces. Prob. de obtener al menos dos sellos:", o: ["3/8", "1/2", "5/8", "7/8"], a: 1, exp: "Casos: SSS, SSA, SAS, ASS (4 de 8). $4/8 = 1/2$." },
+                { q: "Tirar 3 dados. Prob. de Par en 1ero, y un '2' en los otros dos:", o: ["1/72", "3/72", "1/216", "3/216"], a: 0, exp: "$(3/6) \\times (1/6) \\times (1/6) = 3/216 = 1/72$." },
+                { q: "Pirinola (2 rojo, 5 negro, 1 azul). Dos giros: ambos rojos.", o: ["1/4", "1/16", "1/32", "1/64"], a: 1, exp: "1ero: 2/8 (1/4). 2do: 1/4. Prob = $1/16$." },
+                { q: "Miguel (4 menta, 6 caramelo). Saca dos de menta seguidos (sin reemplazo):", o: ["2/15", "1/9", "4/10", "2/45"], a: 0, exp: "$(4/10) \\times (3/9) = (2/5) \\times (1/3) = 2/15$." },
+                { q: "Dos monedas: Prob. de que ambas caigan Cara.", o: ["1/2", "1/4", "1/8", "1"], a: 1, exp: "1/2 $\\times$ 1/2 = 1/4." },
+                { q: "Dado y Moneda: Prob. de 6 y Águila.", o: ["1/6", "1/2", "1/12", "1/8"], a: 2, exp: "1/6 $\\times$ 1/2 = 1/12." },
+                { q: "Tres tiros libres (80% éxito cada uno). Prob. de fallar los tres:", o: ["0.2", "0.064", "0.008", "0.512"], a: 2, exp: "Falla = 20% (0.2). $0.2 \\times 0.2 \\times 0.2 = 0.008$." },
+                { q: "Extraer 2 cartas de 52 (sin reemplazo). Prob. de 2 Ases:", o: ["1/13", "1/169", "1/221", "1/2652"], a: 2, exp: "$(4/52) \\times (3/51) = (1/13) \\times (1/17) = 1/221$." },
+                { q: "Prob. de que NO llueva en 2 días (50% prob. lluvia cada día):", o: ["0.25", "0.5", "0.75", "0.1"], a: 0, exp: "0.5 $\\times$ 0.5 = 0.25." },
+                { q: "Lanzar 4 monedas. Prob. de todas águilas:", o: ["1/4", "1/8", "1/16", "1/32"], a: 2, exp: "$(1/2)^4 = 1/16$." }
+            ],
+            venn: [
+                { q: "Salón de 29: 12 tienen automóvil y 9 tienen motocicleta. Si 10 se mueven en camión, ¿cuántas personas tienen ambos?", svg: drawVenn2("Auto", "Moto", "10", "?", "7", "10"), o: ["1", "2", "3", "4"], a: 1, exp: "<b>Análisis:</b><br>1. Total con vehículo = $29 - 10 = 19$.<br>2. Suma individual = $12 + 9 = 21$.<br>3. Intersección = $21 - 19 = 2$." },
+                { q: "Artes (26 miemb): 16 bailan folklórico y 9 bailan ballet. Si 2 son músicos, ¿cuántos bailan SOLO ballet?", svg: drawVenn2("Folklórico", "Ballet", "15", "1", "?", "2"), o: ["1", "8", "15", "17"], a: 1, exp: "<b>Análisis:</b><br>1. Bailarines total = $26 - 2 = 24$.<br>2. Intersección = $(16+9)-24 = 1$.<br>3. Solo ballet = $9 - 1 = 8$." },
+                { q: "Ciudad (2400 fam): 1620 compraron pintura y 800 impermeabilizante. ¿Cuántas compraron ambas cosas?", svg: drawVenn2("Pintura", "Imperm.", "1600", "20", "780"), o: ["20", "220", "800", "1620"], a: 0, exp: "Intersección = $(1620 + 800) - 2400 = 2420 - 2400 = 20$." },
+                { q: "Escuela (1230 est): 230 violín, 850 guitarra y 150 nada. ¿Cuántos tocan ambos?", svg: drawVenn2("Violín", "Guitarra", "230", "0", "850", "150"), o: ["0", "3", "5", "100"], a: 0, exp: "Músicos total = $1230 - 150 = 1080$. <br> Suma individual = $230 + 850 = 1080$. <br> Como son iguales, no hay intersección." },
+                { q: "Estudiantes de idiomas: J (Japonés), C (Coreano), E (Esperanto). ¿Cuánta gente estudia Japonés?", svg: drawVenn3("Japonés", "Coreano", "Esperanto", {center: 2, inter12: 5, inter23: 3, inter13: 3, only1: 7, only2: 5, only3: 0}), o: ["12", "14", "17", "19"], a: 2, exp: "Sumamos todo el círculo J: $7 + 5 + 2 + 3 = 17$." },
+                { q: "¿Cuántos estudian un idioma asiático (Japonés o Coreano) en la gráfica anterior?", svg: drawVenn3("Japonés", "Coreano", "E", {center: 2, inter12: 5, inter23: 3, inter13: 3, only1: 7, only2: 5, only3: 0}), o: ["17", "25", "27", "30"], a: 1, exp: "Es la unión de J y C: $7+5+2+3+5+3 = 25$." },
+                { q: "¿Cuántos estudian SOLO esperanto según la gráfica?", svg: drawVenn3("Japonés", "Coreano", "E", {center: 2, inter12: 5, inter23: 3, inter13: 3, only1: 7, only2: 5, only3: 0}), o: ["0", "3", "5", "17"], a: 0, exp: "La región de E que no toca J ni C marca 0." },
+                { q: "En un grupo de 100: 60 café, 40 té, 20 ambos. ¿Cuántos no toman ninguno?", svg: drawVenn2("Café", "Té", "40", "20", "20", "?"), o: ["10", "20", "30", "40"], a: 1, exp: "Unión = $60+40-20=80$. Ninguno = $100-80=20$." },
+                { q: "¿Qué sección representa la intersección de tres conjuntos en el diagrama?", svg: drawVenn3("A", "B", "C", {center: "X", inter12: "", inter23: "", inter13: "", only1: "", only2: "", only3: ""}), o: ["A U B", "A ∩ B ∩ C", "U", "Conjunto Vacío"], a: 1, exp: "La parte central ('X') donde se cruzan los tres círculos es la intersección triple." },
+                { q: "Si A={1,2,3} y B={3,4,5}, ¿qué número va en el centro del diagrama?", svg: drawVenn2("A", "B", "1,2", "3", "4,5"), o: ["1", "2", "3", "4"], a: 2, exp: "El 3 es el único elemento que pertenece a ambos conjuntos." },
+                { q: "Grupo de 50: 30 deporte, 25 música. Todos hacen algo. ¿Cuántos hacen AMBOS?", svg: drawVenn2("Dep.", "Mús.", "25", "5", "20"), o: ["5", "10", "15", "20"], a: 0, exp: "Intersección = $(30 + 25) - 50 = 55 - 50 = 5$." },
+                { q: "¿Qué representa el rectángulo exterior en un diagrama de Venn?", o: ["Subconjunto", "Universo", "Intersección", "Elemento"], a: 1, exp: "El rectángulo representa el Conjunto Universo ($U$), que contiene todos los elementos posibles bajo estudio." }
+            ]
+        };
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+
+            const info = topicsInfo[tabId];
+            document.getElementById('topic-title').innerText = info.title;
+            document.getElementById('topic-text').innerHTML = info.desc;
+
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 category-card mb-6';
+                    
+                    let svgHtml = item.svg ? `<div class="svg-container">${item.svg}</div>` : '';
+                    
+                    let opts = '';
+                    item.o.forEach((opt, idx) => {
+                        opts += `<button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 flex items-center justify-between mb-2">
+                            <span>${String.fromCharCode(65 + idx)}) ${opt}</span>
+                        </button>`;
+                    });
+
+                    card.innerHTML = `
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-[10px] font-black bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-full uppercase tracking-widest">Reto PrepMaster ${i+1}</span>
+                        </div>
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        ${svgHtml}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" id="box_${cat}_${i}">
+                            ${opts}
+                        </div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <div class="flex items-center gap-2 mb-3 text-indigo-800 font-bold uppercase text-[11px] tracking-widest">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                                Análisis PrepMaster
+                            </div>
+                            <div class="text-[14px] text-indigo-900 font-medium leading-relaxed italic">
+                                ${item.exp}
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const buttons = box.querySelectorAll('.opt-btn');
+            const hint = document.getElementById(`hint_${id}`);
+            
+            buttons.forEach(b => b.disabled = true);
+            
+            if (sel === ans) { 
+                btn.classList.add('correct-opt'); 
+                score += 10;
+            } else { 
+                btn.classList.add('incorrect-opt'); 
+                buttons[ans].classList.add('correct-opt');
+                if(score > 0) score -= 2;
+            }
+            
+            hint.style.display = 'block';
+            if (window.MathJax) MathJax.typesetPromise([hint]);
+            updateScore();
+        }
+
+        function updateScore() {
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() {
+            if(confirm('¿Reiniciar todo el progreso de este módulo?')) {
+                score = 0;
+                updateScore();
+                render();
+                showTab('basica');
+            }
+        }
+
+        window.onload = () => {
+            render();
+            showTab('basica');
+        };
+    </script>
+</body>
+</html>

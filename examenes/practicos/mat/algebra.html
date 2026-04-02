@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Álgebra Avanzada</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        
+        .opt-btn {
+            transition: all 0.2s ease;
+            border: 2px solid #e2e8f0;
+        }
+        .opt-btn:hover:not(:disabled) {
+            border-color: #6366f1;
+            background-color: #f8fafc;
+        }
+
+        .category-card {
+            transition: transform 0.2s;
+        }
+        .category-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">
+                    PrepMaster
+                </div>
+                <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
+                <h1 class="font-bold text-slate-500 text-sm hidden sm:block italic">Dominio del Álgebra</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje PrepMaster</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors" title="Reiniciar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-8">
+        
+        <!-- Tabs Navigation -->
+        <nav class="flex flex-wrap gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl">
+            <button onclick="showTab('sustitucion')" id="btn-sustitucion" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all bg-white shadow-sm text-indigo-600">
+                Sustitución
+            </button>
+            <button onclick="showTab('suma_resta')" id="btn-suma_resta" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
+                Suma/Resta Alg
+            </button>
+            <button onclick="showTab('mult_div')" id="btn-mult_div" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
+                Mult/Div Alg
+            </button>
+            <button onclick="showTab('productos')" id="btn-productos" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
+                Prod. Notables
+            </button>
+            <button onclick="showTab('leyes')" id="btn-leyes" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
+                Leyes Exp
+            </button>
+        </nav>
+
+        <!-- Topic Banner -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl shadow-indigo-100 relative overflow-hidden">
+            <div class="relative z-10">
+                <h3 id="topic-title" class="text-2xl font-bold mb-2 text-white">Cargando...</h3>
+                <div id="topic-text" class="text-indigo-100 text-sm leading-relaxed max-w-4xl"></div>
+            </div>
+            <div class="absolute right-0 top-0 opacity-10 transform translate-x-1/4 -translate-y-1/4 scale-150">
+                <svg width="150" height="150" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 14H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2z"/></svg>
+            </div>
+        </div>
+
+        <!-- Content Containers -->
+        <div id="sustitucion" class="tab-content active space-y-6"></div>
+        <div id="suma_resta" class="tab-content space-y-6"></div>
+        <div id="mult_div" class="tab-content space-y-6"></div>
+        <div id="productos" class="tab-content space-y-6"></div>
+        <div id="leyes" class="tab-content space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+            sustitucion: {
+                title: "Sustitución Algebraica",
+                desc: "Sustituir consiste en reemplazar una variable por su valor numérico. <br><b>Paso Clave:</b> Una vez reemplazada la letra, la expresión se convierte en una operación aritmética normal. <br>Ejemplo: Si $x=3$, entonces $2x+4 \\rightarrow 2(3)+4 = 6+4 = 10$."
+            },
+            suma_resta: {
+                title: "Suma y Resta de Términos Algebraicos",
+                desc: "<b>REGLA DE ORO:</b> Solo puedes sumar o restar <u>términos semejantes</u> (misma base y mismo exponente). <br>Ejemplo: $3x^2 + 5x^2 = 8x^2$. <br><b>Cuidado:</b> Si las potencias son distintas (ej. $x^2 + x^3$), la operación no se puede realizar, el resultado es la misma expresión."
+            },
+            mult_div: {
+                title: "Multiplicación y División Algebraica",
+                desc: "1. <b>Multiplicación:</b> Multiplica los números (coeficientes) y <u>suma</u> los exponentes de bases iguales. <br>2. <b>División:</b> Divide los números y <u>resta</u> los exponentes de bases iguales."
+            },
+            productos: {
+                title: "Productos Notables y Factorización",
+                desc: "Son 'atajos' matemáticos. <br>1. <b>Binomio al Cuadrado:</b> $(a+b)^2 = a^2 + 2ab + b^2$. <br>2. <b>Diferencia de Cuadrados:</b> $(a+b)(a-b) = a^2 - b^2$. <br>3. <b>Factor Común:</b> Extraer lo que se repite en todos los términos."
+            },
+            leyes: {
+                title: "Especial: ¿Qué pasa con los exponentes?",
+                desc: `<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/20">
+                        <p class="font-bold text-indigo-200 mb-1 underline">En la SUMA / RESTA:</p>
+                        <p class="text-sm">¡El exponente <b>NO CAMBIA</b>!<br>Ej: $x^2 + x^2 = 2x^2$ (Solo cambia el coeficiente).</p>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/20">
+                        <p class="font-bold text-indigo-200 mb-1 underline">En la MULTIPLICACIÓN:</p>
+                        <p class="text-sm">Los exponentes <b>se SUMAN</b> ($a+b$).<br>Ej: $x^2 \\cdot x^3 = x^{2+3} = x^5$.</p>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/20">
+                        <p class="font-bold text-indigo-200 mb-1 underline">En la DIVISIÓN:</p>
+                        <p class="text-sm">Los exponentes <b>se RESTAN</b> ($a-b$).<br>Ej: $\\frac{x^7}{x^3} = x^{7-3} = x^4$.</p>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/20">
+                        <p class="font-bold text-indigo-200 mb-1 underline">Potencia de una POTENCIA:</p>
+                        <p class="text-sm">Los exponentes <b>se MULTIPLICAN</b> ($a \\cdot b$).<br>Ej: $(x^4)^2 = x^8$.</p>
+                    </div>
+                </div>`
+            }
+        };
+
+        const data = {
+            sustitucion: [
+                { q: "Si $y=10$, entonces $y^2 - 10$ es:", o: ["0", "10", "90", "100"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>1. Reemplazamos $y$ por $10$: $(10)^2 - 10$.<br>2. Elevamos al cuadrado: $10 \\times 10 = 100$.<br>3. Restamos: $100 - 10 = 90$." },
+                { q: "Si $m=-4$, entonces $m - 32$ es:", o: ["36", "28", "-28", "-36"], a: 3, exp: "<b>Análisis PrepMaster:</b><br>1. Sustituimos: $(-4) - 32$.<br>2. Como ambos son negativos, se suman y se mantiene el signo: $4 + 32 = 36$.<br>3. Resultado: $-36$." },
+                { q: "Si $r=15$, entonces $-4(r - 20)$ es:", o: ["20", "15", "-15", "-20"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>1. Sustituimos dentro del paréntesis: $15 - 20 = -5$.<br>2. Multiplicamos por el $-4$ exterior: $(-4) \\times (-5)$.<br>3. Ley de signos: $(-) \\times (-) = (+)$. Resultado: $20$." },
+                { q: "Si $x^3 - 5 = 22$, ¿cuánto vale $x+5$?", o: ["8", "14", "27", "32"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>1. Primero hallamos $x$: $x^3 = 22 + 5 = 27$.<br>2. Raíz cúbica: $\\sqrt[3]{27} = 3$ (porque $3^3=27$).<br>3. Resolvemos lo pedido: $3 + 5 = 8$." },
+                { q: "Si $w=5$, ¿cuál es el valor de $w^2 + w + 10$?", o: ["20", "30", "40", "50"], a: 2, exp: "<b>Análisis:</b><br>1. Sustituimos: $5^2 + 5 + 10$.<br>2. Operamos: $25 + 5 + 10 = 40$." },
+                { q: "Si $x=2$, halla $\\frac{8^x + 5^x - 9^x}{x}$", o: ["2", "4", "8", "92"], a: 1, exp: "<b>Análisis:</b><br>1. Potencias: $8^2=64, 5^2=25, 9^2=81$.<br>2. Numerador: $64 + 25 - 81 = 89 - 81 = 8$.<br>3. División: $8 / 2 = 4$." },
+                { q: "Si $j=4$ y $k=-2$, ¿cuánto vale $\\frac{j^2}{k^3}$?", o: ["-2", "-1/2", "1/2", "2"], a: 0, exp: "<b>Análisis:</b><br>1. $j^2 = 4^2 = 16$.<br>2. $k^3 = (-2)^3 = -8$ (Impar conserva el negativo).<br>3. División: $16 / (-8) = -2$." },
+                { q: "Si $wx=80$ y $z=10$, halla $\\frac{16z}{wx}$", o: ["2", "4", "20", "40"], a: 0, exp: "<b>Análisis:</b><br>1. Sustituimos los valores conocidos: $\\frac{16(10)}{80}$.<br>2. Operamos: $\\frac{160}{80} = 2$." },
+                { q: "Si $x=3$, ¿cuál es el resultado de $3^x - 4x$?", o: ["-3", "3", "12", "15"], a: 3, exp: "<b>Análisis:</b><br>1. $3^3 = 27$.<br>2. $4(3) = 12$.<br>3. Resta: $27 - 12 = 15$." },
+                { q: "Si $a=2, b=3$, halla $a^b + b^a$", o: ["12", "13", "17", "25"], a: 2, exp: "<b>Análisis:</b><br>1. $2^3 = 8$.<br>2. $3^2 = 9$.<br>3. Suma: $8 + 9 = 17$." }
+            ],
+            suma_resta: [
+                { q: "¿A qué es igual $a^4 + a^4$?", o: ["$a^8$", "$a^4$", "$2a^4$", "$2a^8$"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>Es una SUMA de términos iguales. Imagina que son manzanas: 1 manzana + 1 manzana = 2 manzanas. <br>El exponente NO cambia: $2a^4$." },
+                { q: "Simplifica: $16mn^5 - 8mn - 16mn^5$", o: ["$-8mn$", "$32mn^5 - 8mn$", "$-32mn^5 - 8mn$", "0"], a: 0, exp: "<b>Análisis:</b><br>1. Identificamos términos semejantes: $16mn^5$ y $-16mn^5$.<br>2. Se eliminan entre sí ($16 - 16 = 0$).<br>3. Solo queda $-8mn$." },
+                { q: "¿Cuál es el resultado de $14y^5 + 20y^4$?", o: ["$34y^9$", "$34y$", "$-6y$", "$14y^5 + 20y^4$"], a: 3, exp: "<b>Análisis Crítico:</b><br>¡Cuidado! No tienen el mismo exponente (5 y 4). No son términos semejantes, por lo tanto NO se pueden sumar. La expresión se queda igual." },
+                { q: "Simplifica: $8xy + 4xy - 16yx$", o: ["$4x^2y^2$", "$-4x^2y^2$", "$4xy$", "$-4xy$"], a: 3, exp: "<b>Análisis:</b><br>1. $xy$ y $yx$ son lo mismo (el orden de los factores no altera el producto).<br>2. $8+4=12$.<br>3. $12 - 16 = -4$. Resultado: $-4xy$." },
+                { q: "Reduce: $-10h - 12h - 8h$", o: ["$-18h$", "$-20h$", "$-22h$", "$-30h$"], a: 3, exp: "Todos tienen la misma base $h$. Sumamos los coeficientes negativos: $(-10-12-8) = -30$. Resultado: $-30h$." },
+                { q: "¿Qué resulta de $18xy + xy + 6yx - 14xy$?", o: ["$11xy$", "$31xy$", "$18xy+7yx$", "$25xy$"], a: 0, exp: "<b>Análisis:</b><br>1. Positivos: $18 + 1 + 6 = 25xy$.<br>2. Restamos el negativo: $25 - 14 = 11xy$." },
+                { q: "Simplifica: $-3b + b^3 + 2b + 5b - 4b^2$", o: ["$7b - 4b^2 + b^3$", "$4b - 4b^2 + b^3$", "$8b + 4b^2 - b^3$", "Se queda igual"], a: 1, exp: "Agrupamos por potencias:<br>1. $b^3$: solo hay uno.<br>2. $b^2$: $-4b^2$.<br>3. $b^1$: $-3b + 2b + 5b = 4b$.<br>Resultado: $4b - 4b^2 + b^3$." },
+                { q: "¿A qué es igual $25a^2 + 14b^2 + 10c^2$?", o: ["$49abc$", "$49a^2b^2c^2$", "No se puede simplificar", "$49a^6$"], a: 2, exp: "Bases diferentes ($a, b, c$). No se pueden sumar." }
+            ],
+            mult_div: [
+                { q: "Resuelve: $(-x)(-x)$", o: ["$-2x$", "$2x$", "$-x^2$", "$x^2$"], a: 3, exp: "<b>Análisis:</b><br>1. Signos: $(-) \\times (-) = (+)$.<br>2. Exponentes: $x^1 \\cdot x^1 = x^{1+1} = x^2$." },
+                { q: "Resuelve: $(-2x^4yz^2)(-5xy)$", o: ["$10x^4yz^2$", "$-10x^5y^2z^2$", "$10x^5y^2z^2$", "$-10x^4yz^2$"], a: 2, exp: "<b>Análisis:</b><br>1. Números: $(-2)(-5) = 10$.<br>2. $x^4 \\cdot x^1 = x^5$.<br>3. $y^1 \\cdot y^1 = y^2$.<br>4. $z^2$ se queda igual. Resultado: $10x^5y^2z^2$." },
+                { q: "Resuelve: $(4m^2)(25mn^3o^2)$", o: ["$100m^3n^3o^2$", "$100mn^3o^2$", "$100m^2n^3o^2$", "$29m^3$"], a: 0, exp: "<b>Análisis:</b><br>1. $4 \\times 25 = 100$.<br>2. $m^2 \\cdot m^1 = m^3$.<br>3. $n^3$ y $o^2$ se mantienen. Resultado: $100m^3n^3o^2$." },
+                { q: "Multiplica: $(-h^3j^{-2})(-3h^5j^2)(2)$", o: ["$6h^8$", "$-6h^8$", "$6h^{15}$", "$6h^8j^4$"], a: 0, exp: "<b>Paso a paso:</b><br>1. Coeficientes: $(-1)(-3)(2) = 6$.<br>2. Base $h$: $3+5 = 8$.<br>3. Base $j$: $-2 + 2 = 0$. Recuerda que $j^0 = 1$.<br>Resultado: $6h^8$." },
+                { q: "¿A qué es igual $\\frac{8ab^7}{2b^4}$?", o: ["$4ab^3$", "$4ab^{11}$", "$4ab$", "$6ab^3$"], a: 0, exp: "<b>División:</b><br>1. $8 / 2 = 4$.<br>2. $a$ se mantiene.<br>3. Restamos exponentes de $b$: $7 - 4 = 3$.<br>Resultado: $4ab^3$." },
+                { q: "Resuelve: $\\frac{16a^2x^2}{4x^2}$", o: ["$4$", "$4a^2$", "$4a^2x$", "$4ax$"], a: 1, exp: "<b>Análisis:</b><br>1. $16 / 4 = 4$.<br>2. $a^2$ se mantiene.<br>3. $x^2 / x^2 = 1$ (se eliminan porque $2-2=0$).<br>Resultado: $4a^2$." },
+                { q: "Simplifica: $\\frac{160m^2n^4p^2}{30m^2n^4}$", o: ["$16p^2 / 3$", "$16p/n$", "$16mp^2/3$", "$16/3$"], a: 0, exp: "<b>Análisis:</b><br>1. Fracción: $160/30 = 16/3$.<br>2. $m^2/m^2$ y $n^4/n^4$ se eliminan.<br>3. Queda el $p^2$. Resultado: $16p^2 / 3$." }
+            ],
+            productos: [
+                { q: "¿A qué es igual $(a+b)^2$?", o: ["$a^2+b^2$", "$a^2+2ab+b^2$", "$a+2ab+b$", "$a^2+ab+b^2$"], a: 1, exp: "<b>Binomio al Cuadrado:</b> El cuadrado del primero, más el doble del primero por el segundo, más el cuadrado del segundo." },
+                { q: "Resuelve: $(x-2)^2$", o: ["$x^2-4$", "$x^2-4x-4$", "$x^2-4x+4$", "$x^2+4$"], a: 2, exp: "<b>Análisis:</b><br>1. $(x)^2 = x^2$.<br>2. $2(x)(-2) = -4x$.<br>3. $(-2)^2 = +4$.<br>Resultado: $x^2 - 4x + 4$." },
+                { q: "¿A qué es igual $(y+4)(y-4)$?", o: ["$y^2-16$", "$y^2-4$", "$2y^2-16$", "$y^2+16$"], a: 0, exp: "<b>Binomios Conjugados:</b> El resultado es una 'Diferencia de Cuadrados'.<br>$(y)^2 - (4)^2 = y^2 - 16$." },
+                { q: "Resuelve: $(x^2+2)(x^2-3)$", o: ["$x^4-6$", "$x^4-x^2-6$", "$x^4+x^2-6$", "$x^2-6$"], a: 1, exp: "<b>Término Común:</b><br>1. $(x^2)^2 = x^4$.<br>2. Suma de diferentes: $2 + (-3) = -1 \\rightarrow -1x^2$.<br>3. Mult. de diferentes: $2 \\times -3 = -6$.<br>Resultado: $x^4 - x^2 - 6$." },
+                { q: "Factorización de $x^2 - x - 42$:", o: ["$(x+7)(x-6)$", "$(x+6)(x-7)$", "$(x-7)(x-6)$", "$(x-1)(x-42)$"], a: 1, exp: "Buscamos dos números que multiplicados den $-42$ y sumados den $-1$. Estos son $+6$ y $-7$." },
+                { q: "Factorización de $x^2 - 100$:", o: ["$(x-10)^2$", "$(x+10)^2$", "$(x+10)(x-10)$", "$(x-50)(x+50)$"], a: 2, exp: "Es una diferencia de cuadrados. Raíz de $x^2$ es $x$, raíz de $100$ es $10$. Resultado: $(x+10)(x-10)$." },
+                { q: "Factor común de $ch^2 + 4abc^2h^2 + h^3$:", o: ["$h(c+4abc^2+h^2)$", "$h^2(c+4abc^2+h)$", "$h^2(c+4abc+h)$", "$h^3$"], a: 1, exp: "El término que se repite en todos con su menor exponente es $h^2$. Al extraerlo queda: $h^2(c + 4abc^2 + h)$." },
+                { q: "Simplifica por factor común: $4m^2n + m^2np - am^2n$", o: ["$m^2n(4+np-a)$", "$m^2n(4+p-a)$", "$m^2n(4p-a)$", "$m^2n(4+p+a)$"], a: 1, exp: "El factor común es $m^2n$.<br>1. $4m^2n / m^2n = 4$.<br>2. $m^2np / m^2n = p$.<br>3. $-am^2n / m^2n = -a$.<br>Resultado: $m^2n(4 + p - a)$." }
+            ],
+            leyes: [
+                { 
+                    q: "¿A cuánto es igual $x^{5} \\cdot x^{2}$?", 
+                    o: ["$x^{3}$", "$x^{10}$", "$x^{5}$", "$x^{7}$"], 
+                    a: 3, 
+                    exp: "<b>En la MULTIPLICACIÓN:</b> Los exponentes se <b>SUMAN</b>.<br><br>$$x^{5} \\cdot x^{2} = x^{5 + 2} = x^{7}$$" 
+                },
+                { 
+                    q: "¿Qué pasa con el exponente en $a^3 + a^3$?", 
+                    o: ["$a^6$", "$2a^3$", "$2a^6$", "$a^9$"], 
+                    a: 1, 
+                    exp: "<b>En la SUMA:</b> El exponente <b>NO CAMBIA</b>. Solo sumas cuántos términos tienes (coeficientes).<br><br>$$1a^3 + 1a^3 = 2a^3$$" 
+                },
+                { 
+                    q: "¿A cuánto es igual $\\frac{m^{10}}{m^4}$?", 
+                    o: ["$m^{14}$", "$m^{6}$", "$m^{2.5}$", "$m^4$"], 
+                    a: 1, 
+                    exp: "<b>En la DIVISIÓN:</b> Los exponentes se <b>RESTAN</b>.<br><br>$$m^{10-4} = m^6$$" 
+                },
+                { 
+                    q: "¿Cuál es el resultado de $(y^4)^3$?", 
+                    o: ["$y^7$", "$y^{12}$", "$y^{64}$", "$3y^4$"], 
+                    a: 1, 
+                    exp: "<b>Potencia de POTENCIA:</b> Los exponentes se <b>MULTIPLICAN</b>.<br><br>$$y^{4 \\cdot 3} = y^{12}$$" 
+                },
+                { 
+                    q: "¿Cuál es el valor de $x^{-2}$ expresado correctamente?", 
+                    o: ["$-x^2$", "$-2x$", "$\\frac{1}{x^2}$", "$0$"], 
+                    a: 2, 
+                    exp: "<b>Exponente NEGATIVO:</b> Se convierte en una fracción con el término en el denominador y exponente positivo.<br><br>$$x^{-2} = \\frac{1}{x^2}$$" 
+                }
+            ]
+        };
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+
+            const info = topicsInfo[tabId];
+            document.getElementById('topic-title').innerText = info.title;
+            document.getElementById('topic-text').innerHTML = info.desc;
+
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 category-card mb-6';
+                    
+                    let opts = '';
+                    item.o.forEach((opt, idx) => {
+                        opts += `<button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 flex items-center justify-between mb-2">
+                            <span>${String.fromCharCode(65 + idx)}) ${opt}</span>
+                        </button>`;
+                    });
+
+                    card.innerHTML = `
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-[10px] font-black bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-full uppercase tracking-widest">Reto PrepMaster ${i+1}</span>
+                        </div>
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" id="box_${cat}_${i}">
+                            ${opts}
+                        </div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <div class="flex items-center gap-2 mb-3 text-indigo-800 font-bold uppercase text-[11px] tracking-widest">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                                Análisis Paso a Paso
+                            </div>
+                            <div class="text-[14px] text-indigo-900 font-medium leading-relaxed italic">
+                                ${item.exp}
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const buttons = box.querySelectorAll('.opt-btn');
+            const hint = document.getElementById(`hint_${id}`);
+            
+            buttons.forEach(b => b.disabled = true);
+            
+            if (sel === ans) { 
+                btn.classList.add('correct-opt'); 
+                score += 10;
+            } else { 
+                btn.classList.add('incorrect-opt'); 
+                buttons[ans].classList.add('correct-opt');
+                if(score > 0) score -= 2;
+            }
+            
+            hint.style.display = 'block';
+            
+            if (window.MathJax) {
+                MathJax.typesetPromise([hint]);
+            }
+            
+            updateScore();
+        }
+
+        function updateScore() {
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() {
+            if(confirm('¿Reiniciar todo el entrenamiento de Álgebra?')) {
+                score = 0;
+                updateScore();
+                render();
+                showTab('sustitucion');
+            }
+        }
+
+        window.onload = () => {
+            render();
+            showTab('sustitucion');
+        };
+    </script>
+</body>
+</html>

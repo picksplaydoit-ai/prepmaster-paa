@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Entrenamiento Algebraico Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración y carga de MathJax para renderizado matemático impecable -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        
+        .opt-btn {
+            transition: all 0.2s ease;
+            border: 2px solid #e2e8f0;
+        }
+        .opt-btn:hover:not(:disabled) {
+            border-color: #6366f1;
+            background-color: #f8fafc;
+        }
+
+        .category-card {
+            transition: transform 0.2s;
+        }
+        .category-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">
+                    PrepMaster
+                </div>
+                <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
+                <h1 class="font-bold text-slate-500 text-sm hidden sm:block italic">Dominio Algebraico</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Progreso Total</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors" title="Reiniciar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-8">
+        
+        <!-- Tabs Navigation -->
+        <nav class="flex flex-wrap gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl">
+            <button onclick="showTab('planteamiento')" id="btn-planteamiento" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all bg-white shadow-sm text-indigo-600">
+                Planteamiento
+            </button>
+            <button onclick="showTab('despejes')" id="btn-despejes" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
+                Ecuaciones 1 var
+            </button>
+            <button onclick="showTab('sistemas')" id="btn-sistemas" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
+                Sistemas 2x2
+            </button>
+            <button onclick="showTab('cuadraticas')" id="btn-cuadraticas" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
+                Ecuaciones Cuadráticas
+            </button>
+        </nav>
+
+        <!-- Topic Banner -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl shadow-indigo-100 relative overflow-hidden">
+            <div class="relative z-10">
+                <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando tema...</h3>
+                <p id="topic-text" class="text-indigo-100 text-sm leading-relaxed max-w-2xl">
+                    Prepárate para resolver los desafíos planteados en tus guías de estudio.
+                </p>
+            </div>
+            <div class="absolute right-0 top-0 opacity-10 transform translate-x-1/4 -translate-y-1/4 scale-150">
+                <svg width="150" height="150" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 14H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2z"/></svg>
+            </div>
+        </div>
+
+        <!-- Content Containers -->
+        <div id="planteamiento" class="tab-content active space-y-6"></div>
+        <div id="despejes" class="tab-content space-y-6"></div>
+        <div id="sistemas" class="tab-content space-y-6"></div>
+        <div id="cuadraticas" class="tab-content space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+            planteamiento: {
+                title: "Planteamiento de Ecuaciones",
+                desc: "Dominar el lenguaje algebraico es traducir palabras a símbolos. Recuerda: 'el doble de' es $2x$, 'más que' indica suma y 'la diferencia' es resta. Busca siempre equilibrar la balanza de la igualdad."
+            },
+            despejes: {
+                title: "Despejes de una Variable",
+                desc: "Para despejar $x$, debes aplicar la operación contraria a ambos lados. Si algo suma, resta; si multiplica, divide. No olvides resolver primero lo que está más alejado de la incógnita."
+            },
+            sistemas: {
+                title: "Sistemas de Ecuaciones 2x2",
+                desc: "Aquí buscamos el punto donde dos condiciones se cumplen al mismo tiempo. El método de reducción (suma y resta) suele ser el más rápido para tus exámenes. ¡Asegúrate de alinear las variables!"
+            },
+            cuadraticas: {
+                title: "Ecuaciones de Segundo Grado",
+                desc: "Identifica siempre $a$, $b$ y $c$. Si puedes factorizar buscando números que sumados den $b$ y multiplicados den $c$, ahorrarás tiempo. Si no, la fórmula general nunca falla."
+            }
+        };
+
+        const data = {
+            planteamiento: [
+                { q: "En tortas 'El Pelucas', una torta y un refresco cuestan 44 pesos. Si la torta cuesta 10 pesos más que el refresco, ¿cuánto cuesta el refresco?", o: ["15", "17", "27", "32"], a: 1, exp: "<b>Paso 1:</b> Definimos el refresco como $x$.<br><b>Paso 2:</b> La torta es $x + 10$.<br><b>Paso 3:</b> Sumamos: $x + (x + 10) = 44$.<br><b>Paso 4:</b> Resolvemos $2x + 10 = 44 \\rightarrow 2x = 34 \\rightarrow x = 17$." },
+                { q: "Tres números impares consecutivos suman 51. ¿Cuál es el mayor?", o: ["15", "17", "19", "21"], a: 2, exp: "Los números impares consecutivos se llevan 2 de diferencia: $x, x+2, x+4$.<br>Sumamos: $3x + 6 = 51$.<br>Despejamos: $3x = 45 \\rightarrow x = 15$.<br>Los números son 15, 17 y 19. El mayor es <b>19</b>." },
+                { q: "Salvador gana $400 más que Roberto. Si juntos ganan $3600 quincenales, ¿cuánto gana Roberto?", o: ["1400", "1600", "1800", "2000"], a: 1, exp: "Roberto $= x$. Salvador $= x + 400$.<br>Ecuación: $x + x + 400 = 3600$.<br>Simplificamos: $2x = 3200$.<br>Resultado: $x = 1600$. Roberto gana 1600 pesos." },
+                { q: "El edificio de Ingenierías se construyó 4 años antes que el de Medicina. Si en 2018 sus antigüedades suman 128 años, ¿en qué año se construyó Ingeniería?", o: ["1952", "1954", "1956", "1958"], a: 0, exp: "Medicina $= x$ años. Ingeniería $= x + 4$ años.<br>Suma: $2x + 4 = 128 \\rightarrow 2x = 124 \\rightarrow x = 62$.<br>En 2018, Ingeniería tiene $62+4 = 66$ años. Restamos del año actual: $2018 - 66 = 1952$." },
+                { q: "María tiene monedas de $2, $5 y $10 en igual cantidad. Si tiene $136 en total, ¿cuántas monedas tiene en total?", o: ["8", "16", "17", "24"], a: 3, exp: "Sea $x$ el número de monedas de cada tipo.<br>$2x + 5x + 10x = 136 \\rightarrow 17x = 136$.<br>Dividimos: $x = 136 / 17 = 8$.<br>Como tiene 8 monedas de cada denominación (2, 5 y 10), el total es $8 \\times 3 = 24$." },
+                { q: "Un paquete de limpieza de $160 tiene 8 escobas y 4 recogedores. La escoba cuesta el doble que el recogedor. ¿Cuánto cuesta un recogedor?", o: ["8", "12", "16", "24"], a: 0, exp: "Recogedor $= x$. Escoba $= 2x$.<br>Ecuación: $8(2x) + 4(x) = 160 \\rightarrow 16x + 4x = 160$.<br>$20x = 160 \\rightarrow x = 8$. El recogedor cuesta 8 pesos." },
+                { q: "Las Cabras de Jalisco ganaron el doble de partidos de los que empataron. Perdieron 4. Tienen 28 puntos (V=3, E=1). ¿Cuántas victorias tuvieron?", o: ["4", "6", "8", "12"], a: 2, exp: "Empates $= x$. Victorias $= 2x$.<br>Puntos: $3(2x) + 1(x) = 28$.<br>$6x + x = 28 \\rightarrow 7x = 28 \\rightarrow x = 4$.<br>Victorias $= 2(4) = 8$." },
+                { q: "Un terreno de $800 m^2$ tiene un ancho que es la mitad del largo. ¿Cuál es su perímetro?", o: ["120", "160", "280", "400"], a: 0, exp: "Ancho $= x$, Largo $= 2x$.<br>Área: $x(2x) = 800 \\rightarrow 2x^2 = 800 \\rightarrow x^2 = 400 \\rightarrow x = 20$.<br>Lados: 20 y 40. Perímetro: $2(20) + 2(40) = 40 + 80 = 120$." },
+                { q: "Los lados de un triángulo son pares consecutivos y su perímetro es 84. ¿Cuánto mide el lado menor?", o: ["22", "24", "26", "28"], a: 2, exp: "Lados: $x, x+2, x+4$.<br>Suma: $3x + 6 = 84 \\rightarrow 3x = 78$.<br>Resultado: $x = 26$." },
+                { q: "Fernanda lleva el triple de dulces que María. Entre las dos llevan 160. ¿Cuántos lleva Fernanda?", o: ["40", "80", "120", "140"], a: 2, exp: "María $= x$. Fer $= 3x$.<br>$x + 3x = 160 \\rightarrow 4x = 160 \\rightarrow x = 40$.<br>Fernanda tiene $3(40) = 120$ dulces." },
+                { q: "Padre e hijo suman 60 años. El padre tiene el cuádruple de edad que el hijo. ¿Qué edad tiene el padre?", o: ["12", "45", "48", "50"], a: 2, exp: "Hijo $= x$. Padre $= 4x$.<br>$5x = 60 \\rightarrow x = 12$.<br>Padre $= 4(12) = 48$ años." },
+                { q: "Un número sumado con su mitad da 30. ¿Cuál es el número?", o: ["10", "15", "20", "25"], a: 2, exp: "$x + \\frac{x}{2} = 30$.<br>Multiplicamos todo por 2: $2x + x = 60 \\rightarrow 3x = 60$.<br>Resultado: $x = 20$." }
+            ],
+            despejes: [
+                { q: "Si $4x - 2 = 22$, ¿cuánto vale $x$?", o: ["3", "6", "8", "12"], a: 1, exp: "El -2 pasa sumando: $4x = 22 + 2 \\rightarrow 4x = 24$.<br>Dividimos entre 4: $x = 24 / 4 = 6$." },
+                { q: "Si $m^2 - 10 = 54$, ¿cuánto vale $m$?", o: ["4", "8", "10", "16"], a: 1, exp: "$m^2 = 54 + 10 = 64$.<br>Aplicamos raíz cuadrada: $m = \\sqrt{64} = 8$." },
+                { q: "Si $\\frac{-a - 2}{8} = 4$, ¿cuánto vale $a$?", o: ["-34", "-32", "32", "34"], a: 0, exp: "El 8 pasa multiplicando: $-a - 2 = 32$.<br>El -2 pasa sumando: $-a = 34$.<br>Multiplicamos por -1: $a = -34$." },
+                { q: "Si $4x - 5 = 2x + 9$, ¿cuál es el valor de $x$?", o: ["5", "7", "9", "10"], a: 1, exp: "Agrupamos $x$: $4x - 2x = 9 + 5$.<br>$2x = 14 \\rightarrow x = 7$." },
+                { q: "Si $y + 12 = 18 - 2y$, ¿cuánto vale $y$?", o: ["2", "4", "6", "10"], a: 0, exp: "$y + 2y = 18 - 12$.<br>$3y = 6 \\rightarrow y = 2$." },
+                { q: "Si $3(x - 4) = 6$, despeja $x$.", o: ["2", "4", "6", "8"], a: 2, exp: "Dividimos entre 3: $x - 4 = 2$.<br>Pasamos sumando el 4: $x = 6$." },
+                { q: "Encuentra $x$ si $\\sqrt{9x + 1} = 8$.", o: ["5", "7", "9", "10"], a: 1, exp: "Elevamos al cuadrado: $9x + 1 = 64$.<br>$9x = 63 \\rightarrow x = 7$." },
+                { q: "Si $a - 5 = -a + 1$, ¿cuánto vale $a$?", o: ["3", "5", "8", "12"], a: 0, exp: "$a + a = 1 + 5 \\rightarrow 2a = 6 \\rightarrow a = 3$." },
+                { q: "Despeja $b$ de $\\frac{2b}{8} = 18$.", o: ["72", "80", "90", "92"], a: 0, exp: "$2b = 18 \\times 8 = 144$.<br>$b = 144 / 2 = 72$." },
+                { q: "Si $12g - 4 = 4g + 12$, ¿cuánto es $g$?", o: ["12", "6", "4", "2"], a: 3, exp: "$8g = 16 \\rightarrow g = 2$." },
+                { q: "Resuelve $5(x + 2) = 2x + 22$.", o: ["3", "4", "5", "6"], a: 1, exp: "$5x + 10 = 2x + 22 \\rightarrow 3x = 12 \\rightarrow x = 4$." },
+                { q: "Si $\\frac{x}{3} + 5 = 10$, despeja $x$.", o: ["5", "10", "15", "20"], a: 2, exp: "$\\frac{x}{3} = 5 \\rightarrow x = 5 \\times 3 = 15$." }
+            ],
+            sistemas: [
+                { q: "Resuelve: $2x + 3y = 34$ y $3x - 3y = 36$.", o: ["x=2, y=10", "x=12, y=1", "x=14, y=2", "x=10, y=5"], a: 2, exp: "Usamos reducción. Sumamos ambas: $(2x+3x) + (3y-3y) = 34 + 36 \\rightarrow 5x = 70$.<br>$x = 14$. Sustituyendo en la primera: $2(14) + 3y = 34 \\rightarrow 28 + 3y = 34 \\rightarrow 3y = 6 \\rightarrow y = 2$." },
+                { q: "Resuelve: $2m + n = 4$ y $-m + n = -5$.", o: ["m=3, n=-2", "m=3, n=2", "m=1, n=2", "m=1, n=-2"], a: 0, exp: "Restamos las ecuaciones: $(2m - (-m)) = 4 - (-5) \\rightarrow 3m = 9 \\rightarrow m = 3$.<br>Si $m=3$, entonces $-3 + n = -5 \\rightarrow n = -2$." },
+                { q: "Anita pagó $800 por 3 pares de chanclas y 2 de tenis. Su hermano pagó $680 por 2 de cada uno. ¿Cuánto cuesta un par de cada uno juntos?", o: ["$340", "$380", "$400", "$440"], a: 0, exp: "$3c + 2t = 800$ y $2c + 2t = 680$.<br>Restamos directamente: $c = 120$.<br>Sustituimos: $2(120) + 2t = 680 \\rightarrow 2t = 440 \\rightarrow t = 220$.<br>Suma: $120 + 220 = 340$." },
+                { q: "Granja con 12 cabezas y 32 patas (gallinas y cabras). ¿Cabras?", o: ["4", "6", "8", "10"], a: 0, exp: "Gallinas $(g)$ y Cabras $(c)$.<br>$g + c = 12$ y $2g + 4c = 32$.<br>Multiplicamos la 1ra por 2: $2g + 2c = 24$.<br>Restamos de la 2da: $2c = 8 \\rightarrow c = 4$." },
+                { q: "24 monedas de $2 y $5 sumando $75. ¿Monedas de $2?", o: ["9", "10", "15", "20"], a: 2, exp: "$x + y = 24$ y $2x + 5y = 75$.<br>Restamos $2(x+y)=48$ de la 2da: $3y = 27 \\rightarrow y = 9$.<br>Entonces $x = 24 - 9 = 15$." },
+                { q: "Resolver: $4m - 2n = 2$ y $3m - 5n = -16$.", o: ["m=2, n=3", "m=3, n=5", "m=5, n=3", "m=1, n=1"], a: 1, exp: "Multiplicamos 1ra por 5 y 2da por 2:<br>$20m - 10n = 10$<br>$6m - 10n = -32$<br>Restamos: $14m = 42 \\rightarrow m = 3, n = 5$." },
+                { q: "La suma de dos números es 50 y su diferencia es 10. ¿El mayor?", o: ["20", "25", "30", "40"], a: 2, exp: "$x + y = 50$ y $x - y = 10$.<br>Sumamos: $2x = 60 \\rightarrow x = 30$.<br>Si $x = 30$, $y = 20$. El mayor es 30." },
+                { q: "Doble de x + y = 10, y x - y = 2. Halla x.", o: ["2", "4", "6", "8"], a: 1, exp: "Sumamos: $3x = 12 \\rightarrow x = 4$." },
+                { q: "Kenia compró 5 vasos y 2 bolsas por $140. Luego 2 vasos y 3 bolsas por $111. ¿Bolsa?", o: ["$25", "$31", "$40", "$43"], a: 0, exp: "Sistema: $5v + 2b = 140$ y $2v + 3b = 111$.<br>Resolviendo por eliminación, obtenemos $b = 25$." },
+                { q: "Un número es el triple de otro y suman 40.", o: ["5 y 15", "10 y 30", "15 y 25", "8 y 24"], a: 1, exp: "$x = 3y, x + y = 40 \\rightarrow 4y = 40 \\rightarrow y = 10, x = 30$." },
+                { q: "Halla $x$ si $x+y=5$ y $2x-y=1$.", o: ["2", "3", "4", "1"], a: 0, exp: "Sumamos: $3x = 6 \\rightarrow x = 2$." },
+                { q: "Halla $y$ si $x+y=5$ y $2x-y=1$.", o: ["2", "3", "4", "1"], a: 1, exp: "Si $x=2$, entonces $2+y=5 \\rightarrow y=3$." }
+            ],
+            cuadraticas: [
+                { q: "Raíces de $2x^2 + 6x - 8 = 0$.", o: ["1 y -4", "4 y -1", "-1 y -3", "-3 y -2"], a: 0, exp: "Simplificamos dividiendo entre 2: $x^2 + 3x - 4 = 0$.<br>Buscamos números que multiplicados den -4 y sumados 3: (4 y -1).<br>Factores: $(x+4)(x-1)=0$. Raíces: -4 y 1." },
+                { q: "Valores que cumplen $x^2 - 64 = 0$.", o: ["8 y 8", "8 y -8", "16 y -4", "16 y 4"], a: 1, exp: "$x^2 = 64 \\rightarrow x = \\pm \\sqrt{64} = \\pm 8$." },
+                { q: "Raíces de $x^2 + 8x + 15 = 0$.", o: ["-5 y -3", "5 y 3", "15 y 1", "-15 y -1"], a: 0, exp: "Factorizamos: $(x+5)(x+3)=0$.<br>Raíces: -5 y -3." },
+                { q: "Raíces de $2x^2 - 4x + 2 = 0$.", o: ["1 y -1", "1 y 1", "3 y 1", "-2 y 1"], a: 1, exp: "Dividimos entre 2: $x^2 - 2x + 1 = 0$.<br>Es un TCP: $(x-1)^2 = 0$. Raíz: $x = 1$." },
+                { q: "Mayor valor de $x$ en $x^2 - 3x = 4$.", o: ["-1", "4", "8", "10"], a: 1, exp: "$x^2 - 3x - 4 = 0 \\rightarrow (x-4)(x+1) = 0$.<br>Raíces: 4 y -1. El mayor es 4." },
+                { q: "Raíz menor de $2x^2 - 4x - 6 = 0$.", o: ["-1", "1", "2", "3"], a: 0, exp: "$x^2 - 2x - 3 = 0 \\rightarrow (x-3)(x+1) = 0$.<br>Raíces: 3 y -1. La menor es -1." },
+                { q: "Halla $x$ en $2x^2 = 18$.", o: ["3 y 4", "3 y -3", "9 y -9", "2 y -2"], a: 1, exp: "$x^2 = 9 \\rightarrow x = \\pm 3$." },
+                { q: "Valores de $x$ en $x^2 - 4 = 0$.", o: ["2 y -2", "4 y -4", "1 y -1", "0 y 4"], a: 0, exp: "$x = \\pm \\sqrt{4} = \\pm 2$." },
+                { q: "Raíz menor de $x^2 + 8x - 20 = 0$.", o: ["-10", "-2", "2", "10"], a: 0, exp: "$(x+10)(x-2)=0$. Raíces: -10 y 2. La menor es -10." },
+                { q: "Máximo de $2x^2 - 7x + 3 = 0$.", o: ["0.5", "2", "3", "3.5"], a: 2, exp: "Usando tijera o fórmula general: $(2x-1)(x-3)=0$.<br>Raíces: 0.5 y 3. El máximo es 3." },
+                { q: "Raíces de $x^2 - 10x + 21 = 0$.", o: ["-7 y -3", "7 y 3", "21 y 1", "-21 y 1"], a: 1, exp: "$(x-7)(x-3)=0$. Raíces: 7 y 3." },
+                { q: "Raíces de $m^2 + 5m - 150 = 0$.", o: ["15 y -10", "10 y -15", "30 y -5", "-30 y 5"], a: 1, exp: "$(m+15)(m-10)=0$. Raíces: -15 y 10." }
+            ]
+        };
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+
+            const info = topicsInfo[tabId];
+            document.getElementById('topic-title').innerText = info.title;
+            document.getElementById('topic-text').innerText = info.desc;
+
+            // Al cambiar de tab, pedimos a MathJax que procese el nuevo banner
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 category-card mb-6';
+                    
+                    let opts = '';
+                    item.o.forEach((opt, idx) => {
+                        opts += `<button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 flex items-center justify-between mb-2">
+                            <span>${String.fromCharCode(65 + idx)}) ${opt}</span>
+                        </button>`;
+                    });
+
+                    card.innerHTML = `
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-[10px] font-black bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-full uppercase tracking-widest">Reto PrepMaster ${i+1}</span>
+                        </div>
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" id="box_${cat}_${i}">
+                            ${opts}
+                        </div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <div class="flex items-center gap-2 mb-2 text-indigo-800 font-bold uppercase text-[11px] tracking-widest">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                                Análisis Paso a Paso
+                            </div>
+                            <p class="text-[13px] text-indigo-900 font-medium leading-relaxed italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+            // Después de renderizar todo, procesamos las matemáticas
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const buttons = box.querySelectorAll('.opt-btn');
+            const hint = document.getElementById(`hint_${id}`);
+            
+            buttons.forEach(b => b.disabled = true);
+            
+            if (sel === ans) { 
+                btn.classList.add('correct-opt'); 
+                score += 10;
+            } else { 
+                btn.classList.add('incorrect-opt'); 
+                buttons[ans].classList.add('correct-opt');
+                if(score > 0) score -= 2;
+            }
+            
+            hint.style.display = 'block';
+            
+            // Re-procesar solo el hint que se acaba de mostrar
+            if (window.MathJax) {
+                MathJax.typesetPromise([hint]);
+            }
+            
+            updateScore();
+        }
+
+        function updateScore() {
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() {
+            if(confirm('¿Reiniciar todo el entrenamiento?')) {
+                score = 0;
+                updateScore();
+                render();
+                showTab('planteamiento');
+            }
+        }
+
+        window.onload = () => {
+            render();
+            showTab('planteamiento');
+        };
+    </script>
+</body>
+</html>

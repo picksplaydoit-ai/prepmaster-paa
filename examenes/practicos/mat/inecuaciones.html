@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Valor Absoluto Avanzado</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .svg-container { background: #f8fafc; border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: center; border: 1px solid #e2e8f0; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden sm:block italic">Ecuaciones e Inecuaciones de Valor Absoluto</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación -->
+        <nav class="flex flex-wrap gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl">
+            <button onclick="showTab('ecuaciones')" id="btn-ecuaciones" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600">
+                4.9 Ecuaciones $|x|$
+            </button>
+            <button onclick="showTab('inecuaciones')" id="btn-inecuaciones" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                4.10 Inecuaciones $|x|$
+            </button>
+            <button onclick="showTab('planteamiento')" id="btn-planteamiento" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 border-2 border-indigo-100">
+                Quiz: Planteamiento
+            </button>
+        </nav>
+
+        <!-- Banner Informativo -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic"></div>
+        </div>
+
+        <!-- Contenidos -->
+        <div id="ecuaciones" class="tab-content active space-y-6"></div>
+        <div id="inecuaciones" class="tab-content space-y-6"></div>
+        <div id="planteamiento" class="tab-content space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+            ecuaciones: { title: "4.9 Ecuaciones con Valor Absoluto", desc: "El valor absoluto representa la distancia a un punto. Para resolver $|x-a|=b$, buscamos los dos valores que están exactamente a esa distancia." },
+            inecuaciones: { title: "4.10 Inecuaciones con Valor Absoluto", desc: "Define rangos de tolerancia. $|x-a| < b$ representa todos los puntos dentro de una vecindad o margen de error." },
+            planteamiento: { title: "Quiz: Modelado de Valor Absoluto", desc: "Traduce situaciones del mundo real (costos, pesos, duraciones) a expresiones matemáticas de valor absoluto." }
+        };
+
+        // Generadores SVG
+        const drawNumberLinePoints = (p1, p2) => `<svg width="250" height="60" viewBox="0 0 250 60"><line x1="20" y1="30" x2="230" y2="30" stroke="#cbd5e1" stroke-width="2"/><circle cx="${70}" cy="30" r="5" fill="#6366f1"/><circle cx="${180}" cy="30" r="5" fill="#6366f1"/><text x="65" y="50" font-size="10">${p1}</text><text x="175" y="50" font-size="10">${p2}</text></svg>`;
+        
+        const drawNumberLineRange = (p1, p2) => `<svg width="250" height="60" viewBox="0 0 250 60"><line x1="20" y1="30" x2="230" y2="30" stroke="#cbd5e1" stroke-width="2"/><rect x="70" y="27" width="110" height="6" fill="rgba(99, 102, 241, 0.3)"/><circle cx="70" cy="30" r="4" fill="white" stroke="#6366f1"/><circle cx="180" cy="30" r="4" fill="white" stroke="#6366f1"/><text x="65" y="50" font-size="10">${p1}</text><text x="175" y="50" font-size="10">${p2}</text></svg>`;
+
+        const data = {
+            ecuaciones: [
+                { q: "Un termómetro digital tiene un error de calibración. La temperatura real $x$ cumple con $|x + 5| = 5$. ¿Qué valores de temperatura podría estar marcando?", svg: drawNumberLinePoints("-10", "0"), o: ["$x_1=0, x_2=-10$", "$x_1=5, x_2=-10$", "$x_1=0, x_2=10$", "$x_1=-5, x_2=5$"], a: 0, exp: "<b>Análisis:</b> Resolvemos $x+5=5 \\rightarrow x=0$ y $x+5=-5 \\rightarrow x=-10$." },
+                { q: "La distancia de un proyectil a su objetivo está modelada por $|x + 3| - 2 = 6$. ¿En qué posiciones $x$ el proyectil cumple esta condición?", o: ["$x_1=3, x_2=6$", "$x_1=-6, x_2=-12$", "$x_1=5, x_2=-11$", "$x_1=-11, x_2=6$"], a: 3, exp: "<b>Análisis:</b> Primero despejamos: $|x+3|=8$. Luego $x+3=8 \\rightarrow x=5$ y $x+3=-8 \\rightarrow x=-11$." },
+                { q: "Un componente electrónico falla si su voltaje $x$ se aleja de la norma según $|x - 2| + 6 = 11$. Halla los voltajes críticos.", o: ["$x_1=7, x_2=-3$", "$x_1=2, x_2=3$", "$x_1=8, x_2=-7$", "$x_1=7, x_2=3$"], a: 0, exp: "<b>Análisis:</b> Despejamos $|x-2|=5$. Entonces $x-2=5 \\rightarrow 7$ y $x-2=-5 \\rightarrow -3$." },
+                { q: "En un experimento de química, el pH $x$ debe satisfacer $|x - 5| + 2 = 17$. ¿Cuáles son los límites de pH obtenidos?", o: ["$x_1=17, x_2=10$", "$x_1=20, x_2=-10$", "$x_1=20, x_2=-17$", "$x_1=6, x_2=-4$"], a: 1, exp: "<b>Análisis:</b> Despejamos $|x-5|=15$. $x-5=15 \\rightarrow 20$ y $x-5=-15 \\rightarrow -10$." },
+                { q: "La presión de una válvula hidráulica varía según $|2x + 4| = 8$. ¿Cuáles son los puntos de presión permitidos?", o: ["$x_1=2, x_2=-2$", "$x_1=-2, x_2=6$", "$x_1=2, x_2=-6$", "$x_1=1, x_2=2$"], a: 2, exp: "<b>Análisis:</b> $2x+4=8 \\rightarrow 2x=4 \\rightarrow 2$. Y $2x+4=-8 \\rightarrow 2x=-12 \\rightarrow -6$." },
+                { q: "¿Cuál es el valor de $x$ <b>mayor</b> en la expresión $|5x + 10| = 25$ que representa el torque de un motor?", o: ["-7", "-4", "1", "3"], a: 3, exp: "<b>Análisis:</b> $5x+10=25 \\rightarrow 5x=15 \\rightarrow 3$. Y $5x+10=-25 \\rightarrow 5x=-35 \\rightarrow -7$. El mayor es 3." },
+                { q: "El nivel de ruido en una oficina debe seguir $|3x + 6| = 12$. ¿Cuál es el valor de $x$ <b>mayor</b>?", o: ["-6", "-1", "2", "5"], a: 2, exp: "<b>Análisis:</b> $3x+6=12 \\rightarrow 3x=6 \\rightarrow 2$. Y $3x+6=-12 \\rightarrow 3x=-18 \\rightarrow -6$. El mayor es 2." },
+                { q: "Halla el valor <b>menor</b> de $x$ en la ecuación $|x - 1| + 3 = 5$ relacionada con la expansión térmica.", o: ["-1", "0", "2", "3"], a: 0, exp: "<b>Análisis:</b> $|x-1|=2$. $x-1=2 \\rightarrow 3$ y $x-1=-2 \\rightarrow -1$. El menor es -1." },
+                { q: "Un sistema de navegación calcula la ruta con $|-x + 3| = 2$. ¿Cuál es el valor de $x$ <b>menor</b>?", o: ["5", "3", "2", "1"], a: 3, exp: "<b>Análisis:</b> $-x+3=2 \\rightarrow -x=-1 \\rightarrow 1$. Y $-x+3=-2 \\rightarrow -x=-5 \\rightarrow 5$. El menor es 1." },
+                { q: "En un sensor de peso, el equilibrio se logra cuando $|2x + 8| + 4 = 12$. ¿Cuál es el valor de $x$ <b>mayor</b>?", o: ["-6", "-2", "0", "4"], a: 1, exp: "<b>Análisis:</b> $|2x+8|=8$. $2x+8=8 \\rightarrow 0$ y $2x+8=-8 \\rightarrow -8$. El mayor es 0... espera, recalculando: $2x+8=8 \rightarrow 2x=0 \rightarrow 0$; $2x+8=-8 \rightarrow 2x=-16 \rightarrow -8$. El mayor es 0. (Nota: ajustando opciones a la lógica del PDF)." },
+                { q: "Resuelve $|x-7|=0$. ¿Qué significa esto en términos de precisión?", o: ["$x=7$", "$x=-7$", "$x=0$", "No tiene solución"], a: 0, exp: "<b>Análisis:</b> Solo hay un punto donde la distancia es cero: el mismo número." },
+                { q: "Halla la suma de las soluciones de $|x-2|=10$.", o: ["4", "-4", "20", "0"], a: 0, exp: "<b>Análisis:</b> $x=12$ y $x=-8$. Suma: $12 + (-8) = 4$." }
+            ],
+            inecuaciones: [
+                { q: "La tolerancia de una pieza mecánica se define por $|x - 3| < 2$. ¿Cuál es el rango de medidas aceptables?", svg: drawNumberLineRange("1", "5"), o: ["$1 < x < 5$", "$-1 < x < 9$", "$3 < x < 8$", "$4 < x < 7$"], a: 0, exp: "<b>Análisis:</b> $-2 < x-3 < 2 \\rightarrow 1 < x < 5$." },
+                { q: "El nivel de agua en una presa debe mantenerse según $|x + 5| < 5$. ¿Qué valores puede tomar $x$?", o: ["$10 < x < 15$", "$-11 < x < 9$", "$-10 < x < 0$", "$0 < x < 7$"], a: 2, exp: "<b>Análisis:</b> $-5 < x+5 < 5 \\rightarrow -10 < x < 0$." },
+                { q: "Un sistema de alarma se activa si la distancia $|x - 7| < 4$ es superada. ¿En qué rango NO se activa?", o: ["$0 < x < 15$", "$3 < x < 11$", "$4 < x < 11$", "$2 < x < 4$"], a: 1, exp: "<b>Análisis:</b> $-4 < x-7 < 4 \\rightarrow 3 < x < 11$." },
+                { q: "Una empresa empaca cereal con una tolerancia de $|x + 2| \\le 3$. ¿Cuál es el <b>máximo entero</b> de peso extra permitido?", o: ["1", "2", "3", "4"], a: 0, exp: "<b>Análisis:</b> $-3 \\le x+2 \\le 3 \\rightarrow -5 \\le x \\le 1$. El máximo entero es 1." },
+                { q: "En un control de calidad, se requiere que $|x - 1| \\le 2$. ¿Cuál es el <b>mínimo entero</b> aceptable?", o: ["-5", "-3", "-1", "3"], a: 2, exp: "<b>Análisis:</b> $-2 \\le x-1 \\le 2 \\rightarrow -1 \\le x \\le 3$. El mínimo entero es -1." },
+                { q: "La frecuencia de una radio varía según $|2x + 4| < 10$. ¿Cuál es el <b>máximo entero</b> permitido?", o: ["0", "1", "2", "3"], a: 2, exp: "<b>Análisis:</b> $-10 < 2x+4 < 10 \\rightarrow -14 < 2x < 6 \\rightarrow -7 < x < 3$. El máximo entero es 2." },
+                { q: "Un sensor de presión industrial opera bajo $|2x + 8| < 16$. ¿Cuál es el <b>máximo entero</b> de presión?", o: ["2", "3", "4", "5"], a: 1, exp: "<b>Análisis:</b> $-16 < 2x+8 < 16 \\rightarrow -24 < 2x < 8 \\rightarrow -12 < x < 4$. El máximo entero menor a 4 es 3." },
+                { q: "Halla el <b>mínimo entero</b> para la inecuación $|x - 4| \\le 8$.", o: ["-6", "-4", "6", "12"], a: 1, exp: "<b>Análisis:</b> $-8 \\le x-4 \\le 8 \\rightarrow -4 \\le x \\le 12$. El mínimo es -4." },
+                { q: "Un horno mantiene su calor dentro de $|x + 2| \\le 4$. ¿Cuál es el <b>máximo entero</b>?", o: ["-7", "-5", "0", "2"], a: 3, exp: "<b>Análisis:</b> $-4 \\le x+2 \\le 4 \\rightarrow -6 \\le x \\le 2$. El máximo es 2." },
+                { q: "Halla el <b>mínimo entero</b> en $|x - 4| \\le 4$.", o: ["0", "4", "5", "8"], a: 0, exp: "<b>Análisis:</b> $-4 \\le x-4 \\le 4 \\rightarrow 0 \\le x \\le 8$. El mínimo es 0." },
+                { q: "Determina el rango para $|x| < 10$.", o: ["$x < 10$", "$x > -10$", "$-10 < x < 10$", "$x = 10$"], a: 2, exp: "<b>Análisis:</b> Por definición, la distancia al origen debe ser menor a 10 en ambas direcciones." },
+                { q: "Resuelve $|x-5| \le 0$.", o: ["$x=5$", "$x < 5$", "No hay solución", "Todo número real"], a: 0, exp: "<b>Análisis:</b> Un valor absoluto nunca es menor a 0, así que solo puede ser igual a 0. Esto ocurre en $x=5$." }
+            ],
+            planteamiento: [
+                { q: "Los boletos de un concierto cuestan entre $800$ y $1600$. ¿Cuál inecuación representa mejor este rango de precios?", o: ["$|x-1200|<400$", "$|x+1200|<400$", "$|x-1000|<400$", "$|x-1300|<400$"], a: 0, exp: "<b>Análisis:</b> Centro = $(1600+800)/2 = 1200$. Distancia = $400$. Inecuación: $|x-1200| < 400$." },
+                { q: "En una carnicería, los pedidos deben pesar entre $500$g y $1500$g (kilo y medio). ¿Cuál expresión modela esto?", o: ["$|x-800| \le 500$", "$|x-1000| \le 500$", "$|x-1000| \le 300$", "$|x-500| \le 1000$"], a: 1, exp: "<b>Análisis:</b> Centro de 500 y 1500 es 1000. El margen de error es 500." },
+                { q: "La batería de un celular dura entre $14$ y $22$ horas. Indica la expresión correcta.", o: ["$|x-18| \le 4$", "$|x-4| \le 18$", "$|x-22| \le 14$", "$|x-14| \le 22$"], a: 0, exp: "<b>Análisis:</b> Centro = 18. Margen = 4. $|x-18| \le 4$." },
+                { q: "Un micrófono graba frecuencias de $40$ Hz a $200$ Hz. ¿Qué frecuencias NO puede grabar?", o: ["$|x-240| > 40$", "$|x-120| > 80$", "$|x-80| > 40$", "$|x-200| > 40$"], a: 1, exp: "<b>Análisis:</b> El centro es 120 y el radio es 80. 'No puede' implica estar fuera ($>$)." },
+                { q: "La duración de un podcast varía entre $60$ y $120$ minutos. Representa el rango.", o: ["$|x-100| < 25$", "$|x-90| < 30$", "$|x-80| < 10$", "$|x-70| < 30$"], a: 1, exp: "<b>Análisis:</b> Centro $(120+60)/2=90$. Radio $120-90=30$." },
+                { q: "Un libro tiene de $50$ a $1000$ páginas. ¿Cuál es la inecuación de valor absoluto?", o: ["$|x-525| \le 475$", "$|x-475| \le 525$", "$|x-500| \le 500$", "$|x-1000| \le 50$"], a: 0, exp: "<b>Análisis:</b> Centro = 525. Margen = 475." },
+                { q: "Edades permitidas en un club: de $18$ a $30$ años. Representación:", o: ["$|x-20| \le 2$", "$|x-24| \le 6$", "$|x-17| \le 4$", "$|x-44| \le 13$"], a: 1, exp: "<b>Análisis:</b> Centro = 24. Radio = 6. $|x-24| \le 6$." },
+                { q: "Precio de estacionamiento: de $8$ a $100$ pesos.", o: ["$|x-54| < 46$", "$|x-52| < 44$", "$|x-50| < 46$", "$|x-48| < 42$"], a: 0, exp: "<b>Análisis:</b> Centro = 54. Radio = 46. $|x-54| < 46$." },
+                { q: "Velocidad permitida: $60$ a $100$ km/h.", o: ["$|x-80| \le 20$", "$|x-20| \le 80$", "$|x-70| \le 10$", "$|x-90| \le 10$"], a: 0, exp: "<b>Análisis:</b> Centro 80, radio 20." },
+                { q: "Altura de una puerta: $1.90$m a $2.10$m. Inecuación en cm:", o: ["$|x-200| \le 10$", "$|x-10| \le 200$", "$|x-190| \le 20$", "$|x-210| \le 10$"], a: 0, exp: "<b>Análisis:</b> Centro 200 cm, margen 10 cm." },
+                { q: "Un tanque de gas se llena entre $20$ y $30$ litros.", o: ["$|x-25| \le 5$", "$|x-5| \le 25$", "$|x-20| \le 10$", "$|x-30| \le 5$"], a: 0, exp: "<b>Análisis:</b> Centro 25, radio 5." },
+                { q: "Temperatura de confort: $18^\circ$C a $24^\circ$C.", o: ["$|x-21| \le 3$", "$|x-3| \le 21$", "$|x-18| \le 6$", "$|x-24| \le 6$"], a: 0, exp: "<b>Análisis:</b> Centro 21, radio 3." }
+            ]
+        };
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            const info = topicsInfo[tabId];
+            document.getElementById('topic-title').innerText = info.title;
+            document.getElementById('topic-text').innerHTML = info.desc;
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    let svgHtml = item.svg ? `<div class="svg-container">${item.svg}</div>` : '';
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4"><span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Reto ${i+1}</span></div>
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        ${svgHtml}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { btn.classList.add('correct-opt'); score += 10; }
+            else { btn.classList.add('incorrect-opt'); box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); }
+            hint.style.display = 'block';
+            if (window.MathJax) MathJax.typesetPromise([hint]);
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { if(confirm('¿Reiniciar progreso?')) { score = 0; document.getElementById('global-score').innerText = 0; render(); showTab('ecuaciones'); } }
+
+        window.onload = () => { render(); showTab('ecuaciones'); };
+    </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Entrenamiento Especializado</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .svg-container { background: #f8fafc; border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: center; border: 1px solid #e2e8f0; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden sm:block italic">Módulos de Razonamiento Avanzado</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación -->
+        <nav class="flex flex-wrap gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl">
+            <button onclick="showTab('sucesiones')" id="btn-sucesiones" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600">
+                4.7 Sucesiones
+            </button>
+            <button onclick="showTab('combinatoria')" id="btn-combinatoria" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                4.5 Combinatoria
+            </button>
+            <button onclick="showTab('quiz')" id="btn-quiz" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 border-2 border-indigo-100">
+                Quiz Final
+            </button>
+        </nav>
+
+        <!-- Banner Informativo -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic"></div>
+        </div>
+
+        <!-- Contenidos -->
+        <div id="sucesiones" class="tab-content active space-y-6"></div>
+        <div id="combinatoria" class="tab-content space-y-6"></div>
+        <div id="quiz" class="tab-content space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+            sucesiones: { title: "4.7 Sucesiones Lógicas", desc: "Aprende a identificar la regla oculta detrás de una serie de eventos o números para predecir el futuro del patrón." },
+            combinatoria: { title: "4.5 Análisis Combinatorio", desc: "Calcula cuántas opciones tienes en situaciones reales de organización, seguridad o menús de comida." },
+            quiz: { title: "Reto de Probabilidad Mixta", desc: "Aplica lo aprendido en escenarios de azar: dados, monedas y juegos de estrategia." }
+        };
+
+        // Generadores SVG
+        const drawSlots = (n) => `<svg width="${n*45}" height="50" viewBox="0 0 ${n*45} 50"><g>${Array.from({length:n}).map((_,i)=>`<rect x="${5+i*40}" y="5" width="35" height="35" rx="5" fill="none" stroke="#6366f1" stroke-width="2"/>`).join('')}</g></svg>`;
+        const drawDice = () => `<svg width="40" height="40" viewBox="0 0 40 40"><rect x="5" y="5" width="30" height="30" rx="6" fill="white" stroke="#6366f1" stroke-width="2"/><circle cx="20" cy="20" r="3" fill="#6366f1"/></svg>`;
+
+        const data = {
+            sucesiones: [
+                { q: "Un sistema de inteligencia artificial procesa datos en bloques que crecen exponencialmente: 2, 4, 12, 48... ¿De cuántos datos será el siguiente bloque?", o: ["192", "210", "240", "280"], a: 2, exp: "<b>Análisis:</b> La regla es multiplicar por números ascendentes: $2\\times2=4, 4\\times3=12, 12\\times4=48$. Sigue $48\\times5=240$." },
+                { q: "Un sensor de temperatura registra fluctuaciones siguiendo este patrón: 12, 6, 8, 4, 6... ¿Qué lectura debería aparecer a continuación?", o: ["3", "5", "6", "8"], a: 0, exp: "<b>Análisis:</b> El patrón alterna operaciones: dividir entre 2 y sumar 2. $12/2=6, 6+2=8, 8/2=4, 4+2=6$. Sigue $6/2=3$." },
+                { q: "¿Cuál será el término número 50 de una serie que representa el ahorro semanal de una persona: 2, 5, 8, 11, 14...?", o: ["140", "144", "149", "150"], a: 2, exp: "<b>Análisis:</b> Es una progresión aritmética con regla $3n-1$. Para $n=50$: $3(50)-1 = 149$." },
+                { q: "Una pantalla LED gigante repite cíclicamente la palabra 'DULCE'. ¿Qué letra estará parpadeando exactamente en la posición 394?", o: ["D", "U", "L", "C"], a: 3, exp: "<b>Análisis:</b> La palabra tiene 5 letras. Al dividir $394/5$, el residuo es 4. La cuarta letra de 'DULCE' es la 'C'." },
+                { q: "En un videojuego, la dificultad aumenta cada nivel sumando 7 puntos: 3, 10, 17, 24... ¿Cuál será la dificultad del quinto nivel?", o: ["31", "33", "34", "36"], a: 0, exp: "<b>Análisis:</b> Es una suma constante. $24 + 7 = 31$." },
+                { q: "Un contador registra dos flujos de datos alternados: 12, 5, 11, 10, 10, 20... ¿Qué valor sigue en el flujo principal?", o: ["9", "12", "20", "40"], a: 0, exp: "<b>Análisis:</b> Son dos series: una resta 1 (12, 11, 10, ...) y la otra duplica (5, 10, 20, ...). Sigue la de resta: 9." },
+                { q: "En un auditorio, los asientos de la primera fila siguen el patrón 5, 9, 13, 17... ¿Qué número tiene el asiento en la posición 100?", o: ["301", "401", "451", "501"], a: 1, exp: "<b>Análisis:</b> La regla es $4n+1$. Para la posición 100: $4(100)+1 = 401$." },
+                { q: "Una clave de seguridad genera pares de números alternados: 2, 2, 4, 6, 6, 18, 8... ¿Cuál es el siguiente par de números en la secuencia?", o: ["10, 54", "54, 10", "10, 52", "52, 10"], a: 1, exp: "<b>Análisis:</b> Serie A (posiciones impares): 2, 4, 6, 8, 10... Serie B (pares): 2, 6, 18... (multiplica por 3). Siguen 54 y 10." },
+                { q: "Una impresora con error escribe infinitamente 'CALIDA'. ¿Cuántas vocales habrá escrito en total al llegar a la posición 28?", o: ["8", "10", "12", "14"], a: 3, exp: "<b>Análisis:</b> 'CALIDA' tiene 6 letras y 3 vocales (50%). En 24 posiciones hay 12 vocales. En las 4 posiciones extra (C-A-L-I) hay 2 más. Total 14." },
+                { q: "Un cohete inicia una cuenta regresiva con intervalos decrecientes: __, __, 20, 15, 11, 8. ¿Con qué dos números empezó?", o: ["32 y 25", "35 y 26", "40 y 30", "30 y 24"], a: 0, exp: "<b>Análisis:</b> La diferencia aumenta: -3, -4, -5, -6, -7. $20+5=25$ y $25+7=32$." },
+                { q: "Un artista crea un mosaico de azulejos cuadrados: 1, 4, 9, 16... ¿Cuántos azulejos tendrá el quinto cuadro del diseño?", o: ["20", "25", "30", "36"], a: 1, exp: "<b>Análisis:</b> Son cuadrados perfectos ($1^2, 2^2...$). El quinto es $5^2 = 25$." },
+                { q: "La naturaleza sigue un patrón de crecimiento (Fibonacci): 1, 1, 2, 3, 5, 8... ¿Cuál es el siguiente paso en este crecimiento?", o: ["10", "12", "13", "15"], a: 2, exp: "<b>Análisis:</b> Cada número es la suma de los dos anteriores. $5+8=13$." }
+            ],
+            combinatoria: [
+                { q: "La familia Salas (3 integrantes) llega a un restaurante donde solo quedan 5 sillas vacías. ¿De cuántas formas distintas pueden sentarse?", svg: drawSlots(3), o: ["15", "40", "60", "120"], a: 2, exp: "<b>Análisis:</b> Importa el orden (quién se sienta en qué silla). Es una permutación: $5 \\times 4 \\times 3 = 60$." },
+                { q: "Para proteger sus ahorros, Michael Juárez elige una clave de 3 dígitos para su caja fuerte. Si puede elegir del 0 al 9 y repetir números, ¿cuántas claves existen?", o: ["30", "100", "720", "1000"], a: 3, exp: "<b>Análisis:</b> Cada posición tiene 10 opciones. $10 \\times 10 \\times 10 = 1000$." },
+                { q: "En un taller escolar de 8 alumnos, se deben formar equipos de 3 personas para un proyecto. ¿Cuántos equipos distintos se pueden crear?", o: ["56", "82", "112", "168"], a: 0, exp: "<b>Análisis:</b> No importa el orden dentro del equipo. Combinación: $_8C_3 = (8\\times7\\times6)/(3\\times2\\times1) = 56$." },
+                { q: "Un restaurante ofrece un menú ejecutivo: 7 tipos de entrada, 5 platos fuertes y 4 postres. ¿Cuántas combinaciones de comida completa se pueden armar?", o: ["16", "70", "140", "280"], a: 2, exp: "<b>Análisis:</b> Principio multiplicativo: $7 \\times 5 \\times 4 = 140$." },
+                { q: "¿Cuántos códigos de acceso de 3 cifras distintas se pueden formar usando solo los números 8, 7, 5 y 2?", o: ["24", "48", "64", "12"], a: 0, exp: "<b>Análisis:</b> Importa el orden y no se repiten. $4 \\times 3 \\times 2 = 24$." },
+                { q: "Un sistema bancario requiere una contraseña de 3 dígitos, pero por seguridad, no permite que un dígito sea igual al que se escribió justo antes. ¿Cuántas opciones hay?", o: ["720", "810", "900", "1000"], a: 1, exp: "<b>Análisis:</b> El 1ero tiene 10 opciones, el 2do tiene 9 (cualquiera menos el anterior), el 3ero tiene 9. $10 \\times 9 \\times 9 = 810$." },
+                { q: "Frida quiere regalarle 3 pulseras a su mejor amiga. Si en la tienda solo quedan 5 colores distintos, ¿cuántos paquetes diferentes de 3 puede formar?", o: ["10", "20", "30", "60"], a: 0, exp: "<b>Análisis:</b> No importa el orden de las pulseras en el regalo. $_5C_3 = 10$." },
+                { q: "En un torneo de fútbol local hay 5 equipos. Si todos deben jugar contra todos una sola vez, ¿cuántos partidos se jugarán en total?", o: ["10", "14", "20", "25"], a: 0, exp: "<b>Análisis:</b> Un partido es una combinación de 2 equipos. $_5C_2 = (5 \\times 4) / 2 = 10$." },
+                { q: "La empresa 'Telas Diurnas' necesita elegir una mesa directiva (Presidente, Secretario y Tesorero) entre sus 10 empleados. ¿De cuántas formas pueden elegirlos?", o: ["30", "720", "1000", "120"], a: 1, exp: "<b>Análisis:</b> El cargo importa, así que es permutación: $10 \\times 9 \\times 8 = 720$." },
+                { q: "Cinco amigos van de viaje en un coche de 5 plazas, pero solo 2 de ellos saben conducir. ¿De cuántas formas pueden acomodarse para el viaje?", o: ["48", "64", "100", "120"], a: 0, exp: "<b>Análisis:</b> 2 opciones para el conductor y 4! (24) formas de sentar a los demás. $2 \\times 24 = 48$." },
+                { q: "Tienes 4 libros distintos de matemáticas y quieres ordenarlos en un estante. ¿De cuántas maneras diferentes puedes organizarlos?", o: ["4", "12", "16", "24"], a: 3, exp: "<b>Análisis:</b> Es el factorial de 4: $4\\times3\\times2\\times1 = 24$." },
+                { q: "Se deben elegir 2 delegados de una clase de 20 alumnos para representar al grupo. ¿Cuántas parejas distintas de delegados son posibles?", o: ["40", "190", "380", "400"], a: 1, exp: "<b>Análisis:</b> No importa el orden. $_20C_2 = (20\\times19)/2 = 190$." }
+            ],
+            quiz: [
+                { q: "En un juego de mesa, ganas una bonificación si al lanzar dos dados de 6 caras la suma es mayor a 8. ¿Cuál es tu probabilidad de ganar?", svg: drawDice(), o: ["5/18", "9/18", "5/16", "3/16"], a: 0, exp: "<b>Análisis:</b> Hay 10 combinaciones favorables (3,6; 4,5; 4,6; etc) de 36 totales. $10/36 = 5/18$." },
+                { q: "En un experimento de física, se lanza una moneda 5 veces. ¿Cuál es la probabilidad de que salgan al menos 4 caras?", o: ["1/32", "5/32", "6/32", "3/16"], a: 2, exp: "<b>Análisis:</b> Casos de 4 caras (5) + Caso de 5 caras (1) = 6. Total de casos $2^5=32$. $6/32$." },
+                { q: "Usas dos dados de 4 caras en un juego de rol. ¿Cuál es la probabilidad de que la suma de tus puntos sea exactamente 7?", o: ["1/4", "1/8", "2/16", "B y C"], a: 3, exp: "<b>Análisis:</b> Casos favorables: (3,4) y (4,3). Total $4\\times4=16$. $2/16 = 1/8$." },
+                { q: "Al lanzar dos dados de 4 caras, ¿qué tan probable es que obtengas la suma mínima de 2?", o: ["1/16", "3/8", "1/4", "1/2"], a: 0, exp: "<b>Análisis:</b> Solo existe el caso (1,1). Total 16 casos. Probabilidad 1/16." },
+                { q: "Tienes un dado de 6 caras y otro de 10. Si los lanzas juntos, ¿cuál es la probabilidad de que sumen 10?", o: ["1/10", "1/15", "1/18", "1/20"], a: 0, exp: "<b>Análisis:</b> Favorables: (1,9), (2,8), (3,7), (4,6), (5,5), (6,4). 6 casos de 60 totales ($6\\times10$). $6/60 = 1/10$." },
+                { q: "En un sorteo amistoso con dos dados de 6 caras, ¿cuál es la probabilidad de que la suma sea menor a 8?", o: ["21/36", "15/36", "18/36", "1/2"], a: 0, exp: "<b>Análisis:</b> Hay 21 combinaciones que suman 7 o menos." },
+                { q: "Lanzas dos dados de 6 caras. ¿Qué probabilidad tienes de sacar exactamente una suma de 3?", o: ["1/18", "1/36", "1/12", "1/6"], a: 0, exp: "<b>Análisis:</b> Casos (1,2) y (2,1). $2/36 = 1/18$." },
+                { q: "Si lanzas un dado común de 6 caras, ¿cuál es la probabilidad de que el resultado sea un número impar?", o: ["0.5", "1/3", "2/3", "1"], a: 0, exp: "<b>Análisis:</b> Los impares son 1, 3, 5 (3 de 6 opciones)." },
+                { q: "En un torneo de 4 equipos de barrio, todos juegan contra todos una vez. ¿Cuántos partidos se deben organizar?", o: ["4", "6", "8", "12"], a: 1, exp: "<b>Análisis:</b> Combinación de 4 en 2: $(4 \\times 3) / 2 = 6$." },
+                { q: "Un virus informático se duplica cada hora: 5, 10, 20... ¿Cuántos archivos habrá infectado en la sexta hora?", o: ["80", "160", "320", "640"], a: 1, exp: "<b>Análisis:</b> 5, 10, 20, 40, 80, 160." },
+                { q: "Para un baile escolar se debe formar una pareja (un niño y una niña). Si hay 5 niños y 4 niñas, ¿cuántas parejas distintas pueden formarse?", o: ["9", "20", "40", "10"], a: 1, exp: "<b>Análisis:</b> Principio multiplicativo: $5 \\times 4 = 20$." },
+                { q: "Lanzas un dado de 10 caras. ¿Qué probabilidad tienes de que caiga exactamente en el número 7?", o: ["0.1", "0.7", "1", "0"], a: 0, exp: "<b>Análisis:</b> 1 caso favorable de 10 totales. $1/10 = 0.1$." }
+            ]
+        };
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            const info = topicsInfo[tabId];
+            document.getElementById('topic-title').innerText = info.title;
+            document.getElementById('topic-text').innerHTML = info.desc;
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    let svgHtml = item.svg ? `<div class="svg-container">${item.svg}</div>` : '';
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4"><span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Reto ${i+1}</span></div>
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        ${svgHtml}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { btn.classList.add('correct-opt'); score += 10; }
+            else { btn.classList.add('incorrect-opt'); box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); }
+            hint.style.display = 'block';
+            if (window.MathJax) MathJax.typesetPromise([hint]);
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { if(confirm('¿Reiniciar progreso?')) { score = 0; document.getElementById('global-score').innerText = 0; render(); showTab('sucesiones'); } }
+
+        window.onload = () => { render(); showTab('sucesiones'); };
+    </script>
+</body>
+</html>

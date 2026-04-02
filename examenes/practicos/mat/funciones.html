@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Álgebra y Gráficas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        
+        .opt-btn {
+            transition: all 0.2s ease;
+            border: 2px solid #e2e8f0;
+        }
+        .opt-btn:hover:not(:disabled) {
+            border-color: #6366f1;
+            background-color: #f8fafc;
+        }
+
+        .category-card {
+            transition: transform 0.2s;
+        }
+        .category-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">
+                    PrepMaster
+                </div>
+                <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
+                <h1 class="font-bold text-slate-500 text-sm hidden sm:block italic">Módulo de Álgebra Avanzada</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors" title="Reiniciar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-8">
+        
+        <!-- Tabs Navigation -->
+        <nav class="flex flex-wrap gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl">
+            <button onclick="showTab('criterios')" id="btn-criterios" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all bg-white shadow-sm text-indigo-600">
+                Criterios Ec.
+            </button>
+            <button onclick="showTab('inecuaciones')" id="btn-inecuaciones" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
+                Inecuaciones
+            </button>
+            <button onclick="showTab('funciones')" id="btn-funciones" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
+                Funciones
+            </button>
+            <button onclick="showTab('sustitucion')" id="btn-sustitucion" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
+                Sustitución
+            </button>
+        </nav>
+
+        <!-- Topic Banner -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl shadow-indigo-100 relative overflow-hidden">
+            <div class="relative z-10">
+                <h3 id="topic-title" class="text-2xl font-bold mb-2 text-white">Cargando tema...</h3>
+                <div id="topic-text" class="text-indigo-100 text-sm leading-relaxed max-w-4xl"></div>
+            </div>
+            <div class="absolute right-0 top-0 opacity-10 transform translate-x-1/4 -translate-y-1/4 scale-150">
+                <svg width="150" height="150" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 14H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2z"/></svg>
+            </div>
+        </div>
+
+        <!-- Content Containers -->
+        <div id="criterios" class="tab-content active space-y-6"></div>
+        <div id="inecuaciones" class="tab-content space-y-6"></div>
+        <div id="funciones" class="tab-content space-y-6"></div>
+        <div id="sustitucion" class="tab-content space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+            criterios: {
+                title: "Criterios de Ecuaciones",
+                desc: `Este tema consiste en encontrar el valor de una expresión compleja a partir de una ecuación simple. No necesitas despejar la variable; <b>observa la relación</b> entre los coeficientes (si son el doble, la mitad, o una suma directa).`
+            },
+            inecuaciones: {
+                title: "Inecuaciones y Desigualdades",
+                desc: `<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/20 text-sm">
+                        <b>Regla Crítica:</b> Si multiplicas o divides ambos lados por un número <b>negativo</b>, el signo de la desigualdad ($\small{<, >}$) <b>se invierte</b>.
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/20 text-sm">
+                        <b>Intervalos:</b> Parentesis $(\small{x, y})$ indican "abierto" (no incluye), Corchetes $[\small{x, y}]$ indican "cerrado" (incluye el valor).
+                    </div>
+                </div>`
+            },
+            funciones: {
+                title: "Funciones y Gráficas",
+                desc: `Una función $f(x)$ es una regla que asigna un valor a cada $x$.<br>
+                1. <b>Evaluación:</b> Sustituye la $x$ por el número dado.<br>
+                2. <b>Discontinuidad:</b> Una función es discontinua (o no tiene valor real) cuando el <b>denominador se hace cero</b>.`
+            },
+            sustitucion: {
+                title: "Sustitución Algebraica",
+                desc: "Reemplaza las letras por sus valores numéricos y resuelve la aritmética resultante. ¡Presta atención a los signos negativos!"
+            }
+        };
+
+        const data = {
+            criterios: [
+                { q: "Si $4m + 2n = 14$, ¿a qué es igual $8m + 4n$?", o: ["20", "24", "26", "28"], a: 3, exp: "<b>Análisis PrepMaster:</b><br>Observamos que la expresión $8m + 4n$ es exactamente el <b>doble</b> de la original ($4m + 2n$).<br>Multiplicamos toda la ecuación por 2: $2(4m + 2n) = 2(14) = 28$." },
+                { q: "Si $8a - 10b = 28$, ¿a qué es igual $4a - 5b$?", o: ["7", "14", "24", "26"], a: 1, exp: "<b>Análisis PrepMaster:</b><br>Observamos que $4a - 5b$ es la <b>mitad</b> de la expresión original.<br>Dividimos toda la ecuación entre 2: $28 / 2 = 14$." },
+                { q: "Si $12x = 40$, ¿a qué es igual $9x$?", o: ["14", "20", "30", "40"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>1. Hallamos el valor de $x$: $x = 40/12 = 10/3$.<br>2. Sustituimos en la expresión pedida: $9(10/3)$.<br>3. Resolvemos: $90/3 = 30$." },
+                { q: "Si $18k + 6j = 84$, ¿a qué es igual $6k + 2j$?", o: ["18", "24", "28", "46"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>Observamos que $6k + 2j$ es la <b>tercera parte</b> de $18k + 6j$.<br>Dividimos el resultado total entre 3: $84 / 3 = 28$." },
+                { q: "Si $8d - 12f = -120$, ¿a qué es igual $24d - 36f$?", o: ["-360", "-240", "-120", "-40"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>La nueva expresión es el <b>triple</b> de la original ($8 \\times 3 = 24$, $12 \\times 3 = 36$).<br>Multiplicamos el resultado por 3: $-120 \\times 3 = -360$." },
+                { q: "Si $2x^4y^2 = 36$ y $xy = 4$, ¿a qué es igual $2x^5y^3$?", o: ["40", "72", "144", "150"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>Para obtener $2x^5y^3$, debemos multiplicar $2x^4y^2$ por $xy$.<br>Sustituimos sus valores: $36 \\times 4 = 144$." },
+                { q: "Si $5a - 3b = 9$ y $2a + 2b = 6$, ¿a qué es igual $3a - 5b$?", o: ["3", "6", "9", "15"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>Restamos la segunda ecuación de la primera:<br>$(5a - 2a) - (3b + 2b) = 9 - 6$.<br>$3a - 5b = 3$." },
+                { q: "Si $3x + 3y = 6$, ¿a qué es igual $-x - y$?", o: ["-6", "-2", "2", "0"], a: 1, exp: "<b>Análisis PrepMaster:</b><br>1. Simplificamos dividiendo entre 3: $x + y = 2$.<br>2. Para obtener $-x - y$, multiplicamos por -1.<br>3. Resultado: $-2$." },
+                { q: "Si $3x + 5 = 4y$, ¿a qué es igual $15x - 20y$?", o: ["-25", "-5", "5", "25"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>1. Reordenamos: $3x - 4y = -5$.<br>2. La expresión pedida es 5 veces mayor ($15x - 20y$).<br>3. Multiplicamos: $-5 \\times 5 = -25$." },
+                { q: "Si $x + y = 10$, ¿cuánto vale $x^2 + 2xy + y^2$?", o: ["10", "20", "100", "200"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>Reconocemos el producto notable: $x^2 + 2xy + y^2 = (x+y)^2$.<br>Sustituimos: $(10)^2 = 100$." },
+                { q: "Si $2a - b = 5$, ¿cuánto vale $4a - 2b + 10$?", o: ["15", "20", "25", "30"], a: 1, exp: "<b>Análisis PrepMaster:</b><br>1. El doble de $2a-b$ es $10$ ($4a-2b$).<br>2. Sumamos el 10 extra: $10 + 10 = 20$." },
+                { q: "Si $w/3 = 5$, ¿cuánto vale $2w$?", o: ["10", "15", "30", "45"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>1. Despejamos $w$: $w = 15$.<br>2. Calculamos el doble: $2(15) = 30$." }
+            ],
+            inecuaciones: [
+                { q: "¿Resultado de $4x + 5 < -11$?", o: ["x < -4", "x < 4", "x > -4", "x > 4"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>1. $4x < -11 - 5 \\rightarrow 4x < -16$.<br>2. Dividimos entre 4: $x < -4$." },
+                { q: "¿Resultado de $3x - 3 > 6$?", o: ["x < 3", "x > 1", "x > 3", "x > 9"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>1. $3x > 9$.<br>2. Dividimos entre 3: $x > 3$." },
+                { q: "¿Resultado de $5x + 8 \\le 13$?", o: ["x < 1", "x \\le 1", "x \\ge 1", "x \\le -1"], a: 1, exp: "<b>Análisis PrepMaster:</b><br>1. $5x \\le 13 - 8 \\rightarrow 5x \\le 5$.<br>2. Dividimos: $x \\le 1$." },
+                { q: "Máximo entero de $\\frac{8x + 4}{3} < 2x + 2$?", o: ["-5", "-4", "-3", "1"], a: 3, exp: "<b>Análisis PrepMaster:</b><br>1. $8x + 4 < 3(2x + 2) \\rightarrow 8x + 4 < 6x + 6$.<br>2. $2x < 2 \\rightarrow x < 1$.<br>3. El máximo entero menor a 1 es 0." },
+                { q: "¿Resultado de $2(x + 4) \\le 12$?", o: ["x < 2", "x \\le 2", "x > 2", "x \\le 6"], a: 1, exp: "<b>Análisis PrepMaster:</b><br>1. Dividimos entre 2: $x + 4 \\le 6$.<br>2. Restamos 4: $x \\le 2$." },
+                { q: "Mínimo entero de $x + 4 < 3x - 2$?", o: ["1", "2", "3", "4"], a: 3, exp: "<b>Análisis PrepMaster:</b><br>1. $4 + 2 < 3x - x \\rightarrow 6 < 2x$.<br>2. $3 < x$ (o $x > 3$).<br>3. El primer entero mayor que 3 es 4." },
+                { q: "Mínimo entero de $2x + 2 \\ge x - 3$?", o: ["-5", "-4", "-3", "-2"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>1. $2x - x \\ge -3 - 2 \\rightarrow x \\ge -5$.<br>2. El mínimo valor que puede tomar es -5." },
+                { q: "Mínimo entero de $4x - 3 \\ge x + 6$?", o: ["1", "2", "3", "4"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>1. $3x \\ge 9 \\rightarrow x \\ge 3$.<br>2. El mínimo valor entero es 3." },
+                { q: "¿Resultado de $-2x > 8$?", o: ["x > -4", "x < -4", "x > 4", "x < 4"], a: 1, exp: "<b>¡REGLA DE ORO!:</b> Al dividir entre -2, el signo <b>cambia de dirección</b>.<br>$x < 8 / (-2) \\rightarrow x < -4$." },
+                { q: "¿Qué intervalo representa $x > 3$?", o: ["(3, ∞)", "[3, ∞)", "(-∞, 3)", "(-∞, 3]"], a: 0, exp: "Símbolo $>$ significa abierto (paréntesis) y hacia la derecha (infinito positivo): $(3, \\infty)$." },
+                { q: "¿Qué intervalo representa $-2 \\le x < 5$?", o: ["(-2, 5)", "[-2, 5]", "[-2, 5)", "(-2, 5]"], a: 2, exp: "$\le$ es cerrado $[$ y $<$ es abierto $)$. Por lo tanto: $[-2, 5)$." },
+                { q: "Resuelve: $10 - x < 12$", o: ["x < -2", "x > -2", "x < 2", "x > 2"], a: 1, exp: "$-x < 2$. Multiplicamos por -1 y <b>cambiamos signo</b>: $x > -2$." }
+            ],
+            funciones: [
+                { q: "Valor de $f(x) = 5x + 10$ para $x = 2$:", o: ["20", "32", "38", "40"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>Sustituimos $x$: $f(2) = 5(2) + 10 = 10 + 10 = 20$." },
+                { q: "Valor de $f(x) = x^2 - x$ para $x = -4$:", o: ["-12", "12", "16", "20"], a: 3, exp: "<b>Análisis PrepMaster:</b><br>$f(-4) = (-4)^2 - (-4) = 16 + 4 = 20$." },
+                { q: "Si $f(x) = -4^x$, ¿cuál es el valor de $f(3)$?", o: ["-64", "-16", "16", "64"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>El signo está fuera de la potencia: $-(4 \\times 4 \\times 4) = -64$." },
+                { q: "¿Qué valor hace discontinua a $f(x) = \\frac{2}{x - 3}$?", o: ["-3", "0", "3", "Ninguno"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>Buscamos cuando el denominador es cero: $x - 3 = 0 \\rightarrow x = 3$." },
+                { q: "¿En qué punto no tiene valor real $f(x) = \\frac{x+4}{x-8}$?", o: ["-8", "-4", "4", "8"], a: 3, exp: "<b>Análisis PrepMaster:</b><br>La división entre cero no existe. Si $x = 8$, el denominador es cero." },
+                { q: "Valor de $f(x) = x(2^x)$ para $x = 3$:", o: ["8", "16", "24", "32"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>$f(3) = 3 \\cdot (2^3) = 3 \\cdot 8 = 24$." },
+                { q: "Si $f(x) = 3x - 1$, halla $f(4) + f(0)$:", o: ["10", "11", "12", "13"], a: 0, exp: "$f(4) = 11$, $f(0) = -1$. Suma: $11 - 1 = 10$." },
+                { q: "¿Qué tipo de función es $f(x) = x^2 + 5$?", o: ["Lineal", "Cuadrática", "Cúbica", "Constante"], a: 1, exp: "Como el mayor exponente de $x$ es 2, es una función cuadrática (parábola)." },
+                { q: "Dada la tabulación x={1,2}, y={5,10}, ¿qué función es?", o: ["f(x)=x+4", "f(x)=5x", "f(x)=x^2+4", "f(x)=10x"], a: 1, exp: "Cada valor de $y$ es 5 veces el de $x$. Por lo tanto, $f(x) = 5x$." },
+                { q: "Valor de $f(x) = \\sqrt{x+9}$ para $x = 16$:", o: ["4", "5", "7", "25"], a: 1, exp: "$\\sqrt{16+9} = \\sqrt{25} = 5$." },
+                { q: "Si $f(x) = 2x$, ¿cuánto vale $f(f(3))$?", o: ["6", "12", "18", "24"], a: 1, exp: "$f(3) = 6$. Ahora evaluamos $f(6) = 12$." },
+                { q: "¿Cuál es la pendiente de $f(x) = -3x - 1$?", o: ["-3", "-1", "3", "1"], a: 0, exp: "En una función lineal $y=mx+b$, la pendiente es el coeficiente de $x$: $-3$." }
+            ],
+            sustitucion: [
+                { q: "Si $y=10$, entonces $y^2 - 10$ es:", o: ["0", "10", "90", "100"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>1. Reemplazamos $y$ por $10$: $(10)^2 - 10$.<br>2. Elevamos al cuadrado: $10 \\times 10 = 100$.<br>3. Restamos: $100 - 10 = 90$." },
+                { q: "Si $m=-4$, entonces $m - 32$ es:", o: ["36", "28", "-28", "-36"], a: 3, exp: "<b>Análisis PrepMaster:</b><br>1. Sustituimos: $(-4) - 32$.<br>2. Como ambos son negativos, se suman y se mantiene el signo: $4 + 32 = 36$." },
+                { q: "Si $r=15$, entonces $-4(r - 20)$ es:", o: ["20", "15", "-15", "-20"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>1. Sustituimos: $15 - 20 = -5$.<br>2. Multiplicamos: $(-4) \\times (-5) = 20$." },
+                { q: "Si $x^3 - 5 = 22$, ¿cuánto vale $x+5$?", o: ["8", "14", "27", "32"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>1. $x^3 = 27 \\rightarrow x = 3$.<br>2. $3 + 5 = 8$." },
+                { q: "Si $w=5$, ¿cuál es el valor de $w^2 + w + 10$?", o: ["20", "30", "40", "50"], a: 2, exp: "<b>Análisis:</b><br>$25 + 5 + 10 = 40$." },
+                { q: "Si $x=2$, halla $\\frac{8^x + 5^x - 9^x}{x}$", o: ["2", "4", "8", "92"], a: 1, exp: "<b>Análisis:</b><br>$(64 + 25 - 81)/2 = 8/2 = 4$." },
+                { q: "Si $j=4$ y $k=-2$, ¿cuánto vale $\\frac{j^2}{k^3}$?", o: ["-2", "-1/2", "1/2", "2"], a: 0, exp: "<b>Análisis:</b><br>$16 / (-8) = -2$." },
+                { q: "Si $wx=80$ y $z=10$, halla $\\frac{16z}{wx}$", o: ["2", "4", "20", "40"], a: 0, exp: "<b>Análisis:</b><br>$160 / 80 = 2$." },
+                { q: "Si $x=3$, ¿cuál es el resultado de $3^x - 4x$?", o: ["-3", "3", "12", "15"], a: 3, exp: "<b>Análisis:</b><br>$27 - 12 = 15$." },
+                { q: "Si $a=2, b=3$, halla $a^b + b^a$", o: ["12", "13", "17", "25"], a: 2, exp: "<b>Análisis:</b><br>$8 + 9 = 17$." },
+                { q: "Si $x=-1$, halla $2x^3 - 4x^2 + 5$:", o: ["-1", "3", "7", "11"], a: 0, exp: "$-2 - 4 + 5 = -1$." },
+                { q: "Si $x=1, y=2, z=3$, halla $x+y+z$:", o: ["4", "5", "6", "9"], a: 2, exp: "$1+2+3=6$." }
+            ]
+        };
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+
+            const info = topicsInfo[tabId];
+            document.getElementById('topic-title').innerText = info.title;
+            document.getElementById('topic-text').innerHTML = info.desc;
+
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 category-card mb-6';
+                    
+                    let opts = '';
+                    item.o.forEach((opt, idx) => {
+                        opts += `<button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 flex items-center justify-between mb-2">
+                            <span>${String.fromCharCode(65 + idx)}) ${opt}</span>
+                        </button>`;
+                    });
+
+                    card.innerHTML = `
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-[10px] font-black bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-full uppercase tracking-widest">Reto PrepMaster ${i+1}</span>
+                        </div>
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" id="box_${cat}_${i}">
+                            ${opts}
+                        </div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <div class="flex items-center gap-2 mb-3 text-indigo-800 font-bold uppercase text-[11px] tracking-widest">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                                Análisis PrepMaster
+                            </div>
+                            <div class="text-[14px] text-indigo-900 font-medium leading-relaxed italic">
+                                ${item.exp}
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const buttons = box.querySelectorAll('.opt-btn');
+            const hint = document.getElementById(`hint_${id}`);
+            
+            buttons.forEach(b => b.disabled = true);
+            
+            if (sel === ans) { 
+                btn.classList.add('correct-opt'); 
+                score += 10;
+            } else { 
+                btn.classList.add('incorrect-opt'); 
+                buttons[ans].classList.add('correct-opt');
+                if(score > 0) score -= 2;
+            }
+            
+            hint.style.display = 'block';
+            
+            if (window.MathJax) {
+                MathJax.typesetPromise([hint]);
+            }
+            
+            updateScore();
+        }
+
+        function updateScore() {
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() {
+            if(confirm('¿Reiniciar todo el entrenamiento?')) {
+                score = 0;
+                updateScore();
+                render();
+                showTab('criterios');
+            }
+        }
+
+        window.onload = () => {
+            render();
+            showTab('criterios');
+        };
+    </script>
+</body>
+</html>

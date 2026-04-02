@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Geometría Visual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        
+        .opt-btn {
+            transition: all 0.2s ease;
+            border: 2px solid #e2e8f0;
+        }
+        .opt-btn:hover:not(:disabled) {
+            border-color: #6366f1;
+            background-color: #f8fafc;
+        }
+
+        .category-card {
+            transition: transform 0.2s;
+        }
+        .category-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .svg-container {
+            background: #f1f5f9;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">
+                    PrepMaster
+                </div>
+                <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
+                <h1 class="font-bold text-slate-500 text-sm hidden sm:block italic">Geometría Ilustrada</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors" title="Reiniciar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación -->
+        <nav class="flex flex-wrap gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto">
+            <button onclick="showTab('angulos')" id="btn-angulos" class="tab-btn flex-1 min-w-[120px] py-3 px-4 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600">
+                3.1 Ángulos
+            </button>
+            <button onclick="showTab('triangulos')" id="btn-triangulos" class="tab-btn flex-1 min-w-[120px] py-3 px-4 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                3.2 Polígonos
+            </button>
+            <button onclick="showTab('paralelas')" id="btn-paralelas" class="tab-btn flex-1 min-w-[120px] py-3 px-4 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                3.3 Paralelas
+            </button>
+            <button onclick="showTab('pitagoras')" id="btn-pitagoras" class="tab-btn flex-1 min-w-[120px] py-3 px-4 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                3.4 Pitágoras
+            </button>
+        </nav>
+
+        <!-- Banner -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl shadow-indigo-100 relative overflow-hidden">
+            <div class="relative z-10">
+                <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+                <div id="topic-text" class="text-indigo-100 text-sm leading-relaxed max-w-4xl italic"></div>
+            </div>
+        </div>
+
+        <!-- Contenidos -->
+        <div id="angulos" class="tab-content active space-y-6"></div>
+        <div id="triangulos" class="tab-content space-y-6"></div>
+        <div id="paralelas" class="tab-content space-y-6"></div>
+        <div id="pitagoras" class="tab-content space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+            angulos: { title: "3.1 Ángulos", desc: "Clasificación por suma: Suplementarios ($180^\\circ$), Complementarios ($90^\\circ$) y Perigonales ($360^\\circ$)." },
+            triangulos: { title: "3.2 Polígonos", desc: "Suma interna del triángulo ($180^\\circ$) y fórmula general para $n$ lados: $S = (n-2) \\cdot 180^\\circ$." },
+            paralelas: { title: "3.3 Rectas Paralelas", desc: "Relaciones visuales: Correspondientes (iguales), Alternos (iguales) y Colaterales (suman $180^\\circ$)." },
+            pitagoras: { title: "3.4 Pitágoras", desc: "Relación de lados en triángulos rectángulos: $a^2 + b^2 = c^2$. La hipotenusa siempre es el lado mayor." }
+        };
+
+        // Generador de SVG para Paralelas
+        const getParalelasSVG = (label1, label2, type) => {
+            return `<svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                <line x1="20" y1="40" x2="180" y2="40" stroke="#475569" stroke-width="3" />
+                <line x1="20" y1="80" x2="180" y2="80" stroke="#475569" stroke-width="3" />
+                <line x1="140" y1="10" x2="60" y2="110" stroke="#6366f1" stroke-width="2" />
+                <text x="100" y="35" font-size="12" font-weight="bold" fill="#4f46e5">${label1}</text>
+                <text x="75" y="95" font-size="12" font-weight="bold" fill="#4f46e5">${label2}</text>
+            </svg>`;
+        };
+
+        // Generador de SVG para Pitágoras
+        const getPitagorasSVG = (a, b, c) => {
+            return `<svg width="150" height="120" viewBox="0 0 150 120" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 30 20 L 30 100 L 120 100 Z" fill="none" stroke="#475569" stroke-width="3" />
+                <rect x="30" y="90" width="10" height="10" fill="none" stroke="#475569" stroke-width="1" />
+                <text x="15" y="65" font-size="12" fill="#6366f1" font-weight="bold">${a}</text>
+                <text x="70" y="115" font-size="12" fill="#6366f1" font-weight="bold">${b}</text>
+                <text x="85" y="55" font-size="12" fill="#4f46e5" font-weight="bold">${c}</text>
+            </svg>`;
+        };
+
+        const data = {
+            angulos: [
+                { q: "Si un ángulo mide $149^\\circ$, ¿cuánto mide su suplementario?", o: ["$31^\\circ$", "$153^\\circ$", "$41^\\circ$", "$180^\\circ$"], a: 0, exp: "Suplementarios suman $180^\\circ$. $180 - 149 = 31^\\circ$." },
+                { q: "Halla $x$ si los ángulos $51^\\circ, 32^\\circ$ y $x$ forman un ángulo llano.", o: ["$87^\\circ$", "$92^\\circ$", "$97^\\circ$", "$100^\\circ$"], a: 2, exp: "$180 - (51 + 32) = 180 - 83 = 97^\\circ$." },
+                { q: "Ángulo opuesto por el vértice a $72^\\circ$:", o: ["$18^\\circ$", "$72^\\circ$", "$108^\\circ$", "$148^\\circ$"], a: 1, exp: "Los opuestos por el vértice son siempre iguales." },
+                { q: "Complemento de $38^\\circ$:", o: ["$42^\\circ$", "$52^\\circ$", "$62^\\circ$", "$90^\\circ$"], a: 1, exp: "Complementarios suman $90^\\circ$. $90 - 38 = 52^\\circ$." },
+                { q: "Ángulos perigonales $4x$ y $x$, halla $x$:", o: ["$36^\\circ$", "$72^\\circ$", "$90^\\circ$", "$180^\\circ$"], a: 1, exp: "$5x = 360 \\rightarrow x = 72^\\circ$." },
+                { q: "Si $x$ y $2x$ son complementarios, $x$ vale:", o: ["$30^\\circ$", "$45^\\circ$", "$60^\\circ$", "$15^\\circ$"], a: 0, exp: "$3x = 90 \\rightarrow x = 30^\\circ$." },
+                { q: "Suplemento de $45^\\circ$:", o: ["$45^\\circ$", "$90^\\circ$", "$135^\\circ$", "$180^\\circ$"], a: 2, exp: "$180 - 45 = 135^\\circ$." },
+                { q: "Un ángulo perigonal dividido en 4 partes iguales:", o: ["$45^\\circ$", "$90^\\circ$", "$180^\\circ$", "$360^\\circ$"], a: 1, exp: "$360 / 4 = 90^\\circ$." },
+                { q: "Complemento de $25^\\circ$:", o: ["$65^\\circ$", "$75^\\circ$", "$155^\\circ$", "$5^\\circ$"], a: 0, exp: "$90 - 25 = 65^\\circ$." },
+                { q: "Si $3x = 60^\\circ$ por ser opuestos:", o: ["$10^\\circ$", "$20^\\circ$", "$30^\\circ$", "$60^\\circ$"], a: 1, exp: "$x = 60 / 3 = 20^\\circ$." },
+                { q: "Suplemento de $100^\\circ$:", o: ["$10^\\circ$", "$80^\\circ$", "$90^\\circ$", "$100^\\circ$"], a: 1, exp: "$180 - 100 = 80^\\circ$." },
+                { q: "Ángulo igual a su complemento:", o: ["$30^\\circ$", "$45^\\circ$", "$60^\\circ$", "$90^\\circ$"], a: 1, exp: "$2x = 90 \\rightarrow x = 45^\\circ$." }
+            ],
+            triangulos: [
+                { q: "Tercer ángulo si otros son $82^\\circ$ y $30^\\circ$:", o: ["$68^\\circ$", "$72^\\circ$", "$80^\\circ$", "$112^\\circ$"], a: 0, exp: "$180 - 112 = 68^\\circ$." },
+                { q: "Suma interna de un hexágono ($n=6$):", o: ["$360^\\circ$", "$540^\\circ$", "$720^\\circ$", "$900^\\circ$"], a: 2, exp: "$(6-2) \\cdot 180 = 720^\\circ$." },
+                { q: "Isósceles con ángulo desigual de $40^\\circ$:", o: ["$40^\\circ$", "$60^\\circ$", "$70^\\circ$", "$80^\\circ$"], a: 2, exp: "$(180 - 40) / 2 = 70^\\circ$." },
+                { q: "Suma interna de un cuadrilátero:", o: ["$180^\\circ$", "$360^\\circ$", "$540^\\circ$", "$720^\\circ$"], a: 1, exp: "$(4-2) \\cdot 180 = 360^\\circ$." },
+                { q: "Suma interna de pentágono ($n=5$):", o: ["$360^\\circ$", "$540^\\circ$", "$720^\\circ$", "$180^\\circ$"], a: 1, exp: "$3 \\cdot 180 = 540^\\circ$." },
+                { q: "Ángulo agudo faltante en triángulo rectángulo con $30^\\circ$:", o: ["$30^\\circ$", "$60^\\circ$", "$90^\\circ$", "$45^\\circ$"], a: 1, exp: "$90 - 30 = 60^\\circ$." },
+                { q: "Si la suma interna es $1080^\\circ$, ¿lados?", o: ["$6$", "$8$", "$10$", "$12$"], a: 1, exp: "$1080/180 = 6 \\rightarrow n-2=6 \\rightarrow n=8$." },
+                { q: "Ángulo de un triángulo equilátero:", o: ["$45^\\circ$", "$60^\\circ$", "$90^\\circ$", "$180^\\circ$"], a: 1, exp: "$180 / 3 = 60^\\circ$." },
+                { q: "Suma interna de decágono ($n=10$):", o: ["$1080^\\circ$", "$1260^\\circ$", "$1440^\\circ$", "$1800^\\circ$"], a: 2, exp: "$8 \\cdot 180 = 1440^\\circ$." },
+                { q: "Ángulos $x, 2x, 3x$ en triángulo. Mayor:", o: ["$30^\\circ$", "$60^\\circ$", "$90^\\circ$", "$120^\\circ$"], a: 2, exp: "$6x=180 \\rightarrow x=30. 3(30)=90^\\circ$." },
+                { q: "Suma interna de triángulo:", o: ["$90^\\circ$", "$180^\\circ$", "$360^\\circ$", "$270^\\circ$"], a: 1, exp: "Siempre $180^\\circ$." },
+                { q: "Suma interna de heptágono ($n=7$):", o: ["$720^\\circ$", "$900^\\circ$", "$1080^\\circ$", "$1260^\\circ$"], a: 1, exp: "$5 \\cdot 180 = 900^\\circ$." }
+            ],
+            paralelas: [
+                { q: "Halla el ángulo correspondiente $b$ si el otro es $62^\\circ$.", svg: getParalelasSVG("62°", "b", "corr"), o: ["$28^\\circ$", "$62^\\circ$", "$118^\\circ$", "$208^\\circ$"], a: 1, exp: "Ángulos correspondientes son iguales entre paralelas." },
+                { q: "Si un ángulo interno es $102^\\circ$, halla su colateral interno.", svg: getParalelasSVG("102°", "c", "col"), o: ["$78^\\circ$", "$102^\\circ$", "$118^\\circ$", "$180^\\circ$"], a: 0, exp: "Colaterales internos suman $180^\\circ$. $180 - 102 = 78^\\circ$." },
+                { q: "Alternos internos: $4x+10$ y $70^\\circ$. Halla $x$.", svg: getParalelasSVG("4x+10", "70°", "alt"), o: ["$10$", "$15$", "$20$", "$25$"], a: 1, exp: "Alternos internos son iguales: $4x+10=70 \\rightarrow 4x=60 \\rightarrow x=15$." },
+                { q: "Si un ángulo es $110^\\circ$, ¿cuánto mide su alterno externo?", svg: getParalelasSVG("110°", "ext", "alte"), o: ["$70^\\circ$", "$110^\\circ$", "$180^\\circ$", "$90^\\circ$"], a: 1, exp: "Alternos externos son iguales entre paralelas." },
+                { q: "Colaterales externos $x$ y $135^\\circ$. Halla $x$.", svg: getParalelasSVG("135°", "x", "cole"), o: ["$45^\\circ$", "$135^\\circ$", "$180^\\circ$", "$90^\\circ$"], a: 0, exp: "Colaterales externos suman $180^\\circ$. $180-135=45^\\circ$." },
+                { q: "Si un ángulo es $50^\\circ$, su opuesto por el vértice es:", o: ["$40^\\circ$", "$50^\\circ$", "$130^\\circ$", "$140^\\circ$"], a: 1, exp: "Siempre iguales." },
+                { q: "Correspondientes: $2x$ y $80^\\circ$. Halla $x$.", svg: getParalelasSVG("2x", "80°", "corr"), o: ["$20$", "$40$", "$80$", "$160$"], a: 1, exp: "$2x=80 \\rightarrow x=40$." },
+                { q: "Ángulos alternos internos son:", o: ["Suplementarios", "Complementarios", "Iguales", "Opuestos"], a: 2, exp: "Propiedad fundamental de paralelas." },
+                { q: "Colateral interno de $30^\\circ$:", svg: getParalelasSVG("30°", "y", "col"), o: ["$30^\\circ$", "$60^\\circ$", "$150^\\circ$", "$180^\\circ$"], a: 2, exp: "$180 - 30 = 150^\\circ$." },
+                { q: "Alterno externo: $x+20$ y $50^\\circ$. Halla $x$.", svg: getParalelasSVG("x+20", "50°", "alte"), o: ["$30$", "$50$", "$70$", "$110$"], a: 0, exp: "$x+20=50 \\rightarrow x=30$." },
+                { q: "Si la transversal es perpendicular ($90^\\circ$):", o: ["$45^\\circ$", "$90^\\circ$", "$180^\\circ$", "$0^\\circ$"], a: 1, exp: "Todos los ángulos serán rectos." },
+                { q: "Correspondiente de $150^\\circ$:", o: ["$30^\\circ$", "$150^\\circ$", "$180^\\circ$", "$60^\\circ$"], a: 1, exp: "Iguales entre paralelas." }
+            ],
+            pitagoras: [
+                { q: "Halla la hipotenusa $c$ si catetos miden $9$ y $12$.", svg: getPitagorasSVG("9", "12", "c"), o: ["$15$", "$17$", "$21$", "$144$"], a: 0, exp: "$c = \\sqrt{9^2 + 12^2} = \\sqrt{225} = 15$." },
+                { q: "Hipotenusa $35$, cateto $21$. Halla el otro cateto.", svg: getPitagorasSVG("21", "b", "35"), o: ["$14$", "$21$", "$28$", "$30$"], a: 2, exp: "$b = \\sqrt{35^2 - 21^2} = \\sqrt{784} = 28$." },
+                { q: "Hipotenusa $10$, cateto $8$. Halla el otro cateto.", svg: getPitagorasSVG("a", "8", "10"), o: ["$2$", "$4$", "$6$", "$8$"], a: 2, exp: "$\\sqrt{100 - 64} = \\sqrt{36} = 6$." },
+                { q: "Caminata: $60$m Este, $80$m Sur. Distancia recta:", svg: getPitagorasSVG("60", "80", "dist"), o: ["$100$m", "$140$m", "$200$m$m", "$520$m"], a: 0, exp: "$\\sqrt{60^2 + 80^2} = \\sqrt{10000} = 100$m." },
+                { q: "Catetos $5$ y $12$. Hipotenusa:", svg: getPitagorasSVG("5", "12", "c"), o: ["$13$", "$17$", "$19$", "$25$"], a: 0, exp: "$\\sqrt{25 + 144} = \\sqrt{169} = 13$." },
+                { q: "Hipotenusa $25$, cateto $7$. Halla el otro.", svg: getPitagorasSVG("7", "b", "25"), o: ["$18$", "$20$", "$24$", "$32$"], a: 2, exp: "$\\sqrt{625 - 49} = \\sqrt{576} = 24$." },
+                { q: "Halla $c$ si $a=8$ y $b=15$.", svg: getPitagorasSVG("8", "15", "c"), o: ["$16$", "$17$", "$23$", "$17.5$"], a: 1, exp: "$\\sqrt{64 + 225} = \\sqrt{289} = 17$." },
+                { q: "Escalera $13$m, base a $5$m. Altura muro:", svg: getPitagorasSVG("h", "5", "13"), o: ["$8$m", "$10$m", "$12$m", "$14$m"], a: 2, exp: "$\\sqrt{169 - 25} = 12$m." },
+                { q: "Catetos $3$ y $4$. Hipotenusa:", svg: getPitagorasSVG("3", "4", "c"), o: ["$5$", "$7$", "$12$", "$25$"], a: 0, exp: "$\\sqrt{9 + 16} = 5$." },
+                { q: "Risco $160$m, rampa toca suelo a $120$m. Rampa:", svg: getPitagorasSVG("160", "120", "L"), o: ["$200$m", "$280$m", "$400$m", "$500$m"], a: 0, exp: "$\\sqrt{25600 + 14400} = 200$m." },
+                { q: "Halla cateto si hipotenusa $= 17$ y cateto $= 15$.", o: ["$2$", "$8$", "$10$", "$12$"], a: 1, exp: "$\\sqrt{289 - 225} = 8$." },
+                { q: "Catetos $20$ y $21$. Hipotenusa:", svg: getPitagorasSVG("20", "21", "c"), o: ["$25$", "$29$", "$31$", "$41$"], a: 1, exp: "$\\sqrt{400 + 441} = \\sqrt{841} = 29$." }
+            ]
+        };
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+
+            const info = topicsInfo[tabId];
+            document.getElementById('topic-title').innerText = info.title;
+            document.getElementById('topic-text').innerHTML = info.desc;
+
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 category-card mb-6';
+                    
+                    let svgHtml = item.svg ? `<div class="svg-container">${item.svg}</div>` : '';
+                    
+                    let opts = '';
+                    item.o.forEach((opt, idx) => {
+                        opts += `<button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 flex items-center justify-between mb-2">
+                            <span>${String.fromCharCode(65 + idx)}) ${opt}</span>
+                        </button>`;
+                    });
+
+                    card.innerHTML = `
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-[10px] font-black bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-full uppercase tracking-widest">Reto PrepMaster ${i+1}</span>
+                        </div>
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        ${svgHtml}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" id="box_${cat}_${i}">
+                            ${opts}
+                        </div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <div class="flex items-center gap-2 mb-3 text-indigo-800 font-bold uppercase text-[11px] tracking-widest">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                                Análisis PrepMaster
+                            </div>
+                            <div class="text-[14px] text-indigo-900 font-medium leading-relaxed italic">
+                                ${item.exp}
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const buttons = box.querySelectorAll('.opt-btn');
+            const hint = document.getElementById(`hint_${id}`);
+            
+            buttons.forEach(b => b.disabled = true);
+            
+            if (sel === ans) { 
+                btn.classList.add('correct-opt'); 
+                score += 10;
+            } else { 
+                btn.classList.add('incorrect-opt'); 
+                buttons[ans].classList.add('correct-opt');
+                if(score > 0) score -= 2;
+            }
+            
+            hint.style.display = 'block';
+            
+            if (window.MathJax) {
+                MathJax.typesetPromise([hint]);
+            }
+            
+            updateScore();
+        }
+
+        function updateScore() {
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() {
+            if(confirm('¿Reiniciar todo el progreso?')) {
+                score = 0;
+                updateScore();
+                render();
+                showTab('angulos');
+            }
+        }
+
+        window.onload = () => {
+            render();
+            showTab('angulos');
+        };
+    </script>
+</body>
+</html>

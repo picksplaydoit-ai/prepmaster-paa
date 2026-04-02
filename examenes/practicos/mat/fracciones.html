@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrenamiento Aritmético: Fracciones y Divisibilidad</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .frac {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+            font-weight: 700;
+            margin: 0 2px;
+        }
+        .frac > span { display: block; }
+        .frac span.num { border-bottom: 2px solid #475569; padding: 0 2px; }
+        
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #b91c1c !important; }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .theory-box {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-left: 5px solid #4f46e5;
+            border-radius: 0.75rem;
+        }
+        
+        .opt-btn:disabled { cursor: default; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <header class="bg-indigo-700 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col items-center">
+            <h1 class="text-xl font-bold tracking-tight text-center">Master en Aritmética: Preparación Integral</h1>
+            <nav class="flex gap-1 mt-3 overflow-x-auto w-full justify-start md:justify-center no-scrollbar">
+                <button onclick="showTab('divisibilidad')" class="tab-btn whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold bg-white text-indigo-700 shadow" data-tab="divisibilidad">Divisibilidad</button>
+                <button onclick="showTab('teoria')" class="tab-btn whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold hover:bg-indigo-600 transition" data-tab="teoria">Teoría Fracciones</button>
+                <button onclick="showTab('conversion')" class="tab-btn whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold hover:bg-indigo-600 transition" data-tab="conversion">Conversiones</button>
+                <button onclick="showTab('sumaresta')" class="tab-btn whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold hover:bg-indigo-600 transition" data-tab="sumaresta">Suma y Resta</button>
+                <button onclick="showTab('multidiv')" class="tab-btn whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold hover:bg-indigo-600 transition" data-tab="multidiv">Mult. y Div.</button>
+                <button onclick="showTab('mcmmcd')" class="tab-btn whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold hover:bg-indigo-600 transition" data-tab="mcmmcd">MCM / MCD</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-4 py-6 pb-20">
+        
+        <!-- DIVISIBILIDAD -->
+        <div id="divisibilidad" class="tab-content active space-y-6">
+            <div class="theory-box p-5 shadow-sm border border-slate-200">
+                <h3 class="font-bold text-indigo-700 mb-3 flex items-center gap-2"><span>🔍</span> Repaso: Criterios para Dividir sin Resto</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-600">
+                    <div>
+                        <p><b>• Por 2:</b> Basta mirar la última cifra. Si es <b>par (0, 2, 4, 6 u 8)</b>, se puede partir a la mitad exactamente.</p>
+                        <p><b>• Por 3:</b> No importa el tamaño del número; <b>suma sus dígitos</b>. Si esa suma está en la tabla del 3, el número original también.</p>
+                        <p><b>• Por 4:</b> Mira solo las <b>dos últimas cifras</b>. Si son 00 o múltiplo de 4, todo el número es divisible.</p>
+                    </div>
+                    <div>
+                        <p><b>• Por 5:</b> El criterio más fácil. Si termina en <b>0 o en 5</b>, el número es múltiplo de 5.</p>
+                        <p><b>• Por 6:</b> Es una regla combinada. El número debe ser par (regla del 2) y sus cifras deben sumar un múltiplo de 3.</p>
+                        <p><b>• Por 9:</b> Igual que el 3, pero la <b>suma de sus dígitos</b> debe dar un múltiplo de 9 (ej: 18, 27, 36).</p>
+                    </div>
+                </div>
+            </div>
+            <div id="cont_divisibilidad" class="space-y-4"></div>
+        </div>
+
+        <!-- TIPOS FRACCIONES -->
+        <div id="teoria" class="tab-content space-y-6">
+            <div class="theory-box p-5 shadow-sm border border-slate-200">
+                <h3 class="font-bold text-indigo-700 mb-3 flex items-center gap-2"><span>📊</span> Repaso: Clasificación y Conceptos</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-600">
+                    <div>
+                        <p><b>• Propias:</b> Tienen menos de una unidad. El numerador es <b>más pequeño</b> que el denominador. Ej: 3/4.</p>
+                        <p><b>• Impropias:</b> Representan una unidad o más. El numerador es <b>mayor o igual</b> al denominador. Ej: 5/2.</p>
+                    </div>
+                    <div>
+                        <p><b>• Equivalentes:</b> Son diferentes "nombres" para la <b>misma cantidad</b>. Se obtienen multiplicando o dividiendo arriba y abajo por lo mismo.</p>
+                        <p><b>• Unitarias:</b> Valen exactamente 1. Sucede cuando el número de <b>arriba y abajo son iguales</b>.</p>
+                    </div>
+                </div>
+                <p class="text-xs mt-3 text-slate-400"><b>Nota:</b> El denominador nunca puede ser cero porque no existe la división entre nada.</p>
+            </div>
+            <div id="cont_teoria" class="space-y-4"></div>
+        </div>
+
+        <!-- CONVERSIÓN -->
+        <div id="conversion" class="tab-content space-y-6">
+            <div class="theory-box p-5 shadow-sm border border-slate-200">
+                <h3 class="font-bold text-indigo-700 mb-3 flex items-center gap-2"><span>🔄</span> Repaso: Cambiando Formatos</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-600">
+                    <div>
+                        <p><b>• Impropia a Mixta:</b> Piensa cuántas veces cabe el de abajo en el de arriba. Ese es el <b>entero</b>. Lo que sobra es el <b>nuevo numerador</b>.</p>
+                    </div>
+                    <div>
+                        <p><b>• Mixta a Impropia:</b> Haz el camino inverso: multiplica el entero por el denominador y suma el de arriba. Es como contar cuántos pedacitos hay en total.</p>
+                    </div>
+                </div>
+                <p class="text-xs mt-2 text-slate-400 italic">Para decimales: Divide el numerador entre el denominador usando la calculadora o división larga.</p>
+            </div>
+            <div id="cont_conversion" class="space-y-4"></div>
+        </div>
+
+        <!-- SUMA Y RESTA -->
+        <div id="sumaresta" class="tab-content space-y-6">
+            <div class="theory-box p-5 shadow-sm border border-slate-200">
+                <h3 class="font-bold text-indigo-700 mb-3 flex items-center gap-2"><span>➕</span> Repaso: Cómo Operar Correctamente</h3>
+                <div class="text-sm text-slate-600 space-y-2">
+                    <p><b>• Si tienen el mismo denominador:</b> Solo suma o resta los números de arriba. El de abajo es el "apellido" de la fracción y se mantiene igual.</p>
+                    <p><b>• Si tienen distinto denominador:</b> No puedes sumarlos directamente. Primero debes usar el <b>m.c.m.</b> para convertirlas en fracciones equivalentes que tengan el mismo denominador.</p>
+                </div>
+            </div>
+            <div id="cont_sumaresta" class="space-y-4"></div>
+        </div>
+
+        <!-- MULT Y DIV -->
+        <div id="multidiv" class="tab-content space-y-6">
+            <div class="theory-box p-5 shadow-sm border border-slate-200">
+                <h3 class="font-bold text-indigo-700 mb-3 flex items-center gap-2"><span>✖️</span> Repaso: Operaciones Rápidas</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-600">
+                    <div>
+                        <p><b>• Multiplicar:</b> Es el camino más fácil. Solo multiplica <b>arriba por arriba</b> y <b>abajo por abajo</b> en línea recta.</p>
+                    </div>
+                    <div>
+                        <p><b>• Dividir:</b> Se multiplica en <b>forma de cruz</b>. El numerador de la primera por el denominador de la segunda da el numerador final.</p>
+                    </div>
+                </div>
+                <p class="text-xs mt-2 text-slate-400">Si aparece "de" (ej: la mitad de un cuarto), significa multiplicar.</p>
+            </div>
+            <div id="cont_multidiv" class="space-y-4"></div>
+        </div>
+
+        <!-- MCM Y MCD -->
+        <div id="mcmmcd" class="tab-content space-y-6">
+            <div class="theory-box p-5 shadow-sm border border-slate-200">
+                <h3 class="font-bold text-indigo-700 mb-3 flex items-center gap-2"><span>📏</span> Repaso: ¿Cuál usar y cuándo?</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-600">
+                    <div>
+                        <p><b>• MCM (Mínimo Común Múltiplo):</b> Úsalo cuando buscas <b>coincidencias futuras</b> en el tiempo o la medida más pequeña para alinear cosas.</p>
+                    </div>
+                    <div>
+                        <p><b>• MCD (Máximo Común Divisor):</b> Úsalo cuando quieras <b>repartir o dividir</b> objetos en grupos o piezas lo más grandes posibles sin que sobre nada.</p>
+                    </div>
+                </div>
+            </div>
+            <div id="cont_mcmmcd" class="space-y-4"></div>
+        </div>
+
+    </main>
+
+    <script>
+        function f(n, d) {
+            return `<div class="frac"><span class="num">${n}</span><span class="den">${d}</span></div>`;
+        }
+
+        const data = {
+            divisibilidad: [
+                { q: "¿Cuál de estos números es divisible por 3?", options: ["254", "1,001", "723", "800"], ans: 2, exp: "Para el 723: Sumamos sus cifras 7+2+3 = 12. Como el 12 está en la tabla del 3, el número 723 se puede dividir entre 3 exactamente." },
+                { q: "¿Qué número es divisible por 6 a la vez?", options: ["412", "510", "225", "116"], ans: 1, exp: "El 510 termina en 0 (es par, cumple con el 2) y sus cifras 5+1+0 suman 6 (múltiplo de 3). Al cumplir ambas reglas, es divisible por 6." },
+                { q: "Un número que termina en 0 siempre es divisible por:", options: ["2, 5 y 10", "Solo 10", "3 y 5", "2 y 3"], ans: 0, exp: "Terminar en 0 garantiza que es par (divisible por 2), que está en la tabla del 5 y, por definición, en la del 10." },
+                { q: "¿Cuál de estos es divisible por 9?", options: ["1,827", "2,009", "3,333", "4,501"], ans: 0, exp: "Sumamos las cifras de 1,827: 1+8+2+7 = 18. Como 18 es múltiplo de 9 (9x2), el número es divisible por 9." },
+                { q: "¿Cuál de estos NO es divisible por 2?", options: ["1,002", "998", "457", "220"], ans: 2, exp: "Un número es divisible por 2 solo si termina en 0, 2, 4, 6 u 8. El 457 termina en 7 (impar), así que no se puede dividir entre 2 sin dejar resto." },
+                { q: "¿Cuál es divisible por 4?", options: ["1,014", "2,024", "3,034", "4,054"], ans: 1, exp: "La regla del 4 dice que miremos las últimas dos cifras. En 2,024 es '24'. Como 24 es 4x6, todo el número es divisible." },
+                { q: "¿Es el 1,230 divisible por 6?", options: ["Sí", "No", "Solo por 2", "Solo por 3"], ans: 0, exp: "Sí, porque es par (cumple regla del 2) y 1+2+3+0=6 (cumple regla del 3). Si cumple 2 y 3, cumple la del 6." },
+                { q: "¿Cuál es divisible por 5 y 3 al mismo tiempo?", options: ["50", "100", "75", "25"], ans: 2, exp: "75 termina en 5 (cumple regla del 5) y 7+5=12 (cumple regla del 3). Por lo tanto, cumple ambas." },
+                { q: "Todo número divisible por 10 es también divisible por:", options: ["3", "4", "5", "6"], ans: 2, exp: "Si un número termina en 0 (divisible por 10), por regla de terminación también tiene que ser divisible por 5." },
+                { q: "¿Qué cifra falta en 8_4 para que sea divisible por 9?", options: ["2", "4", "6", "8"], ans: 2, exp: "Sumamos lo que tenemos: 8 + 4 = 12. Buscamos el siguiente múltiplo de 9 después de 12, que es 18. De 12 para 18 faltan 6." }
+            ],
+            teoria: [
+                { q: "¿Cuál es una fracción propia?", options: [f(12,14), f(13,11), f(7,4), "2"], ans: 0, exp: "Una fracción propia es aquella donde el numerador es menor que el denominador (vale menos que 1). 12/14 cumple esto." },
+                { q: "¿Cuál es equivalente (vale lo mismo) que "+f(3,5)+"?", options: [f(12,20), f(12,18), f(14,24), f(15,30)], ans: 0, exp: "Si multiplicas el 3 por 4 da 12, y el 5 por 4 da 20. Al hacer lo mismo arriba y abajo, obtienes una equivalente: 12/20." },
+                { q: "¿Cuál de estas puede convertirse a número mixto?", options: [f(16,17), f(25,24), f(7,8), f(19,20)], ans: 1, exp: "Solo las fracciones impropias (donde el de arriba es mayor) pueden sacarse enteros para formar un número mixto." },
+                { q: "¿Fracción simplificada de "+f(1240,1800)+"? ", options: [f(12,18), f(31,45), f(30,42), f(622,800)], ans: 1, exp: "Si divides 1,240 entre 40 y 1,800 entre 40, obtienes 31/45. Es la forma más pequeña de representar esa cantidad." },
+                { q: "¿Cuál de estas es impropia?", options: [f(1,2), f(2,3), f(108,109), f(1000,1000)], ans: 3, exp: "Una fracción es impropia si el numerador es mayor o igual al denominador. 1000/1000 es igual a 1 entero, por lo que es impropia." },
+                { q: "¿Cuál está entre 4 y "+f(22,5)+"? (es decir, entre 4 y 4.4)", options: [f(21,5), f(23,5), f(23,4), f(24,8)], ans: 0, exp: "Al convertir a decimal: 21/5 = 4.2. Como 4.2 es mayor que 4 y menor que 4.4, es la respuesta correcta." },
+                { q: "¿Cuál de las siguientes fracciones es la mayor?", options: [f(16,7), f(21,9), f(12,8), f(51,30)], ans: 1, exp: "Convertimos a decimales aproximados: 16/7≈2.28, 21/9≈2.33, 12/8=1.5, 51/30=1.7. La más alta es 2.33." },
+                { q: "¿Cuál NO puede ser usado como denominador?", options: ["1", "-2", "0", "100"], ans: 2, exp: "En matemáticas, dividir entre 0 no tiene sentido físico ni lógico, por lo que el denominador jamás puede ser cero." },
+                { q: "¿Qué fracción comparte denominador con 16/120?", options: [f(120,4), f(120,16), f(2,120), f(4,60)], ans: 2, exp: "Compartir denominador significa tener el mismo número abajo. 2/120 tiene el mismo 120 abajo." },
+                { q: "¿Cuál de estas es una fracción unitaria?", options: [f(5,4), f(8,8), f(1,8), f(0,8)], ans: 1, exp: "Unitaria significa que vale exactamente 1 unidad. Esto pasa cuando el numerador es igual al denominador: 8/8 = 1." }
+            ],
+            conversion: [
+                { q: "Convierte "+f(15,2)+" a número mixto:", options: ["4 1/2", "5 1/2", "6 1/2", "7 1/2"], ans: 3, exp: "El 2 cabe 7 veces en el 15 (2x7=14). Sobra 1. Entonces tenemos 7 enteros y nos queda 1/2." },
+                { q: "Convierte "+f(27,8)+" a número mixto:", options: ["3 3/4", "3 3/8", "4 3/4", "4 3/8"], ans: 1, exp: "El 8 cabe 3 veces en el 27 (8x3=24). Del 24 al 27 sobran 3. El resultado es 3 enteros 3/8." },
+                { q: "Convierte "+f(38,6)+" a número mixto:", options: ["3 1/3", "3 2/3", "4 2/3", "6 1/3"], ans: 3, exp: "38 ÷ 6 = 6 enteros y sobran 2/6. Al simplificar 2/6 (dividiendo entre 2), obtenemos 1/3. Total: 6 1/3." },
+                { q: "Convierte "+f(13,8)+" a número mixto:", options: ["1 7/8", "1 5/8", "1 3/8", "1 1/8"], ans: 1, exp: "El 8 cabe 1 vez en el 13. Sobran 5. Queda 1 entero con 5/8." },
+                { q: "Convierte el decimal 0.75 a fracción:", options: [f(4,3), f(2,3), f(3,4), f(3,8)], ans: 2, exp: "0.75 es lo mismo que 75/100. Si simplificamos dividiendo ambos entre 25, llegamos a 3/4." },
+                { q: "Convierte "+f(20,6)+" a número mixto:", options: ["2 2/3", "2 1/3", "3 2/3", "3 1/3"], ans: 3, exp: "20 ÷ 6 = 3 (porque 6x3=18) y sobran 2. Queda 3 2/6, que simplificado es 3 1/3." },
+                { q: "Convierte "+f(22,4)+" a decimal:", options: ["2.5", "3.4", "5.5", "5.8"], ans: 2, exp: "Simplemente realizamos la división 22 entre 4, lo que nos da exactamente 5.5." },
+                { q: "Convierte "+f(33,10)+" a número mixto:", options: ["3 3/10", "3 3/5", "3 1/10", "3 1/5"], ans: 0, exp: "El 10 cabe 3 veces en el 33 (10x3=30) y sobran 3. Se escribe como 3 3/10." },
+                { q: "Convierte 12 "+f(4,5)+" a fracción impropia:", options: [f(64,5), f(60,5), f(32,5), f(36,5)], ans: 0, exp: "Multiplicamos el entero (12) por el denominador (5) y sumamos el numerador (4): 12x5=60; 60+4=64. Queda 64/5." },
+                { q: "Convierte "+f(8,12)+" a decimal:", options: ["0.33", "0.5", "0.66", "1.5"], ans: 2, exp: "Dividimos 8 entre 12. Es lo mismo que 2/3, cuyo valor decimal es periódico: 0.666..." }
+            ],
+            sumaresta: [
+                { q: "¿Qué resultado da "+f(1,4)+" + "+f(2,8)+"?", options: [f(1,2), f(1,4), f(1,8), f(3,8)], ans: 0, exp: "Nota que 2/8 es equivalente a 1/4. Entonces sumamos 1/4 + 1/4 = 2/4. Al simplificar 2/4 obtenemos 1/2." },
+                { q: "¿A qué es igual "+f(1,2)+" + "+f(1,4)+" + "+f(1,3)+"?", options: [f(12,13), f(13,12), f(8,24), f(24,8)], ans: 1, exp: "El MCM de 2, 4 y 3 es 12. Convertimos: 6/12 + 3/12 + 4/12 = 13/12." },
+                { q: "Resuelve: -"+f(1,9)+" + "+f(3,2)+" - "+f(1,2), options: [f(3,9), f(5,9), f(8,9), f(10,9)], ans: 2, exp: "Es más fácil primero restar las que tienen igual denominador: 3/2 - 1/2 = 2/2 = 1 entero. Luego 1 entero - 1/9 = 8/9." },
+                { q: "Resuelve: "+f(1,3)+" + "+f(4,3)+" + "+f(18,3)+" - "+f(20,3), options: [f(2,3), f(6,3), f(4,3), "1"], ans: 3, exp: "Como todas tienen denominador 3, solo operamos arriba: (1+4+18-20) = 3. Nos queda 3/3, que es igual a 1." },
+                { q: "Resuelve: "+f(7,4)+" + "+f(8,3)+" - "+f(16,6), options: [f(7,4), f(7,8), f(5,6), f(3,4)], ans: 0, exp: "16/6 simplificado es 8/3. Entonces 8/3 - 8/3 se cancelan (da 0). Solo nos queda el 7/4." },
+                { q: "Suma catorce octavos, siete doceavos y dos tercios:", options: [f(2,3), "2", "3", "4"], ans: 2, exp: "Simplificamos 14/8 a 7/4. El MCM de 4, 12 y 3 es 12. Convertimos: 21/12 + 7/12 + 8/12 = 36/12 = 3 enteros exactos." },
+                { q: "Suma mixtas: 4 1/3 + 6 2/3", options: ["8 2/3", "10 1/3", "10 2/3", "11"], ans: 3, exp: "Sumamos los enteros: 4+6=10. Sumamos las fracciones: 1/3+2/3 = 3/3 = 1. Total: 10 + 1 = 11." },
+                { q: "Resuelve: 14/7 - 2 + 8/2 - 4", options: [f(2,7), "-1/4", "-2/7", "0"], ans: 3, exp: "Primero resolvemos las divisiones: 14/7=2 y 8/2=4. La operación queda: 2 - 2 + 4 - 4 = 0." },
+                { q: "Resuelve: -7/3 + 8/6 + 2/18 - 1/4", options: [f(-4,3), f(-31,36), f(-41,36), f(-31,46)], ans: 2, exp: "El MCM de 3, 6, 18 y 4 es 36. Convertimos todo a treinta-iseisavos: (-84 + 48 + 4 - 9) / 36 = -41/36." },
+                { q: "Suma: 1/2 + 1/3 + 1/4 + 1/5", options: [f(77,60), f(73,60), f(1,14), f(4,14)], ans: 0, exp: "MCM de 2, 3, 4 y 5 es 60. Las fracciones equivalentes son: 30/60 + 20/60 + 15/60 + 12/60 = 77/60." }
+            ],
+            multidiv: [
+                { q: "¿Qué resulta de multiplicar 3/8 por 1/2?", options: [f(3,4), f(7,8), f(17,8), f(3,16)], ans: 3, exp: "Multiplicación directa: multiplicamos 3x1 (arriba) y 8x2 (abajo). Resultado 3/16." },
+                { q: "Divide 16/9 entre 1/3:", options: [f(25,9), f(25,18), f(16,3), f(5,9)], ans: 2, exp: "Multiplicamos cruzado: el 16 de arriba por el 3 de abajo (16x3=48) y el 9 de abajo por el 1 de arriba (9x1=9). 48/9 simplificado entre 3 es 16/3." },
+                { q: "(2/7) × (1/8) × (8/7) es igual a:", options: [f(2,49), f(1,49), f(1,7), f(3,14)], ans: 0, exp: "Podemos 'cancelar' el 8 que multiplica con el 8 que divide. Nos queda (2x1) arriba y (7x7) abajo = 2/49." },
+                { q: "Resultado de (16/100) × (50/2) × (1/4):", options: [f(16,240), f(8,45), "1", "2"], ans: 2, exp: "(50/2) es 25. Entonces: 16/100 * 25 * 1/4. Multiplicamos: (16*25*1)/(100*1*4) = 400/400 = 1." },
+                { q: "(1/2) ÷ (2/5) ÷ (3/8):", options: [f(2,3), f(5,3), f(10,3), f(50,3)], ans: 2, exp: "Primero hacemos 1/2 ÷ 2/5 = 5/4. Luego 5/4 ÷ 3/8 = (5x8)/(4x3) = 40/12. Simplificado es 10/3." },
+                { q: "¿Doble del triple de 14/6?", options: [f(14,36), f(14,6), "14", "6"], ans: 2, exp: "Doble (x2) y triple (x3) significa multiplicar por 6 en total. 6 × (14/6). Los 6 se cancelan y queda 14." },
+                { q: "Joaquín comió 2/8 de un cuarto (1/4) de pastel:", options: [f(2,8), f(1,2), f(3,8), f(1,16)], ans: 3, exp: "Comer una fracción 'de' otra es multiplicar: 2/8 * 1/4 = 1/4 * 1/4 = 1/16." },
+                { q: "Divide 12 1/2 entre 4 1/2:", options: [f(14,27), f(14,3), f(25,9), f(16,3)], ans: 2, exp: "Pasamos a impropias: 25/2 ÷ 9/2. Al dividir cruzado: (25x2)/(2x9) = 50/18 = 25/9." },
+                { q: "(15/2) ÷ (3/7) ÷ (5/6):", options: [f(1,21), f(3,42), "21", "42"], ans: 2, exp: "Primero 15/2 ÷ 3/7 = 105/6. Luego 105/6 ÷ 5/6 = (105x6)/(6x5) = 105/5 = 21." },
+                { q: "Resuelve: (2/5) × (1/7) × (5/9) × (7/16):", options: [f(1,72), f(2,16), f(1,16), f(5,16)], ans: 0, exp: "Cancelamos el 5 de arriba con el de abajo, y el 7 de arriba con el de abajo. Queda (2x1)/(9x16) = 2/144 = 1/72." }
+            ],
+            mcmmcd: [
+                { q: "¿Cuál es el MCM (entero más pequeño) de 24, 36 y 8?", options: ["72", "144", "160", "212"], ans: 0, exp: "Múltiplos de 36: 36, 72... El 72 se puede dividir exactamente entre 24 (72/24=3) y entre 8 (72/8=9). Es el más pequeño común." },
+                { q: "Divisor más grande (MCD) de 60, 120 y 210:", options: ["18", "24", "30", "34"], ans: 2, exp: "El 30 divide al 60 (da 2), al 120 (da 4) y al 210 (da 7). No hay un número mayor que pueda dividir a los tres a la vez." },
+                { q: "Mínimo Común Múltiplo de 7, 11 y 13:", options: ["77", "1001", "1628", "No existe"], ans: 1, exp: "Como 7, 11 y 13 son números primos, su MCM es simplemente la multiplicación de los tres: 7x11x13 = 1001." },
+                { q: "Máximo Común Divisor de 180, 50 y 100:", options: ["10", "15", "20", "5"], ans: 0, exp: "El número más grande que divide a 180, 50 y 100 al mismo tiempo es el 10." },
+                { q: "240 hombres y 168 mujeres. ¿Cuál es el máximo de mesas iguales?", options: ["30", "60", "24", "12"], ans: 2, exp: "Buscamos el MCD de 240 y 168. Al descomponer, encontramos que el mayor divisor común es 24." },
+                { q: "Del problema anterior: ¿Cuántos hombres habrá por mesa?", options: ["7", "10", "12", "14"], ans: 1, exp: "Si hay 240 hombres repartidos en 24 mesas iguales, dividimos 240/24 = 10 hombres por mesa." },
+                { q: "¿Cuál es el MCM de 30, 70 y 50?", options: ["1050", "1150", "1250", "1500"], ans: 0, exp: "Descomponiendo: 30=2x3x5; 70=2x5x7; 50=2x5x5. El MCM toma todos los factores: 2 x 3 x 25 x 7 = 1050." },
+                { q: "Panaderos (45, 60, 30 min) inician 8 am. ¿A qué hora coinciden de nuevo?", options: ["10 am", "11 am", "12 pm", "1 pm"], ans: 1, exp: "MCM de 45, 60 y 30 es 180 minutos. Como 180 min son 3 horas, sumamos 8:00 + 3 horas = 11:00 am." },
+                { q: "Torres de bloques (8, 12, 10 cm). Altura mínima para que sean iguales:", options: ["60 cm", "80 cm", "100 cm", "120 cm"], ans: 3, exp: "El MCM de 8, 12 y 10 es 120. A esa altura las tres torres coincidirán por primera vez." },
+                { q: "Encuentra el mayor factor común (MCD) entre 108 y 180:", options: ["24", "30", "32", "36"], ans: 3, exp: "El 36 divide a 108 (da 3) y a 180 (da 5). Es el divisor máximo que comparten." }
+            ]
+        };
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'text-indigo-700', 'shadow');
+                b.classList.add('hover:bg-indigo-600');
+            });
+            document.getElementById(tabId).classList.add('active');
+            const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
+            activeBtn.classList.remove('hover:bg-indigo-600');
+            activeBtn.classList.add('bg-white', 'text-indigo-700', 'shadow');
+        }
+
+        function render() {
+            for (let cat in data) {
+                const container = document.getElementById('cont_' + cat);
+                if(!container) continue;
+                
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-4";
+                    
+                    const opts = item.options.map((opt, oi) => `
+                        <button onclick="check(this, ${item.ans}, ${oi}, '${cat}_${i}')" 
+                                class="opt-btn w-full text-left p-3 rounded-xl border-2 border-slate-50 hover:bg-indigo-50 transition-all flex justify-between items-center group">
+                            <span class="font-semibold text-slate-600 group-hover:text-indigo-700 flex items-center">
+                                <span class="bg-slate-100 text-slate-400 w-6 h-6 flex items-center justify-center rounded-lg mr-3 text-[10px] font-bold">${String.fromCharCode(65 + oi)}</span> 
+                                ${opt}
+                            </span>
+                        </button>
+                    `).join('');
+
+                    card.innerHTML = `
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-xs font-bold bg-indigo-100 text-indigo-700 px-2 py-1 rounded">EJERCICIO ${i+1}</span>
+                        </div>
+                        <h2 class="font-bold text-slate-800 text-lg mb-4 leading-relaxed">${item.q}</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="box_${cat}_${i}">
+                            ${opts}
+                        </div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-4 p-4 bg-blue-50 rounded-xl border-l-4 border-blue-500">
+                            <p class="text-sm text-blue-900 font-medium leading-relaxed italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const buttons = box.querySelectorAll('.opt-btn');
+            const hint = document.getElementById(`hint_${id}`);
+            buttons.forEach(b => b.disabled = true);
+            if (sel === ans) { 
+                btn.classList.add('correct-opt'); 
+            } else { 
+                btn.classList.add('incorrect-opt'); 
+                buttons[ans].classList.add('correct-opt'); 
+            }
+            hint.style.display = 'block';
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>
