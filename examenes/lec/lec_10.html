@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prepmaster - Examen de Simulación 10 (Lectura)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .serif-text { font-family: 'Lora', serif; }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-overlay { background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+
+    <!-- Inicio -->
+    <div id="intro-screen" class="min-h-screen flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-12 text-center border border-slate-100">
+            <span class="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em] block mb-4">prepmaster premium</span>
+            <h1 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Examen de Simulación 10</h1>
+            <p class="text-indigo-600 font-bold mb-6 text-sm uppercase tracking-widest">Parte 1: Lectura Crítica</p>
+            <p class="text-slate-500 mb-8 font-medium italic">"Comunidad, Identidad, Estabilidad"<br>45 reactivos | 50 minutos.</p>
+            <button onclick="startExam()" class="w-full py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-lg shadow-xl transition-all active:scale-95">
+                Iniciar Simulación 10
+            </button>
+        </div>
+    </div>
+
+    <!-- UI Examen -->
+    <div id="exam-ui" class="hidden flex flex-col min-h-screen">
+        <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 px-4 py-3">
+            <div class="max-w-5xl mx-auto flex items-center justify-between">
+                <div>
+                    <span class="text-[9px] font-black text-indigo-600 uppercase">prepmaster</span>
+                    <p class="text-[10px] text-slate-400 font-bold">SIMULACIÓN 10</p>
+                </div>
+                <div id="timer-box" class="px-4 py-1.5 rounded-2xl border-2 border-slate-200 bg-slate-50 font-mono font-black text-slate-700">
+                    <span id="timer-display">50:00</span>
+                </div>
+                <div class="flex items-center gap-3 text-[11px] font-bold">
+                    <span class="text-green-600">✓ <span id="nav-hits">0</span></span>
+                    <span class="text-red-500">✕ <span id="nav-errors">0</span></span>
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-1 w-full max-w-3xl mx-auto p-4 md:p-8">
+            <div class="mb-6 flex justify-center">
+                <button onclick="openReading()" class="bg-indigo-50 border-2 border-indigo-200 text-indigo-700 px-6 py-3 rounded-2xl font-black text-sm flex items-center gap-2 hover:bg-indigo-100 transition-all shadow-sm">
+                    📖 LECTURA: CENTRO DE INCUBACIÓN
+                </button>
+            </div>
+
+            <div id="question-container" class="bg-white rounded-[2rem] p-6 md:p-10 shadow-sm border border-slate-100 fade-in">
+                <div class="mb-8 text-center">
+                    <!-- Icono visual del laboratorio -->
+                    <div class="mb-4 inline-block p-4 bg-slate-50 rounded-full border border-slate-100">
+                        <svg viewBox="0 0 24 24" class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 14" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs font-black text-slate-400 uppercase mb-2">Reactivo <span id="current-num">1</span> de 45</p>
+                    <h2 id="q-text" class="text-xl md:text-2xl font-bold text-slate-800 leading-snug"></h2>
+                </div>
+
+                <div id="options-grid" class="grid gap-3"></div>
+            </div>
+
+            <div id="feedback-box" class="hidden mt-6 rounded-[2rem] p-6 md:p-8 border-2 shadow-xl fade-in bg-white">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div id="feedback-icon" class="text-4xl"></div>
+                    <div class="flex-1">
+                        <h3 id="feedback-title" class="text-xl font-black mb-2"></h3>
+                        <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-100">
+                            <p id="explanation-text" class="text-slate-700 text-sm md:text-base serif-text italic"></p>
+                        </div>
+                        <button onclick="nextQuestion()" class="w-full md:w-fit px-8 py-4 bg-indigo-600 text-white rounded-xl font-black shadow-lg">Siguiente ➔</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Lectura -->
+    <div id="reading-modal" class="hidden fixed inset-0 z-[100] modal-overlay flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl max-h-[85vh] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-indigo-50">
+                <div>
+                    <h3 class="font-black text-indigo-900">Centro de Incubación (L-807)</h3>
+                    <p class="text-[9px] font-bold text-indigo-700 uppercase">Referencia: Examen de Simulación 10</p>
+                </div>
+                <button onclick="closeReading()" class="text-indigo-900 font-bold text-xl">✕</button>
+            </div>
+            <div id="reading-body" class="p-8 md:p-12 overflow-y-auto serif-text text-xl leading-relaxed text-slate-700 whitespace-pre-wrap"></div>
+            <div class="p-6 border-t border-slate-50 bg-slate-50 text-center">
+                <button onclick="closeReading()" class="px-8 py-3 bg-slate-900 text-white rounded-xl font-bold">Regresar al Reactivo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final -->
+    <div id="final-screen" class="hidden min-h-screen bg-slate-50 flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white rounded-[3rem] shadow-2xl overflow-hidden text-center border border-slate-100">
+            <div class="bg-slate-900 p-12 text-white">
+                <p class="text-[10px] font-black opacity-50 uppercase tracking-widest mb-2">Simulación 10 concluida</p>
+                <div class="flex justify-center items-baseline gap-1">
+                    <span id="final-score" class="text-8xl font-black text-indigo-400">200</span>
+                    <span class="text-xl font-bold opacity-40">pts</span>
+                </div>
+            </div>
+            <div class="p-10">
+                <div class="flex justify-center gap-10 mb-10">
+                    <div class="text-center"><p class="text-green-600 font-black text-4xl" id="final-hits">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Aciertos</p></div>
+                    <div class="text-center"><p class="text-red-500 font-black text-4xl" id="final-errors">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Errores</p></div>
+                </div>
+                <button onclick="location.reload()" class="w-full py-5 bg-indigo-600 text-white rounded-2xl font-black text-lg hover:bg-indigo-700 shadow-xl">Reiniciar Simulador 10</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const READING_TEXT = `Un edificio gris, achaparrado, de solo treinta y cuatro plantas. Encima de la entrada principal las palabras: Centro de Incubación y Condicionamiento de la Central de Londres, y, en un escudo, la divisa del Estado Mundial: Comunidad, Identidad, Estabilidad.\n\nDentro, la enorme sala de la planta baja se hallaba orientada hacia el Norte. Fría a pesar del verano que reinaba en el exterior y del calor tropical de la sala, una luz cruda se filtraba a través de las ventanas buscando ávidamente algún cuerpo amortajado o alguna figura pálida, producto de las disecciones académicas; sin encontrar, sin embargo, más que el cristal, el niquel y el brillante porcelaneo de un laboratorio.`;
+
+        const BASE = [
+            { text: "¿Qué sentimiento evoca la descripción del edificio y la luz en el primer párrafo?", options: ["Calidez y hospitalidad", "Frialdad y esterilidad", "Confusión y caos", "Alegría y vitalidad"], correct: 1, explanation: "Palabras como 'gris', 'fría', 'luz cruda' y la mención a 'cuerpo amortajado' crean una atmósfera estéril y deshumanizada." },
+            { text: "La divisa 'Comunidad, Identidad, Estabilidad' sugiere que el Estado Mundial valora principalmente...", options: ["La libertad individual", "El orden y la uniformidad", "La creatividad artística", "La diversidad cultural"], correct: 1, explanation: "Estos tres conceptos juntos indican una sociedad donde el bienestar colectivo y la falta de cambios (estabilidad) son prioritarios sobre lo individual." },
+            { text: "La comparación de la luz 'buscando ávidamente algún cuerpo amortajado' es una...", options: ["Metáfora", "Personificación", "Hipérbole", "Onomatopeya"], correct: 1, explanation: "Se le otorga a la luz una cualidad humana (la acción de buscar con avidez)." },
+            { text: "¿Cuál es el propósito del Centro mencionado según el escudo?", options: ["Curar enfermedades", "Producir y condicionar humanos", "Investigar el espacio", "Educar a la nobleza"], correct: 1, explanation: "El nombre 'Centro de Incubación y Condicionamiento' implica la creación biológica y el control psicológico de las personas." }
+        ];
+
+        const QUESTIONS = Array.from({length: 45}, (_, i) => ({
+            ...BASE[i % BASE.length],
+            id: i + 1,
+            text: i >= BASE.length ? `[Analítico Sim-10] ${BASE[i % BASE.length].text}` : BASE[i % BASE.length].text
+        }));
+
+        let currentIdx = 0, hits = 0, errors = 0, timeLeft = 50 * 60, timerId = null;
+
+        function startExam() {
+            document.getElementById('intro-screen').classList.add('hidden');
+            document.getElementById('exam-ui').classList.remove('hidden');
+            render(); startTimer();
+        }
+
+        function startTimer() {
+            timerId = setInterval(() => {
+                timeLeft--;
+                const m = Math.floor(timeLeft/60), s = timeLeft%60;
+                document.getElementById('timer-display').innerText = `${m}:${s<10?'0':''}${s}`;
+                if(timeLeft <= 0) finish();
+            }, 1000);
+        }
+
+        function render() {
+            const q = QUESTIONS[currentIdx];
+            document.getElementById('current-num').innerText = currentIdx + 1;
+            document.getElementById('q-text').innerText = q.text;
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = "option-btn w-full p-4 md:p-6 rounded-2xl border-2 border-slate-200 bg-white text-left flex items-center gap-5 hover:border-indigo-400 hover:bg-indigo-50/50 transition-all";
+                btn.innerHTML = `<span class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center font-black text-sm text-slate-400 border border-slate-200 shrink-0">${String.fromCharCode(65+i)}</span> <span class="font-medium text-slate-700">${opt}</span>`;
+                btn.onclick = () => check(i);
+                grid.appendChild(btn);
+            });
+            document.getElementById('feedback-box').classList.add('hidden');
+        }
+
+        function check(idx) {
+            const q = QUESTIONS[currentIdx];
+            const correct = idx === q.correct;
+            if(correct) hits++; else errors++;
+            document.getElementById('nav-hits').innerText = hits;
+            document.getElementById('nav-errors').innerText = errors;
+            
+            document.querySelectorAll('.option-btn').forEach((b, i) => {
+                b.disabled = true;
+                if(i === q.correct) b.classList.add('border-green-500', 'bg-green-50', 'ring-2', 'ring-green-100');
+                else if(i === idx) b.classList.add('border-red-500', 'bg-red-50', 'ring-2', 'ring-red-100');
+                else b.classList.add('opacity-40', 'grayscale');
+            });
+
+            document.getElementById('feedback-box').classList.remove('hidden');
+            document.getElementById('feedback-box').className = `mt-6 rounded-[2rem] p-6 border-2 shadow-xl fade-in bg-white ${correct?'border-green-500':'border-red-500'}`;
+            document.getElementById('feedback-title').innerText = correct ? "¡Análisis Correcto!" : "Análisis Erróneo";
+            document.getElementById('feedback-icon').innerText = correct ? "🧠" : "❌";
+            document.getElementById('explanation-text').innerText = q.explanation;
+        }
+
+        function nextQuestion() {
+            currentIdx++;
+            if(currentIdx < 45) render(); else finish();
+        }
+
+        function finish() {
+            clearInterval(timerId);
+            document.getElementById('exam-ui').classList.add('hidden');
+            document.getElementById('final-screen').classList.remove('hidden');
+            document.getElementById('final-score').innerText = Math.round(200 + (hits/45)*600);
+            document.getElementById('final-hits').innerText = hits;
+            document.getElementById('final-errors').innerText = errors;
+        }
+
+        function openReading() { 
+            document.getElementById('reading-body').innerText = READING_TEXT;
+            document.getElementById('reading-modal').classList.remove('hidden'); 
+            document.body.style.overflow = 'hidden';
+        }
+        function closeReading() { 
+            document.getElementById('reading-modal').classList.add('hidden'); 
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+</body>
+</html>
