@@ -601,7 +601,7 @@
     <div class="section-header">
       <h2 class="section-title">Exámenes de simulación</h2>
       <div class="section-line"></div>
-      <span class="section-count">3 secciones · 11 simulaciones c/u</span>
+      <span class="section-count">33 simulaciones en total · 3 áreas</span>
     </div>
     <div class="categories-grid">
       <div>
@@ -650,7 +650,7 @@
     <div class="section-header">
       <h2 class="section-title">📝 Ejercicios prácticos por tema</h2>
       <div class="section-line"></div>
-      <span class="section-count">Matemáticas · Con soluciones incluidas</span>
+      <span class="section-count">Matemáticas · Español · Con soluciones incluidas</span>
     </div>
 
     <!-- Matemáticas -->
@@ -719,6 +719,47 @@
         <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/combinatoria.html','Práctica: Combinatoria')">
           <div class="exp-icon">🧮</div><div class="exp-area-tag">Matemáticas</div>
           <div class="exp-name">Combinatoria</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Español -->
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div style="width:32px;height:32px;background:#7c3aed;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">✍️</div>
+        <span style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);">Español</span>
+        <span style="font-size:11px;color:#a78bfa;font-weight:700;text-transform:uppercase;letter-spacing:.5px;">6 temas</span>
+      </div>
+      <div class="exp-grid">
+        <div class="exp-card" data-area="esp" onclick="openExam('examenes/practicos/esp/figurasretoricas.html','Práctica: Figuras Retóricas')">
+          <div class="exp-icon">🎭</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Español</div>
+          <div class="exp-name">Figuras Retóricas</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="esp" onclick="openExam('examenes/practicos/esp/inferenciasygenerosliterarios.html','Práctica: Inferencias y Géneros Literarios')">
+          <div class="exp-icon">🔍</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Español</div>
+          <div class="exp-name">Inferencias y Géneros Literarios</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="esp" onclick="openExam('examenes/practicos/esp/narrativas.html','Práctica: Elementos Narrativos')">
+          <div class="exp-icon">📖</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Español</div>
+          <div class="exp-name">Elementos Narrativos</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="esp" onclick="openExam('examenes/practicos/esp/signosdepuntuacion.html','Práctica: Signos de Puntuación')">
+          <div class="exp-icon">✒️</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Español</div>
+          <div class="exp-name">Signos de Puntuación</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="esp" onclick="openExam('examenes/practicos/esp/tiposdetexto.html','Práctica: Tipos de Texto')">
+          <div class="exp-icon">📝</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Español</div>
+          <div class="exp-name">Tipos de Texto</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="esp" onclick="openExam('examenes/practicos/esp/tituloideaprincipal.html','Práctica: Título e Idea Principal')">
+          <div class="exp-icon">💡</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Español</div>
+          <div class="exp-name">Título e Idea Principal</div>
           <button class="exp-btn">✏️ Practicar</button>
         </div>
       </div>
@@ -1014,14 +1055,14 @@ function renderExams(key, containerId) {
         <div class="exam-num">${String(i+1).padStart(2,'0')}</div>
         <div>
           <div class="exam-info-name">${ex.name}</div>
-          <div class="exam-info-meta">${ex.meta} · PDF con procedimientos incluido</div>
+          <div class="exam-info-meta">${ex.meta} · ${i < 8 ? "PDF con procedimientos incluido" : "Respuestas incluidas en el examen"}</div>
         </div>
       </div>
       <div class="exam-item-actions">
         <button class="btn-exam btn-exam-start" style="background:${color};border-color:${color}"
           onclick="event.stopPropagation();openExam('${ex.file}','${ex.name}')">▶ Iniciar</button>
-        <button class="btn-exam btn-exam-pdf"
-          onclick="event.stopPropagation();openPDF('${ex.pdf}','Respuestas — ${ex.name}')">📄 Respuestas</button>
+        ${i < 8 ? `<button class="btn-exam btn-exam-pdf"
+          onclick="event.stopPropagation();openPDF('${ex.pdf}','Respuestas — ${ex.name}')">📄 Respuestas</button>` : ''}
       </div>`;
     cont.appendChild(div);
   });
