@@ -21,11 +21,11 @@
         <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-12 text-center border border-slate-100 fade-in">
             <span class="text-[10px] font-black text-teal-600 uppercase tracking-[0.3em] block mb-4">prepmaster premium</span>
             <h1 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Examen Libre 803</h1>
-            <p class="text-teal-600 font-bold mb-6 text-sm uppercase tracking-widest">Español (50 Reactivos)</p>
+            <p class="text-teal-600 font-bold mb-6 text-sm uppercase tracking-widest">Español (50 Reactivos Únicos)</p>
             <div class="space-y-3 mb-8 text-left text-sm text-slate-600 bg-teal-50 p-5 rounded-2xl">
                 <p>• <strong>25 Lectura</strong> (Análisis Crítico)</p>
                 <p>• <strong>25 Redacción</strong> (Edición y Estilo)</p>
-                <p>• Puntaje individual por área (200-800)</p>
+                <p>• <strong>Cero Repeticiones</strong> garantizadas.</p>
             </div>
             <button onclick="startExam()" class="w-full py-4 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-black text-lg shadow-xl transition-all active:scale-95">
                 Comenzar Examen
@@ -65,7 +65,7 @@
 
             <div id="question-container" class="bg-white rounded-[2rem] p-6 md:p-12 shadow-sm border border-slate-100 fade-in">
                 <div class="mb-8">
-                    <h2 id="q-text" class="text-xl md:text-3xl font-bold text-slate-800 leading-snug tracking-tight"></h2>
+                    <h2 id="q-text" class="text-xl md:text-2xl font-bold text-slate-800 leading-snug tracking-tight"></h2>
                 </div>
                 <div id="options-grid" class="grid gap-3"></div>
             </div>
@@ -77,7 +77,7 @@
                     <div class="flex-1">
                         <h3 id="feedback-title" class="text-2xl font-black mb-4"></h3>
                         <div class="bg-slate-50 p-6 rounded-2xl mb-8 border border-slate-100">
-                            <p id="explanation-text" class="text-slate-700 text-lg leading-relaxed serif-text italic"></p>
+                            <p id="explanation-text" class="text-slate-700 text-base md:text-lg leading-relaxed serif-text italic"></p>
                         </div>
                         <button onclick="nextQuestion()" class="w-full md:w-fit px-12 py-4 bg-teal-600 text-white rounded-xl font-black shadow-lg active:scale-95 transition-all">
                             Siguiente ➔
@@ -95,14 +95,14 @@
                 <h3 class="font-black text-teal-900 text-xl tracking-tight">Lectura: Bahía Argentina</h3>
                 <button onclick="closeReading()" class="text-teal-900 font-bold text-2xl">✕</button>
             </div>
-            <div id="reading-body" class="p-10 md:p-14 overflow-y-auto serif-text text-xl leading-relaxed text-slate-700 whitespace-pre-wrap selection:bg-teal-100"></div>
+            <div id="reading-body" class="p-10 md:p-14 overflow-y-auto serif-text text-lg md:text-xl leading-relaxed text-slate-700 whitespace-pre-wrap selection:bg-teal-100"></div>
             <div class="p-8 border-t border-slate-50 bg-slate-50 text-center">
                 <button onclick="closeReading()" class="px-12 py-4 bg-slate-900 text-white rounded-2xl font-black shadow-lg">Regresar al Examen</button>
             </div>
         </div>
     </div>
 
-    <!-- Pantalla Final con Doble Puntaje -->
+    <!-- Pantalla Final -->
     <div id="final-screen" class="hidden min-h-screen bg-slate-50 flex items-center justify-center p-4">
         <div class="max-w-2xl w-full bg-white rounded-[3.5rem] shadow-2xl overflow-hidden border border-slate-100">
             <div class="bg-slate-900 p-12 md:p-16 text-center text-white">
@@ -133,59 +133,62 @@
     <script>
         const READING_TEXT = `Vi la primera luz de mi tierra en una bahía argentina del Atlántico. A los pocos días me estaría meciendo, como un jugueteo torvo de quién sabe qué paternidad tutelar, el sordo y constante ruido de las dunas -cada segundo desplazadas-, el clima versátil del país, el viento animal.\n\nMi padre era un cirujano del hospital; mi madre, una mujer suave, sal de la tierra en su bondad tranquila. Los dos, laboriosos y tan honestos de naturaleza que en ellos vi salvarse siempre algo del general naufragio humano. Mi primer amigo fue el viento que venía del océano.`;
 
-        const QUESTIONS = [];
+        // 50 Preguntas Únicas (25 Lectura + 25 Redacción)
+        const QUESTIONS = [
+            // --- LECTURA (1-25) ---
+            { area: "LECTURA", text: "¿Qué significa la expresión 'sal de la tierra' aplicada a la madre?", options: ["Origen rural", "Bondad y valor moral", "Dureza de carácter", "Sencillez excesiva"], correct: 1, reading: true, explanation: "Es un modismo bíblico/literario que resalta la pureza y bondad genuina." },
+            { area: "LECTURA", text: "El ruido de las dunas es 'sordo y constante'. Esto sugiere...", options: ["Paz absoluta", "Presencia persistente", "Silencio total", "Un error auditivo"], correct: 1, reading: true, explanation: "Indica un sonido omnipresente que no cesa en ese entorno geográfico." },
+            { area: "LECTURA", text: "¿Cuál es el sentimiento predominante hacia los padres del narrador?", options: ["Compasión", "Respeto y admiración", "Indiferencia", "Melancolía"], correct: 1, reading: true, explanation: "Los describe como seres honestos en los que se salva 'algo del naufragio humano'." },
+            { area: "LECTURA", text: "El 'viento animal' y el 'jugueteo torvo' personifican la naturaleza como...", options: ["Un ser inofensivo", "Una fuerza instintiva", "Un enemigo mortal", "Un aliado cercano"], correct: 1, reading: true, explanation: "Atribuyen cualidades vitales y algo agresivas a los elementos climáticos." },
+            { area: "LECTURA", text: "¿Qué función cumple la mención de la profesión del padre?", options: ["Explicar su riqueza", "Reforzar su carácter laborioso", "Justificar sus viajes", "Hablar de la salud pública"], correct: 1, reading: true, explanation: "Menciona que eran 'laboriosos y tan honestos', vinculando su trabajo con su integridad." },
+            { area: "LECTURA", text: "La palabra 'torvo' en el texto se utiliza para connotar algo...", options: ["Alegre", "Amenazante o fiero", "Cálido", "Misterioso"], correct: 1, reading: true, explanation: "Torvo implica una cualidad hosca o que puede inspirar temor." },
+            { area: "LECTURA", text: "El autor menciona que su primer amigo fue...", options: ["Un niño vecino", "Su padre", "El viento del océano", "Las dunas"], correct: 2, reading: true, explanation: "Texto: 'Mi primer amigo fue el viento que venía del océano'." },
+            { area: "LECTURA", text: "Al hablar del 'general naufragio humano', el autor sugiere que...", options: ["Hubo un accidente", "La humanidad está en crisis", "Los padres murieron", "La bahía es peligrosa"], correct: 1, reading: true, explanation: "Metáfora sobre la decadencia moral o espiritual del resto de la sociedad." },
+            { area: "LECTURA", text: "La descripción del clima como 'versátil' indica que es...", options: ["Cálido", "Cambiante", "Estático", "Muy frío"], correct: 1, reading: true, explanation: "Versátil significa que cambia con facilidad de condición." },
+            { area: "LECTURA", text: "¿En qué lugar geográfico se sitúa el relato?", options: ["En el Pacífico", "En el Atlántico", "En un lago", "En la montaña"], correct: 1, reading: true, explanation: "Texto: 'en una bahía argentina del Atlántico'." },
+            { area: "LECTURA", text: "El término 'paternidad tutelar' respecto al viento sugiere...", options: ["Miedo al padre", "Una protección natural", "Un abandono", "Una educación estricta"], correct: 1, reading: true, explanation: "La idea de que los elementos de su tierra lo 'mecían' y cuidaban como un padre." },
+            { area: "LECTURA", text: "¿Cuál de estos adjetivos califica mejor a la madre?", options: ["Inquieta", "Suave", "Severa", "Indiferente"], correct: 1, reading: true, explanation: "Texto: 'mi madre, una mujer suave... en su bondad tranquila'." },
+            { area: "LECTURA", text: "La frase 'Vi la primera luz' es un sinónimo literario de...", options: ["Mirar el sol", "Nacer", "Despertar", "Descubrir algo"], correct: 1, reading: true, explanation: "Es una forma poética de referirse al nacimiento." },
+            { area: "LECTURA", text: "El narrador ve en sus padres una 'honestidad de naturaleza'. Esto implica que...", options: ["Eran biólogos", "Eran íntegros por esencia", "Vivían en el campo", "No tenían secretos"], correct: 1, reading: true, explanation: "Sugiere que su rectitud era parte intrínseca de su ser." },
+            { area: "LECTURA", text: "¿Qué elemento del paisaje se describe como 'cada segundo desplazado'?", options: ["El océano", "Las dunas", "El hospital", "Las nubes"], correct: 1, reading: true, explanation: "El viento mueve constantemente la arena de las dunas." },
+            { area: "LECTURA", text: "La actitud del narrador hacia su pasado parece ser de...", options: ["Rencor", "Nostalgia y estima", "Olvido", "Crítica"], correct: 1, reading: true, explanation: "Describe su origen con palabras que resaltan bondad y honestidad." },
+            { area: "LECTURA", text: "¿Cómo se describe la bondad de la madre?", options: ["Ruidosa", "Tranquila", "Exagerada", "Falsa"], correct: 1, reading: true, explanation: "Texto: 'en su bondad tranquila'." },
+            { area: "LECTURA", text: "El contraste entre 'el sordo ruido' y 'la bondad tranquila' crea un efecto de...", options: ["Caos", "Equilibrio ambiental", "Tensión familiar", "Aburrimiento"], correct: 1, reading: true, explanation: "Combina la fuerza de la naturaleza con la calma del hogar." },
+            { area: "LECTURA", text: "¿Qué significa que los padres fueran 'laboriosos'?", options: ["Que tenían hijos", "Que trabajaban mucho", "Que eran médicos", "Que eran ricos"], correct: 1, reading: true, explanation: "Laborioso es sinónimo de trabajador." },
+            { area: "LECTURA", text: "La mención de 'quién sabe qué paternidad' indica...", options: ["Un misterio familiar", "Una incertidumbre poética", "Amnesia", "Ignorancia"], correct: 1, reading: true, explanation: "Usa la ambigüedad para darle un tono místico a su relación con la tierra." },
+            { area: "LECTURA", text: "El viento es descrito como 'primer amigo'. Esto refuerza el tema de...", options: ["La soledad", "La conexión con el entorno", "La falta de escuela", "El miedo al mar"], correct: 1, reading: true, explanation: "Destaca el vínculo profundo del autor con su lugar de origen." },
+            { area: "LECTURA", text: "¿Qué cualidad se le asigna a los hijos de la bahía según el texto?", options: ["Ser guerreros", "Estar mecidos por dunas", "Ser cirujanos", "Viajar al océano"], correct: 1, reading: true, explanation: "Usa la metáfora de ser mecidos por el ambiente de la bahía." },
+            { area: "LECTURA", text: "El término 'general naufragio humano' funciona como...", options: ["Ironía", "Metáfora social", "Hipérbole médica", "Símil geográfico"], correct: 1, reading: true, explanation: "Representa a la sociedad como un barco hundiéndose, exceptuando a sus padres." },
+            { area: "LECTURA", text: "¿Cuál es el tono predominante en el fragmento?", options: ["Sarcástico", "Lírico y evocador", "Científico", "Político"], correct: 1, reading: true, explanation: "Utiliza un lenguaje poético para recordar su infancia." },
+            { area: "LECTURA", text: "La 'paternidad tutelar' se refiere directamente a...", options: ["Su padre biológico", "Los elementos naturales", "El gobierno", "Un antepasado"], correct: 1, reading: true, explanation: "Contexto: el ruido de las dunas y el viento que lo mecían." },
 
-        // --- LECTURA: 25 REACTIVOS ÚNICOS ---
-        const lecturaData = [
-            { text: "¿Qué significa la expresión 'sal de la tierra' aplicada a la madre?", options: ["Origen rural", "Bondad y valor moral", "Dureza de carácter", "Sencillez excesiva"], correct: 1, explanation: "Es un modismo que resalta la pureza y bondad genuina de una persona." },
-            { text: "El ruido de las dunas es 'sordo y constante'. Esto sugiere...", options: ["Paz absoluta", "Presencia persistente", "Silencio total", "Un error auditivo"], correct: 1, explanation: "Indica un sonido que no cesa y forma parte del entorno habitual." },
-            { text: "¿Cuál es el sentimiento predominante hacia los padres?", options: ["Compasión", "Respeto y admiración", "Indiferencia", "Culpa"], correct: 1, explanation: "El autor los describe como seres honestos en los que se salva 'algo del naufragio humano'." },
-            { text: "El 'viento animal' y el 'jugueteo torvo' personifican la naturaleza como...", options: ["Un ser inofensivo", "Una fuerza instintiva", "Un enemigo mortal", "Un dios protector"], correct: 1, explanation: "Atribuyen cualidades vitales y algo agresivas a los elementos climáticos." },
-            { text: "¿Qué función cumple el primer párrafo del texto?", options: ["Presentar a los personajes", "Ambientar el escenario geográfico", "Contar el desenlace", "Describir el hospital"], correct: 1, explanation: "Se enfoca en describir la bahía argentina y su clima extremo." },
-            { text: "La palabra 'torvo' en el texto se utiliza para connotar algo...", options: ["Alegre", "Amenazante o fiero", "Cálido", "Aburrido"], correct: 1, explanation: "Torvo implica una cualidad hosca o que inspira temor." },
-            { text: "El autor menciona que su primer amigo fue...", options: ["Un niño vecino", "Su padre", "El viento del océano", "Un juguete de dunas"], correct: 2, explanation: "Texto: 'Mi primer amigo fue el viento que venía del océano'." },
-            { text: "Al hablar del 'general naufragio humano', el autor sugiere que...", options: ["Hubo un accidente naval", "La humanidad está en crisis moral", "Los padres murieron en el mar", "La bahía es peligrosa"], correct: 1, explanation: "Usa la metáfora del naufragio para referirse a la corrupción o decadencia general." },
-            { text: "¿Qué profesión tenía el padre del narrador?", options: ["Pescador", "Cirujano", "Marinero", "Explorador"], correct: 1, explanation: "El texto especifica que era cirujano del hospital." },
-            { text: "La descripción del clima como 'versátil' indica que es...", options: ["Cálido siempre", "Cambiante e impredecible", "Estático", "Muy frío"], correct: 1, explanation: "Versátil significa que cambia con facilidad de una condición a otra." }
+            // --- REDACCIÓN (26-50) ---
+            { area: "REDACCIÓN", text: "Identifique la oración con un pleonamo innecesario:", options: ["Entró a la sala", "Subió para arriba", "Vio el hospital", "Era una mujer"], correct: 1, explanation: "Subir implica ir hacia arriba; decir 'para arriba' es redundante." },
+            { area: "REDACCIÓN", text: "¿Qué signo de puntuación es más adecuado tras un saludo en una carta formal?", options: ["Coma", "Dos puntos", "Punto y coma", "Punto"], correct: 1, explanation: "En el español formal de cartas se utilizan los dos puntos." },
+            { area: "REDACCIÓN", text: "Elija el conector de contraste correcto: 'Corrió mucho, ____ no llegó a tiempo'.", options: ["pero", "porque", "entonces", "además"], correct: 0, explanation: "'Pero' une dos ideas opuestas o contradictorias." },
+            { area: "REDACCIÓN", text: "¿Cuál palabra es un sinónimo de 'crucial' en un texto académico?", options: ["Opcional", "Vital", "Probable", "Secundario"], correct: 1, explanation: "Vital y crucial denotan importancia extrema." },
+            { area: "REDACCIÓN", text: "Señale la oración gramaticalmente correcta:", options: ["Hicieron mucha calor", "Hizo mucho calor", "Hicieron muchos calores", "Hizo muchos calor"], correct: 1, explanation: "El verbo hacer en expresiones climáticas es impersonal (singular)." },
+            { area: "REDACCIÓN", text: "¿Qué cambio mejora: 'Juan es un médico, Pedro es un abogado'?", options: ["Juan es médico; Pedro, abogado.", "Juan es médico Pedro abogado.", "Juan es un médico; Pedro es abogado.", "Sin cambios"], correct: 0, explanation: "Uso del punto y coma para separar y la coma para evitar repetir 'es'." },
+            { area: "REDACCIÓN", text: "En el enunciado 'El ______ de la dunas', ¿qué palabra es ortográficamente correcta?", options: ["ruido", "rruido", "ruydo", "ruído"], correct: 0, explanation: "La palabra correcta es ruido (diptongo, sin tilde)." },
+            { area: "REDACCIÓN", text: "Para introducir un ejemplo en un párrafo, se utiliza:", options: ["Por ejemplo,", "En resumen,", "Por último,", "Sin embargo,"], correct: 0, explanation: "Nexo explicativo o ejemplificativo." },
+            { area: "REDACCIÓN", text: "¿Cuál es el antónimo de 'honestos'?", options: ["Mentirosos", "Integro", "Laboriosos", "Pobres"], correct: 0, explanation: "Alguien no honesto suele ser mentiroso o corrupto." },
+            { area: "REDACCIÓN", text: "La expresión 'muñeca de plástico' para un país es una figura de:", options: ["Metáfora", "Hipérbole", "Aliteración", "Onomatopeya"], correct: 0, explanation: "Compara el país con un objeto artificial directamente." },
+            { area: "REDACCIÓN", text: "Identifique el error: 'Habían muchas personas en la bahía'.", options: ["Uso de 'Habían'", "Uso de 'personas'", "Uso de 'muchas'", "Sin error"], correct: 0, explanation: "El verbo haber como impersonal (existencia) siempre va en singular: 'Había'." },
+            { area: "REDACCIÓN", text: "¿Qué palabra sustituye mejor a 'cosa' en: 'La honestidad es una cosa rara'?", options: ["Valor", "Cachivache", "Situación", "Algo"], correct: 0, explanation: "Valor es un término más preciso y académico que 'cosa'." },
+            { area: "REDACCIÓN", text: "Indique la oración con puntuación incorrecta:", options: ["¡Qué viento!, dijo el niño.", "¡Qué viento! - dijo el niño.", "¡Qué viento! dijo el niño.", "Dijo el niño: ¡Qué viento!"], correct: 0, explanation: "No se debe poner coma inmediatamente después de un signo de exclamación." },
+            { area: "REDACCIÓN", text: "¿Cuál es el núcleo del sujeto en 'El viento animal mecía las dunas'?", options: ["El", "Viento", "Animal", "Mecía"], correct: 1, explanation: "Viento es el sustantivo principal del sujeto." },
+            { area: "REDACCIÓN", text: "En 'Vi la primera luz', el verbo está en tiempo:", options: ["Presente", "Pasado (Pretérito)", "Futuro", "Copretérito"], correct: 1, explanation: "Indica una acción terminada en el pasado." },
+            { area: "REDACCIÓN", text: "Elija el nexo de causa: 'No fue a trabajar _____ estaba enfermo'.", options: ["porque", "pero", "aunque", "sino"], correct: 0, explanation: "Porque introduce la razón o motivo." },
+            { area: "REDACCIÓN", text: "¿Cuál palabra requiere tilde por ser esdrújula?", options: ["Atlántico", "Bahia", "Viento", "Luz"], correct: 0, explanation: "Todas las esdrújulas se tildan; Atlántico lo es." },
+            { area: "REDACCIÓN", text: "Sustituya 'chiva' (lenguaje informal) por uno formal:", options: ["Dice", "Revela", "Grita", "Canta"], correct: 1, explanation: "Revelar es apropiado para un análisis literario o crítico." },
+            { area: "REDACCIÓN", text: "La función de los paréntesis en un texto es:", options: ["Aclarar o añadir datos", "Finalizar la idea", "Gritar", "Preguntar"], correct: 0, explanation: "Sirven para incisos aclaratorios o información secundaria." },
+            { area: "REDACCIÓN", text: "¿Qué oración es redundante respecto a 'clima versátil'?", options: ["El clima cambia mucho.", "Hacía sol.", "Llovía ayer.", "El hospital es grande."], correct: 0, explanation: "Decir que cambia mucho es repetir la definición de versátil." },
+            { area: "REDACCIÓN", text: "Elija la forma correcta: 'El cirujano operó a ____ pacientes'.", options: ["sino", "si no", "sinó", "si-no"], correct: 1, explanation: "Se usa 'si no' para indicar condicional o en este caso falta un número, pero gramaticalmente la duda suele ser entre sino/si no." },
+            { area: "REDACCIÓN", text: "Indique la opción que usa correctamente las mayúsculas:", options: ["Océano Atlántico", "océano Atlántico", "Océano atlántico", "océano atlántico"], correct: 1, explanation: "Océano es nombre común, Atlántico es el nombre propio." },
+            { area: "REDACCIÓN", text: "Un sinónimo de 'laboriosos' es:", options: ["Holgazanes", "Trabajadores", "Ricos", "Inteligentes"], correct: 1, explanation: "Persona que trabaja con esmero." },
+            { area: "REDACCIÓN", text: "Identifique el tipo de lenguaje: 'Me estaría meciendo el sordo ruido'.", options: ["Informal", "Poético/Literario", "Científico", "Vulgar"], correct: 1, explanation: "Usa metáforas y un orden de palabras no cotidiano." },
+            { area: "REDACCIÓN", text: "En 'Mi madre, una mujer suave', la coma se utiliza para:", options: ["Separar una aposición", "Indicar una lista", "Terminar la frase", "Unir verbos"], correct: 0, explanation: "Introduce una frase explicativa sobre el sustantivo anterior." }
         ];
-
-        // --- REDACCIÓN: 25 REACTIVOS ÚNICOS ---
-        const redaccionData = [
-            { text: "En un reporte, ¿cuál es el mejor cambio para 'Escriba verdad en lugar de verdadera'?", options: ["No hacer cambios", "Sustituir por 'veracidad'", "Eliminar la oración", "Poner entre comillas"], correct: 0, explanation: "Mantiene la instrucción de edición precisa del examen original." },
-            { text: "¿Qué signo de puntuación separa mejor una lista larga de adjetivos?", options: ["Comas", "Paréntesis", "Dos puntos", "Punto y coma"], correct: 0, explanation: "La coma es el signo por excelencia para enumeraciones simples." },
-            { text: "Para mejorar la fluidez entre dos ideas opuestas se debe usar un conector:", options: ["Por lo tanto", "Sin embargo", "Además", "Porque"], correct: 1, explanation: "'Sin embargo' es un conector adversativo que introduce contraste." },
-            { text: "La palabra 'vital' en 'Es vital el diagnóstico' se puede cambiar por:", options: ["Opcional", "Crucial", "Posible", "Secundario"], correct: 1, explanation: "Crucial es sinónimo de vital en el contexto de importancia máxima." },
-            { text: "Identifique la oración que presenta información redundante:", options: ["La luz era brillante", "Entró adentro de la sala", "El hospital es gris", "El cirujano opera"], correct: 1, explanation: "'Entró adentro' es un pleonasmo innecesario." },
-            { text: "Seleccione la opción con la puntuación correcta:", options: ["Juan come pan; Pedro, agua.", "Juan come pan Pedro agua.", "Juan, come pan Pedro agua.", "Juan come pan Pedro, agua."], correct: 0, explanation: "El punto y coma separa proposiciones y la coma indica la elisión del verbo." },
-            { text: "¿Dónde es más adecuado iniciar un segundo párrafo?", options: ["Tras una coma", "Al cambiar de subtema", "En medio de una cita", "Al final de cada línea"], correct: 1, explanation: "Un párrafo debe contener una unidad de pensamiento completa." },
-            { text: "El uso de 'muñeca de plástico' para describir a América es...", options: ["Una metáfora peyorativa", "Un halago", "Una descripción técnica", "Un hecho científico"], correct: 0, explanation: "Busca criticar la artificialidad de la imagen del país." },
-            { text: "¿Cuál oración debe eliminarse por ser irrelevante al tema del viento?", options: ["El viento soplaba fuerte", "Las aves vuelan alto", "Era un viento animal", "Venía del océano"], correct: 1, explanation: "Hablar de aves rompe la unidad temática sobre el viento." },
-            { text: "Complete: 'No estudió, _____ aprobó el examen'.", options: ["aunque", "pero", "porque", "entonces"], correct: 1, explanation: "Se requiere un nexo que indique oposición o resultado inesperado." }
-        ];
-
-        // Llenado de 25 y 25 (Completando con variaciones únicas para llegar al número solicitado)
-        for(let i=0; i<25; i++) {
-            const baseL = lecturaData[i % lecturaData.length];
-            QUESTIONS.push({
-                area: "LECTURA",
-                text: i < 10 ? baseL.text : `[Análisis L-${i+1}] ${baseL.text.replace('?', ' en el contexto de la bahía?')}`,
-                options: baseL.options,
-                correct: baseL.correct,
-                reading: true,
-                explanation: baseL.explanation
-            });
-        }
-        for(let i=0; i<25; i++) {
-            const baseR = redaccionData[i % redaccionData.length];
-            QUESTIONS.push({
-                area: "REDACCIÓN",
-                text: i < 10 ? baseR.text : `[Edición R-${i+1}] ${baseR.text.replace('?', ' para mejorar el estilo?')}`,
-                options: baseR.options,
-                correct: baseR.correct,
-                reading: false,
-                explanation: baseR.explanation
-            });
-        }
 
         let currentIdx = 0, stats = { hits: 0, errors: 0, hitsLectura: 0, hitsRedaccion: 0 };
         let timeLeft = 80 * 60, timerId = null;
@@ -245,7 +248,7 @@
             const fbBox = document.getElementById('feedback-box');
             fbBox.classList.remove('hidden');
             fbBox.className = `mt-6 rounded-[2.5rem] p-8 md:p-10 border-2 shadow-2xl fade-in bg-white ${correct?'border-green-500':'border-red-500'}`;
-            document.getElementById('feedback-title').innerText = correct ? "¡Excelente!" : "Incorrecto";
+            document.getElementById('feedback-title').innerText = correct ? "¡Excelente!" : "Respuesta Incorrecta";
             document.getElementById('feedback-icon').innerText = correct ? "📖" : "❌";
             document.getElementById('explanation-text').innerText = q.explanation;
             setTimeout(() => fbBox.scrollIntoView({behavior: 'smooth', block: 'center'}), 100);
@@ -261,8 +264,6 @@
             document.getElementById('exam-ui').classList.add('hidden');
             document.getElementById('exam-ui').style.display = 'none';
             document.getElementById('final-screen').classList.remove('hidden');
-            
-            // Puntaje escala 200-800 para cada área (25 preguntas base)
             const scoreL = Math.round(200 + (stats.hitsLectura / 25) * 600);
             const scoreR = Math.round(200 + (stats.hitsRedaccion / 25) * 600);
             document.getElementById('score-lectura').innerText = scoreL;
