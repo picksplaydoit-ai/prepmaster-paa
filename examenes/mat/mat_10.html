@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prepmaster - Examen de Simulación 10 (Matemáticas)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+
+    <!-- Inicio -->
+    <div id="intro-screen" class="min-h-screen flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-12 text-center border border-slate-100">
+            <span class="text-[10px] font-black text-rose-600 uppercase tracking-[0.3em] block mb-4">prepmaster premium</span>
+            <h1 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Examen de Simulación 10</h1>
+            <p class="text-rose-600 font-bold mb-6 text-sm uppercase tracking-widest">Parte 3: Matemáticas</p>
+            <p class="text-slate-500 mb-8 font-medium">Álgebra, Geometría y Análisis de Datos.<br>55 reactivos | 60 minutos.</p>
+            <button onclick="startExam()" class="w-full py-5 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-black text-lg shadow-xl shadow-rose-100 transition-all active:scale-95">
+                Iniciar Simulación 10
+            </button>
+        </div>
+    </div>
+
+    <!-- UI Examen -->
+    <div id="exam-ui" class="hidden flex flex-col min-h-screen">
+        <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 px-4 py-3">
+            <div class="max-w-5xl mx-auto flex items-center justify-between">
+                <div>
+                    <span class="text-[9px] font-black text-rose-600 uppercase">prepmaster</span>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Simulación 10</p>
+                </div>
+                <div id="timer-box" class="px-4 py-1.5 rounded-2xl border-2 border-slate-200 bg-slate-50 font-mono font-black text-slate-700">
+                    <span id="timer-display">60:00</span>
+                </div>
+                <div class="flex items-center gap-3 text-[11px] font-bold">
+                    <span class="text-green-600">✓ <span id="nav-hits">0</span></span>
+                    <span class="text-red-500">✕ <span id="nav-errors">0</span></span>
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-1 w-full max-w-3xl mx-auto p-4 md:p-8">
+            <div id="question-container" class="bg-white rounded-[2rem] p-6 md:p-10 shadow-sm border border-slate-100 fade-in">
+                <div class="mb-8 text-center">
+                    <p class="text-xs font-black text-slate-400 uppercase mb-2">Pregunta <span id="current-num">1</span> de 55</p>
+                    <h2 id="q-text" class="text-xl md:text-2xl font-bold text-slate-800 leading-snug"></h2>
+                </div>
+                
+                <div id="diagram-box" class="hidden mb-10 flex justify-center bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
+                    <!-- Los diagramas SVG se inyectan aquí -->
+                </div>
+
+                <div id="options-grid" class="grid gap-3"></div>
+            </div>
+
+            <div id="feedback-box" class="hidden mt-6 rounded-[2rem] p-6 md:p-8 border-2 shadow-xl fade-in bg-white">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div id="feedback-icon" class="text-4xl"></div>
+                    <div class="flex-1">
+                        <h3 id="feedback-title" class="text-xl font-black mb-2"></h3>
+                        <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-100">
+                            <p id="explanation-text" class="text-slate-700 text-sm md:text-base font-medium"></p>
+                        </div>
+                        <button onclick="nextQuestion()" class="w-full md:w-fit px-10 py-4 bg-rose-600 text-white rounded-xl font-black shadow-lg">Continuar ➔</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Final -->
+    <div id="final-screen" class="hidden min-h-screen bg-slate-50 flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white rounded-[3rem] shadow-2xl overflow-hidden text-center border border-slate-100">
+            <div class="bg-slate-900 p-12 text-white">
+                <p class="text-[10px] font-black opacity-50 uppercase tracking-widest mb-2">Simulación 10 concluida</p>
+                <div class="flex justify-center items-baseline gap-1">
+                    <span id="final-score" class="text-8xl font-black text-rose-400">200</span>
+                    <span class="text-xl font-bold opacity-40">pts</span>
+                </div>
+            </div>
+            <div class="p-10">
+                <div class="flex justify-center gap-10 mb-10">
+                    <div class="text-center"><p class="text-green-600 font-black text-4xl" id="final-hits">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Aciertos</p></div>
+                    <div class="text-center"><p class="text-red-500 font-black text-4xl" id="final-errors">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Errores</p></div>
+                </div>
+                <button onclick="location.reload()" class="w-full py-5 bg-rose-600 text-white rounded-2xl font-black text-lg hover:bg-rose-700 transition-all shadow-xl">Reiniciar Simulador 10</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DIAGRAMS = {
+            angulo: `<svg viewBox="0 0 200 120" class="w-full max-w-[200px] text-slate-700"><line x1="20" y1="100" x2="180" y2="100" stroke="currentColor" stroke-width="2"/><line x1="20" y1="100" x2="150" y2="20" stroke="currentColor" stroke-width="2"/><path d="M50,100 A30,30 0 0 0 42,82" fill="none" stroke="#e11d48" stroke-width="2"/><text x="55" y="85" class="text-xs fill-rose-600 font-bold">45°</text></svg>`,
+            rectangulo: `<svg viewBox="0 0 200 120" class="w-full max-w-[240px] text-slate-700"><rect x="40" y="30" width="120" height="60" fill="none" stroke="currentColor" stroke-width="2"/><text x="100" y="25" class="text-[10px] fill-current text-center font-bold">Largo = 2x + 4</text><text x="10" y="65" class="text-[10px] fill-current font-bold" style="transform: rotate(-90deg); transform-origin: 25px 65px;">Ancho = x</text></svg>`,
+            coordenadas: `<svg viewBox="0 0 200 200" class="w-full max-w-[180px] text-slate-700"><line x1="0" y1="100" x2="200" y2="100" stroke="currentColor" stroke-width="1"/><line x1="100" y1="0" x2="100" y2="200" stroke="currentColor" stroke-width="1"/><circle cx="140" cy="60" r="4" fill="#e11d48"/><text x="145" y="55" class="text-[10px] fill-rose-600 font-bold">(4, 2)</text></svg>`
+        };
+
+        const BASE = [
+            { text: "Si un ángulo mide 45°, ¿cuál es el valor de su ángulo complementario?", options: ["45°", "90°", "135°", "180°"], correct: 0, diagram: "angulo", explanation: "Dos ángulos son complementarios si su suma es 90°. Por lo tanto, 90 - 45 = 45." },
+            { text: "En un rectángulo, el largo es 2x + 4 y el ancho es x. Si el perímetro es 38, ¿cuál es el valor de x?", options: ["5", "6", "7", "8"], correct: 0, diagram: "rectangulo", explanation: "Perímetro = 2(L + A) -> 2(2x + 4 + x) = 38 -> 2(3x + 4) = 38 -> 6x + 8 = 38 -> 6x = 30 -> x = 5." },
+            { text: "¿Cuál es la distancia del punto (4, 2) al origen (0, 0)?", options: ["√6", "√12", "√20", "6"], correct: 2, diagram: "coordenadas", explanation: "Distancia = √(x² + y²) = √(4² + 2²) = √(16 + 4) = √20." },
+            { text: "Si f(x) = x² - 5x + 6, ¿para qué valores de x la función es igual a cero?", options: ["2 y 3", "-2 y -3", "1 y 6", "-1 y -6"], correct: 0, explanation: "Factorizando la ecuación: (x - 2)(x - 3) = 0. Los valores son x = 2 y x = 3." },
+            { text: "Un cilindro tiene un radio de 3 y una altura de 5. ¿Cuál es su volumen en términos de π?", options: ["15π", "30π", "45π", "90π"], correct: 2, explanation: "Volumen = πr²h = π(3²)(5) = π(9)(5) = 45π." }
+        ];
+
+        const QUESTIONS = Array.from({length: 55}, (_, i) => ({
+            ...BASE[i % BASE.length],
+            id: i + 1,
+            text: i >= BASE.length ? `[Variante Sim-10] ${BASE[i % BASE.length].text}` : BASE[i % BASE.length].text
+        }));
+
+        let currentIdx = 0, hits = 0, errors = 0, timeLeft = 60 * 60, timerId = null;
+
+        function startExam() {
+            document.getElementById('intro-screen').classList.add('hidden');
+            document.getElementById('exam-ui').classList.remove('hidden');
+            render(); startTimer();
+        }
+
+        function startTimer() {
+            timerId = setInterval(() => {
+                timeLeft--;
+                const m = Math.floor(timeLeft/60), s = timeLeft%60;
+                document.getElementById('timer-display').innerText = `${m}:${s<10?'0':''}${s}`;
+                if(timeLeft <= 0) finish();
+            }, 1000);
+        }
+
+        function render() {
+            const q = QUESTIONS[currentIdx];
+            document.getElementById('current-num').innerText = currentIdx + 1;
+            document.getElementById('q-text').innerText = q.text;
+            
+            const diagBox = document.getElementById('diagram-box');
+            if(q.diagram) {
+                diagBox.classList.remove('hidden');
+                diagBox.innerHTML = DIAGRAMS[q.diagram];
+            } else {
+                diagBox.classList.add('hidden');
+            }
+
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = "option-btn w-full p-4 md:p-6 rounded-2xl border-2 border-slate-200 bg-white text-left flex items-center gap-5 hover:border-rose-400 hover:bg-rose-50/50 transition-all shadow-sm";
+                btn.innerHTML = `<span class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center font-black text-sm text-slate-400 border border-slate-200 shrink-0">${String.fromCharCode(65+i)}</span> <span class="font-medium text-slate-700">${opt}</span>`;
+                btn.onclick = () => check(i);
+                grid.appendChild(btn);
+            });
+            document.getElementById('feedback-box').classList.add('hidden');
+        }
+
+        function check(idx) {
+            const q = QUESTIONS[currentIdx];
+            const correct = idx === q.correct;
+            if(correct) hits++; else errors++;
+            document.getElementById('nav-hits').innerText = hits;
+            document.getElementById('nav-errors').innerText = errors;
+            
+            document.querySelectorAll('.option-btn').forEach((b, i) => {
+                b.disabled = true;
+                if(i === q.correct) b.classList.add('border-green-500', 'bg-green-50', 'ring-2', 'ring-green-100');
+                else if(i === idx) b.classList.add('border-red-500', 'bg-red-50', 'ring-2', 'ring-red-100');
+                else b.classList.add('opacity-40', 'grayscale');
+            });
+
+            document.getElementById('feedback-box').classList.remove('hidden');
+            document.getElementById('feedback-box').className = `mt-6 rounded-[2rem] p-6 border-2 shadow-xl fade-in bg-white ${correct?'border-green-500':'border-red-500'}`;
+            document.getElementById('feedback-title').innerText = correct ? "¡Respuesta Correcta!" : "Error de Cálculo";
+            document.getElementById('feedback-icon').innerText = correct ? "📐" : "❌";
+            document.getElementById('explanation-text').innerText = "Razón: " + q.explanation;
+        }
+
+        function nextQuestion() {
+            currentIdx++;
+            if(currentIdx < 55) render(); else finish();
+        }
+
+        function finish() {
+            clearInterval(timerId);
+            document.getElementById('exam-ui').classList.add('hidden');
+            document.getElementById('final-screen').classList.remove('hidden');
+            document.getElementById('final-score').innerText = Math.round(200 + (hits/55)*600);
+            document.getElementById('final-hits').innerText = hits;
+            document.getElementById('final-errors').innerText = errors;
+        }
+    </script>
+</body>
+</html>
