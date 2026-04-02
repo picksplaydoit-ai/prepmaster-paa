@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prepmaster - Examen Libre (Español)</title>
+    <title>Prepmaster - Examen Libre Español</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
@@ -12,28 +12,40 @@
         .fade-in { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .modal-overlay { background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); }
+        .reading-scroll::-webkit-scrollbar { width: 6px; }
+        .reading-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
 
-    <!-- Pantalla de Inicio -->
+    <!-- Pantalla de Bienvenida -->
     <div id="intro-screen" class="min-h-screen flex items-center justify-center p-4">
         <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-12 text-center border border-slate-100 fade-in">
-            <span class="text-[10px] font-black text-teal-600 uppercase tracking-[0.3em] block mb-4">prepmaster premium</span>
-            <h1 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Examen Libre 803</h1>
-            <p class="text-teal-600 font-bold mb-6 text-sm uppercase tracking-widest">Español (50 Reactivos Únicos)</p>
-            <div class="space-y-3 mb-8 text-left text-sm text-slate-600 bg-teal-50 p-5 rounded-2xl">
-                <p>• <strong>25 Lectura</strong> (Análisis Crítico)</p>
-                <p>• <strong>25 Redacción</strong> (Edición y Estilo)</p>
-                <p>• <strong>Cero Repeticiones</strong> garantizadas.</p>
+            <div class="w-20 h-20 bg-teal-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-lg rotate-3">
+                <span class="text-white text-4xl font-black">Aa</span>
             </div>
-            <button onclick="startExam()" class="w-full py-4 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-black text-lg shadow-xl transition-all active:scale-95">
-                Comenzar Examen
+            <span class="text-[10px] font-black text-teal-600 uppercase tracking-[0.3em] block mb-4">prepmaster premium</span>
+            <h1 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Examen Libre</h1>
+            <p class="text-teal-600 font-bold mb-8 text-sm uppercase tracking-widest italic">Híbrido: Lectura y Redacción</p>
+            
+            <div class="grid grid-cols-2 gap-4 mb-8 text-left">
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase">Ejercicios</p>
+                    <p class="text-xl font-black text-slate-800">50 Totales</p>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase">Tiempo</p>
+                    <p class="text-xl font-black text-slate-800">50 Minutos</p>
+                </div>
+            </div>
+
+            <button onclick="startExam()" class="w-full py-4 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-black text-lg shadow-xl transition-all shadow-teal-100 active:scale-95">
+                Comenzar Prueba
             </button>
         </div>
     </div>
 
-    <!-- UI del Examen -->
+    <!-- Interfaz del Examen -->
     <div id="exam-ui" class="hidden flex-col flex-1">
         <nav class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 px-4 py-3 shadow-sm">
             <div class="max-w-5xl mx-auto flex items-center justify-between gap-2">
@@ -45,42 +57,43 @@
                     </div>
                 </div>
                 
-                <div id="timer-box" class="px-4 py-1.5 rounded-xl border-2 border-slate-200 bg-slate-50 font-mono font-black text-sm md:text-lg text-slate-700">
-                    <span id="timer-display">80:00</span>
+                <div id="timer-box" class="px-5 py-2 rounded-2xl border-2 border-slate-200 bg-slate-50 font-mono text-lg text-slate-700 font-black">
+                    <span id="timer-display">50:00</span>
                 </div>
 
                 <div class="text-right">
-                    <p class="text-[9px] font-black text-slate-400 uppercase leading-none" id="q-area">Área</p>
-                    <p class="text-xs md:text-sm font-black text-slate-800 tracking-tighter"><span id="current-num">1</span>/50</p>
+                    <p class="text-[9px] font-black text-slate-400 uppercase leading-none" id="area-label">Sección</p>
+                    <p class="text-sm font-black text-slate-800 tracking-tighter"><span id="current-num">1</span>/50</p>
                 </div>
             </div>
         </nav>
 
         <main class="flex-1 w-full max-w-4xl mx-auto p-4 md:p-8">
-            <div class="mb-6 flex justify-center">
-                <button id="btn-reading" onclick="openReading()" class="hidden bg-teal-50 border-2 border-teal-200 text-teal-700 px-8 py-3 rounded-3xl font-black text-sm flex items-center gap-2 hover:bg-teal-100 transition-all shadow-md active:scale-95">
-                    📖 CONSULTAR LECTURA 803
+            <!-- Acceso a lectura -->
+            <div id="reading-btn-container" class="mb-6 flex justify-center">
+                <button onclick="openReading()" class="bg-white border-2 border-teal-500 text-teal-600 px-8 py-3 rounded-2xl font-black text-xs flex items-center gap-2 shadow-sm hover:bg-teal-50 transition-all active:scale-95">
+                    📖 ABRIR TEXTO DE APOYO
                 </button>
             </div>
 
-            <div id="question-container" class="bg-white rounded-[2rem] p-6 md:p-12 shadow-sm border border-slate-100 fade-in">
-                <div class="mb-8">
+            <div id="question-container" class="bg-white rounded-[2.5rem] p-6 md:p-12 shadow-sm border border-slate-100 fade-in">
+                <div class="mb-10">
                     <h2 id="q-text" class="text-xl md:text-2xl font-bold text-slate-800 leading-snug tracking-tight"></h2>
                 </div>
                 <div id="options-grid" class="grid gap-3"></div>
             </div>
 
-            <!-- Retroalimentación -->
-            <div id="feedback-box" class="hidden mt-6 rounded-[2.5rem] p-8 md:p-10 border-2 shadow-2xl fade-in bg-white">
-                <div class="flex flex-col md:flex-row gap-8">
+            <!-- Caja de Retroalimentación -->
+            <div id="feedback-box" class="hidden mt-6 rounded-[2.5rem] p-8 border-2 shadow-2xl fade-in bg-white">
+                <div class="flex flex-col md:flex-row gap-6">
                     <div id="feedback-icon" class="text-5xl"></div>
                     <div class="flex-1">
-                        <h3 id="feedback-title" class="text-2xl font-black mb-4"></h3>
+                        <h3 id="feedback-title" class="text-2xl font-black mb-2 tracking-tight"></h3>
                         <div class="bg-slate-50 p-6 rounded-2xl mb-8 border border-slate-100">
-                            <p id="explanation-text" class="text-slate-700 text-base md:text-lg leading-relaxed serif-text italic"></p>
+                            <p id="explanation-text" class="text-slate-700 text-lg leading-relaxed italic serif-text"></p>
                         </div>
-                        <button onclick="nextQuestion()" class="w-full md:w-fit px-12 py-4 bg-teal-600 text-white rounded-xl font-black shadow-lg active:scale-95 transition-all">
-                            Siguiente ➔
+                        <button onclick="nextQuestion()" class="w-full md:w-fit px-12 py-4 bg-teal-600 text-white rounded-xl font-black shadow-lg hover:bg-teal-700 transition-all active:scale-95">
+                            Siguiente Ejercicio ➔
                         </button>
                     </div>
                 </div>
@@ -88,110 +101,123 @@
         </main>
     </div>
 
-    <!-- Modal Lectura -->
+    <!-- Modal para Lecturas Largas -->
     <div id="reading-modal" class="hidden fixed inset-0 z-[100] modal-overlay flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-2xl max-h-[85vh] rounded-[3rem] shadow-2xl flex flex-col overflow-hidden border border-slate-100">
+        <div class="bg-white w-full max-w-2xl max-h-[85vh] rounded-[3rem] shadow-2xl flex flex-col overflow-hidden">
             <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-teal-50">
-                <h3 class="font-black text-teal-900 text-xl tracking-tight">Lectura: Bahía Argentina</h3>
-                <button onclick="closeReading()" class="text-teal-900 font-bold text-2xl">✕</button>
+                <h3 id="modal-title" class="font-black text-teal-900 text-xl tracking-tight">Lectura</h3>
+                <button onclick="closeReading()" class="text-teal-900 font-bold text-2xl p-2">✕</button>
             </div>
-            <div id="reading-body" class="p-10 md:p-14 overflow-y-auto serif-text text-lg md:text-xl leading-relaxed text-slate-700 whitespace-pre-wrap selection:bg-teal-100"></div>
+            <div id="reading-body" class="p-10 md:p-14 overflow-y-auto serif-text text-lg leading-relaxed text-slate-700 whitespace-pre-wrap reading-scroll"></div>
             <div class="p-8 border-t border-slate-50 bg-slate-50 text-center">
-                <button onclick="closeReading()" class="px-12 py-4 bg-slate-900 text-white rounded-2xl font-black shadow-lg">Regresar al Examen</button>
+                <button onclick="closeReading()" class="px-12 py-4 bg-slate-900 text-white rounded-2xl font-black">Volver a la Pregunta</button>
             </div>
         </div>
     </div>
 
-    <!-- Pantalla Final -->
+    <!-- Pantalla de Resultados -->
     <div id="final-screen" class="hidden min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        <div class="max-w-2xl w-full bg-white rounded-[3.5rem] shadow-2xl overflow-hidden border border-slate-100">
-            <div class="bg-slate-900 p-12 md:p-16 text-center text-white">
-                <span class="text-[10px] font-black opacity-50 uppercase tracking-[0.4em] block mb-8">análisis detallado prepmaster</span>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-                    <div class="bg-white/10 p-8 rounded-[2.5rem] backdrop-blur-sm border border-white/10">
-                        <p class="text-[10px] font-bold uppercase opacity-60 mb-2 tracking-widest">Puntaje Lectura</p>
-                        <p id="score-lectura" class="text-6xl font-black text-teal-400 mt-2">200</p>
+        <div class="max-w-2xl w-full bg-white rounded-[3.5rem] shadow-2xl overflow-hidden border border-slate-100 fade-in">
+            <div class="bg-slate-900 p-12 text-center text-white">
+                <p class="text-[10px] font-black opacity-50 uppercase tracking-[0.4em] mb-8">evaluación finalizada</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                    <div class="bg-white/10 p-8 rounded-3xl border border-white/5">
+                        <p class="text-xs font-bold text-teal-400 uppercase mb-2">Lectura</p>
+                        <p id="score-lectura" class="text-7xl font-black">200</p>
                     </div>
-                    <div class="bg-white/10 p-8 rounded-[2.5rem] backdrop-blur-sm border border-white/10">
-                        <p class="text-[10px] font-bold uppercase opacity-60 mb-2 tracking-widest">Puntaje Redacción</p>
-                        <p id="score-redaccion" class="text-6xl font-black text-teal-400 mt-2">200</p>
+                    <div class="bg-white/10 p-8 rounded-3xl border border-white/5">
+                        <p class="text-xs font-bold text-teal-400 uppercase mb-2">Redacción</p>
+                        <p id="score-redaccion" class="text-7xl font-black">200</p>
                     </div>
                 </div>
             </div>
             <div class="p-12 text-center">
                 <div class="flex justify-center gap-12 mb-10">
-                    <div><p class="text-green-600 font-black text-4xl" id="final-hits">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Aciertos</p></div>
-                    <div><p class="text-red-500 font-black text-4xl" id="final-errors">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Errores</p></div>
+                    <div class="text-center">
+                        <p class="text-green-600 font-black text-4xl" id="final-hits">0</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">Aciertos</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-red-500 font-black text-4xl" id="final-errors">0</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">Errores</p>
+                    </div>
                 </div>
-                <button onclick="location.reload()" class="w-full py-6 bg-teal-600 text-white rounded-2xl font-black text-xl hover:bg-teal-700 transition-all shadow-xl shadow-teal-100 active:scale-95">
-                    Reiniciar Simulador
-                </button>
+                <button onclick="location.reload()" class="w-full py-6 bg-teal-600 text-white rounded-2xl font-black text-xl hover:bg-teal-700 transition-all shadow-xl shadow-teal-50 active:scale-95">Reiniciar Simulación</button>
             </div>
         </div>
     </div>
 
     <script>
-        const READING_TEXT = `Vi la primera luz de mi tierra en una bahía argentina del Atlántico. A los pocos días me estaría meciendo, como un jugueteo torvo de quién sabe qué paternidad tutelar, el sordo y constante ruido de las dunas -cada segundo desplazadas-, el clima versátil del país, el viento animal.\n\nMi padre era un cirujano del hospital; mi madre, una mujer suave, sal de la tierra en su bondad tranquila. Los dos, laboriosos y tan honestos de naturaleza que en ellos vi salvarse siempre algo del general naufragio humano. Mi primer amigo fue el viento que venía del océano.`;
+        const LECTURAS = {
+            cid: {
+                title: "Poema Medieval",
+                content: "En Valencia, con los suyos, vivía el Cid campeador. Con él estaban sus yernos, infantes de Carrión. Un día que el Cid dormía en su escaño, sin temor, un mal sobresalto entonces, sabed, les aconteció: escapóse de una jaula, saliendo fuera, un león. Los que estaban en la Corte sintieron un gran temor; recogiéronse sus mantos los del buen campeador, y rodean el escaño en guarda de su señor.\n\nAllí Fernando González, infante de Carrión, ni en las salas ni en la torre ningún refugio encontró; metióse bajo el escaño, tanto era su pavor. Diego González, el otro, por la puerta se salió gritando con grandes voces: «¡Ay, qué no veré Carrión!» Tras la viga de un lagar metióse con gran temor; todo el manto y la túnica sucios de allí los sacó.\n\nEn esto que despierta el que en buen hora nació; ve cercado su escaño por tanto buen varón. «¿Qué es esto, decid, mesnadas? ¿Qué queréis aquí, varones?» «¡Ay, señor honrado, un susto nos ha dado el león.» Mio Cid hincó el codo, en pie se levantó, el manto se puso al cuello y hacia el león se dirigió. El león, cuando lo vio, a tal punto se asustó; delante de Mio Cid la cabeza inclinó y su rostro hincó en el suelo."
+            },
+            carver: {
+                title: "Análisis Literario",
+                content: "Sea mediante el cine, la radio, la televisión, la moda o a través de su avanzada tecnología, América se ha promocionado a sí misma como una hermosa y glamurosa mujer, rica e inquieta, que puede colmar los sueños de cualquier mortal dispuesto a lanzarse a sus redes. Y presume de su esbelta figura con imágenes como las de La estatua de la Libertad, Central Park, La Séptima Avenida o las cálidas playas de California.\n\nPero, justo cuando estamos a punto de sucumbir a sus encantos, aparece Raymond Carver para desmentirlo todo. Carver nos chiva que no tiene nada de guapa, nada; que tan solo es una impostora, una artificial muñeca de plástico, con el pelo teñido y las caderas celulíticas; una maliciosa y frívola mujerzuela que no cumple. Carver nos dice que detrás de esa fastuosa fachada de la mujer-América, lo que hay de verdad es una galería de seres derrotados, de gentes corrientes, humildes, marcadas por el dolor y la soledad."
+            }
+        };
 
-        // 50 Preguntas Únicas (25 Lectura + 25 Redacción)
-        const QUESTIONS = [
-            // --- LECTURA (1-25) ---
-            { area: "LECTURA", text: "¿Qué significa la expresión 'sal de la tierra' aplicada a la madre?", options: ["Origen rural", "Bondad y valor moral", "Dureza de carácter", "Sencillez excesiva"], correct: 1, reading: true, explanation: "Es un modismo bíblico/literario que resalta la pureza y bondad genuina." },
-            { area: "LECTURA", text: "El ruido de las dunas es 'sordo y constante'. Esto sugiere...", options: ["Paz absoluta", "Presencia persistente", "Silencio total", "Un error auditivo"], correct: 1, reading: true, explanation: "Indica un sonido omnipresente que no cesa en ese entorno geográfico." },
-            { area: "LECTURA", text: "¿Cuál es el sentimiento predominante hacia los padres del narrador?", options: ["Compasión", "Respeto y admiración", "Indiferencia", "Melancolía"], correct: 1, reading: true, explanation: "Los describe como seres honestos en los que se salva 'algo del naufragio humano'." },
-            { area: "LECTURA", text: "El 'viento animal' y el 'jugueteo torvo' personifican la naturaleza como...", options: ["Un ser inofensivo", "Una fuerza instintiva", "Un enemigo mortal", "Un aliado cercano"], correct: 1, reading: true, explanation: "Atribuyen cualidades vitales y algo agresivas a los elementos climáticos." },
-            { area: "LECTURA", text: "¿Qué función cumple la mención de la profesión del padre?", options: ["Explicar su riqueza", "Reforzar su carácter laborioso", "Justificar sus viajes", "Hablar de la salud pública"], correct: 1, reading: true, explanation: "Menciona que eran 'laboriosos y tan honestos', vinculando su trabajo con su integridad." },
-            { area: "LECTURA", text: "La palabra 'torvo' en el texto se utiliza para connotar algo...", options: ["Alegre", "Amenazante o fiero", "Cálido", "Misterioso"], correct: 1, reading: true, explanation: "Torvo implica una cualidad hosca o que puede inspirar temor." },
-            { area: "LECTURA", text: "El autor menciona que su primer amigo fue...", options: ["Un niño vecino", "Su padre", "El viento del océano", "Las dunas"], correct: 2, reading: true, explanation: "Texto: 'Mi primer amigo fue el viento que venía del océano'." },
-            { area: "LECTURA", text: "Al hablar del 'general naufragio humano', el autor sugiere que...", options: ["Hubo un accidente", "La humanidad está en crisis", "Los padres murieron", "La bahía es peligrosa"], correct: 1, reading: true, explanation: "Metáfora sobre la decadencia moral o espiritual del resto de la sociedad." },
-            { area: "LECTURA", text: "La descripción del clima como 'versátil' indica que es...", options: ["Cálido", "Cambiante", "Estático", "Muy frío"], correct: 1, reading: true, explanation: "Versátil significa que cambia con facilidad de condición." },
-            { area: "LECTURA", text: "¿En qué lugar geográfico se sitúa el relato?", options: ["En el Pacífico", "En el Atlántico", "En un lago", "En la montaña"], correct: 1, reading: true, explanation: "Texto: 'en una bahía argentina del Atlántico'." },
-            { area: "LECTURA", text: "El término 'paternidad tutelar' respecto al viento sugiere...", options: ["Miedo al padre", "Una protección natural", "Un abandono", "Una educación estricta"], correct: 1, reading: true, explanation: "La idea de que los elementos de su tierra lo 'mecían' y cuidaban como un padre." },
-            { area: "LECTURA", text: "¿Cuál de estos adjetivos califica mejor a la madre?", options: ["Inquieta", "Suave", "Severa", "Indiferente"], correct: 1, reading: true, explanation: "Texto: 'mi madre, una mujer suave... en su bondad tranquila'." },
-            { area: "LECTURA", text: "La frase 'Vi la primera luz' es un sinónimo literario de...", options: ["Mirar el sol", "Nacer", "Despertar", "Descubrir algo"], correct: 1, reading: true, explanation: "Es una forma poética de referirse al nacimiento." },
-            { area: "LECTURA", text: "El narrador ve en sus padres una 'honestidad de naturaleza'. Esto implica que...", options: ["Eran biólogos", "Eran íntegros por esencia", "Vivían en el campo", "No tenían secretos"], correct: 1, reading: true, explanation: "Sugiere que su rectitud era parte intrínseca de su ser." },
-            { area: "LECTURA", text: "¿Qué elemento del paisaje se describe como 'cada segundo desplazado'?", options: ["El océano", "Las dunas", "El hospital", "Las nubes"], correct: 1, reading: true, explanation: "El viento mueve constantemente la arena de las dunas." },
-            { area: "LECTURA", text: "La actitud del narrador hacia su pasado parece ser de...", options: ["Rencor", "Nostalgia y estima", "Olvido", "Crítica"], correct: 1, reading: true, explanation: "Describe su origen con palabras que resaltan bondad y honestidad." },
-            { area: "LECTURA", text: "¿Cómo se describe la bondad de la madre?", options: ["Ruidosa", "Tranquila", "Exagerada", "Falsa"], correct: 1, reading: true, explanation: "Texto: 'en su bondad tranquila'." },
-            { area: "LECTURA", text: "El contraste entre 'el sordo ruido' y 'la bondad tranquila' crea un efecto de...", options: ["Caos", "Equilibrio ambiental", "Tensión familiar", "Aburrimiento"], correct: 1, reading: true, explanation: "Combina la fuerza de la naturaleza con la calma del hogar." },
-            { area: "LECTURA", text: "¿Qué significa que los padres fueran 'laboriosos'?", options: ["Que tenían hijos", "Que trabajaban mucho", "Que eran médicos", "Que eran ricos"], correct: 1, reading: true, explanation: "Laborioso es sinónimo de trabajador." },
-            { area: "LECTURA", text: "La mención de 'quién sabe qué paternidad' indica...", options: ["Un misterio familiar", "Una incertidumbre poética", "Amnesia", "Ignorancia"], correct: 1, reading: true, explanation: "Usa la ambigüedad para darle un tono místico a su relación con la tierra." },
-            { area: "LECTURA", text: "El viento es descrito como 'primer amigo'. Esto refuerza el tema de...", options: ["La soledad", "La conexión con el entorno", "La falta de escuela", "El miedo al mar"], correct: 1, reading: true, explanation: "Destaca el vínculo profundo del autor con su lugar de origen." },
-            { area: "LECTURA", text: "¿Qué cualidad se le asigna a los hijos de la bahía según el texto?", options: ["Ser guerreros", "Estar mecidos por dunas", "Ser cirujanos", "Viajar al océano"], correct: 1, reading: true, explanation: "Usa la metáfora de ser mecidos por el ambiente de la bahía." },
-            { area: "LECTURA", text: "El término 'general naufragio humano' funciona como...", options: ["Ironía", "Metáfora social", "Hipérbole médica", "Símil geográfico"], correct: 1, reading: true, explanation: "Representa a la sociedad como un barco hundiéndose, exceptuando a sus padres." },
-            { area: "LECTURA", text: "¿Cuál es el tono predominante en el fragmento?", options: ["Sarcástico", "Lírico y evocador", "Científico", "Político"], correct: 1, reading: true, explanation: "Utiliza un lenguaje poético para recordar su infancia." },
-            { area: "LECTURA", text: "La 'paternidad tutelar' se refiere directamente a...", options: ["Su padre biológico", "Los elementos naturales", "El gobierno", "Un antepasado"], correct: 1, reading: true, explanation: "Contexto: el ruido de las dunas y el viento que lo mecían." },
+        const PREGUNTAS = [
+            // LECTURA 1 (Cid)
+            { area: "LECTURA", text: "¿Qué suceso altera la tranquilidad en la Corte mientras el protagonista duerme?", options: ["Un ataque inesperado de enemigos", "El escape de un león de su jaula", "La traición de los infantes de Carrión", "Un incendio en las salas de Valencia"], correct: 1, readingKey: "cid", explanation: "El texto indica explícitamente: 'escapóse de una jaula... un león'." },
+            { area: "LECTURA", text: "¿Cuál es la reacción inmediata de Fernando González ante la presencia del animal?", options: ["Saca su espada para defender al Cid", "Se esconde bajo el escaño por el pavor", "Huye gritando hacia las tierras de Carrión", "Se refugia en la torre más alta del castillo"], correct: 1, readingKey: "cid", explanation: "Fernando 'metióse bajo el escaño' debido a su miedo." },
+            { area: "LECTURA", text: "La expresión 'el que en buen hora nació' hace referencia a:", options: ["Fernando González", "Diego González", "Mio Cid", "El león"], correct: 2, readingKey: "cid", explanation: "Es un epíteto épico tradicional para referirse al Cid Campeador." },
+            { area: "LECTURA", text: "¿En qué estado salió Diego González de su escondite tras la viga del lagar?", options: ["Con el manto y la túnica sucios", "Herido por las garras del león", "Con grandes voces de victoria", "Con el rostro hincado en el suelo"], correct: 0, readingKey: "cid", explanation: "Se menciona que sacó su ropa sucia tras esconderse allí." },
+            { area: "LECTURA", text: "¿Cómo reacciona el león al encontrarse frente al Cid?", options: ["Intenta atacarlo con fiereza", "Huye hacia las salas del castillo", "Inclina la cabeza y pone el rostro en el suelo", "Ruge con gran fuerza ante las mesnadas"], correct: 2, readingKey: "cid", explanation: "El animal muestra sumisión ante la figura del héroe." },
+            { area: "LECTURA", text: "El término 'pavor' en la narración se asocia principalmente con:", options: ["La actitud del Cid al despertar", "El comportamiento de los infantes de Carrión", "La reacción del león ante el Cid", "La lealtad de las mesnadas"], correct: 1, readingKey: "cid", explanation: "Describe el miedo extremo de Fernando y Diego." },
+            { area: "LECTURA", text: "¿Cuál es el propósito primordial de los hombres que rodean el escaño?", options: ["Despertar al Cid para que pelee", "Atrapar al león con sus mantos", "Resguardar a su señor mientras duerme", "Burlar la cobardía de los infantes"], correct: 2, readingKey: "cid", explanation: "Los del campeador 'rodean el escaño en guarda de su señor'." },
+            { area: "LECTURA", text: "En el contexto de la lectura, un 'escaño' es un:", options: ["Escudo protector", "Asiento con respaldo donde se puede descansar", "Tipo de torre defensiva", "Manto de guerra"], correct: 1, readingKey: "cid", explanation: "Es el mueble donde el Cid estaba durmiendo." },
+            { area: "LECTURA", text: "¿Qué sentimiento proyecta Diego González al salir por la puerta?", options: ["Valentía desmedida", "Nostalgia y miedo por su tierra", "Ira contra el Cid", "Confusión por el ruido"], correct: 1, readingKey: "cid", explanation: "Grita lamentando que tal vez no vuelva a ver Carrión." },
+            { area: "LECTURA", text: "¿Qué acción realiza el Cid inmediatamente después de despertarse?", options: ["Regaña a sus yernos por su cobardía", "Se dirige directamente hacia el león", "Ordena que cierren las jaulas", "Pide su espada a las mesnadas"], correct: 1, readingKey: "cid", explanation: "Se pone el manto y encara al animal." },
+            { area: "LECTURA", text: "La actitud de los infantes de Carrión frente a las mesnadas del Cid es de:", options: ["Superioridad", "Contraste por su falta de valor", "Cooperación", "Liderazgo militar"], correct: 1, readingKey: "cid", explanation: "Mientras los hombres del Cid protegen al señor, los infantes se esconden." },
+            { area: "LECTURA", text: "¿Dónde se encontraba el Cid al inicio de la historia?", options: ["En Carrión", "En Valencia", "En un lagar", "En una torre"], correct: 1, readingKey: "cid", explanation: "La primera línea indica: 'En Valencia... vivía el Cid'." },
 
-            // --- REDACCIÓN (26-50) ---
-            { area: "REDACCIÓN", text: "Identifique la oración con un pleonamo innecesario:", options: ["Entró a la sala", "Subió para arriba", "Vio el hospital", "Era una mujer"], correct: 1, explanation: "Subir implica ir hacia arriba; decir 'para arriba' es redundante." },
-            { area: "REDACCIÓN", text: "¿Qué signo de puntuación es más adecuado tras un saludo en una carta formal?", options: ["Coma", "Dos puntos", "Punto y coma", "Punto"], correct: 1, explanation: "En el español formal de cartas se utilizan los dos puntos." },
-            { area: "REDACCIÓN", text: "Elija el conector de contraste correcto: 'Corrió mucho, ____ no llegó a tiempo'.", options: ["pero", "porque", "entonces", "además"], correct: 0, explanation: "'Pero' une dos ideas opuestas o contradictorias." },
-            { area: "REDACCIÓN", text: "¿Cuál palabra es un sinónimo de 'crucial' en un texto académico?", options: ["Opcional", "Vital", "Probable", "Secundario"], correct: 1, explanation: "Vital y crucial denotan importancia extrema." },
-            { area: "REDACCIÓN", text: "Señale la oración gramaticalmente correcta:", options: ["Hicieron mucha calor", "Hizo mucho calor", "Hicieron muchos calores", "Hizo muchos calor"], correct: 1, explanation: "El verbo hacer en expresiones climáticas es impersonal (singular)." },
-            { area: "REDACCIÓN", text: "¿Qué cambio mejora: 'Juan es un médico, Pedro es un abogado'?", options: ["Juan es médico; Pedro, abogado.", "Juan es médico Pedro abogado.", "Juan es un médico; Pedro es abogado.", "Sin cambios"], correct: 0, explanation: "Uso del punto y coma para separar y la coma para evitar repetir 'es'." },
-            { area: "REDACCIÓN", text: "En el enunciado 'El ______ de la dunas', ¿qué palabra es ortográficamente correcta?", options: ["ruido", "rruido", "ruydo", "ruído"], correct: 0, explanation: "La palabra correcta es ruido (diptongo, sin tilde)." },
-            { area: "REDACCIÓN", text: "Para introducir un ejemplo en un párrafo, se utiliza:", options: ["Por ejemplo,", "En resumen,", "Por último,", "Sin embargo,"], correct: 0, explanation: "Nexo explicativo o ejemplificativo." },
-            { area: "REDACCIÓN", text: "¿Cuál es el antónimo de 'honestos'?", options: ["Mentirosos", "Integro", "Laboriosos", "Pobres"], correct: 0, explanation: "Alguien no honesto suele ser mentiroso o corrupto." },
-            { area: "REDACCIÓN", text: "La expresión 'muñeca de plástico' para un país es una figura de:", options: ["Metáfora", "Hipérbole", "Aliteración", "Onomatopeya"], correct: 0, explanation: "Compara el país con un objeto artificial directamente." },
-            { area: "REDACCIÓN", text: "Identifique el error: 'Habían muchas personas en la bahía'.", options: ["Uso de 'Habían'", "Uso de 'personas'", "Uso de 'muchas'", "Sin error"], correct: 0, explanation: "El verbo haber como impersonal (existencia) siempre va en singular: 'Había'." },
-            { area: "REDACCIÓN", text: "¿Qué palabra sustituye mejor a 'cosa' en: 'La honestidad es una cosa rara'?", options: ["Valor", "Cachivache", "Situación", "Algo"], correct: 0, explanation: "Valor es un término más preciso y académico que 'cosa'." },
-            { area: "REDACCIÓN", text: "Indique la oración con puntuación incorrecta:", options: ["¡Qué viento!, dijo el niño.", "¡Qué viento! - dijo el niño.", "¡Qué viento! dijo el niño.", "Dijo el niño: ¡Qué viento!"], correct: 0, explanation: "No se debe poner coma inmediatamente después de un signo de exclamación." },
-            { area: "REDACCIÓN", text: "¿Cuál es el núcleo del sujeto en 'El viento animal mecía las dunas'?", options: ["El", "Viento", "Animal", "Mecía"], correct: 1, explanation: "Viento es el sustantivo principal del sujeto." },
-            { area: "REDACCIÓN", text: "En 'Vi la primera luz', el verbo está en tiempo:", options: ["Presente", "Pasado (Pretérito)", "Futuro", "Copretérito"], correct: 1, explanation: "Indica una acción terminada en el pasado." },
-            { area: "REDACCIÓN", text: "Elija el nexo de causa: 'No fue a trabajar _____ estaba enfermo'.", options: ["porque", "pero", "aunque", "sino"], correct: 0, explanation: "Porque introduce la razón o motivo." },
-            { area: "REDACCIÓN", text: "¿Cuál palabra requiere tilde por ser esdrújula?", options: ["Atlántico", "Bahia", "Viento", "Luz"], correct: 0, explanation: "Todas las esdrújulas se tildan; Atlántico lo es." },
-            { area: "REDACCIÓN", text: "Sustituya 'chiva' (lenguaje informal) por uno formal:", options: ["Dice", "Revela", "Grita", "Canta"], correct: 1, explanation: "Revelar es apropiado para un análisis literario o crítico." },
-            { area: "REDACCIÓN", text: "La función de los paréntesis en un texto es:", options: ["Aclarar o añadir datos", "Finalizar la idea", "Gritar", "Preguntar"], correct: 0, explanation: "Sirven para incisos aclaratorios o información secundaria." },
-            { area: "REDACCIÓN", text: "¿Qué oración es redundante respecto a 'clima versátil'?", options: ["El clima cambia mucho.", "Hacía sol.", "Llovía ayer.", "El hospital es grande."], correct: 0, explanation: "Decir que cambia mucho es repetir la definición de versátil." },
-            { area: "REDACCIÓN", text: "Elija la forma correcta: 'El cirujano operó a ____ pacientes'.", options: ["sino", "si no", "sinó", "si-no"], correct: 1, explanation: "Se usa 'si no' para indicar condicional o en este caso falta un número, pero gramaticalmente la duda suele ser entre sino/si no." },
-            { area: "REDACCIÓN", text: "Indique la opción que usa correctamente las mayúsculas:", options: ["Océano Atlántico", "océano Atlántico", "Océano atlántico", "océano atlántico"], correct: 1, explanation: "Océano es nombre común, Atlántico es el nombre propio." },
-            { area: "REDACCIÓN", text: "Un sinónimo de 'laboriosos' es:", options: ["Holgazanes", "Trabajadores", "Ricos", "Inteligentes"], correct: 1, explanation: "Persona que trabaja con esmero." },
-            { area: "REDACCIÓN", text: "Identifique el tipo de lenguaje: 'Me estaría meciendo el sordo ruido'.", options: ["Informal", "Poético/Literario", "Científico", "Vulgar"], correct: 1, explanation: "Usa metáforas y un orden de palabras no cotidiano." },
-            { area: "REDACCIÓN", text: "En 'Mi madre, una mujer suave', la coma se utiliza para:", options: ["Separar una aposición", "Indicar una lista", "Terminar la frase", "Unir verbos"], correct: 0, explanation: "Introduce una frase explicativa sobre el sustantivo anterior." }
+            // LECTURA 2 (Carver)
+            { area: "LECTURA", text: "¿Qué imagen de América desmiente Raymond Carver según el autor del texto?", options: ["La de una nación industrial y gris", "La de una mujer hermosa, rica y glamurosa", "La de un desierto marcado por la soledad", "La de un centro tecnológico sin alma"], correct: 1, readingKey: "carver", explanation: "Contrasta la propaganda idealizada con la realidad cruda." },
+            { area: "LECTURA", text: "La palabra 'chiva' en el fragmento se utiliza para indicar que el autor:", options: ["Miente sobre la realidad", "Revela o delata una verdad oculta", "Grita sus opiniones con fuerza", "Duda de lo que ve en la televisión"], correct: 1, readingKey: "carver", explanation: "Es un uso coloquial para 'delatar' o 'informar' la verdad." },
+            { area: "LECTURA", text: "¿Qué elementos se mencionan como parte de la 'esbelta figura' de la nación?", options: ["Sus bibliotecas y universidades", "Central Park y La Séptima Avenida", "Sus fábricas y zonas obreras", "Sus desiertos y montañas"], correct: 1, readingKey: "carver", explanation: "Son los símbolos visuales que usa para promocionarse." },
+            { area: "LECTURA", text: "Según Carver, ¿qué hay realmente detrás de la 'fastuosa fachada' de América?", options: ["Un futuro de éxito inalcanzable", "Una galería de seres derrotados y humildes", "Nuevas tecnologías de vanguardia", "Una mujer que cumple todos los sueños"], correct: 1, readingKey: "carver", explanation: "Su obra se enfoca en la gente común marcada por el dolor." },
+            { area: "LECTURA", text: "La comparación de América con una 'artificial muñeca de plástico' sugiere:", options: ["Fragilidad", "Falsedad y falta de autenticidad", "Belleza moderna", "Juventud eterna"], correct: 1, readingKey: "carver", explanation: "Refuerza la idea de una imagen 'impostora' y construida." },
+            { area: "LECTURA", text: "¿Qué medios utiliza América para promocionar su imagen idealizada?", options: ["Solo el cine y la moda", "La radio, la televisión y la tecnología", "Libros de historia antigua", "Charlas académicas"], correct: 1, readingKey: "carver", explanation: "Menciona múltiples canales de comunicación y tecnología." },
+            { area: "LECTURA", text: "El tono del texto al describir la visión de Carver es:", options: ["Crítico y desmitificador", "Alegre y optimista", "Indiferente y frío", "Científico y objetivo"], correct: 0, readingKey: "carver", explanation: "Busca romper los mitos de la 'mujer-América'." },
+            { area: "LECTURA", text: "¿Qué cualidad se le atribuye a la mujer-América que 'no cumple'?", options: ["Sinceridad", "Frívola y maliciosa", "Trabajadora", "Sabia"], correct: 1, readingKey: "carver", explanation: "La describe como una 'mujerzuela' que engaña." },
+            { area: "LECTURA", text: "Las 'caderas celulíticas' mencionadas en el texto funcionan como una metáfora de:", options: ["La salud de la población", "Las imperfecciones reales de la sociedad", "La falta de moda en América", "El paso del tiempo"], correct: 1, readingKey: "carver", explanation: "Simbolizan la fealdad que la propaganda intenta ocultar." },
+            { area: "LECTURA", text: "Según el texto, América se promociona como alguien capaz de:", options: ["Resolver conflictos mundiales", "Colmar los sueños de cualquier mortal", "Enseñar tecnología a todos", "Eliminar la soledad"], correct: 1, readingKey: "carver", explanation: "Se vende como la panacea de los deseos humanos." },
+            { area: "LECTURA", text: "¿Cuál es el contraste principal que plantea el autor?", options: ["Entre el cine y la radio", "Entre la propaganda y la realidad literaria de Carver", "Entre Nueva York y California", "Entre la riqueza y la tecnología"], correct: 1, readingKey: "carver", explanation: "Es el eje central del análisis." },
+            { area: "LECTURA", text: "La palabra 'fastuosa' (último párrafo) significa:", options: ["Sencilla", "Lujosa y digna de admiración", "Rápida", "Antigua"], correct: 1, readingKey: "carver", explanation: "Se refiere a la fachada de lujo que se proyecta." },
+            { area: "LECTURA", text: "Carver describe a los habitantes reales como personas marcadas por:", options: ["El éxito constante", "El dolor y la soledad", "La ambición", "La indiferencia"], correct: 1, readingKey: "carver", explanation: "Es la descripción final de los 'seres derrotados'." },
+
+            // REDACCIÓN (25 ejercicios)
+            { area: "REDACCIÓN", text: "Elija la opción que mejor sustituye a la palabra subrayada para otorgar mayor precisión al enunciado: 'El científico *hizo* un experimento complejo'.", options: ["Creó", "Realizó", "Construyó", "Efectuó"], correct: 1, explanation: "Realizar es más preciso que 'hacer' para experimentos." },
+            { area: "REDACCIÓN", text: "¿Cuál de las siguientes opciones elimina la redundancia innecesaria?", options: ["Subir arriba de la montaña", "Ascender a la montaña", "Subir hacia arriba", "Elevarse para arriba"], correct: 1, explanation: "Ascender ya implica dirección hacia arriba." },
+            { area: "REDACCIÓN", text: "Seleccione la opción que presenta la puntuación correcta:", options: ["Juan, ven aquí.", "Juan ven aquí.", "Juan ven, aquí.", "Juan ven aquí,"], correct: 0, explanation: "Se requiere coma vocativa para dirigirse a alguien." },
+            { area: "REDACCIÓN", text: "¿En qué oración se utiliza correctamente el nexo causal?", options: ["Estudió mucho pero aprobó.", "Estudió mucho por lo tanto aprobó.", "Estudió mucho ya que quería aprender.", "Estudió mucho sin embargo falló."], correct: 2, explanation: "'Ya que' introduce la causa del estudio." },
+            { area: "REDACCIÓN", text: "Identifique la palabra que debe escribirse con mayúscula inicial:", options: ["primavera", "domingo", "américa", "marzo"], correct: 2, explanation: "Los nombres de continentes son nombres propios." },
+            { area: "REDACCIÓN", text: "¿Cuál es el antónimo más preciso de 'efímero'?", options: ["Corto", "Pasajero", "Duradero", "Bello"], correct: 2, explanation: "Efímero es lo que dura poco; duradero es su opuesto." },
+            { area: "REDACCIÓN", text: "Elija la opción que mejor une estas dos ideas: 'Llovió mucho. No salimos de casa'.", options: ["Llovió mucho porque no salimos.", "No salimos ya que llovió mucho.", "Llovió mucho aunque no salimos.", "Llovió mucho pero no salimos."], correct: 1, explanation: "Establece una relación de causa-consecuencia lógica." },
+            { area: "REDACCIÓN", text: "Seleccione la palabra que corrige la ortografía de 'atravez':", options: ["a traves", "a través", "atravez", "através"], correct: 1, explanation: "La forma correcta es en dos palabras y con tilde." },
+            { area: "REDACCIÓN", text: "¿Cuál de estos enunciados es gramaticalmente correcto?", options: ["Habían muchas personas.", "Había muchas personas.", "Hubieron muchas personas.", "Han habido muchas personas."], correct: 1, explanation: "El verbo haber como impersonal no se pluraliza." },
+            { area: "REDACCIÓN", text: "Sustituya la palabra 'cosa' por una más específica: 'La humildad es una *cosa* valiosa'.", options: ["Objeto", "Virtud", "Herramienta", "Asunto"], correct: 1, explanation: "La humildad es categorizada como una virtud moral." },
+            { area: "REDACCIÓN", text: "Identifique la oración con el uso correcto de las comillas:", options: ["Él dijo: 'Volveré pronto'.", "Él dijo volveré pronto.", "Él 'dijo' volveré pronto.", "Él dijo: Volveré pronto."], correct: 0, explanation: "Se usan para citas textuales tras dos puntos." },
+            { area: "REDACCIÓN", text: "Elija el conector de contraste adecuado: 'Intentó llegar a tiempo; ______, el tráfico se lo impidió'.", options: ["además", "sin embargo", "porque", "entonces"], correct: 1, explanation: "Indica una oposición a la intención inicial." },
+            { area: "REDACCIÓN", text: "¿Cuál de las siguientes palabras está mal empleada en el contexto?", options: ["Inminente (que va a suceder)", "Eminente (ilustre)", "Inmanente (que no sucederá)", "Incipiente (que empieza)"], correct: 2, explanation: "Inmanente significa que es propio de la naturaleza de algo." },
+            { area: "REDACCIÓN", text: "Seleccione la opción que mejora la cohesión del párrafo:", options: ["Corrió rápido, pero llegó tarde.", "Corrió rápido. Llegó tarde.", "Corrió rápido y llegó tarde.", "Corrió rápido; por eso llegó tarde."], correct: 0, explanation: "El nexo 'pero' explica la contradicción esperada." },
+            { area: "REDACCIÓN", text: "Identifique la oración que debe eliminarse por no aportar información nueva (redundancia):", options: ["1. El sol salió temprano.", "2. Eran las seis de la mañana.", "3. El astro rey iluminó el alba.", "4. Teníamos mucho sueño."], correct: 2, explanation: "Repite la idea del sol saliendo de forma poética pero sin añadir datos." },
+            { area: "REDACCIÓN", text: "¿Cuál de estos verbos es el más adecuado para 'escribir un libro'?", options: ["Hacer", "Redactar", "Componer", "Plasmar"], correct: 1, explanation: "Redactar es el término técnico para la escritura de textos." },
+            { area: "REDACCIÓN", text: "Elija el sinónimo de 'indigencia':", options: ["Riqueza", "Pobreza", "Salud", "Nobleza"], correct: 1, explanation: "Es el estado de falta de recursos básicos." },
+            { area: "REDACCIÓN", text: "¿Qué oración utiliza correctamente el punto y coma?", options: ["Llegaron todos; Juan, Pedro y Luis.", "Estudió mucho; sin embargo, reprobó.", "Mañana iré; a la playa.", "No lo sé; dímelo."], correct: 1, explanation: "Se usa antes de conectores adversativos en oraciones largas." },
+            { area: "REDACCIÓN", text: "Identifique el error de concordancia:", options: ["La gente son buena.", "La gente es buena.", "Las gentes son buenas.", "El grupo es bueno."], correct: 0, explanation: "'Gente' es un sustantivo colectivo que concuerda en singular." },
+            { area: "REDACCIÓN", text: "Seleccione la palabra que otorga más formalidad: 'Él ____ de la reunión'.", options: ["se fue", "se retiró", "se marchó", "peló gallo"], correct: 1, explanation: "'Retirarse' es el término más formal para irse de un evento." },
+            { area: "REDACCIÓN", text: "¿Cuál es el sujeto de la oración: 'Ayer compró flores para su madre Juan'?", options: ["Flores", "Su madre", "Juan", "Ayer"], correct: 2, explanation: "Juan es quien realiza la acción de comprar." },
+            { area: "REDACCIÓN", text: "Elija la opción que corrige la cacofonía (repetición de sonidos):", options: ["La águila vuela.", "El águila vuela.", "Una águila vuela.", "Esa águila vuela."], correct: 1, explanation: "Se usa el artículo 'el' para evitar el choque de la vocal 'a'." },
+            { area: "REDACCIÓN", text: "Identifique el uso correcto del 'porqué':", options: ["¿Por qué no viniste?", "No sé el porqué de su actitud.", "Vino porque quiso.", "Porque sí."], correct: 1, explanation: "'Porqué' como sustantivo va junto y con tilde." },
+            { area: "REDACCIÓN", text: "¿Qué palabra sustituye mejor a 'cosa' en: 'La brújula es una *cosa* útil'?", options: ["Herramienta", "Instrumento", "Aparato", "Invento"], correct: 1, explanation: "Es un instrumento de navegación." },
+            { area: "REDACCIÓN", text: "Seleccione la forma correcta del gerundio:", options: ["Entró sentándose.", "Murió luchando.", "Salió corriendo.", "Llegó cantando."], correct: 2, explanation: "Expresa una acción simultánea al verbo principal." }
         ];
 
-        let currentIdx = 0, stats = { hits: 0, errors: 0, hitsLectura: 0, hitsRedaccion: 0 };
-        let timeLeft = 80 * 60, timerId = null;
+        let currentIdx = 0, stats = { hitsL: 0, hitsR: 0, errors: 0 }, timeLeft = 50 * 60, timerId = null;
 
         function startExam() {
             document.getElementById('intro-screen').classList.add('hidden');
@@ -210,18 +236,23 @@
         }
 
         function render() {
-            const q = QUESTIONS[currentIdx];
+            const q = PREGUNTAS[currentIdx];
             document.getElementById('current-num').innerText = currentIdx + 1;
-            document.getElementById('q-area').innerText = q.area;
+            document.getElementById('area-label').innerText = q.area;
             document.getElementById('q-text').innerText = q.text;
-            const btnReading = document.getElementById('btn-reading');
-            if(q.reading) btnReading.classList.remove('hidden'); else btnReading.classList.add('hidden');
+            
+            // Botón de lectura solo en área de lectura
+            document.getElementById('reading-btn-container').classList.toggle('hidden', !q.readingKey);
+            
             const grid = document.getElementById('options-grid');
             grid.innerHTML = '';
             q.options.forEach((opt, i) => {
                 const btn = document.createElement('button');
-                btn.className = "option-btn w-full p-4 md:p-6 rounded-2xl border-2 border-slate-200 bg-white text-left flex items-center gap-4 hover:border-teal-400 hover:bg-teal-50/50 transition-all shadow-sm active:scale-[0.98]";
-                btn.innerHTML = `<span class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center font-black text-sm text-slate-400 border border-slate-200 shrink-0">${String.fromCharCode(65+i)}</span> <span class="font-medium text-slate-700 text-sm md:text-lg">${opt}</span>`;
+                btn.className = "option-btn w-full p-5 rounded-2xl border-2 border-slate-200 bg-white text-left flex items-center gap-4 hover:border-teal-400 hover:bg-teal-50 transition-all shadow-sm active:scale-[0.98]";
+                btn.innerHTML = `
+                    <span class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center font-black text-sm text-slate-400 border border-slate-200 shrink-0">${String.fromCharCode(65+i)}</span>
+                    <span class="font-medium text-slate-700 text-sm md:text-lg">${opt}</span>
+                `;
                 btn.onclick = () => check(i);
                 grid.appendChild(btn);
             });
@@ -230,57 +261,65 @@
         }
 
         function check(idx) {
-            const q = QUESTIONS[currentIdx];
-            const correct = idx === q.correct;
-            if(correct) {
-                stats.hits++;
-                if(q.area === "LECTURA") stats.hitsLectura++; else stats.hitsRedaccion++;
-            } else { stats.errors++; }
+            const q = PREGUNTAS[currentIdx];
+            const isCorrect = idx === q.correct;
+            if(isCorrect) {
+                if(q.area === "LECTURA") stats.hitsL++; else stats.hitsR++;
+            } else {
+                stats.errors++;
+            }
             
-            document.getElementById('nav-hits').innerText = stats.hits;
+            document.getElementById('nav-hits').innerText = stats.hitsL + stats.hitsR;
             document.getElementById('nav-errors').innerText = stats.errors;
+
             document.querySelectorAll('.option-btn').forEach((b, i) => {
                 b.disabled = true;
                 if(i === q.correct) b.classList.add('border-green-500', 'bg-green-50');
                 else if (i === idx) b.classList.add('border-red-500', 'bg-red-50');
                 else b.classList.add('opacity-40');
             });
+
             const fbBox = document.getElementById('feedback-box');
             fbBox.classList.remove('hidden');
-            fbBox.className = `mt-6 rounded-[2.5rem] p-8 md:p-10 border-2 shadow-2xl fade-in bg-white ${correct?'border-green-500':'border-red-500'}`;
-            document.getElementById('feedback-title').innerText = correct ? "¡Excelente!" : "Respuesta Incorrecta";
-            document.getElementById('feedback-icon').innerText = correct ? "📖" : "❌";
+            fbBox.className = `mt-6 rounded-[2.5rem] p-8 border-2 shadow-2xl fade-in bg-white ${isCorrect ? 'border-green-500' : 'border-red-500'}`;
+            document.getElementById('feedback-title').innerText = isCorrect ? "¡Respuesta Correcta!" : "Respuesta Incorrecta";
+            document.getElementById('feedback-icon').innerText = isCorrect ? "📖" : "❌";
             document.getElementById('explanation-text').innerText = q.explanation;
             setTimeout(() => fbBox.scrollIntoView({behavior: 'smooth', block: 'center'}), 100);
         }
 
         function nextQuestion() {
             currentIdx++;
-            if(currentIdx < 50) render(); else finish();
+            if(currentIdx < PREGUNTAS.length) render(); else finish();
         }
 
         function finish() {
             clearInterval(timerId);
             document.getElementById('exam-ui').classList.add('hidden');
-            document.getElementById('exam-ui').style.display = 'none';
             document.getElementById('final-screen').classList.remove('hidden');
-            const scoreL = Math.round(200 + (stats.hitsLectura / 25) * 600);
-            const scoreR = Math.round(200 + (stats.hitsRedaccion / 25) * 600);
+            
+            const scoreL = Math.round(200 + (stats.hitsL / 25) * 600);
+            const scoreR = Math.round(200 + (stats.hitsR / 25) * 600);
+            
             document.getElementById('score-lectura').innerText = scoreL;
             document.getElementById('score-redaccion').innerText = scoreR;
-            document.getElementById('final-hits').innerText = stats.hits;
+            document.getElementById('final-hits').innerText = stats.hitsL + stats.hitsR;
             document.getElementById('final-errors').innerText = stats.errors;
         }
 
-        function openReading() { 
-            document.getElementById('reading-body').innerText = READING_TEXT;
-            document.getElementById('reading-modal').classList.remove('hidden'); 
+        function openReading() {
+            const q = PREGUNTAS[currentIdx];
+            const data = LECTURAS[q.readingKey];
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('reading-body').innerText = data.content;
+            document.getElementById('reading-modal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
-        function closeReading() { 
-            document.getElementById('reading-modal').classList.add('hidden'); 
+        function closeReading() {
+            document.getElementById('reading-modal').classList.add('hidden');
             document.body.style.overflow = 'auto';
         }
     </script>
 </body>
 </html>
+
