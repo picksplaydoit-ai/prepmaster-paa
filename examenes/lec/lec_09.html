@@ -3,147 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prepmaster - Examen de Simulación 9 (Lectura)</title>
+    <title>Prepmaster - Simulación 9 (Lectura)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         .serif-text { font-family: 'Lora', serif; }
-        .fade-in { animation: fadeIn 0.4s ease-out; }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .modal-overlay { background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen">
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
 
     <!-- Inicio -->
     <div id="intro-screen" class="min-h-screen flex items-center justify-center p-4">
-        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-12 text-center border border-slate-100">
-            <span class="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] block mb-4">prepmaster premium</span>
-            <h1 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Examen de Simulación 9</h1>
-            <p class="text-blue-600 font-bold mb-6 text-sm uppercase tracking-widest">Parte 1: Lectura</p>
-            <p class="text-slate-500 mb-8 font-medium">Análisis de textos y vocabulario.<br>45 reactivos | 50 minutos.</p>
-            <button onclick="startExam()" class="w-full py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-lg shadow-xl transition-all active:scale-95">
-                Iniciar Examen 9
+        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-12 text-center border border-slate-100 fade-in">
+            <span class="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em] block mb-4">prepmaster premium</span>
+            <h1 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Simulación 9</h1>
+            <p class="text-indigo-600 font-bold mb-6 text-sm uppercase tracking-widest">Lectura (45 Reactivos Únicos)</p>
+            <div class="space-y-3 mb-8 text-left text-sm text-slate-600 bg-indigo-50 p-5 rounded-2xl border border-indigo-100">
+                <p>• <strong>Textos:</strong> El Cid, Bahía Argentina y Pedro Páramo.</p>
+                <p>• <strong>Tiempo:</strong> 50 minutos.</p>
+                <p>• <strong>Meta:</strong> 800 puntos.</p>
+            </div>
+            <button onclick="startExam()" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-lg shadow-xl transition-all active:scale-95">
+                Iniciar Simulación 9
             </button>
         </div>
     </div>
 
     <!-- UI Examen -->
-    <div id="exam-ui" class="hidden flex flex-col min-h-screen">
-        <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 px-4 py-3">
-            <div class="max-w-5xl mx-auto flex items-center justify-between">
-                <div>
-                    <span class="text-[9px] font-black text-blue-600 uppercase">prepmaster</span>
-                    <p class="text-[10px] text-slate-400 font-bold">SIMULACIÓN 9</p>
+    <div id="exam-ui" class="hidden flex-col flex-1">
+        <nav class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 px-4 py-3 shadow-sm">
+            <div class="max-w-5xl mx-auto flex items-center justify-between gap-2">
+                <div class="flex flex-col">
+                    <span class="text-[9px] font-black text-indigo-600 uppercase">prepmaster</span>
+                    <div class="flex items-center gap-2 font-bold text-[10px]">
+                        <span class="text-green-600">✓ <span id="nav-hits">0</span></span>
+                        <span class="text-red-500">✕ <span id="nav-errors">0</span></span>
+                    </div>
                 </div>
-                <div id="timer-box" class="px-4 py-1.5 rounded-2xl border-2 border-slate-200 bg-slate-50 font-mono font-black text-slate-700">
+                <div id="timer-box" class="px-4 py-1.5 rounded-xl border-2 border-slate-200 bg-slate-50 font-mono font-black text-sm md:text-lg text-slate-700">
                     <span id="timer-display">50:00</span>
                 </div>
-                <div class="flex items-center gap-3 text-[11px] font-bold">
-                    <span class="text-green-600">✓ <span id="nav-hits">0</span></span>
-                    <span class="text-red-500">✕ <span id="nav-errors">0</span></span>
+                <div class="text-right">
+                    <p class="text-[9px] font-black text-slate-400 uppercase leading-none">Pregunta</p>
+                    <p class="text-xs md:text-sm font-black text-slate-800 tracking-tighter"><span id="current-num">1</span>/45</p>
                 </div>
             </div>
         </nav>
 
-        <main class="flex-1 w-full max-w-3xl mx-auto p-4 md:p-8">
+        <main class="flex-1 w-full max-w-4xl mx-auto p-4 md:p-8">
             <div class="mb-6 flex justify-center">
-                <button onclick="openReading()" class="bg-amber-50 border-2 border-amber-200 text-amber-700 px-6 py-3 rounded-2xl font-black text-sm flex items-center gap-2 hover:bg-amber-100 transition-all shadow-sm">
-                    📖 ABRIR LECTURA DEL CID
+                <button id="btn-reading" onclick="openReading()" class="bg-indigo-50 border-2 border-indigo-200 text-indigo-700 px-8 py-3 rounded-2xl font-black text-xs flex items-center gap-2 shadow-md active:scale-95 transition-all">
+                    📖 ABRIR LECTURA ACTUAL
                 </button>
             </div>
 
-            <div id="question-container" class="bg-white rounded-[2rem] p-6 md:p-10 shadow-sm border border-slate-100 fade-in">
-                <div class="mb-8">
-                    <p class="text-xs font-black text-slate-400 uppercase mb-2">Pregunta <span id="current-num">1</span> de 45</p>
-                    <h2 id="q-text" class="text-xl md:text-2xl font-bold text-slate-800 leading-snug"></h2>
-                </div>
-                
-                <div id="diagram-box" class="hidden mb-6 flex justify-center">
-                    <!-- Icono o diagrama contextual si aplica -->
-                    <svg viewBox="0 0 100 60" class="w-32 h-auto text-amber-600 opacity-20">
-                        <path fill="currentColor" d="M10,50 L90,50 L90,20 L75,20 L75,10 L65,10 L65,20 L35,20 L35,10 L25,10 L25,20 L10,20 Z" />
-                    </svg>
-                </div>
-
+            <div id="question-container" class="bg-white rounded-[2rem] p-6 md:p-12 shadow-sm border border-slate-100 fade-in">
+                <h2 id="q-text" class="text-xl md:text-2xl font-bold text-slate-800 leading-snug mb-8"></h2>
                 <div id="options-grid" class="grid gap-3"></div>
             </div>
 
-            <div id="feedback-box" class="hidden mt-6 rounded-[2rem] p-6 md:p-8 border-2 shadow-xl fade-in bg-white">
+            <div id="feedback-box" class="hidden mt-6 rounded-[2.5rem] p-8 border-2 shadow-xl fade-in bg-white">
                 <div class="flex flex-col md:flex-row gap-6">
                     <div id="feedback-icon" class="text-4xl"></div>
                     <div class="flex-1">
                         <h3 id="feedback-title" class="text-xl font-black mb-2"></h3>
-                        <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-100">
-                            <p id="explanation-text" class="text-slate-700 text-sm md:text-base serif-text italic"></p>
+                        <div class="bg-slate-50 p-6 rounded-2xl mb-6 border border-slate-100 text-slate-700 text-base italic serif-text">
+                            <p id="explanation-text"></p>
                         </div>
-                        <button onclick="nextQuestion()" class="w-full md:w-fit px-8 py-4 bg-blue-600 text-white rounded-xl font-black shadow-lg">Siguiente ➔</button>
+                        <button onclick="nextQuestion()" class="w-full md:w-fit px-12 py-4 bg-indigo-600 text-white rounded-xl font-black shadow-lg">Continuar ➔</button>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Modal Lectura -->
+    <!-- Modal de Lectura -->
     <div id="reading-modal" class="hidden fixed inset-0 z-[100] modal-overlay flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-2xl max-h-[85vh] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden">
-            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-amber-50">
-                <div>
-                    <h3 class="font-black text-amber-900">Poema de Mío Cid</h3>
-                    <p class="text-[9px] font-bold text-amber-700 uppercase">Referencia: Examen 9</p>
-                </div>
-                <button onclick="closeReading()" class="text-amber-900 font-bold text-xl">✕</button>
+        <div class="bg-white w-full max-w-2xl max-h-[85vh] rounded-[3rem] shadow-2xl flex flex-col overflow-hidden">
+            <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-indigo-50">
+                <h3 id="modal-title" class="font-black text-indigo-900 text-xl tracking-tight">Lectura</h3>
+                <button onclick="closeReading()" class="text-indigo-900 font-bold text-2xl">✕</button>
             </div>
-            <div id="reading-body" class="p-8 md:p-12 overflow-y-auto serif-text text-xl leading-relaxed text-slate-700 whitespace-pre-wrap"></div>
-            <div class="p-6 border-t border-slate-50 bg-slate-50 text-center">
-                <button onclick="closeReading()" class="px-8 py-3 bg-slate-900 text-white rounded-xl font-bold">Volver al examen</button>
+            <div id="reading-body" class="p-10 md:p-14 overflow-y-auto serif-text text-lg leading-relaxed text-slate-700 whitespace-pre-wrap"></div>
+            <div class="p-8 border-t border-slate-50 bg-slate-50 text-center">
+                <button onclick="closeReading()" class="px-12 py-4 bg-slate-900 text-white rounded-2xl font-black">Regresar</button>
             </div>
         </div>
     </div>
 
     <!-- Final -->
     <div id="final-screen" class="hidden min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        <div class="max-w-md w-full bg-white rounded-[3rem] shadow-2xl overflow-hidden text-center border border-slate-100">
-            <div class="bg-slate-900 p-12 text-white">
-                <p class="text-[10px] font-black opacity-50 uppercase tracking-widest mb-2">Simulación 9 finalizada</p>
+        <div class="max-w-md w-full bg-white rounded-[3.5rem] shadow-2xl overflow-hidden border border-slate-100 fade-in">
+            <div class="bg-slate-900 p-12 text-center text-white">
+                <p class="text-[10px] font-black opacity-50 uppercase tracking-[0.4em] mb-4">Simulación 9 finalizada</p>
                 <div class="flex justify-center items-baseline gap-1">
-                    <span id="final-score" class="text-8xl font-black text-blue-400">200</span>
-                    <span class="text-xl font-bold opacity-40">pts</span>
+                    <span id="final-score" class="text-8xl font-black text-indigo-400">200</span>
+                    <span class="text-2xl font-bold opacity-40">pts</span>
                 </div>
-                <p class="mt-4 text-xs font-bold text-slate-400">Escala PAA 200-800</p>
             </div>
-            <div class="p-10">
-                <div class="flex justify-center gap-10 mb-10">
-                    <div class="text-center"><p class="text-green-600 font-black text-4xl" id="final-hits">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Aciertos</p></div>
-                    <div class="text-center"><p class="text-red-500 font-black text-4xl" id="final-errors">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Errores</p></div>
+            <div class="p-10 text-center">
+                <div class="flex justify-center gap-12 mb-10">
+                    <div><p class="text-green-600 font-black text-4xl" id="final-hits">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Aciertos</p></div>
+                    <div><p class="text-red-500 font-black text-4xl" id="final-errors">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Errores</p></div>
                 </div>
-                <button onclick="location.reload()" class="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl">Reiniciar Examen 9</button>
+                <button onclick="location.reload()" class="w-full py-5 bg-indigo-600 text-white rounded-2xl font-black text-lg shadow-xl hover:bg-indigo-700 transition-all">Reiniciar</button>
             </div>
         </div>
     </div>
 
     <script>
-        const READING_TEXT = `En Valencia, con los suyos, vivía el Cid campeador.\nCon él estaban sus yernos, infantes de Carrión.\nUn día que el Cid dormía en su escaño, sin temor,\nun mal sobresalto entonces, sabed, les aconteció:\n\nescapóse de una jaula, saliendo fuera, un león.\nLos que estaban en la Corte sintieron un gran temor;\nrecogiéronse sus mantos los del buen campeador,\ny rodean el escaño en guarda de su señor.\n\nAllí Fernando González, infante de Carrión,\nni en las salas ni en la torre ningún refugio encontró;\nmetióse bajo el escaño, tan grande fue su pavor.`;
+        const TEXTS = {
+            set1: { title: "Cantar de Mio Cid", content: "En Valencia, con los suyos, vivía el Cid campeador. Con él estaban sus yernos, infantes de Carrión. Un día que el Cid dormía en su escaño, sin temor, un mal sobresalto entonces, sabed, les aconteció: escapóse de una jaula, saliendo fuera, un león. Los que estaban en la Corte sintieron un gran temor; recogiéronse sus mantos los del buen campeador, y rodean el escaño en guarda de su señor. Allí Fernando González, infante de Carrión, ni en las salas ni en la torre ningún refugio encontró; metióse bajo el escaño, tanto era su pavor. Diego González, el otro, por la puerta se salió gritando con grandes voces: «¡Ay, qué no veré Carrión!» Tras la viga de un lagar metióse con gran temor; todo el manto y la túnica sucios de allí los sacó. En esto que despierta el que en buen hora nació; ve cercado su escaño por tanto buen varón." },
+            set2: { title: "La Bahía Argentina", content: "Vi la primera luz de mi tierra en una bahía argentina del Atlántico. A los pocos días me estaría meciendo, como un jugueteo torvo de quién sabe qué paternidad tutelar, el sordo y constante ruido de las dunas -cada segundo desplazadas-, el clima versátil del país, el viento animal. Mi padre era un cirujano del hospital; mi madre, una mujer suave, sal de la tierra en su bondad tranquila. Los dos, laboriosos y tan honestos de naturaleza que en ellos vi salvarse siempre algo del general naufragio humano. Mi primer amigo fue el viento que venía del océano. Este viento me enseñó muchas cosas. Me enseñó a ser libre, a no tener miedo de la soledad, a amar el silencio y a comprender que el mundo es mucho más de lo que parece." },
+            set3: { title: "Pedro Páramo (Lumiere 5)", content: "Un hombre al que le decían el Tartamudo llegó a la Media Luna y preguntó por Pedro Páramo. ¿Para qué lo solicitas? Quiero hablar cocon él. No está. Dile, cucuando regrese, que vengo de parte de don Fulgor. Lo iré a buscar; pero aguántate unas cuantas horas. Dile, es cocosa de urgencia. Se lo diré. El hombre al que decían el Tartamudo aguardó arriba del caballo. Pasado un rato, Pedro Páramo, al que nunca había visto, se le puso enfrente: ¿Qué se te ofrece? Necesito hablar directamente cocon el patrón. Yo soy. ¿Qué quieres? Pues, nanada más esto. Mataron a don Fulgor." }
+        };
 
-        const BASE = [
-            { text: "¿Cuál es el evento central que genera el 'mal sobresalto' en el fragmento?", options: ["La muerte del Cid", "El escape de un león", "La traición de yernos", "Un ataque enemigo"], correct: 1, explanation: "El texto especifica: 'escapóse de una jaula, saliendo fuera, un león'." },
-            { text: "La reacción de los hombres del Cid ante el león demuestra principalmente su...", options: ["Pavor y cobardía", "Lealtad y valentía", "Indiferencia", "Enojo con el Cid"], correct: 1, explanation: "Los hombres 'rodean el escaño en guarda de su señor', mostrando lealtad para protegerlo mientras duerme." },
-            { text: "¿Qué sentimiento describe la acción de Fernando González al esconderse?", options: ["Prudencia estratégica", "Pavor extremo", "Enojo contenido", "Indiferencia"], correct: 1, explanation: "El poema dice: 'metióse bajo el escaño, tan grande fue su pavor'." },
-            { text: "El Cid es llamado 'campeador', término que resalta su carácter de...", options: ["Gobernante justo", "Guerrero victorioso", "Padre ejemplar", "Poeta medieval"], correct: 1, explanation: "El término 'campeador' es un epíteto que resalta sus virtudes militares y de combate." }
+        const QUESTIONS = [
+            // CANTAR DE MIO CID (1-15)
+            { text: "¿Qué evento provoca el temor inicial en la Corte?", options: ["Un ataque de enemigos", "El escape de un león", "La muerte del Cid", "Un incendio"], correct: 1, setId: "set1", explanation: "El texto narra: 'escapóse de una jaula... un león'." },
+            { text: "¿Cómo reacciona Fernando González ante el peligro?", options: ["Saca su espada", "Se esconde bajo el escaño", "Huye a Carrión", "Rodea al Cid"], correct: 1, setId: "set1", explanation: "Fernando 'metióse bajo el escaño, tanto era su pavor'." },
+            { text: "La frase 'el que en buen hora nació' se refiere a:", options: ["Fernando González", "El león", "Mio Cid", "Diego González"], correct: 2, setId: "set1", explanation: "Es un epíteto clásico para referirse a Rodrigo Díaz de Vivar, el Cid." },
+            { text: "¿Dónde se escondió Diego González?", options: ["Bajo el escaño", "En la torre", "Tras la viga de un lagar", "En Valencia"], correct: 2, setId: "set1", explanation: "Diego se metió tras la viga de un lagar, ensuciando su túnica." },
+            { text: "El término 'pavor' en la línea 12 significa:", options: ["Valentía", "Tristeza", "Miedo intenso", "Sorpresa"], correct: 2, setId: "set1", explanation: "El contexto muestra que el infante estaba aterrorizado." },
+            { text: "¿Quiénes rodeaban el escaño mientras el Cid dormía?", options: ["Los infantes de Carrión", "Las mesnadas del Cid", "Los enemigos", "El león"], correct: 1, setId: "set1", explanation: "Los del buen campeador rodean el escaño para guardarlo." },
+            { text: "¿Qué sentimiento demuestran los infantes de Carrión?", options: ["Lealtad", "Cobardía", "Ambición", "Resignación"], correct: 1, setId: "set1", explanation: "Sus acciones de esconderse y huir demuestran falta de valor." },
+            { text: "¿Cuál era el parentesco de los infantes con el Cid?", options: ["Sobrinos", "Hijos", "Yernos", "Amigos"], correct: 2, setId: "set1", explanation: "El texto menciona: 'Con él estaban sus yernos'." },
+            { text: "El escaño mencionado en el relato es un:", options: ["Escudo", "Banco con respaldo", "Caballo", "Espada"], correct: 1, setId: "set1", explanation: "Escaño es un mueble para sentarse o dormir." },
+            { text: "¿Qué gritó Diego González al salir por la puerta?", options: ["¡Ayuda!", "¡Venzamos al león!", "¡Ay, que no veré Carrión!", "¡Despierta, Cid!"], correct: 2, setId: "set1", explanation: "Grita lamentando que quizás no regrese a su tierra." },
+            { text: "Al despertar, el Cid pregunta '¿Qué queréis aquí, varones?'. Esto muestra que:", options: ["Está asustado", "Desconoce lo ocurrido", "Está enojado", "Quiere pelear"], correct: 1, explanation: "Acaba de despertar y ve a sus hombres rodeándolo sin saber por qué." },
+            { text: "¿Cómo se describe el estado del león al salir?", options: ["Hambriento", "Agresivo", "Fuera de la jaula", "Cansado"], correct: 2, explanation: "Simplemente se dice que se escapó saliendo fuera." },
+            { text: "¿Qué hicieron los hombres del Cid con sus mantos?", options: ["Los tiraron", "Los recogieron", "Los usaron para tapar al león", "Los quemaron"], correct: 1, explanation: "Recogiéronse sus mantos para protegerse o estar listos para la acción." },
+            { text: "El texto se sitúa geográficamente en:", options: ["Carrión", "Valencia", "Burgos", "Castilla"], correct: 1, explanation: "Línea 1: 'En Valencia, con los suyos, vivía el Cid'." },
+            { text: "¿Cuál es el tono predominante del fragmento?", options: ["Cómico", "Trágico", "Épico/Narrativo", "Lírico"], correct: 2, explanation: "Narra hazañas y comportamientos de personajes heroicos." },
+
+            // BAHÍA ARGENTINA (16-30)
+            { text: "¿A qué se refiere el autor con 'Vi la primera luz'?", options: ["A un amanecer", "A su nacimiento", "A un incendio", "A un descubrimiento"], correct: 1, setId: "set2", explanation: "Es una metáfora común para nacer." },
+            { text: "¿Qué elemento es descrito como el 'primer amigo' del narrador?", options: ["El hospital", "El viento del océano", "Las dunas", "Sus padres"], correct: 1, setId: "set2", explanation: "Línea 9: 'Mi primer amigo fue el viento que venía del océano'." },
+            { text: "¿Qué profesión tenía el padre?", options: ["Marinero", "Cirujano", "Pescador", "Maestro"], correct: 1, setId: "set2", explanation: "El texto dice: 'Mi padre era un cirujano del hospital'." },
+            { text: "La madre es descrita como 'sal de la tierra'. Esto connota:", options: ["Dureza", "Bondad y valor moral", "Pobreza", "Sencillez excesiva"], correct: 1, setId: "set2", explanation: "Es un elogio a su integridad y virtud." },
+            { text: "El clima de la región es calificado como:", options: ["Cálido", "Gélido", "Versátil", "Seco"], correct: 2, setId: "set2", explanation: "Línea 4: 'el clima versátil del país'." },
+            { text: "¿Qué sucede constantemente con las dunas?", options: ["Están congeladas", "Son desplazadas cada segundo", "No existen", "Son propiedad del hospital"], correct: 1, setId: "set2", explanation: "El viento las mueve de forma constante." },
+            { text: "El autor describe el comportamiento de sus padres como:", options: ["Ambicioso", "Laborioso y honesto", "Indiferente", "Triste"], correct: 1, setId: "set2", explanation: "Dice que eran 'laboriosos y tan honestos de naturaleza'." },
+            { text: "¿Qué le enseñó el viento al narrador?", options: ["A navegar", "A ser libre y amar el silencio", "A operar como su padre", "A temer a la soledad"], correct: 1, setId: "set2", explanation: "El viento le enseñó a ser libre y no temer a la soledad." },
+            { text: "El término 'naufragio humano' se usa para contrastar:", options: ["Un choque de barcos", "La corrupción general vs la honestidad de sus padres", "La vida en el mar", "Su nacimiento"], correct: 1, explanation: "Ve en ellos algo salvado del desastre moral general." },
+            { text: "El 'ruido de las dunas' es calificado como:", options: ["Estridente", "Sordo y constante", "Melódico", "Aterrador"], correct: 1, explanation: "El texto menciona el 'sordo y constante ruido de las dunas'." },
+            { text: "¿Cómo describe el autor la bondad de su madre?", options: ["Ruidosa", "Tranquila", "Forzada", "Inútil"], correct: 1, explanation: "Menciona su 'bondad tranquila'." },
+            { text: "La ubicación exacta del relato es una bahía en el:", options: ["Pacífico", "Atlántico", "Ártico", "Caribe"], correct: 1, explanation: "Línea 1: 'bahía argentina del Atlántico'." },
+            { text: "¿Qué significa 'jugueteo torvo' en el contexto del viento?", options: ["Algo divertido", "Algo amenazante o fiero", "Algo invisible", "Algo cálido"], correct: 1, explanation: "Torvo implica una cualidad hosca o severa." },
+            { text: "El autor sugiere que el mundo es:", options: ["Pequeño", "Mucho más de lo que veía en el hospital", "Peligroso", "Solo para cirujanos"], correct: 1, explanation: "El viento le ayudó a comprender la inmensidad del mundo." },
+            { text: "¿Cuál es el propósito del texto?", options: ["Criticar el hospital", "Evocar recuerdos de infancia", "Enseñar geografía", "Hablar de medicina"], correct: 1, explanation: "El narrador reflexiona sobre sus orígenes y aprendizajes tempranos." },
+
+            // PEDRO PÁRAMO (31-45)
+            { text: "¿Qué noticia le da el Tartamudo a Pedro Páramo?", options: ["Don Fulgor ha regresado", "Mataron a don Fulgor", "La Media Luna fue robada", "Él es su nuevo socio"], correct: 1, setId: "set3", explanation: "Línea final: 'Mataron a don Fulgor'." },
+            { text: "¿De parte de quién venía el Tartamudo inicialmente?", options: ["Don Fulgor", "Juan Preciado", "El arriero", "Abundio"], correct: 0, setId: "set3", explanation: "Línea 6: 'vengo de parte de don Fulgor'." },
+            { text: "¿Cuál es el nombre de la hacienda?", options: ["Comala", "La Media Luna", "La Esperanza", "Lumiere"], correct: 1, setId: "set3", explanation: "Línea 2: 'llegó a la Media Luna'." },
+            { text: "¿Cómo reacciona Pedro Páramo al ver al hombre?", options: ["Le dispara", "Le pregunta qué se le ofrece", "Huye", "Llora"], correct: 1, setId: "set3", explanation: "Pedro Páramo se le pone enfrente y pregunta '¿Qué se te ofrece?'." },
+            { text: "El Tartamudo aguardó la llegada del patrón:", options: ["En la entrada", "Arriba del caballo", "En la torre", "En la cantina"], correct: 1, setId: "set3", explanation: "Línea 10: 'aguardó arriba del caballo'." },
+            { text: "¿Cuál es la característica del habla del mensajero?", options: ["Habla muy rápido", "Es tartamudo", "Es mudo", "Habla en otro idioma"], correct: 1, setId: "set3", explanation: "Se le llama el Tartamudo y su diálogo refleja la repetición de sílabas." },
+            { text: "¿A quién nunca había visto el mensajero?", options: ["A don Fulgor", "A Pedro Páramo", "A Ana", "Al Cid"], correct: 1, setId: "set3", explanation: "Línea 11: 'al que nunca había visto' (referido a Pedro Páramo)." },
+            { text: "La urgencia del mensaje se debe a:", options: ["Un cobro de dinero", "Una muerte", "Una fiesta", "Un viaje"], correct: 1, explanation: "La muerte de don Fulgor es un evento crítico." },
+            { text: "¿Qué le dice el primer interlocutor al Tartamudo?", options: ["Pasa adelante", "Pedro Páramo no está", "Vete de aquí", "Don Fulgor te engañó"], correct: 1, explanation: "Línea 5: '-No está'." },
+            { text: "El diálogo '¿Qué quieres?' es pronunciado por:", options: ["El Tartamudo", "Don Fulgor", "Pedro Páramo", "El caballo"], correct: 2, explanation: "Es parte de la interacción directa con Pedro Páramo." },
+            { text: "¿Cuánto tiempo le pidieron aguardar al mensajero?", options: ["Cinco minutos", "Unas cuantas horas", "Todo el día", "Hasta mañana"], correct: 1, explanation: "Línea 7: 'aguántate unas cuantas horas'." },
+            { text: "El Tartamudo insiste en que su visita es:", options: ["Un error", "Cosa de urgencia", "Un saludo", "Para pedir pan"], correct: 1, explanation: "Línea 8: 'Dile, es cocosa de urgencia'." },
+            { text: "¿Qué revela el texto sobre la identidad de Pedro Páramo?", options: ["Es un empleado", "Es el patrón", "Es un forastero", "Es un niño"], correct: 1, explanation: "Él mismo confirma: 'Yo soy' cuando preguntan por el patrón." },
+            { text: "¿Qué sugiere el silencio o la ausencia inicial de Pedro Páramo?", options: ["Que es un hombre ocupado o inaccesible", "Que no vive allí", "Que tiene miedo", "Que está enfermo"], correct: 0, explanation: "Muestra la jerarquía y el protocolo de la hacienda." },
+            { text: "¿Cuál es el impacto emocional final del fragmento?", options: ["Alegría", "Tensión/Impacto", "Aburrimiento", "Confusión"], correct: 1, explanation: "Cierra con la revelación violenta de un asesinato." }
         ];
-
-        const QUESTIONS = Array.from({length: 45}, (_, i) => ({
-            ...BASE[i % BASE.length],
-            id: i + 1,
-            text: i >= BASE.length ? `[Variante Examen 9] ${BASE[i % BASE.length].text}` : BASE[i % BASE.length].text
-        }));
 
         let currentIdx = 0, hits = 0, errors = 0, timeLeft = 50 * 60, timerId = null;
 
         function startExam() {
             document.getElementById('intro-screen').classList.add('hidden');
             document.getElementById('exam-ui').classList.remove('hidden');
+            document.getElementById('exam-ui').style.display = 'flex';
             render(); startTimer();
         }
 
@@ -164,12 +201,13 @@
             grid.innerHTML = '';
             q.options.forEach((opt, i) => {
                 const btn = document.createElement('button');
-                btn.className = "option-btn w-full p-4 md:p-6 rounded-2xl border-2 border-slate-200 bg-white text-left flex items-center gap-5 hover:border-blue-400 hover:bg-blue-50/50 transition-all";
+                btn.className = "option-btn w-full p-5 rounded-2xl border-2 border-slate-200 bg-white text-left flex items-center gap-4 hover:border-indigo-400 hover:bg-indigo-50 transition-all shadow-sm active:scale-[0.98]";
                 btn.innerHTML = `<span class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center font-black text-sm text-slate-400 border border-slate-200 shrink-0">${String.fromCharCode(65+i)}</span> <span class="font-medium text-slate-700">${opt}</span>`;
                 btn.onclick = () => check(i);
                 grid.appendChild(btn);
             });
             document.getElementById('feedback-box').classList.add('hidden');
+            window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
         function check(idx) {
@@ -178,19 +216,18 @@
             if(correct) hits++; else errors++;
             document.getElementById('nav-hits').innerText = hits;
             document.getElementById('nav-errors').innerText = errors;
-            
             document.querySelectorAll('.option-btn').forEach((b, i) => {
                 b.disabled = true;
-                if(i === q.correct) b.classList.add('border-green-500', 'bg-green-50', 'ring-2', 'ring-green-100');
-                else if(i === idx) b.classList.add('border-red-500', 'bg-red-50', 'ring-2', 'ring-red-100');
-                else b.classList.add('opacity-40', 'grayscale');
+                if(i === q.correct) b.classList.add('border-green-500', 'bg-green-50');
+                else if (i === idx) b.classList.add('border-red-500', 'bg-red-50');
+                else b.classList.add('opacity-40');
             });
-
-            document.getElementById('feedback-box').classList.remove('hidden');
-            document.getElementById('feedback-box').className = `mt-6 rounded-[2rem] p-6 border-2 shadow-xl fade-in bg-white ${correct?'border-green-500':'border-red-500'}`;
-            document.getElementById('feedback-title').innerText = correct ? "¡Excelente!" : "Respuesta Incorrecta";
-            document.getElementById('feedback-icon').innerText = correct ? "🏆" : "❌";
+            const fbBox = document.getElementById('feedback-box');
+            fbBox.classList.remove('hidden');
+            document.getElementById('feedback-title').innerText = correct ? "¡Excelente!" : "Incorrecto";
+            document.getElementById('feedback-icon').innerText = correct ? "📖" : "❌";
             document.getElementById('explanation-text').innerText = q.explanation;
+            setTimeout(() => fbBox.scrollIntoView({behavior: 'smooth', block: 'center'}), 100);
         }
 
         function nextQuestion() {
@@ -202,18 +239,21 @@
             clearInterval(timerId);
             document.getElementById('exam-ui').classList.add('hidden');
             document.getElementById('final-screen').classList.remove('hidden');
-            document.getElementById('final-score').innerText = Math.round(200 + (hits/45)*600);
+            const score = Math.round(200 + (hits / 45) * 600);
+            document.getElementById('final-score').innerText = score;
             document.getElementById('final-hits').innerText = hits;
             document.getElementById('final-errors').innerText = errors;
         }
 
-        function openReading() { 
-            document.getElementById('reading-body').innerText = READING_TEXT;
-            document.getElementById('reading-modal').classList.remove('hidden'); 
+        function openReading() {
+            const setId = QUESTIONS[currentIdx].setId;
+            document.getElementById('modal-title').innerText = TEXTS[setId].title;
+            document.getElementById('reading-body').innerText = TEXTS[setId].content;
+            document.getElementById('reading-modal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
-        function closeReading() { 
-            document.getElementById('reading-modal').classList.add('hidden'); 
+        function closeReading() {
+            document.getElementById('reading-modal').classList.add('hidden');
             document.body.style.overflow = 'auto';
         }
     </script>
