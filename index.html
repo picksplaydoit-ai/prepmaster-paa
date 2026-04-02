@@ -301,17 +301,8 @@
         <a href="examenes/explicaciones/Funciones.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ffffff1a;border-radius:10px;color:#f0f0f8;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
           📈 Explicación: Funciones
         </a>
-        <a href="minijuegos/conecta4_espanol.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ffffff1a;border-radius:10px;color:#f0f0f8;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
+        <a href="minijuegos/conecta4_espanol.html" target="_blank" style="grid-column:span 2;display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ffffff1a;border-radius:10px;color:#f0f0f8;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
           🔵 Conecta 4 — Español
-        </a>
-        <a href="minijuegos/conecta4_mat.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ffffff1a;border-radius:10px;color:#f0f0f8;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
-          🔴 Conecta 4 — Matemáticas
-        </a>
-        <a href="calculadora.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #f59e0b40;border-radius:10px;color:#f59e0b;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
-          🧮 Calculadora de Puntajes
-        </a>
-        <a href="examenes/testvocacional.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #10b98140;border-radius:10px;color:#10b981;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
-          🧭 Test Vocacional
         </a>
       </div>
     </div>
@@ -330,10 +321,7 @@
         <button class="btn-secondary" style="font-size:12px;padding:10px 8px;color:#a78bfa;border-color:#7c3aed40;" onclick="window.open('examenes/simulacionespanolgratis.html','_blank')">✍️ Simulación Español</button>
         <button class="btn-secondary" style="font-size:12px;padding:10px 8px;" onclick="window.open('examenes/explicaciones/Guiapaa.html','_blank')">🎓 Guía PAA</button>
         <button class="btn-secondary" style="font-size:12px;padding:10px 8px;" onclick="window.open('examenes/explicaciones/Funciones.html','_blank')">📈 Explicación: Funciones</button>
-        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;" onclick="window.open('minijuegos/conecta4_espanol.html','_blank')">🔵 Conecta 4 — Español</button>
-        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;" onclick="window.open('minijuegos/conecta4_mat.html','_blank')">🔴 Conecta 4 — Matemáticas</button>
-        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;color:#f59e0b;border-color:#f59e0b40;" onclick="window.open('calculadora.html','_blank')">🧮 Calculadora de Puntajes</button>
-        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;color:#10b981;border-color:#10b98140;" onclick="window.open('examenes/testvocacional.html','_blank')">🧭 Test Vocacional</button>
+        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;grid-column:span 2;" onclick="window.open('minijuegos/conecta4_espanol.html','_blank')">🔵 Conecta 4 — Español</button>
       </div>
     </div>
 
@@ -613,7 +601,7 @@
     <div class="section-header">
       <h2 class="section-title">Exámenes de simulación</h2>
       <div class="section-line"></div>
-      <span class="section-count">3 secciones · 8 simulaciones c/u</span>
+      <span class="section-count">3 secciones · 11 simulaciones c/u</span>
     </div>
     <div class="categories-grid">
       <div>
@@ -653,6 +641,89 @@
         </div>
       </div>
     </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- ══ EJERCICIOS PRÁCTICOS POR TEMA ══ -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">📝 Ejercicios prácticos por tema</h2>
+      <div class="section-line"></div>
+      <span class="section-count">Matemáticas · Con soluciones incluidas</span>
+    </div>
+
+    <!-- Matemáticas -->
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div style="width:32px;height:32px;background:#ff6b35;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">📐</div>
+        <span style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);">Matemáticas</span>
+        <span style="font-size:11px;color:#ff6b35;font-weight:700;text-transform:uppercase;letter-spacing:.5px;">12 temas</span>
+      </div>
+      <div class="exp-grid">
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/operaciones.html','Práctica: Operaciones Básicas')">
+          <div class="exp-icon">🔢</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Operaciones Básicas</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/fracciones.html','Práctica: Fracciones')">
+          <div class="exp-icon">➗</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Fracciones</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/regla3.html','Práctica: Regla de 3')">
+          <div class="exp-icon">⚖️</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Regla de 3</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/algebra.html','Práctica: Álgebra')">
+          <div class="exp-icon">🔣</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Álgebra</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/ecuaciones.html','Práctica: Ecuaciones')">
+          <div class="exp-icon">📊</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Ecuaciones</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/inecuaciones.html','Práctica: Inecuaciones')">
+          <div class="exp-icon">⚠️</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Desigualdades e Inecuaciones</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/funciones.html','Práctica: Álgebra y Funciones')">
+          <div class="exp-icon">📈</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Álgebra y Funciones</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/linearecta.html','Práctica: Línea Recta')">
+          <div class="exp-icon">📉</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Línea Recta</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/angulos.html','Práctica: Ángulos')">
+          <div class="exp-icon">📐</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Ángulos</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/areas.html','Práctica: Áreas y Geometría')">
+          <div class="exp-icon">🔷</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Áreas y Geometría</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/probabilidad.html','Práctica: Probabilidad y Estadística')">
+          <div class="exp-icon">🎲</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Probabilidad y Estadística</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/combinatoria.html','Práctica: Combinatoria')">
+          <div class="exp-icon">🧮</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Combinatoria</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+      </div>
+    </div>
+
   </section>
 
   <hr class="divider"/>
@@ -830,14 +901,6 @@
         <span class="recurso-action">→ Visitar sitio College Board</span>
       </a>
 
-      <a class="recurso-card" data-type="video" href="https://www.tiktok.com/@prepmasterudg" target="_blank" rel="noopener">
-        <div class="recurso-type-badge">📱 TikTok</div>
-        <div class="recurso-org">@prepmasterudg</div>
-        <div class="recurso-title">PrepMaster en TikTok</div>
-        <div class="recurso-desc">Tips express, trucos para el examen, explicaciones rápidas y contenido de preparación PAA. Síguenos para no perderte nada antes de tu examen.</div>
-        <span class="recurso-action">→ Ver en TikTok</span>
-      </a>
-
     </div>
   </section>
 
@@ -916,10 +979,16 @@ const auth = getAuth(app);
 auth.settings.appVerificationDisabledForTesting = true;
 const db   = getFirestore(app);
 
+const EXAM_FILES = {
+  mat: ['mat_01','mat_02','mat_03','mat_04','mat_05','mat_06','mat_07','mat_08','mat_09','mat_10','mat_11'],
+  red: ['red_01','red_02','red_03','red_04','red_05','red_06','red_07','red_08','red_09','red_10','red_11'],
+  lec: ['lec_01','lec_02','lec_03','lec_04','lec_05','lec_06','lec_07','lec_08','lec_09','lec_10','lec_11'],
+};
+const EXAM_META = { mat:'55 reactivos', red:'30 reactivos', lec:'45 reactivos' };
 const EXAMS = {
-  mat: Array.from({length:8},(_,i)=>({name:`Simulación Matemáticas ${i+1}`,file:`examenes/mat/mat_0${i+1}.html`,pdf:`respuestas/mat/mat_0${i+1}_resp.pdf`,meta:'55 reactivos'})),
-  red: Array.from({length:8},(_,i)=>({name:`Simulación Redacción ${i+1}`,file:`examenes/red/red_0${i+1}.html`,pdf:`respuestas/red/red_0${i+1}_resp.pdf`,meta:'25 reactivos'})),
-  lec: Array.from({length:8},(_,i)=>({name:`Simulación Lectura ${i+1}`,file:`examenes/lec/lec_0${i+1}.html`,pdf:`respuestas/lec/lec_0${i+1}_resp.pdf`,meta:'45 reactivos'})),
+  mat: EXAM_FILES.mat.map((f,i)=>({name:`Simulación Matemáticas ${i+1}`,file:`examenes/mat/${f}.html`,pdf:`respuestas/mat/${f}_resp.pdf`,meta:EXAM_META.mat})),
+  red: EXAM_FILES.red.map((f,i)=>({name:`Simulación Redacción ${i+1}`,file:`examenes/red/${f}.html`,pdf:`respuestas/red/${f}_resp.pdf`,meta:EXAM_META.red})),
+  lec: EXAM_FILES.lec.map((f,i)=>({name:`Simulación Lectura ${i+1}`,file:`examenes/lec/${f}.html`,pdf:`respuestas/lec/${f}_resp.pdf`,meta:EXAM_META.lec})),
 };
 const COLORS = {mat:'#ff6b35',red:'#7c3aed',lec:'#059669'};
 const SURVIVAL = [
