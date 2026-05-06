@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matemágica: El Maestro del PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;900&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #020617;
+            color: white;
+            margin: 0;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .font-game { font-family: 'Orbitron', sans-serif; }
+
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+        }
+
+        canvas { display: block; }
+
+        .modal-blur {
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(10px);
+        }
+
+        .heart-container {
+            filter: drop-shadow(0 0 8px #ef4444);
+        }
+
+        .btn-option {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-option:hover {
+            background: #2563eb;
+            border-color: #60a5fa;
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+        }
+
+        .victory-glow {
+            text-shadow: 0 0 30px rgba(34, 197, 94, 0.8);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .shake { animation: shake 0.2s ease-in-out infinite; }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <!-- HUD Superior -->
+        <div class="fixed top-0 left-0 w-full p-4 flex justify-between items-start z-20 pointer-events-none">
+            <div class="pointer-events-auto flex flex-col gap-2">
+                <div id="lives-display" class="flex gap-2 text-2xl heart-container">❤️ ❤️ ❤️</div>
+                <div class="bg-slate-900/90 border-l-4 border-yellow-500 p-3 rounded-r-lg shadow-2xl min-w-[160px]">
+                    <div class="text-[10px] text-yellow-500 font-bold uppercase tracking-widest text-left">Puntaje PAA</div>
+                    <div class="text-2xl font-black font-game text-yellow-400"><span id="score-val">0</span> <span class="text-sm opacity-50">/ 800</span></div>
+                    <div class="w-full bg-slate-800 h-2 mt-1 rounded-full overflow-hidden border border-slate-700">
+                        <div id="total-progress-bar" class="bg-yellow-500 h-full transition-all duration-500" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center pointer-events-auto bg-slate-900/90 border-t-4 border-blue-500 p-3 rounded-b-lg shadow-2xl min-w-[150px]">
+                <div class="text-[10px] text-blue-400 font-bold uppercase tracking-widest">Invasión Activa</div>
+                <div id="spawn-timer" class="text-2xl font-black font-game text-white">0s</div>
+                <div class="text-[9px] text-slate-500 uppercase font-bold">Próximo Enemigo</div>
+            </div>
+        </div>
+
+        <canvas id="game-canvas"></canvas>
+
+        <!-- Pantalla de Inicio -->
+        <div id="start-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-950">
+            <div class="text-center mb-8">
+                <h1 class="text-5xl md:text-7xl font-black text-white font-game leading-tight tracking-tighter uppercase">Matemágica<br><span class="text-blue-500 text-4xl md:text-6xl">Maestría PAA</span></h1>
+            </div>
+            
+            <div class="bg-slate-900/60 p-8 rounded-3xl border border-slate-800 max-w-lg mb-8 backdrop-blur-md">
+                <p class="text-green-400 font-bold mb-4 text-center uppercase tracking-widest">Banco de +140 Reactivos Contextualizados</p>
+                <div class="grid grid-cols-2 gap-3 text-slate-300 text-[11px] uppercase font-bold text-center">
+                    <div class="flex items-center gap-2"><span>✔</span> Aritmética (35)</div>
+                    <div class="flex items-center gap-2"><span>✔</span> Geometría (35)</div>
+                    <div class="flex items-center gap-2"><span>✔</span> Álgebra (35)</div>
+                    <div class="flex items-center gap-2"><span>✔</span> Estadística (35)</div>
+                </div>
+                <p class="text-blue-300 text-[10px] mt-4 text-center font-bold">FLUJO DINÁMICO • SIN REPETICIONES</p>
+                <div class="mt-6 text-red-400 text-center text-xs font-bold animate-pulse">
+                    ⚠️ SPAWN CADA 9S - LA ACCIÓN NO SE DETIENE
+                </div>
+            </div>
+
+            <button onclick="initGame()" class="bg-blue-600 hover:bg-blue-500 text-white px-20 py-6 rounded-full font-black text-2xl transition-all hover:scale-105 shadow-[0_0_40px_rgba(37,99,235,0.3)] uppercase tracking-widest">
+                Iniciar Prueba
+            </button>
+        </div>
+
+        <!-- Modal de Pregunta -->
+        <div id="math-modal" class="fixed inset-0 z-40 modal-blur flex items-center justify-center hidden p-4">
+            <div class="bg-slate-900 border-2 border-blue-500/30 p-6 md:p-10 rounded-3xl w-full max-w-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full bg-slate-800 h-2">
+                    <div id="timer-bar" class="h-full bg-green-500 transition-all duration-1000 linear" style="width: 100%;"></div>
+                </div>
+
+                <div class="flex justify-between items-center mb-8 mt-2">
+                    <span id="problem-category" class="bg-blue-600 text-white text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider">Categoría</span>
+                    <span id="timer-text" class="text-3xl font-black font-game text-green-400">30s</span>
+                </div>
+
+                <div id="problem-text" class="text-xl md:text-2xl font-bold mb-10 text-center text-white leading-relaxed font-game min-h-[140px] flex items-center justify-center px-4">
+                    ¿Pregunta?
+                </div>
+
+                <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Opciones -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Victoria/Derrota -->
+        <div id="victory-screen" class="fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center hidden text-center">
+            <h2 class="text-6xl md:text-8xl font-black text-green-500 mb-4 font-game victory-glow uppercase tracking-tighter">¡ADMITIDO!</h2>
+            <p class="text-2xl text-slate-300 mb-12 font-game">PUNTAJE PERFECTO: 800</p>
+            <button onclick="location.reload()" class="bg-white text-black px-12 py-4 rounded-full font-black text-xl">OTRA VEZ</button>
+        </div>
+
+        <div id="game-over" class="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center hidden text-center">
+            <h2 class="text-7xl font-black text-red-600 mb-6 font-game uppercase tracking-tighter">NO ADMITIDO</h2>
+            <p class="text-2xl text-slate-400 mb-10 font-game">Puntaje: <span id="final-score" class="text-yellow-500">0</span></p>
+            <button onclick="location.reload()" class="bg-blue-600 text-white px-12 py-4 rounded-full font-black text-xl">REINTENTAR</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const scoreVal = document.getElementById('score-val');
+        const livesDisplay = document.getElementById('lives-display');
+        const spawnTimerUI = document.getElementById('spawn-timer');
+        const totalProgressBar = document.getElementById('total-progress-bar');
+        const mathModal = document.getElementById('math-modal');
+        const timerBar = document.getElementById('timer-bar');
+        const timerText = document.getElementById('timer-text');
+
+        let state = {
+            active: false,
+            score: 0,
+            lives: 3,
+            enemies: [],
+            lastSpawnTime: 0,
+            spawnInterval: 9000,
+            problemActive: false,
+            timeLeft: 30,
+            timerInterval: null,
+            lastFrameTime: 0,
+            lastCategory: null,
+            usedIndices: { "Aritmética": [], "Álgebra": [], "Geometría": [], "Estadística": [] }
+        };
+
+        const VICTORY_SCORE = 800;
+
+        // BANCO DE 140 PREGUNTAS (35 POR ÁREA) CON CONTEXTO PAA
+        const QUESTION_BANK = {
+            "Aritmética": [
+                { q: "Un carpintero necesita dividir tablones de 24 y 36 cm en partes iguales de la mayor longitud posible. ¿Cuánto medirá cada parte?", a: 12, opts: [12, 6, 8, 4] },
+                { q: "Dos alarmas suenan cada 4 y 6 minutos respectivamente. Si sonaron juntas a las 10:00, ¿a qué hora volverán a coincidir?", a: 12, opts: [12, 24, 10, 8] },
+                { q: "Si 4 obreros terminan una barda en 6 horas, ¿cuántas horas tardarían 8 obreros trabajando al mismo ritmo?", a: 3, opts: [3, 12, 4, 2] },
+                { q: "Un cliente compra una chamarra de $150 que tiene un 20% de descuento. ¿De cuánto dinero es la rebaja?", a: 30, opts: [30, 20, 15, 45] },
+                { q: "Resuelve la siguiente jerarquía de operaciones: 3 + 5 x 2 - 4:", a: 9, opts: [9, 12, 16, 7] },
+                { q: "Una receta pide 3/4 de taza de harina y 1/2 taza adicional. ¿Cuánta harina se requiere en total?", a: "5/4", opts: ["5/4", "1", "1 1/4", "3/8"] },
+                { q: "Se quieren repartir 15 dulces y 25 chocolates en bolsas iguales con el máximo contenido posible. ¿Cuántos dulces habrá por bolsa?", a: 5, opts: [5, 1, 10, 3] },
+                { q: "Un camión entrega cada 5 días y otro cada 3 días. ¿En cuántos días coincidirán sus entregas?", a: 15, opts: [15, 8, 1, 30] },
+                { q: "¿Cuál es el valor numérico de elevar la base 2 a la quinta potencia?", a: 32, opts: [32, 25, 10, 64] },
+                { q: "Si 3 paquetes de hojas cuestan $15, ¿cuál es el precio de 10 paquetes iguales?", a: 50, opts: [50, 45, 30, 60] },
+                { q: "Calcula el resultado de sumar la raíz cuadrada de 144 más la raíz cuadrada de 25:", a: 17, opts: [17, 13, 19, 21] },
+                { q: "¿Qué cantidad es mayor: 0.5 unidades o la fracción 2/5?", a: "0.5", opts: ["0.5", "2/5", "Son iguales", "0.25"] },
+                { q: "Resuelve la operación combinada: 10 - (2 x 3) + 4:", a: 8, opts: [8, 20, 4, 12] },
+                { q: "Si un atleta corre durante 5 minutos de forma continua, ¿cuántos segundos ha transcurrido su cronómetro?", a: 300, opts: [300, 50, 600, 3000] },
+                { q: "Una inversión de $200 genera un 15% de interés anual simple. ¿Cuánto es el interés ganado?", a: 30, opts: [30, 20, 15, 45] },
+                { q: "¿Cuál es la expresión recíproca de la fracción 2/3?", a: "3/2", opts: ["3/2", "2/3", "1/3", "-2/3"] },
+                { q: "Se desea cortar dos cables de 48m y 60m en pedazos iguales de longitud máxima. ¿Cuánto mide cada pedazo?", a: 12, opts: [12, 6, 24, 4] },
+                { q: "Si 5 kilogramos de manzanas valen $25, ¿cuál es el costo de comprar únicamente 2 kilogramos?", a: 10, opts: [10, 5, 15, 20] },
+                { q: "Resuelve la diferencia de los cuadrados: 4² - 3²:", a: 7, opts: [7, 1, 25, 14] },
+                { q: "Encuentra el mínimo común múltiplo de los números 8 y 12:", a: 24, opts: [24, 48, 96, 20] },
+                { q: "Un tanque tiene 1/2 de agua y se extrae 1/4 del total. ¿Qué fracción del tanque queda?", a: "1/4", opts: ["1/4", "1/8", "1/2", "3/4"] },
+                { q: "Resuelve el producto de las sumas: (8 + 2) x (5 - 3):", a: 20, opts: [20, 10, 4, 16] },
+                { q: "Calcula el valor final: El 50% del 50% de una cantidad de 100 unidades:", a: 25, opts: [25, 50, 12.5, 75] },
+                { q: "¿Cuántos divisores enteros tiene el número 12?", a: 6, opts: [6, 4, 5, 3] },
+                { q: "Un corredor avanza 2.5 km y luego 1.5 km más. Después multiplica su distancia por 3. ¿Cuánto recorrió?", a: 12, opts: [12, 11.5, 10, 9] },
+                { q: "Encuentra el MCD de los números 10, 20 y 30:", a: 10, opts: [10, 5, 1, 2] },
+                { q: "Encuentra el mcm de los números 10, 15 y 20:", a: 60, opts: [60, 30, 45, 90] },
+                { q: "¿Cuál es el número primo más pequeño de la recta numérica?", a: 2, opts: [2, 1, 3, 0] },
+                { q: "Resuelve la operación: 100 dividido entre 4 y el resultado multiplicado por 2:", a: 50, opts: [50, 12.5, 25, 10] },
+                { q: "Si una cuerda se divide en 5 partes iguales y cada parte mide 4 metros, ¿cuánto medía la cuerda original?", a: 20, opts: [20, 9, 1, 25] },
+                { q: "Divide 0.75 entre 0.25:", a: 3, opts: [3, 0.3, 30, 1] },
+                { q: "¿Qué porcentaje de 200 es 40?", a: "20%", opts: ["20%", "40%", "10%", "25%"] },
+                { q: "Si a 10 le restas el producto de 2 por 3, ¿qué obtienes?", a: 4, opts: [4, 24, 0, 16] },
+                { q: "Un tercio de 90 es:", a: 30, opts: [30, 45, 10, 60] },
+                { q: "Calcula 2 + 2 x 2:", a: 6, opts: [6, 8, 4, 10] }
+            ],
+            "Álgebra": [
+                { q: "Si el doble de un número aumentado en 5 es igual a 15, ¿cuál es el valor de dicho número?", a: 5, opts: [5, 10, 4, 6] },
+                { q: "Resuelve la proporción: El valor de x tal que x sobre 4 es igual a 9 sobre 12:", a: 3, opts: [3, 4, 5, 6] },
+                { q: "Dada la función f(x) = 2x - 3, calcula el valor de la imagen cuando x = 4:", a: 5, opts: [5, 8, 11, 4] },
+                { q: "Factoriza la expresión de diferencia de cuadrados: x² - 9:", a: "(x-3)(x+3)", opts: ["(x-3)(x+3)", "(x-3)²", "(x+9)(x-1)", "x(x-9)"] },
+                { q: "En un sistema de ecuaciones: x + y = 10 y x - y = 4. ¿Cuál es el valor de x?", a: 7, opts: [7, 6, 3, 5] },
+                { q: "Resuelve la desigualdad para x: 3x > 12. ¿Cuál es el intervalo?", a: "x > 4", opts: ["x > 4", "x < 4", "x = 4", "x > 3"] },
+                { q: "Si a = 2 y b = 3, ¿cuál es el resultado de la expresión a² + b²?", a: 13, opts: [13, 10, 25, 7] },
+                { q: "Resuelve la proporción: 2 sobre x es igual a 6 sobre 15. ¿Cuánto vale x?", a: 5, opts: [5, 4, 3, 6] },
+                { q: "Factoriza la expresión algebraica: x² - 1:", a: "(x-1)(x+1)", opts: ["(x-1)(x+1)", "(x-1)²", "x(x-1)", "(x+1)²"] },
+                { q: "Si 5 veces un número menos 10 da como resultado cero, ¿cuál es el número?", a: 2, opts: [2, 1, 0, 5] },
+                { q: "Simplifica la expresión de potencias: (x³)(x²):", a: "x⁵", opts: ["x⁵", "x⁶", "x¹", "2x⁵"] },
+                { q: "Dada la función f(x) = x², ¿cuál es el valor de f(-3)?", a: 9, opts: [9, -9, 6, -6] },
+                { q: "Resuelve la ecuación lineal: 2(x + 3) = 10:", a: 2, opts: [2, 4, 1, 5] },
+                { q: "Resuelve la proporción: x sobre 10 es igual a 2 sobre 5:", a: 4, opts: [4, 5, 2, 8] },
+                { q: "Si x = 2, evalúa la siguiente expresión: 3x² - 2x:", a: 8, opts: [8, 4, 10, 6] },
+                { q: "Factoriza el trinomio cuadrado perfecto: x² + 2x + 1:", a: "(x+1)²", opts: ["(x+1)²", "(x-1)²", "(x+1)(x-1)", "x(x+2)"] },
+                { q: "Si la recta y = 3x + 1 cruza el eje y, ¿cuál es el valor de y cuando x = 0?", a: 1, opts: [1, 0, 3, 4] },
+                { q: "Resuelve la inecuación simple: x - 5 < 10:", a: "x < 15", opts: ["x < 15", "x > 15", "x < 5", "x = 15"] },
+                { q: "Si la relación es 2 sobre 3 igual a x sobre 9, ¿cuál es el valor de x?", a: 6, opts: [6, 3, 9, 12] },
+                { q: "Simplifica los términos semejantes: 4x + 2x - 3x:", a: "3x", opts: ["3x", "9x", "x", "6x"] },
+                { q: "Si la función f(x) = x + 7 resulta en 10, ¿cuál fue el valor de entrada x?", a: 3, opts: [3, 17, 10, 0] },
+                { q: "Resuelve la ecuación cuadrática pura: x² = 16:", a: "±4", opts: ["±4", "4", "8", "±8"] },
+                { q: "Calcula x en la proporción: 5 / 4 = x / 20:", a: 25, opts: [25, 20, 16, 15] },
+                { q: "Si x = -1, ¿cuál es el resultado de evaluar 2x³?", a: -2, opts: [-2, 2, -1, 1] },
+                { q: "Simplifica la expresión con paréntesis: (2x)²:", a: "4x²", opts: ["4x²", "2x²", "4x", "2x"] },
+                { q: "Si x + 5 = 5, ¿cuál es el valor de x?", a: 0, opts: [0, 5, 10, -5] },
+                { q: "Resuelve la desigualdad: -2x < 10. (Recuerda invertir el signo):", a: "x > -5", opts: ["x > -5", "x < -5", "x > 5", "x = -5"] },
+                { q: "Resuelve la proporción: 3 / x = 1 / 4:", a: 12, opts: [12, 7, 1, 3/4] },
+                { q: "Si x = 0 y y = 5, ¿cuál es el resultado de x² + y?", a: 5, opts: [5, 25, 0, 10] },
+                { q: "Factoriza la diferencia: x² - 4:", a: "(x-2)(x+2)", opts: ["(x-2)(x+2)", "(x-2)²", "x(x-4)", "(x+2)²"] },
+                { q: "Despeja x: x/2 + 1 = 5:", a: 8, opts: [8, 12, 4, 10] },
+                { q: "El producto de (x+2)(x-2) es:", a: "x²-4", opts: ["x²-4", "x²+4", "x²-2", "x²-4x+4"] },
+                { q: "Si 3x = 12, entonces 2x es:", a: 8, opts: [8, 6, 4, 12] },
+                { q: "El valor de x en 10-x=7 es:", a: 3, opts: [3, -3, 17, 7] },
+                { q: "Simplifica: x + x + x:", a: "3x", opts: ["3x", "x³", "2x", "x+3"] }
+            ],
+            "Geometría": [
+                { q: "Un jardinero construye un camino diagonal en un jardín rectangular cuyos lados miden 3m y 4m. ¿Cuánto mide el camino?", a: 5, opts: [5, 7, 6, 25] },
+                { q: "Una escalera de 10m se apoya en una pared. Si la base de la escalera está a 6m de la pared, ¿a qué altura llega?", a: 8, opts: [8, 4, 16, 5] },
+                { q: "Calcula el área de una vela triangular para un barco que tiene 10m de base y 5m de altura:", a: 25, opts: [25, 50, 15, 10] },
+                { q: "¿Cuál es el valor del ángulo suplementario de un ángulo que mide exactamente 70°?", a: 110, opts: [110, 20, 90, 180] },
+                { q: "¿Cuál es la suma de los ángulos internos de cualquier triángulo en geometría plana?", a: 180, opts: [180, 360, 90, 270] },
+                { q: "Se desea cercar un corral cuadrado que mide 5m por lado. ¿Cuántos metros de cerca se necesitan?", a: 20, opts: [20, 25, 10, 15] },
+                { q: "Un cable de acero de 15m se tensa desde un poste de 9m hasta el suelo. ¿A qué distancia del poste toca el suelo?", a: 12, opts: [12, 21, 24, 18] },
+                { q: "¿Cuál es el valor del ángulo complementario de un ángulo agudo de 30°?", a: 60, opts: [60, 150, 90, 120] },
+                { q: "Calcula el área de una loseta cuadrada cuyo lado mide 4 unidades:", a: 16, opts: [16, 8, 4, 20] },
+                { q: "Si el radio de una glorieta circular es de 5m, ¿cuál es la medida de su diámetro?", a: 10, opts: [10, 25, 5, 20] },
+                { q: "Una rampa tiene una longitud de 15m y una base de 12m. ¿Cuál es la altura de la rampa?", a: 9, opts: [9, 3, 27, 10] },
+                { q: "¿Cuál es la suma de los ángulos internos de un cuadrilátero regular?", a: 360, opts: [360, 180, 720, 90] },
+                { q: "Calcula el perímetro de un triángulo equilátero cuya base mide 6cm:", a: 18, opts: [18, 12, 24, 36] },
+                { q: "Calcula el área de un círculo de radio 1 unidad (Considera π = 3 para el cálculo):", a: 3, opts: [3, 1, 6, 9] },
+                { q: "Un poste de 15m proyecta una sombra de 20m. ¿Cuál es la distancia de la punta del poste a la punta de la sombra?", a: 25, opts: [25, 35, 45, 30] },
+                { q: "¿Cuántos lados tiene un polígono denominado hexágono?", a: 6, opts: [6, 5, 8, 4] },
+                { q: "Una diagonal de una pantalla rectangular de 20 pulgadas tiene una altura de 16 pulgadas. ¿Cuál es su ancho?", a: 12, opts: [12, 4, 36, 10] },
+                { q: "Determina el perímetro de un marco rectangular que mide 10cm de base por 5cm de altura:", a: 30, opts: [30, 50, 15, 60] },
+                { q: "¿Cuántos grados sexagesimales mide un ángulo recto?", a: 90, opts: [90, 180, 45, 360] },
+                { q: "Un triángulo rectángulo tiene catetos de 30cm y 40cm. ¿Cuánto mide su hipotenusa?", a: 50, opts: [50, 70, 60, 100] },
+                { q: "Calcula el área de un terreno rectangular que tiene 8m de frente y 4m de fondo:", a: 32, opts: [32, 24, 12, 16] },
+                { q: "Si una rueda tiene un radio de 3 unidades, ¿cuánto mide su diámetro total?", a: 6, opts: [6, 9, 3, 12] },
+                { q: "¿Cuál es el valor del ángulo suplementario para un ángulo de 45°?", a: 135, opts: [135, 45, 90, 55] },
+                { q: "Una hipotenusa mide 30 y un cateto mide 24. ¿Cuánto mide el otro cateto?", a: 18, opts: [18, 6, 12, 20] },
+                { q: "Calcula el perímetro de una circunferencia con radio de 10 unidades (Considera π = 3):", a: 60, opts: [60, 30, 20, 100] },
+                { q: "¿Cuántas diagonales se pueden trazar desde un solo vértice en un cuadrado?", a: 1, opts: [1, 2, 4, 0] },
+                { q: "En un triángulo con catetos de 1.5m y 2m, ¿cuánto mide la diagonal?", a: 2.5, opts: [2.5, 3.5, 3, 2] },
+                { q: "Calcula el área de un triángulo rectángulo de catetos 4 y 4 unidades:", a: 8, opts: [8, 16, 12, 4] },
+                { q: "¿Cuál es el ángulo complementario de uno que mide 80°?", a: 10, opts: [10, 100, 90, 20] },
+                { q: "Si la hipotenusa es 5 y un cateto mide 3, ¿el cateto faltante es?", a: 4, opts: [4, 2, 8, 5] },
+                { q: "El perímetro de un círculo de diámetro 10 es (π=3):", a: 30, opts: [30, 60, 15, 10] },
+                { q: "Área de un cuadrado cuyo perímetro es 12:", a: 9, opts: [9, 12, 16, 6] },
+                { q: "Un ángulo de 180 grados se llama:", a: "Llano", opts: ["Llano", "Recto", "Agudo", "Obtuso"] },
+                { q: "¿Cuántos grados hay en un círculo completo?", a: 360, opts: [360, 180, 90, 100] },
+                { q: "Si un triángulo tiene lados 3, 4 y 5, es un triángulo:", a: "Rectángulo", opts: ["Rectángulo", "Isósceles", "Equilátero", "Obtusángulo"] }
+            ],
+            "Estadística": [
+                { q: "Calcula la media aritmética del siguiente conjunto de datos: {10, 20, 30}:", a: 20, opts: [20, 10, 15, 60] },
+                { q: "Encuentra la mediana de los siguientes valores: {1, 5, 3, 8, 2}:", a: 3, opts: [3, 5, 2, 4] },
+                { q: "Si el promedio de 3 notas es 80 y tienes un 70 y un 80, ¿qué nota necesitas en el tercer examen?", a: 90, opts: [90, 80, 100, 70] },
+                { q: "¿Cuál es la moda en el conjunto de datos {2, 3, 3, 4, 5}?", a: 3, opts: [3, 2, 4, 5] },
+                { q: "En un grupo de 20 alumnos, 10 prefieren A y 5 prefieren ambos. ¿Cuántos prefieren SOLO la opción A?", a: 5, opts: [5, 10, 15, 0] },
+                { q: "¿Cuál es la probabilidad teórica de obtener cara al lanzar una moneda equilibrada?", a: "1/2", opts: ["1/2", "1/4", "1", "0"] },
+                { q: "Calcula el rango del conjunto de datos {2, 10, 5, 1}:", a: 9, opts: [9, 10, 8, 11] },
+                { q: "¿Cuál es el promedio de cuatro calificaciones iguales a 5?", a: 5, opts: [5, 20, 1, 0] },
+                { q: "Determina la mediana del conjunto {10, 2, 8, 4, 6}:", a: 6, opts: [6, 8, 4, 5] },
+                { q: "En una encuesta a 30 personas, 15 prefieren A, 10 B y 5 ambos. ¿Cuántos prefieren A o B?", a: 20, opts: [20, 25, 15, 30] },
+                { q: "¿Cuál es la probabilidad de obtener un número 6 al lanzar un dado estándar?", a: "1/6", opts: ["1/6", "1/2", "6/1", "1/3"] },
+                { q: "Calcula la media de los primeros cuatro números pares: {2, 4, 6, 8}:", a: 5, opts: [5, 4, 6, 20] },
+                { q: "Identifica la moda del conjunto {7, 8, 7, 9, 7}:", a: 7, opts: [7, 8, 9, 0] },
+                { q: "Si el promedio de 3 notas debe ser 10 y ya tienes dos dieces, ¿qué nota falta?", a: 10, opts: [10, 0, 20, 30] },
+                { q: "Encuentra la mediana de los valores {100, 200, 300}:", a: 200, opts: [200, 150, 300, 100] },
+                { q: "De 10 niños, 6 juegan fútbol, 4 básquet y 2 ambos. ¿Cuántos juegan solo fútbol?", a: 4, opts: [4, 6, 2, 8] },
+                { q: "¿Cuál es la probabilidad de sacar un número par en un dado de 6 caras?", a: "1/2", opts: ["1/2", "1/3", "3/1", "1/6"] },
+                { q: "Determina el rango de los datos {5, 5, 5, 5}:", a: 0, opts: [0, 5, 1, 4] },
+                { q: "Calcula la media de los datos extremos 0 y 10:", a: 5, opts: [5, 10, 0, 2] },
+                { q: "Identifica la moda en la secuencia cualitativa {A, B, A, C}:", a: "A", opts: ["A", "B", "C", "D"] },
+                { q: "El promedio de 4 notas es 7. Si tres notas son 7, ¿cuál es la cuarta?", a: 7, opts: [7, 0, 14, 28] },
+                { q: "Calcula la mediana del conjunto {1, 2, 3, 4}:", a: 2.5, opts: [2.5, 2, 3, 1.5] },
+                { q: "En un grupo de 50 personas, 25 gustan de A y 20 de B, con 10 ambos. ¿A cuántos no les gusta ninguno?", a: 15, opts: [15, 5, 45, 0] },
+                { q: "¿Cuál es la probabilidad de que al lanzar un dado NO salga el número 1?", a: "5/6", opts: ["5/6", "1/6", "1/2", "1"] },
+                { q: "Calcula el rango de temperatura si el máximo es 10° y el mínimo es -10°:", a: 20, opts: [20, 0, 10, -10] },
+                { q: "Encuentra la media de los primeros cinco números naturales:", a: 3, opts: [3, 2.5, 4, 15] },
+                { q: "De 10 personas, 5 prefieren A y 5 prefieren B (sin traslape). ¿Cuántos prefieren A o B?", a: 10, opts: [10, 5, 0, 20] },
+                { q: "En una bolsa con 1 bola roja y 1 azul, ¿qué probabilidad hay de sacar la roja?", a: "1/2", opts: ["1/2", "1", "0", "1/4"] },
+                { q: "¿Cuál es la moda del conjunto {5, 6, 7, 8}?", a: "No hay", opts: ["No hay", "5", "8", "6.5"] },
+                { q: "Si el promedio de 3 notas es 9 y tienes un 8 y un 9, ¿qué nota falta?", a: 10, opts: [10, 9, 8, 11] },
+                { q: "La probabilidad de un evento seguro es:", a: 1, opts: [1, 0, 0.5, 0.1] },
+                { q: "La mediana de {1, 2, 100} es:", a: 2, opts: [2, 1, 100, 34] },
+                { q: "La media de {4, 4, 10} es:", a: 6, opts: [6, 4, 10, 18] },
+                { q: "Si lanzas dos monedas, ¿cuántos resultados posibles hay?", a: 4, opts: [4, 2, 8, 1] },
+                { q: "Un evento imposible tiene probabilidad:", a: 0, opts: [0, 1, 0.5, -1] }
+            ]
+        };
+
+        const problemGen = {
+            get() {
+                const categories = Object.keys(QUESTION_BANK);
+                // Alternancia estricta: No repetir categoría
+                let availableCategories = categories.filter(c => c !== state.lastCategory);
+                let cat = availableCategories[Math.floor(Math.random() * availableCategories.length)];
+                
+                // Buscar una pregunta no usada en esta categoría
+                let availableIndices = [];
+                for(let i=0; i < QUESTION_BANK[cat].length; i++) {
+                    if(!state.usedIndices[cat].includes(i)) availableIndices.push(i);
+                }
+
+                // Si se agotaron las de esta categoría, resetear historial de la misma
+                if(availableIndices.length === 0) {
+                    state.usedIndices[cat] = [];
+                    for(let i=0; i < QUESTION_BANK[cat].length; i++) availableIndices.push(i);
+                }
+
+                let idx = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+                state.usedIndices[cat].push(idx);
+                state.lastCategory = cat;
+
+                let problem = QUESTION_BANK[cat][idx];
+                return { ...problem, cat };
+            }
+        };
+
+        class Enemy {
+            constructor() {
+                this.x = canvas.width + 60;
+                this.y = 150 + Math.random() * (canvas.height - 300);
+                this.baseSpeed = 0.8 + (state.score / 2000); 
+                this.size = 55;
+                this.id = Math.random();
+                const emojis = ['👾', '👺', '💀', '👽', '🧛', '🧟', '👹'];
+                this.emoji = emojis[Math.floor(Math.random() * emojis.length)];
+                this.isTarget = false;
+                this.float = Math.random() * Math.PI * 2;
+                this.pulse = 0;
+            }
+            update(dt) {
+                const speedMult = dt / 16.67; 
+                this.x -= this.baseSpeed * speedMult;
+                this.float += 0.05 * speedMult;
+                this.pulse += 0.1 * speedMult;
+                if (this.x < 130) { loseLife(); return false; }
+                return true;
+            }
+            draw() {
+                const yPos = this.y + Math.sin(this.float) * 15;
+                const scale = 1 + Math.sin(this.pulse) * 0.05;
+                ctx.save();
+                ctx.translate(this.x, yPos);
+                ctx.scale(scale, scale);
+                if (this.isTarget) { ctx.shadowBlur = 30; ctx.shadowColor = "#3b82f6"; }
+                ctx.font = `${this.size}px serif`;
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(this.emoji, 0, 0);
+                ctx.restore();
+                ctx.save();
+                ctx.font = "bold 10px Orbitron";
+                ctx.fillStyle = this.x < 300 ? "#ef4444" : "#60a5fa";
+                ctx.textAlign = "center";
+                ctx.fillText("PRESIONAR", this.x, yPos + 40);
+                ctx.restore();
+            }
+        }
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function updateUI() {
+            scoreVal.innerText = state.score;
+            let hearts = "";
+            for(let i=0; i<state.lives; i++) hearts += "❤️ ";
+            livesDisplay.innerText = hearts || "💀";
+            const progress = (state.score / VICTORY_SCORE) * 100;
+            totalProgressBar.style.width = `${Math.min(100, progress)}%`;
+            if (state.score >= VICTORY_SCORE) endGame(true);
+            if (state.lives <= 0) endGame(false);
+        }
+
+        function loseLife() {
+            state.lives--;
+            state.enemies = []; 
+            updateUI();
+        }
+
+        function initGame() {
+            document.getElementById('start-screen').style.display = 'none';
+            state.active = true;
+            state.lastSpawnTime = Date.now() - state.spawnInterval;
+            state.lastFrameTime = performance.now();
+            updateUI();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function gameLoop(currentTime) {
+            if (!state.active) return;
+            const dt = currentTime - state.lastFrameTime;
+            state.lastFrameTime = currentTime;
+            const now = Date.now();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = "rgba(59, 130, 246, 0.05)";
+            for(let i=0; i<canvas.width; i+=100) { ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke(); }
+            for(let j=0; j<canvas.height; j+=100) { ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(canvas.width, j); ctx.stroke(); }
+            const grad = ctx.createLinearGradient(0, 0, 130, 0);
+            grad.addColorStop(0, "#0f172a");
+            grad.addColorStop(1, "#1e293b");
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 130, canvas.height);
+            ctx.fillStyle = "#3b82f6";
+            ctx.fillRect(125, 0, 5, canvas.height);
+            const remaining = Math.max(0, state.spawnInterval - (now - state.lastSpawnTime));
+            spawnTimerUI.innerText = `${Math.ceil(remaining/1000)}s`;
+            if (remaining <= 0) { state.enemies.push(new Enemy()); state.lastSpawnTime = now; }
+            state.enemies = state.enemies.filter(en => {
+                const ok = en.update(dt);
+                if (ok) en.draw();
+                return ok;
+            });
+            requestAnimationFrame(gameLoop);
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            if (state.problemActive || !state.active) return;
+            const rect = canvas.getBoundingClientRect();
+            const mx = e.clientX - rect.left;
+            const my = e.clientY - rect.top;
+            const sortedEnemies = [...state.enemies].sort((a, b) => a.x - b.x);
+            for (let en of sortedEnemies) {
+                if (Math.hypot(en.x - mx, en.y - my) < 70) { openChallenge(en); break; }
+            }
+        });
+
+        function openChallenge(enemy) {
+            state.problemActive = true;
+            enemy.isTarget = true;
+            const prob = problemGen.get();
+            document.getElementById('problem-category').innerText = prob.cat;
+            document.getElementById('problem-text').innerText = prob.q;
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+            prob.opts.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "btn-option p-5 rounded-2xl font-bold text-white transition-all text-lg";
+                btn.innerText = opt;
+                btn.onclick = () => solve(opt == prob.a, enemy);
+                grid.appendChild(btn);
+            });
+            mathModal.classList.remove('hidden');
+            startQuestionTimer(enemy);
+        }
+
+        function startQuestionTimer(target) {
+            state.timeLeft = 30;
+            updateTimerUI();
+            if (state.timerInterval) clearInterval(state.timerInterval);
+            state.timerInterval = setInterval(() => {
+                state.timeLeft--;
+                updateTimerUI();
+                if (state.timeLeft <= 0) { clearInterval(state.timerInterval); solve(false, target); }
+            }, 1000);
+        }
+
+        function updateTimerUI() {
+            const perc = (state.timeLeft / 30) * 100;
+            timerBar.style.width = `${perc}%`;
+            timerText.innerText = `${state.timeLeft}s`;
+            timerText.className = state.timeLeft <= 10 ? "text-3xl font-black font-game text-red-500 shake" : "text-3xl font-black font-game text-green-400";
+        }
+
+        function solve(correct, enemy) {
+            clearInterval(state.timerInterval);
+            state.problemActive = false;
+            mathModal.classList.add('hidden');
+            if (correct) {
+                state.enemies = state.enemies.filter(e => e.id !== enemy.id);
+                state.score += 40;
+                updateUI();
+            } else { loseLife(); enemy.isTarget = false; }
+        }
+
+        function endGame(victory) {
+            state.active = false;
+            if (victory) document.getElementById('victory-screen').classList.remove('hidden');
+            else { document.getElementById('final-score').innerText = state.score; document.getElementById('game-over').classList.remove('hidden'); }
+        }
+    </script>
+</body>
+</html>
