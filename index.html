@@ -554,9 +554,18 @@
         <div>
           <div class="home-card-icon">📚</div>
           <div class="home-card-title">Recursos oficiales</div>
-          <div class="home-card-desc">Guías PDF oficiales de UDG y cuadernillos PrepMaster listos para imprimir.</div>
+          <div class="home-card-desc">Descargas directas de guías PDF oficiales de UDG y College Board.</div>
         </div>
         <div class="home-card-action">Ver recursos →</div>
+      </div>
+
+      <div class="home-card" data-col="purple" onclick="switchView('cuadernillos')">
+        <div>
+          <div class="home-card-icon">🖨️</div>
+          <div class="home-card-title">Cuadernillos imprimibles</div>
+          <div class="home-card-desc">126 reactivos listos para imprimir y practicar en papel, con hoja de respuestas.</div>
+        </div>
+        <div class="home-card-action">Ver cuadernillos →</div>
       </div>
     </div>
   </div>
@@ -848,18 +857,49 @@
         <div class="recurso-title">Guía PAA — Prueba en Línea</div>
         <div class="recurso-action">⬇ Descargar PDF</div>
       </a>
-      <a class="recurso-card" data-type="pdf" href="cuadernillos/cuadernillo-general-paa.pdf" target="_blank" rel="noopener">
-        <div class="recurso-type-badge">🖨️ Cuadernillo Imprimible</div>
-        <div class="recurso-org">PrepMaster PAA</div>
-        <div class="recurso-title">Cuadernillo General de Práctica (116 reactivos)</div>
-        <div class="recurso-action">⬇ Descargar PDF</div>
-      </a>
-      <a class="recurso-card" data-type="pdf" href="respuestas/respuestas-general-paa.pdf" target="_blank" rel="noopener">
-        <div class="recurso-type-badge">🔑 Hoja de Respuestas</div>
-        <div class="recurso-org">PrepMaster PAA</div>
-        <div class="recurso-title">Respuestas — Cuadernillo General (116 reactivos)</div>
-        <div class="recurso-action">⬇ Descargar PDF</div>
-      </a>
+    </div>
+  </div>
+
+  <!-- 🖨️ VIEW: CUADERNILLOS IMPRIMIBLES -->
+  <div id="view-cuadernillos" class="view-container">
+    <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
+    <div class="section-header">
+      <h2 class="section-title">🖨️ Cuadernillos imprimibles</h2>
+      <div class="section-line"></div>
+    </div>
+    <p style="color:var(--muted);font-size:14px;max-width:640px;margin:-10px 0 24px;">
+      Reactivos en formato de hoja para imprimir y resolver en físico con lápiz y papel. Cada cuadernillo incluye su hoja de respuestas con justificación breve.
+    </p>
+    <div class="exam-panel open" style="margin-top:0;">
+      <div class="exam-panel-header"><span class="exam-panel-dot" style="background:#7c3aed"></span>Cuadernillo General — Elige qué abrir</div>
+      <div>
+        <div class="exam-item">
+          <div class="exam-item-left">
+            <div class="exam-num">01</div>
+            <div>
+              <div class="exam-info-name">Cuadernillo General de Práctica</div>
+              <div class="exam-info-meta">126 reactivos · Español (30) + Matemáticas (80) + Gráficos y Visuales (16)</div>
+            </div>
+          </div>
+          <div class="exam-item-actions">
+            <button class="btn-exam btn-exam-start" style="background:#7c3aed;border-color:#7c3aed"
+              onclick="event.stopPropagation();openExam('examenes/cuadernillos/cuadernillo-general-paa.html','Cuadernillo General de Práctica')">🖨️ Abrir e imprimir</button>
+          </div>
+        </div>
+        <div class="exam-item">
+          <div class="exam-item-left">
+            <div class="exam-num">02</div>
+            <div>
+              <div class="exam-info-name">Hoja de Respuestas General</div>
+              <div class="exam-info-meta">Clave de respuestas con justificación · uso del instructor o autocorrección</div>
+            </div>
+          </div>
+          <div class="exam-item-actions">
+            <button class="btn-exam btn-exam-pdf"
+              onclick="event.stopPropagation();openExam('respuestas/cuadernillos/respuestas-general-paa.html','Hoja de Respuestas General')">📄 Ver respuestas</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
