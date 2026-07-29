@@ -365,6 +365,7 @@
       <div class="input-group"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
       <button class="btn-primary" onclick="doLogin()">Entrar →</button>
       <div class="auth-error" id="login-error"></div>
+      <button class="btn-secondary" id="btn-close-sessions" style="display:none;margin-top:10px;width:100%;" onclick="closeAllSessions()">🔒 Cerrar todas mis sesiones activas y entrar aquí</button>
     </div>
 
     <!-- REGISTER PANEL -->
@@ -1214,6 +1215,63 @@ window.addEventListener('beforeunload', () => {
   }
 });
 
+let pendingLimitUid = null;
+let pendingLimitExpires = null;
+
+function grantAccess(user, expires) {
+  startHeartbeat(user.uid);
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  const now = new Date();
+  const days = Math.ceil((expires - now) / (1000*60*60*24));
+  const userEl = document.getElementById('nav-user-email');
+  userEl.textContent = user.displayName || user.email;
+  userEl.title = `Acceso válido hasta ${expires.toLocaleDateString('es-MX')} (${days} días restantes)`;
+}
+
+window.closeAllSessions = async () => {
+  const btn = document.getElementById('btn-close-sessions');
+  const errEl = document.getElementById('login-error');
+  const uid = auth.currentUser && auth.currentUser.uid;
+  if (!uid || !pendingLimitUid || uid !== pendingLimitUid) {
+    errEl.textContent = '⚠️ Tu sesión expiró, vuelve a iniciar sesión para poder cerrar tus dispositivos.';
+    errEl.style.display = 'block';
+    btn.style.display = 'none';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = 'Cerrando sesiones...';
+  try {
+    const sessionsRef = collection(db, 'sessions', uid, 'active');
+    const snap = await getDocs(sessionsRef);
+    for (const d of snap.docs) {
+      await deleteDoc(d.ref);
+    }
+    mySessionId = null;
+    const sessionOk = await registerSession(uid);
+    if (!sessionOk) {
+      errEl.textContent = '⚠️ No se pudieron cerrar las sesiones. Intenta de nuevo en unos segundos.';
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = '🔒 Cerrar todas mis sesiones activas y entrar aquí';
+      return;
+    }
+    errEl.style.display = 'none';
+    btn.style.display = 'none';
+    btn.disabled = false;
+    btn.textContent = '🔒 Cerrar todas mis sesiones activas y entrar aquí';
+    grantAccess(auth.currentUser, pendingLimitExpires);
+    pendingLimitUid = null;
+    pendingLimitExpires = null;
+  } catch(e) {
+    console.error('Error cerrando sesiones:', e);
+    errEl.textContent = '⚠️ Ocurrió un error al cerrar tus sesiones. Intenta de nuevo.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = '🔒 Cerrar todas mis sesiones activas y entrar aquí';
+  }
+};
+
 onAuthStateChanged(auth, async user => {
   if (user) {
     try {
@@ -1228,18 +1286,17 @@ onAuthStateChanged(auth, async user => {
             document.getElementById('auth-screen').style.display = 'flex';
             document.getElementById('app').style.display = 'none';
             const errEl = document.getElementById('login-error');
-            errEl.textContent = '⚠️ Límite de 3 dispositivos alcanzado. Cierra sesión en otro dispositivo o espera unos minutos.';
+            errEl.textContent = '⚠️ Límite de 3 dispositivos alcanzado.';
             errEl.style.display = 'block';
-            await signOut(auth);
+            pendingLimitUid = user.uid;
+            pendingLimitExpires = expires;
+            document.getElementById('btn-close-sessions').style.display = 'block';
+            // No cerramos sesión aquí a propósito: se necesita mantener al usuario
+            // autenticado para poder cerrar sus propias sesiones desde el botón.
             return;
           }
-          startHeartbeat(user.uid);
-          document.getElementById('auth-screen').style.display = 'none';
-          document.getElementById('app').style.display = 'block';
-          const days = Math.ceil((expires - now) / (1000*60*60*24));
-          const userEl = document.getElementById('nav-user-email');
-          userEl.textContent = user.displayName || user.email;
-          userEl.title = `Acceso válido hasta ${expires.toLocaleDateString('es-MX')} (${days} días restantes)`;
+          document.getElementById('btn-close-sessions').style.display = 'none';
+          grantAccess(user, expires);
           return;
         }
       }
@@ -1259,6 +1316,8 @@ onAuthStateChanged(auth, async user => {
 window.switchTab = (tab) => {
   const loginErr = document.getElementById('login-error');
   if (loginErr) loginErr.style.display = 'none';
+  const closeSessBtn = document.getElementById('btn-close-sessions');
+  if (closeSessBtn) closeSessBtn.style.display = 'none';
   document.querySelectorAll('.auth-tab').forEach((t,i) => {
     t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register'));
   });
@@ -1277,6 +1336,9 @@ window.doLogin = async () => {
   const pass  = document.getElementById('login-pass').value;
   const err   = document.getElementById('login-error');
   err.style.display = 'none';
+  document.getElementById('btn-close-sessions').style.display = 'none';
+  pendingLimitUid = null;
+  pendingLimitExpires = null;
   if (!email || !pass) { err.textContent = 'Completa todos los campos.'; err.style.display='block'; return; }
   try {
     await signInWithEmailAndPassword(auth, email, pass);
