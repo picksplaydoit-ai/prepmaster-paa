@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>PrepMaster PAA — Explicación: Funciones y Gráficas</title>
+<title>PrepMaster PAA — Explicación: Funciones y Traslaciones</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
@@ -79,25 +79,22 @@
   <!-- HEADER -->
   <div class="header-card">
     <span class="badge-area">Matemáticas · Álgebra Superior</span>
-    <h1 class="title">Funciones y Gráficas PAA</h1>
-    <p class="subtitle">Módulos guiados paso a paso para resolver con precisión los ejercicios de evaluación, composición, cálculo de pendientes e interpretación de gráficas.</p>
+    <h1 class="title">Funciones y Traslaciones PAA</h1>
+    <p class="subtitle">Guía gráfica interactiva para dominar la evaluación de funciones, composición y el análisis visual de traslaciones horizontales y verticales.</p>
   </div>
 
   <!-- NAVEGACIÓN POR PESTAÑAS (TABS) -->
   <div class="tabs-bar">
     <button class="tab-btn active" onclick="switchTab('tab-simple')">🔢 1. Función Simple</button>
-    <button class="tab-btn" onclick="switchTab('tab-maxmin')">⛰️ 2. Máximos, Mínimos y Rango</button>
-    <button class="tab-btn" onclick="switchTab('tab-comp-num')">🔄 3. Composición f(g(k))</button>
-    <button class="tab-btn" onclick="switchTab('tab-comp-alg')">🧩 4. Composición f(g(x))</button>
-    <button class="tab-btn" onclick="switchTab('tab-ceros')">📊 5. Ceros y Cortes</button>
-    <button class="tab-btn" onclick="switchTab('tab-rectas')">📈 6. Pendiente en Gráficas</button>
-    <button class="tab-btn" onclick="switchTab('tab-traslacion')">↔️ 7. Traslaciones</button>
-    <button class="tab-btn" onclick="switchTab('tab-domrango')">🎯 8. Dominio e Intervalos</button>
+    <button class="tab-btn" onclick="switchTab('tab-comp-num')">🔄 2. Composición Numérica $f(g(k))$</button>
+    <button class="tab-btn" onclick="switchTab('tab-comp-alg')">🧩 3. Composición Algebraica $f(g(x))$</button>
+    <button class="tab-btn" onclick="switchTab('tab-traslacion-simple')">↔️ 4. Traslaciones Simples</button>
+    <button class="tab-btn" onclick="switchTab('tab-traslacion-vertice')">🎯 5. Traslación de Vértice</button>
   </div>
 
 
   <!-- ================================================================= -->
-  <!-- PESTAÑA 1: FUNCIÓN SIMPLE Y EVALUACIÓN                            -->
+  <!-- PESTAÑA 1: FUNCIÓN SIMPLE                                         -->
   <!-- ================================================================= -->
   <div id="tab-simple" class="tab-pane active">
     <div class="block-card">
@@ -106,31 +103,47 @@
         Evaluar una función $f(x)$ significa sustituir $x$ por un valor numérico. Si en cambio te piden hallar $a$ sabiendo que $f(a) = K$, debes **igualar la regla a $K$ y despejar $a$**.
       </p>
 
+      <div class="tip-box">
+        <strong>💡 Cuida los Signos Negativos:</strong> Si evalúas un número negativo en potencias pares (ej. $x^2$), el resultado siempre es positivo: $(-3)^2 = 9$.
+      </div>
+
       <!-- EJEMPLO GUIADO PASO A PASO -->
       <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
-        📌 Ejemplo Guiado: Si $f(x) = 3x^2 - 4x + 1$, halla el valor de $f(-3)$.
+        📌 Ejemplo Guiado 1 (Evaluación Directa): Si $f(x) = 3x^2 - 4x + 1$, halla el valor de $f(-3)$.
       </div>
       
       <div class="solucion-guiada">
-        <p style="margin-bottom:8px;"><strong>Paso 1:</strong> Sustituye $x = -3$ encerrando entre paréntesis:</p>
+        <p style="margin-bottom:8px;"><strong>Paso 1:</strong> Sustituye $x = -3$ usando paréntesis:</p>
         $$f(-3) = 3(-3)^2 - 4(-3) + 1$$
         <p style="margin-bottom:8px;"><strong>Paso 2:</strong> Eleva la potencia $(-3)^2 = 9$ y multiplica signos $(-4)(-3) = 12$:</p>
         $$f(-3) = 3(9) + 12 + 1 = 27 + 12 + 1 = 40$$
         <p><strong>Respuesta:</strong> $f(-3) = 40$.</p>
       </div>
 
+      <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
+        📌 Ejemplo Guiado 2 (Despeje de Entrada): Si $f(a) = 15$ para $f(x) = 4x - 5$, halla el valor de $a$.
+      </div>
+      
+      <div class="solucion-guiada">
+        <p style="margin-bottom:8px;"><strong>Paso 1:</strong> Iguala la expresión de la función a $15$:</p>
+        $$4a - 5 = 15$$
+        <p style="margin-bottom:8px;"><strong>Paso 2:</strong> Suma $5$ a ambos lados y luego divide entre $4$:</p>
+        $$4a = 15 + 5 \implies 4a = 20 \implies a = 5$$
+        <p><strong>Respuesta:</strong> $a = 5$.</p>
+      </div>
+
       <!-- RESUÉLVELO TÚ MISMO -->
       <div class="pratice-box">
-        <div class="pratice-title"><i class="fa-solid fa-pen-to-square"></i> ¡Resuélvelo tú mismo! (Despeje)</div>
+        <div class="pratice-title"><i class="fa-solid fa-pen-to-square"></i> ¡Resuélvelo tú mismo!</div>
         <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
-          Si $f(a) = 15$ para la función $f(x) = 4x - 5$, ¿cuál es el valor de $a$?
+          Dada la función $g(x) = \frac{x^2 - 4}{x + 3}$, ¿cuál es el valor de $g(-5)$?
         </div>
 
         <div id="opts-simple">
-          <button class="opcion-btn" onclick="responder('simple', 0, false, this)"><div class="opcion-letra">A</div><span>$2.5$</span></button>
-          <button class="opcion-btn" onclick="responder('simple', 1, false, this)"><div class="opcion-letra">B</div><span>$4$</span></button>
-          <button class="opcion-btn" onclick="responder('simple', 2, true, this)"><div class="opcion-letra">C</div><span>$5$</span></button>
-          <button class="opcion-btn" onclick="responder('simple', 3, false, this)"><div class="opcion-letra">D</div><span>$55$</span></button>
+          <button class="opcion-btn" onclick="responder('simple', 0, false, this)"><div class="opcion-letra">A</div><span>10.5</span></button>
+          <button class="opcion-btn" onclick="responder('simple', 1, false, this)"><div class="opcion-letra">B</div><span>-7</span></button>
+          <button class="opcion-btn" onclick="responder('simple', 2, true, this)"><div class="opcion-letra">C</div><span>-10.5</span></button>
+          <button class="opcion-btn" onclick="responder('simple', 3, false, this)"><div class="opcion-letra">D</div><span>-21</span></button>
         </div>
         <div id="fb-simple" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
       </div>
@@ -140,65 +153,7 @@
 
 
   <!-- ================================================================= -->
-  <!-- PESTAÑA 2: MÁXIMOS, MÍNIMOS Y RANGO                               -->
-  <!-- ================================================================= -->
-  <div id="tab-maxmin" class="tab-pane">
-    <div class="block-card">
-      <div class="block-title"><i class="fa-solid fa-chart-line"></i> Identificación de Máximos, Mínimos y Rango</div>
-      <p style="font-size:14px; color:var(--muted); line-height:1.6;">
-        El **máximo** o **mínimo** de una curva es el punto más alto o bajo alcanzado en el eje $Y$. Este punto determina el límite del **Rango** (todos los valores posibles de $y$).
-      </p>
-
-      <!-- GRAFICA SVG MÍNIMO -->
-      <div class="svg-container">
-        <div style="font-family:'Syne',sans-serif; font-size:14px; font-weight:700; margin-bottom:12px; color:var(--text);">
-          Lectura del Punto Mínimo y Rango de $f(x)$
-        </div>
-        <svg width="100%" height="160" viewBox="0 0 300 160" style="max-width:380px;">
-          <line x1="20" y1="100" x2="280" y2="100" stroke="#7070a0" stroke-width="2"/>
-          <line x1="80" y1="20" x2="80" y2="140" stroke="#7070a0" stroke-width="2"/>
-          
-          <path d="M 40,20 Q 160,140 260,20" fill="none" stroke="#7c3aed" stroke-width="3"/>
-          <circle cx="160" cy="120" r="5" fill="#34d399"/>
-          
-          <text x="170" y="125" fill="#34d399" font-size="11" font-weight="bold">Vértice Mínimo (3, -2)</text>
-          <text x="85" y="125" fill="#9090b8" font-size="10">-2 en Y</text>
-        </svg>
-      </div>
-
-      <!-- EJEMPLO GUIADO PASO A PASO -->
-      <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
-        📌 Ejemplo Guiado: Con base en la gráfica anterior, determina el valor MÍNIMO y el Rango de la función.
-      </div>
-      
-      <div class="solucion-guiada">
-        <p style="margin-bottom:8px;"><strong>Paso 1 (Mínimo):</strong> Revisa la coordenada $Y$ del punto verde más bajo. Ocurre en $y = -2$.</p>
-        <p style="margin-bottom:8px;"><strong>Paso 2 (Rango):</strong> La curva sube ilimitadamente desde $y = -2$ hacia arriba.</p>
-        <p><strong>Respuesta:</strong> El valor mínimo es <strong>$y = -2$</strong> y el Rango es <strong>$y \ge -2$</strong> (o $[-2, \infty)$).</p>
-      </div>
-
-      <!-- RESUÉLVELO TÚ MISMO -->
-      <div class="pratice-box">
-        <div class="pratice-title"><i class="fa-solid fa-pen-to-square"></i> ¡Resuélvelo tú mismo!</div>
-        <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
-          ¿Cuál es el valor MÁXIMO que alcanza la función parabólica cuya gráfica abre hacia abajo con vértice en el punto $(-1, 5)$?
-        </div>
-
-        <div id="opts-maxmin">
-          <button class="opcion-btn" onclick="responder('maxmin', 0, false, this)"><div class="opcion-letra">A</div><span>$y = -1$</span></button>
-          <button class="opcion-btn" onclick="responder('maxmin', 1, true, this)"><div class="opcion-letra">B</div><span>$y = 5$</span></button>
-          <button class="opcion-btn" onclick="responder('maxmin', 2, false, this)"><div class="opcion-letra">C</div><span>$y = 0$</span></button>
-          <button class="opcion-btn" onclick="responder('maxmin', 3, false, this)"><div class="opcion-letra">D</div><span>$y = \infty$</span></button>
-        </div>
-        <div id="fb-maxmin" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- ================================================================= -->
-  <!-- PESTAÑA 3: COMPOSICIÓN NUMÉRICA f(g(k))                           -->
+  <!-- PESTAÑA 2: COMPOSICIÓN NUMÉRICA f(g(k))                           -->
   <!-- ================================================================= -->
   <div id="tab-comp-num" class="tab-pane">
     <div class="block-card">
@@ -246,7 +201,7 @@
 
 
   <!-- ================================================================= -->
-  <!-- PESTAÑA 4: COMPOSICIÓN ALGEBRAICA f(g(x))                         -->
+  <!-- PESTAÑA 3: COMPOSICIÓN ALGEBRAICA f(g(x))                         -->
   <!-- ================================================================= -->
   <div id="tab-comp-alg" class="tab-pane">
     <div class="block-card">
@@ -289,176 +244,80 @@
 
 
   <!-- ================================================================= -->
-  <!-- PESTAÑA 5: CEROS, RAÍCES Y CORTES CON EJES                        -->
+  <!-- PESTAÑA 4: TRASLACIONES SIMPLES (CÓMO MEDIR UNIDADES)            -->
   <!-- ================================================================= -->
-  <div id="tab-ceros" class="tab-pane">
+  <div id="tab-traslacion-simple" class="tab-pane">
     <div class="block-card">
-      <div class="block-title"><i class="fa-solid fa-chart-area"></i> Cálculo de Ceros y Cortes con el Eje Y</div>
+      <div class="block-title"><i class="fa-solid fa-up-down-left-right"></i> ¿Cómo saber cuántas unidades y hacia dónde se movió?</div>
       <p style="font-size:14px; color:var(--muted); line-height:1.6;">
-        • <strong>Ceros o Raíces ($f(x) = 0$):</strong> Son los valores de $x$ donde la gráfica cruza el eje horizontal X.
-        <br>• <strong>Corte con Eje Y ($f(0)$):</strong> Es el punto donde la gráfica cruza el eje vertical Y.
+        En la PAA te darán la gráfica original $f(x)$ (punteada) y la nueva gráfica $g(x)$ (sólida). Para saber el movimiento exacto, **selecciona un punto de referencia (como el vértice o una intersección) y mide el desplazamiento en los ejes**.
       </p>
 
-      <!-- GRAFICA SVG DE PARÁBOLA -->
+      <!-- GRAFICA SVG DE TRASLACIÓN HORIZONTAL Y VERTICAL -->
       <div class="svg-container">
         <div style="font-family:'Syne',sans-serif; font-size:14px; font-weight:700; margin-bottom:12px; color:var(--text);">
-          Ceros y Corte Y de $f(x) = -x^2 + 4x - 3$
+          Desplazamiento de $f(x)$ [Morada] a $g(x)$ [Naranja]
         </div>
-        <svg width="100%" height="180" viewBox="0 0 300 180" style="max-width:400px;">
-          <line x1="30" y1="140" x2="270" y2="140" stroke="#7070a0" stroke-width="2"/>
-          <line x1="80" y1="20" x2="80" y2="160" stroke="#7070a0" stroke-width="2"/>
-          <path d="M 100,180 Q 160,60 220,180" fill="none" stroke="#ff6b35" stroke-width="3"/>
-          <circle cx="120" cy="140" r="4" fill="#fbbf24"/>
-          <circle cx="200" cy="140" r="4" fill="#fbbf24"/>
-          <circle cx="160" cy="100" r="5" fill="#34d399"/>
-          <text x="110" y="155" fill="#fbbf24" font-size="10">x=1</text>
-          <text x="190" y="155" fill="#fbbf24" font-size="10">x=3</text>
-          <text x="150" y="90" fill="#34d399" font-size="11" font-weight="bold">Vértice (2,1)</text>
+        <svg width="100%" height="200" viewBox="0 0 320 200" style="max-width:420px;">
+          <!-- Cuadrícula / Ejes -->
+          <line x1="20" y1="120" x2="300" y2="120" stroke="#7070a0" stroke-width="2"/>
+          <line x1="100" y1="20" x2="100" y2="180" stroke="#7070a0" stroke-width="2"/>
+
+          <!-- Guías de Unidades en Ejes -->
+          <text x="92" y="135" fill="#9090b8" font-size="10">0</text>
+          <text x="160" y="135" fill="#9090b8" font-size="10">3</text>
+          <text x="90" y="70" fill="#9090b8" font-size="10">2</text>
+
+          <!-- Gráfica Original f(x) con Vértice en (0, 0) -> SVG (100, 120) -->
+          <path d="M 60,40 Q 100,120 140,40" fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="4"/>
+          <circle cx="100" cy="120" r="5" fill="#7c3aed"/>
+          <text x="40" y="30" fill="#7c3aed" font-size="11" font-weight="bold">f(x) original en (0,0)</text>
+
+          <!-- Gráfica Trasladada g(x) con Vértice en (3, 2) -> SVG (160, 70) -->
+          <path d="M 120,-10 Q 160,70 200,-10" fill="none" stroke="#ff6b35" stroke-width="3"/>
+          <circle cx="160" cy="70" r="5" fill="#fbbf24"/>
+          <text x="170" y="65" fill="#fbbf24" font-size="11" font-weight="bold">g(x) trasladada en (3,2)</text>
+
+          <!-- Flecha de Desplazamiento -->
+          <line x1="100" y1="120" x2="160" y2="70" stroke="#fbbf24" stroke-width="2" stroke-dasharray="3"/>
         </svg>
       </div>
-
-      <!-- EJEMPLO GUIADO PASO A PASO -->
-      <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
-        📌 Ejemplo Guiado: Halla algebraicamente las raíces de $f(x) = x^2 - 5x + 6$.
-      </div>
-
-      <div class="solucion-guiada">
-        <p style="margin-bottom:8px;"><strong>Paso 1:</strong> Iguala la función a cero: $x^2 - 5x + 6 = 0$.</p>
-        <p style="margin-bottom:8px;"><strong>Paso 2:</strong> Factoriza buscando dos números que multiplicados den $6$ y sumados den $-5$:</p>
-        $$(x - 2)(x - 3) = 0 \implies x = 2 \quad \text{y} \quad x = 3$$
-        <p><strong>Respuesta:</strong> Los ceros de la función son <strong>$x = 2$ y $x = 3$</strong>.</p>
-      </div>
-
-      <!-- RESUÉLVELO TÚ MISMO -->
-      <div class="pratice-box">
-        <div class="pratice-title"><i class="fa-solid fa-pen-to-square"></i> ¡Resuélvelo tú mismo!</div>
-        <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
-          ¿Cuáles son las raíces o ceros de la función cuadrática $f(x) = x^2 - 9$?
-        </div>
-
-        <div id="opts-ceros">
-          <button class="opcion-btn" onclick="responder('ceros', 0, false, this)"><div class="opcion-letra">A</div><span>$x = 9$</span></button>
-          <button class="opcion-btn" onclick="responder('ceros', 1, true, this)"><div class="opcion-letra">B</div><span>$x = 3$ y $x = -3$</span></button>
-          <button class="opcion-btn" onclick="responder('ceros', 2, false, this)"><div class="opcion-letra">C</div><span>$x = 0$ y $x = 9$</span></button>
-          <button class="opcion-btn" onclick="responder('ceros', 3, false, this)"><div class="opcion-letra">D</div><span>Solo $x = 3$</span></button>
-        </div>
-        <div id="fb-ceros" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- ================================================================= -->
-  <!-- PESTAÑA 6: PENDIENTE EN GRÁFICAS DE RECTAS                        -->
-  <!-- ================================================================= -->
-  <div id="tab-rectas" class="tab-pane">
-    <div class="block-card">
-      <div class="block-title"><i class="fa-solid fa-ruler-combined"></i> Cálculo de Pendientes desde la Gráfica</div>
-      <p style="font-size:14px; color:var(--muted); line-height:1.6;">
-        Para hallar la pendiente $m$ de una recta en una gráfica, ubica **dos puntos claros $(x_1, y_1)$ y $(x_2, y_2)$** por los que cruce el trazado.
-      </p>
-
-      <!-- GRAFICA SVG DE RECTA CON PUNTOS NOTABLES -->
-      <div class="svg-container">
-        <div style="font-family:'Syne',sans-serif; font-size:14px; font-weight:700; margin-bottom:12px; color:var(--text);">
-          Recta que pasa por $P_1(0, 1)$ y $P_2(2, 3)$
-        </div>
-        <svg width="100%" height="150" viewBox="0 0 300 150" style="max-width:380px;">
-          <line x1="30" y1="120" x2="270" y2="120" stroke="#7070a0" stroke-width="2"/>
-          <line x1="100" y1="20" x2="100" y2="140" stroke="#7070a0" stroke-width="2"/>
-          
-          <line x1="50" y1="120" x2="250" y2="20" stroke="#ff6b35" stroke-width="3"/>
-          
-          <circle cx="100" cy="95" r="5" fill="#fbbf24"/>
-          <text x="112" y="100" fill="#fbbf24" font-size="11" font-weight="bold">P₁ (0, 1)</text>
-
-          <circle cx="200" cy="45" r="5" fill="#fbbf24"/>
-          <text x="212" y="50" fill="#fbbf24" font-size="11" font-weight="bold">P₂ (2, 3)</text>
-        </svg>
-      </div>
-
-      <div style="background:var(--surface2); padding:16px; border-radius:12px; font-size:13.5px; border:1px solid var(--border); margin-top:12px;">
-        $$\text{Fórmula de Pendiente:} \quad m = \frac{\Delta y}{\Delta x} = \frac{y_2 - y_1}{x_2 - x_1}$$
-      </div>
-
-      <!-- EJEMPLO GUIADO PASO A PASO -->
-      <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
-        📌 Ejemplo Guiado: Con base en los puntos identificados en la gráfica $P_1(0, 1)$ y $P_2(2, 3)$, halla la pendiente $m$.
-      </div>
-
-      <div class="solucion-guiada">
-        <p style="margin-bottom:8px;"><strong>Paso 1:</strong> Asigna valores: $x_1=0, y_1=1$ y $x_2=2, y_2=3$.</p>
-        <p style="margin-bottom:8px;"><strong>Paso 2:</strong> Aplica la fórmula dividiendo el cambio vertical entre el horizontal:</p>
-        $$m = \frac{3 - 1}{2 - 0} = \frac{2}{2} = 1$$
-        <p><strong>Respuesta:</strong> La pendiente de la recta es <strong>$m = 1$</strong>.</p>
-      </div>
-
-      <!-- RESUÉLVELO TÚ MISMO -->
-      <div class="pratice-box">
-        <div class="pratice-title"><i class="fa-solid fa-pen-to-square"></i> ¡Resuélvelo tú mismo!</div>
-        <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
-          ¿Cuál es la pendiente $m$ de la función lineal que en su gráfica conecta los puntos $P_1(1, 4)$ y $P_2(3, 10)$?
-        </div>
-
-        <div id="opts-rectas">
-          <button class="opcion-btn" onclick="responder('rectas', 0, false, this)"><div class="opcion-letra">A</div><span>$m = 2$</span></button>
-          <button class="opcion-btn" onclick="responder('rectas', 1, true, this)"><div class="opcion-letra">B</div><span>$m = 3$</span></button>
-          <button class="opcion-btn" onclick="responder('rectas', 2, false, this)"><div class="opcion-letra">C</div><span>$m = 4$</span></button>
-          <button class="opcion-btn" onclick="responder('rectas', 3, false, this)"><div class="opcion-letra">D</div><span>$m = 6$</span></button>
-        </div>
-        <div id="fb-rectas" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- ================================================================= -->
-  <!-- PESTAÑA 7: TRASLACIONES Y DESPLAZAMIENTOS                         -->
-  <!-- ================================================================= -->
-  <div id="tab-traslacion" class="tab-pane">
-    <div class="block-card">
-      <div class="block-title"><i class="fa-solid fa-arrows-up-down-left-right"></i> Desplazamiento de Gráficas</div>
-      <p style="font-size:14px; color:var(--muted); line-height:1.6;">
-        Reglas para saber hacia dónde se desplaza la gráfica $y = f(x)$:
-      </p>
 
       <div style="background:var(--surface2); padding:16px; border-radius:12px; font-size:13px; border:1px solid var(--border); margin-top:10px;">
-        <strong style="color:var(--gold);">Reglas Rápidas:</strong>
+        <strong style="color:var(--gold);">Reglas Clave para Interpretar la Ecuación:</strong>
         <ul style="margin-top:8px; margin-left:14px; color:var(--text); line-height:1.8;">
-          <li>• $f(x) + c \implies$ Desplaza $c$ unidades hacia <strong>ARRIBA</strong>.</li>
-          <li>• $f(x) - c \implies$ Desplaza $c$ unidades hacia <strong>ABAJO</strong>.</li>
-          <li>• $f(x - c) \implies$ Desplaza $c$ unidades hacia la <strong>DERECHA</strong>.</li>
-          <li>• $f(x + c) \implies$ Desplaza $c$ unidades hacia la <strong>IZQUIERDA</strong>.</li>
+          <li>• Movimiento a la <strong>DERECHA</strong> de $h$ unidades $\implies (x - h)$ dentro del paréntesis.</li>
+          <li>• Movimiento a la <strong>IZQUIERDA</strong> de $h$ unidades $\implies (x + h)$ dentro del paréntesis.</li>
+          <li>• Movimiento hacia <strong>ARRIBA</strong> de $k$ unidades $\implies + k$ fuera del paréntesis.</li>
+          <li>• Movimiento hacia <strong>ABAJO</strong> de $k$ unidades $\implies - k$ fuera del paréntesis.</li>
         </ul>
       </div>
 
       <!-- EJEMPLO GUIADO PASO A PASO -->
       <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
-        📌 Ejemplo Guiado: Si $f(x) = x^2$ se desplaza 3 unidades a la derecha y 4 hacia arriba, ¿cuál es su nueva ecuación?
+        📌 Ejemplo Guiado: Analizando la gráfica anterior, ¿cuántas unidades y hacia dónde se trasladó $f(x)$ para convertirse en $g(x)$?
       </div>
 
       <div class="solucion-guiada">
-        <p style="margin-bottom:8px;"><strong>Paso 1:</strong> Desplazamiento a la derecha 3 unidades $\implies (x - 3)^2$.</p>
-        <p style="margin-bottom:8px;"><strong>Paso 2:</strong> Desplazamiento hacia arriba 4 unidades $\implies + 4$.</p>
-        <p><strong>Respuesta:</strong> La nueva función es <strong>$g(x) = (x - 3)^2 + 4$</strong> con vértice en $(3, 4)$.</p>
+        <p style="margin-bottom:8px;"><strong>Paso 1 (Eje X):</strong> Compara el vértice morado en $x = 0$ con el vértice amarillo en $x = 3$. Se movió <strong>3 unidades a la DERECHA</strong>.</p>
+        <p style="margin-bottom:8px;"><strong>Paso 2 (Eje Y):</strong> Compara la altura del vértice morado en $y = 0$ con el amarillo en $y = 2$. Subió <strong>2 unidades hacia ARRIBA</strong>.</p>
+        <p><strong>Ecuación Resultante:</strong> $g(x) = (x - 3)^2 + 2$.</p>
       </div>
 
       <!-- RESUÉLVELO TÚ MISMO -->
       <div class="pratice-box">
         <div class="pratice-title"><i class="fa-solid fa-pen-to-square"></i> ¡Resuélvelo tú mismo!</div>
         <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
-          Si el punto $(3, 8)$ pertenece a $f(x)$, ¿por qué punto pasa la función desplazada $g(x) = f(x) - 5$?
+          Si la función original $f(x) = x^2$ se traslada hasta tener su vértice en el punto $(-4, -1)$, ¿cuál es su nueva ecuación?
         </div>
 
-        <div id="opts-traslacion">
-          <button class="opcion-btn" onclick="responder('traslacion', 0, false, this)"><div class="opcion-letra">A</div><span>$(-2, 8)$</span></button>
-          <button class="opcion-btn" onclick="responder('traslacion', 1, true, this)"><div class="opcion-letra">B</div><span>$(3, 3)$</span></button>
-          <button class="opcion-btn" onclick="responder('traslacion', 2, false, this)"><div class="opcion-letra">C</div><span>$(3, 13)$</span></button>
-          <button class="opcion-btn" onclick="responder('traslacion', 3, false, this)"><div class="opcion-letra">D</div><span>$(8, 8)$</span></button>
+        <div id="opts-traslacion-simple">
+          <button class="opcion-btn" onclick="responder('traslacion-simple', 0, false, this)"><div class="opcion-letra">A</div><span>$g(x) = (x - 4)^2 - 1$</span></button>
+          <button class="opcion-btn" onclick="responder('traslacion-simple', 1, true, this)"><div class="opcion-letra">B</div><span>$g(x) = (x + 4)^2 - 1$</span></button>
+          <button class="opcion-btn" onclick="responder('traslacion-simple', 2, false, this)"><div class="opcion-letra">C</div><span>$g(x) = (x + 4)^2 + 1$</span></button>
+          <button class="opcion-btn" onclick="responder('traslacion-simple', 3, false, this)"><div class="opcion-letra">D</div><span>$g(x) = (x - 4)^2 + 1$</span></button>
         </div>
-        <div id="fb-traslacion" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
+        <div id="fb-traslacion-simple" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
       </div>
 
     </div>
@@ -466,47 +325,63 @@
 
 
   <!-- ================================================================= -->
-  <!-- PESTAÑA 8: DOMINIO Y RANGO EN GRÁFICAS                            -->
+  <!-- PESTAÑA 5: TRASLACIÓN DE VÉRTICE Y PUNTOS ESPECÍFICOS             -->
   <!-- ================================================================= -->
-  <div id="tab-domrango" class="tab-pane">
+  <div id="tab-traslacion-vertice" class="tab-pane">
     <div class="block-card">
-      <div class="block-title"><i class="fa-solid fa-bullseye"></i> Determinación de Dominio y Rango</div>
+      <div class="block-title"><i class="fa-solid fa-location-crosshairs"></i> Traslación Aplicada a Puntos $P(x, y)$</div>
       <p style="font-size:14px; color:var(--muted); line-height:1.6;">
-        • <strong>Dominio:</strong> Valores permitidos de $x$ (Eje horizontal).
-        <br>• <strong>Rango:</strong> Valores resultantes de $y$ (Eje vertical).
+        En algunos reactivos de la PAA no te dan toda la gráfica, sino únicamente las **coordenadas de un punto $(x, y)$ de la función original** y te preguntan la nueva posición tras aplicar $g(x) = f(x \pm h) \pm k$.
       </p>
 
-      <div class="tip-box">
-        <strong>💡 Regla para Parábolas que abren hacia arriba ($y = x^2 + k$):</strong>
-        <br>• Dominio: Todos los números reales ($-\infty, \infty$).
-        <br>• Rango: $y \ge k$ (desde el valor mínimo del vértice hacia arriba).
+      <!-- GRAFICA DE RASTREO DE PUNTO -->
+      <div class="svg-container">
+        <div style="font-family:'Syne',sans-serif; font-size:14px; font-weight:700; margin-bottom:12px; color:var(--text);">
+          Rastreo del Punto P(3, 8) al aplicar g(x) = f(x) - 5
+        </div>
+        <svg width="100%" height="160" viewBox="0 0 300 160" style="max-width:400px;">
+          <line x1="30" y1="130" x2="270" y2="130" stroke="#7070a0" stroke-width="2"/>
+          <line x1="80" y1="20" x2="80" y2="140" stroke="#7070a0" stroke-width="2"/>
+
+          <!-- Punto Original P(3, 8) -> SVG (180, 40) -->
+          <circle cx="180" cy="40" r="6" fill="#7c3aed"/>
+          <text x="192" y="42" fill="#7c3aed" font-size="11" font-weight="bold">Punto Original P(3, 8)</text>
+
+          <!-- Flecha de descenso de 5 unidades en Y -->
+          <line x1="180" y1="40" x2="180" y2="90" stroke="#fbbf24" stroke-width="2" stroke-dasharray="3"/>
+
+          <!-- Punto Trasladado P'(3, 3) -> SVG (180, 90) -->
+          <circle cx="180" cy="90" r="6" fill="#34d399"/>
+          <text x="192" y="95" fill="#34d399" font-size="11" font-weight="bold">Punto Trasladado P'(3, 3)</text>
+        </svg>
       </div>
 
       <!-- EJEMPLO GUIADO PASO A PASO -->
       <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
-        📌 Ejemplo Guiado: ¿Cuál es el Dominio de $f(x) = \sqrt{x - 4}$?
+        📌 Ejemplo Guiado: Si el punto $(3, 8)$ pertenece a la función $f(x)$, ¿por qué punto pasa obligatoriamente la función $g(x) = f(x) - 5$?
       </div>
 
       <div class="solucion-guiada">
-        <p style="margin-bottom:8px;"><strong>Paso 1:</strong> Como no existen raíces cuadradas reales de números negativos, $x - 4$ debe ser mayor o igual a cero:</p>
-        $$x - 4 \ge 0 \implies x \ge 4$$
-        <p><strong>Respuesta:</strong> El dominio es <strong>$x \ge 4$</strong> (Intervalo $[4, \infty)$).</p>
+        <p style="margin-bottom:8px;"><strong>Análisis:</strong> Restar $5$ fuera de la función es una traslación vertical de 5 unidades hacia **abajo**.</p>
+        <p style="margin-bottom:8px;">• Coordenada $X$: No cambia nada dentro del paréntesis $\implies x = 3$.</p>
+        <p style="margin-bottom:8px;">• Coordenada $Y$: Resta 5 unidades al valor original $\implies y = 8 - 5 = 3$.</p>
+        <p><strong>Respuesta:</strong> El nuevo punto es <strong>$(3, 3)$</strong>.</p>
       </div>
 
       <!-- RESUÉLVELO TÚ MISMO -->
       <div class="pratice-box">
         <div class="pratice-title"><i class="fa-solid fa-pen-to-square"></i> ¡Resuélvelo tú mismo!</div>
         <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
-          ¿Cuál es el RANGO de la función cuadrática $f(x) = x^2 + 3$?
+          Si la función $f(x)$ tiene su punto más bajo en $(-2, 4)$, ¿cuál será el punto más bajo de la función $g(x) = f(x + 3) + 2$?
         </div>
 
-        <div id="opts-domrango">
-          <button class="opcion-btn" onclick="responder('domrango', 0, false, this)"><div class="opcion-letra">A</div><span>Todos los reales</span></button>
-          <button class="opcion-btn" onclick="responder('domrango', 1, true, this)"><div class="opcion-letra">B</div><span>$y \ge 3$ (o $[3, \infty)$)</span></button>
-          <button class="opcion-btn" onclick="responder('domrango', 2, false, this)"><div class="opcion-letra">C</div><span>$y \le 3$</span></button>
-          <button class="opcion-btn" onclick="responder('domrango', 3, false, this)"><div class="opcion-letra">D</div><span>$y \ge 0$</span></button>
+        <div id="opts-traslacion-vertice">
+          <button class="opcion-btn" onclick="responder('traslacion-vertice', 0, false, this)"><div class="opcion-letra">A</div><span>$(1, 6)$</span></button>
+          <button class="opcion-btn" onclick="responder('traslacion-vertice', 1, true, this)"><div class="opcion-letra">B</div><span>$(-5, 6)$</span></button>
+          <button class="opcion-btn" onclick="responder('traslacion-vertice', 2, false, this)"><div class="opcion-letra">C</div><span>$(-5, 2)$</span></button>
+          <button class="opcion-btn" onclick="responder('traslacion-vertice', 3, false, this)"><div class="opcion-letra">D</div><span>$(1, 2)$</span></button>
         </div>
-        <div id="fb-domrango" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
+        <div id="fb-traslacion-vertice" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
       </div>
 
     </div>
@@ -546,21 +421,15 @@ function responder(seccion, idxOpt, esCorrecta, btnElem) {
     btnElem.classList.add('incorrect');
     feedback.style.color = '#fb7185';
     if(seccion === 'simple') {
-      feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. Iguala 4a - 5 = 15 => 4a = 20 => a = 5.';
-    } else if(seccion === 'maxmin') {
-      feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. El valor máximo se mide en el eje Y. Si el vértice está en (-1, 5), el valor máximo es y = 5.';
+      feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. g(-5) = [(-5)² - 4] / [-5 + 3] = (25 - 4) / (-2) = 21 / (-2) = -10.5.';
     } else if(seccion === 'comp-num') {
       feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. Primero f(3) = 2(3) + 1 = 7. Luego g(7) = 7² - 2 = 49 - 2 = 47.';
     } else if(seccion === 'comp-alg') {
       feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. g(f(x)) = 2(3x - 1) + 4 = 6x - 2 + 4 = 6x + 2.';
-    } else if(seccion === 'ceros') {
-      feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. x² - 9 = 0 => x² = 9 => x = ±3.';
-    } else if(seccion === 'rectas') {
-      feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. Pendiente m = (10 - 4) / (3 - 1) = 6 / 2 = 3.';
-    } else if(seccion === 'traslacion') {
-      feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. Restar 5 a la función disminuye la coordenada Y de 8 a 3. Punto (3, 3).';
-    } else if(seccion === 'domrango') {
-      feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. Como x² ≥ 0, x² + 3 será siempre ≥ 3. Rango: y ≥ 3.';
+    } else if(seccion === 'traslacion-simple') {
+      feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. Mover a la derecha 4 resta dentro: (x - 4)². Mover abajo 1 resta fuera: - 1. Queda g(x) = (x - 4)² - 1.';
+    } else if(seccion === 'traslacion-vertice') {
+      feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. f(x + 3) mueve 3 a la izquierda (-2 - 3 = -5 en X). + 2 mueve 2 hacia arriba (4 + 2 = 6 en Y). Nuevo punto (-5, 6).';
     }
   }
   feedback.style.display = 'block';
