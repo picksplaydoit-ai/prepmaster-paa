@@ -30,7 +30,7 @@
   button{-webkit-appearance:none;appearance:none;cursor:pointer;}
   input{-webkit-appearance:none;appearance:none;}
   #auth-screen{position:fixed;inset:0;display:flex;align-items:flex-start;justify-content:center;background:var(--bg);z-index:1000;padding:20px;overflow-y:auto;overscroll-behavior:contain;}
-  .auth-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:var(--radius-xl);padding:36px 32px;width:100%;max-width:420px;position:relative;margin:auto;box-shadow:var(--shadow-lg);backdrop-filter:blur(20px);}
+  .auth-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:var(--radius-xl);padding:36px 32px;width:100%;max-width:440px;position:relative;margin:auto;box-shadow:var(--shadow-lg);backdrop-filter:blur(20px);}
   .auth-card::before{content:'';position:absolute;top:-80px;right:-80px;width:200px;height:200px;background:radial-gradient(circle,#7c3aed33 0%,transparent 70%);pointer-events:none;}
   .auth-logo{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px;}
   .auth-logo span{color:var(--gold);}
@@ -62,6 +62,29 @@
   .auth-success{background:#10b98120;border:1px solid #10b98140;border-radius:8px;padding:10px 14px;font-size:13px;color:#10b981;margin-top:12px;display:none;}
   .price-badge{display:inline-flex;align-items:center;gap:6px;background:#fbbf2418;border:1px solid #fbbf2430;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;color:#fbbf24;margin-bottom:20px;}
   .auth-error{background:#ff6b3520;border:1px solid #ff6b3540;border-radius:8px;padding:10px 14px;font-size:13px;color:#ff9966;margin-top:12px;display:none;}
+
+  /* ── NUEVA SECCIÓN DE PRUEBA GRATIS (SIN LOGIN) ── */
+  .free-trial-container{width:100%;max-width:440px;margin:24px auto 40px;}
+  .free-divider{display:flex;align-items:center;gap:12px;margin-bottom:16px;color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+  .free-divider::before,.free-divider::after{content:'';flex:1;height:1px;background:var(--border-bright);}
+  .free-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .free-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:14px;padding:14px;text-align:left;cursor:pointer;transition:all 0.2s ease;}
+  .free-card:hover{border-color:var(--gold);transform:translateY(-2px);background:var(--surface2);}
+  .free-icon{font-size:20px;margin-bottom:6px;display:inline-block;}
+  .free-tag{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;padding:2px 6px;border-radius:100px;display:inline-block;margin-bottom:4px;}
+  .tag-free{background:#fbbf2418;color:var(--gold);border:1px solid #fbbf2435;}
+  .tag-game{background:#7c3aed18;color:#a78bfa;border:1px solid #7c3aed35;}
+  .free-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:white;line-height:1.2;}
+  .free-desc{font-size:10.5px;color:var(--muted);margin-top:3px;}
+
+  /* MODAL DE PRUEBA GRATIS / CONECTA 4 */
+  .free-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);display:none;justify-content:center;align-items:center;z-index:2000;padding:16px;}
+  .free-modal-content{background:var(--surface);border:1px solid var(--border-bright);border-radius:24px;width:100%;max-width:850px;height:90vh;display:flex;flex-direction:column;position:relative;overflow:hidden;}
+  .free-modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;background:var(--surface2);border:1px solid var(--border-bright);border-radius:50%;color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;}
+  #c4-board{display:grid;grid-template-columns:repeat(7, 1fr);gap:8px;background:#1e1e38;padding:12px;border-radius:16px;max-width:380px;margin:20px auto;}
+  .c4-cell{width:44px;height:44px;background:var(--bg);border-radius:50%;cursor:pointer;transition:background 0.2s;}
+  .c4-cell.red{background:#ef4444;box-shadow:0 0 10px #ef444480;}
+  .c4-cell.yellow{background:#f59e0b;box-shadow:0 0 10px #f59e0b80;}
   
   #app{display:none;}
   nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;background:#0a0a0fcc;backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
@@ -368,6 +391,63 @@
     </div>
 
   </div>
+
+  <!-- SECCIÓN DE PRUEBA GRATIS (SIN LOGIN) DEBAJO DEL CARD -->
+  <div class="free-trial-container">
+    <div class="free-divider">✨ O prueba recursos gratis ahora</div>
+    <div class="free-grid">
+      <div class="free-card" onclick="openFreeModal('examenes/diagnosticos/diagnostico-matematicas.html', 'Diagnóstico Matemáticas')">
+        <span class="free-icon">📐</span>
+        <div><span class="free-tag tag-free">Sin Login</span></div>
+        <div class="free-title">Diag. Matemáticas</div>
+        <div class="free-desc">55 reactivos reales PAA.</div>
+      </div>
+      <div class="free-card" onclick="openFreeModal('examenes/diagnosticos/diagnostico-espanol.html', 'Diagnóstico Español')">
+        <span class="free-icon">✍️</span>
+        <div><span class="free-tag tag-free">Sin Login</span></div>
+        <div class="free-title">Diag. Español</div>
+        <div class="free-desc">40 reactivos y textos.</div>
+      </div>
+      <div class="free-card" onclick="openFreeModal('examenes/explicaciones/InterpretacionGraficas.html', 'Explicación: Gráficas')">
+        <span class="free-icon">📖</span>
+        <div><span class="free-tag tag-free">Teoría</span></div>
+        <div class="free-title">Explicación Gráficas</div>
+        <div class="free-desc">Conceptos clave PAA.</div>
+      </div>
+      <div class="free-card" onclick="openFreeModal('examenes/practicos/mat/graficas.html', 'Práctica: Gráficas')">
+        <span class="free-icon">📊</span>
+        <div><span class="free-tag tag-free">Práctica</span></div>
+        <div class="free-title">Ejercicios Gráficas</div>
+        <div class="free-desc">24 reactivos interactivos.</div>
+      </div>
+      <div class="free-card" onclick="openFreeModal('calculadora.html', 'Calculadora de Puntajes PAA')">
+        <span class="free-icon">🧮</span>
+        <div><span class="free-tag tag-free">Herramienta</span></div>
+        <div class="free-title">Calculadora PAA</div>
+        <div class="free-desc">Estima tu puntaje UDG.</div>
+      </div>
+      <div class="free-card" onclick="openConecta4Modal()">
+        <span class="free-icon">🟡</span>
+        <div><span class="free-tag tag-game">Minijuego</span></div>
+        <div class="free-title">Conecta 4 PAA</div>
+        <div class="free-desc">Minijuego 1 vs 1.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FLOTANTE PARA PRUEBA GRATIS / CONECTA 4 -->
+<div class="free-modal-overlay" id="free-modal">
+  <div class="free-modal-content">
+    <div class="free-modal-close" onclick="closeFreeModal()"><i class="fa-solid fa-xmark"></i></div>
+    <iframe id="free-iframe" style="width:100%;height:100%;border:none;display:none;"></iframe>
+    <div id="free-game-container" style="display:none;padding:24px;text-align:center;overflow-y:auto;height:100%;">
+      <h2 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:white;margin-bottom:4px;">🟡 Conecta 4 PrepMaster 🔴</h2>
+      <p style="font-size:12px;color:var(--muted);" id="c4-status">Turno del Jugador 1 (Rojo)</p>
+      <div id="c4-board"></div>
+      <button onclick="iniciarConecta4()" style="background:var(--surface2);border:1px solid var(--border-bright);color:white;padding:10px 20px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;margin-top:10px;">Reiniciar Partida</button>
+    </div>
+  </div>
 </div>
 
 <div id="app">
@@ -498,9 +578,7 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════ -->
-  <!-- 🗺️ VIEW: RUTA DE ESTUDIO (ACTUALIZADA)          -->
-  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 🗺️ VIEW: RUTA DE ESTUDIO -->
   <div id="view-ruta" class="view-container">
     <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
@@ -511,7 +589,6 @@
       <p style="font-size:14px;color:var(--muted);margin-bottom:28px;line-height:1.7;">Sigue este orden metodológico cada semana para garantizar tu progreso óptimo hacia la PAA UDG:</p>
       
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;">
-        <!-- Paso 1 -->
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:22px;position:relative;">
           <div style="font-size:24px;margin-bottom:12px;">⚡</div>
           <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Paso 1</div>
@@ -519,7 +596,6 @@
           <p style="font-size:13px;color:var(--muted);line-height:1.5;">Revisa las <strong style="color:var(--text);">Explicaciones rápidas</strong> de cada tema para comprender fórmulas, reglas gramaticales y conceptos clave.</p>
         </div>
 
-        <!-- Paso 2 -->
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:22px;position:relative;">
           <div style="font-size:24px;margin-bottom:12px;">📝</div>
           <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Paso 2</div>
@@ -527,7 +603,6 @@
           <p style="font-size:13px;color:var(--muted);line-height:1.5;">Resuelve los <strong style="color:var(--text);">Ejercicios prácticos</strong> o pon a prueba tu velocidad con los módulos de <strong style="color:var(--text);">Supervivencia</strong> de cada tema.</p>
         </div>
 
-        <!-- Paso 3 -->
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:22px;position:relative;">
           <div style="font-size:24px;margin-bottom:12px;">🎮</div>
           <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Paso 3</div>
@@ -535,7 +610,6 @@
           <p style="font-size:13px;color:var(--muted);line-height:1.5;">Gana agilidad mental y destreza practicando constantemente con los <strong style="color:var(--text);">Minijuegos</strong> interactivos.</p>
         </div>
 
-        <!-- Paso 4 -->
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:22px;position:relative;">
           <div style="font-size:24px;margin-bottom:12px;">📄</div>
           <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Paso 4</div>
@@ -547,9 +621,7 @@
   </div>
 
 
-  <!-- ═══════════════════════════════════════════════ -->
-  <!-- ⚡ VIEW: EXPLICACIONES RÁPIDAS                  -->
-  <!-- ═══════════════════════════════════════════════ -->
+  <!-- ⚡ VIEW: EXPLICACIONES RÁPIDAS -->
   <div id="view-explicaciones" class="view-container">
     <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
@@ -884,6 +956,88 @@ document.addEventListener('keydown', e => {
   if(document.getElementById('guia-modal').classList.contains('open')&&e.key==='Escape')closeGuiaModal();
 });
 
+/* LÓGICA DE MODALES DE PRUEBA GRATIS */
+function openFreeModal(url, title) {
+  document.getElementById('free-iframe').style.display = 'block';
+  document.getElementById('free-game-container').style.display = 'none';
+  document.getElementById('free-iframe').src = url;
+  document.getElementById('free-modal').style.display = 'flex';
+}
+
+function openConecta4Modal() {
+  document.getElementById('free-iframe').style.display = 'none';
+  document.getElementById('free-game-container').style.display = 'block';
+  document.getElementById('free-modal').style.display = 'flex';
+  iniciarConecta4();
+}
+
+function closeFreeModal() {
+  document.getElementById('free-modal').style.display = 'none';
+  document.getElementById('free-iframe').src = '';
+}
+
+/* LÓGICA DEL MINIJUEGO CONECTA 4 */
+const ROWS = 6;
+const COLS = 7;
+let board = [];
+let currentPlayer = 1;
+
+function iniciarConecta4() {
+  board = Array(ROWS).fill(null).map(() => Array(COLS).fill(0));
+  currentPlayer = 1;
+  document.getElementById('c4-status').innerText = "Turno del Jugador 1 (Rojo)";
+  renderBoard();
+}
+
+function renderBoard() {
+  const boardElem = document.getElementById('c4-board');
+  if(!boardElem) return;
+  boardElem.innerHTML = '';
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const cell = document.createElement('div');
+      cell.className = 'c4-cell';
+      if (board[r][c] === 1) cell.classList.add('red');
+      if (board[r][c] === 2) cell.classList.add('yellow');
+      cell.onclick = () => dropPiece(c);
+      boardElem.appendChild(cell);
+    }
+  }
+}
+
+function dropPiece(col) {
+  for (let r = ROWS - 1; r >= 0; r--) {
+    if (board[r][col] === 0) {
+      board[r][col] = currentPlayer;
+      if (checkWin(r, col)) {
+        renderBoard();
+        document.getElementById('c4-status').innerHTML = `<strong style="color:${currentPlayer === 1 ? '#ef4444':'#f59e0b'};">¡Jugador ${currentPlayer} ha ganado! 🎉</strong>`;
+        return;
+      }
+      currentPlayer = currentPlayer === 1 ? 2 : 1;
+      document.getElementById('c4-status').innerText = `Turno del Jugador ${currentPlayer} (${currentPlayer === 1 ? 'Rojo':'Amarillo'})`;
+      renderBoard();
+      return;
+    }
+  }
+}
+
+function checkWin(r, c) {
+  const p = board[r][c];
+  function count(dx, dy) {
+    let cnt = 0;
+    let x = r + dx, y = c + dy;
+    while (x >= 0 && x < ROWS && y >= 0 && y < COLS && board[x][y] === p) {
+      cnt++; x += dx; y += dy;
+    }
+    return cnt;
+  }
+  return (count(1,0) + count(-1,0) >= 3) ||
+         (count(0,1) + count(0,-1) >= 3) ||
+         (count(1,1) + count(-1,-1) >= 3) ||
+         (count(1,-1) + count(-1,1) >= 3);
+}
+
 window.switchView = switchView;
 window.switchLayerTab = switchLayerTab;
 window.openModalGuia = openModalGuia;
@@ -896,6 +1050,10 @@ window.closeIframe = closeIframe;
 window.openPDF = openPDF; 
 window.closePDF = closePDF;
 window.closePDFOnBg = closePDFOnBg;
+window.openFreeModal = openFreeModal;
+window.openConecta4Modal = openConecta4Modal;
+window.closeFreeModal = closeFreeModal;
+window.iniciarConecta4 = iniciarConecta4;
 </script>
 
 <script type="module">
@@ -1038,7 +1196,6 @@ async function registerSession(uid) {
   for (const d of snap.docs) {
     const data = d.data();
     const age = now - (data.ts?.toMillis?.() || 0);
-    // Limpiar sesiones inactivas mayores a 45 minutos para evitar bloqueos fantasma
     if (age > 45 * 60 * 1000) {
       await deleteDoc(d.ref);
     }
