@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>PrepMaster PAA — Explicación: Interpretación de Gráficas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- MathJax para fórmulas -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root{
+    --bg:#080810;--surface:#0f0f1a;--surface2:#161624;--surface3:#1e1e30;
+    --border:#ffffff08;--border-bright:#ffffff14;
+    --text:#eeeef8;--muted:#7070a0;--mat:#ff6b35;--gold:#fbbf24;--accent:#7c3aed;
+    --radius-sm:10px;--radius-md:16px;--radius-lg:22px;
+  }
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;margin:0;padding:20px 16px;-webkit-font-smoothing:antialiased;}
+  .container{max-width:850px;margin:0 auto;}
+  
+  .header-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:var(--radius-lg);padding:32px 24px;margin-bottom:24px;text-align:center;position:relative;overflow:hidden;}
+  .header-card::before{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;background:radial-gradient(circle,#ff6b3525 0%,transparent 70%);pointer-events:none;}
+  .badge-area{display:inline-block;padding:4px 12px;background:#ff6b3518;border:1px solid #ff6b3535;border-radius:100px;font-size:11px;font-weight:700;color:var(--mat);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+  .title{font-family:'Syne',sans-serif;font-size:clamp(24px,4vw,34px);font-weight:800;line-height:1.2;margin-bottom:10px;}
+  .subtitle{color:var(--muted);font-size:14px;max-width:580px;margin:0 auto;line-height:1.6;}
+
+  /* PESTAÑAS (TABS) */
+  .tabs-bar{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:24px;}
+  .tab-btn{padding:10px 18px;border-radius:12px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all 0.2s;}
+  .tab-btn:hover{color:var(--text);border-color:var(--border-bright);}
+  .tab-btn.active{background:linear-gradient(135deg,var(--mat),#e65c24);color:white;border-color:transparent;box-shadow:0 4px 16px #ff6b3540;}
+
+  .tab-pane{display:none;animation:fadeIn 0.25s ease;}
+  .tab-pane.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .block-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:24px;margin-bottom:20px;}
+  .block-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .block-title i{color:var(--mat);}
+
+  .tip-box{background:#fbbf2410;border:1px solid #fbbf2430;border-radius:var(--radius-sm);padding:16px;margin-top:16px;font-size:13px;color:#fef08a;line-height:1.6;}
+  .tip-box strong{color:var(--gold);}
+
+  /* Solución explicada paso a paso */
+  .solucion-guiada{margin-top:16px;padding:18px;background:var(--surface3);border-radius:14px;border-left:4px solid var(--mat);font-size:13.5px;line-height:1.6;color:var(--text);}
+  
+  /* Ejercicio de práctica (Resuélvelo tú mismo) */
+  .pratice-box{background:var(--surface2);border:1px solid var(--border-bright);border-radius:var(--radius-md);padding:20px;margin-top:24px;}
+  .pratice-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  
+  .opcion-btn{width:100%;display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;cursor:pointer;transition:all .2s;text-align:left;font-size:14px;color:var(--text);}
+  .opcion-btn:hover{border-color:var(--mat);background:var(--surface3);}
+  .opcion-letra{width:28px;height:32px;border-radius:8px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Syne',sans-serif;color:var(--muted);flex-shrink:0;}
+  
+  .opcion-btn.correct{background:#05966920!important;border-color:#10b981!important;color:#34d399!important;}
+  .opcion-btn.correct .opcion-letra{background:#10b981;color:white;}
+  .opcion-btn.incorrect{background:#e11d4820!important;border-color:#f43f5e!important;color:#fb7185!important;}
+  .opcion-btn.incorrect .opcion-letra{background:#f43f5e;color:white;}
+
+  /* SVG & CSS Mock de Gráficas */
+  .svg-container{background:#161624;border:1px solid var(--border-bright);border-radius:16px;padding:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;margin:16px 0;}
+  .pictograma-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;width:100%;max-width:500px;}
+  .pic-label{width:110px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--gold);}
+  .pic-icons{display:flex;gap:8px;flex-wrap:wrap;color:var(--mat);font-size:20px;}
+
+  /* Gráfica Circular Perfecta */
+  .pie-chart-css {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: conic-gradient(
+      #7c3aed 0% 50%,    /* Python 50% */
+      #ff6b35 50% 75%,   /* JavaScript 25% */
+      #fbbf24 75% 100%   /* C++ 25% */
+    );
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- HEADER -->
+  <div class="header-card">
+    <span class="badge-area">Matemáticas · Estadística y Datos</span>
+    <h1 class="title">Interpretación de Gráficas PAA</h1>
+    <p class="subtitle">Aprende a analizar pictogramas, barras, líneas y sectores circulares con explicaciones guiadas e interactividad.</p>
+  </div>
+
+  <!-- NAVEGACIÓN POR PESTAÑAS (TABS) -->
+  <div class="tabs-bar">
+    <button class="tab-btn active" onclick="switchTab('tab-pic')">🐶 Pictogramas</button>
+    <button class="tab-btn" onclick="switchTab('tab-barras')">📊 Barras (Mayores Ventas)</button>
+    <button class="tab-btn" onclick="switchTab('tab-lineas')">📈 Líneas y Rango</button>
+    <button class="tab-btn" onclick="switchTab('tab-pastel')">🍕 Sectores y Ángulos</button>
+  </div>
+
+
+  <!-- ================================================================= -->
+  <!-- PESTAÑA 1: PICTOGRAMAS (ICONOS APILADOS)                          -->
+  <!-- ================================================================= -->
+  <div id="tab-pic" class="tab-pane active">
+    <div class="block-card">
+      <div class="block-title"><i class="fa-solid fa-dog"></i> Pictogramas y Equivalencias</div>
+      <p style="font-size:14px; color:var(--muted); line-height:1.6;">
+        Un <strong>pictograma</strong> utiliza símbolos o figuras para representar datos. La clave fundamental en la PAA es identificar el <strong>valor numérico de cada ícono (escala)</strong> antes de contar.
+      </p>
+
+      <!-- GRAFICA BASE DEL EJEMPLO GUIADO -->
+      <div class="svg-container">
+        <div style="font-family:'Syne',sans-serif; font-size:14px; font-weight:700; margin-bottom:16px; color:var(--text);">
+          Adopciones de Perros en Refugio (2025)
+        </div>
+        
+        <div class="pictograma-row">
+          <div class="pic-label">Zona Norte</div>
+          <div class="pic-icons">
+            <i class="fa-solid fa-dog"></i>
+            <i class="fa-solid fa-dog"></i>
+            <i class="fa-solid fa-dog"></i>
+            <i class="fa-solid fa-dog"></i>
+          </div>
+        </div>
+        <div class="pictograma-row">
+          <div class="pic-label">Zona Sur</div>
+          <div class="pic-icons">
+            <i class="fa-solid fa-dog"></i>
+            <i class="fa-solid fa-dog"></i>
+          </div>
+        </div>
+        <div class="pictograma-row">
+          <div class="pic-label">Zona Centro</div>
+          <div class="pic-icons">
+            <i class="fa-solid fa-dog"></i>
+            <i class="fa-solid fa-dog"></i>
+            <i class="fa-solid fa-dog"></i>
+            <i class="fa-solid fa-dog"></i>
+            <i class="fa-solid fa-dog"></i>
+          </div>
+        </div>
+
+        <div style="background:#fbbf2415; border:1px solid #fbbf2440; border-radius:10px; padding:8px 16px; margin-top:10px; font-size:12px; font-weight:700; color:var(--gold);">
+          Leyenda: Cada 🐕 = 100 Perros
+        </div>
+      </div>
+
+      <!-- EJEMPLO GUIADO PASO A PASO (RESUELTO) -->
+      <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
+        📌 Ejemplo Guiado: Con base en el pictograma anterior, ¿cuántos perros MÁS se adoptaron en la Zona Centro que en la Zona Sur?
+      </div>
+      
+      <div class="solucion-guiada">
+        <p style="margin-bottom:8px;"><strong>Paso 1:</strong> Calcula el total de perros por cada zona usando la escala (1 ícono = 100 perros).</p>
+        <ul style="margin-bottom:10px; padding-left:14px;">
+          <li>• Zona Centro = 5 íconos &times; 100 = 500 perros</li>
+          <li>• Zona Sur = 2 íconos &times; 100 = 200 perros</li>
+        </ul>
+        <p style="margin-bottom:8px;"><strong>Paso 2:</strong> Calcula la diferencia solicitada ("cuántos MÁS"):</p>
+        <div style="font-weight:700; color:var(--gold); margin-bottom:6px;">Diferencia = 500 - 200 = 300 perros</div>
+        <p><strong>Respuesta:</strong> En la Zona Centro se adoptaron <strong>300 perros más</strong> que en la Zona Sur.</p>
+      </div>
+
+      <!-- RESUÉLVELO TÚ MISMO (OPCIÓN MÚLTIPLE) -->
+      <div class="pratice-box">
+        <div class="pratice-title"><i class="fa-solid fa-pen-to-square"></i> ¡Resuélvelo tú mismo! (Misma Gráfica)</div>
+        <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
+          ¿Cuál fue el total de perros adoptados entre la Zona Norte y la Zona Sur en conjunto?
+        </div>
+
+        <div id="opts-pic">
+          <button class="opcion-btn" onclick="responder('pic', 0, false, this)"><div class="opcion-letra">A</div><span>400 perros</span></button>
+          <button class="opcion-btn" onclick="responder('pic', 1, true, this)"><div class="opcion-letra">B</div><span>600 perros</span></button>
+          <button class="opcion-btn" onclick="responder('pic', 2, false, this)"><div class="opcion-letra">C</div><span>700 perros</span></button>
+          <button class="opcion-btn" onclick="responder('pic', 3, false, this)"><div class="opcion-letra">D</div><span>1,100 perros</span></button>
+        </div>
+        <div id="fb-pic" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ================================================================= -->
+  <!-- PESTAÑA 2: GRAFICA DE BARRAS (MAYORES VENTAS)                     -->
+  <!-- ================================================================= -->
+  <div id="tab-barras" class="tab-pane">
+    <div class="block-card">
+      <div class="block-title"><i class="fa-solid fa-chart-column"></i> Gráficas de Barras: Comparación y Promedios</div>
+      <p style="font-size:14px; color:var(--muted); line-height:1.6;">
+        Las gráficas de barras permiten comparar magnitudes discretas. En la PAA se utilizan mucho para identificar **meses con mayores/menores ventas, modas o sumar totales acumulados**.
+      </p>
+
+      <div class="svg-container">
+        <div style="font-family:'Syne',sans-serif; font-size:14px; font-weight:700; margin-bottom:12px; color:var(--text);">
+          Ventas Mensuales de Computadoras (en miles de pesos)
+        </div>
+        <svg width="100%" height="200" viewBox="0 0 400 200" style="max-width:450px;">
+          <line x1="40" y1="20" x2="40" y2="160" stroke="#7070a0" stroke-width="2"/>
+          <line x1="40" y1="160" x2="380" y2="160" stroke="#7070a0" stroke-width="2"/>
+          
+          <text x="10" y="165" fill="#9090b8" font-size="10">$0k</text>
+          <text x="10" y="125" fill="#9090b8" font-size="10">$20k</text>
+          <text x="10" y="85" fill="#9090b8" font-size="10">$40k</text>
+          <text x="10" y="45" fill="#9090b8" font-size="10">$60k</text>
+
+          <rect x="60" y="100" width="35" height="60" fill="#7c3aed" rx="4"/>
+          <text x="70" y="93" fill="#eeeef8" font-size="11" font-weight="bold">30</text>
+
+          <rect x="130" y="50" width="35" height="110" fill="#ff6b35" rx="4"/>
+          <text x="140" y="43" fill="#eeeef8" font-size="11" font-weight="bold">55</text>
+
+          <rect x="200" y="80" width="35" height="80" fill="#7c3aed" rx="4"/>
+          <text x="210" y="73" fill="#eeeef8" font-size="11" font-weight="bold">40</text>
+
+          <rect x="270" y="120" width="35" height="40" fill="#7c3aed" rx="4"/>
+          <text x="280" y="113" fill="#eeeef8" font-size="11" font-weight="bold">20</text>
+
+          <rect x="330" y="60" width="35" height="100" fill="#7c3aed" rx="4"/>
+          <text x="340" y="53" fill="#eeeef8" font-size="11" font-weight="bold">50</text>
+
+          <text x="65" y="180" fill="#9090b8" font-size="11">Ene</text>
+          <text x="135" y="180" fill="#9090b8" font-size="11">Feb</text>
+          <text x="205" y="180" fill="#9090b8" font-size="11">Mar</text>
+          <text x="275" y="180" fill="#9090b8" font-size="11">Abr</text>
+          <text x="335" y="180" fill="#9090b8" font-size="11">May</text>
+        </svg>
+      </div>
+
+      <!-- EJEMPLO GUIADO PASO A PASO -->
+      <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
+        📌 Ejemplo Guiado: ¿Cuál fue el promedio mensual de ventas en pesos durante los 5 meses mostrados?
+      </div>
+
+      <div class="solucion-guiada">
+        <p style="margin-bottom:8px;"><strong>Paso 1:</strong> Suma las ventas de los 5 meses (atención a la escala en miles de pesos):</p>
+        <div style="font-weight:700; color:var(--gold); margin-bottom:8px;">Suma = 30 + 55 + 40 + 20 + 50 = $195,000 MXN</div>
+        <p style="margin-bottom:8px;"><strong>Paso 2:</strong> Divide el total entre los 5 meses para obtener el promedio:</p>
+        <div style="font-weight:700; color:var(--gold); margin-bottom:8px;">Promedio = $195,000 / 5 = $39,000 MXN</div>
+        <p><strong>Respuesta:</strong> El promedio mensual de ventas fue de <strong>$39,000 MXN</strong>.</p>
+      </div>
+
+      <!-- RESUÉLVELO TÚ MISMO (OPCIÓN MÚLTIPLE) -->
+      <div class="pratice-box">
+        <div class="pratice-title"><i class="fa-solid fa-pen-to-square"></i> ¡Resuélvelo tú mismo! (Misma Gráfica)</div>
+        <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
+          ¿Qué porcentaje del total acumulado de ventas ($195,000 MXN) representó el mes de MAYOR ventas (Febrero)?
+        </div>
+
+        <div id="opts-barras">
+          <button class="opcion-btn" onclick="responder('barras', 0, false, this)"><div class="opcion-letra">A</div><span>20.5%</span></button>
+          <button class="opcion-btn" onclick="responder('barras', 1, false, this)"><div class="opcion-letra">B</div><span>25.0%</span></button>
+          <button class="opcion-btn" onclick="responder('barras', 2, true, this)"><div class="opcion-letra">C</div><span>28.2%</span></button>
+          <button class="opcion-btn" onclick="responder('barras', 3, false, this)"><div class="opcion-letra">D</div><span>35.0%</span></button>
+        </div>
+        <div id="fb-barras" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ================================================================= -->
+  <!-- PESTAÑA 3: GRAFICA DE LÍNEAS Y RANGO                              -->
+  <!-- ================================================================= -->
+  <div id="tab-lineas" class="tab-pane">
+    <div class="block-card">
+      <div class="block-title"><i class="fa-solid fa-chart-line"></i> Gráficas de Líneas: Rango y Tendencias</div>
+      <p style="font-size:14px; color:var(--muted); line-height:1.6;">
+        Muestran la evolución temporal de una variable. En la PAA es habitual que te pidan calcular el <strong>Rango</strong> (diferencia entre el valor máximo y el valor mínimo).
+      </p>
+
+      <div class="svg-container">
+        <div style="font-family:'Syne',sans-serif; font-size:14px; font-weight:700; margin-bottom:12px; color:var(--text);">
+          Temperatura Registrada (°C) a lo largo de un día
+        </div>
+        <svg width="100%" height="180" viewBox="0 0 400 180" style="max-width:450px;">
+          <line x1="40" y1="140" x2="360" y2="140" stroke="#7070a0" stroke-width="2"/>
+          <line x1="40" y1="20" x2="40" y2="140" stroke="#7070a0" stroke-width="2"/>
+          
+          <text x="15" y="145" fill="#9090b8" font-size="10">0°C</text>
+          <text x="10" y="90" fill="#9090b8" font-size="10">15°C</text>
+          <text x="10" y="35" fill="#9090b8" font-size="10">30°C</text>
+
+          <polyline points="60,120 120,95 180,50 240,30 300,75 360,110" fill="none" stroke="#ff6b35" stroke-width="3"/>
+          
+          <circle cx="60" cy="120" r="4" fill="#fbbf24"/>
+          <circle cx="120" cy="95" r="4" fill="#fbbf24"/>
+          <circle cx="180" cy="50" r="4" fill="#fbbf24"/>
+          <circle cx="240" cy="30" r="4" fill="#fbbf24"/>
+          <circle cx="300" cy="75" r="4" fill="#fbbf24"/>
+          <circle cx="360" cy="110" r="4" fill="#fbbf24"/>
+
+          <text x="52" y="135" fill="#eeeef8" font-size="10" font-weight="bold">10°</text>
+          <text x="112" y="88" fill="#eeeef8" font-size="10" font-weight="bold">18°</text>
+          <text x="172" y="43" fill="#eeeef8" font-size="10" font-weight="bold">28°</text>
+          <text x="232" y="23" fill="#eeeef8" font-size="10" font-weight="bold">32° (Máx)</text>
+          <text x="292" y="68" fill="#eeeef8" font-size="10" font-weight="bold">22°</text>
+          <text x="352" y="103" fill="#eeeef8" font-size="10" font-weight="bold">14°</text>
+
+          <text x="50" y="160" fill="#9090b8" font-size="10">6:00</text>
+          <text x="110" y="160" fill="#9090b8" font-size="10">9:00</text>
+          <text x="170" y="160" fill="#9090b8" font-size="10">12:00</text>
+          <text x="230" y="160" fill="#9090b8" font-size="10">15:00</text>
+          <text x="290" y="160" fill="#9090b8" font-size="10">18:00</text>
+          <text x="350" y="160" fill="#9090b8" font-size="10">21:00</text>
+        </svg>
+      </div>
+
+      <!-- EJEMPLO GUIADO PASO A PASO -->
+      <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
+        📌 Ejemplo Guiado: ¿Cuál es el RANGO de temperatura registrado durante todo el día?
+      </div>
+
+      <div class="solucion-guiada">
+        <p style="margin-bottom:8px;"><strong>Paso 1:</strong> Aplica la fórmula de Rango (Rango = Valor Máximo - Valor Mínimo).</p>
+        <ul style="margin-bottom:8px; padding-left:14px;">
+          <li>• Valor Máximo = 32 °C (a las 15:00 hrs)</li>
+          <li>• Valor Mínimo = 10 °C (a las 6:00 hrs)</li>
+        </ul>
+        <div style="font-weight:700; color:var(--gold); margin-bottom:6px;">Rango = 32 °C - 10 °C = 22 °C</div>
+        <p><strong>Respuesta:</strong> El rango de temperatura fue de <strong>22 °C</strong>.</p>
+      </div>
+
+      <!-- RESUÉLVELO TÚ MISMO (OPCIÓN MÚLTIPLE) -->
+      <div class="pratice-box">
+        <div class="pratice-title"><i class="fa-solid fa-pen-to-square"></i> ¡Resuélvelo tú mismo! (Misma Gráfica)</div>
+        <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
+          ¿Entre qué lapso de tiempo de 3 horas se registró el MAYOR incremento de temperatura?
+        </div>
+
+        <div id="opts-lineas">
+          <button class="opcion-btn" onclick="responder('lineas', 0, false, this)"><div class="opcion-letra">A</div><span>De 6:00 a 9:00 (aumentó 8°C)</span></button>
+          <button class="opcion-btn" onclick="responder('lineas', 1, true, this)"><div class="opcion-letra">B</div><span>De 9:00 a 12:00 (aumentó 10°C)</span></button>
+          <button class="opcion-btn" onclick="responder('lineas', 2, false, this)"><div class="opcion-letra">C</div><span>De 12:00 a 15:00 (aumentó 4°C)</span></button>
+          <button class="opcion-btn" onclick="responder('lineas', 3, false, this)"><div class="opcion-letra">D</div><span>De 15:00 a 18:00 (disminuyó 10°C)</span></button>
+        </div>
+        <div id="fb-lineas" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ================================================================= -->
+  <!-- PESTAÑA 4: SECTORES Y ÁNGULOS (PASTEL)                            -->
+  <!-- ================================================================= -->
+  <div id="tab-pastel" class="tab-pane">
+    <div class="block-card">
+      <div class="block-title"><i class="fa-solid fa-chart-pie"></i> Gráficas Circulares y Regla de 3</div>
+      <p style="font-size:14px; color:var(--muted); line-height:1.6;">
+        El círculo representa la totalidad (100% o 360°). Las preguntas suelen pedir convertir entre <strong>grados, porcentajes o número total de individuos</strong>.
+      </p>
+
+      <!-- GRAFICA CIRCULAR PERFECTA -->
+      <div class="svg-container">
+        <div style="font-family:'Syne',sans-serif; font-size:14px; font-weight:700; margin-bottom:16px; color:var(--text);">
+          Distribución de Lenguajes de Programación Favoritos
+        </div>
+        
+        <div class="pie-chart-css"></div>
+
+        <div style="display:flex; gap:16px; margin-top:20px; font-size:12px; font-weight:700; flex-wrap:wrap; justify-content:center;">
+          <span style="color:#7c3aed;">■ Python (50%)</span>
+          <span style="color:#ff6b35;">■ JavaScript (25%)</span>
+          <span style="color:#fbbf24;">■ C++ (25%)</span>
+        </div>
+      </div>
+
+      <!-- EJEMPLO GUIADO PASO A PASO -->
+      <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
+        📌 Ejemplo Guiado: Si el gráfico representa a 800 desarrolladores, ¿cuántos grados del círculo le corresponden a la sección de JavaScript?
+      </div>
+
+      <div class="solucion-guiada">
+        <p style="margin-bottom:8px;"><strong>Paso 1:</strong> Identifica el porcentaje de JavaScript (25%).</p>
+        <p style="margin-bottom:8px;"><strong>Paso 2:</strong> Recuerda que el círculo completo equivale a 360° (100%). Multiplica el total de grados por el porcentaje:</p>
+        <div style="font-weight:700; color:var(--gold); margin-bottom:6px;">Ángulo = 360° &times; 0.25 = 90°</div>
+        <p><strong>Respuesta:</strong> A la sección de JavaScript le corresponden exactamente <strong>90°</strong> (un ángulo recto).</p>
+      </div>
+
+      <!-- RESUÉLVELO TÚ MISMO (OPCIÓN MÚLTIPLE) -->
+      <div class="pratice-box">
+        <div class="pratice-title"><i class="fa-solid fa-pen-to-square"></i> ¡Resuélvelo tú mismo! (Misma Gráfica)</div>
+        <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
+          Si la encuesta se aplicó a un total de 800 desarrolladores, ¿cuántos eligieron <strong>Python</strong>?
+        </div>
+
+        <div id="opts-pastel">
+          <button class="opcion-btn" onclick="responder('pastel', 0, false, this)"><div class="opcion-letra">A</div><span>200 desarrolladores</span></button>
+          <button class="opcion-btn" onclick="responder('pastel', 1, true, this)"><div class="opcion-letra">B</div><span>400 desarrolladores</span></button>
+          <button class="opcion-btn" onclick="responder('pastel', 2, false, this)"><div class="opcion-letra">C</div><span>500 desarrolladores</span></button>
+          <button class="opcion-btn" onclick="responder('pastel', 3, false, this)"><div class="opcion-letra">D</div><span>600 desarrolladores</span></button>
+        </div>
+        <div id="fb-pastel" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Lógica para cambiar de pestañas (Tabs)
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+
+  if(event && event.target) event.target.classList.add('active');
+  const targetPane = document.getElementById(tabId);
+  if(targetPane) targetPane.classList.add('active');
+}
+
+// Lógica interactiva para calificar la pregunta "Resuélvelo tú mismo"
+function responder(seccion, idxOpt, esCorrecta, btnElem) {
+  const contenedor = document.getElementById(`opts-${seccion}`);
+  const feedback = document.getElementById(`fb-${seccion}`);
+
+  // Bloquear todos los botones de esa sección
+  contenedor.querySelectorAll('.opcion-btn').forEach(btn => {
+    btn.style.pointerEvents = 'none';
+  });
+
+  if (esCorrecta) {
+    btnElem.classList.add('correct');
+    feedback.style.color = '#34d399';
+    feedback.innerHTML = '<i class="fa-solid fa-circle-check"></i> ¡Excelente! Respuesta correcta.';
+  } else {
+    btnElem.classList.add('incorrect');
+    feedback.style.color = '#fb7185';
+    feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. Revisa el procedimiento de arriba e inténtalo de nuevo.';
+  }
+  feedback.style.display = 'block';
+}
+</script>
+
+</body>
+</html>
