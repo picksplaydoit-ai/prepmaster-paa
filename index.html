@@ -29,7 +29,7 @@
   img,svg{display:block;max-width:100%;}
   button{-webkit-appearance:none;appearance:none;cursor:pointer;}
   input{-webkit-appearance:none;appearance:none;}
-  #auth-screen{position:fixed;inset:0;display:flex;align-items:flex-start;justify-content:center;background:var(--bg);z-index:1000;padding:20px;overflow-y:auto;overscroll-behavior:contain;}
+  #auth-screen{position:fixed;inset:0;display:flex;align-items:flex-start;justify-content:center;background:var(--bg);z-index:1000;padding:20px 16px 40px;overflow-y:auto;overscroll-behavior:contain;}
   .auth-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:var(--radius-xl);padding:36px 32px;width:100%;max-width:420px;position:relative;margin:auto;box-shadow:var(--shadow-lg);backdrop-filter:blur(20px);}
   .auth-card::before{content:'';position:absolute;top:-80px;right:-80px;width:200px;height:200px;background:radial-gradient(circle,#7c3aed33 0%,transparent 70%);pointer-events:none;}
   .auth-logo{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px;}
@@ -327,7 +327,6 @@
   .section-count{background:var(--surface2);padding:4px 10px;border-radius:100px;border:1px solid var(--border);font-size:12px;}
 
   /* ── SECCIÓN GRATIS ── */
-  #auth-screen{overflow-y:auto;align-items:flex-start;padding:32px 16px 48px;}
   .auth-wrapper{width:100%;max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:20px;}
   .free-trial-box{background:var(--surface);border:1px solid var(--border-bright);border-radius:20px;padding:22px;}
   .free-divider-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);text-align:center;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
@@ -433,6 +432,8 @@
 
   </div><!-- /auth-wrapper -->
 </div><!-- /auth-screen -->
+
+<div id="app">
   <nav>
     <div class="nav-logo" onclick="switchView('home')">Prep<span>Master</span></div>
     <div class="nav-right">
