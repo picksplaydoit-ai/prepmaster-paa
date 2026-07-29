@@ -102,14 +102,13 @@
   .home-card-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:20px;}
   .home-card-action{font-size:12px;font-weight:700;font-family:'Syne',sans-serif;display:inline-flex;align-items:center;gap:6px;color:var(--gold);}
 
-  /* Submenu tabs inside layer views */
   .layer-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
   .layer-tab{padding:10px 20px;border-radius:12px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);font-weight:700;font-family:'Syne',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s;}
   .layer-tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border-color:transparent;box-shadow:0 4px 16px var(--accent-glow);}
 
-  .section{padding:60px 40px;max-width:1200px;margin:0 auto;}
-  .section-header{display:flex;align-items:baseline;gap:14px;margin-bottom:32px;}
-  .section-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.5px;}
+  .section{padding:40px 0;max-width:1200px;margin:0 auto;}
+  .section-header{display:flex;align-items:baseline;gap:14px;margin-bottom:24px;}
+  .section-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.5px;}
   .section-line{flex:1;height:1px;background:var(--border);}
   .section-count{font-size:13px;color:var(--muted);}
   .categories-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
@@ -212,7 +211,6 @@
   .pdf-frame-wrap{flex:1;overflow:hidden;}
   .pdf-frame-wrap iframe{width:100%;height:100%;border:none;}
 
-  /* ── Sticky no-data banner ── */
   .data-banner{
     position:sticky;top:0;z-index:40;
     background:linear-gradient(90deg,#1a1a2e,#16213e,#1a1a2e);
@@ -227,7 +225,6 @@
   .data-banner .banner-dot{width:6px;height:6px;border-radius:50%;background:#fbbf24;flex-shrink:0;opacity:.8;}
   @media(max-width:540px){.data-banner{font-size:10.5px;padding:6px 14px;gap:7px;}}
 
-  /* ── Minijuegos ── */
   .mini-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
   .mini-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:8px;transition:all .25s;}
   .mini-card:hover{transform:translateY(-3px);border-color:var(--border-bright);box-shadow:0 12px 30px #0005;}
@@ -241,12 +238,10 @@
   .mini-note strong{color:var(--text);}
   @media(max-width:640px){.mini-grid{grid-template-columns:repeat(2,1fr);gap:10px;}.mini-card{padding:14px;}.mini-icon{font-size:24px;}}
 
-  /* ── Inglés section ── */
   .eng-note{background:var(--surface);border:1px solid #fbbf2430;border-radius:14px;padding:16px 20px;margin-bottom:20px;font-size:13px;color:var(--muted);line-height:1.6;}
   .eng-note strong{color:var(--gold);}
   .eng-badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;background:#fbbf2415;color:#fbbf24;border:1px solid #fbbf2430;}
 
-  /* ── Explicaciones y Prácticas ── */
   .exp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
   .exp-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:8px;}
   .exp-card:hover{transform:translateY(-3px);border-color:var(--border-bright);box-shadow:0 12px 30px #0004;}
@@ -255,11 +250,7 @@
   .exp-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;line-height:1.3;}
   .exp-btn{margin-top:4px;padding:7px 12px;border-radius:8px;font-size:12px;font-weight:600;border:1px solid var(--border-bright);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;text-align:left;}
   .exp-card:hover .exp-btn{border-color:var(--gold);color:var(--gold);}
-  .exp-card[data-area="mat"]{--ec:var(--mat);} .exp-card[data-area="mat"]:hover{border-color:#ff6b3555;}
-  .exp-card[data-area="red"]{--ec:var(--red);} .exp-card[data-area="red"]:hover{border-color:#7c3aed55;}
-  .exp-card[data-area="lec"]{--ec:var(--lec);} .exp-card[data-area="lec"]:hover{border-color:#05966955;}
-  .exp-card[data-area="esp"]{--ec:var(--red);} .exp-card[data-area="esp"]:hover{border-color:#7c3aed55;}
-  .exp-area-tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;background:color-mix(in srgb,var(--ec,#888) 15%,transparent);color:var(--ec,#888);border:1px solid color-mix(in srgb,var(--ec,#888) 30%,transparent);}
+  .exp-area-tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;background:#7c3aed22;color:#a78bfa;border:1px solid #7c3aed40;}
   @media(max-width:640px){.exp-grid{grid-template-columns:repeat(2,1fr);gap:10px;}.exp-card{padding:14px;}.exp-icon{font-size:22px;}}
 
   .divider{border:none;border-top:1px solid var(--border);margin:0;}
@@ -272,9 +263,6 @@
   .recurso-card[data-type="pdf"]{--rcc:#f59e0b;}
   .recurso-card[data-type="pdf"]::before{background:radial-gradient(circle at top right,#f59e0b12,transparent 65%);}
   .recurso-card[data-type="pdf"]:hover{border-color:#f59e0b55;box-shadow:0 16px 48px #f59e0b20;}
-  .recurso-card[data-type="video"]{--rcc:#e11d48;}
-  .recurso-card[data-type="video"]::before{background:radial-gradient(circle at top right,#e11d4812,transparent 65%);}
-  .recurso-card[data-type="video"]:hover{border-color:#e11d4855;box-shadow:0 16px 48px #e11d4820;}
   .recurso-card[data-type="web"]{--rcc:#0ea5e9;}
   .recurso-card[data-type="web"]::before{background:radial-gradient(circle at top right,#0ea5e912,transparent 65%);}
   .recurso-card[data-type="web"]:hover{border-color:#0ea5e955;box-shadow:0 16px 48px #0ea5e920;}
@@ -286,15 +274,14 @@
   .recurso-card:hover .recurso-action{background:color-mix(in srgb,var(--rcc) 22%,transparent);}
   .recursos-note{background:var(--surface);border:1px solid var(--border-bright);border-radius:14px;padding:16px 20px;margin-bottom:24px;font-size:13px;color:var(--muted);line-height:1.6;}
   .recursos-note strong{color:var(--text);}
-  @media(max-width:640px){.recursos-grid{grid-template-columns:1fr;gap:12px;}}
+
   @media(max-width:640px){
     nav{padding:0 max(16px,env(safe-area-inset-left));height:56px;}
     .nav-logo{font-size:17px;}
     .nav-user{display:none;}
-    .hero{padding:88px 16px 48px;}
-    .section{padding:28px max(16px,env(safe-area-inset-left));}
-    .section-title{font-size:19px;}
-    .section-header{margin-bottom:20px;}
+    .view-container{padding:80px 16px 40px;}
+    .home-grid{grid-template-columns:1fr;gap:12px;}
+    .home-card{padding:20px;}
     .categories-grid{grid-template-columns:1fr;gap:12px;}
     .cat-card{padding:20px;}
     .cat-name{font-size:17px;}
@@ -316,26 +303,12 @@
     .reto-intro{padding:12px 14px;gap:8px;}
     .reto-card{padding:18px;}
     .tool-card{padding:18px;}
-    .hero-badge{font-size:10px;padding:5px 12px;}
     .section-count{font-size:12px;}
     .exp-grid{gap:8px;}
     .exp-card{padding:14px 10px;}
     .mini-grid{gap:8px;}
     .mini-card{padding:14px;}
-    .btn-secondary{margin-top:8px;}
     .data-banner{flex-wrap:wrap;justify-content:center;}
-  }
-  @media(max-width:400px){
-    .btn-exam{padding:6px 10px;font-size:12px;}
-    .auth-card{padding:24px 14px;}
-    .section{padding:24px 14px;}
-  }
-  @media(hover:none){
-    .cat-card:hover,.exp-card:hover,.reto-card:hover,.tool-card:hover{transform:none;box-shadow:none;}
-    .cat-card:active{transform:scale(.98);transition:transform .1s;}
-    .exp-card:active{transform:scale(.97);transition:transform .1s;}
-    .btn-primary:hover{transform:none;filter:none;}
-    .btn-primary:active{transform:scale(.97);filter:brightness(.95);}
   }
 
   @media(prefers-reduced-motion:reduce){
@@ -363,23 +336,9 @@
 
     <div class="auth-nodata">📋 Esta plataforma <strong>no guarda tu progreso</strong> entre sesiones. <span>Anota tu puntaje</span> al terminar cada simulación o minijuego.</div>
 
-    <!-- Tabs -->
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchTab('login')">Iniciar sesión</button>
       <button class="auth-tab" onclick="switchTab('register')">Crear cuenta</button>
-    </div>
-
-    <!-- Demo buttons -->
-    <div style="margin-bottom:20px;">
-      <p style="font-size:11px;color:#8888aa;text-align:center;margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;">🎯 Prueba sin registrarte</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <a href="examenes/simulacionmathgratis.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ff6b3540;border-radius:10px;color:#ff6b35;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
-          📐 Simulación Matemáticas
-        </a>
-        <a href="examenes/simulacionespanolgratis.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #7c3aed40;border-radius:10px;color:#a78bfa;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
-          ✍️ Simulación Español
-        </a>
-      </div>
     </div>
 
     <!-- LOGIN PANEL -->
@@ -429,7 +388,7 @@
   </div>
 
   <!-- ═══════════════════════════════════════════════ -->
-  <!-- 🏠 VIEW: HOME (DASHBOARD POR CAPAS)            -->
+  <!-- 🏠 HOME VIEW                                    -->
   <!-- ═══════════════════════════════════════════════ -->
   <div id="view-home" class="view-container active">
     <div class="home-hero">
@@ -442,7 +401,7 @@
         <div>
           <div class="home-card-icon">🎓</div>
           <div class="home-card-title">¿Qué es la PAA?</div>
-          <div class="home-card-desc">Conoce la estructura oficial, puntajes y distribución del examen UDG.</div>
+          <div class="home-card-desc">Estructura oficial, puntajes y distribución del examen UDG.</div>
         </div>
         <div class="home-card-action">Ver detalles →</div>
       </div>
@@ -532,17 +491,14 @@
         <div>
           <div class="home-card-icon">📚</div>
           <div class="home-card-title">Recursos oficiales</div>
-          <div class="home-card-desc">Descarga directas de guías PDF oficiales de UDG y College Board.</div>
+          <div class="home-card-desc">Descargas directas de guías PDF oficiales de UDG y College Board.</div>
         </div>
         <div class="home-card-action">Ver recursos →</div>
       </div>
     </div>
   </div>
 
-
-  <!-- ═══════════════════════════════════════════════ -->
-  <!-- 🗺️ VIEW: RUTA DE ESTUDIO                        -->
-  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 🗺️ RUTA DE ESTUDIO -->
   <div id="view-ruta" class="view-container">
     <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
@@ -552,7 +508,6 @@
     <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:20px;padding:28px;">
       <p style="font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.7;">Sigue esta ruta para maximizar tu preparación. Empieza por las explicaciones de cada tema, luego practica con los ejercicios y cierra con las simulaciones.</p>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
-        <!-- Matemáticas -->
         <div style="background:var(--surface2);border:1px solid #ff6b3530;border-radius:16px;padding:20px;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
             <div style="width:36px;height:36px;background:#ff6b35;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">📐</div>
@@ -568,7 +523,6 @@
             <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;">4</span><span><b style="color:var(--text);">Geometría y Probabilidad</b></span></li>
           </ol>
         </div>
-        <!-- Español -->
         <div style="background:var(--surface2);border:1px solid #7c3aed30;border-radius:16px;padding:20px;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
             <div style="width:36px;height:36px;background:#7c3aed;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">✍️</div>
@@ -588,10 +542,7 @@
     </div>
   </div>
 
-
-  <!-- ═══════════════════════════════════════════════ -->
-  <!-- ⚡ VIEW: EXPLICACIONES RÁPIDAS                  -->
-  <!-- ═══════════════════════════════════════════════ -->
+  <!-- ⚡ EXPLICACIONES RÁPIDAS -->
   <div id="view-explicaciones" class="view-container">
     <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
@@ -600,13 +551,12 @@
     </div>
     
     <div class="layer-tabs">
-      <button class="layer-tab active" onclick="switchLayerTab('exp', 'mat')">📐 Matemáticas (14)</button>
-      <button class="layer-tab" onclick="switchLayerTab('exp', 'red')">✍️ Redacción (5)</button>
-      <button class="layer-tab" onclick="switchLayerTab('exp', 'lec')">📖 Lectura (5)</button>
+      <button class="layer-tab active" onclick="switchLayerTab('exp', 'mat', event)">📐 Matemáticas (14)</button>
+      <button class="layer-tab" onclick="switchLayerTab('exp', 'red', event)">✍️ Redacción (5)</button>
+      <button class="layer-tab" onclick="switchLayerTab('exp', 'lec', event)">📖 Lectura (5)</button>
     </div>
 
     <div class="exp-grid" id="layer-exp-grid">
-      <!-- Se llena dinámicamente o por clases -->
       <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/Fracciones.html','Fracciones')"><div class="exp-icon">➗</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Fracciones y Aritmética</div><button class="exp-btn">📖 Ver explicación</button></div>
       <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/Proporciones.html','Proporciones')"><div class="exp-icon">⚖️</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Razones y Proporciones</div><button class="exp-btn">📖 Ver explicación</button></div>
       <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/Sucesiones.html','Sucesiones')"><div class="exp-icon">🔢</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Sucesiones y Patrones</div><button class="exp-btn">📖 Ver explicación</button></div>
@@ -638,10 +588,7 @@
     </div>
   </div>
 
-
-  <!-- ═══════════════════════════════════════════════ -->
-  <!-- 📝 VIEW: EJERCICIOS PRÁCTICOS                   -->
-  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 📝 VIEW: EJERCICIOS PRÁCTICOS -->
   <div id="view-practicos" class="view-container">
     <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
@@ -650,8 +597,8 @@
     </div>
 
     <div class="layer-tabs">
-      <button class="layer-tab active" onclick="switchLayerTab('prac', 'mat')">📐 Matemáticas (12)</button>
-      <button class="layer-tab" onclick="switchLayerTab('prac', 'esp')">✍️ Español (Próximo)</button>
+      <button class="layer-tab active" onclick="switchLayerTab('prac', 'mat', event)">📐 Matemáticas (12)</button>
+      <button class="layer-tab" onclick="switchLayerTab('prac', 'esp', event)">✍️ Español (6)</button>
     </div>
 
     <div class="exp-grid" id="layer-prac-grid">
@@ -667,13 +614,18 @@
       <div class="exp-card mat-prac" data-group="mat" onclick="openExam('examenes/practicos/mat/areas.html','Áreas')"><div class="exp-icon">🔷</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Áreas y Geometría</div><button class="exp-btn">✏️ Practicar</button></div>
       <div class="exp-card mat-prac" data-group="mat" onclick="openExam('examenes/practicos/mat/probabilidad.html','Probabilidad')"><div class="exp-icon">🎲</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Probabilidad y Estadística</div><button class="exp-btn">✏️ Practicar</button></div>
       <div class="exp-card mat-prac" data-group="mat" onclick="openExam('examenes/practicos/mat/combinatoria.html','Combinatoria')"><div class="exp-icon">🧮</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Combinatoria</div><button class="exp-btn">✏️ Practicar</button></div>
+
+      <!-- ESPAÑOL PRÁCTICO -->
+      <div class="exp-card esp-prac" data-group="esp" style="display:none;" onclick="openExam('examenes/practicos/esp/signosdepuntuacion.html','Práctica: Signos')"><div class="exp-icon">✒️</div><div class="exp-area-tag" style="background:#7c3aed22; color:#a78bfa;">Español</div><div class="exp-name">Signos de Puntuación</div><button class="exp-btn">✏️ Practicar</button></div>
+      <div class="exp-card esp-prac" data-group="esp" style="display:none;" onclick="openExam('examenes/practicos/esp/tiposdetexto.html','Práctica: Tipos de Texto')"><div class="exp-icon">📝</div><div class="exp-area-tag" style="background:#7c3aed22; color:#a78bfa;">Español</div><div class="exp-name">Tipos de Texto</div><button class="exp-btn">✏️ Practicar</button></div>
+      <div class="exp-card esp-prac" data-group="esp" style="display:none;" onclick="openExam('examenes/practicos/esp/tituloideaprincipal.html','Práctica: Idea Principal')"><div class="exp-icon">💡</div><div class="exp-area-tag" style="background:#05966922; color:#34d399;">Español</div><div class="exp-name">Título e Idea Principal</div><button class="exp-btn">✏️ Practicar</button></div>
+      <div class="exp-card esp-prac" data-group="esp" style="display:none;" onclick="openExam('examenes/practicos/esp/figurasretoricas.html','Práctica: Figuras Retóricas')"><div class="exp-icon">🎭</div><div class="exp-area-tag" style="background:#05966922; color:#34d399;">Español</div><div class="exp-name">Figuras Retóricas</div><button class="exp-btn">✏️ Practicar</button></div>
+      <div class="exp-card esp-prac" data-group="esp" style="display:none;" onclick="openExam('examenes/practicos/esp/inferenciasygenerosliterarios.html','Práctica: Inferencias')"><div class="exp-icon">🔍</div><div class="exp-area-tag" style="background:#05966922; color:#34d399;">Español</div><div class="exp-name">Inferencias y Géneros Literarios</div><button class="exp-btn">✏️ Practicar</button></div>
+      <div class="exp-card esp-prac" data-group="esp" style="display:none;" onclick="openExam('examenes/practicos/esp/narrativas.html','Práctica: Narrativas')"><div class="exp-icon">📖</div><div class="exp-area-tag" style="background:#05966922; color:#34d399;">Español</div><div class="exp-name">Elementos Narrativos</div><button class="exp-btn">✏️ Practicar</button></div>
     </div>
   </div>
 
-
-  <!-- ═══════════════════════════════════════════════ -->
-  <!-- 🏋️ VIEW: SUPERVIVENCIA                          -->
-  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 🏋️ VIEW: SUPERVIVENCIA -->
   <div id="view-supervivencia" class="view-container">
     <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
@@ -683,10 +635,7 @@
     <div class="tools-grid" id="survival-grid"></div>
   </div>
 
-
-  <!-- ═══════════════════════════════════════════════ -->
-  <!-- 📄 VIEW: EXÁMENES DE SIMULACIÓN                 -->
-  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 📄 VIEW: EXÁMENES DE SIMULACIÓN -->
   <div id="view-simulaciones" class="view-container">
     <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
@@ -733,10 +682,7 @@
     </div>
   </div>
 
-
-  <!-- ═══════════════════════════════════════════════ -->
-  <!-- 📖 VIEW: RETOS LECTURA RÁPIDA                   -->
-  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 📖 VIEW: RETOS LECTURA RÁPIDA -->
   <div id="view-retos" class="view-container">
     <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
@@ -746,90 +692,36 @@
     <div class="reto-intro">
       <div class="reto-intro-icon">📖</div>
       <div class="reto-intro-text">
-        <strong>Entrena tu velocidad y comprensión lectora.</strong> Cada nivel te presenta 3 lecturas aleatorias de un banco de 15 textos. Lee en el tiempo indicado y responde preguntas de comprensión.
+        <strong>Entrena tu velocidad y comprensión lectora.</strong> Cada nivel te presenta 3 lecturas aleatorias de un banco de 15 textos.
       </div>
     </div>
     <div class="reto-grid" id="reto-grid"></div>
   </div>
 
-
-  <!-- ═══════════════════════════════════════════════ -->
-  <!-- 🎮 VIEW: MINIJUEGOS                             -->
-  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 🎮 VIEW: MINIJUEGOS -->
   <div id="view-minijuegos" class="view-container">
     <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
       <h2 class="section-title">🎮 Minijuegos</h2>
       <div class="section-line"></div>
     </div>
-    <div class="mini-note">
-      <strong>📋 Aviso:</strong> La plataforma <strong>no guarda datos</strong> entre sesiones. Para llevar tu progresión, <strong>anota tu puntaje</strong> al terminar cada simulación o minijuego.
-    </div>
     <div class="mini-grid">
-      <div class="mini-card">
-        <div class="mini-icon">⚔️</div>
-        <span class="mini-tag">Español · 1 jugador</span>
-        <div class="mini-name">Reading Conquest</div>
-        <div class="mini-desc">Conquista zonas respondiendo preguntas de Lectura, Redacción y Vocabulario.</div>
-        <button class="mini-btn" onclick="openExam('minijuegos/conquista_espanol.html','Reading Conquest')">▶ Jugar</button>
-      </div>
-      <div class="mini-card">
-        <div class="mini-icon">📚</div>
-        <span class="mini-tag">Español · 1 jugador</span>
-        <div class="mini-name">PAA Chronicles</div>
-        <div class="mini-desc">Mega banco de preguntas de español con múltiples niveles y desafíos.</div>
-        <button class="mini-btn" onclick="openExam('minijuegos/conquista_espanol2.html','PAA Chronicles')">▶ Jugar</button>
-      </div>
-      <div class="mini-card">
-        <div class="mini-icon">🔢</div>
-        <span class="mini-tag">Matemáticas · 1 jugador</span>
-        <div class="mini-name">Math Conquest</div>
-        <div class="mini-desc">Conquista territorios matemáticos dominando Aritmética y Álgebra.</div>
-        <button class="mini-btn" onclick="openExam('minijuegos/conquista_mat.html','Math Conquest')">▶ Jugar</button>
-      </div>
-      <div class="mini-card">
-        <div class="mini-icon">🌌</div>
-        <span class="mini-tag">Matemáticas · 1 jugador</span>
-        <div class="mini-name">Crónicas Matemáticas</div>
-        <div class="mini-desc">La Odisea Numérica. Viaja por zonas matemáticas resolviendo problemas.</div>
-        <button class="mini-btn" onclick="openExam('minijuegos/cronicas_mat.html','Math Chronicles')">▶ Jugar</button>
-      </div>
-      <div class="mini-card">
-        <div class="mini-icon">🔵</div>
-        <span class="mini-tag">Español · 2 jugadores</span>
-        <div class="mini-name">Conecta 4 — Español</div>
-        <div class="mini-desc">Duelo 1 vs 1. Responde preguntas de Lectura PAA para ganar columnas.</div>
-        <button class="mini-btn" onclick="openExam('minijuegos/conecta4_espanol.html','Connect 4 Español')">▶ Jugar</button>
-      </div>
-      <div class="mini-card">
-        <div class="mini-icon">🔴</div>
-        <span class="mini-tag">Matemáticas · 2 jugadores</span>
-        <div class="mini-name">Conecta 4 — Matemáticas</div>
-        <div class="mini-desc">Duelo matemático 1 vs 1. Resuelve problemas para colocar fichas.</div>
-        <button class="mini-btn" onclick="openExam('minijuegos/conecta4_mat.html','Connect 4 Matemáticas')">▶ Jugar</button>
-      </div>
-      <div class="mini-card" style="border-color:#e11d4840;background:linear-gradient(135deg,var(--surface),#1a0a0e);">
-        <div class="mini-icon">🎮</div>
-        <span class="mini-tag" style="background:#e11d4818;color:#fb7185;border-color:#e11d4840;">Matemáticas · 1 jugador</span>
-        <div class="mini-name">Dominando el PAA</div>
-        <div class="mini-desc">Juego de acción y reflejos bajo presión para avanzar de nivel.</div>
-        <button class="mini-btn" style="background:#e11d4820;border-color:#e11d4840;color:#fb7185;" onclick="openExam('minijuegos/dominando_el_paa.html','Dominando el PAA')">▶ Jugar</button>
-      </div>
+      <div class="mini-card"><div class="mini-icon">⚔️</div><span class="mini-tag">Español</span><div class="mini-name">Reading Conquest</div><button class="mini-btn" onclick="openExam('minijuegos/conquista_espanol.html','Reading Conquest')">▶ Jugar</button></div>
+      <div class="mini-card"><div class="mini-icon">📚</div><span class="mini-tag">Español</span><div class="mini-name">PAA Chronicles</div><button class="mini-btn" onclick="openExam('minijuegos/conquista_espanol2.html','PAA Chronicles')">▶ Jugar</button></div>
+      <div class="mini-card"><div class="mini-icon">🔢</div><span class="mini-tag">Matemáticas</span><div class="mini-name">Math Conquest</div><button class="mini-btn" onclick="openExam('minijuegos/conquista_mat.html','Math Conquest')">▶ Jugar</button></div>
+      <div class="mini-card"><div class="mini-icon">🌌</div><span class="mini-tag">Matemáticas</span><div class="mini-name">Crónicas Matemáticas</div><button class="mini-btn" onclick="openExam('minijuegos/cronicas_mat.html','Math Chronicles')">▶ Jugar</button></div>
+      <div class="mini-card"><div class="mini-icon">🔵</div><span class="mini-tag">Español 1vs1</span><div class="mini-name">Conecta 4 — Español</div><button class="mini-btn" onclick="openExam('minijuegos/conecta4_espanol.html','Connect 4 Español')">▶ Jugar</button></div>
+      <div class="mini-card"><div class="mini-icon">🔴</div><span class="mini-tag">Matemáticas 1vs1</span><div class="mini-name">Conecta 4 — Matemáticas</div><button class="mini-btn" onclick="openExam('minijuegos/conecta4_mat.html','Connect 4 Matemáticas')">▶ Jugar</button></div>
+      <div class="mini-card" style="border-color:#e11d4840;background:linear-gradient(135deg,var(--surface),#1a0a0e);"><div class="mini-icon">🎮</div><span class="mini-tag" style="background:#e11d4818;color:#fb7185;">Acción</span><div class="mini-name">Dominando el PAA</div><button class="mini-btn" style="background:#e11d4820;color:#fb7185;" onclick="openExam('minijuegos/dominando_el_paa.html','Dominando el PAA')">▶ Jugar</button></div>
     </div>
   </div>
 
-
-  <!-- ═══════════════════════════════════════════════ -->
-  <!-- 🇺🇸 VIEW: INGLÉS ESLAT                           -->
-  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 🇺🇸 VIEW: INGLÉS ESLAT -->
   <div id="view-ingles" class="view-container">
     <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
       <h2 class="section-title">🇺🇸 Inglés — ESLAT</h2>
       <div class="section-line"></div>
-    </div>
-    <div class="eng-note">
-      <strong>⚠️ Nota importante:</strong> El inglés (ESLAT) <strong>no cuenta para el puntaje final de admisión</strong> a la UDG. Sin embargo, obtener un buen desempeño puede apoyarte para certificaciones como el <strong>TOEFL</strong>.
     </div>
     <div class="categories-grid" style="grid-template-columns:1fr;">
       <div>
@@ -847,10 +739,7 @@
     </div>
   </div>
 
-
-  <!-- ═══════════════════════════════════════════════ -->
-  <!-- 🧰 VIEW: HERRAMIENTAS                           -->
-  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 🧰 VIEW: HERRAMIENTAS -->
   <div id="view-herramientas" class="view-container">
     <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
@@ -867,45 +756,30 @@
     </div>
   </div>
 
-
-  <!-- ═══════════════════════════════════════════════ -->
-  <!-- 📚 VIEW: RECURSOS OFICIALES                     -->
-  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 📚 VIEW: RECURSOS OFICIALES -->
   <div id="view-recursos" class="view-container">
     <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
       <h2 class="section-title">📚 Recursos oficiales · Apoyo</h2>
       <div class="section-line"></div>
     </div>
-    <div class="recursos-note">
-      <strong>Material de apoyo oficial para tu preparación.</strong> Descarga las guías publicadas por la UDG y College Board.
-    </div>
     <div class="recursos-grid">
       <a class="recurso-card" data-type="pdf" href="https://escolar.udg.mx/sites/default/files/adjuntos/paa-prueba-practica.pdf" target="_blank" rel="noopener">
         <div class="recurso-type-badge">📄 PDF Descargable</div>
         <div class="recurso-org">UDG · Escolar</div>
         <div class="recurso-title">Guía PAA — Prueba Práctica</div>
-        <div class="recurso-desc">Guía oficial de la Universidad de Guadalajara con ejercicios de práctica.</div>
-        <span class="recurso-action">⬇ Descargar PDF · 2.17 MB</span>
+        <div class="recurso-action">⬇ Descargar PDF</div>
       </a>
       <a class="recurso-card" data-type="pdf" href="https://escolar.udg.mx/sites/default/files/adjuntos/paa-prueba-practica-en-linea.pdf" target="_blank" rel="noopener">
         <div class="recurso-type-badge">📄 PDF Descargable</div>
         <div class="recurso-org">UDG · Escolar</div>
         <div class="recurso-title">Guía PAA — Prueba en Línea</div>
-        <div class="recurso-desc">Versión compacta orientada al formato de examen en línea.</div>
-        <span class="recurso-action">⬇ Descargar PDF · 203 KB</span>
-      </a>
-      <a class="recurso-card" data-type="web" href="https://latam.collegeboard.org/publicaciones/guia-de-estudio-paa/" target="_blank" rel="noopener">
-        <div class="recurso-type-badge">🌐 Sitio Oficial</div>
-        <div class="recurso-org">College Board Latinoamérica</div>
-        <div class="recurso-title">Guía de Estudio Oficial PAA</div>
-        <div class="recurso-desc">Publicación oficial con estructura completa del examen.</div>
-        <span class="recurso-action">→ Visitar sitio College Board</span>
+        <div class="recurso-action">⬇ Descargar PDF</div>
       </a>
     </div>
   </div>
 
-  <footer>PrepMaster © 2025 · Todos los derechos reservados · Acceso exclusivo para usuarios registrados</footer>
+  <footer>PrepMaster © 2026 · Todos los derechos reservados</footer>
 </div>
 
 <!-- Modal Guía PAA -->
@@ -913,7 +787,6 @@
   <div class="pdf-container">
     <div class="pdf-topbar">
       <span class="pdf-title">🎓 Guía Maestra PAA (UDG)</span>
-      <span class="pdf-readonly">Estructura Oficial</span>
       <button class="btn-close-pdf" onclick="closeGuiaModal()">×</button>
     </div>
     <div class="pdf-frame-wrap">
@@ -934,7 +807,6 @@
   <div class="pdf-container">
     <div class="pdf-topbar">
       <span class="pdf-title" id="pdf-title">Respuestas</span>
-      <span class="pdf-readonly">📄 Solo lectura</span>
       <button class="btn-close-pdf" onclick="closePDF()">×</button>
     </div>
     <div class="pdf-frame-wrap">
@@ -944,7 +816,7 @@
 </div>
 
 <script>
-// Sistema de navegación por capas (Views)
+// Sistema de navegación por capas (Views) de manera aislada y robusta
 function switchView(viewId) {
   document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
   const target = document.getElementById('view-' + viewId);
@@ -954,38 +826,30 @@ function switchView(viewId) {
   }
 }
 
-// Submenu tabs inside layer views (Explicaciones / Prácticos)
-function switchLayerTab(type, area) {
+function switchLayerTab(type, area, event) {
   const containerId = type === 'exp' ? 'layer-exp-grid' : 'layer-prac-grid';
   const container = document.getElementById(containerId);
   if(!container) return;
 
   container.querySelectorAll('.exp-card').forEach(card => {
     const group = card.getAttribute('data-group');
-    if (area === 'todas' || group === area) {
+    if (group === area) {
       card.style.display = 'flex';
     } else {
       card.style.display = 'none';
     }
   });
 
-  // Activar tab visualmente
   const parent = container.previousElementSibling;
   if(parent && parent.classList.contains('layer-tabs')) {
     parent.querySelectorAll('.layer-tab').forEach(t => t.classList.remove('active'));
-    event.target.classList.add('active');
+    if(event && event.target) event.target.classList.add('active');
   }
 }
 
-function openModalGuia() {
-  document.getElementById('guia-modal').classList.add('open');
-}
-function closeGuiaModal() {
-  document.getElementById('guia-modal').classList.remove('open');
-}
-function closeGuiaOnBg(e) {
-  if(e.target === document.getElementById('guia-modal')) closeGuiaModal();
-}
+function openModalGuia() { document.getElementById('guia-modal').classList.add('open'); }
+function closeGuiaModal() { document.getElementById('guia-modal').classList.remove('open'); }
+function closeGuiaOnBg(e) { if(e.target === document.getElementById('guia-modal')) closeGuiaModal(); }
 
 function togglePanel(id) {
   const p=document.getElementById(id), a=document.getElementById('arrow-panel-'+id.replace('panel-','')), open=p&&p.classList.contains('open');
@@ -1252,11 +1116,7 @@ onAuthStateChanged(auth, async user => {
 
 window.switchTab = (tab) => {
   const loginErr = document.getElementById('login-error');
-  const regErr = document.getElementById('register-error');
-  const regOk = document.getElementById('register-success');
   if (loginErr) loginErr.style.display = 'none';
-  if (regErr) regErr.style.display = 'none';
-  if (regOk) regOk.style.display = 'none';
   document.querySelectorAll('.auth-tab').forEach((t,i) => {
     t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register'));
   });
