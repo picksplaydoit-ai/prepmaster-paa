@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>PrepMaster PAA — Práctica: Interpretación de Gráficas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root{
+    --bg:#080810;--surface:#0f0f1a;--surface2:#161624;--surface3:#1e1e30;
+    --border:#ffffff08;--border-bright:#ffffff14;
+    --text:#eeeef8;--muted:#7070a0;--mat:#ff6b35;--gold:#fbbf24;--accent:#7c3aed;
+    --radius-sm:10px;--radius-md:16px;--radius-lg:22px;
+  }
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;margin:0;padding:20px 16px;-webkit-font-smoothing:antialiased;}
+  .container{max-width:850px;margin:0 auto;}
+  
+  .header-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:var(--radius-lg);padding:28px 24px;margin-bottom:20px;text-align:center;position:relative;overflow:hidden;}
+  .header-card::before{content:'';position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:radial-gradient(circle,#ff6b3525 0%,transparent 70%);pointer-events:none;}
+  .badge-area{display:inline-block;padding:4px 12px;background:#ff6b3518;border:1px solid #ff6b3535;border-radius:100px;font-size:11px;font-weight:700;color:var(--mat);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+  .title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:8px;}
+  .subtitle{color:var(--muted);font-size:13.5px;max-width:580px;margin:0 auto;line-height:1.5;}
+
+  /* PESTAÑAS (TABS) */
+  .tabs-bar{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:20px;}
+  .tab-btn{padding:10px 18px;border-radius:12px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all 0.2s;}
+  .tab-btn:hover{color:var(--text);border-color:var(--border-bright);}
+  .tab-btn.active{background:linear-gradient(135deg,var(--mat),#e65c24);color:white;border-color:transparent;box-shadow:0 4px 16px #ff6b3540;}
+
+  .tab-pane{display:none;animation:fadeIn 0.25s ease;}
+  .tab-pane.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  /* Tarjeta de Ejercicio */
+  .ejercicio-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:22px;margin-bottom:20px;}
+  .ejercicio-header{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--gold);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+  .ejercicio-pregunta{font-size:14.5px;font-weight:600;line-height:1.5;margin-bottom:16px;color:var(--text);}
+
+  /* Gráficas */
+  .gfx-container{background:#161624;border:1px solid var(--border-bright);border-radius:14px;padding:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:16px;}
+  .pictograma-row{display:flex;align-items:center;gap:12px;margin-bottom:8px;width:100%;max-width:480px;}
+  .pic-label{width:110px;font-family:'Syne',sans-serif;font-size:12.5px;font-weight:700;color:var(--gold);}
+  .pic-icons{display:flex;gap:6px;flex-wrap:wrap;color:var(--mat);font-size:18px;}
+
+  /* Opciones de respuesta */
+  .opciones-box{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:14px;}
+  .opcion-btn{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s;text-align:left;font-size:14px;color:var(--text);}
+  .opcion-btn:hover{border-color:var(--mat);background:var(--surface3);}
+  .opcion-letra{width:28px;height:28px;border-radius:8px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Syne',sans-serif;color:var(--muted);flex-shrink:0;}
+  
+  .opcion-btn.correct{background:#05966920!important;border-color:#10b981!important;color:#34d399!important;}
+  .opcion-btn.correct .opcion-letra{background:#10b981;color:white;}
+  .opcion-btn.incorrect{background:#e11d4820!important;border-color:#f43f5e!important;color:#fb7185!important;}
+  .opcion-btn.incorrect .opcion-letra{background:#f43f5e;color:white;}
+
+  .feedback-box{display:none;padding:14px;background:var(--surface3);border-radius:12px;border-left:4px solid var(--mat);font-size:13px;line-height:1.6;color:var(--text);margin-top:12px;}
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- HEADER -->
+  <div class="header-card">
+    <span class="badge-area">Ejercicios Prácticos · Matemáticas</span>
+    <h1 class="title">Interpretación de Gráficas y Tablas</h1>
+    <p class="subtitle">Selecciona una pestaña y resuelve 6 ejercicios prácticos de cada tema para perfeccionar tu habilidad analítica para el PAA.</p>
+  </div>
+
+  <!-- NAVEGACIÓN POR PESTAÑAS (TABS) -->
+  <div class="tabs-bar">
+    <button class="tab-btn active" onclick="switchTab('tab-pic')">🐶 Pictogramas (6)</button>
+    <button class="tab-btn" onclick="switchTab('tab-barras')">📊 Barras (6)</button>
+    <button class="tab-btn" onclick="switchTab('tab-lineas')">📈 Líneas y Rangos (6)</button>
+    <button class="tab-btn" onclick="switchTab('tab-pastel')">🍕 Sectores Circulares (6)</button>
+  </div>
+
+
+  <!-- ================================================================= -->
+  <!-- PESTAÑA 1: PICTOGRAMAS (6 REACTIVOS)                              -->
+  <!-- ================================================================= -->
+  <div id="tab-pic" class="tab-pane active">
+    <!-- P1.1 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 1 de 6 · Pictogramas</span></div>
+      <div class="ejercicio-pregunta">Con base en el gráfico, ¿cuántos autos MÁS se vendieron en Marzo que en Enero?</div>
+      <div class="gfx-container">
+        <div class="pictograma-row"><div class="pic-label">Enero</div><div class="pic-icons"><i class="fa-solid fa-car"></i><i class="fa-solid fa-car"></i></div></div>
+        <div class="pictograma-row"><div class="pic-label">Febrero</div><div class="pic-icons"><i class="fa-solid fa-car"></i><i class="fa-solid fa-car"></i><i class="fa-solid fa-car"></i><i class="fa-solid fa-car"></i></div></div>
+        <div class="pictograma-row"><div class="pic-label">Marzo</div><div class="pic-icons"><i class="fa-solid fa-car"></i><i class="fa-solid fa-car"></i><i class="fa-solid fa-car"></i><i class="fa-solid fa-car"></i><i class="fa-solid fa-car"></i><i class="fa-solid fa-car"></i></div></div>
+        <div style="background:#fbbf2415; border:1px solid #fbbf2440; border-radius:8px; padding:6px 12px; margin-top:8px; font-size:11px; font-weight:700; color:var(--gold);">Leyenda: Cada 🚗 = 50 Autos</div>
+      </div>
+      <div class="opciones-box" id="opts_p1_1">
+        <button class="opcion-btn" onclick="evaluar('p1_1', 0, false, this)"><div class="opcion-letra">A</div><span>100 autos</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_1', 1, true, this)"><div class="opcion-letra">B</div><span>200 autos</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_1', 2, false, this)"><div class="opcion-letra">C</div><span>250 autos</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_1', 3, false, this)"><div class="opcion-letra">D</div><span>300 autos</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p1_1"></div>
+    </div>
+
+    <!-- P1.2 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 2 de 6 · Pictogramas</span></div>
+      <div class="ejercicio-pregunta">¿Cuál fue el total acumulado de ventas de autos durante el trimestre (Ene-Mar)?</div>
+      <div class="opciones-box" id="opts_p1_2">
+        <button class="opcion-btn" onclick="evaluar('p1_2', 0, false, this)"><div class="opcion-letra">A</div><span>500 autos</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_2', 1, true, this)"><div class="opcion-letra">B</div><span>600 autos</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_2', 2, false, this)"><div class="opcion-letra">C</div><span>650 autos</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_2', 3, false, this)"><div class="opcion-letra">D</div><span>12 autos</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p1_2"></div>
+    </div>
+
+    <!-- P1.3 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 3 de 6 · Pictogramas</span></div>
+      <div class="ejercicio-pregunta">Un refugio registró la entrega de paquetes de comida. ¿Cuántos paquetes se entregaron en total?</div>
+      <div class="gfx-container">
+        <div class="pictograma-row"><div class="pic-label">Semana 1</div><div class="pic-icons"><i class="fa-solid fa-box"></i><i class="fa-solid fa-box"></i><i class="fa-solid fa-box"></i></div></div>
+        <div class="pictograma-row"><div class="pic-label">Semana 2</div><div class="pic-icons"><i class="fa-solid fa-box"></i><i class="fa-solid fa-box"></i><i class="fa-solid fa-box"></i><i class="fa-solid fa-box"></i><i class="fa-solid fa-box"></i></div></div>
+        <div style="background:#fbbf2415; border:1px solid #fbbf2440; border-radius:8px; padding:6px 12px; margin-top:8px; font-size:11px; font-weight:700; color:var(--gold);">Leyenda: Cada 📦 = 80 Paquetes</div>
+      </div>
+      <div class="opciones-box" id="opts_p1_3">
+        <button class="opcion-btn" onclick="evaluar('p1_3', 0, false, this)"><div class="opcion-letra">A</div><span>480 paquetes</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_3', 1, false, this)"><div class="opcion-letra">B</div><span>560 paquetes</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_3', 2, true, this)"><div class="opcion-letra">C</div><span>640 paquetes</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_3', 3, false, this)"><div class="opcion-letra">D</div><span>800 paquetes</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p1_3"></div>
+    </div>
+
+    <!-- P1.4 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 4 de 6 · Pictogramas</span></div>
+      <div class="ejercicio-pregunta">Si la meta mensual del refugio era entregar 500 paquetes en la Semana 2, ¿cuántos paquetes faltaron para alcanzarla?</div>
+      <div class="opciones-box" id="opts_p1_4">
+        <button class="opcion-btn" onclick="evaluar('p1_4', 0, true, this)"><div class="opcion-letra">A</div><span>100 paquetes</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_4', 1, false, this)"><div class="opcion-letra">B</div><span>120 paquetes</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_4', 2, false, this)"><div class="opcion-letra">C</div><span>200 paquetes</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_4', 3, false, this)"><div class="opcion-letra">D</div><span>240 paquetes</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p1_4"></div>
+    </div>
+
+    <!-- P1.5 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 5 de 6 · Pictogramas</span></div>
+      <div class="ejercicio-pregunta">En una reforestación se registraron los árboles plantados por brigada. ¿Qué porcentaje del total plantaron las brigadas A y B juntas?</div>
+      <div class="gfx-container">
+        <div class="pictograma-row"><div class="pic-label">Brigada A</div><div class="pic-icons"><i class="fa-solid fa-tree"></i><i class="fa-solid fa-tree"></i></div></div>
+        <div class="pictograma-row"><div class="pic-label">Brigada B</div><div class="pic-icons"><i class="fa-solid fa-tree"></i><i class="fa-solid fa-tree"></i><i class="fa-solid fa-tree"></i></div></div>
+        <div class="pictograma-row"><div class="pic-label">Brigada C</div><div class="pic-icons"><i class="fa-solid fa-tree"></i><i class="fa-solid fa-tree"></i><i class="fa-solid fa-tree"></i><i class="fa-solid fa-tree"></i><i class="fa-solid fa-tree"></i></div></div>
+        <div style="background:#fbbf2415; border:1px solid #fbbf2440; border-radius:8px; padding:6px 12px; margin-top:8px; font-size:11px; font-weight:700; color:var(--gold);">Leyenda: Cada 🌲 = 100 Árboles</div>
+      </div>
+      <div class="opciones-box" id="opts_p1_5">
+        <button class="opcion-btn" onclick="evaluar('p1_5', 0, false, this)"><div class="opcion-letra">A</div><span>30%</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_5', 1, true, this)"><div class="opcion-letra">B</div><span>50%</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_5', 2, false, this)"><div class="opcion-letra">C</div><span>60%</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_5', 3, false, this)"><div class="opcion-letra">D Glauben</div><span>75%</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p1_5"></div>
+    </div>
+
+    <!-- P1.6 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 6 de 6 · Pictogramas</span></div>
+      <div class="ejercicio-pregunta">Con base en la gráfica de árboles anterior, si cada árbol plantado absorbe 20 kg de CO₂ al año, ¿cuántos kg absorbe la Brigada C?</div>
+      <div class="opciones-box" id="opts_p1_6">
+        <button class="opcion-btn" onclick="evaluar('p1_6', 0, false, this)"><div class="opcion-letra">A</div><span>5,000 kg</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_6', 1, true, this)"><div class="opcion-letra">B</div><span>10,000 kg</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_6', 2, false, this)"><div class="opcion-letra">C</div><span>15,000 kg</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_6', 3, false, this)"><div class="opcion-letra">D</div><span>20,000 kg</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p1_6"></div>
+    </div>
+  </div>
+
+
+  <!-- ================================================================= -->
+  <!-- PESTAÑA 2: BARRAS Y PROMEDIOS (6 REACTIVOS)                      -->
+  <!-- ================================================================= -->
+  <div id="tab-barras" class="tab-pane">
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 1 de 6 · Gráficas de Barras</span></div>
+      <div class="ejercicio-pregunta">La gráfica muestra la venta de computadoras en miles de pesos. ¿Cuál fue el promedio mensual de ventas?</div>
+      <div class="gfx-container">
+        <svg width="100%" height="150" viewBox="0 0 360 150" style="max-width:400px;">
+          <line x1="30" y1="20" x2="30" y2="120" stroke="#7070a0" stroke-width="2"/>
+          <line x1="30" y1="120" x2="340" y2="120" stroke="#7070a0" stroke-width="2"/>
+          <rect x="50" y="60" width="30" height="60" fill="#7c3aed" rx="3"/><text x="58" y="53" fill="#eeeef8" font-size="10" font-weight="bold">30</text>
+          <rect x="120" y="20" width="30" height="100" fill="#ff6b35" rx="3"/><text x="128" y="13" fill="#eeeef8" font-size="10" font-weight="bold">50</text>
+          <rect x="190" y="40" width="30" height="80" fill="#7c3aed" rx="3"/><text x="198" y="33" fill="#eeeef8" font-size="10" font-weight="bold">40</text>
+          <rect x="260" y="80" width="30" height="40" fill="#7c3aed" rx="3"/><text x="268" y="73" fill="#eeeef8" font-size="10" font-weight="bold">20</text>
+          <text x="52" y="136" fill="#9090b8" font-size="10">Ene</text><text x="122" y="136" fill="#9090b8" font-size="10">Feb</text>
+          <text x="192" y="136" fill="#9090b8" font-size="10">Mar</text><text x="262" y="136" fill="#9090b8" font-size="10">Abr</text>
+        </svg>
+      </div>
+      <div class="opciones-box" id="opts_p2_1">
+        <button class="opcion-btn" onclick="evaluar('p2_1', 0, false, this)"><div class="opcion-letra">A</div><span>$30,000 MXN</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_1', 1, true, this)"><div class="opcion-letra">B</div><span>$35,000 MXN</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_1', 2, false, this)"><div class="opcion-letra">C</div><span>$40,000 MXN</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_1', 3, false, this)"><div class="opcion-letra">D</div><span>$140,000 MXN</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p2_1"></div>
+    </div>
+
+    <!-- P2.2 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 2 de 6 · Gráficas de Barras</span></div>
+      <div class="ejercicio-pregunta">Con base en la gráfica de computadoras anterior, ¿qué porcentaje de las ventas totales representa Febrero?</div>
+      <div class="opciones-box" id="opts_p2_2">
+        <button class="opcion-btn" onclick="evaluar('p2_2', 0, false, this)"><div class="opcion-letra">A</div><span>25.0%</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_2', 1, false, this)"><div class="opcion-letra">B</div><span>30.0%</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_2', 2, true, this)"><div class="opcion-letra">C</div><span>35.7%</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_2', 3, false, this)"><div class="opcion-letra">D</div><span>50.0%</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p2_2"></div>
+    </div>
+
+    <!-- P2.3 - P2.6 Bloque continuo -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 3 de 6 · Gráficas de Barras</span></div>
+      <div class="ejercicio-pregunta">¿En qué mes se registró la MODA de asistencia a salas de cine según la gráfica?</div>
+      <div class="gfx-container">
+        <svg width="100%" height="140" viewBox="0 0 300 140" style="max-width:380px;">
+          <line x1="30" y1="10" x2="30" y2="110" stroke="#7070a0" stroke-width="2"/>
+          <line x1="30" y1="110" x2="280" y2="110" stroke="#7070a0" stroke-width="2"/>
+          <rect x="50" y="50" width="25" height="60" fill="#7c3aed"/><text x="55" y="43" fill="#eeeef8" font-size="10">200</text>
+          <rect x="100" y="20" width="25" height="90" fill="#ff6b35"/><text x="105" y="13" fill="#eeeef8" font-size="10">450</text>
+          <rect x="150" y="50" width="25" height="60" fill="#7c3aed"/><text x="155" y="43" fill="#eeeef8" font-size="10">200</text>
+          <rect x="200" y="70" width="25" height="40" fill="#7c3aed"/><text x="205" y="63" fill="#eeeef8" font-size="10">100</text>
+          <text x="50" y="125" fill="#9090b8" font-size="10">Jun</text><text x="100" y="125" fill="#9090b8" font-size="10">Jul</text>
+          <text x="150" y="125" fill="#9090b8" font-size="10">Ago</text><text x="200" y="125" fill="#9090b8" font-size="10">Sep</text>
+        </svg>
+      </div>
+      <div class="opciones-box" id="opts_p2_3">
+        <button class="opcion-btn" onclick="evaluar('p2_3', 0, false, this)"><div class="opcion-letra">A</div><span>Junio</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_3', 1, true, this)"><div class="opcion-letra">B</div><span>Julio</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_3', 2, false, this)"><div class="opcion-letra">C</div><span>Agosto</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_3', 3, false, this)"><div class="opcion-letra">D</div><span>Septiembre</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p2_3"></div>
+    </div>
+
+    <!-- P2.4 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 4 de 6 · Gráficas de Barras</span></div>
+      <div class="ejercicio-pregunta">¿Cuál es la MEDIANA de la asistencia de cine entre los 4 meses mostrados?</div>
+      <div class="opciones-box" id="opts_p2_4">
+        <button class="opcion-btn" onclick="evaluar('p2_4', 0, false, this)"><div class="opcion-letra">A</div><span>150 personas</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_4', 1, true, this)"><div class="opcion-letra">B</div><span>200 personas</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_4', 2, false, this)"><div class="opcion-letra">C</div><span>237.5 personas</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_4', 3, false, this)"><div class="opcion-letra">D</div><span>450 personas</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p2_4"></div>
+    </div>
+
+    <!-- P2.5 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 5 de 6 · Gráficas de Barras</span></div>
+      <div class="ejercicio-pregunta">Si el boleto de cine cuesta $80 MXN, ¿cuánto dinero se recaudó en total durante Julio?</div>
+      <div class="opciones-box" id="opts_p2_5">
+        <button class="opcion-btn" onclick="evaluar('p2_5', 0, false, this)"><div class="opcion-letra">A</div><span>$16,000 MXN</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_5', 1, false, this)"><div class="opcion-letra">B</div><span>$32,000 MXN</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_5', 2, true, this)"><div class="opcion-letra">C</div><span>$36,000 MXN</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_5', 3, false, this)"><div class="opcion-letra">D</div><span>$45,000 MXN</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p2_5"></div>
+    </div>
+
+    <!-- P2.6 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 6 de 6 · Gráficas de Barras</span></div>
+      <div class="ejercicio-pregunta">¿Cuál fue la diferencia de ingresos entre el mes con mayor asistencia (Julio) y el de menor asistencia (Septiembre)?</div>
+      <div class="opciones-box" id="opts_p2_6">
+        <button class="opcion-btn" onclick="evaluar('p2_6', 0, false, this)"><div class="opcion-letra">A</div><span>$8,000 MXN</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_6', 1, false, this)"><div class="opcion-letra">B</div><span>$20,000 MXN</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_6', 2, true, this)"><div class="opcion-letra">C</div><span>$28,000 MXN</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_6', 3, false, this)"><div class="opcion-letra">D</div><span>$35,000 MXN</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p2_6"></div>
+    </div>
+  </div>
+
+
+  <!-- ================================================================= -->
+  <!-- PESTAÑA 3: LÍNEAS Y RANGOS (6 REACTIVOS)                         -->
+  <!-- ================================================================= -->
+  <div id="tab-lineas" class="tab-pane">
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 1 de 6 · Gráficas de Líneas</span></div>
+      <div class="ejercicio-pregunta">¿Cuál es el RANGO de temperatura (°C) registrado a lo largo del día según la gráfica?</div>
+      <div class="gfx-container">
+        <svg width="100%" height="140" viewBox="0 0 360 140" style="max-width:400px;">
+          <line x1="30" y1="10" x2="30" y2="110" stroke="#7070a0" stroke-width="2"/>
+          <line x1="30" y1="110" x2="340" y2="110" stroke="#7070a0" stroke-width="2"/>
+          <polyline points="50,90 120,70 190,20 260,50 320,80" fill="none" stroke="#ff6b35" stroke-width="3"/>
+          <circle cx="50" cy="90" r="4" fill="#fbbf24"/><text x="45" y="82" fill="#eeeef8" font-size="10">10°</text>
+          <circle cx="120" cy="70" r="4" fill="#fbbf24"/><text x="115" y="62" fill="#eeeef8" font-size="10">18°</text>
+          <circle cx="190" cy="20" r="4" fill="#fbbf24"/><text x="185" y="12" fill="#eeeef8" font-size="10">32°</text>
+          <circle cx="260" cy="50" r="4" fill="#fbbf24"/><text x="255" y="42" fill="#eeeef8" font-size="10">24°</text>
+          <circle cx="320" cy="80" r="4" fill="#fbbf24"/><text x="315" y="72" fill="#eeeef8" font-size="10">14°</text>
+          <text x="45" y="125" fill="#9090b8" font-size="10">6:00</text><text x="115" y="125" fill="#9090b8" font-size="10">9:00</text>
+          <text x="185" y="125" fill="#9090b8" font-size="10">12:00</text><text x="255" y="125" fill="#9090b8" font-size="10">15:00</text><text x="315" y="125" fill="#9090b8" font-size="10">18:00</text>
+        </svg>
+      </div>
+      <div class="opciones-box" id="opts_p3_1">
+        <button class="opcion-btn" onclick="evaluar('p3_1', 0, false, this)"><div class="opcion-letra">A</div><span>14 °C</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_1', 1, false, this)"><div class="opcion-letra">B</div><span>18 °C</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_1', 2, true, this)"><div class="opcion-letra">C</div><span>22 °C</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_1', 3, false, this)"><div class="opcion-letra">D</div><span>32 °C</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p3_1"></div>
+    </div>
+
+    <!-- P3.2 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 2 de 6 · Gráficas de Líneas</span></div>
+      <div class="ejercicio-pregunta">¿Entre qué horario se registró el MAYOR aumento de temperatura?</div>
+      <div class="opciones-box" id="opts_p3_2">
+        <button class="opcion-btn" onclick="evaluar('p3_2', 0, false, this)"><div class="opcion-letra">A</div><span>De 6:00 a 9:00 (+8°C)</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_2', 1, true, this)"><div class="opcion-letra">B</div><span>De 9:00 a 12:00 (+14°C)</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_2', 2, false, this)"><div class="opcion-letra">C</div><span>De 12:00 a 15:00 (-8°C)</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_2', 3, false, this)"><div class="opcion-letra">D</div><span>De 15:00 a 18:00 (-10°C)</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p3_2"></div>
+    </div>
+
+    <!-- P3.3 a P3.6 Continuación -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 3 de 6 · Gráficas de Líneas</span></div>
+      <div class="ejercicio-pregunta">Un atleta registró su velocidad de carrera (km/h) en 4 lapsos. ¿Cuál fue el descenso de velocidad entre el Lapso 2 y el Lapso 3?</div>
+      <div class="gfx-container">
+        <svg width="100%" height="130" viewBox="0 0 300 130" style="max-width:380px;">
+          <line x1="30" y1="10" x2="30" y2="100" stroke="#7070a0" stroke-width="2"/>
+          <line x1="30" y1="100" x2="280" y2="100" stroke="#7070a0" stroke-width="2"/>
+          <polyline points="60,30 120,10 180,70 240,40" fill="none" stroke="#7c3aed" stroke-width="3"/>
+          <circle cx="60" cy="30" r="4" fill="#fbbf24"/><text x="55" y="22" fill="#eeeef8" font-size="10">18 km/h</text>
+          <circle cx="120" cy="10" r="4" fill="#fbbf24"/><text x="115" y="8" fill="#eeeef8" font-size="10">22 km/h</text>
+          <circle cx="180" cy="70" r="4" fill="#fbbf24"/><text x="175" y="62" fill="#eeeef8" font-size="10">10 km/h</text>
+          <circle cx="240" cy="40" r="4" fill="#fbbf24"/><text x="235" y="32" fill="#eeeef8" font-size="10">16 km/h</text>
+          <text x="50" y="115" fill="#9090b8" font-size="10">Lapso 1</text><text x="110" y="115" fill="#9090b8" font-size="10">Lapso 2</text>
+          <text x="170" y="115" fill="#9090b8" font-size="10">Lapso 3</text><text x="230" y="115" fill="#9090b8" font-size="10">Lapso 4</text>
+        </svg>
+      </div>
+      <div class="opciones-box" id="opts_p3_3">
+        <button class="opcion-btn" onclick="evaluar('p3_3', 0, false, this)"><div class="opcion-letra">A</div><span>6 km/h</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_3', 1, false, this)"><div class="opcion-letra">B</div><span>8 km/h</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_3', 2, true, this)"><div class="opcion-letra">C</div><span>12 km/h</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_3', 3, false, this)"><div class="opcion-letra">D</div><span>14 km/h</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p3_3"></div>
+    </div>
+
+    <!-- P3.4 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 4 de 6 · Gráficas de Líneas</span></div>
+      <div class="ejercicio-pregunta">¿Cuál fue la velocidad promedio del atleta a lo largo de los 4 lapsos?</div>
+      <div class="opciones-box" id="opts_p3_4">
+        <button class="opcion-btn" onclick="evaluar('p3_4', 0, false, this)"><div class="opcion-letra">A</div><span>14 km/h</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_4', 1, true, this)"><div class="opcion-letra">B</div><span>16.5 km/h</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_4', 2, false, this)"><div class="opcion-letra">C</div><span>18 km/h</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_4', 3, false, this)"><div class="opcion-letra">D</div><span>22 km/h</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p3_4"></div>
+    </div>
+
+    <!-- P3.5 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 5 de 6 · Gráficas de Líneas</span></div>
+      <div class="ejercicio-pregunta">¿Cuál es el RANGO de la velocidad del atleta?</div>
+      <div class="opciones-box" id="opts_p3_5">
+        <button class="opcion-btn" onclick="evaluar('p3_5', 0, false, this)"><div class="opcion-letra">A</div><span>10 km/h</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_5', 1, true, this)"><div class="opcion-letra">B</div><span>12 km/h</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_5', 2, false, this)"><div class="opcion-letra">C</div><span>16 km/h</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_5', 3, false, this)"><div class="opcion-letra">D</div><span>22 km/h</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p3_5"></div>
+    </div>
+
+    <!-- P3.6 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 6 de 6 · Gráficas de Líneas</span></div>
+      <div class="ejercicio-pregunta">Si en el Lapso 5 el atleta aumentó un 50% su velocidad con respecto al Lapso 3 (10 km/h), ¿cuál fue su velocidad final?</div>
+      <div class="opciones-box" id="opts_p3_6">
+        <button class="opcion-btn" onclick="evaluar('p3_6', 0, false, this)"><div class="opcion-letra">A</div><span>12 km/h</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_6', 1, true, this)"><div class="opcion-letra">B</div><span>15 km/h</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_6', 2, false, this)"><div class="opcion-letra">C</div><span>18 km/h</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_6', 3, false, this)"><div class="opcion-letra">D</div><span>20 km/h</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p3_6"></div>
+    </div>
+  </div>
+
+
+  <!-- ================================================================= -->
+  <!-- PESTAÑA 4: SECTORES CIRCULARES Y ÁNGULOS (6 REACTIVOS)           -->
+  <!-- ================================================================= -->
+  <div id="tab-pastel" class="tab-pane">
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 1 de 6 · Sectores Circulares</span></div>
+      <div class="ejercicio-pregunta">En una encuesta sobre lenguajes de programación a 800 personas, ¿cuántos eligieron Python (50%)?</div>
+      <div class="gfx-container">
+        <div style="width:130px; height:130px; border-radius:50%; background: conic-gradient(#7c3aed 0% 50%, #ff6b35 50% 75%, #fbbf24 75% 100%);"></div>
+        <div style="display:flex; gap:12px; margin-top:12px; font-size:11px; font-weight:700;">
+          <span style="color:#7c3aed;">■ Python (50%)</span>
+          <span style="color:#ff6b35;">■ JS (25%)</span>
+          <span style="color:#fbbf24;">■ C++ (25%)</span>
+        </div>
+      </div>
+      <div class="opciones-box" id="opts_p4_1">
+        <button class="opcion-btn" onclick="evaluar('p4_1', 0, false, this)"><div class="opcion-letra">A</div><span>200 personas</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_1', 1, true, this)"><div class="opcion-letra">B</div><span>400 personas</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_1', 2, false, this)"><div class="opcion-letra">C</div><span>500 personas</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_1', 3, false, this)"><div class="opcion-letra">D</div><span>600 personas</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p4_1"></div>
+    </div>
+
+    <!-- P4.2 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 2 de 6 · Sectores Circulares</span></div>
+      <div class="ejercicio-pregunta">¿Cuántos GRADOS del círculo corresponden a la sección de JavaScript (25%)?</div>
+      <div class="opciones-box" id="opts_p4_2">
+        <button class="opcion-btn" onclick="evaluar('p4_2', 0, false, this)"><div class="opcion-letra">A</div><span>45°</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_2', 1, true, this)"><div class="opcion-letra">B</div><span>90°</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_2', 2, false, this)"><div class="opcion-letra">C</div><span>120°</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_2', 3, false, this)"><div class="opcion-letra">D</div><span>180°</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p4_2"></div>
+    </div>
+
+    <!-- P4.3 a P4.6 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 3 de 6 · Sectores Circulares</span></div>
+      <div class="ejercicio-pregunta">Una empresa distribuye su presupuesto mensual de $120,000 MXN según la gráfica. ¿Cuánto dinero se destina a Marketing (30%)?</div>
+      <div class="gfx-container">
+        <div style="width:130px; height:130px; border-radius:50%; background: conic-gradient(#059669 0% 40%, #ff6b35 40% 70%, #0ea5e9 70% 100%);"></div>
+        <div style="display:flex; gap:12px; margin-top:12px; font-size:11px; font-weight:700;">
+          <span style="color:#059669;">■ Salarios (40%)</span>
+          <span style="color:#ff6b35;">■ Marketing (30%)</span>
+          <span style="color:#0ea5e9;">■ Renta (30%)</span>
+        </div>
+      </div>
+      <div class="opciones-box" id="opts_p4_3">
+        <button class="opcion-btn" onclick="evaluar('p4_3', 0, false, this)"><div class="opcion-letra">A</div><span>$30,000 MXN</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_3', 1, true, this)"><div class="opcion-letra">B</div><span>$36,000 MXN</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_3', 2, false, this)"><div class="opcion-letra">C</div><span>$40,000 MXN</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_3', 3, false, this)"><div class="opcion-letra">D</div><span>$48,000 MXN</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p4_3"></div>
+    </div>
+
+    <!-- P4.4 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 4 de 6 · Sectores Circulares</span></div>
+      <div class="ejercicio-pregunta">¿Cuántos GRADOS del círculo representa la sección de Salarios (40%)?</div>
+      <div class="opciones-box" id="opts_p4_4">
+        <button class="opcion-btn" onclick="evaluar('p4_4', 0, false, this)"><div class="opcion-letra">A</div><span>100°</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_4', 1, false, this)"><div class="opcion-letra">B</div><span>120°</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_4', 2, true, this)"><div class="opcion-letra">C</div><span>144°</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_4', 3, false, this)"><div class="opcion-letra">D</div><span>160°</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p4_4"></div>
+    </div>
+
+    <!-- P4.5 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 5 de 6 · Sectores Circulares</span></div>
+      <div class="ejercicio-pregunta">Si el ángulo de la sección de Renta equivale a 108°, ¿a qué porcentaje corresponde?</div>
+      <div class="opciones-box" id="opts_p4_5">
+        <button class="opcion-btn" onclick="evaluar('p4_5', 0, false, this)"><div class="opcion-letra">A</div><span>25%</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_5', 1, true, this)"><div class="opcion-letra">B</div><span>30%</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_5', 2, false, this)"><div class="opcion-letra">C</div><span>35%</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_5', 3, false, this)"><div class="opcion-letra">D</div><span>40%</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p4_5"></div>
+    </div>
+
+    <!-- P4.6 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 6 de 6 · Sectores Circulares</span></div>
+      <div class="ejercicio-pregunta">¿Cuánto dinero suman juntos Salarios (40%) y Renta (30%) del presupuesto total de $120,000 MXN?</div>
+      <div class="opciones-box" id="opts_p4_6">
+        <button class="opcion-btn" onclick="evaluar('p4_6', 0, false, this)"><div class="opcion-letra">A</div><span>$70,000 MXN</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_6', 1, true, this)"><div class="opcion-letra">B</div><span>$84,000 MXN</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_6', 2, false, this)"><div class="opcion-letra">C</div><span>$90,000 MXN</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_6', 3, false, this)"><div class="opcion-letra">D</div><span>$96,000 MXN</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p4_6"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Banco de soluciones paso a paso
+const explicaciones = {
+  p1_1: "Marzo = 6 íconos × 50 = 300. Enero = 2 íconos × 50 = 100. Diferencia = 300 - 100 = 200 autos más.",
+  p1_2: "Suma total de íconos = 2 + 4 + 6 = 12 íconos. Total = 12 × 50 = 600 autos.",
+  p1_3: "Semana 1 = 3 × 80 = 240. Semana 2 = 5 × 80 = 400. Total = 240 + 400 = 640 paquetes.",
+  p1_4: "Se entregaron 400 paquetes en la Semana 2. Meta = 500. Faltan 500 - 400 = 100 paquetes.",
+  p1_5: "A = 2, B = 3, C = 5 íconos. Total = 10 íconos. A + B = 5 íconos (5 / 10 = 50%).",
+  p1_6: "Brigada C plantó 5 íconos × 100 = 500 árboles. Absorción = 500 × 20 kg = 10,000 kg de CO₂.",
+
+  p2_1: "Suma = 30 + 50 + 40 + 20 = 140 (miles). Dividido entre 4 meses = 35 (miles) = $35,000 MXN.",
+  p2_2: "Febrero = 50. Total = 140. Porcentaje = (50 / 140) × 100 = 35.7%.",
+  p2_3: "La moda es el valor con la frecuencia más alta: Julio con 450 asistentes.",
+  p2_4: "Datos ordenados: 100, 200, 200, 450. La mediana es el promedio de los valores centrales: (200 + 200)/2 = 200.",
+  p2_5: "Julio = 450 personas × $80 = $36,000 MXN.",
+  p2_6: "Julio = $36,000. Septiembre = 100 × $80 = $8,000. Diferencia = 36,000 - 8,000 = $28,000 MXN.",
+
+  p3_1: "Rango = Máximo - Mínimo = 32 °C - 10 °C = 22 °C.",
+  p3_2: "De 9:00 (18°C) a 12:00 (32°C) subió 14°C, siendo la pendiente más pronunciada.",
+  p3_3: "Lapso 2 = 22 km/h. Lapso 3 = 10 km/h. Descenso = 22 - 10 = 12 km/h.",
+  p3_4: "Suma = 18 + 22 + 10 + 16 = 66. Promedio = 66 / 4 = 16.5 km/h.",
+  p3_5: "Rango = Velocidad Máxima (22) - Mínima (10) = 12 km/h.",
+  p3_6: "Lapso 3 = 10 km/h. Incremento del 50% = 5 km/h. Velocidad final = 10 + 5 = 15 km/h.",
+
+  p4_1: "800 personas × 0.50 = 400 personas.",
+  p4_2: "360° × 0.25 = 90°.",
+  p4_3: "$120,000 MXN × 0.30 = $36,000 MXN.",
+  p4_4: "360° × 0.40 = 144°.",
+  p4_5: "Porcentaje = (108° / 360°) × 100 = 30%.",
+  p4_6: "40% + 30% = 70%. $120,000 × 0.70 = $84,000 MXN."
+};
+
+// Cambiar pestañas
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+
+  if(event && event.target) event.target.classList.add('active');
+  const target = document.getElementById(tabId);
+  if(target) target.classList.add('active');
+}
+
+// Evaluar cada pregunta
+function evaluar(id, idxOpt, esCorrecta, btnElem) {
+  const boxOpts = document.getElementById(`opts_${id}`);
+  const feedback = document.getElementById(`fb_${id}`);
+
+  // Deshabilitar botones de esa pregunta
+  boxOpts.querySelectorAll('.opcion-btn').forEach(btn => {
+    btn.style.pointerEvents = 'none';
+  });
+
+  if (esCorrecta) {
+    btnElem.classList.add('correct');
+    feedback.style.color = '#34d399';
+    feedback.innerHTML = `<i class="fa-solid fa-circle-check"></i> <strong>¡Correcto!</strong><br/>${explicaciones[id]}`;
+  } else {
+    btnElem.classList.add('incorrect');
+    feedback.style.color = '#fb7185';
+    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> <strong>Incorrecto.</strong><br/>${explicaciones[id]}`;
+  }
+  feedback.style.display = 'block';
+}
+</script>
+
+</body>
+</html>
