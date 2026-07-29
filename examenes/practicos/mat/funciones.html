@@ -1,306 +1,592 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PrepMaster: Álgebra y Gráficas</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true
-            },
-            options: {
-                enableMenu: false
-            }
-        };
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
-        
-        body { font-family: 'Quicksand', sans-serif; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        
-        .explanation { display: none; }
-        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
-        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
-        
-        .opt-btn {
-            transition: all 0.2s ease;
-            border: 2px solid #e2e8f0;
-        }
-        .opt-btn:hover:not(:disabled) {
-            border-color: #6366f1;
-            background-color: #f8fafc;
-        }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>PrepMaster PAA — Práctica: Funciones y Traslaciones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- MathJax para fórmulas -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-        .category-card {
-            transition: transform 0.2s;
-        }
-        .category-card:hover {
-            transform: translateY(-2px);
-        }
-    </style>
+<style>
+  :root{
+    --bg:#080810;--surface:#0f0f1a;--surface2:#161624;--surface3:#1e1e30;
+    --border:#ffffff08;--border-bright:#ffffff14;
+    --text:#eeeef8;--muted:#7070a0;--mat:#ff6b35;--gold:#fbbf24;--accent:#7c3aed;
+    --radius-sm:10px;--radius-md:16px;--radius-lg:22px;
+  }
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;margin:0;padding:20px 16px;-webkit-font-smoothing:antialiased;}
+  .container{max-width:850px;margin:0 auto;}
+  
+  .header-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:var(--radius-lg);padding:28px 24px;margin-bottom:20px;text-align:center;position:relative;overflow:hidden;}
+  .header-card::before{content:'';position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:radial-gradient(circle,#ff6b3525 0%,transparent 70%);pointer-events:none;}
+  .badge-area{display:inline-block;padding:4px 12px;background:#ff6b3518;border:1px solid #ff6b3535;border-radius:100px;font-size:11px;font-weight:700;color:var(--mat);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+  .title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:8px;}
+  .subtitle{color:var(--muted);font-size:13.5px;max-width:580px;margin:0 auto;line-height:1.5;}
+
+  /* PESTAÑAS (TABS) */
+  .tabs-bar{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:20px;}
+  .tab-btn{padding:10px 18px;border-radius:12px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all 0.2s;}
+  .tab-btn:hover{color:var(--text);border-color:var(--border-bright);}
+  .tab-btn.active{background:linear-gradient(135deg,var(--mat),#e65c24);color:white;border-color:transparent;box-shadow:0 4px 16px #ff6b3540;}
+
+  .tab-pane{display:none;animation:fadeIn 0.25s ease;}
+  .tab-pane.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  /* Tarjeta de Ejercicio */
+  .ejercicio-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:22px;margin-bottom:20px;}
+  .ejercicio-header{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--gold);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+  .ejercicio-pregunta{font-size:14.5px;font-weight:600;line-height:1.5;margin-bottom:16px;color:var(--text);}
+
+  /* Gráficas */
+  .gfx-container{background:#161624;border:1px solid var(--border-bright);border-radius:14px;padding:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:16px;}
+
+  /* Opciones de respuesta */
+  .opciones-box{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:14px;}
+  .opcion-btn{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s;text-align:left;font-size:14px;color:var(--text);}
+  .opcion-btn:hover{border-color:var(--mat);background:var(--surface3);}
+  .opcion-letra{width:28px;height:28px;border-radius:8px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Syne',sans-serif;color:var(--muted);flex-shrink:0;}
+  
+  .opcion-btn.correct{background:#05966920!important;border-color:#10b981!important;color:#34d399!important;}
+  .opcion-btn.correct .opcion-letra{background:#10b981;color:white;}
+  .opcion-btn.incorrect{background:#e11d4820!important;border-color:#f43f5e!important;color:#fb7185!important;}
+  .opcion-btn.incorrect .opcion-letra{background:#f43f5e;color:white;}
+
+  .feedback-box{display:none;padding:14px;background:var(--surface3);border-radius:12px;border-left:4px solid var(--mat);font-size:13px;line-height:1.6;color:var(--text);margin-top:12px;}
+</style>
 </head>
-<body class="bg-slate-50 min-h-screen pb-12">
+<body>
 
-    <!-- Header -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">
-                    PrepMaster
-                </div>
-                <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
-                <h1 class="font-bold text-slate-500 text-sm hidden sm:block italic">Módulo de Álgebra Avanzada</h1>
-            </div>
-            <div class="flex gap-4 items-center">
-                <div class="text-right">
-                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
-                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
-                </div>
-                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors" title="Reiniciar">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                </button>
-            </div>
-        </div>
-    </header>
+<div class="container">
+  
+  <!-- HEADER -->
+  <div class="header-card">
+    <span class="badge-area">Ejercicios Prácticos · Matemáticas</span>
+    <h1 class="title">Funciones y Traslaciones</h1>
+    <p class="subtitle">Resuelve los 6 ejercicios prácticos de cada pestaña para dominar la evaluación simple, composición numérica, algebraica y traslación gráfica.</p>
+  </div>
 
-    <main class="max-w-5xl mx-auto px-4 mt-8">
-        
-        <!-- Tabs Navigation -->
-        <nav class="flex flex-wrap gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl">
-            <button onclick="showTab('criterios')" id="btn-criterios" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all bg-white shadow-sm text-indigo-600">
-                Criterios Ec.
-            </button>
-            <button onclick="showTab('inecuaciones')" id="btn-inecuaciones" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
-                Inecuaciones
-            </button>
-            <button onclick="showTab('funciones')" id="btn-funciones" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
-                Funciones
-            </button>
-            <button onclick="showTab('sustitucion')" id="btn-sustitucion" class="tab-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all text-slate-600 hover:bg-white/50">
-                Sustitución
-            </button>
-        </nav>
+  <!-- NAVEGACIÓN POR PESTAÑAS (TABS) -->
+  <div class="tabs-bar">
+    <button class="tab-btn active" onclick="switchTab('tab-simple')">🔢 1. Función Simple (6)</button>
+    <button class="tab-btn" onclick="switchTab('tab-comp-num')">🔄 2. Composición f(g(k)) (6)</button>
+    <button class="tab-btn" onclick="switchTab('tab-comp-alg')">🧩 3. Composición f(g(x)) (6)</button>
+    <button class="tab-btn" onclick="switchTab('tab-tras-simple')">↔️ 4. Traslaciones Simples (6)</button>
+    <button class="tab-btn" onclick="switchTab('tab-tras-vertice')">🎯 5. Traslación de Vértices (6)</button>
+  </div>
 
-        <!-- Topic Banner -->
-        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl shadow-indigo-100 relative overflow-hidden">
-            <div class="relative z-10">
-                <h3 id="topic-title" class="text-2xl font-bold mb-2 text-white">Cargando tema...</h3>
-                <div id="topic-text" class="text-indigo-100 text-sm leading-relaxed max-w-4xl"></div>
-            </div>
-            <div class="absolute right-0 top-0 opacity-10 transform translate-x-1/4 -translate-y-1/4 scale-150">
-                <svg width="150" height="150" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 14H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2z"/></svg>
-            </div>
-        </div>
 
-        <!-- Content Containers -->
-        <div id="criterios" class="tab-content active space-y-6"></div>
-        <div id="inecuaciones" class="tab-content space-y-6"></div>
-        <div id="funciones" class="tab-content space-y-6"></div>
-        <div id="sustitucion" class="tab-content space-y-6"></div>
+  <!-- ================================================================= -->
+  <!-- PESTAÑA 1: FUNCIÓN SIMPLE (6 REACTIVOS)                           -->
+  <!-- ================================================================= -->
+  <div id="tab-simple" class="tab-pane active">
+    <!-- P1.1 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 1 de 6 · Función Simple</span></div>
+      <div class="ejercicio-pregunta">Si $f(x) = 3x^2 - 4x + 1$, ¿cuál es el valor de $f(-3)$?</div>
+      <div class="opciones-box" id="opts_p1_1">
+        <button class="opcion-btn" onclick="evaluar('p1_1', 0, false, this)"><div class="opcion-letra">A</div><span>$14$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_1', 1, false, this)"><div class="opcion-letra">B</div><span>$28$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_1', 2, true, this)"><div class="opcion-letra">C</div><span>$40$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_1', 3, false, this)"><div class="opcion-letra">D</div><span>$52$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p1_1"></div>
+    </div>
 
-    </main>
+    <!-- P1.2 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 2 de 6 · Función Simple</span></div>
+      <div class="ejercicio-pregunta">Dada la función $g(x) = \frac{x^2 - 4}{x + 3}$, ¿cuál es el valor de $g(-5)$?</div>
+      <div class="opciones-box" id="opts_p1_2">
+        <button class="opcion-btn" onclick="evaluar('p1_2', 0, false, this)"><div class="opcion-letra">A</div><span>$10.5$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_2', 1, false, this)"><div class="opcion-letra">B</div><span>$-7$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_2', 2, true, this)"><div class="opcion-letra">C</div><span>$-10.5$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_2', 3, false, this)"><div class="opcion-letra">D</div><span>$-21$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p1_2"></div>
+    </div>
 
-    <script>
-        const topicsInfo = {
-            criterios: {
-                title: "Criterios de Ecuaciones",
-                desc: `Este tema consiste en encontrar el valor de una expresión compleja a partir de una ecuación simple. No necesitas despejar la variable; <b>observa la relación</b> entre los coeficientes (si son el doble, la mitad, o una suma directa).`
-            },
-            inecuaciones: {
-                title: "Inecuaciones y Desigualdades",
-                desc: `<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                    <div class="bg-white/10 p-3 rounded-xl border border-white/20 text-sm">
-                        <b>Regla Crítica:</b> Si multiplicas o divides ambos lados por un número <b>negativo</b>, el signo de la desigualdad ($\small{<, >}$) <b>se invierte</b>.
-                    </div>
-                    <div class="bg-white/10 p-3 rounded-xl border border-white/20 text-sm">
-                        <b>Intervalos:</b> Parentesis $(\small{x, y})$ indican "abierto" (no incluye), Corchetes $[\small{x, y}]$ indican "cerrado" (incluye el valor).
-                    </div>
-                </div>`
-            },
-            funciones: {
-                title: "Funciones y Gráficas",
-                desc: `Una función $f(x)$ es una regla que asigna un valor a cada $x$.<br>
-                1. <b>Evaluación:</b> Sustituye la $x$ por el número dado.<br>
-                2. <b>Discontinuidad:</b> Una función es discontinua (o no tiene valor real) cuando el <b>denominador se hace cero</b>.`
-            },
-            sustitucion: {
-                title: "Sustitución Algebraica",
-                desc: "Reemplaza las letras por sus valores numéricos y resuelve la aritmética resultante. ¡Presta atención a los signos negativos!"
-            }
-        };
+    <!-- P1.3 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 3 de 6 · Función Simple</span></div>
+      <div class="ejercicio-pregunta">Si $f(a) = 15$ para la función $f(x) = 4x - 5$, ¿cuál es el valor de $a$?</div>
+      <div class="opciones-box" id="opts_p1_3">
+        <button class="opcion-btn" onclick="evaluar('p1_3', 0, false, this)"><div class="opcion-letra">A</div><span>$2.5$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_3', 1, false, this)"><div class="opcion-letra">B</div><span>$4$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_3', 2, true, this)"><div class="opcion-letra">C</div><span>$5$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_3', 3, false, this)"><div class="opcion-letra">D</div><span>$55$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p1_3"></div>
+    </div>
 
-        const data = {
-            criterios: [
-                { q: "Si $4m + 2n = 14$, ¿a qué es igual $8m + 4n$?", o: ["20", "24", "26", "28"], a: 3, exp: "<b>Análisis PrepMaster:</b><br>Observamos que la expresión $8m + 4n$ es exactamente el <b>doble</b> de la original ($4m + 2n$).<br>Multiplicamos toda la ecuación por 2: $2(4m + 2n) = 2(14) = 28$." },
-                { q: "Si $8a - 10b = 28$, ¿a qué es igual $4a - 5b$?", o: ["7", "14", "24", "26"], a: 1, exp: "<b>Análisis PrepMaster:</b><br>Observamos que $4a - 5b$ es la <b>mitad</b> de la expresión original.<br>Dividimos toda la ecuación entre 2: $28 / 2 = 14$." },
-                { q: "Si $12x = 40$, ¿a qué es igual $9x$?", o: ["14", "20", "30", "40"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>1. Hallamos el valor de $x$: $x = 40/12 = 10/3$.<br>2. Sustituimos en la expresión pedida: $9(10/3)$.<br>3. Resolvemos: $90/3 = 30$." },
-                { q: "Si $18k + 6j = 84$, ¿a qué es igual $6k + 2j$?", o: ["18", "24", "28", "46"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>Observamos que $6k + 2j$ es la <b>tercera parte</b> de $18k + 6j$.<br>Dividimos el resultado total entre 3: $84 / 3 = 28$." },
-                { q: "Si $8d - 12f = -120$, ¿a qué es igual $24d - 36f$?", o: ["-360", "-240", "-120", "-40"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>La nueva expresión es el <b>triple</b> de la original ($8 \\times 3 = 24$, $12 \\times 3 = 36$).<br>Multiplicamos el resultado por 3: $-120 \\times 3 = -360$." },
-                { q: "Si $2x^4y^2 = 36$ y $xy = 4$, ¿a qué es igual $2x^5y^3$?", o: ["40", "72", "144", "150"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>Para obtener $2x^5y^3$, debemos multiplicar $2x^4y^2$ por $xy$.<br>Sustituimos sus valores: $36 \\times 4 = 144$." },
-                { q: "Si $5a - 3b = 9$ y $2a + 2b = 6$, ¿a qué es igual $3a - 5b$?", o: ["3", "6", "9", "15"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>Restamos la segunda ecuación de la primera:<br>$(5a - 2a) - (3b + 2b) = 9 - 6$.<br>$3a - 5b = 3$." },
-                { q: "Si $3x + 3y = 6$, ¿a qué es igual $-x - y$?", o: ["-6", "-2", "2", "0"], a: 1, exp: "<b>Análisis PrepMaster:</b><br>1. Simplificamos dividiendo entre 3: $x + y = 2$.<br>2. Para obtener $-x - y$, multiplicamos por -1.<br>3. Resultado: $-2$." },
-                { q: "Si $3x + 5 = 4y$, ¿a qué es igual $15x - 20y$?", o: ["-25", "-5", "5", "25"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>1. Reordenamos: $3x - 4y = -5$.<br>2. La expresión pedida es 5 veces mayor ($15x - 20y$).<br>3. Multiplicamos: $-5 \\times 5 = -25$." },
-                { q: "Si $x + y = 10$, ¿cuánto vale $x^2 + 2xy + y^2$?", o: ["10", "20", "100", "200"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>Reconocemos el producto notable: $x^2 + 2xy + y^2 = (x+y)^2$.<br>Sustituimos: $(10)^2 = 100$." },
-                { q: "Si $2a - b = 5$, ¿cuánto vale $4a - 2b + 10$?", o: ["15", "20", "25", "30"], a: 1, exp: "<b>Análisis PrepMaster:</b><br>1. El doble de $2a-b$ es $10$ ($4a-2b$).<br>2. Sumamos el 10 extra: $10 + 10 = 20$." },
-                { q: "Si $w/3 = 5$, ¿cuánto vale $2w$?", o: ["10", "15", "30", "45"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>1. Despejamos $w$: $w = 15$.<br>2. Calculamos el doble: $2(15) = 30$." }
-            ],
-            inecuaciones: [
-                { q: "¿Resultado de $4x + 5 < -11$?", o: ["x < -4", "x < 4", "x > -4", "x > 4"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>1. $4x < -11 - 5 \\rightarrow 4x < -16$.<br>2. Dividimos entre 4: $x < -4$." },
-                { q: "¿Resultado de $3x - 3 > 6$?", o: ["x < 3", "x > 1", "x > 3", "x > 9"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>1. $3x > 9$.<br>2. Dividimos entre 3: $x > 3$." },
-                { q: "¿Resultado de $5x + 8 \\le 13$?", o: ["x < 1", "x \\le 1", "x \\ge 1", "x \\le -1"], a: 1, exp: "<b>Análisis PrepMaster:</b><br>1. $5x \\le 13 - 8 \\rightarrow 5x \\le 5$.<br>2. Dividimos: $x \\le 1$." },
-                { q: "Máximo entero de $\\frac{8x + 4}{3} < 2x + 2$?", o: ["-5", "-4", "-3", "1"], a: 3, exp: "<b>Análisis PrepMaster:</b><br>1. $8x + 4 < 3(2x + 2) \\rightarrow 8x + 4 < 6x + 6$.<br>2. $2x < 2 \\rightarrow x < 1$.<br>3. El máximo entero menor a 1 es 0." },
-                { q: "¿Resultado de $2(x + 4) \\le 12$?", o: ["x < 2", "x \\le 2", "x > 2", "x \\le 6"], a: 1, exp: "<b>Análisis PrepMaster:</b><br>1. Dividimos entre 2: $x + 4 \\le 6$.<br>2. Restamos 4: $x \\le 2$." },
-                { q: "Mínimo entero de $x + 4 < 3x - 2$?", o: ["1", "2", "3", "4"], a: 3, exp: "<b>Análisis PrepMaster:</b><br>1. $4 + 2 < 3x - x \\rightarrow 6 < 2x$.<br>2. $3 < x$ (o $x > 3$).<br>3. El primer entero mayor que 3 es 4." },
-                { q: "Mínimo entero de $2x + 2 \\ge x - 3$?", o: ["-5", "-4", "-3", "-2"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>1. $2x - x \\ge -3 - 2 \\rightarrow x \\ge -5$.<br>2. El mínimo valor que puede tomar es -5." },
-                { q: "Mínimo entero de $4x - 3 \\ge x + 6$?", o: ["1", "2", "3", "4"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>1. $3x \\ge 9 \\rightarrow x \\ge 3$.<br>2. El mínimo valor entero es 3." },
-                { q: "¿Resultado de $-2x > 8$?", o: ["x > -4", "x < -4", "x > 4", "x < 4"], a: 1, exp: "<b>¡REGLA DE ORO!:</b> Al dividir entre -2, el signo <b>cambia de dirección</b>.<br>$x < 8 / (-2) \\rightarrow x < -4$." },
-                { q: "¿Qué intervalo representa $x > 3$?", o: ["(3, ∞)", "[3, ∞)", "(-∞, 3)", "(-∞, 3]"], a: 0, exp: "Símbolo $>$ significa abierto (paréntesis) y hacia la derecha (infinito positivo): $(3, \\infty)$." },
-                { q: "¿Qué intervalo representa $-2 \\le x < 5$?", o: ["(-2, 5)", "[-2, 5]", "[-2, 5)", "(-2, 5]"], a: 2, exp: "$\le$ es cerrado $[$ y $<$ es abierto $)$. Por lo tanto: $[-2, 5)$." },
-                { q: "Resuelve: $10 - x < 12$", o: ["x < -2", "x > -2", "x < 2", "x > 2"], a: 1, exp: "$-x < 2$. Multiplicamos por -1 y <b>cambiamos signo</b>: $x > -2$." }
-            ],
-            funciones: [
-                { q: "Valor de $f(x) = 5x + 10$ para $x = 2$:", o: ["20", "32", "38", "40"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>Sustituimos $x$: $f(2) = 5(2) + 10 = 10 + 10 = 20$." },
-                { q: "Valor de $f(x) = x^2 - x$ para $x = -4$:", o: ["-12", "12", "16", "20"], a: 3, exp: "<b>Análisis PrepMaster:</b><br>$f(-4) = (-4)^2 - (-4) = 16 + 4 = 20$." },
-                { q: "Si $f(x) = -4^x$, ¿cuál es el valor de $f(3)$?", o: ["-64", "-16", "16", "64"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>El signo está fuera de la potencia: $-(4 \\times 4 \\times 4) = -64$." },
-                { q: "¿Qué valor hace discontinua a $f(x) = \\frac{2}{x - 3}$?", o: ["-3", "0", "3", "Ninguno"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>Buscamos cuando el denominador es cero: $x - 3 = 0 \\rightarrow x = 3$." },
-                { q: "¿En qué punto no tiene valor real $f(x) = \\frac{x+4}{x-8}$?", o: ["-8", "-4", "4", "8"], a: 3, exp: "<b>Análisis PrepMaster:</b><br>La división entre cero no existe. Si $x = 8$, el denominador es cero." },
-                { q: "Valor de $f(x) = x(2^x)$ para $x = 3$:", o: ["8", "16", "24", "32"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>$f(3) = 3 \\cdot (2^3) = 3 \\cdot 8 = 24$." },
-                { q: "Si $f(x) = 3x - 1$, halla $f(4) + f(0)$:", o: ["10", "11", "12", "13"], a: 0, exp: "$f(4) = 11$, $f(0) = -1$. Suma: $11 - 1 = 10$." },
-                { q: "¿Qué tipo de función es $f(x) = x^2 + 5$?", o: ["Lineal", "Cuadrática", "Cúbica", "Constante"], a: 1, exp: "Como el mayor exponente de $x$ es 2, es una función cuadrática (parábola)." },
-                { q: "Dada la tabulación x={1,2}, y={5,10}, ¿qué función es?", o: ["f(x)=x+4", "f(x)=5x", "f(x)=x^2+4", "f(x)=10x"], a: 1, exp: "Cada valor de $y$ es 5 veces el de $x$. Por lo tanto, $f(x) = 5x$." },
-                { q: "Valor de $f(x) = \\sqrt{x+9}$ para $x = 16$:", o: ["4", "5", "7", "25"], a: 1, exp: "$\\sqrt{16+9} = \\sqrt{25} = 5$." },
-                { q: "Si $f(x) = 2x$, ¿cuánto vale $f(f(3))$?", o: ["6", "12", "18", "24"], a: 1, exp: "$f(3) = 6$. Ahora evaluamos $f(6) = 12$." },
-                { q: "¿Cuál es la pendiente de $f(x) = -3x - 1$?", o: ["-3", "-1", "3", "1"], a: 0, exp: "En una función lineal $y=mx+b$, la pendiente es el coeficiente de $x$: $-3$." }
-            ],
-            sustitucion: [
-                { q: "Si $y=10$, entonces $y^2 - 10$ es:", o: ["0", "10", "90", "100"], a: 2, exp: "<b>Análisis PrepMaster:</b><br>1. Reemplazamos $y$ por $10$: $(10)^2 - 10$.<br>2. Elevamos al cuadrado: $10 \\times 10 = 100$.<br>3. Restamos: $100 - 10 = 90$." },
-                { q: "Si $m=-4$, entonces $m - 32$ es:", o: ["36", "28", "-28", "-36"], a: 3, exp: "<b>Análisis PrepMaster:</b><br>1. Sustituimos: $(-4) - 32$.<br>2. Como ambos son negativos, se suman y se mantiene el signo: $4 + 32 = 36$." },
-                { q: "Si $r=15$, entonces $-4(r - 20)$ es:", o: ["20", "15", "-15", "-20"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>1. Sustituimos: $15 - 20 = -5$.<br>2. Multiplicamos: $(-4) \\times (-5) = 20$." },
-                { q: "Si $x^3 - 5 = 22$, ¿cuánto vale $x+5$?", o: ["8", "14", "27", "32"], a: 0, exp: "<b>Análisis PrepMaster:</b><br>1. $x^3 = 27 \\rightarrow x = 3$.<br>2. $3 + 5 = 8$." },
-                { q: "Si $w=5$, ¿cuál es el valor de $w^2 + w + 10$?", o: ["20", "30", "40", "50"], a: 2, exp: "<b>Análisis:</b><br>$25 + 5 + 10 = 40$." },
-                { q: "Si $x=2$, halla $\\frac{8^x + 5^x - 9^x}{x}$", o: ["2", "4", "8", "92"], a: 1, exp: "<b>Análisis:</b><br>$(64 + 25 - 81)/2 = 8/2 = 4$." },
-                { q: "Si $j=4$ y $k=-2$, ¿cuánto vale $\\frac{j^2}{k^3}$?", o: ["-2", "-1/2", "1/2", "2"], a: 0, exp: "<b>Análisis:</b><br>$16 / (-8) = -2$." },
-                { q: "Si $wx=80$ y $z=10$, halla $\\frac{16z}{wx}$", o: ["2", "4", "20", "40"], a: 0, exp: "<b>Análisis:</b><br>$160 / 80 = 2$." },
-                { q: "Si $x=3$, ¿cuál es el resultado de $3^x - 4x$?", o: ["-3", "3", "12", "15"], a: 3, exp: "<b>Análisis:</b><br>$27 - 12 = 15$." },
-                { q: "Si $a=2, b=3$, halla $a^b + b^a$", o: ["12", "13", "17", "25"], a: 2, exp: "<b>Análisis:</b><br>$8 + 9 = 17$." },
-                { q: "Si $x=-1$, halla $2x^3 - 4x^2 + 5$:", o: ["-1", "3", "7", "11"], a: 0, exp: "$-2 - 4 + 5 = -1$." },
-                { q: "Si $x=1, y=2, z=3$, halla $x+y+z$:", o: ["4", "5", "6", "9"], a: 2, exp: "$1+2+3=6$." }
-            ]
-        };
+    <!-- P1.4 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 4 de 6 · Función Simple</span></div>
+      <div class="ejercicio-pregunta">Dada $h(x) = \sqrt{25 - x^2}$, ¿cuál es el valor de $h(4)$?</div>
+      <div class="opciones-box" id="opts_p1_4">
+        <button class="opcion-btn" onclick="evaluar('p1_4', 0, true, this)"><div class="opcion-letra">A</div><span>$3$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_4', 1, false, this)"><div class="opcion-letra">B</div><span>$5$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_4', 2, false, this)"><div class="opcion-letra">C</div><span>$9$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_4', 3, false, this)"><div class="opcion-letra">D</div><span>$21$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p1_4"></div>
+    </div>
 
-        let score = 0;
+    <!-- P1.5 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 5 de 6 · Función Simple</span></div>
+      <div class="ejercicio-pregunta">Si $f(x) = 2^x + 3$, ¿cuál es el valor de $f(4)$?</div>
+      <div class="opciones-box" id="opts_p1_5">
+        <button class="opcion-btn" onclick="evaluar('p1_5', 0, false, this)"><div class="opcion-letra">A</div><span>$11$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_5', 1, false, this)"><div class="opcion-letra">B</div><span>$14$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_5', 2, true, this)"><div class="opcion-letra">C</div><span>$19$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_5', 3, false, this)"><div class="opcion-letra">D</div><span>$35$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p1_5"></div>
+    </div>
 
-        function showTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => {
-                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
-                b.classList.add('text-slate-600', 'hover:bg-white/50');
-            });
-            
-            document.getElementById(tabId).classList.add('active');
-            const activeBtn = document.getElementById(`btn-${tabId}`);
-            activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+    <!-- P1.6 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 6 de 6 · Función Simple</span></div>
+      <div class="ejercicio-pregunta">Si $f(x) = x^3 - 2x$, ¿cuál es el resultado de $f(-2) + f(2)$?</div>
+      <div class="opciones-box" id="opts_p1_6">
+        <button class="opcion-btn" onclick="evaluar('p1_6', 0, true, this)"><div class="opcion-letra">A</div><span>$0$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_6', 1, false, this)"><div class="opcion-letra">B</div><span>$8$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_6', 2, false, this)"><div class="opcion-letra">C</div><span>$16$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p1_6', 3, false, this)"><div class="opcion-letra">D</div><span>$-8$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p1_6"></div>
+    </div>
+  </div>
 
-            const info = topicsInfo[tabId];
-            document.getElementById('topic-title').innerText = info.title;
-            document.getElementById('topic-text').innerHTML = info.desc;
 
-            if (window.MathJax) {
-                MathJax.typesetPromise();
-            }
-        }
+  <!-- ================================================================= -->
+  <!-- PESTAÑA 2: COMPOSICIÓN NUMÉRICA f(g(k)) (6 REACTIVOS)            -->
+  <!-- ================================================================= -->
+  <div id="tab-comp-num" class="tab-pane">
+    <!-- P2.1 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 1 de 6 · Composición Numérica</span></div>
+      <div class="ejercicio-pregunta">Si $f(x) = x^2 + 1$ y $g(x) = 2x - 3$, halla el valor de $f(g(4))$.</div>
+      <div class="opciones-box" id="opts_p2_1">
+        <button class="opcion-btn" onclick="evaluar('p2_1', 0, false, this)"><div class="opcion-letra">A</div><span>$17$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_1', 1, true, this)"><div class="opcion-letra">B</div><span>$26$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_1', 2, false, this)"><div class="opcion-letra">C</div><span>$33$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_1', 3, false, this)"><div class="opcion-letra">D</div><span>$35$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p2_1"></div>
+    </div>
 
-        function render() {
-            for (const cat in data) {
-                const container = document.getElementById(cat);
-                if (!container) continue;
-                container.innerHTML = '';
-                data[cat].forEach((item, i) => {
-                    const card = document.createElement('div');
-                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 category-card mb-6';
-                    
-                    let opts = '';
-                    item.o.forEach((opt, idx) => {
-                        opts += `<button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 flex items-center justify-between mb-2">
-                            <span>${String.fromCharCode(65 + idx)}) ${opt}</span>
-                        </button>`;
-                    });
+    <!-- P2.2 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 2 de 6 · Composición Numérica</span></div>
+      <div class="ejercicio-pregunta">Si $f(x) = x^2 + 2$ y $g(x) = 3x - 1$, halla $g(f(2))$.</div>
+      <div class="opciones-box" id="opts_p2_2">
+        <button class="opcion-btn" onclick="evaluar('p2_2', 0, true, this)"><div class="opcion-letra">A</div><span>$17$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_2', 1, false, this)"><div class="opcion-letra">B</div><span>$27$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_2', 2, false, this)"><div class="opcion-letra">C</div><span>$35$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_2', 3, false, this)"><div class="opcion-letra">D</div><span>$41$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p2_2"></div>
+    </div>
 
-                    card.innerHTML = `
-                        <div class="flex items-center gap-3 mb-4">
-                            <span class="text-[10px] font-black bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-full uppercase tracking-widest">Reto PrepMaster ${i+1}</span>
-                        </div>
-                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" id="box_${cat}_${i}">
-                            ${opts}
-                        </div>
-                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
-                            <div class="flex items-center gap-2 mb-3 text-indigo-800 font-bold uppercase text-[11px] tracking-widest">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
-                                Análisis PrepMaster
-                            </div>
-                            <div class="text-[14px] text-indigo-900 font-medium leading-relaxed italic">
-                                ${item.exp}
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-            }
-            if (window.MathJax) {
-                MathJax.typesetPromise();
-            }
-        }
+    <!-- P2.3 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 3 de 6 · Composición Numérica</span></div>
+      <div class="ejercicio-pregunta">Si $f(x) = 2x + 1$ y $g(x) = x^2 - 2$, ¿cuál es el valor de $g(f(3))$?</div>
+      <div class="opciones-box" id="opts_p2_3">
+        <button class="opcion-btn" onclick="evaluar('p2_3', 0, false, this)"><div class="opcion-letra">A</div><span>$12$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_3', 1, false, this)"><div class="opcion-letra">B</div><span>$23$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_3', 2, true, this)"><div class="opcion-letra">C</div><span>$47$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_3', 3, false, this)"><div class="opcion-letra">D</div><span>$49$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p2_3"></div>
+    </div>
 
-        function check(btn, ans, sel, id) {
-            const box = document.getElementById(`box_${id}`);
-            const buttons = box.querySelectorAll('.opt-btn');
-            const hint = document.getElementById(`hint_${id}`);
-            
-            buttons.forEach(b => b.disabled = true);
-            
-            if (sel === ans) { 
-                btn.classList.add('correct-opt'); 
-                score += 10;
-            } else { 
-                btn.classList.add('incorrect-opt'); 
-                buttons[ans].classList.add('correct-opt');
-                if(score > 0) score -= 2;
-            }
-            
-            hint.style.display = 'block';
-            
-            if (window.MathJax) {
-                MathJax.typesetPromise([hint]);
-            }
-            
-            updateScore();
-        }
+    <!-- P2.4 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 4 de 6 · Composición Numérica</span></div>
+      <div class="ejercicio-pregunta">Si $h(x) = x - 4$, halla el valor de $h(h(10))$.</div>
+      <div class="opciones-box" id="opts_p2_4">
+        <button class="opcion-btn" onclick="evaluar('p2_4', 0, true, this)"><div class="opcion-letra">A</div><span>$2$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_4', 1, false, this)"><div class="opcion-letra">B</div><span>$4$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_4', 2, false, this)"><div class="opcion-letra">C</div><span>$6$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_4', 3, false, this)"><div class="opcion-letra">D</div><span>$8$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p2_4"></div>
+    </div>
 
-        function updateScore() {
-            document.getElementById('global-score').innerText = score;
-        }
+    <!-- P2.5 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 5 de 6 · Composición Numérica</span></div>
+      <div class="ejercicio-pregunta">Si $f(x) = \sqrt{x}$ y $g(x) = 3x + 1$, halla $f(g(5))$.</div>
+      <div class="opciones-box" id="opts_p2_5">
+        <button class="opcion-btn" onclick="evaluar('p2_5', 0, false, this)"><div class="opcion-letra">A</div><span>$3.87$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_5', 1, true, this)"><div class="opcion-letra">B</div><span>$4$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_5', 2, false, this)"><div class="opcion-letra">C</div><span>$16$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_5', 3, false, this)"><div class="opcion-letra">D</div><span>$25$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p2_5"></div>
+    </div>
 
-        function resetAll() {
-            if(confirm('¿Reiniciar todo el entrenamiento?')) {
-                score = 0;
-                updateScore();
-                render();
-                showTab('criterios');
-            }
-        }
+    <!-- P2.6 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 6 de 6 · Composición Numérica</span></div>
+      <div class="ejercicio-pregunta">Si $f(x) = 2x$ y $g(x) = x^2 - 3$, ¿para qué valor positivo de $x$ se cumple que $g(f(x)) = 13$?</div>
+      <div class="opciones-box" id="opts_p2_6">
+        <button class="opcion-btn" onclick="evaluar('p2_6', 0, true, this)"><div class="opcion-letra">A</div><span>$2$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_6', 1, false, this)"><div class="opcion-letra">B</div><span>$4$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_6', 2, false, this)"><div class="opcion-letra">C</div><span>$8$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p2_6', 3, false, this)"><div class="opcion-letra">D</div><span>$16$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p2_6"></div>
+    </div>
+  </div>
 
-        window.onload = () => {
-            render();
-            showTab('criterios');
-        };
-    </script>
+
+  <!-- ================================================================= -->
+  <!-- PESTAÑA 3: COMPOSICIÓN ALGEBRAICA (6 REACTIVOS)                  -->
+  <!-- ================================================================= -->
+  <div id="tab-comp-alg" class="tab-pane">
+    <!-- P3.1 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 1 de 6 · Composición Algebraica</span></div>
+      <div class="ejercicio-pregunta">Si $f(x) = 4x - 5$ y $g(x) = x + 2$, ¿cuál es la expresión simplificada de $f(g(x))$?</div>
+      <div class="opciones-box" id="opts_p3_1">
+        <button class="opcion-btn" onclick="evaluar('p3_1', 0, false, this)"><div class="opcion-letra">A</div><span>$4x - 3$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_1', 1, true, this)"><div class="opcion-letra">B</div><span>$4x + 3$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_1', 2, false, this)"><div class="opcion-letra">C</div><span>$4x + 8$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_1', 3, false, this)"><div class="opcion-letra">D</div><span>$4x - 10$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p3_1"></div>
+    </div>
+
+    <!-- P3.2 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 2 de 6 · Composición Algebraica</span></div>
+      <div class="ejercicio-pregunta">Si $f(x) = 3x - 1$ y $g(x) = 2x + 4$, ¿cuál es la expresión simplificada de $g(f(x))$?</div>
+      <div class="opciones-box" id="opts_p3_2">
+        <button class="opcion-btn" onclick="evaluar('p3_2', 0, true, this)"><div class="opcion-letra">A</div><span>$6x + 2$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_2', 1, false, this)"><div class="opcion-letra">B</div><span>$6x + 11$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_2', 2, false, this)"><div class="opcion-letra">C</div><span>$6x + 3$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_2', 3, false, this)"><div class="opcion-letra">D</div><span>$6x - 2$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p3_2"></div>
+    </div>
+
+    <!-- P3.3 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 3 de 6 · Composición Algebraica</span></div>
+      <div class="ejercicio-pregunta">Si $f(x) = x^2$ y $g(x) = x - 3$, halla la expresión de $f(g(x))$.</div>
+      <div class="opciones-box" id="opts_p3_3">
+        <button class="opcion-btn" onclick="evaluar('p3_3', 0, false, this)"><div class="opcion-letra">A</div><span>$x^2 - 3$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_3', 1, true, this)"><div class="opcion-letra">B</div><span>$x^2 - 6x + 9$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_3', 2, false, this)"><div class="opcion-letra">C</div><span>$x^2 - 9$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_3', 3, false, this)"><div class="opcion-letra">D</div><span>$x^2 + 6x + 9$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p3_3"></div>
+    </div>
+
+    <!-- P3.4 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 4 de 6 · Composición Algebraica</span></div>
+      <div class="ejercicio-pregunta">Si $f(x) = x^2$ y $g(x) = x - 3$, halla la expresión de $g(f(x))$.</div>
+      <div class="opciones-box" id="opts_p3_4">
+        <button class="opcion-btn" onclick="evaluar('p3_4', 0, true, this)"><div class="opcion-letra">A</div><span>$x^2 - 3$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_4', 1, false, this)"><div class="opcion-letra">B</div><span>$x^2 - 6x + 9$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_4', 2, false, this)"><div class="opcion-letra">C</div><span>$x^2 + 3$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_4', 3, false, this)"><div class="opcion-letra">D</div><span>$(x - 3)^2$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p3_4"></div>
+    </div>
+
+    <!-- P3.5 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 5 de 6 · Composición Algebraica</span></div>
+      <div class="ejercicio-pregunta">Si $f(x) = 5x$ y $g(x) = \frac{x}{5}$, ¿cuál es el resultado de $f(g(x))$?</div>
+      <div class="opciones-box" id="opts_p3_5">
+        <button class="opcion-btn" onclick="evaluar('p3_5', 0, true, this)"><div class="opcion-letra">A</div><span>$x$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_5', 1, false, this)"><div class="opcion-letra">B</div><span>$5x$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_5', 2, false, this)"><div class="opcion-letra">C</div><span>$25x$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_5', 3, false, this)"><div class="opcion-letra">D</div><span>$1$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p3_5"></div>
+    </div>
+
+    <!-- P3.6 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 6 de 6 · Composición Algebraica</span></div>
+      <div class="ejercicio-pregunta">Si $f(x) = 2x + 3$, halla la expresión compuesta $f(f(x))$.</div>
+      <div class="opciones-box" id="opts_p3_6">
+        <button class="opcion-btn" onclick="evaluar('p3_6', 0, false, this)"><div class="opcion-letra">A</div><span>$4x + 6$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_6', 1, true, this)"><div class="opcion-letra">B</div><span>$4x + 9$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_6', 2, false, this)"><div class="opcion-letra">C</div><span>$4x^2 + 9$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p3_6', 3, false, this)"><div class="opcion-letra">D</div><span>$2x + 6$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p3_6"></div>
+    </div>
+  </div>
+
+
+  <!-- ================================================================= -->
+  <!-- PESTAÑA 4: TRASLACIONES SIMPLES (6 REACTIVOS)                     -->
+  <!-- ================================================================= -->
+  <div id="tab-tras-simple" class="tab-pane">
+    <!-- P4.1 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 1 de 6 · Traslaciones Simples</span></div>
+      <div class="ejercicio-pregunta">Si la gráfica de $f(x) = x^2$ se desplaza 4 unidades hacia ARRIBA, ¿cuál es la nueva función $g(x)$?</div>
+      <div class="opciones-box" id="opts_p4_1">
+        <button class="opcion-btn" onclick="evaluar('p4_1', 0, true, this)"><div class="opcion-letra">A</div><span>$g(x) = x^2 + 4$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_1', 1, false, this)"><div class="opcion-letra">B</div><span>$g(x) = x^2 - 4$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_1', 2, false, this)"><div class="opcion-letra">C</div><span>$g(x) = (x + 4)^2$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_1', 3, false, this)"><div class="opcion-letra">D</div><span>$g(x) = (x - 4)^2$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p4_1"></div>
+    </div>
+
+    <!-- P4.2 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 2 de 6 · Traslaciones Simples</span></div>
+      <div class="ejercicio-pregunta">Si la gráfica de $f(x) = x^2$ se desplaza 3 unidades hacia la DERECHA, ¿cuál es su nueva ecuación?</div>
+      <div class="opciones-box" id="opts_p4_2">
+        <button class="opcion-btn" onclick="evaluar('p4_2', 0, false, this)"><div class="opcion-letra">A</div><span>$g(x) = x^2 - 3$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_2', 1, false, this)"><div class="opcion-letra">B</div><span>$g(x) = (x + 3)^2$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_2', 2, true, this)"><div class="opcion-letra">C</div><span>$g(x) = (x - 3)^2$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_2', 3, false, this)"><div class="opcion-letra">D</div><span>$g(x) = 3x^2$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p4_2"></div>
+    </div>
+
+    <!-- P4.3 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 3 de 6 · Traslaciones Simples</span></div>
+      <div class="ejercicio-pregunta">Si la función $f(x) = x^2$ se traslada hasta tener la ecuación $g(x) = (x + 4)^2 - 1$, ¿cuál fue el movimiento aplicado?</div>
+      <div class="opciones-box" id="opts_p4_3">
+        <button class="opcion-btn" onclick="evaluar('p4_3', 0, false, this)"><div class="opcion-letra">A</div><span>4 a la derecha y 1 arriba</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_3', 1, true, this)"><div class="opcion-letra">B</div><span>4 a la izquierda y 1 abajo</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_3', 2, false, this)"><div class="opcion-letra">C</div><span>4 a la izquierda y 1 arriba</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_3', 3, false, this)"><div class="opcion-letra">D</div><span>4 a la derecha y 1 abajo</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p4_3"></div>
+    </div>
+
+    <!-- P4.4 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 4 de 6 · Traslaciones Simples</span></div>
+      <div class="ejercicio-pregunta">¿Qué cambio sufre la gráfica de $f(x)$ al transformarse en $g(x) = f(x) - 7$?</div>
+      <div class="opciones-box" id="opts_p4_4">
+        <button class="opcion-btn" onclick="evaluar('p4_4', 0, false, this)"><div class="opcion-letra">A</div><span>Se desplaza 7 unidades a la derecha</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_4', 1, false, this)"><div class="opcion-letra">B</div><span>Se desplaza 7 unidades a la izquierda</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_4', 2, true, this)"><div class="opcion-letra">C</div><span>Se desplaza 7 unidades hacia abajo</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_4', 3, false, this)"><div class="opcion-letra">D</div><span>Se desplaza 7 unidades hacia arriba</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p4_4"></div>
+    </div>
+
+    <!-- P4.5 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 5 de 6 · Traslaciones Simples</span></div>
+      <div class="ejercicio-pregunta">¿Qué cambio sufre la gráfica de $f(x)$ al transformarse en $g(x) = f(x + 5)$?</div>
+      <div class="opciones-box" id="opts_p4_5">
+        <button class="opcion-btn" onclick="evaluar('p4_5', 0, false, this)"><div class="opcion-letra">A</div><span>Se desplaza 5 unidades hacia arriba</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_5', 1, false, this)"><div class="opcion-letra">B</div><span>Se desplaza 5 unidades a la derecha</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_5', 2, true, this)"><div class="opcion-letra">C</div><span>Se desplaza 5 unidades a la izquierda</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_5', 3, false, this)"><div class="opcion-letra">D</div><span>Se desplaza 5 unidades hacia abajo</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p4_5"></div>
+    </div>
+
+    <!-- P4.6 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 6 de 6 · Traslaciones Simples</span></div>
+      <div class="ejercicio-pregunta">Si la gráfica $f(x) = x^3$ se mueve 2 unidades a la izquierda y 5 hacia arriba, ¿cuál es su nueva fórmula?</div>
+      <div class="opciones-box" id="opts_p4_6">
+        <button class="opcion-btn" onclick="evaluar('p4_6', 0, false, this)"><div class="opcion-letra">A</div><span>$g(x) = (x - 2)^3 + 5$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_6', 1, true, this)"><div class="opcion-letra">B</div><span>$g(x) = (x + 2)^3 + 5$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_6', 2, false, this)"><div class="opcion-letra">C</div><span>$g(x) = (x + 2)^3 - 5$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p4_6', 3, false, this)"><div class="opcion-letra">D</div><span>$g(x) = (x - 2)^3 - 5$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p4_6"></div>
+    </div>
+  </div>
+
+
+  <!-- ================================================================= -->
+  <!-- PESTAÑA 5: TRASLACIÓN DE VÉRTICES (6 REACTIVOS)                   -->
+  <!-- ================================================================= -->
+  <div id="tab-tras-vertice" class="tab-pane">
+    <!-- P5.1 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 1 de 6 · Traslación de Vértices</span></div>
+      <div class="ejercicio-pregunta">¿Dónde se ubica el vértice de la parábola $g(x) = (x + 5)^2 - 2$?</div>
+      <div class="opciones-box" id="opts_p5_1">
+        <button class="opcion-btn" onclick="evaluar('p5_1', 0, false, this)"><div class="opcion-letra">A</div><span>$(5, -2)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_1', 1, true, this)"><div class="opcion-letra">B</div><span>$(-5, -2)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_1', 2, false, this)"><div class="opcion-letra">C</div><span>$(-5, 2)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_1', 3, false, this)"><div class="opcion-letra">D</div><span>$(5, 2)$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p5_1"></div>
+    </div>
+
+    <!-- P5.2 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 2 de 6 · Traslación de Vértices</span></div>
+      <div class="ejercicio-pregunta">Si el punto $(3, 8)$ pertenece a la función $f(x)$, ¿por qué punto pasa $g(x) = f(x) - 5$?</div>
+      <div class="opciones-box" id="opts_p5_2">
+        <button class="opcion-btn" onclick="evaluar('p5_2', 0, false, this)"><div class="opcion-letra">A</div><span>$(-2, 8)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_2', 1, true, this)"><div class="opcion-letra">B</div><span>$(3, 3)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_2', 2, false, this)"><div class="opcion-letra">C</div><span>$(3, 13)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_2', 3, false, this)"><div class="opcion-letra">D</div><span>$(8, 8)$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p5_2"></div>
+    </div>
+
+    <!-- P5.3 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 3 de 6 · Traslación de Vértices</span></div>
+      <div class="ejercicio-pregunta">Si la función $f(x)$ tiene su punto más bajo en $(-2, 4)$, ¿cuál será el punto más bajo de $g(x) = f(x + 3) + 2$?</div>
+      <div class="opciones-box" id="opts_p5_3">
+        <button class="opcion-btn" onclick="evaluar('p5_3', 0, false, this)"><div class="opcion-letra">A</div><span>$(1, 6)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_3', 1, true, this)"><div class="opcion-letra">B</div><span>$(-5, 6)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_3', 2, false, this)"><div class="opcion-letra">C</div><span>$(-5, 2)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_3', 3, false, this)"><div class="opcion-letra">D</div><span>$(1, 2)$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p5_3"></div>
+    </div>
+
+    <!-- P5.4 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 4 de 6 · Traslación de Vértices</span></div>
+      <div class="ejercicio-pregunta">¿Cuál es el vértice de la parábola $g(x) = (x - 6)^2 + 9$?</div>
+      <div class="opciones-box" id="opts_p5_4">
+        <button class="opcion-btn" onclick="evaluar('p5_4', 0, true, this)"><div class="opcion-letra">A</div><span>$(6, 9)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_4', 1, false, this)"><div class="opcion-letra">B</div><span>$(-6, 9)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_4', 2, false, this)"><div class="opcion-letra">C</div><span>$(6, -9)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_4', 3, false, this)"><div class="opcion-letra">D</div><span>$(-6, -9)$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p5_4"></div>
+    </div>
+
+    <!-- P5.5 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 5 de 6 · Traslación de Vértices</span></div>
+      <div class="ejercicio-pregunta">Si el punto $(0, 0)$ es la intersección original de $f(x)$, ¿cuáles son las coordenadas de ese punto en $g(x) = f(x - 2) - 4$?</div>
+      <div class="opciones-box" id="opts_p5_5">
+        <button class="opcion-btn" onclick="evaluar('p5_5', 0, false, this)"><div class="opcion-letra">A</div><span>$(-2, -4)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_5', 1, true, this)"><div class="opcion-letra">B</div><span>$(2, -4)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_5', 2, false, this)"><div class="opcion-letra">C</div><span>$(2, 4)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_5', 3, false, this)"><div class="opcion-letra">D</div><span>$(-2, 4)$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p5_5"></div>
+    </div>
+
+    <!-- P5.6 -->
+    <div class="ejercicio-card">
+      <div class="ejercicio-header"><span>Reactivo 6 de 6 · Traslación de Vértices</span></div>
+      <div class="ejercicio-pregunta">La parábola $f(x) = x^2 - 4$ tiene su vértice en $(0, -4)$. Si se aplica $g(x) = f(x - 3)$, ¿cuál es el nuevo vértice?</div>
+      <div class="opciones-box" id="opts_p5_6">
+        <button class="opcion-btn" onclick="evaluar('p5_6', 0, false, this)"><div class="opcion-letra">A</div><span>$(-3, -4)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_6', 1, true, this)"><div class="opcion-letra">B</div><span>$(3, -4)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_6', 2, false, this)"><div class="opcion-letra">C</div><span>$(3, -7)$</span></button>
+        <button class="opcion-btn" onclick="evaluar('p5_6', 3, false, this)"><div class="opcion-letra">D</div><span>$(0, -7)$</span></button>
+      </div>
+      <div class="feedback-box" id="fb_p5_6"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Banco de soluciones explicadas paso a paso
+const explicaciones = {
+  p1_1: "f(-3) = 3(-3)² - 4(-3) + 1 = 3(9) + 12 + 1 = 27 + 12 + 1 = 40.",
+  p1_2: "g(-5) = [(-5)² - 4] / [-5 + 3] = (25 - 4) / (-2) = 21 / (-2) = -10.5.",
+  p1_3: "4a - 5 = 15 => 4a = 20 => a = 5.",
+  p1_4: "h(4) = √(25 - 4²) = √(25 - 16) = √9 = 3.",
+  p1_5: "f(4) = 2⁴ + 3 = 16 + 3 = 19.",
+  p1_6: "f(-2) = (-2)³ - 2(-2) = -8 + 4 = -4. f(2) = (2)³ - 2(2) = 8 - 4 = 4. Suma: -4 + 4 = 0.",
+
+  p2_1: "Primero g(4) = 2(4) - 3 = 5. Luego f(5) = (5)² + 1 = 25 + 1 = 26.",
+  p2_2: "Primero f(2) = (2)² + 2 = 6. Luego g(6) = 3(6) - 1 = 18 - 1 = 17.",
+  p2_3: "Primero f(3) = 2(3) + 1 = 7. Luego g(7) = (7)² - 2 = 49 - 2 = 47.",
+  p2_4: "Primero h(10) = 10 - 4 = 6. Luego h(6) = 6 - 4 = 2.",
+  p2_5: "Primero g(5) = 3(5) + 1 = 16. Luego f(16) = √16 = 4.",
+  p2_6: "g(f(x)) = (2x)² - 3 = 4x² - 3. Si 4x² - 3 = 13 => 4x² = 16 => x² = 4 => x = 2.",
+
+  p3_1: "f(g(x)) = 4(x + 2) - 5 = 4x + 8 - 5 = 4x + 3.",
+  p3_2: "g(f(x)) = 2(3x - 1) + 4 = 6x - 2 + 4 = 6x + 2.",
+  p3_3: "f(g(x)) = (x - 3)² = x² - 6x + 9.",
+  p3_4: "g(f(x)) = (x²) - 3 = x² - 3.",
+  p3_5: "f(g(x)) = 5(x/5) = x.",
+  p3_6: "f(f(x)) = 2(2x + 3) + 3 = 4x + 6 + 3 = 4x + 9.",
+
+  p4_1: "Sumar 4 fuera de la función la desplaza hacia arriba: g(x) = x² + 4.",
+  p4_2: "Restar 3 dentro del argumento la desplaza hacia la derecha: g(x) = (x - 3)².",
+  p4_3: "Sumar 4 dentro del argumento la desplaza a la izquierda. Restar 1 fuera la desplaza hacia abajo.",
+  p4_4: "Restar 7 fuera del argumento provoca un desplazamiento vertical de 7 unidades hacia abajo.",
+  p4_5: "Sumar 5 dentro del argumento provoca un desplazamiento horizontal de 5 unidades a la izquierda.",
+  p4_6: "Mover a la izquierda 2 unidades equivale a (x + 2)³. Mover arriba 5 equivale a sumar + 5. Ecuación: g(x) = (x + 2)³ + 5.",
+
+  p5_1: "El término (x + 5) mueve 5 a la izquierda (-5) y el término -2 mueve 2 hacia abajo (-2). Vértice en (-5, -2).",
+  p5_2: "Restar 5 fuera de la función resta 5 a la coordenada Y: y = 8 - 5 = 3. La coordenada X se mantiene en 3. Punto (3, 3).",
+  p5_3: "f(x + 3) desplaza 3 a la izquierda (-2 - 3 = -5). + 2 desplaza 2 hacia arriba (4 + 2 = 6). Punto (-5, 6).",
+  p5_4: "Forma (x - h)² + k tiene vértice en (h, k). Vértice en (6, 9).",
+  p5_5: "f(x - 2) desplaza 2 a la derecha (0 + 2 = 2). - 4 desplaza 4 hacia abajo (0 - 4 = -4). Punto (2, -4).",
+  p5_6: "f(x - 3) desplaza la gráfica 3 unidades a la derecha. El vértice cambia de (0, -4) a (3, -4)."
+};
+
+// Cambiar pestañas (Tabs)
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+
+  if(event && event.target) event.target.classList.add('active');
+  const target = document.getElementById(tabId);
+  if(target) target.classList.add('active');
+
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    MathJax.typesetPromise();
+  }
+}
+
+// Evaluar cada pregunta
+function evaluar(id, idxOpt, esCorrecta, btnElem) {
+  const boxOpts = document.getElementById(`opts_${id}`);
+  const feedback = document.getElementById(`fb_${id}`);
+
+  boxOpts.querySelectorAll('.opcion-btn').forEach(btn => {
+    btn.style.pointerEvents = 'none';
+  });
+
+  if (esCorrecta) {
+    btnElem.classList.add('correct');
+    feedback.style.color = '#34d399';
+    feedback.innerHTML = `<i class="fa-solid fa-circle-check"></i> <strong>¡Correcto!</strong><br/>${explicaciones[id]}`;
+  } else {
+    btnElem.classList.add('incorrect');
+    feedback.style.color = '#fb7185';
+    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> <strong>Incorrecto.</strong><br/>${explicaciones[id]}`;
+  }
+  feedback.style.display = 'block';
+
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    MathJax.typesetPromise();
+  }
+}
+</script>
+
 </body>
 </html>
