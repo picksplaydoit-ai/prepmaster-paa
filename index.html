@@ -48,7 +48,6 @@
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--accent-glow);filter:brightness(1.08);}
   .btn-primary:active{transform:translateY(0);filter:brightness(.95);}
 
-  /* ── Auth tabs ── */
   .auth-tabs{display:flex;gap:4px;background:var(--surface2);border-radius:10px;padding:4px;margin-bottom:28px;}
   .auth-tab{flex:1;padding:9px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;border-radius:7px;cursor:pointer;transition:all .2s;}
   .auth-tab.active{background:var(--surface3);color:var(--text);box-shadow:0 2px 8px #0008;}
@@ -63,20 +62,51 @@
   .auth-success{background:#10b98120;border:1px solid #10b98140;border-radius:8px;padding:10px 14px;font-size:13px;color:#10b981;margin-top:12px;display:none;}
   .price-badge{display:inline-flex;align-items:center;gap:6px;background:#fbbf2418;border:1px solid #fbbf2430;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;color:#fbbf24;margin-bottom:20px;}
   .auth-error{background:#ff6b3520;border:1px solid #ff6b3540;border-radius:8px;padding:10px 14px;font-size:13px;color:#ff9966;margin-top:12px;display:none;}
+  
   #app{display:none;}
   nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;background:#0a0a0fcc;backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
-  .nav-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;}
+  .nav-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;cursor:pointer;}
   .nav-logo span{color:var(--gold);}
   .nav-right{display:flex;align-items:center;gap:16px;}
   .nav-user{font-size:13px;color:var(--muted);}
   .btn-logout{padding:7px 16px;background:transparent;border:1px solid var(--border-bright);border-radius:8px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;}
   .btn-logout:hover{border-color:#ff6b35;color:#ff6b35;}
-  .hero{padding:140px 40px 80px;text-align:center;position:relative;}
-  .hero::after{content:'';position:absolute;top:80px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,#7c3aed18 0%,transparent 65%);pointer-events:none;}
-  .hero-badge{display:inline-block;padding:6px 16px;background:#fbbf2412;border:1px solid #fbbf2428;border-radius:100px;font-size:11px;font-weight:600;color:var(--gold);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:20px;backdrop-filter:blur(8px);}
-  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(36px,6vw,72px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:20px;}
-  .hero h1 em{font-style:normal;background:linear-gradient(90deg,#ff6b35,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-  .hero p{color:var(--muted);font-size:18px;max-width:500px;margin:0 auto;line-height:1.6;}
+
+  /* ── SISTEMA DE CAPAS (HOME & VIEWS) ── */
+  .view-container{display:none;padding:100px 40px 60px;max-width:1200px;margin:0 auto;animation:fadeIn .25s ease;}
+  .view-container.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  .btn-back{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:var(--surface2);border:1px solid var(--border-bright);border-radius:10px;color:var(--text);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:24px;transition:all .2s;}
+  .btn-back:hover{border-color:var(--accent);color:var(--accent);}
+
+  /* Home Dashboard Grid */
+  .home-hero{padding:40px 0 30px;text-align:center;position:relative;}
+  .home-hero h1{font-family:'Syne',sans-serif;font-size:clamp(30px,5vw,50px);font-weight:800;letter-spacing:-1px;margin-bottom:10px;}
+  .home-hero h1 em{font-style:normal;background:linear-gradient(90deg,#ff6b35,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .home-hero p{color:var(--muted);font-size:15px;max-width:450px;margin:0 auto;}
+
+  .home-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:30px;}
+  .home-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:var(--radius-lg);padding:24px;cursor:pointer;transition:var(--transition);display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+  .home-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;}
+  .home-card:hover{transform:translateY(-4px);border-color:var(--border-focus);box-shadow:var(--shadow-md);}
+  .home-card:hover::before{opacity:1;}
+  .home-card[data-col="purple"]::before{background:radial-gradient(circle at top right,#7c3aed15,transparent 70%);}
+  .home-card[data-col="orange"]::before{background:radial-gradient(circle at top right,#ff6b3515,transparent 70%);}
+  .home-card[data-col="green"]::before{background:radial-gradient(circle at top right,#05966915,transparent 70%);}
+  .home-card[data-col="blue"]::before{background:radial-gradient(circle at top right,#0ea5e915,transparent 70%);}
+  .home-card[data-col="gold"]::before{background:radial-gradient(circle at top right,#fbbf2415,transparent 70%);}
+  
+  .home-card-icon{font-size:32px;margin-bottom:14px;}
+  .home-card-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:6px;}
+  .home-card-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:20px;}
+  .home-card-action{font-size:12px;font-weight:700;font-family:'Syne',sans-serif;display:inline-flex;align-items:center;gap:6px;color:var(--gold);}
+
+  /* Submenu tabs inside layer views */
+  .layer-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+  .layer-tab{padding:10px 20px;border-radius:12px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);font-weight:700;font-family:'Syne',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s;}
+  .layer-tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border-color:transparent;box-shadow:0 4px 16px var(--accent-glow);}
+
   .section{padding:60px 40px;max-width:1200px;margin:0 auto;}
   .section-header{display:flex;align-items:baseline;gap:14px;margin-bottom:32px;}
   .section-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.5px;}
@@ -262,8 +292,6 @@
     .nav-logo{font-size:17px;}
     .nav-user{display:none;}
     .hero{padding:88px 16px 48px;}
-    .hero h1{letter-spacing:-1px;font-size:clamp(28px,8vw,48px);}
-    .hero p{font-size:15px;}
     .section{padding:28px max(16px,env(safe-area-inset-left));}
     .section-title{font-size:19px;}
     .section-header{margin-bottom:20px;}
@@ -298,7 +326,6 @@
     .data-banner{flex-wrap:wrap;justify-content:center;}
   }
   @media(max-width:400px){
-    .hero h1{font-size:26px;}
     .btn-exam{padding:6px 10px;font-size:12px;}
     .auth-card{padding:24px 14px;}
     .section{padding:24px 14px;}
@@ -311,7 +338,6 @@
     .btn-primary:active{transform:scale(.97);filter:brightness(.95);}
   }
 
-  /* ── PERFORMANCE & POLISH ── */
   @media(prefers-reduced-motion:reduce){
     *{animation-duration:.01ms!important;transition-duration:.01ms!important;}
   }
@@ -321,42 +347,11 @@
   ::-webkit-scrollbar-thumb:hover{background:var(--border-bright);}
   ::selection{background:var(--accent-glow);color:var(--text);}
   
-  /* Improved section header */
   .section-header{margin-bottom:28px;}
   .section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border-bright),transparent);}
-  
-  /* Smooth iframe modal */
   .iframe-modal,.pdf-modal{-webkit-overflow-scrolling:touch;}
-  
-  /* Better auth inputs on mobile */
-  .input-group input{font-size:16px;} /* prevents zoom on iOS */
-  
-  /* Hero gradient improvement */
-  .hero::after{background:radial-gradient(ellipse 70% 50% at 50% 0%,#7c3aed1a 0%,transparent 70%);}
-  
-  /* Glow on active nav links */
-  .cat-card[data-active],.cat-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
-  
-  /* Smoother panel animation */
-  @keyframes slideDown{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
-  
-  /* Exam panel polish */
-  .exam-panel{border-radius:var(--radius-md);}
-  .exam-panel-header{background:var(--surface2);}
-  
-  /* Button active states for touch */
-  .btn-exam-start:active{transform:scale(.96)!important;}
-  .btn-exam-pdf:active{transform:scale(.96)!important;}
-  .btn-secondary:active{transform:scale(.97);}
-  .exp-btn:hover{background:var(--surface3);border-color:var(--border-bright);color:var(--text);}
-
-  /* Mini card polish */
-  .mini-card{transition:var(--transition);}
-  .mini-card:active{transform:scale(.98);}
-  
-  /* Section count pill */
+  .input-group input{font-size:16px;}
   .section-count{background:var(--surface2);padding:4px 10px;border-radius:100px;border:1px solid var(--border);font-size:12px;}
-
 </style>
 </head>
 <body>
@@ -384,36 +379,6 @@
         <a href="examenes/simulacionespanolgratis.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #7c3aed40;border-radius:10px;color:#a78bfa;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
           ✍️ Simulación Español
         </a>
-        <a href="examenes/explicaciones/Guiapaa.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ffffff1a;border-radius:10px;color:#f0f0f8;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
-          🎓 Guía PAA
-        </a>
-        <a href="examenes/explicaciones/Funciones.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ffffff1a;border-radius:10px;color:#f0f0f8;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
-          📈 Explicación: Funciones
-        </a>
-        <a href="https://el-bicho-paa.vercel.app/" target="_blank" rel="noopener" style="grid-column:span 2;display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #10b98140;border-radius:10px;color:#10b981;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
-          🐛 El Bicho en el Examen PAA
-        </a>
-        <a href="minijuegos/conecta4_espanol.html" target="_blank" style="grid-column:span 2;display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ffffff1a;border-radius:10px;color:#f0f0f8;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
-          🔵 Conecta 4 — Español
-        </a>
-        <a href="minijuegos/conecta4_mat.html" target="_blank" style="grid-column:span 2;display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ff6b3540;border-radius:10px;color:#ff6b35;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
-          🔴 Conecta 4 — Matemáticas
-        </a>
-        <a href="examenes/practicos/mat/probabilidad.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ff6b3540;border-radius:10px;color:#ff6b35;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
-          📊 Práctica: Estadística
-        </a>
-        <a href="examenes/practicos/esp/narrativas.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #7c3aed40;border-radius:10px;color:#a78bfa;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
-          📖 Práctica: Narrativas
-        </a>
-        <a href="calculadora.html" target="_blank" style="grid-column:span 2;display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #fbbf2440;border-radius:10px;color:#fbbf24;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
-          🧮 Calculadora de Puntajes
-        </a>
-        <a href="minijuegos/dominando_el_paa.html" target="_blank" style="grid-column:span 2;display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #e11d4840;border-radius:10px;color:#fb7185;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
-          🎮 Juego: Dominando el PAA
-        </a>
-        <a href="https://www.tiktok.com/@prepmasterudg" target="_blank" rel="noopener" style="grid-column:span 2;display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ffffff20;border-radius:10px;color:#f0f0f8;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
-          🎵 Síguenos en TikTok @prepmasterudg
-        </a>
       </div>
     </div>
 
@@ -423,23 +388,6 @@
       <div class="input-group"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
       <button class="btn-primary" onclick="doLogin()">Entrar →</button>
       <div class="auth-error" id="login-error"></div>
-
-      <div class="auth-divider">o prueba gratis</div>
-      <p style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:10px;">Sin registro — acceso libre</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;color:#ff6b35;border-color:#ff6b3540;" onclick="window.open('examenes/simulacionmathgratis.html','_blank')">📐 Simulación Matemáticas</button>
-        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;color:#a78bfa;border-color:#7c3aed40;" onclick="window.open('examenes/simulacionespanolgratis.html','_blank')">✍️ Simulación Español</button>
-        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;" onclick="window.open('examenes/explicaciones/Guiapaa.html','_blank')">🎓 Guía PAA</button>
-        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;" onclick="window.open('examenes/explicaciones/Funciones.html','_blank')">📈 Explicación: Funciones</button>
-        <a href="https://el-bicho-paa.vercel.app/" target="_blank" rel="noopener" class="btn-secondary" style="font-size:12px;padding:10px 8px;grid-column:span 2;color:#10b981;border-color:#10b98140;text-decoration:none;display:block;text-align:center;">🐛 El Bicho en el Examen PAA</a>
-        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;grid-column:span 2;" onclick="window.open('minijuegos/conecta4_espanol.html','_blank')">🔵 Conecta 4 — Español</button>
-        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;grid-column:span 2;color:#ff6b35;border-color:#ff6b3540;" onclick="window.open('minijuegos/conecta4_mat.html','_blank')">🔴 Conecta 4 — Matemáticas</button>
-        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;color:#ff6b35;border-color:#ff6b3540;" onclick="window.open('examenes/practicos/mat/probabilidad.html','_blank')">📊 Práctica: Estadística</button>
-        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;color:#a78bfa;border-color:#7c3aed40;" onclick="window.open('examenes/practicos/esp/narrativas.html','_blank')">📖 Práctica: Narrativas</button>
-        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;grid-column:span 2;color:#fbbf24;border-color:#fbbf2440;" onclick="window.open('calculadora.html','_blank')">🧮 Calculadora de Puntajes</button>
-        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;grid-column:span 2;color:#fb7185;border-color:#e11d4840;" onclick="window.open('minijuegos/dominando_el_paa.html','_blank')">🎮 Juego: Dominando el PAA</button>
-        <a href="https://www.tiktok.com/@prepmasterudg" target="_blank" rel="noopener" class="btn-secondary" style="font-size:12px;padding:10px 8px;grid-column:span 2;color:#f0f0f8;border-color:#ffffff20;text-decoration:none;display:block;text-align:center;">🎵 TikTok @prepmasterudg</a>
-      </div>
     </div>
 
     <!-- REGISTER PANEL -->
@@ -452,7 +400,6 @@
       <div class="auth-error" id="register-error"></div>
       <div class="auth-success" id="register-success"></div>
 
-      <!-- Free code toggle -->
       <div class="auth-divider">o</div>
       <div class="free-code-toggle" onclick="toggleFreeCode()">🎁 ¿Tienes un código de acceso gratuito?</div>
       <div id="free-code-section">
@@ -466,274 +413,285 @@
 
 <div id="app">
   <nav>
-    <div class="nav-logo">Prep<span>Master</span></div>
+    <div class="nav-logo" onclick="switchView('home')">Prep<span>Master</span></div>
     <div class="nav-right">
       <span class="nav-user" id="nav-user-email"></span>
       <button class="btn-logout" onclick="doLogout()">Salir</button>
     </div>
   </nav>
 
-  <!-- Aviso persistente: no guarda datos -->
   <div class="data-banner">
     <div class="banner-dot"></div>
     <span>
-      <strong>📋 Aviso:</strong>
-      Esta plataforma <strong>no guarda tu progreso</strong> entre sesiones. 
-      <span class="banner-highlight">Anota tu puntaje</span> al terminar cada simulación o minijuego para llevar tu avance.
+      <strong>📋 Aviso:</strong> Esta plataforma <strong>no guarda tu progreso</strong> entre sesiones. <span class="banner-highlight">Anota tu puntaje</span> al terminar.
     </span>
     <div class="banner-dot"></div>
   </div>
 
-  <div class="hero">
-    <div class="hero-badge">🎯 Simulación PAA Oficial</div>
-    <h1>Prepárate para<br/><em>el PAA</em></h1>
-    <p>Simulaciones reales de Matemáticas, Redacción y Lectura con respuestas y procedimientos explicados.</p>
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 🏠 VIEW: HOME (DASHBOARD POR CAPAS)            -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="view-home" class="view-container active">
+    <div class="home-hero">
+      <h1>Prepárate para<br/><em>el PAA</em></h1>
+      <p>Selecciona una categoría para comenzar tu entrenamiento oficial.</p>
+    </div>
+
+    <div class="home-grid">
+      <div class="home-card" data-col="purple" onclick="openModalGuia()">
+        <div>
+          <div class="home-card-icon">🎓</div>
+          <div class="home-card-title">¿Qué es la PAA?</div>
+          <div class="home-card-desc">Conoce la estructura oficial, puntajes y distribución del examen UDG.</div>
+        </div>
+        <div class="home-card-action">Ver detalles →</div>
+      </div>
+
+      <div class="home-card" data-col="gold" onclick="switchView('ruta')">
+        <div>
+          <div class="home-card-icon">🗺️</div>
+          <div class="home-card-title">Ruta de estudio</div>
+          <div class="home-card-desc">Plan semanal recomendado organizado de menos a más dificultad.</div>
+        </div>
+        <div class="home-card-action">Consultar ruta →</div>
+      </div>
+
+      <div class="home-card" data-col="orange" onclick="switchView('explicaciones')">
+        <div>
+          <div class="home-card-icon">⚡</div>
+          <div class="home-card-title">Explicaciones rápidas</div>
+          <div class="home-card-desc">24 temas resumidos con teoría, fórmulas y ejemplos resueltos.</div>
+        </div>
+        <div class="home-card-action">Explorar temas →</div>
+      </div>
+
+      <div class="home-card" data-col="green" onclick="switchView('practicos')">
+        <div>
+          <div class="home-card-icon">📝</div>
+          <div class="home-card-title">Ejercicios prácticos</div>
+          <div class="home-card-desc">Reactivos por tema con soluciones paso a paso incluidas.</div>
+        </div>
+        <div class="home-card-action">Practicar ahora →</div>
+      </div>
+
+      <div class="home-card" data-col="blue" onclick="switchView('supervivencia')">
+        <div>
+          <div class="home-card-icon">🏋️</div>
+          <div class="home-card-title">Supervivencia</div>
+          <div class="home-card-desc">Retos de velocidad y resistencia contra el reloj por área.</div>
+        </div>
+        <div class="home-card-action">Entrar al reto →</div>
+      </div>
+
+      <div class="home-card" data-col="purple" onclick="switchView('simulaciones')">
+        <div>
+          <div class="home-card-icon">📄</div>
+          <div class="home-card-title">Exámenes de simulación</div>
+          <div class="home-card-desc">33 exámenes completos con formato real y hojas de respuestas PDF.</div>
+        </div>
+        <div class="home-card-action">Ver exámenes →</div>
+      </div>
+
+      <div class="home-card" data-col="gold" onclick="switchView('retos')">
+        <div>
+          <div class="home-card-icon">📖</div>
+          <div class="home-card-title">Reto lectura rápida</div>
+          <div class="home-card-desc">Entrena tus PPM (palabras por minuto) y mejora tu comprensión.</div>
+        </div>
+        <div class="home-card-action">Iniciar reto →</div>
+      </div>
+
+      <div class="home-card" data-col="orange" onclick="switchView('minijuegos')">
+        <div>
+          <div class="home-card-icon">🎮</div>
+          <div class="home-card-title">Minijuegos PAA</div>
+          <div class="home-card-desc">7 juegos interactivos, incluyendo Duelos 1 vs 1 y Conecta 4.</div>
+        </div>
+        <div class="home-card-action">Jugar ahora →</div>
+      </div>
+
+      <div class="home-card" data-col="blue" onclick="switchView('ingles')">
+        <div>
+          <div class="home-card-icon">🇺🇸</div>
+          <div class="home-card-title">Inglés ESLAT</div>
+          <div class="home-card-desc">5 simulaciones completas orientadas al nivel de inglés del PAA.</div>
+        </div>
+        <div class="home-card-action">Ver simulaciones →</div>
+      </div>
+
+      <div class="home-card" data-col="gold" onclick="switchView('herramientas')">
+        <div>
+          <div class="home-card-icon">🧰</div>
+          <div class="home-card-title">Herramientas</div>
+          <div class="home-card-desc">Calculadora de puntajes estimada para ingreso a carreras UDG.</div>
+        </div>
+        <div class="home-card-action">Abrir herramienta →</div>
+      </div>
+
+      <div class="home-card" data-col="green" onclick="switchView('recursos')">
+        <div>
+          <div class="home-card-icon">📚</div>
+          <div class="home-card-title">Recursos oficiales</div>
+          <div class="home-card-desc">Descarga directas de guías PDF oficiales de UDG y College Board.</div>
+        </div>
+        <div class="home-card-action">Ver recursos →</div>
+      </div>
+    </div>
   </div>
 
-  <hr class="divider"/>
 
-  <!-- GUÍA PAA -->
-  <section class="section">
-    <div class="section-header">
-      <h2 class="section-title">🎓 ¿Qué es la PAA?</h2>
-      <div class="section-line"></div>
-      <span class="section-count">Estructura · Puntajes · Temario</span>
-    </div>
-    <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:20px;padding:32px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;">
-      <div style="font-size:48px;">🎓</div>
-      <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;">Todo lo que necesitas saber antes del examen</div>
-      <p style="font-size:14px;color:var(--muted);max-width:480px;line-height:1.7;">Estructura del examen, puntajes por sección, temario completo de Matemáticas, Redacción, Lectura e Inglés.</p>
-      <button onclick="openExam('examenes/explicaciones/Guiapaa.html','Guía Maestra PAA')" style="padding:14px 32px;background:linear-gradient(135deg,#7c3aed,#5b21b6);border:none;border-radius:12px;color:white;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-        📖 Ver Guía PAA completa
-      </button>
-    </div>
-  </section>
-
-  <hr class="divider"/>
-
-  <!-- RUTA DE ESTUDIO RECOMENDADA -->
-  <section class="section">
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 🗺️ VIEW: RUTA DE ESTUDIO                        -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="view-ruta" class="view-container">
+    <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
       <h2 class="section-title">🗺️ Orden recomendado de estudio</h2>
       <div class="section-line"></div>
-      <span class="section-count">De menos a más difícil</span>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:20px;padding:28px;">
-      <p style="font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.7;">Sigue esta ruta para maximizar tu preparación. Empieza por las explicaciones de cada tema, luego practica con los ejercicios de supervivencia y cierra con las simulaciones completas.</p>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.7;">Sigue esta ruta para maximizar tu preparación. Empieza por las explicaciones de cada tema, luego practica con los ejercicios y cierra con las simulaciones.</p>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
-
         <!-- Matemáticas -->
         <div style="background:var(--surface2);border:1px solid #ff6b3530;border-radius:16px;padding:20px;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
             <div style="width:36px;height:36px;background:#ff6b35;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">📐</div>
             <div>
               <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;">Matemáticas</div>
-              <div style="font-size:11px;color:#ff6b35;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">800 puntos</div>
+              <div style="font-size:11px;color:#ff6b35;font-weight:600;text-transform:uppercase;">800 puntos</div>
             </div>
           </div>
-          <ol style="list-style:none;padding:0;margin:0;counter-reset:step-mat;">
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">1</span><span><b style="color:var(--text);">Fracciones y Aritmética</b> — Base de todo</span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">2</span><span><b style="color:var(--text);">Regla de 3 y Proporciones</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">3</span><span><b style="color:var(--text);">Sucesiones y Patrones</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">4</span><span><b style="color:var(--text);">Exponentes y Radicales</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">5</span><span><b style="color:var(--text);">Valor Absoluto y Desigualdades</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">6</span><span><b style="color:var(--text);">Álgebra y Ecuaciones</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">7</span><span><b style="color:var(--text);">Sistemas de Ecuaciones</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">8</span><span><b style="color:var(--text);">Funciones y Gráficas</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">9</span><span><b style="color:var(--text);">Geometría y Volúmenes</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">10</span><span><b style="color:var(--text);">Diagramas de Venn y Probabilidad</b></span></li>
+          <ol style="list-style:none;padding:0;margin:0;">
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;">1</span><span><b style="color:var(--text);">Fracciones y Aritmética</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;">2</span><span><b style="color:var(--text);">Regla de 3 y Proporciones</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;">3</span><span><b style="color:var(--text);">Álgebra y Ecuaciones</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;">4</span><span><b style="color:var(--text);">Geometría y Probabilidad</b></span></li>
           </ol>
         </div>
-
         <!-- Español -->
         <div style="background:var(--surface2);border:1px solid #7c3aed30;border-radius:16px;padding:20px;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
             <div style="width:36px;height:36px;background:#7c3aed;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">✍️</div>
             <div>
               <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;">Redacción y Lectura</div>
-              <div style="font-size:11px;color:#7c3aed;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">800 puntos combinados</div>
+              <div style="font-size:11px;color:#7c3aed;font-weight:600;text-transform:uppercase;">800 puntos</div>
             </div>
           </div>
           <ol style="list-style:none;padding:0;margin:0;">
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">1</span><span><b style="color:var(--text);">Tipos de Texto</b> — Base conceptual</span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">2</span><span><b style="color:var(--text);">Vocabulario en Contexto</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">3</span><span><b style="color:var(--text);">Comprensión de Lectura</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">4</span><span><b style="color:var(--text);">Idea Principal y Generalización</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">5</span><span><b style="color:var(--text);">Análisis Dual de Textos</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">6</span><span><b style="color:var(--text);">Figuras Retóricas</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">7</span><span><b style="color:var(--text);">Redacción e Indirecta</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">8</span><span><b style="color:var(--text);">Combinando Oraciones</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">9</span><span><b style="color:var(--text);">Eliminación de Enunciados</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">10</span><span><b style="color:var(--text);">Idea Principal y Analogías</b> — Nivel avanzado</span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;">1</span><span><b style="color:var(--text);">Tipos de Texto y Vocabulario</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;">2</span><span><b style="color:var(--text);">Comprensión de Lectura</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;">3</span><span><b style="color:var(--text);">Redacción Indirecta</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;">4</span><span><b style="color:var(--text);">Análisis Dual y Retórica</b></span></li>
           </ol>
         </div>
-
-      </div>
-      <div style="margin-top:20px;padding:16px 20px;background:var(--surface2);border:1px solid var(--border-bright);border-radius:14px;font-size:13px;color:var(--muted);line-height:1.7;">
-        💡 <strong style="color:var(--text);">Estrategia recomendada:</strong> Lee la explicación del tema → Practica con el ejercicio de supervivencia correspondiente → Haz una simulación completa → Revisa tus errores con las respuestas en PDF.
       </div>
     </div>
-  </section>
+  </div>
 
-  <hr class="divider"/>
 
-  <!-- ══ EXPLICACIONES RÁPIDAS (AGRUPADAS CON TABS) ══ -->
-  <section class="section">
-    <div class="section-header" style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
-      <div style="display:flex; align-items:baseline; gap:14px; width:100%;">
-        <h2 class="section-title">⚡ Explicaciones rápidas</h2>
-        <div class="section-line"></div>
-      </div>
-      
-      <!-- BOTONES DE FILTRADO (TABS) -->
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <button onclick="filtrarExplicaciones('todas')" id="btn-exp-todas" style="padding:8px 16px; border-radius:10px; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:white; border:none; font-weight:700; font-family:'Syne', sans-serif; cursor:pointer; transition:all 0.2s;">
-          Todas
-        </button>
-        <button onclick="filtrarExplicaciones('matematicas')" id="btn-exp-matematicas" style="padding:8px 16px; border-radius:10px; background:var(--surface2); color:var(--muted); border:1px solid var(--border); font-weight:600; font-family:'Syne', sans-serif; cursor:pointer; transition:all 0.2s;">
-          📐 Matemáticas
-        </button>
-        <button onclick="filtrarExplicaciones('espanol')" id="btn-exp-espanol" style="padding:8px 16px; border-radius:10px; background:var(--surface2); color:var(--muted); border:1px solid var(--border); font-weight:600; font-family:'Syne', sans-serif; cursor:pointer; transition:all 0.2s;">
-          ✍️ Español
-        </button>
-      </div>
-    </div>
-
-    <div class="exp-grid" id="grid-explicaciones">
-      
-      <!-- MATEMÁTICAS -->
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/explicaciones/Fracciones.html','Explicación: Fracciones')">
-        <div class="exp-icon">➗</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Fracciones y Aritmética</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/explicaciones/Proporciones.html','Explicación: Proporciones')">
-        <div class="exp-icon">⚖️</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Razones y Proporciones</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/explicaciones/Sucesiones.html','Explicación: Sucesiones')">
-        <div class="exp-icon">🔢</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Sucesiones y Patrones</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/explicaciones/Exponentes.html','Explicación: Exponentes')">
-        <div class="exp-icon">🚀</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Exponentes y Radicales</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/explicaciones/Valorabsoluto.html','Explicación: Valor Absoluto')">
-        <div class="exp-icon">📏</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Valor Absoluto</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/explicaciones/Desigualdades.html','Explicación: Desigualdades')">
-        <div class="exp-icon">⚠️</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Desigualdades</div>
-        <button class="exp-btn">📖 Ver explanation</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/explicaciones/Ecuaciones.html','Explicación: Ecuaciones')">
-        <div class="exp-icon">🔣</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Álgebra y Ecuaciones</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/explicaciones/Sistemaecuaciones.html','Explicación: Sistemas')">
-        <div class="exp-icon">📊</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Sistemas de Ecuaciones</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/explicaciones/Funciones.html','Explicación: Funciones')">
-        <div class="exp-icon">📈</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Funciones</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/explicaciones/Geometria.html','Explicación: Geometría')">
-        <div class="exp-icon">📐</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Geometría</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/explicaciones/Volumenes.html','Explicación: Volúmenes')">
-        <div class="exp-icon">📦</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Volúmenes</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/explicaciones/DiagramasVenn.html','Explicación: Venn')">
-        <div class="exp-icon">⭕</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Diagramas de Venn</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/explicaciones/Probabilidad.html','Explicación: Probabilidad')">
-        <div class="exp-icon">🎲</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Probabilidad y Estadística</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/explicaciones/Reglade3.html','Explicación: Regla de 3')">
-        <div class="exp-icon">✖️</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Regla de 3</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-
-      <!-- ESPAÑOL (Redacción y Lectura juntas) -->
-      <div class="exp-card esp" data-area="esp" onclick="openExam('examenes/explicaciones/Tiposdetexto.html','Explicación: Tipos de texto')">
-        <div class="exp-icon">📄</div><div class="exp-area-tag" style="background:#7c3aed22; color:#a78bfa; border-color:#7c3aed40;">Español</div>
-        <div class="exp-name">Tipos de Texto</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card esp" data-area="esp" onclick="openExam('examenes/explicaciones/Redaccion.html','Explicación: Redacción')">
-        <div class="exp-icon">✍️</div><div class="exp-area-tag" style="background:#7c3aed22; color:#a78bfa; border-color:#7c3aed40;">Español</div>
-        <div class="exp-name">Redacción e Indirecta</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card esp" data-area="esp" onclick="openExam('examenes/explicaciones/Combinandooraciones.html','Explicación: Oraciones')">
-        <div class="exp-icon">🔗</div><div class="exp-area-tag" style="background:#7c3aed22; color:#a78bfa; border-color:#7c3aed40;">Español</div>
-        <div class="exp-name">Combinando Oraciones</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card esp" data-area="esp" onclick="openExam('examenes/explicaciones/Eliminarenunciados.html','Explicación: Eliminación')">
-        <div class="exp-icon">✂️</div><div class="exp-area-tag" style="background:#7c3aed22; color:#a78bfa; border-color:#7c3aed40;">Español</div>
-        <div class="exp-name">Eliminación de Enunciados</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card esp" data-area="esp" onclick="openExam('examenes/explicaciones/Figuras_retoricas.html','Explicación: Retórica')">
-        <div class="exp-icon">🎭</div><div class="exp-area-tag" style="background:#05966922; color:#34d399; border-color:#05966940;">Español</div>
-        <div class="exp-name">Figuras Retóricas</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card esp" data-area="esp" onclick="openExam('examenes/explicaciones/Vocabulariocontexto.html','Explicación: Vocabulario')">
-        <div class="exp-icon">📖</div><div class="exp-area-tag" style="background:#05966922; color:#34d399; border-color:#05966940;">Español</div>
-        <div class="exp-name">Vocabulario en Contexto</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card esp" data-area="esp" onclick="openExam('examenes/explicaciones/Comprensiondelectura.html','Explicación: Comprensión')">
-        <div class="exp-icon">🧠</div><div class="exp-area-tag" style="background:#05966922; color:#34d399; border-color:#05966940;">Español</div>
-        <div class="exp-name">Comprensión de Lectura</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card esp" data-area="esp" onclick="openExam('examenes/explicaciones/Generalizacion.html','Explicación: Idea General')">
-        <div class="exp-icon">🎯</div><div class="exp-area-tag" style="background:#05966922; color:#34d399; border-color:#05966940;">Español</div>
-        <div class="exp-name">Idea Principal y Títulos</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card esp" data-area="esp" onclick="openExam('examenes/explicaciones/Analisisdual.html','Explicación: Análisis Dual')">
-        <div class="exp-icon">🎙️</div><div class="exp-area-tag" style="background:#05966922; color:#34d399; border-color:#05966940;">Español</div>
-        <div class="exp-name">Análisis Dual de Textos</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-      <div class="exp-card esp" data-area="esp" onclick="openExam('examenes/explicaciones/Ideaprincipalyanalogia.html','Explicación: Analogías')">
-        <div class="exp-icon">💡</div><div class="exp-area-tag" style="background:#05966922; color:#34d399; border-color:#05966940;">Español</div>
-        <div class="exp-name">Idea Principal y Analogías</div>
-        <button class="exp-btn">📖 Ver explicación</button>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider"/>
-
-  <section class="section">
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- ⚡ VIEW: EXPLICACIONES RÁPIDAS                  -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="view-explicaciones" class="view-container">
+    <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
-      <h2 class="section-title">Exámenes de simulación</h2>
+      <h2 class="section-title">⚡ Explicaciones rápidas</h2>
       <div class="section-line"></div>
-      <span class="section-count">33 simulaciones en total · 3 áreas</span>
+    </div>
+    
+    <div class="layer-tabs">
+      <button class="layer-tab active" onclick="switchLayerTab('exp', 'mat')">📐 Matemáticas (14)</button>
+      <button class="layer-tab" onclick="switchLayerTab('exp', 'red')">✍️ Redacción (5)</button>
+      <button class="layer-tab" onclick="switchLayerTab('exp', 'lec')">📖 Lectura (5)</button>
+    </div>
+
+    <div class="exp-grid" id="layer-exp-grid">
+      <!-- Se llena dinámicamente o por clases -->
+      <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/Fracciones.html','Fracciones')"><div class="exp-icon">➗</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Fracciones y Aritmética</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/Proporciones.html','Proporciones')"><div class="exp-icon">⚖️</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Razones y Proporciones</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/Sucesiones.html','Sucesiones')"><div class="exp-icon">🔢</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Sucesiones y Patrones</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/Exponentes.html','Exponentes')"><div class="exp-icon">🚀</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Exponentes y Radicales</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/Valorabsoluto.html','Valor Absoluto')"><div class="exp-icon">📏</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Valor Absoluto</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/Desigualdades.html','Desigualdades')"><div class="exp-icon">⚠️</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Desigualdades</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/Ecuaciones.html','Ecuaciones')"><div class="exp-icon">🔣</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Álgebra y Ecuaciones</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/Sistemaecuaciones.html','Sistemas')"><div class="exp-icon">📊</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Sistemas de Ecuaciones</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/Funciones.html','Funciones')"><div class="exp-icon">📈</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Funciones</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/Geometria.html','Geometría')"><div class="exp-icon">📐</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Geometría</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/Volumenes.html','Volúmenes')"><div class="exp-icon">📦</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Volúmenes</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/DiagramasVenn.html','Venn')"><div class="exp-icon">⭕</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Diagramas de Venn</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/Probabilidad.html','Probabilidad')"><div class="exp-icon">🎲</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Probabilidad y Estadística</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card mat-exp" data-group="mat" onclick="openExam('examenes/explicaciones/Reglade3.html','Regla de 3')"><div class="exp-icon">✖️</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Regla de 3</div><button class="exp-btn">📖 Ver explicación</button></div>
+
+      <!-- REDACCIÓN -->
+      <div class="exp-card red-exp" data-group="red" style="display:none;" onclick="openExam('examenes/explicaciones/Tiposdetexto.html','Tipos de Texto')"><div class="exp-icon">📄</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Redacción</div><div class="exp-name">Tipos de Texto</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card red-exp" data-group="red" style="display:none;" onclick="openExam('examenes/explicaciones/Redaccion.html','Redacción')"><div class="exp-icon">✍️</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Redacción</div><div class="exp-name">Redacción e Indirecta</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card red-exp" data-group="red" style="display:none;" onclick="openExam('examenes/explicaciones/Combinandooraciones.html','Oraciones')"><div class="exp-icon">🔗</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Redacción</div><div class="exp-name">Combinando Oraciones</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card red-exp" data-group="red" style="display:none;" onclick="openExam('examenes/explicaciones/Eliminarenunciados.html','Eliminación')"><div class="exp-icon">✂️</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Redacción</div><div class="exp-name">Eliminación de Enunciados</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card red-exp" data-group="red" style="display:none;" onclick="openExam('examenes/explicaciones/Figuras_retoricas.html','Retórica')"><div class="exp-icon">🎭</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Redacción</div><div class="exp-name">Figuras Retóricas</div><button class="exp-btn">📖 Ver explicación</button></div>
+
+      <!-- LECTURA -->
+      <div class="exp-card lec-exp" data-group="lec" style="display:none;" onclick="openExam('examenes/explicaciones/Vocabulariocontexto.html','Vocabulario')"><div class="exp-icon">📖</div><div class="exp-area-tag" style="background:#05966922;color:#34d399;">Lectura</div><div class="exp-name">Vocabulario en Contexto</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card lec-exp" data-group="lec" style="display:none;" onclick="openExam('examenes/explicaciones/Comprensiondelectura.html','Comprensión')"><div class="exp-icon">🧠</div><div class="exp-area-tag" style="background:#05966922;color:#34d399;">Lectura</div><div class="exp-name">Comprensión de Lectura</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card lec-exp" data-group="lec" style="display:none;" onclick="openExam('examenes/explicaciones/Generalizacion.html','Idea General')"><div class="exp-icon">🎯</div><div class="exp-area-tag" style="background:#05966922;color:#34d399;">Lectura</div><div class="exp-name">Idea Principal y Títulos</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card lec-exp" data-group="lec" style="display:none;" onclick="openExam('examenes/explicaciones/Analisisdual.html','Análisis Dual')"><div class="exp-icon">🎙️</div><div class="exp-area-tag" style="background:#05966922;color:#34d399;">Lectura</div><div class="exp-name">Análisis Dual de Textos</div><button class="exp-btn">📖 Ver explicación</button></div>
+      <div class="exp-card lec-exp" data-group="lec" style="display:none;" onclick="openExam('examenes/explicaciones/Ideaprincipalyanalogia.html','Analogías')"><div class="exp-icon">💡</div><div class="exp-area-tag" style="background:#05966922;color:#34d399;">Lectura</div><div class="exp-name">Idea Principal y Analogías</div><button class="exp-btn">📖 Ver explicación</button></div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 📝 VIEW: EJERCICIOS PRÁCTICOS                   -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="view-practicos" class="view-container">
+    <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
+    <div class="section-header">
+      <h2 class="section-title">📝 Ejercicios prácticos</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="layer-tabs">
+      <button class="layer-tab active" onclick="switchLayerTab('prac', 'mat')">📐 Matemáticas (12)</button>
+      <button class="layer-tab" onclick="switchLayerTab('prac', 'esp')">✍️ Español (Próximo)</button>
+    </div>
+
+    <div class="exp-grid" id="layer-prac-grid">
+      <div class="exp-card mat-prac" data-group="mat" onclick="openExam('examenes/practicos/mat/operaciones.html','Operaciones Básicas')"><div class="exp-icon">🔢</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Operaciones Básicas</div><button class="exp-btn">✏️ Practicar</button></div>
+      <div class="exp-card mat-prac" data-group="mat" onclick="openExam('examenes/practicos/mat/fracciones.html','Fracciones')"><div class="exp-icon">➗</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Fracciones</div><button class="exp-btn">✏️ Practicar</button></div>
+      <div class="exp-card mat-prac" data-group="mat" onclick="openExam('examenes/practicos/mat/regla3.html','Regla de 3')"><div class="exp-icon">⚖️</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Regla de 3</div><button class="exp-btn">✏️ Practicar</button></div>
+      <div class="exp-card mat-prac" data-group="mat" onclick="openExam('examenes/practicos/mat/algebra.html','Álgebra')"><div class="exp-icon">🔣</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Álgebra</div><button class="exp-btn">✏️ Practicar</button></div>
+      <div class="exp-card mat-prac" data-group="mat" onclick="openExam('examenes/practicos/mat/ecuaciones.html','Ecuaciones')"><div class="exp-icon">📊</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Ecuaciones</div><button class="exp-btn">✏️ Practicar</button></div>
+      <div class="exp-card mat-prac" data-group="mat" onclick="openExam('examenes/practicos/mat/inecuaciones.html','Inecuaciones')"><div class="exp-icon">⚠️</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Desigualdades e Inecuaciones</div><button class="exp-btn">✏️ Practicar</button></div>
+      <div class="exp-card mat-prac" data-group="mat" onclick="openExam('examenes/practicos/mat/funciones.html','Funciones')"><div class="exp-icon">📈</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Álgebra y Funciones</div><button class="exp-btn">✏️ Practicar</button></div>
+      <div class="exp-card mat-prac" data-group="mat" onclick="openExam('examenes/practicos/mat/linearecta.html','Línea Recta')"><div class="exp-icon">📉</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Línea Recta</div><button class="exp-btn">✏️ Practicar</button></div>
+      <div class="exp-card mat-prac" data-group="mat" onclick="openExam('examenes/practicos/mat/angulos.html','Ángulos')"><div class="exp-icon">📐</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Ángulos</div><button class="exp-btn">✏️ Practicar</button></div>
+      <div class="exp-card mat-prac" data-group="mat" onclick="openExam('examenes/practicos/mat/areas.html','Áreas')"><div class="exp-icon">🔷</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Áreas y Geometría</div><button class="exp-btn">✏️ Practicar</button></div>
+      <div class="exp-card mat-prac" data-group="mat" onclick="openExam('examenes/practicos/mat/probabilidad.html','Probabilidad')"><div class="exp-icon">🎲</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Probabilidad y Estadística</div><button class="exp-btn">✏️ Practicar</button></div>
+      <div class="exp-card mat-prac" data-group="mat" onclick="openExam('examenes/practicos/mat/combinatoria.html','Combinatoria')"><div class="exp-icon">🧮</div><div class="exp-area-tag">Matemáticas</div><div class="exp-name">Combinatoria</div><button class="exp-btn">✏️ Practicar</button></div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 🏋️ VIEW: SUPERVIVENCIA                          -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="view-supervivencia" class="view-container">
+    <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
+    <div class="section-header">
+      <h2 class="section-title">🏋️ Ejercicios de supervivencia</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="tools-grid" id="survival-grid"></div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 📄 VIEW: EXÁMENES DE SIMULACIÓN                 -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="view-simulaciones" class="view-container">
+    <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
+    <div class="section-header">
+      <h2 class="section-title">📄 Exámenes de simulación</h2>
+      <div class="section-line"></div>
     </div>
     <div class="categories-grid">
       <div>
@@ -773,234 +731,105 @@
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <hr class="divider"/>
 
-  <!-- ══ EJERCICIOS PRÁCTICOS POR TEMA (AGRUPADOS CON TABS) ══ -->
-  <section class="section">
-    <div class="section-header" style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
-      <div style="display:flex; align-items:baseline; gap:14px; width:100%;">
-        <h2 class="section-title">📝 Ejercicios prácticos por tema</h2>
-        <div class="section-line"></div>
-      </div>
-      
-      <!-- BOTONES DE FILTRADO (TABS) -->
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <button onclick="filtrarPracticas('todas')" id="btn-prac-todas" style="padding:8px 16px; border-radius:10px; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:white; border:none; font-weight:700; font-family:'Syne', sans-serif; cursor:pointer; transition:all 0.2s;">
-          Todas
-        </button>
-        <button onclick="filtrarPracticas('matematicas')" id="btn-prac-matematicas" style="padding:8px 16px; border-radius:10px; background:var(--surface2); color:var(--muted); border:1px solid var(--border); font-weight:600; font-family:'Syne', sans-serif; cursor:pointer; transition:all 0.2s;">
-          📐 Matemáticas
-        </button>
-        <button onclick="filtrarPracticas('espanol')" id="btn-prac-espanol" style="padding:8px 16px; border-radius:10px; background:var(--surface2); color:var(--muted); border:1px solid var(--border); font-weight:600; font-family:'Syne', sans-serif; cursor:pointer; transition:all 0.2s;">
-          ✍️ Español
-        </button>
-      </div>
-    </div>
-
-    <div class="exp-grid" id="grid-practicas">
-      
-      <!-- MATEMÁTICAS -->
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/practicos/mat/operaciones.html','Práctica: Operaciones Básicas')">
-        <div class="exp-icon">🔢</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Operaciones Básicas</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/practicos/mat/fracciones.html','Práctica: Fracciones')">
-        <div class="exp-icon">➗</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Fracciones</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/practicos/mat/regla3.html','Práctica: Regla de 3')">
-        <div class="exp-icon">⚖️</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Regla de 3</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/practicos/mat/algebra.html','Práctica: Álgebra')">
-        <div class="exp-icon">🔣</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Álgebra</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/practicos/mat/ecuaciones.html','Práctica: Ecuaciones')">
-        <div class="exp-icon">📊</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Ecuaciones</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/practicos/mat/inecuaciones.html','Práctica: Inecuaciones')">
-        <div class="exp-icon">⚠️</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Desigualdades e Inecuaciones</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/practicos/mat/funciones.html','Práctica: Funciones')">
-        <div class="exp-icon">📈</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Álgebra y Funciones</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/practicos/mat/linearecta.html','Práctica: Línea Recta')">
-        <div class="exp-icon">📉</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Línea Recta</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/practicos/mat/angulos.html','Práctica: Ángulos')">
-        <div class="exp-icon">📐</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Ángulos</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/practicos/mat/areas.html','Práctica: Áreas')">
-        <div class="exp-icon">🔷</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Áreas y Geometría</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/practicos/mat/probabilidad.html','Práctica: Probabilidad')">
-        <div class="exp-icon">🎲</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Probabilidad y Estadística</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-      <div class="exp-card mat" data-area="mat" onclick="openExam('examenes/practicos/mat/combinatoria.html','Práctica: Combinatoria')">
-        <div class="exp-icon">🧮</div><div class="exp-area-tag" style="background:#ff6b3520; color:#ff6b35; border-color:#ff6b3540;">Matemáticas</div>
-        <div class="exp-name">Combinatoria</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-
-      <!-- ESPAÑOL -->
-      <div class="exp-card esp" data-area="esp" onclick="openExam('examenes/practicos/esp/signosdepuntuacion.html','Práctica: Signos')">
-        <div class="exp-icon">✒️</div><div class="exp-area-tag" style="background:#7c3aed22; color:#a78bfa; border-color:#7c3aed40;">Español</div>
-        <div class="exp-name">Signos de Puntuación</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-      <div class="exp-card esp" data-area="esp" onclick="openExam('examenes/practicos/esp/tiposdetexto.html','Práctica: Tipos de Texto')">
-        <div class="exp-icon">📝</div><div class="exp-area-tag" style="background:#7c3aed22; color:#a78bfa; border-color:#7c3aed40;">Español</div>
-        <div class="exp-name">Tipos de Texto</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-      <div class="exp-card esp" data-area="esp" onclick="openExam('examenes/practicos/esp/tituloideaprincipal.html','Práctica: Idea Principal')">
-        <div class="exp-icon">💡</div><div class="exp-area-tag" style="background:#05966922; color:#34d399; border-color:#05966940;">Español</div>
-        <div class="exp-name">Título e Idea Principal</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-      <div class="exp-card esp" data-area="esp" onclick="openExam('examenes/practicos/esp/figurasretoricas.html','Práctica: Figuras Retóricas')">
-        <div class="exp-icon">🎭</div><div class="exp-area-tag" style="background:#05966922; color:#34d399; border-color:#05966940;">Español</div>
-        <div class="exp-name">Figuras Retóricas</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-      <div class="exp-card esp" data-area="esp" onclick="openExam('examenes/practicos/esp/inferenciasygenerosliterarios.html','Práctica: Inferencias')">
-        <div class="exp-icon">🔍</div><div class="exp-area-tag" style="background:#05966922; color:#34d399; border-color:#05966940;">Español</div>
-        <div class="exp-name">Inferencias y Géneros Literarios</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-      <div class="exp-card esp" data-area="esp" onclick="openExam('examenes/practicos/esp/narrativas.html','Práctica: Narrativas')">
-        <div class="exp-icon">📖</div><div class="exp-area-tag" style="background:#05966922; color:#34d399; border-color:#05966940;">Español</div>
-        <div class="exp-name">Elementos Narrativos</div>
-        <button class="exp-btn">✏️ Practicar</button>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider"/>
-
-  <section class="section">
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 📖 VIEW: RETOS LECTURA RÁPIDA                   -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="view-retos" class="view-container">
+    <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
-      <h2 class="section-title">Ejercicios de supervivencia</h2>
+      <h2 class="section-title">📖 Reto de lectura rápida</h2>
       <div class="section-line"></div>
-      <span class="section-count">Matemáticas · Redacción · Lectura</span>
-    </div>
-    <div class="tools-grid" id="survival-grid"></div>
-  </section>
-
-  <hr class="divider"/>
-
-  <section class="section">
-    <div class="section-header">
-      <h2 class="section-title">⚡ Reto de Lectura Rápida</h2>
-      <div class="section-line"></div>
-      <span class="section-count">4 niveles · 15 lecturas aleatorias c/u</span>
     </div>
     <div class="reto-intro">
       <div class="reto-intro-icon">📖</div>
       <div class="reto-intro-text">
-        <strong>Entrena tu velocidad y comprensión lectora.</strong> Cada nivel te presenta 3 lecturas aleatorias de un banco de 15 textos. Lee en el tiempo indicado y responde preguntas de comprensión. Ideal para dominar la sección de Lectura del PAA.
+        <strong>Entrena tu velocidad y comprensión lectora.</strong> Cada nivel te presenta 3 lecturas aleatorias de un banco de 15 textos. Lee en el tiempo indicado y responde preguntas de comprensión.
       </div>
     </div>
     <div class="reto-grid" id="reto-grid"></div>
-  </section>
+  </div>
 
-  <hr class="divider"/>
 
-  <section class="section">
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 🎮 VIEW: MINIJUEGOS                             -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="view-minijuegos" class="view-container">
+    <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
       <h2 class="section-title">🎮 Minijuegos</h2>
       <div class="section-line"></div>
-      <span class="section-count">7 juegos · Matemáticas · Español · 1 vs 1</span>
     </div>
     <div class="mini-note">
-      <strong>📋 Aviso:</strong> La plataforma <strong>no guarda datos</strong> entre sesiones. Para llevar tu progresión, <strong>anota tu puntaje</strong> al terminar cada simulación o minijuego y compara en cada sesión tu avance.
+      <strong>📋 Aviso:</strong> La plataforma <strong>no guarda datos</strong> entre sesiones. Para llevar tu progresión, <strong>anota tu puntaje</strong> al terminar cada simulación o minijuego.
     </div>
     <div class="mini-grid">
       <div class="mini-card">
         <div class="mini-icon">⚔️</div>
         <span class="mini-tag">Español · 1 jugador</span>
         <div class="mini-name">Reading Conquest</div>
-        <div class="mini-desc">Conquista zonas respondiendo preguntas de Lectura, Redacción y Vocabulario. Sistema de energía y puntos.</div>
-        <button class="mini-btn" onclick="openExam('minijuegos/conquista_espanol.html','Reading Conquest: Misión PAA')">▶ Jugar</button>
+        <div class="mini-desc">Conquista zonas respondiendo preguntas de Lectura, Redacción y Vocabulario.</div>
+        <button class="mini-btn" onclick="openExam('minijuegos/conquista_espanol.html','Reading Conquest')">▶ Jugar</button>
       </div>
       <div class="mini-card">
         <div class="mini-icon">📚</div>
         <span class="mini-tag">Español · 1 jugador</span>
         <div class="mini-name">PAA Chronicles</div>
-        <div class="mini-desc">Mega banco de preguntas de español. El Archivo del Saber con múltiples niveles y desafíos.</div>
-        <button class="mini-btn" onclick="openExam('minijuegos/conquista_espanol2.html','PAA Chronicles: El Archivo del Saber')">▶ Jugar</button>
+        <div class="mini-desc">Mega banco de preguntas de español con múltiples niveles y desafíos.</div>
+        <button class="mini-btn" onclick="openExam('minijuegos/conquista_espanol2.html','PAA Chronicles')">▶ Jugar</button>
       </div>
       <div class="mini-card">
         <div class="mini-icon">🔢</div>
         <span class="mini-tag">Matemáticas · 1 jugador</span>
         <div class="mini-name">Math Conquest</div>
-        <div class="mini-desc">Conquista territorios matemáticos dominando Aritmética, Álgebra, Geometría y Probabilidad.</div>
-        <button class="mini-btn" onclick="openExam('minijuegos/conquista_mat.html','Math Conquest: Operación PAA')">▶ Jugar</button>
+        <div class="mini-desc">Conquista territorios matemáticos dominando Aritmética y Álgebra.</div>
+        <button class="mini-btn" onclick="openExam('minijuegos/conquista_mat.html','Math Conquest')">▶ Jugar</button>
       </div>
       <div class="mini-card">
         <div class="mini-icon">🌌</div>
         <span class="mini-tag">Matemáticas · 1 jugador</span>
         <div class="mini-name">Crónicas Matemáticas</div>
-        <div class="mini-desc">La Odisea Numérica. Viaja por zonas matemáticas resolviendo problemas con mecánica de RPG.</div>
-        <button class="mini-btn" onclick="openExam('minijuegos/cronicas_mat.html','Math Chronicles: La Odisea Numérica')">▶ Jugar</button>
+        <div class="mini-desc">La Odisea Numérica. Viaja por zonas matemáticas resolviendo problemas.</div>
+        <button class="mini-btn" onclick="openExam('minijuegos/cronicas_mat.html','Math Chronicles')">▶ Jugar</button>
       </div>
       <div class="mini-card">
         <div class="mini-icon">🔵</div>
         <span class="mini-tag">Español · 2 jugadores</span>
         <div class="mini-name">Conecta 4 — Español</div>
-        <div class="mini-desc">Duelo 1 vs 1. Responde preguntas de Lectura PAA para ganar columnas y conectar 4 fichas.</div>
-        <button class="mini-btn" onclick="openExam('minijuegos/conecta4_espanol.html','Reading Duel: Connect 4 PAA')">▶ Jugar</button>
+        <div class="mini-desc">Duelo 1 vs 1. Responde preguntas de Lectura PAA para ganar columnas.</div>
+        <button class="mini-btn" onclick="openExam('minijuegos/conecta4_espanol.html','Connect 4 Español')">▶ Jugar</button>
       </div>
       <div class="mini-card">
         <div class="mini-icon">🔴</div>
         <span class="mini-tag">Matemáticas · 2 jugadores</span>
         <div class="mini-name">Conecta 4 — Matemáticas</div>
-        <div class="mini-desc">Duelo matemático 1 vs 1. Resuelve problemas para colocar fichas y vencer a tu rival.</div>
-        <button class="mini-btn" onclick="openExam('minijuegos/conecta4_mat.html','Connect 4: Math Duel PAA')">▶ Jugar</button>
+        <div class="mini-desc">Duelo matemático 1 vs 1. Resuelve problemas para colocar fichas.</div>
+        <button class="mini-btn" onclick="openExam('minijuegos/conecta4_mat.html','Connect 4 Matemáticas')">▶ Jugar</button>
       </div>
       <div class="mini-card" style="border-color:#e11d4840;background:linear-gradient(135deg,var(--surface),#1a0a0e);">
         <div class="mini-icon">🎮</div>
         <span class="mini-tag" style="background:#e11d4818;color:#fb7185;border-color:#e11d4840;">Matemáticas · 1 jugador</span>
         <div class="mini-name">Dominando el PAA</div>
-        <div class="mini-desc">Juego de acción y reflejos. Responde preguntas de Matemáticas bajo presión para avanzar de nivel y dominar el PAA.</div>
+        <div class="mini-desc">Juego de acción y reflejos bajo presión para avanzar de nivel.</div>
         <button class="mini-btn" style="background:#e11d4820;border-color:#e11d4840;color:#fb7185;" onclick="openExam('minijuegos/dominando_el_paa.html','Dominando el PAA')">▶ Jugar</button>
       </div>
     </div>
-  </section>
+  </div>
 
-  <hr class="divider"/>
 
-  <section class="section">
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 🇺🇸 VIEW: INGLÉS ESLAT                           -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="view-ingles" class="view-container">
+    <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
       <h2 class="section-title">🇺🇸 Inglés — ESLAT</h2>
       <div class="section-line"></div>
-      <span class="section-count">5 simulaciones · 50 reactivos c/u</span>
     </div>
     <div class="eng-note">
-      <strong>⚠️ Nota importante:</strong> El inglés (ESLAT) <strong>no cuenta para el puntaje final de admisión</strong> a la UDG. Sin embargo, obtener un buen desempeño puede apoyarte para acceder a certificaciones como el <strong>TOEFL</strong>, especialmente si tienes un buen promedio académico y tu carrera lo requiere.
-      <br/><br/>
-      Aun así, practicarlo te da ventaja y es parte del examen completo PAA.
+      <strong>⚠️ Nota importante:</strong> El inglés (ESLAT) <strong>no cuenta para el puntaje final de admisión</strong> a la UDG. Sin embargo, obtener un buen desempeño puede apoyarte para certificaciones como el <strong>TOEFL</strong>.
     </div>
     <div class="categories-grid" style="grid-template-columns:1fr;">
       <div>
@@ -1008,28 +837,24 @@
           <div class="cat-icon" style="background:#fbbf24;">🇺🇸</div>
           <div class="cat-name">Inglés (ESLAT)</div>
           <div class="cat-desc">Language Use & Vocabulary · Reading Comprehension · Indirect Writing.</div>
-          <div class="cat-footer">
-            <span class="cat-count">5 simulaciones · 50 reactivos c/u</span>
-            <span class="cat-arrow" id="arrow-panel-ing">›</span>
-          </div>
+          <div class="cat-footer"><span class="cat-count">5 simulaciones · 50 reactivos c/u</span><span class="cat-arrow" id="arrow-panel-ing">›</span></div>
         </div>
         <div class="exam-panel" id="panel-ing">
-          <div class="exam-panel-header">
-            <span class="exam-panel-dot" style="background:#fbbf24;"></span>
-            Inglés ESLAT — Elige una simulación
-            <span class="eng-badge" style="margin-left:auto;">No cuenta para admisión</span>
-          </div>
+          <div class="exam-panel-header"><span class="exam-panel-dot" style="background:#fbbf24;"></span>Inglés ESLAT — Elige una simulación</div>
           <div id="exams-ing"></div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <hr class="divider"/>
 
-  <section class="section">
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 🧰 VIEW: HERRAMIENTAS                           -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="view-herramientas" class="view-container">
+    <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
-      <h2 class="section-title">Herramientas</h2>
+      <h2 class="section-title">🧰 Herramientas</h2>
       <div class="section-line"></div>
     </div>
     <div class="tools-grid">
@@ -1040,49 +865,61 @@
         <button class="tool-run-btn">▶ Abrir calculadora</button>
       </div>
     </div>
-  </section>
+  </div>
 
-  <hr class="divider"/>
 
-  <section class="section">
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 📚 VIEW: RECURSOS OFICIALES                     -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="view-recursos" class="view-container">
+    <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
       <h2 class="section-title">📚 Recursos oficiales · Apoyo</h2>
       <div class="section-line"></div>
-      <span class="section-count">Guías · PDFs · Video curso · Explicaciones</span>
     </div>
     <div class="recursos-note">
-      <strong>Material de apoyo oficial para tu preparación.</strong> Descarga las guías publicadas por la UDG y College Board, accede al curso en video y consulta las explicaciones rápidas de cada tema.
+      <strong>Material de apoyo oficial para tu preparación.</strong> Descarga las guías publicadas por la UDG y College Board.
     </div>
     <div class="recursos-grid">
-
       <a class="recurso-card" data-type="pdf" href="https://escolar.udg.mx/sites/default/files/adjuntos/paa-prueba-practica.pdf" target="_blank" rel="noopener">
         <div class="recurso-type-badge">📄 PDF Descargable</div>
         <div class="recurso-org">UDG · Escolar</div>
         <div class="recurso-title">Guía PAA — Prueba Práctica</div>
-        <div class="recurso-desc">Guía oficial de la Universidad de Guadalajara con ejercicios de práctica para Matemáticas, Redacción y Lectura. Formato examen real.</div>
+        <div class="recurso-desc">Guía oficial de la Universidad de Guadalajara con ejercicios de práctica.</div>
         <span class="recurso-action">⬇ Descargar PDF · 2.17 MB</span>
       </a>
-
       <a class="recurso-card" data-type="pdf" href="https://escolar.udg.mx/sites/default/files/adjuntos/paa-prueba-practica-en-linea.pdf" target="_blank" rel="noopener">
         <div class="recurso-type-badge">📄 PDF Descargable</div>
         <div class="recurso-org">UDG · Escolar</div>
         <div class="recurso-title">Guía PAA — Prueba en Línea</div>
-        <div class="recurso-desc">Versión compacta orientada al formato de examen en línea. Ideal para repasar la estructura y tipo de reactivos antes del día del examen.</div>
+        <div class="recurso-desc">Versión compacta orientada al formato de examen en línea.</div>
         <span class="recurso-action">⬇ Descargar PDF · 203 KB</span>
       </a>
-
       <a class="recurso-card" data-type="web" href="https://latam.collegeboard.org/publicaciones/guia-de-estudio-paa/" target="_blank" rel="noopener">
         <div class="recurso-type-badge">🌐 Sitio Oficial</div>
         <div class="recurso-org">College Board Latinoamérica</div>
         <div class="recurso-title">Guía de Estudio Oficial PAA</div>
-        <div class="recurso-desc">Publicación oficial de College Board con la estructura completa del examen, ejemplos de preguntas y consejos estratégicos para cada sección.</div>
+        <div class="recurso-desc">Publicación oficial con estructura completa del examen.</div>
         <span class="recurso-action">→ Visitar sitio College Board</span>
       </a>
-
     </div>
-  </section>
+  </div>
 
   <footer>PrepMaster © 2025 · Todos los derechos reservados · Acceso exclusivo para usuarios registrados</footer>
+</div>
+
+<!-- Modal Guía PAA -->
+<div class="pdf-modal" id="guia-modal" onclick="closeGuiaOnBg(event)">
+  <div class="pdf-container">
+    <div class="pdf-topbar">
+      <span class="pdf-title">🎓 Guía Maestra PAA (UDG)</span>
+      <span class="pdf-readonly">Estructura Oficial</span>
+      <button class="btn-close-pdf" onclick="closeGuiaModal()">×</button>
+    </div>
+    <div class="pdf-frame-wrap">
+      <iframe src="examenes/explicaciones/Guiapaa.html"></iframe>
+    </div>
+  </div>
 </div>
 
 <div class="iframe-modal" id="iframe-modal">
@@ -1107,70 +944,49 @@
 </div>
 
 <script>
-// SCRIPT DE FILTRADO PARA EJERCICIOS Y EXPLICACIONES
-function filtrarPracticas(categoria) {
-  const contenedor = document.getElementById('grid-practicas');
-  if(!contenedor) return;
-  const tarjetas = contenedor.querySelectorAll('.exp-card');
-  tarjetas.forEach(t => {
-    const area = t.getAttribute('data-area');
-    if (categoria === 'todas') {
-      t.style.display = 'flex';
-    } else if (categoria === 'matematicas') {
-      t.style.display = (area === 'mat') ? 'flex' : 'none';
-    } else if (categoria === 'espanol') {
-      t.style.display = (area === 'esp' || area === 'red' || area === 'lec') ? 'flex' : 'none';
-    }
-  });
-  
-  // Limpiar estilos de todos los botones de practicas
-  document.querySelectorAll('[id^="btn-prac-"]').forEach(btn => {
-    btn.style.background = 'var(--surface2)';
-    btn.style.color = 'var(--muted)';
-    btn.style.border = '1px solid var(--border)';
-  });
-  
-  // Activar estilo del botón seleccionado
-  const btnActivo = document.getElementById('btn-prac-' + categoria);
-  if(btnActivo) {
-    btnActivo.style.background = 'linear-gradient(135deg, var(--accent), var(--accent2))';
-    btnActivo.style.color = 'white';
-    btnActivo.style.border = 'none';
+// Sistema de navegación por capas (Views)
+function switchView(viewId) {
+  document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
+  const target = document.getElementById('view-' + viewId);
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
 
-function filtrarExplicaciones(categoria) {
-  const contenedor = document.getElementById('grid-explicaciones');
-  if(!contenedor) return;
-  const tarjetas = contenedor.querySelectorAll('.exp-card');
-  tarjetas.forEach(t => {
-    const area = t.getAttribute('data-area');
-    if (categoria === 'todas') {
-      t.style.display = 'flex';
-    } else if (categoria === 'matematicas') {
-      t.style.display = (area === 'mat') ? 'flex' : 'none';
-    } else if (categoria === 'espanol') {
-      t.style.display = (area === 'esp' || area === 'red' || area === 'lec') ? 'flex' : 'none';
+// Submenu tabs inside layer views (Explicaciones / Prácticos)
+function switchLayerTab(type, area) {
+  const containerId = type === 'exp' ? 'layer-exp-grid' : 'layer-prac-grid';
+  const container = document.getElementById(containerId);
+  if(!container) return;
+
+  container.querySelectorAll('.exp-card').forEach(card => {
+    const group = card.getAttribute('data-group');
+    if (area === 'todas' || group === area) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
     }
   });
-  
-  // Limpiar estilos de todos los botones de explicaciones
-  document.querySelectorAll('[id^="btn-exp-"]').forEach(btn => {
-    btn.style.background = 'var(--surface2)';
-    btn.style.color = 'var(--muted)';
-    btn.style.border = '1px solid var(--border)';
-  });
-  
-  // Activar estilo del botón seleccionado
-  const btnActivo = document.getElementById('btn-exp-' + categoria);
-  if(btnActivo) {
-    btnActivo.style.background = 'linear-gradient(135deg, var(--accent), var(--accent2))';
-    btnActivo.style.color = 'white';
-    btnActivo.style.border = 'none';
+
+  // Activar tab visualmente
+  const parent = container.previousElementSibling;
+  if(parent && parent.classList.contains('layer-tabs')) {
+    parent.querySelectorAll('.layer-tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
   }
 }
 
-// UI functions must be in a regular (non-module) script so onclick handlers work immediately
+function openModalGuia() {
+  document.getElementById('guia-modal').classList.add('open');
+}
+function closeGuiaModal() {
+  document.getElementById('guia-modal').classList.remove('open');
+}
+function closeGuiaOnBg(e) {
+  if(e.target === document.getElementById('guia-modal')) closeGuiaModal();
+}
+
 function togglePanel(id) {
   const p=document.getElementById(id), a=document.getElementById('arrow-panel-'+id.replace('panel-','')), open=p&&p.classList.contains('open');
   document.querySelectorAll('.exam-panel').forEach(x=>x.classList.remove('open'));
@@ -1194,11 +1010,21 @@ function closePDFOnBg(e) { if(e.target===document.getElementById('pdf-modal')) c
 document.addEventListener('keydown', e => {
   if(document.getElementById('pdf-modal').classList.contains('open')){if((e.ctrlKey||e.metaKey)&&e.key==='s')e.preventDefault(); if(e.key==='Escape')closePDF();}
   if(document.getElementById('iframe-modal').classList.contains('open')&&e.key==='Escape')closeIframe();
+  if(document.getElementById('guia-modal').classList.contains('open')&&e.key==='Escape')closeGuiaModal();
 });
-// Also expose to window for any dynamic calls
-window.togglePanel=togglePanel; window.openExam=openExam; window.openTool=openTool;
-window.closeIframe=closeIframe; window.openPDF=openPDF; window.closePDF=closePDF;
-window.closePDFOnBg=closePDFOnBg;
+
+window.switchView = switchView;
+window.switchLayerTab = switchLayerTab;
+window.openModalGuia = openModalGuia;
+window.closeGuiaModal = closeGuiaModal;
+window.closeGuiaOnBg = closeGuiaOnBg;
+window.togglePanel = togglePanel; 
+window.openExam = openExam; 
+window.openTool = openTool;
+window.closeIframe = closeIframe; 
+window.openPDF = openPDF; 
+window.closePDF = closePDF;
+window.closePDFOnBg = closePDFOnBg;
 </script>
 
 <script type="module">
@@ -1276,7 +1102,6 @@ const EXAMS_ING = [
   {name:'Simulation 4: English PAA (ESLAT)',file:'examenes/singl5.html',pdf:'respuestas/ing/singl5_resp.pdf',meta:'50 reactivos'},
 ];
 
-// Render English exams
 const ingCont = document.getElementById('exams-ing');
 if (ingCont) EXAMS_ING.forEach((ex,i) => {
   const div = document.createElement('div');
@@ -1297,7 +1122,6 @@ if (ingCont) EXAMS_ING.forEach((ex,i) => {
     </div>`;
   ingCont.appendChild(div);
 });
-
 
 const svGrid = document.getElementById('survival-grid');
 if (svGrid) SURVIVAL.forEach(sv => {
@@ -1329,8 +1153,6 @@ if (retoGrid) RETOS.forEach(r => {
   retoGrid.appendChild(d);
 });
 
-
-// ── Session management (max 3 simultaneous) ─────────────────────────────────
 const MAX_SESSIONS = 3;
 let mySessionId = null;
 
@@ -1339,7 +1161,6 @@ function genSessionId() {
 }
 
 async function registerSession(uid) {
-  // Clean sessions older than 2 hours
   const sessionsRef = collection(db, 'sessions', uid, 'active');
   const snap = await getDocs(sessionsRef);
   const now = Date.now();
@@ -1348,12 +1169,12 @@ async function registerSession(uid) {
     const data = d.data();
     const age = now - (data.ts?.toMillis?.() || 0);
     if (age > 2 * 60 * 60 * 1000) {
-      await deleteDoc(d.ref); // expired
+      await deleteDoc(d.ref);
     } else {
       active.push(d.id);
     }
   }
-  if (active.length >= MAX_SESSIONS) return false; // limit reached
+  if (active.length >= MAX_SESSIONS) return false;
   mySessionId = genSessionId();
   await setDoc(doc(db, 'sessions', uid, 'active', mySessionId), {
     ts: serverTimestamp(),
@@ -1369,7 +1190,6 @@ async function unregisterSession(uid) {
   }
 }
 
-// Heartbeat — refresh session timestamp every 10 min to keep it alive
 function startHeartbeat(uid) {
   setInterval(async () => {
     if (mySessionId) {
@@ -1381,11 +1201,9 @@ function startHeartbeat(uid) {
   }, 10 * 60 * 1000);
 }
 
-// Unregister session on tab close
 window.addEventListener('beforeunload', () => {
   if (auth.currentUser && mySessionId) {
-    // Use sendBeacon for reliability on tab close
-    navigator.sendBeacon && navigator.sendBeacon('/ping'); // just to trigger beforeunload
+    navigator.sendBeacon && navigator.sendBeacon('/ping');
     unregisterSession(auth.currentUser.uid);
   }
 });
@@ -1399,7 +1217,6 @@ onAuthStateChanged(auth, async user => {
         const now = new Date();
         const expires = sub.expiresAt?.toDate();
         if (sub.active && expires && expires > now) {
-          // Check session limit
           const sessionOk = await registerSession(user.uid);
           if (!sessionOk) {
             document.getElementById('auth-screen').style.display = 'flex';
@@ -1421,7 +1238,6 @@ onAuthStateChanged(auth, async user => {
         }
       }
     } catch(e) { console.error('Error verificando suscripción:', e); }
-    // No active subscription
     document.getElementById('auth-screen').style.display = 'flex';
     document.getElementById('app').style.display = 'none';
     const errEl = document.getElementById('login-error');
@@ -1434,7 +1250,6 @@ onAuthStateChanged(auth, async user => {
   }
 });
 
-// ── Tab switch ──────────────────────────────────────────────────────────────
 window.switchTab = (tab) => {
   const loginErr = document.getElementById('login-error');
   const regErr = document.getElementById('register-error');
@@ -1455,7 +1270,6 @@ window.toggleFreeCode = () => {
   sec.style.display = sec.style.display === 'block' ? 'none' : 'block';
 };
 
-// ── Login ───────────────────────────────────────────────────────────────────
 window.doLogin = async () => {
   const email = document.getElementById('login-email').value.trim();
   const pass  = document.getElementById('login-pass').value;
@@ -1476,7 +1290,6 @@ window.doLogin = async () => {
   }
 };
 
-// ── Register + Redirect to Stripe ───────────────────────────────────────────
 window.doRegisterAndPay = async () => {
   const email  = document.getElementById('reg-email').value.trim();
   const pass   = document.getElementById('reg-pass').value;
@@ -1498,7 +1311,6 @@ window.doRegisterAndPay = async () => {
     ok.textContent = '✅ Cuenta creada. Redirigiendo a pago...';
     ok.style.display = 'block';
 
-    // Call Netlify function to create Stripe Checkout session
     const res = await fetch('https://us-central1-simulador-udg-2026.cloudfunctions.net/createCheckout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1522,7 +1334,6 @@ window.doRegisterAndPay = async () => {
   }
 };
 
-// ── Activate free code ───────────────────────────────────────────────────────
 window.doActivateFree = async () => {
   const email = document.getElementById('reg-email').value.trim();
   const pass  = document.getElementById('reg-pass').value;
@@ -1537,7 +1348,6 @@ window.doActivateFree = async () => {
   if (!code) { err.textContent='Ingresa el código de acceso.'; err.style.display='block'; return; }
 
   try {
-    // Create account if new, or get existing
     let uid;
     try {
       const cred = await createUserWithEmailAndPassword(auth, email, pass);
@@ -1558,7 +1368,6 @@ window.doActivateFree = async () => {
     if (data.ok) {
       ok.textContent = '✅ ¡Acceso activado! Entrando...';
       ok.style.display = 'block';
-      // onAuthStateChanged will detect the subscription and show the app
     } else {
       throw new Error(data.error || 'Código inválido.');
     }
