@@ -29,8 +29,12 @@
   img,svg{display:block;max-width:100%;}
   button{-webkit-appearance:none;appearance:none;cursor:pointer;}
   input{-webkit-appearance:none;appearance:none;}
-  #auth-screen{position:fixed;inset:0;display:flex;align-items:flex-start;justify-content:center;background:var(--bg);z-index:1000;padding:20px;overflow-y:auto;overscroll-behavior:contain;}
-  .auth-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:var(--radius-xl);padding:36px 32px;width:100%;max-width:440px;position:relative;margin:auto;box-shadow:var(--shadow-lg);backdrop-filter:blur(20px);}
+  
+  /* PANTALLA DE ACCESO OPTIMIZADA PC Y CELULAR */
+  #auth-screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);z-index:1000;padding:24px 16px;overflow-y:auto;overscroll-behavior:contain;}
+  .auth-wrapper{width:100%;max-width:440px;display:flex;flex-direction:column;gap:20px;margin:auto;}
+  
+  .auth-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:var(--radius-xl);padding:36px 32px;width:100%;position:relative;box-shadow:var(--shadow-lg);backdrop-filter:blur(20px);}
   .auth-card::before{content:'';position:absolute;top:-80px;right:-80px;width:200px;height:200px;background:radial-gradient(circle,#7c3aed33 0%,transparent 70%);pointer-events:none;}
   .auth-logo{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px;}
   .auth-logo span{color:var(--gold);}
@@ -38,7 +42,7 @@
   .auth-nodata{background:#0f172a;border:1px solid #ffffff12;border-radius:10px;padding:10px 14px;margin-bottom:22px;font-size:11.5px;color:#64748b;line-height:1.6;text-align:center;}
   .auth-nodata strong{color:#f8fafc;}
   .auth-nodata span{color:#fbbf24;font-weight:700;}
-  .auth-subtitle{color:var(--muted);font-size:14px;margin-bottom:36px;}
+  .auth-subtitle{color:var(--muted);font-size:14px;margin-bottom:28px;}
   .input-group{margin-bottom:16px;}
   .input-group label{display:block;font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;}
   .input-group input{width:100%;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .2s;}
@@ -46,9 +50,8 @@
   .btn-primary{width:100%;padding:15px;background:linear-gradient(135deg,#8b5cf6,#6d28d9,#5b21b6);border:none;border-radius:var(--radius-sm);color:white;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;transition:var(--transition);box-shadow:0 4px 20px var(--accent-glow);position:relative;overflow:hidden;}
   .btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#fff2,transparent 60%);pointer-events:none;}
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--accent-glow);filter:brightness(1.08);}
-  .btn-primary:active{transform:translateY(0);filter:brightness(.95);}
 
-  .auth-tabs{display:flex;gap:4px;background:var(--surface2);border-radius:10px;padding:4px;margin-bottom:28px;}
+  .auth-tabs{display:flex;gap:4px;background:var(--surface2);border-radius:10px;padding:4px;margin-bottom:24px;}
   .auth-tab{flex:1;padding:9px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;border-radius:7px;cursor:pointer;transition:all .2s;}
   .auth-tab.active{background:var(--surface3);color:var(--text);box-shadow:0 2px 8px #0008;}
   .auth-panel{display:none;} .auth-panel.active{display:block;}
@@ -63,11 +66,11 @@
   .price-badge{display:inline-flex;align-items:center;gap:6px;background:#fbbf2418;border:1px solid #fbbf2430;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;color:#fbbf24;margin-bottom:20px;}
   .auth-error{background:#ff6b3520;border:1px solid #ff6b3540;border-radius:8px;padding:10px 14px;font-size:13px;color:#ff9966;margin-top:12px;display:none;}
 
-  /* ── NUEVA SECCIÓN DE PRUEBA GRATIS (SIN LOGIN) ── */
-  .free-trial-container{width:100%;max-width:440px;margin:24px auto 40px;}
-  .free-divider{display:flex;align-items:center;gap:12px;margin-bottom:16px;color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+  /* ── SECCIÓN DE PRUEBA GRATIS (SIN LOGIN) ABAJO ORDENADA ── */
+  .free-trial-container{width:100%;}
+  .free-divider{display:flex;align-items:center;gap:12px;margin-bottom:14px;color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
   .free-divider::before,.free-divider::after{content:'';flex:1;height:1px;background:var(--border-bright);}
-  .free-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .free-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
   .free-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:14px;padding:14px;text-align:left;cursor:pointer;transition:all 0.2s ease;}
   .free-card:hover{border-color:var(--gold);transform:translateY(-2px);background:var(--surface2);}
   .free-icon{font-size:20px;margin-bottom:6px;display:inline-block;}
@@ -353,84 +356,85 @@
 <body>
 
 <div id="auth-screen">
-  <div class="auth-card">
-    <div class="auth-logo">Prep<span>Master</span></div>
-    <p class="auth-subtitle">Plataforma oficial de simulación PAA</p>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-logo">Prep<span>Master</span></div>
+      <p class="auth-subtitle">Plataforma oficial de simulación PAA</p>
 
-    <div class="auth-nodata">📋 Esta plataforma <strong>no guarda tu progreso</strong> entre sesiones. <span>Anota tu puntaje</span> al terminar cada simulación o minijuego.</div>
+      <div class="auth-nodata">📋 Esta plataforma <strong>no guarda tu progreso</strong> entre sesiones. <span>Anota tu puntaje</span> al terminar cada simulación o minijuego.</div>
 
-    <div class="auth-tabs">
-      <button class="auth-tab active" onclick="switchTab('login')">Iniciar sesión</button>
-      <button class="auth-tab" onclick="switchTab('register')">Crear cuenta</button>
-    </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login')">Iniciar sesión</button>
+        <button class="auth-tab" onclick="switchTab('register')">Crear cuenta</button>
+      </div>
 
-    <!-- LOGIN PANEL -->
-    <div id="panel-login" class="auth-panel active">
-      <div class="input-group"><label>Correo</label><input type="email" id="login-email" placeholder="correo@ejemplo.com"/></div>
-      <div class="input-group"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-      <button class="btn-primary" onclick="doLogin()">Entrar →</button>
-      <div class="auth-error" id="login-error"></div>
-    </div>
+      <!-- LOGIN PANEL -->
+      <div id="panel-login" class="auth-panel active">
+        <div class="input-group"><label>Correo</label><input type="email" id="login-email" placeholder="correo@ejemplo.com"/></div>
+        <div class="input-group"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+        <button class="btn-primary" onclick="doLogin()">Entrar →</button>
+        <div class="auth-error" id="login-error"></div>
+      </div>
 
-    <!-- REGISTER PANEL -->
-    <div id="panel-register" class="auth-panel">
-      <div class="price-badge">💳 $89 MXN · Acceso 3 meses</div>
-      <div class="input-group"><label>Correo</label><input type="email" id="reg-email" placeholder="correo@ejemplo.com"/></div>
-      <div class="input-group"><label>Contraseña</label><input type="password" id="reg-pass" placeholder="Mínimo 6 caracteres"/></div>
-      <div class="input-group"><label>Confirmar contraseña</label><input type="password" id="reg-pass2" placeholder="Repite tu contraseña"/></div>
-      <button class="btn-primary" onclick="doRegisterAndPay()" id="btn-register">Crear cuenta y pagar →</button>
-      <div class="auth-error" id="register-error"></div>
-      <div class="auth-success" id="register-success"></div>
+      <!-- REGISTER PANEL -->
+      <div id="panel-register" class="auth-panel">
+        <div class="price-badge">💳 $89 MXN · Acceso 3 meses</div>
+        <div class="input-group"><label>Correo</label><input type="email" id="reg-email" placeholder="correo@ejemplo.com"/></div>
+        <div class="input-group"><label>Contraseña</label><input type="password" id="reg-pass" placeholder="Mínimo 6 caracteres"/></div>
+        <div class="input-group"><label>Confirmar contraseña</label><input type="password" id="reg-pass2" placeholder="Repite tu contraseña"/></div>
+        <button class="btn-primary" onclick="doRegisterAndPay()" id="btn-register">Crear cuenta y pagar →</button>
+        <div class="auth-error" id="register-error"></div>
+        <div class="auth-success" id="register-success"></div>
 
-      <div class="auth-divider">o</div>
-      <div class="free-code-toggle" onclick="toggleFreeCode()">🎁 ¿Tienes un código de acceso gratuito?</div>
-      <div id="free-code-section">
-        <div class="input-group" style="margin-bottom:10px"><label>Código de acceso</label><input type="text" id="free-code-input" placeholder="CÓDIGO" style="text-transform:uppercase;letter-spacing:.1em"/></div>
-        <button class="btn-secondary" onclick="doActivateFree()">Activar acceso gratuito →</button>
+        <div class="auth-divider">o</div>
+        <div class="free-code-toggle" onclick="toggleFreeCode()">🎁 ¿Tienes un código de acceso gratuito?</div>
+        <div id="free-code-section">
+          <div class="input-group" style="margin-bottom:10px"><label>Código de acceso</label><input type="text" id="free-code-input" placeholder="CÓDIGO" style="text-transform:uppercase;letter-spacing:.1em"/></div>
+          <button class="btn-secondary" onclick="doActivateFree()">Activar acceso gratuito →</button>
+        </div>
       </div>
     </div>
 
-  </div>
-
-  <!-- SECCIÓN DE PRUEBA GRATIS (SIN LOGIN) DEBAJO DEL CARD -->
-  <div class="free-trial-container">
-    <div class="free-divider">✨ O prueba recursos gratis ahora</div>
-    <div class="free-grid">
-      <div class="free-card" onclick="openFreeModal('examenes/diagnosticos/diagnostico-matematicas.html', 'Diagnóstico Matemáticas')">
-        <span class="free-icon">📐</span>
-        <div><span class="free-tag tag-free">Sin Login</span></div>
-        <div class="free-title">Diag. Matemáticas</div>
-        <div class="free-desc">55 reactivos reales PAA.</div>
-      </div>
-      <div class="free-card" onclick="openFreeModal('examenes/diagnosticos/diagnostico-espanol.html', 'Diagnóstico Español')">
-        <span class="free-icon">✍️</span>
-        <div><span class="free-tag tag-free">Sin Login</span></div>
-        <div class="free-title">Diag. Español</div>
-        <div class="free-desc">40 reactivos y textos.</div>
-      </div>
-      <div class="free-card" onclick="openFreeModal('examenes/explicaciones/InterpretacionGraficas.html', 'Explicación: Gráficas')">
-        <span class="free-icon">📖</span>
-        <div><span class="free-tag tag-free">Teoría</span></div>
-        <div class="free-title">Explicación Gráficas</div>
-        <div class="free-desc">Conceptos clave PAA.</div>
-      </div>
-      <div class="free-card" onclick="openFreeModal('examenes/practicos/mat/graficas.html', 'Práctica: Gráficas')">
-        <span class="free-icon">📊</span>
-        <div><span class="free-tag tag-free">Práctica</span></div>
-        <div class="free-title">Ejercicios Gráficas</div>
-        <div class="free-desc">24 reactivos interactivos.</div>
-      </div>
-      <div class="free-card" onclick="openFreeModal('calculadora.html', 'Calculadora de Puntajes PAA')">
-        <span class="free-icon">🧮</span>
-        <div><span class="free-tag tag-free">Herramienta</span></div>
-        <div class="free-title">Calculadora PAA</div>
-        <div class="free-desc">Estima tu puntaje UDG.</div>
-      </div>
-      <div class="free-card" onclick="openConecta4Modal()">
-        <span class="free-icon">🟡</span>
-        <div><span class="free-tag tag-game">Minijuego</span></div>
-        <div class="free-title">Conecta 4 PAA</div>
-        <div class="free-desc">Minijuego 1 vs 1.</div>
+    <!-- SECCIÓN DE PRUEBA GRATIS (SIN LOGIN) ABAJO ORDENADA -->
+    <div class="free-trial-container">
+      <div class="free-divider">✨ O prueba recursos gratis ahora</div>
+      <div class="free-grid">
+        <div class="free-card" onclick="openFreeModal('examenes/diagnosticos/diagnostico-matematicas.html', 'Diagnóstico Matemáticas')">
+          <span class="free-icon">📐</span>
+          <div><span class="free-tag tag-free">Sin Login</span></div>
+          <div class="free-title">Diag. Matemáticas</div>
+          <div class="free-desc">55 reactivos reales PAA[cite: 4].</div>
+        </div>
+        <div class="free-card" onclick="openFreeModal('examenes/diagnosticos/diagnostico-espanol.html', 'Diagnóstico Español')">
+          <span class="free-icon">✍️</span>
+          <div><span class="free-tag tag-free">Sin Login</span></div>
+          <div class="free-title">Diag. Español</div>
+          <div class="free-desc">40 reactivos y textos[cite: 3].</div>
+        </div>
+        <div class="free-card" onclick="openFreeModal('examenes/explicaciones/InterpretacionGraficas.html', 'Explicación: Gráficas')">
+          <span class="free-icon">📖</span>
+          <div><span class="free-tag tag-free">Teoría</span></div>
+          <div class="free-title">Explicación Gráficas</div>
+          <div class="free-desc">Conceptos clave PAA[cite: 1].</div>
+        </div>
+        <div class="free-card" onclick="openFreeModal('examenes/practicos/mat/graficas.html', 'Práctica: Gráficas')">
+          <span class="free-icon">📊</span>
+          <div><span class="free-tag tag-free">Práctica</span></div>
+          <div class="free-title">Ejercicios Gráficas</div>
+          <div class="free-desc">24 reactivos interactivos[cite: 2].</div>
+        </div>
+        <div class="free-card" onclick="openFreeModal('calculadora.html', 'Calculadora de Puntajes PAA')">
+          <span class="free-icon">🧮</span>
+          <div><span class="free-tag tag-free">Herramienta</span></div>
+          <div class="free-title">Calculadora PAA</div>
+          <div class="free-desc">Estima tu puntaje UDG.</div>
+        </div>
+        <div class="free-card" onclick="openConecta4Modal()">
+          <span class="free-icon">🟡</span>
+          <div><span class="free-tag tag-game">Minijuego</span></div>
+          <div class="free-title">Conecta 4 PAA</div>
+          <div class="free-desc">Minijuego 1 vs 1.</div>
+        </div>
       </div>
     </div>
   </div>
