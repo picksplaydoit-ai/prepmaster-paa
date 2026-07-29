@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>PrepMaster PAA — Examen Diagnóstico de Español</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root{
+    --bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;
+    --text:#0f172a;--muted:#64748b;--esp:#7c3aed;--gold:#f59e0b;--accent:#3b82f6;
+  }
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;margin:0;padding:0;}
+  
+  .top-bar{position:fixed;top:0;left:0;right:0;height:70px;background:white;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 40px;z-index:100;}
+  .top-stats{display:flex;gap:30px;align-items:center;}
+  .stat-block{text-align:center;}
+  .stat-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+  .stat-val{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;}
+  
+  .top-progress-area{width:240px;}
+  .progress-text{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:4px;display:block;}
+  .progress-track{width:100%;height:6px;background:#e2e8f0;border-radius:100px;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--esp);width:0%;transition:width 0.3s ease;}
+
+  .main-wrapper{max-width:800px;margin:120px auto 40px;padding:20px;}
+  .quiz-card{background:white;border:1px solid #e2e8f0;border-radius:28px;padding:40px;box-shadow:0 20px 40px -15px rgba(0,0,0,0.05);position:relative;}
+  
+  .tag-area{display:inline-block;padding:4px 12px;background:#f3e8ff;color:var(--esp);border-radius:100px;font-size:11px;font-weight:700;text-transform:uppercase;margin-bottom:16px;letter-spacing:.5px;}
+  .pregunta-titulo{font-family:'Syne',sans-serif;font-size:19px;font-weight:700;color:#0f172a;line-height:1.5;margin-bottom:24px;}
+
+  /* Caja del texto a leer (Colapsable) */
+  .lectura-container{margin-bottom:24px; display:none;}
+  .btn-toggle-lectura{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;background:#f8fafc;color:var(--esp);border:2px solid #e2e8f0;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+  .btn-toggle-lectura:hover{background:#ede9fe;border-color:#ddd6fe;}
+  .lectura-box{background:#f8fafc;border:2px solid #e2e8f0;border-radius:16px;padding:24px;font-size:14.5px;line-height:1.7;color:#334155;margin-top:12px;display:none;max-height:400px;overflow-y:auto;}
+  .lectura-box p {margin-bottom: 12px;}
+  .lectura-box p:last-child {margin-bottom: 0;}
+  
+  .opcion-btn{width:100%;display:flex;align-items:center;gap:16px;padding:16px 20px;background:white;border:2px solid #e2e8f0;border-radius:16px;margin-bottom:12px;cursor:pointer;transition:all .2s;text-align:left;font-size:15px;font-weight:500;color:#334155;}
+  .opcion-btn:hover{border-color:var(--esp);background:#faf5ff;}
+  .opcion-letra{width:32px;height:32px;border-radius:10px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Syne',sans-serif;color:#475569;flex-shrink:0;}
+  
+  .opcion-btn.correct{background:#dcfce7!important;border-color:#22c55e!important;color:#166534!important;}
+  .opcion-btn.correct .opcion-letra{background:#22c55e;color:white;}
+  .opcion-btn.incorrect{background:#fee2e2!important;border-color:#ef4444!important;color:#991b1b!important;}
+  .opcion-btn.incorrect .opcion-letra{background:#ef4444;color:white;}
+
+  .btn-start{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border:none;padding:14px 32px;border-radius:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 10px 25px rgba(124,58,237,0.3);}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-stats">
+    <div class="stat-block">
+      <div class="stat-label">Tiempo</div>
+      <div class="stat-val" id="timer" style="color:#2563eb;">45:00</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-label">Bien</div>
+      <div class="stat-val" id="score-bien" style="color:#16a34a;">0</div>
+    </div>
+  </div>
+  <div class="top-progress-area" id="progress-area" style="display:none;">
+    <span class="progress-text" id="progress-label">Reactivo 1 de 40</span>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+</div>
+
+<div class="main-wrapper">
+  <!-- INTRO SCREEN -->
+  <div id="screen-intro" class="quiz-card" style="text-align:center;">
+    <div style="font-size:48px;margin-bottom:14px;">✍️</div>
+    <h1 style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:10px;">Examen Diagnóstico Español</h1>
+    <p style="color:var(--muted);font-size:14px;line-height:1.6;max-width:500px;margin:0 auto 28px;">
+      Este diagnóstico evalúa tus habilidades en <strong>Lectura y Redacción</strong>. Consta de <strong>40 reactivos</strong> (15 de redacción y 25 de lectura basados en 3 textos largos). Cuentas con <strong>45 minutos</strong>.
+    </p>
+    <button class="btn-start" onclick="iniciarExamen()">Comenzar Examen →</button>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="screen-quiz" class="quiz-card" style="display:none;">
+    <div class="tag-area" id="q-categoria">Redacción</div>
+    
+    <div id="q-lectura-container" class="lectura-container">
+      <button class="btn-toggle-lectura" onclick="toggleLectura()">
+        <i class="fa-solid fa-book-open"></i> <span id="btn-lectura-txt">Mostrar Lectura de Referencia</span>
+      </button>
+      <div id="q-lectura-box" class="lectura-box"></div>
+    </div>
+
+    <div class="pregunta-titulo" id="q-texto">Cargando pregunta...</div>
+    <div id="q-opciones"></div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="screen-results" class="quiz-card" style="display:none;text-align:center;">
+    <div style="font-size:48px;margin-bottom:10px;">🏆</div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:6px;">¡Examen Concluido!</h2>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:24px;">Puntaje oficial estimado para la sección de Español (Lectura y Redacción):</p>
+    
+    <div style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:16px;padding:24px;margin-bottom:24px;">
+      <div id="puntaje-final" style="font-family:'Syne',sans-serif;font-size:56px;font-weight:800;color:var(--gold);">400</div>
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:700;">Escala PAA (400 - 800 pts)</div>
+    </div>
+
+    <div style="text-align:left;margin-bottom:24px;">
+      <h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:12px;">Desglose por Subárea:</h3>
+      <div id="desglose-box" style="display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+
+    <div style="text-align:left;margin-bottom:24px;">
+      <h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:12px;color:var(--esp);">💡 Solucionario:</h3>
+      <div id="solucionario-box" style="display:flex;flex-direction:column;gap:12px;"></div>
+    </div>
+
+    <button class="btn-start" onclick="window.location.reload()">Volver a intentar</button>
+  </div>
+</div>
+
+<script>
+const texto1_Ciencia = `
+  <p><strong>Los Misterios de los Agujeros Negros</strong></p>
+  <p>Un agujero negro es una región finita del espacio en cuyo interior existe una concentración de masa lo suficientemente elevada como para generar un campo gravitatorio tal que ninguna partícula material, ni siquiera la luz, puede escapar de ella. Esta frontera invisible, el punto de no retorno, se denomina "horizonte de sucesos". Todo lo que cruza esta línea es absorbido inexorablemente hacia el centro, conocido como singularidad, un punto de volumen cero y densidad infinita donde las leyes actuales de la física dejan de tener sentido.</p>
+  <p>Durante décadas, los agujeros negros fueron considerados meras curiosidades matemáticas derivadas de la Teoría de la Relatividad General de Albert Einstein. Albert Einstein mismo dudaba de que la naturaleza permitiera la formación de objetos tan extremos. Sin embargo, en 1971, los astrónomos detectaron Cygnus X-1, un sistema estelar que emitía potentes rayos X. Los cálculos demostraron que el objeto masivo invisible en ese sistema era demasiado pesado para ser una estrella de neutrones; debía ser un agujero negro. Esta fue la primera evidencia empírica sólida de su existencia.</p>
+  <p>Hoy en día, se sabe que los agujeros negros no son aspiradoras cósmicas que "chupan" todo a su alrededor de manera agresiva. Si el Sol fuera reemplazado repentinamente por un agujero negro de la misma masa, la Tierra no sería succionada; simplemente continuaría orbitando en la oscuridad y el frío. Su peligro real solo existe para aquellos objetos que se acercan demasiado a su horizonte de sucesos.</p>
+`;
+
+const texto2_Literatura = `
+  <p><strong>El Relojero de la Calle Mercaderes</strong></p>
+  <p>Elías pasaba sus días confinado en la pequeña tienda de la esquina, un lugar donde el tiempo parecía haberse detenido. Su oficio, heredado de su abuelo, consistía en dar vida a mecanismos inertes. Las paredes estaban cubiertas de relojes de todas las formas y tamaños: cucús de madera tallada, elegantes relojes de bolsillo de plata y pesados relojes de péndulo que marcaban el ritmo de su soledad.</p>
+  <p>Para Elías, cada reloj tenía un alma. Afirmaba que, al igual que los humanos, los engranajes sufrían de fatiga, los muelles perdían su ímpetu y las manecillas dudaban antes de avanzar. Los clientes solían llevarle relojes desahuciados por otros relojeros, piezas oxidadas y olvidadas. Elías, con una paciencia monástica, limpiaba cada diente y ajustaba cada rubí con sus pinzas de precisión, susurrándoles promesas de un futuro mejor.</p>
+  <p>Una tarde de invierno, una mujer vestida de luto entró a la tienda. Llevaba entre sus manos temblorosas un reloj de oro con la tapa grabada. "Mi esposo lo llevaba consigo cuando el barco se hundió", susurró con la mirada perdida. "Dejó de funcionar a las tres y cuarto, el momento exacto en que recibí el telegrama. Nadie ha podido repararlo". Elías tomó el reloj con reverencia. No prometió nada, pero en el fondo sabía que reparar aquel reloj no era cuestión de ajustar engranajes, sino de curar una memoria rota.</p>
+`;
+
+const texto3_Ensayo = `
+  <p><strong>La Hiperconectividad y el Aislamiento Moderno</strong></p>
+  <p>Vivimos en una paradoja fascinante: somos la generación más conectada de la historia de la humanidad, pero al mismo tiempo, los estudios psicológicos revelan niveles alarmantes de soledad y aislamiento social. Las redes sociales prometieron acercarnos, eliminar las fronteras geográficas y democratizar la información. En muchos aspectos, han cumplido esa promesa. Sin embargo, el costo oculto de esta hiperconectividad ha comenzado a manifestarse en el tejido de nuestras interacciones cotidianas.</p>
+  <p>El fenómeno del "phubbing" (ignorar a la persona que tienes enfrente para prestar atención al teléfono móvil) se ha normalizado en cafeterías, cenas familiares y reuniones de trabajo. Estamos físicamente presentes, pero psicológicamente ausentes, inmersos en un flujo constante de notificaciones, "me gusta" y actualizaciones de estado. Esta atención dividida deteriora la calidad de nuestras relaciones reales, sustituyendo la profundidad de una conversación cara a cara por la superficialidad de una interacción digital.</p>
+  <p>Además, la exposición constante a las vidas editadas y filtradas de los demás fomenta un sentido de insuficiencia y ansiedad. Observamos los éxitos, los viajes y los momentos felices de nuestros contactos, creando una ilusión de que todos, excepto nosotros, viven vidas perfectas. Es imperativo que desarrollemos una dieta digital consciente; no se trata de demonizar la tecnología, sino de reaprender a estar presentes, reclamando nuestra atención y reconectando verdaderamente con quienes nos rodean.</p>
+`;
+
+const bancoEspanol = [
+  // REDACCIÓN (15 Reactivos)
+  {cat:"Redacción", lec:"", p:"Selecciona la opción que combine mejor las siguientes oraciones:<br>1. El perro ladró toda la noche.<br>2. El perro no dejó dormir a los vecinos.", ops:["El perro ladró toda la noche y por eso no dejando dormir a los vecinos.", "El perro, ladrando toda la noche, no dejó dormir a los vecinos.", "El perro que ladró toda la noche no dejó dormir a los vecinos.", "Como el perro ladró toda la noche, los vecinos no durmieron el perro."], r:1, exp:"La opción B usa el gerundio de manera efectiva para conectar causalmente las ideas sin repeticiones."},
+  {cat:"Redacción", lec:"", p:"Selecciona la opción que combine mejor las oraciones:<br>1. La tormenta destruyó el puente.<br>2. El pueblo quedó aislado.", ops:["La tormenta destruyó el puente, dejando al pueblo aislado.", "El pueblo quedó aislado, pero la tormenta destruyó el puente.", "Destruyendo el puente la tormenta, el pueblo fue aislado.", "La tormenta destruyó el puente porque el pueblo quedó aislado."], r:0, exp:"La opción A establece una relación directa de causa y consecuencia de forma gramaticalmente fluida."},
+  {cat:"Redacción", lec:"", p:"Une las oraciones lógicamente:<br>1. Juan estudió con dedicación.<br>2. Juan aprobó el examen de admisión.", ops:["Juan estudió con dedicación; sin embargo, aprobó el examen de admisión.", "Aprobó el examen de admisión Juan, estudiando con dedicación.", "Juan estudió con dedicación, por lo tanto, aprobó el examen de admisión.", "Juan aprobó el examen de admisión a pesar de estudiar con dedicación."], r:2, exp:"El conector 'por lo tanto' indica consecuencia, siendo la relación lógica correcta."},
+  {cat:"Redacción", lec:"", p:"Mejora la redacción uniendo los enunciados:<br>1. El museo cerró sus puertas.<br>2. El museo será remodelado.", ops:["El museo cerró sus puertas porque será remodelado.", "Cerró sus puertas el museo, y luego el museo será remodelado.", "El museo cerró sus puertas aunque será remodelado.", "Será remodelado el museo que cerró sus puertas de él."], r:0, exp:"El conector 'porque' justifica adecuadamente la razón del cierre."},
+  {cat:"Redacción", lec:"", p:"Combina:<br>1. Las abejas son polinizadores cruciales.<br>2. Las abejas están en peligro de extinción.", ops:["Las abejas son polinizadores cruciales, así que están en peligro de extinción.", "Las abejas, polinizadores cruciales, están en peligro de extinción.", "Estando en peligro de extinción, las abejas son polinizadores cruciales.", "Las abejas son polinizadores cruciales porque están en peligro de extinción."], r:1, exp:"El uso de la aposición ('polinizadores cruciales') elimina la repetición del sujeto elegantemente."},
+  {cat:"Redacción", lec:"", p:"¿Qué enunciado debe eliminarse del siguiente párrafo por romper la coherencia?<br>(1) El sol es la estrella central del sistema solar. (2) Proporciona luz y calor a la Tierra. (3) Las estrellas de mar habitan en el fondo del océano. (4) Sin la energía solar, la vida no sería posible.", ops:["El 1", "El 2", "El 3", "El 4"], r:2, exp:"El enunciado 3 habla de animales marinos, desviándose del tema astronómico del Sol."},
+  {cat:"Redacción", lec:"", p:"Identifica la oración que debe omitirse por repetición (redundancia):<br>(1) La nueva biblioteca alberga más de mil libros. (2) Su arquitectura es moderna y sustentable. (3) Cuenta con textos antiguos y contemporáneos. (4) En su interior hay una gran cantidad de libros guardados.", ops:["El 1", "El 2", "El 3", "El 4"], r:3, exp:"El enunciado 4 repite de forma redundante la información ya dada en el enunciado 1."},
+  {cat:"Redacción", lec:"", p:"Omite el enunciado innecesario:<br>(1) Mozart fue un genio de la música clásica. (2) Compuso sus primeras obras a los 5 años. (3) La música electrónica surgió en el siglo XX. (4) Su legado perdura en la actualidad.", ops:["El 1", "El 2", "El 3", "El 4"], r:2, exp:"El enunciado 3 habla sobre música electrónica, rompiendo la coherencia sobre la vida de Mozart."},
+  {cat:"Redacción", lec:"", p:"¿Qué oración se debe eliminar por pérdida de rumbo?<br>(1) El ejercicio regular mejora la salud cardiovascular. (2) Ayuda a reducir el estrés. (3) Los zapatos deportivos son muy caros hoy en día. (4) También fortalece el sistema inmunológico.", ops:["La 1", "La 2", "La 3", "La 4"], r:2, exp:"La oración 3 cambia el tema de los beneficios fisiológicos del ejercicio al precio del calzado."},
+  {cat:"Redacción", lec:"", p:"Elimina el enunciado redundante:<br>(1) La fotosíntesis es vital para las plantas. (2) Convierten la luz en energía vital. (3) Las plantas usan la luz solar para producir su alimento a través de la fotosíntesis. (4) Además, liberan oxígeno al ambiente.", ops:["El 1", "El 2", "El 3", "El 4"], r:2, exp:"El enunciado 3 explica exactamente lo mismo que los enunciados 1 y 2 combinados."},
+  {cat:"Redacción", lec:"", p:"Completa correctamente el enunciado: 'Me dijo que no _______ venir a la fiesta porque _______ mucha tarea.'", ops:["híba / tubo", "iba / tuvo", "iva / tubo", "iba / tubo"], r:1, exp:"'Iba' del verbo ir (sin h, con b). 'Tuvo' del verbo tener (con v)."},
+  {cat:"Redacción", lec:"", p:"Identifica la oración con puntuación correcta:", ops:["Juan, el hermano de María llegó tarde.", "Juan, el hermano de María, llegó tarde.", "Juan el hermano, de María llegó tarde.", "Juan el hermano de María, llegó tarde."], r:1, exp:"La aposición explicativa ('el hermano de María') debe ir encerrada entre comas."},
+  {cat:"Redacción", lec:"", p:"Selecciona la palabra escrita correctamente: 'La decisión del juez fue un hecho _______ en la historia legal.'", ops:["tracendental", "trasendental", "trascendental", "tranzendental"], r:2, exp:"La palabra correcta se escribe con 'sc': trascendental."},
+  {cat:"Redacción", lec:"", p:"Identifica el error de concordancia gramatical: 'La manada de lobos salvajes atacaron a la presa durante la noche.'", ops:["La manada", "atacaron", "salvajes", "a la presa"], r:1, exp:"El núcleo del sujeto es 'La manada' (singular), por tanto el verbo debe ser 'atacó'."},
+  {cat:"Redacción", lec:"", p:"¿Qué conector completa mejor el texto? 'Quería salir a correr; _______, empezó a llover fuertemente.'", ops:["además", "sin embargo", "por lo tanto", "es decir"], r:1, exp:"Se requiere un conector de oposición (sin embargo) porque la lluvia frustra el deseo de salir."},
+
+  // LECTURA 1 - CIENCIA (8 Reactivos)
+  {cat:"Lectura", lec:texto1_Ciencia, p:"Según el texto, el 'horizonte de sucesos' se define como:", ops:["El centro del agujero negro donde la densidad es infinita.", "Una curiosidad matemática propuesta por Albert Einstein.", "La frontera espacial de donde nada, ni la luz, puede escapar.", "El campo gravitatorio que absorbe a la Tierra."], r:2, exp:"El texto indica literalmente que el horizonte de sucesos es la frontera invisible, el punto de no retorno de donde ni la luz escapa."},
+  {cat:"Lectura", lec:texto1_Ciencia, p:"¿Qué actitud tenía Albert Einstein respecto a los agujeros negros según la lectura?", ops:["Aseguraba su existencia en la vía Láctea.", "Dudaba que la naturaleza permitiera objetos tan extremos.", "Fue el primero en descubrir Cygnus X-1.", "Creía que eran aspiradoras cósmicas agresivas."], r:1, exp:"El segundo párrafo menciona: 'Albert Einstein mismo dudaba de que la naturaleza permitiera la formación de objetos tan extremos'."},
+  {cat:"Lectura", lec:texto1_Ciencia, p:"La palabra <strong>inexorablemente</strong> en el primer párrafo se puede sustituir mejor por:", ops:["Lentamente", "Inevitablemente", "Cuidosamente", "Aleatoriamente"], r:1, exp:"Inexorablemente significa que no se puede evitar, detener o eludir."},
+  {cat:"Lectura", lec:texto1_Ciencia, p:"El descubrimiento de Cygnus X-1 fue crucial porque:", ops:["Demostró que Einstein estaba equivocado en todas sus teorías.", "Fue la primera evidencia empírica de un agujero negro.", "Mostró cómo las estrellas de neutrones emiten rayos X.", "Comprobó que la Tierra será succionada algún día."], r:1, exp:"El texto afirma explícitamente: 'Esta fue la primera evidencia empírica sólida de su existencia'."},
+  {cat:"Lectura", lec:texto1_Ciencia, p:"De acuerdo con el tercer párrafo, la afirmación 'los agujeros negros son aspiradoras cósmicas':", ops:["Es un hecho comprobado científicamente.", "Solo aplica a agujeros negros como Cygnus X-1.", "Es una idea errónea o mito.", "Sucedería si el Sol se convirtiera en uno."], r:2, exp:"El autor aclara: 'Hoy en día, se sabe que los agujeros negros no son aspiradoras cósmicas que chupan todo...'."},
+  {cat:"Lectura", lec:texto1_Ciencia, p:"Si el Sol fuera reemplazado por un agujero negro de su misma masa, la Tierra:", ops:["Sería destruida instantáneamente por los rayos X.", "Caería hacia la singularidad de inmediato.", "Continuaría su órbita actual, aunque a oscuras.", "Aumentaría su temperatura drásticamente."], r:2, exp:"El texto dice textualmente: 'la Tierra no sería succionada; simplemente continuaría orbitando en la oscuridad y el frío'."},
+  {cat:"Lectura", lec:texto1_Ciencia, p:"La palabra <strong>empírica</strong> en el segundo párrafo se refiere a algo:", ops:["Basado en la experiencia o la observación real.", "Puramente matemático y teórico.", "Extremadamente denso y masivo.", "Relacionado con los imperios estelares."], r:0, exp:"El conocimiento empírico es aquel fundado en la observación de los hechos (en este caso, observaciones astronómicas)."},
+  {cat:"Lectura", lec:texto1_Ciencia, p:"¿Cuál es la idea principal de todo el texto?", ops:["Describir la historia de Albert Einstein.", "Explicar qué son los agujeros negros, su comprobación y desmentir un mito común.", "Advertir sobre el peligro inminente de los agujeros negros.", "Detallar el funcionamiento del sistema estelar Cygnus X-1."], r:1, exp:"El texto define los agujeros negros (P1), relata cómo se comprobó su existencia (P2) y aclara un mito sobre su peligro (P3)."},
+
+  // LECTURA 2 - LITERATURA (8 Reactivos)
+  {cat:"Lectura", lec:texto2_Literatura, p:"Elías consideraba a los relojes como:", ops:["Simples mecanismos de engranajes y muelles.", "Seres con alma que sufrían fatiga humana.", "Objetos malditos que detenían el tiempo.", "Inversiones de oro y plata de alto valor."], r:1, exp:"El segundo párrafo menciona: 'Para Elías, cada reloj tenía un alma. Afirmaba que, al igual que los humanos, los engranajes sufrían...'."},
+  {cat:"Lectura", lec:texto2_Literatura, p:"En el contexto del segundo párrafo, la palabra <strong>monástica</strong> sugiere que la paciencia de Elías era:", ops:["Superficial y comercial.", "Religiosa, profunda y dedicada.", "Irritante y aburrida.", "Excesiva y perjudicial."], r:1, exp:"Monástica remite a los monjes; implica una dedicación total, devota, silenciosa y profunda."},
+  {cat:"Lectura", lec:texto2_Literatura, p:"¿Qué figura retórica predomina en la frase 'las manecillas dudaban antes de avanzar'?", ops:["Hipérbole", "Personificación (o Prosopopeya)", "Símil", "Onomatopeya"], r:1, exp:"Le atribuye la cualidad humana de 'dudar' a un objeto inanimado (las manecillas)."},
+  {cat:"Lectura", lec:texto2_Literatura, p:"¿Qué significa la expresión 'relojes desahuciados' en la lectura?", ops:["Relojes robados a otros relojeros.", "Relojes muy caros y exclusivos.", "Relojes que otros expertos daban por inservibles o sin arreglo.", "Relojes que funcionaban perfectamente."], r:2, exp:"'Desahuciado' se refiere a algo o alguien a quien se le ha quitado la esperanza de cura o reparación."},
+  {cat:"Lectura", lec:texto2_Literatura, p:"La mujer que entró a la tienda vestía de luto porque:", ops:["Era la moda en invierno.", "Había enviudado recientemente.", "Odiaba los relojes de bolsillo.", "Quería intimidar a Elías."], r:1, exp:"El luto y la frase 'Mi esposo lo llevaba consigo cuando el barco se hundió' indican que enviudó."},
+  {cat:"Lectura", lec:texto2_Literatura, p:"¿Por qué el reloj de la mujer se detuvo a las 'tres y cuarto'?", ops:["Porque le faltaba darle cuerda.", "Porque fue la hora en que el barco zarpó.", "Porque coincidió con el instante en que recibió el telegrama trágico.", "Porque los engranajes se oxidaron en ese momento."], r:2, exp:"La mujer dice: 'Dejó de funcionar a las tres y cuarto, el momento exacto en que recibí el telegrama'."},
+  {cat:"Lectura", lec:texto2_Literatura, p:"La última oración del texto sugiere que para Elías la reparación del reloj simbolizaba:", ops:["Una oportunidad para cobrar mucho dinero.", "Un acto de sanación emocional para la viuda.", "Un desafío mecánico imposible de lograr.", "El fin de su carrera como relojero."], r:1, exp:"Elías sabía que reparar el reloj era 'curar una memoria rota', refiriéndose al dolor de la viuda."},
+  {cat:"Lectura", lec:texto2_Literatura, p:"El tono general del texto se puede describir como:", ops:["Humorístico y satírico.", "Melancólico, reflexivo y emotivo.", "Científico y objetivo.", "Épico y aventurero."], r:1, exp:"El texto evoca sentimientos de soledad, devoción al oficio, pérdida y compasión."},
+
+  // LECTURA 3 - ENSAYO (9 Reactivos)
+  {cat:"Lectura", lec:texto3_Ensayo, p:"Según el primer párrafo, la 'paradoja fascinante' de nuestra época consiste en que:", ops:["La tecnología es más barata pero más difícil de usar.", "Estamos altamente conectados digitalmente, pero sufrimos mucho aislamiento social.", "Las redes sociales han eliminado fronteras pero creado muros físicos.", "Tenemos más información, pero leemos menos libros."], r:1, exp:"El autor dice: 'somos la generación más conectada... pero al mismo tiempo... revelan niveles alarmantes de soledad'."},
+  {cat:"Lectura", lec:texto3_Ensayo, p:"En el texto, el término <strong>phubbing</strong> se define como:", ops:["Publicar fotografías editadas en redes sociales.", "Sentir ansiedad al no tener conexión a internet.", "Ignorar a las personas físicamente presentes para mirar el celular.", "La democratización de la información global."], r:2, exp:"El segundo párrafo lo define explícitamente: 'ignorar a la persona que tienes enfrente para prestar atención al teléfono móvil'."},
+  {cat:"Lectura", lec:texto3_Ensayo, p:"El autor afirma que la 'atención dividida' en las interacciones cotidianas causa que:", ops:["Se fomente el debate democrático.", "La profundidad de las conversaciones reales se deteriore y se vuelva superficial.", "Las cenas familiares sean mucho más silenciosas.", "Se eliminen por completo las fronteras geográficas."], r:1, exp:"Menciona que deteriora la calidad de las relaciones, 'sustituyendo la profundidad... por la superficialidad'."},
+  {cat:"Lectura", lec:texto3_Ensayo, p:"¿Qué efecto psicológico provoca 'la exposición constante a las vidas editadas y filtradas' según el ensayo?", ops:["Un sentido de insuficiencia y ansiedad en el usuario.", "Un aumento en la productividad laboral.", "Inspiración inagotable para viajar más.", "Alegría y satisfacción por los logros ajenos."], r:0, exp:"El tercer párrafo es claro: 'fomenta un sentido de insuficiencia y ansiedad'."},
+  {cat:"Lectura", lec:texto3_Ensayo, p:"La palabra <strong>imperativo</strong> en el último párrafo es sinónimo de:", ops:["Opcional", "Sugerido", "Obligatorio / Urgente", "Lento"], r:2, exp:"Imperativo significa que es un deber o una exigencia ineludible y urgente."},
+  {cat:"Lectura", lec:texto3_Ensayo, p:"El concepto de 'dieta digital consciente' propuesto por el autor hace referencia a:", ops:["Borrar todas nuestras redes sociales para siempre.", "No comer mientras usamos el celular.", "Usar la tecnología con moderación y regresar la atención a las personas reales.", "Comprar aplicaciones que midan nuestras calorías consumidas."], r:2, exp:"El autor aclara: 'no se trata de demonizar la tecnología, sino de reaprender a estar presentes...'."},
+  {cat:"Lectura", lec:texto3_Ensayo, p:"¿Cuál de las siguientes premisas serviría como un <strong>contraargumento</strong> a la postura principal del texto?", ops:["El phubbing arruina las citas amorosas.", "Las redes sociales han salvado vidas al conectar a personas con depresión con grupos de apoyo mundial.", "Ver fotos de viajes de influencers causa depresión en adolescentes.", "Las conversaciones digitales carecen del tono de voz humano."], r:1, exp:"El texto argumenta que las redes aíslan. Un contraargumento demostraría que, por el contrario, crean conexiones vitales o de apoyo real."},
+  {cat:"Lectura", lec:texto3_Ensayo, p:"¿Qué intención comunicativa persigue el autor con este ensayo?", ops:["Entretener al lector con anécdotas de tecnología.", "Prohibir el uso de smartphones en lugares públicos.", "Informar sobre un fenómeno social e invitar a la reflexión sobre nuestros hábitos digitales.", "Vender un curso para superar la adicción a internet."], r:2, exp:"Informa sobre el impacto negativo (aislamiento, ansiedad) e invita a la reflexión ('reaprender a estar presentes')."},
+  {cat:"Lectura", lec:texto3_Ensayo, p:"La frase 'vidas editadas y filtradas' es una crítica directa a:", ops:["La industria de la moda tradicional.", "La falsedad o hiper-perfección proyectada en las redes sociales.", "La mala calidad de las cámaras de los celulares antiguos.", "Los filtros purificadores de agua modernos."], r:1, exp:"Critica cómo las personas solo muestran los 'éxitos, los viajes y los momentos felices' irreales en internet."}
+];
+
+// Estado del examen
+let currentIndex = 0;
+let aciertos = 0;
+let tiempoRestante = 45 * 60; // 45 minutos
+let timerInterval = null;
+let historialResultados = [];
+let lecturaVisible = false;
+
+function iniciarExamen() {
+  document.getElementById('screen-intro').style.display = 'none';
+  document.getElementById('screen-quiz').style.display = 'block';
+  document.getElementById('progress-area').style.display = 'block';
+  
+  cargarPregunta(0);
+  
+  timerInterval = setInterval(() => {
+    tiempoRestante--;
+    const m = Math.floor(tiempoRestante / 60);
+    const s = tiempoRestante % 60;
+    document.getElementById('timer').innerText = `${m < 10 ? '0':''}${m}:${s < 10 ? '0':''}${s}`;
+    if (tiempoRestante <= 0) {
+      clearInterval(timerInterval);
+      mostrarResultados();
+    }
+  }, 1000);
+}
+
+function cargarPregunta(idx) {
+  if (idx >= bancoEspanol.length) {
+    mostrarResultados();
+    return;
+  }
+  
+  currentIndex = idx;
+  const item = bancoEspanol[idx];
+  
+  document.getElementById('q-categoria').innerText = item.cat;
+  document.getElementById('q-texto').innerHTML = item.p;
+  document.getElementById('progress-label').innerText = `Reactivo ${idx + 1} de ${bancoEspanol.length}`;
+  document.getElementById('progress-fill').style.width = `${((idx + 1) / bancoEspanol.length) * 100}%`;
+
+  const cajaLectura = document.getElementById('q-lectura-container');
+  const contenidoLectura = document.getElementById('q-lectura-box');
+  const btnTxt = document.getElementById('btn-lectura-txt');
+
+  if (item.lec && item.lec.trim() !== "") {
+    cajaLectura.style.display = 'block';
+    
+    // Si cambiamos de texto o es la primera pregunta con texto, resetea la visibilidad a oculta
+    if (currentIndex === 0 || (bancoEspanol[currentIndex-1] && bancoEspanol[currentIndex-1].lec !== item.lec)) {
+      contenidoLectura.innerHTML = item.lec;
+      contenidoLectura.style.display = 'none';
+      lecturaVisible = false;
+      btnTxt.innerText = "Mostrar Lectura de Referencia";
+    }
+  } else {
+    cajaLectura.style.display = 'none';
+    lecturaVisible = false;
+  }
+
+  const boxOpciones = document.getElementById('q-opciones');
+  boxOpciones.innerHTML = '';
+
+  item.ops.forEach((op, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opcion-btn';
+    btn.id = `opt_${i}`;
+    btn.innerHTML = `<div class="opcion-letra">${String.fromCharCode(65+i)}</div><span>${op}</span>`;
+    btn.onclick = () => seleccionarRespuesta(i, btn);
+    boxOpciones.appendChild(btn);
+  });
+}
+
+function toggleLectura() {
+  const contenido = document.getElementById('q-lectura-box');
+  const btnTxt = document.getElementById('btn-lectura-txt');
+  lecturaVisible = !lecturaVisible;
+  
+  if (lecturaVisible) {
+    contenido.style.display = 'block';
+    btnTxt.innerText = "Ocultar Lectura";
+  } else {
+    contenido.style.display = 'none';
+    btnTxt.innerText = "Mostrar Lectura de Referencia";
+  }
+}
+
+function seleccionarRespuesta(elegida, btnElement) {
+  const botones = document.querySelectorAll('.opcion-btn');
+  botones.forEach(b => b.style.pointerEvents = 'none');
+
+  const item = bancoEspanol[currentIndex];
+  const esCorrecta = (elegida === item.r);
+
+  if (esCorrecta) {
+    btnElement.classList.add('correct');
+    aciertos++;
+    document.getElementById('score-bien').innerText = aciertos;
+  } else {
+    btnElement.classList.add('incorrect');
+    const correctoBtn = document.getElementById(`opt_${item.r}`);
+    if(correctoBtn) correctoBtn.classList.add('correct');
+  }
+
+  historialResultados.push({
+    pregunta: item.p,
+    categoria: item.cat,
+    elegida: item.ops[elegida],
+    correcta: item.ops[item.r],
+    esCorrecta: esCorrecta,
+    explicacion: item.exp
+  });
+
+  setTimeout(() => {
+    cargarPregunta(currentIndex + 1);
+  }, 1800);
+}
+
+function mostrarResultados() {
+  if(timerInterval) clearInterval(timerInterval);
+  
+  document.getElementById('screen-quiz').style.display = 'none';
+  document.getElementById('progress-area').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'block';
+
+  const puntajeFinal = Math.round(400 + (aciertos / bancoEspanol.length) * 400);
+  document.getElementById('puntaje-final').innerText = puntajeFinal;
+
+  const desgloseBox = document.getElementById('desglose-box');
+  desgloseBox.innerHTML = '';
+
+  let porArea = { Redacción: {aciertos: 0, total: 0}, Lectura: {aciertos: 0, total: 0} };
+  historialResultados.forEach(res => {
+    if(porArea[res.categoria]) {
+      porArea[res.categoria].total++;
+      if(res.esCorrecta) porArea[res.categoria].aciertos++;
+    }
+  });
+
+  for(let area in porArea) {
+    const d = porArea[area];
+    if(d.total === 0) continue;
+    const pts = Math.round(400 + (d.aciertos / d.total) * 400);
+    const div = document.createElement('div');
+    div.style.cssText = "background:var(--surface2);border:1px solid #e2e8f0;border-radius:12px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;";
+    div.innerHTML = `<div><strong>${area}</strong>: ${d.aciertos} / ${d.total} aciertos</div> <div style="color:var(--esp);font-weight:800;">~${pts} pts</div>`;
+    desgloseBox.appendChild(div);
+  }
+
+  const solBox = document.getElementById('solucionario-box');
+  solBox.innerHTML = '';
+  historialResultados.forEach((res, idx) => {
+    const itemDiv = document.createElement('div');
+    itemDiv.style.cssText = `background:var(--surface2);border:1px solid ${res.esCorrecta ? '#bbf7d0':'#fecaca'};border-radius:12px;padding:14px;font-size:13px;line-height:1.5;`;
+    itemDiv.innerHTML = `
+      <strong style="color:${res.esCorrecta ? '#16a34a':'#dc2626'}">Reactivo ${idx+1} (${res.categoria}): ${res.esCorrecta ? '✔ Correcto' : '✖ Incorrecto'}</strong><br/>
+      <div style="margin: 8px 0; color:#475569;"><em>${res.pregunta}</em></div>
+      <span style="color:var(--muted)">Tu respuesta: ${res.elegida} | Respuesta correcta: ${res.correcta}</span><br/>
+      <strong style="color:var(--esp); display:block; margin-top:8px;">Solución:</strong> ${res.explicacion}
+    `;
+    solBox.appendChild(itemDiv);
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
