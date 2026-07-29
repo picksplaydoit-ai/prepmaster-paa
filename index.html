@@ -1,635 +1,1530 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PrepMaster PAA | Plataforma de Preparación UDG</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Font Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Poppins', sans-serif; }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#080810"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="description" content="PrepMaster PAA — Plataforma de preparación para el examen de admisión UDG"/>
+<title>PrepMaster PAA — Plataforma de Exámenes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#080810;--surface:#0f0f1a;--surface2:#161624;--surface3:#1e1e30;
+    --border:#ffffff08;--border-bright:#ffffff14;--border-focus:#7c3aed60;
+    --text:#eeeef8;--muted:#7070a0;--muted2:#9090b8;
+    --mat:#ff6b35;--red:#7c3aed;--lec:#059669;--surv:#0ea5e9;--calc:#f59e0b;--gold:#fbbf24;--reto:#e11d48;
+    --accent:#7c3aed;--accent2:#6d28d9;--accent-glow:#7c3aed30;
+    --radius-sm:10px;--radius-md:16px;--radius-lg:22px;--radius-xl:28px;
+    --shadow-sm:0 2px 12px #00000040;--shadow-md:0 8px 32px #00000060;--shadow-lg:0 20px 60px #00000080;
+    --transition:all .2s cubic-bezier(.4,0,.2,1);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;}
+  img,svg{display:block;max-width:100%;}
+  button{-webkit-appearance:none;appearance:none;cursor:pointer;}
+  input{-webkit-appearance:none;appearance:none;}
+  #auth-screen{position:fixed;inset:0;display:flex;align-items:flex-start;justify-content:center;background:var(--bg);z-index:1000;padding:20px;overflow-y:auto;overscroll-behavior:contain;}
+  .auth-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:var(--radius-xl);padding:36px 32px;width:100%;max-width:420px;position:relative;margin:auto;box-shadow:var(--shadow-lg);backdrop-filter:blur(20px);}
+  .auth-card::before{content:'';position:absolute;top:-80px;right:-80px;width:200px;height:200px;background:radial-gradient(circle,#7c3aed33 0%,transparent 70%);pointer-events:none;}
+  .auth-logo{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px;}
+  .auth-logo span{color:var(--gold);}
 
-    <!-- Firebase SDKs (v9 Compat para HTML estático) -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  .auth-nodata{background:#0f172a;border:1px solid #ffffff12;border-radius:10px;padding:10px 14px;margin-bottom:22px;font-size:11.5px;color:#64748b;line-height:1.6;text-align:center;}
+  .auth-nodata strong{color:#f8fafc;}
+  .auth-nodata span{color:#fbbf24;font-weight:700;}
+  .auth-subtitle{color:var(--muted);font-size:14px;margin-bottom:36px;}
+  .input-group{margin-bottom:16px;}
+  .input-group label{display:block;font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;}
+  .input-group input{width:100%;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .2s;}
+  .input-group input:focus{border-color:var(--red);}
+  .btn-primary{width:100%;padding:15px;background:linear-gradient(135deg,#8b5cf6,#6d28d9,#5b21b6);border:none;border-radius:var(--radius-sm);color:white;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;transition:var(--transition);box-shadow:0 4px 20px var(--accent-glow);position:relative;overflow:hidden;}
+  .btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#fff2,transparent 60%);pointer-events:none;}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--accent-glow);filter:brightness(1.08);}
+  .btn-primary:active{transform:translateY(0);filter:brightness(.95);}
+
+  /* ── Auth tabs ── */
+  .auth-tabs{display:flex;gap:4px;background:var(--surface2);border-radius:10px;padding:4px;margin-bottom:28px;}
+  .auth-tab{flex:1;padding:9px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;border-radius:7px;cursor:pointer;transition:all .2s;}
+  .auth-tab.active{background:var(--surface3);color:var(--text);box-shadow:0 2px 8px #0008;}
+  .auth-panel{display:none;} .auth-panel.active{display:block;}
+  .btn-secondary{width:100%;padding:13px;background:transparent;border:1px solid var(--border-bright);border-radius:10px;color:var(--text);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:10px;transition:all .2s;}
+  .btn-secondary:hover{border-color:var(--gold);color:var(--gold);}
+  .auth-divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--muted);font-size:12px;}
+  .auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+  .free-code-toggle{font-size:12px;color:var(--muted);text-align:center;margin-top:14px;cursor:pointer;}
+  .free-code-toggle:hover{color:var(--gold);}
+  #free-code-section{display:none;margin-top:14px;padding:16px;background:var(--surface2);border-radius:12px;border:1px solid var(--border);}
+  .auth-success{background:#10b98120;border:1px solid #10b98140;border-radius:8px;padding:10px 14px;font-size:13px;color:#10b981;margin-top:12px;display:none;}
+  .price-badge{display:inline-flex;align-items:center;gap:6px;background:#fbbf2418;border:1px solid #fbbf2430;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;color:#fbbf24;margin-bottom:20px;}
+  .auth-error{background:#ff6b3520;border:1px solid #ff6b3540;border-radius:8px;padding:10px 14px;font-size:13px;color:#ff9966;margin-top:12px;display:none;}
+  #app{display:none;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;background:#0a0a0fcc;backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;}
+  .nav-logo span{color:var(--gold);}
+  .nav-right{display:flex;align-items:center;gap:16px;}
+  .nav-user{font-size:13px;color:var(--muted);}
+  .btn-logout{padding:7px 16px;background:transparent;border:1px solid var(--border-bright);border-radius:8px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;}
+  .btn-logout:hover{border-color:#ff6b35;color:#ff6b35;}
+  .hero{padding:140px 40px 80px;text-align:center;position:relative;}
+  .hero::after{content:'';position:absolute;top:80px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,#7c3aed18 0%,transparent 65%);pointer-events:none;}
+  .hero-badge{display:inline-block;padding:6px 16px;background:#fbbf2412;border:1px solid #fbbf2428;border-radius:100px;font-size:11px;font-weight:600;color:var(--gold);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:20px;backdrop-filter:blur(8px);}
+  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(36px,6vw,72px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:20px;}
+  .hero h1 em{font-style:normal;background:linear-gradient(90deg,#ff6b35,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hero p{color:var(--muted);font-size:18px;max-width:500px;margin:0 auto;line-height:1.6;}
+  .section{padding:60px 40px;max-width:1200px;margin:0 auto;}
+  .section-header{display:flex;align-items:baseline;gap:14px;margin-bottom:32px;}
+  .section-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.5px;}
+  .section-line{flex:1;height:1px;background:var(--border);}
+  .section-count{font-size:13px;color:var(--muted);}
+  .categories-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
+  .cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px;cursor:pointer;transition:var(--transition);position:relative;overflow:hidden;will-change:transform;}
+  .cat-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;}
+  .cat-card:hover{transform:translateY(-3px);border-color:var(--border-bright);box-shadow:0 12px 40px #00000050;}
+  .cat-card:active{transform:translateY(-1px);}
+  .cat-card:hover::before{opacity:1;}
+  .cat-card[data-cat="mat"]{--cc:var(--mat);}
+  .cat-card[data-cat="mat"]::before{background:radial-gradient(circle at top right,#ff6b3510 0%,transparent 60%);}
+  .cat-card[data-cat="mat"]:hover{box-shadow:0 20px 60px #ff6b3520;}
+  .cat-card[data-cat="red"]{--cc:var(--red);}
+  .cat-card[data-cat="red"]::before{background:radial-gradient(circle at top right,#7c3aed10 0%,transparent 60%);}
+  .cat-card[data-cat="red"]:hover{box-shadow:0 20px 60px #7c3aed20;}
+  .cat-card[data-cat="lec"]{--cc:var(--lec);}
+  .cat-card[data-cat="lec"]::before{background:radial-gradient(circle at top right,#05966910 0%,transparent 60%);}
+  .cat-card[data-cat="lec"]:hover{box-shadow:0 20px 60px #05966920;}
+  .cat-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px;background:var(--cc);}
+  .cat-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+  .cat-desc{font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.5;}
+  .cat-footer{display:flex;align-items:center;justify-content:space-between;}
+  .cat-count{font-size:13px;color:var(--muted);}
+  .cat-arrow{width:32px;height:32px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:16px;transition:all .2s;}
+  .cat-card:hover .cat-arrow{background:var(--cc);border-color:var(--cc);color:white;}
+  .exam-panel{display:none;margin-top:12px;background:var(--surface);border:1px solid var(--border-bright);border-radius:16px;overflow:hidden;animation:slideDown .3s ease;}
+  @keyframes slideDown{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+  .exam-panel.open{display:block;}
+  .exam-panel-header{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;}
+  .exam-panel-dot{width:8px;height:8px;border-radius:50%;}
+  .exam-item{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);transition:background .15s;gap:12px;}
+  .exam-item:last-child{border-bottom:none;}
+  .exam-item:hover{background:var(--surface2);}
+  .exam-item-left{display:flex;align-items:center;gap:14px;}
+  .exam-num{width:36px;height:36px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--muted);flex-shrink:0;}
+  .exam-info-name{font-size:15px;font-weight:500;margin-bottom:2px;}
+  .exam-info-meta{font-size:12px;color:var(--muted);}
+  .exam-item-actions{display:flex;gap:8px;flex-shrink:0;}
+  .btn-exam{padding:7px 14px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px;}
+  .btn-exam-start{color:white;}
+  .btn-exam-start:hover{filter:brightness(1.12);transform:translateY(-1px);box-shadow:0 4px 16px #0004;}
+  .btn-exam-pdf{background:transparent;color:var(--muted);border-color:var(--border-bright);}
+  .btn-exam-pdf:hover{border-color:var(--gold);color:var(--gold);}
+  .tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
+  .tool-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:22px;cursor:pointer;transition:var(--transition);will-change:transform;}
+  .tool-card[data-accent="surv"]{--tc:var(--surv);}
+  .tool-card[data-accent="calc"]{--tc:var(--calc);}
+  .tool-card:hover{transform:translateY(-2px);border-color:var(--tc);box-shadow:0 10px 36px color-mix(in srgb,var(--tc) 18%,transparent);}
+  .tool-card:active{transform:translateY(0);}
+  .tool-badge{display:inline-block;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;background:color-mix(in srgb,var(--tc) 15%,transparent);color:var(--tc);}
+  .tool-name{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;margin-bottom:6px;}
+  .tool-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .tool-run-btn{margin-top:16px;padding:8px 16px;background:color-mix(in srgb,var(--tc) 15%,transparent);border:1px solid color-mix(in srgb,var(--tc) 30%,transparent);border-radius:8px;color:var(--tc);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
+  .tool-run-btn:hover{background:color-mix(in srgb,var(--tc) 25%,transparent);}
+  .reto-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+  .reto-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;cursor:pointer;transition:var(--transition);position:relative;overflow:hidden;will-change:transform;}
+  .reto-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;}
+  .reto-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px #00000050;}
+  .reto-card:active{transform:translateY(-1px);}
+  .reto-card:hover::before{opacity:1;}
+  .reto-card[data-ppm="100"]{--rc:#6366f1;}
+  .reto-card[data-ppm="100"]::before{background:radial-gradient(circle at top right,#6366f115,transparent 65%);}
+  .reto-card[data-ppm="100"]:hover{border-color:#6366f155;box-shadow:0 16px 48px #6366f125;}
+  .reto-card[data-ppm="200"]{--rc:#059669;}
+  .reto-card[data-ppm="200"]::before{background:radial-gradient(circle at top right,#05966915,transparent 65%);}
+  .reto-card[data-ppm="200"]:hover{border-color:#05966955;box-shadow:0 16px 48px #05966925;}
+  .reto-card[data-ppm="300"]{--rc:#7c3aed;}
+  .reto-card[data-ppm="300"]::before{background:radial-gradient(circle at top right,#7c3aed15,transparent 65%);}
+  .reto-card[data-ppm="300"]:hover{border-color:#7c3aed55;box-shadow:0 16px 48px #7c3aed25;}
+  .reto-card[data-ppm="400"]{--rc:#e11d48;}
+  .reto-card[data-ppm="400"]::before{background:radial-gradient(circle at top right,#e11d4815,transparent 65%);}
+  .reto-card[data-ppm="400"]:hover{border-color:#e11d4855;box-shadow:0 16px 48px #e11d4825;}
+  .reto-ppm-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.5px;margin-bottom:14px;background:color-mix(in srgb,var(--rc) 15%,transparent);color:var(--rc);border:1px solid color-mix(in srgb,var(--rc) 30%,transparent);}
+  .reto-speed{font-family:'Syne',sans-serif;font-size:42px;font-weight:800;letter-spacing:-2px;color:var(--rc);line-height:1;margin-bottom:2px;}
+  .reto-unit{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;}
+  .reto-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;}
+  .reto-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:16px;}
+  .reto-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;}
+  .reto-tag{font-size:11px;padding:3px 9px;border-radius:6px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);}
+  .reto-btn{width:100%;padding:10px;background:color-mix(in srgb,var(--rc) 12%,transparent);border:1px solid color-mix(in srgb,var(--rc) 35%,transparent);border-radius:10px;color:var(--rc);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
+  .reto-btn:hover{background:color-mix(in srgb,var(--rc) 22%,transparent);}
+  .reto-intro{background:var(--surface);border:1px solid var(--border-bright);border-radius:14px;padding:18px 22px;margin-bottom:24px;display:flex;align-items:flex-start;gap:14px;}
+  .reto-intro-icon{font-size:24px;flex-shrink:0;margin-top:2px;}
+  .reto-intro-text{font-size:13px;color:var(--muted);line-height:1.6;}
+  .reto-intro-text strong{color:var(--text);}
+  .iframe-modal{position:fixed;inset:0;z-index:500;display:none;flex-direction:column;background:var(--bg);}
+  .iframe-modal.open{display:flex;}
+  .iframe-topbar{height:56px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:16px;flex-shrink:0;}
+  .iframe-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;flex:1;}
+  .btn-close-modal{padding:7px 16px;background:transparent;border:1px solid var(--border-bright);border-radius:8px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;}
+  .btn-close-modal:hover{border-color:#ff6b35;color:#ff6b35;}
+  .iframe-modal iframe{flex:1;border:none;width:100%;}
+  .pdf-modal{position:fixed;inset:0;z-index:600;display:none;align-items:center;justify-content:center;background:#000000cc;backdrop-filter:blur(8px);padding:24px;}
+  .pdf-modal.open{display:flex;}
+  .pdf-container{width:100%;max-width:900px;height:90vh;background:var(--surface);border:1px solid var(--border-bright);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;}
+  .pdf-topbar{height:52px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:14px;flex-shrink:0;}
+  .pdf-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;flex:1;}
+  .pdf-readonly{font-size:11px;color:var(--gold);background:#fbbf2415;border:1px solid #fbbf2425;padding:3px 8px;border-radius:6px;letter-spacing:.5px;text-transform:uppercase;}
+  .btn-close-pdf{width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid var(--border-bright);color:var(--muted);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+  .btn-close-pdf:hover{border-color:#ff6b35;color:#ff6b35;}
+  .pdf-frame-wrap{flex:1;overflow:hidden;}
+  .pdf-frame-wrap iframe{width:100%;height:100%;border:none;}
+
+
+
+
+  /* ── Sticky no-data banner ── */
+  .data-banner{
+    position:sticky;top:0;z-index:40;
+    background:linear-gradient(90deg,#1a1a2e,#16213e,#1a1a2e);
+    border-bottom:1px solid #ffffff12;
+    padding:7px 20px;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    font-size:11.5px;color:#94a3b8;
+    text-align:center;line-height:1.4;
+  }
+  .data-banner strong{color:#f8fafc;}
+  .data-banner .banner-highlight{color:#fbbf24;font-weight:700;}
+  .data-banner .banner-dot{width:6px;height:6px;border-radius:50%;background:#fbbf24;flex-shrink:0;opacity:.8;}
+  @media(max-width:540px){.data-banner{font-size:10.5px;padding:6px 14px;gap:7px;}}
+
+  /* ── Minijuegos ── */
+  .mini-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
+  .mini-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:8px;transition:all .25s;}
+  .mini-card:hover{transform:translateY(-3px);border-color:var(--border-bright);box-shadow:0 12px 30px #0005;}
+  .mini-icon{font-size:32px;}
+  .mini-tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;background:#ffffff0d;color:var(--muted);border:1px solid var(--border);}
+  .mini-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;line-height:1.3;}
+  .mini-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+  .mini-btn{margin-top:6px;padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700;background:#fbbf24;color:#0a0a12;border:none;cursor:pointer;transition:all .2s;display:block;width:100%;}
+  .mini-btn:hover{opacity:.85;transform:scale(1.02);}
+  .mini-note{background:var(--surface);border:1px solid #ffffff0f;border-radius:14px;padding:14px 18px;margin-bottom:18px;font-size:12px;color:var(--muted);line-height:1.7;}
+  .mini-note strong{color:var(--text);}
+  @media(max-width:640px){.mini-grid{grid-template-columns:repeat(2,1fr);gap:10px;}.mini-card{padding:14px;}.mini-icon{font-size:24px;}}
+
+  /* ── Inglés section ── */
+  .eng-note{background:var(--surface);border:1px solid #fbbf2430;border-radius:14px;padding:16px 20px;margin-bottom:20px;font-size:13px;color:var(--muted);line-height:1.6;}
+  .eng-note strong{color:var(--gold);}
+  .eng-badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;background:#fbbf2415;color:#fbbf24;border:1px solid #fbbf2430;}
+
+  /* ── Explicaciones rápidas ── */
+  .exp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+  .exp-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:8px;}
+  .exp-card:hover{transform:translateY(-3px);border-color:var(--border-bright);box-shadow:0 12px 30px #0004;}
+  .exp-icon{font-size:28px;}
+  .exp-area{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);}
+  .exp-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;line-height:1.3;}
+  .exp-btn{margin-top:4px;padding:7px 12px;border-radius:8px;font-size:12px;font-weight:600;border:1px solid var(--border-bright);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;text-align:left;}
+  .exp-card:hover .exp-btn{border-color:var(--gold);color:var(--gold);}
+  .exp-card[data-area="mat"]{--ec:var(--mat);} .exp-card[data-area="mat"]:hover{border-color:#ff6b3555;}
+  .exp-card[data-area="red"]{--ec:var(--red);} .exp-card[data-area="red"]:hover{border-color:#7c3aed55;}
+  .exp-card[data-area="lec"]{--ec:var(--lec);} .exp-card[data-area="lec"]:hover{border-color:#05966955;}
+  .exp-area-tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;background:color-mix(in srgb,var(--ec,#888) 15%,transparent);color:var(--ec,#888);border:1px solid color-mix(in srgb,var(--ec,#888) 30%,transparent);}
+  @media(max-width:640px){.exp-grid{grid-template-columns:repeat(2,1fr);gap:10px;}.exp-card{padding:14px;}.exp-icon{font-size:22px;}}
+
+  .divider{border:none;border-top:1px solid var(--border);margin:0;}
+  footer{text-align:center;padding:48px 24px;color:var(--muted);font-size:13px;border-top:1px solid var(--border);margin-top:40px;}
+  .recursos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;}
+  .recurso-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;text-decoration:none;display:block;transition:all .3s;position:relative;overflow:hidden;}
+  .recurso-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;}
+  .recurso-card:hover{transform:translateY(-4px);}
+  .recurso-card:hover::before{opacity:1;}
+  .recurso-card[data-type="pdf"]{--rcc:#f59e0b;}
+  .recurso-card[data-type="pdf"]::before{background:radial-gradient(circle at top right,#f59e0b12,transparent 65%);}
+  .recurso-card[data-type="pdf"]:hover{border-color:#f59e0b55;box-shadow:0 16px 48px #f59e0b20;}
+  .recurso-card[data-type="video"]{--rcc:#e11d48;}
+  .recurso-card[data-type="video"]::before{background:radial-gradient(circle at top right,#e11d4812,transparent 65%);}
+  .recurso-card[data-type="video"]:hover{border-color:#e11d4855;box-shadow:0 16px 48px #e11d4820;}
+  .recurso-card[data-type="web"]{--rcc:#0ea5e9;}
+  .recurso-card[data-type="web"]::before{background:radial-gradient(circle at top right,#0ea5e912,transparent 65%);}
+  .recurso-card[data-type="web"]:hover{border-color:#0ea5e955;box-shadow:0 16px 48px #0ea5e920;}
+  .recurso-type-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.5px;margin-bottom:14px;background:color-mix(in srgb,var(--rcc) 15%,transparent);color:var(--rcc);border:1px solid color-mix(in srgb,var(--rcc) 30%,transparent);}
+  .recurso-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px;color:var(--text);}
+  .recurso-org{font-size:12px;color:var(--rcc);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+  .recurso-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:18px;}
+  .recurso-action{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;background:color-mix(in srgb,var(--rcc) 12%,transparent);border:1px solid color-mix(in srgb,var(--rcc) 35%,transparent);border-radius:10px;color:var(--rcc);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;transition:background .2s;}
+  .recurso-card:hover .recurso-action{background:color-mix(in srgb,var(--rcc) 22%,transparent);}
+  .recursos-note{background:var(--surface);border:1px solid var(--border-bright);border-radius:14px;padding:16px 20px;margin-bottom:24px;font-size:13px;color:var(--muted);line-height:1.6;}
+  .recursos-note strong{color:var(--text);}
+  @media(max-width:640px){.recursos-grid{grid-template-columns:1fr;gap:12px;}}
+  @media(max-width:640px){
+    nav{padding:0 max(16px,env(safe-area-inset-left));height:56px;}
+    .nav-logo{font-size:17px;}
+    .nav-user{display:none;}
+    .hero{padding:88px 16px 48px;}
+    .hero h1{letter-spacing:-1px;font-size:clamp(28px,8vw,48px);}
+    .hero p{font-size:15px;}
+    .section{padding:28px max(16px,env(safe-area-inset-left));}
+    .section-title{font-size:19px;}
+    .section-header{margin-bottom:20px;}
+    .categories-grid{grid-template-columns:1fr;gap:12px;}
+    .cat-card{padding:20px;}
+    .cat-name{font-size:17px;}
+    .tools-grid{grid-template-columns:1fr;gap:10px;}
+    .reto-grid{grid-template-columns:1fr;gap:10px;}
+    .reto-speed{font-size:34px;}
+    .exam-item{flex-direction:column;align-items:flex-start;gap:10px;padding:12px 16px;}
+    .exam-item-actions{width:100%;display:flex;gap:8px;}
+    .exam-item-actions .btn-exam{flex:1;justify-content:center;padding:9px 10px;font-size:12px;}
+    .exam-num{width:30px;height:30px;font-size:12px;}
+    .exam-panel-header{padding:14px 16px;font-size:14px;}
+    .auth-card{padding:28px 18px;border-radius:20px;}
+    .auth-logo{font-size:24px;}
+    .iframe-topbar{padding:0 14px;gap:10px;}
+    .iframe-title{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .btn-close-modal{padding:6px 12px;font-size:12px;flex-shrink:0;}
+    .pdf-container{height:96vh;border-radius:16px;}
+    .pdf-topbar{padding:0 14px;}
+    .reto-intro{padding:12px 14px;gap:8px;}
+    .reto-card{padding:18px;}
+    .tool-card{padding:18px;}
+    .hero-badge{font-size:10px;padding:5px 12px;}
+    .section-count{font-size:12px;}
+    .exp-grid{gap:8px;}
+    .exp-card{padding:14px 10px;}
+    .mini-grid{gap:8px;}
+    .mini-card{padding:14px;}
+    .btn-secondary{margin-top:8px;}
+    .data-banner{flex-wrap:wrap;justify-content:center;}
+  }
+  @media(max-width:400px){
+    .hero h1{font-size:26px;}
+    .btn-exam{padding:6px 10px;font-size:12px;}
+    .auth-card{padding:24px 14px;}
+    .section{padding:24px 14px;}
+  }
+  @media(hover:none){
+    .cat-card:hover,.exp-card:hover,.reto-card:hover,.tool-card:hover{transform:none;box-shadow:none;}
+    .cat-card:active{transform:scale(.98);transition:transform .1s;}
+    .exp-card:active{transform:scale(.97);transition:transform .1s;}
+    .btn-primary:hover{transform:none;filter:none;}
+    .btn-primary:active{transform:scale(.97);filter:brightness(.95);}
+  }
+
+  /* ── PERFORMANCE & POLISH ── */
+  @media(prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms!important;transition-duration:.01ms!important;}
+  }
+  ::-webkit-scrollbar{width:6px;height:6px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px;}
+  ::-webkit-scrollbar-thumb:hover{background:var(--border-bright);}
+  ::selection{background:var(--accent-glow);color:var(--text);}
+  
+  /* Improved section header */
+  .section-header{margin-bottom:28px;}
+  .section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border-bright),transparent);}
+  
+  /* Smooth iframe modal */
+  .iframe-modal,.pdf-modal{-webkit-overflow-scrolling:touch;}
+  
+  /* Better auth inputs on mobile */
+  .input-group input{font-size:16px;} /* prevents zoom on iOS */
+  
+  /* Hero gradient improvement */
+  .hero::after{background:radial-gradient(ellipse 70% 50% at 50% 0%,#7c3aed1a 0%,transparent 70%);}
+  
+  /* Glow on active nav links */
+  .cat-card[data-active],.cat-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  
+  /* Smoother panel animation */
+  @keyframes slideDown{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+  
+  /* Exam panel polish */
+  .exam-panel{border-radius:var(--radius-md);}
+  .exam-panel-header{background:var(--surface2);}
+  
+  /* Button active states for touch */
+  .btn-exam-start:active{transform:scale(.96)!important;}
+  .btn-exam-pdf:active{transform:scale(.96)!important;}
+  .btn-secondary:active{transform:scale(.97);}
+  .exp-btn:hover{background:var(--surface3);border-color:var(--border-bright);color:var(--text);}
+
+  /* Mini card polish */
+  .mini-card{transition:var(--transition);}
+  .mini-card:active{transform:scale(.98);}
+  
+  /* Section count pill */
+  .section-count{background:var(--surface2);padding:4px 10px;border-radius:100px;border:1px solid var(--border);font-size:12px;}
+
+</style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+<body>
 
-    <!-- Header / Navegación Principal -->
-    <header class="bg-slate-800/90 backdrop-blur-md border-b border-slate-700 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="index.html" class="flex items-center space-x-3">
-                <span class="bg-indigo-600 text-white font-extrabold px-3 py-1.5 rounded-xl text-xl tracking-wider shadow-lg shadow-indigo-500/30">PREPMASTER</span>
-                <span class="text-xs font-semibold px-2.5 py-1 bg-amber-500/20 text-amber-400 rounded-lg border border-amber-500/30">PAA UDG</span>
-            </a>
-            
-            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-300">
-                <a href="#simuladores" class="hover:text-white transition-colors">Simuladores</a>
-                <a href="#explicaciones" class="hover:text-white transition-colors">Explicaciones Rápidas</a>
-                <a href="#minijuegos" class="hover:text-white transition-colors">Minijuegos</a>
-                <a href="calculadora.html" class="hover:text-white transition-colors">Calculadora UDG</a>
-            </nav>
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">Prep<span>Master</span></div>
+    <p class="auth-subtitle">Plataforma oficial de simulación PAA</p>
 
-            <!-- Sección de Usuario / Autenticación -->
-            <div class="flex items-center space-x-3">
-                <!-- Estado: Usuario No Autenticado -->
-                <div id="auth-logged-out" class="flex items-center space-x-2">
-                    <button onclick="abrirModalAuth('login')" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white font-semibold text-xs rounded-xl transition-all">
-                        Iniciar Sesión
-                    </button>
-                    <button onclick="abrirModalAuth('register')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs rounded-xl transition-all shadow-md shadow-indigo-600/30">
-                        Registrarse
-                    </button>
-                </div>
+    <div class="auth-nodata">📋 Esta plataforma <strong>no guarda tu progreso</strong> entre sesiones. <span>Anota tu puntaje</span> al terminar cada simulación o minijuego.</div>
 
-                <!-- Estado: Usuario Autenticado -->
-                <div id="auth-logged-in" class="hidden flex items-center space-x-3">
-                    <div class="text-right hidden sm:block">
-                        <span id="user-display-name" class="block text-xs font-bold text-white">Cargando...</span>
-                        <span id="user-subscription-badge" class="inline-block text-[10px] px-2 py-0.5 rounded-full font-semibold bg-slate-700 text-slate-300">
-                            Verificando plan...
-                        </span>
-                    </div>
-                    <button id="btn-buy-subscription" onclick="iniciarPagoStripe()" class="hidden px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-all shadow-md shadow-amber-500/20">
-                        <i class="fa-solid fa-crown mr-1"></i> Activar $89 MXN
-                    </button>
-                    <button onclick="cerrarSesion()" title="Cerrar Sesión" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-xl border border-slate-700 transition-all">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Banner Hero Principal -->
-    <section class="max-w-7xl mx-auto px-4 pt-10 pb-6 w-full">
-        <div class="bg-gradient-to-r from-indigo-900 via-purple-900 to-slate-900 rounded-3xl p-8 md:p-12 shadow-2xl border border-indigo-700/40 relative overflow-hidden">
-            <div class="absolute -right-12 -bottom-12 opacity-10 text-white pointer-events-none">
-                <i class="fa-solid fa-graduation-cap text-[280px]"></i>
-            </div>
-            <div class="relative z-10 max-w-2xl">
-                <span class="inline-block px-3 py-1 bg-indigo-500/30 text-indigo-300 font-semibold text-xs rounded-full uppercase tracking-wider mb-4 border border-indigo-400/20">Plataforma PAA UDG 2026</span>
-                <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight">Domina la PAA y asegura tu lugar en la UDG</h1>
-                <p class="text-slate-300 text-sm md:text-base mb-6 leading-relaxed">
-                    Accede a más de 50 simuladores, explicaciones guiadas paso a paso y minijuegos educativos interactivos con acceso ilimitado por 3 meses por solo $89 MXN.
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <button onclick="iniciarPagoStripe()" class="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm rounded-xl transition-all shadow-lg shadow-amber-500/20">
-                        <i class="fa-solid fa-bolt mr-2"></i> Obtener Acceso Completo ($89)
-                    </button>
-                    <a href="examenes/explicaciones/Guiapaa.html" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm rounded-xl border border-slate-700 transition-all">
-                        <i class="fa-solid fa-circle-info mr-2"></i> Guía Estructura PAA
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECCIÓN ORGANIZADA DE EXPLICACIONES RÁPIDAS (TABS) -->
-    <section id="explicaciones" class="max-w-7xl mx-auto px-4 py-10 w-full">
-        
-        <!-- Encabezado de la Sección -->
-        <div class="text-center mb-8">
-            <span class="text-indigo-400 font-semibold text-xs uppercase tracking-wider">Centro de Repaso</span>
-            <h2 class="text-3xl font-extrabold text-white mt-1">Explicaciones Rápidas PAA</h2>
-            <p class="text-slate-400 text-sm mt-2 max-w-xl mx-auto">Selecciona el área que deseas repasar. Cada lección incluye teoría concisa, fórmulas y ejemplos resueltos.</p>
-        </div>
-
-        <!-- BOTONES CATEGORÍA / TABS -->
-        <div class="flex flex-wrap justify-center gap-3 mb-8">
-            <button onclick="filtrarExplicaciones('matematicas')" id="btn-matematicas" class="tab-btn px-6 py-3 rounded-xl font-bold text-sm transition-all duration-200 bg-amber-500 text-slate-900 shadow-lg shadow-amber-500/20 flex items-center space-x-2">
-                <i class="fa-solid fa-calculator"></i>
-                <span>Matemáticas</span>
-            </button>
-
-            <button onclick="filtrarExplicaciones('redaccion')" id="btn-redaccion" class="tab-btn px-6 py-3 rounded-xl font-bold text-sm transition-all duration-200 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white flex items-center space-x-2">
-                <i class="fa-solid fa-pen-nib"></i>
-                <span>Redacción Indirecta</span>
-            </button>
-
-            <button onclick="filtrarExplicaciones('lectura')" id="btn-lectura" class="tab-btn px-6 py-3 rounded-xl font-bold text-sm transition-all duration-200 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white flex items-center space-x-2">
-                <i class="fa-solid fa-book-open"></i>
-                <span>Lectura Crítica</span>
-            </button>
-        </div>
-
-        <!-- CONTENEDORES DE EXPLICACIONES -->
-
-        <!-- 1. BLOQUE DE MATEMÁTICAS -->
-        <div id="bloque-matematicas" class="categoria-bloque grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <a href="examenes/explicaciones/Fracciones.html" class="bg-slate-800/80 border border-slate-700 hover:border-amber-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-amber-400 text-base group-hover:text-amber-300">Fracciones y Decimales</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-amber-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Operaciones básicas, simplificación, fracciones equivalentes y conversión.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Reglade3.html" class="bg-slate-800/80 border border-slate-700 hover:border-amber-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-amber-400 text-base group-hover:text-amber-300">Regla de 3 y Porcentajes</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-amber-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Proporcionalidad directa, inversa, variaciones y cálculo rápido de porcentaje.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Proporciones.html" class="bg-slate-800/80 border border-slate-700 hover:border-amber-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-amber-400 text-base group-hover:text-amber-300">Razones y Proporciones</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-amber-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Comparación entre magnitudes y resolución de problemas escala PAA.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Ecuaciones.html" class="bg-slate-800/80 border border-slate-700 hover:border-amber-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-amber-400 text-base group-hover:text-amber-300">Ecuaciones Lineales</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-amber-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Despeje de incógnitas, expresiones algebraicas y problemas verbales.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Sistemaecuaciones.html" class="bg-slate-800/80 border border-slate-700 hover:border-amber-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-amber-400 text-base group-hover:text-amber-300">Sistemas de Ecuaciones</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-amber-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Métodos de resolución de sistemas 2x2: eliminación, sustitución e igualación.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Desigualdades.html" class="bg-slate-800/80 border border-slate-700 hover:border-amber-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-amber-400 text-base group-hover:text-amber-300">Inecuaciones y Desigualdades</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-amber-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Propiedades de desigualdades, cambio de signo al multiplicar/dividir por negativos.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Exponentes.html" class="bg-slate-800/80 border border-slate-700 hover:border-amber-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-amber-400 text-base group-hover:text-amber-300">Leyes de Exponentes</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-amber-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Leyes de potencias, exponentes fraccionarios y simplificación de radicales.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Valorabsoluto.html" class="bg-slate-800/80 border border-slate-700 hover:border-amber-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-amber-400 text-base group-hover:text-amber-300">Valor Absoluto</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-amber-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Concepto de distancia en la recta numérica y ecuaciones con valor absoluto.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Funciones.html" class="bg-slate-800/80 border border-slate-700 hover:border-amber-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-amber-400 text-base group-hover:text-amber-300">Funciones y Evaluaciones</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-amber-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Evaluación de f(x), dominio, rango e interpretación de gráficas cartesianas.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Geometria.html" class="bg-slate-800/80 border border-slate-700 hover:border-amber-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-amber-400 text-base group-hover:text-amber-300">Geometría: Perímetros y Áreas</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-amber-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Fórmulas de figuras planas: triángulos, rectángulos, círculos y polígonos.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Volumenes.html" class="bg-slate-800/80 border border-slate-700 hover:border-amber-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-amber-400 text-base group-hover:text-amber-300">Volúmenes y Cuerpos 3D</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-amber-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Cálculo de volumen en cilindros, prismas rectangulares, esferas y cubos.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Probabilidad.html" class="bg-slate-800/80 border border-slate-700 hover:border-amber-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-amber-400 text-base group-hover:text-amber-300">Probabilidad y Estadística</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-amber-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Probabilidad teórica, eventos independientes y conteo fundamental.</p>
-            </a>
-
-            <a href="examenes/explicaciones/DiagramasVenn.html" class="bg-slate-800/80 border border-slate-700 hover:border-amber-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-amber-400 text-base group-hover:text-amber-300">Diagramas de Venn</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-amber-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Representación de conjuntos, uniones, intersecciones y conteo de datos.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Sucesiones.html" class="bg-slate-800/80 border border-slate-700 hover:border-amber-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-amber-400 text-base group-hover:text-amber-300">Sucesiones y Series</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-amber-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Identificación de patrones numéricos, secuencias aritméticas y geométricas.</p>
-            </a>
-        </div>
-
-        <!-- 2. BLOQUE DE REDACCIÓN -->
-        <div id="bloque-redaccion" class="categoria-bloque hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <a href="examenes/explicaciones/Redaccion.html" class="bg-slate-800/80 border border-slate-700 hover:border-emerald-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-emerald-400 text-base group-hover:text-emerald-300">Guía de Redacción Indirecta</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-emerald-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Estrategias de edición, cohesión textual, tono y coherencia sintáctica.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Combinandooraciones.html" class="bg-slate-800/80 border border-slate-700 hover:border-emerald-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-emerald-400 text-base group-hover:text-emerald-300">Combinación de Oraciones</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-emerald-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Técnicas para unir enunciados manteniendo fluidez, precisión y evitando redundancias.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Eliminarenunciados.html" class="bg-slate-800/80 border border-slate-700 hover:border-emerald-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-emerald-400 text-base group-hover:text-emerald-300">Eliminación de Enunciados</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-emerald-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Criterios para descartar oraciones impertinentes, fuera de tema o repetitivas.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Generalizacion.html" class="bg-slate-800/80 border border-slate-700 hover:border-emerald-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-emerald-400 text-base group-hover:text-emerald-300">Generalización e Integración</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-emerald-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Procesos de síntesis de ideas principales y adición de enunciados clave en borradores.</p>
-            </a>
-        </div>
-
-        <!-- 3. BLOQUE DE LECTURA -->
-        <div id="bloque-lectura" class="categoria-bloque hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <a href="examenes/explicaciones/Comprensiondelectura.html" class="bg-slate-800/80 border border-slate-700 hover:border-blue-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-blue-400 text-base group-hover:text-blue-300">Comprensión de Lectura</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-blue-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Lectura analítica de textos literarios, científicos y ensayos argumentativos.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Ideaprincipalyanalogia.html" class="bg-slate-800/80 border border-slate-700 hover:border-blue-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-blue-400 text-base group-hover:text-blue-300">Idea Principal y Analogías</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-blue-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Extracción del tema central, propósito del autor y relaciones analógicas entre conceptos.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Analisisdual.html" class="bg-slate-800/80 border border-slate-700 hover:border-blue-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-blue-400 text-base group-hover:text-blue-300">Análisis Dual de Textos</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-blue-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Estrategias para comparar dos pasajes con diferentes posturas sobre un mismo tema.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Vocabulariocontexto.html" class="bg-slate-800/80 border border-slate-700 hover:border-blue-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-blue-400 text-base group-hover:text-blue-300">Vocabulario en Contexto</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-blue-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Identificación del sentido preciso de palabras polisémicas según el entorno del texto.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Figuras_retoricas.html" class="bg-slate-800/80 border border-slate-700 hover:border-blue-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-blue-400 text-base group-hover:text-blue-300">Figuras Retóricas y Estilo</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-blue-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Metáforas, símil, hipérbole, ironía y otros recursos expresivos en textos literarios.</p>
-            </a>
-
-            <a href="examenes/explicaciones/Tiposdetexto.html" class="bg-slate-800/80 border border-slate-700 hover:border-blue-500/50 p-5 rounded-2xl transition-all hover:-translate-y-1 block shadow-md group">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-blue-400 text-base group-hover:text-blue-300">Tipos de Texto y Géneros</h4>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-500 group-hover:text-blue-400"></i>
-                </div>
-                <p class="text-slate-400 text-xs leading-relaxed">Diferenciación entre textos narrativos, expositivos, argumentativos y literarios.</p>
-            </a>
-        </div>
-
-    </section>
-
-    <!-- SECCIÓN DE SIMULADORES Y PRÁCTICAS -->
-    <section id="simuladores" class="max-w-7xl mx-auto px-4 py-10 w-full border-t border-slate-800">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-            <div>
-                <span class="text-indigo-400 font-semibold text-xs uppercase tracking-wider">Práctica Activa</span>
-                <h2 class="text-3xl font-extrabold text-white mt-1">Simuladores y Exámenes PAA</h2>
-            </div>
-            <a href="examenes/demogeneral.html" class="mt-4 md:mt-0 inline-flex items-center text-sm font-semibold text-amber-400 hover:text-amber-300">
-                Ver Examen Diagnóstico General <i class="fa-solid fa-arrow-right ml-2"></i>
-            </a>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-6 hover:border-amber-500/40 transition-all">
-                <div class="p-3 bg-amber-500/10 text-amber-400 rounded-xl w-fit mb-4">
-                    <i class="fa-solid fa-calculator text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-2">Módulo Matemáticas</h3>
-                <p class="text-slate-400 text-xs leading-relaxed mb-4">Pruebas graduadas con problemas estilo PAA, tiempos medidos y hoja de respuestas.</p>
-                <a href="examenes/simulacionmathgratis.html" class="inline-flex items-center text-xs font-bold text-amber-400 hover:underline">
-                    Probar Simulador Gratis <i class="fa-solid fa-chevron-right ml-1"></i>
-                </a>
-            </div>
-
-            <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-6 hover:border-emerald-500/40 transition-all">
-                <div class="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl w-fit mb-4">
-                    <i class="fa-solid fa-pen-nib text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-2">Módulo Redacción</h3>
-                <p class="text-slate-400 text-xs leading-relaxed mb-4">Ejercicios de edición de textos, combinación de oraciones y corrección gramatical.</p>
-                <a href="examenes/demo_red.html" class="inline-flex items-center text-xs font-bold text-emerald-400 hover:underline">
-                    Ir a Exámenes de Redacción <i class="fa-solid fa-chevron-right ml-1"></i>
-                </a>
-            </div>
-
-            <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-6 hover:border-blue-500/40 transition-all">
-                <div class="p-3 bg-blue-500/10 text-blue-400 rounded-xl w-fit mb-4">
-                    <i class="fa-solid fa-book-open text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-2">Módulo Lectura</h3>
-                <p class="text-slate-400 text-xs leading-relaxed mb-4">Lecturas graduadas (100 a 400 palabras) y textos dobles con preguntas analíticas.</p>
-                <a href="examenes/simulacionespanolgratis.html" class="inline-flex items-center text-xs font-bold text-blue-400 hover:underline">
-                    Probar Lectura Gratis <i class="fa-solid fa-chevron-right ml-1"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECCIÓN DE MINIJUEGOS Y GAMIFICACIÓN -->
-    <section id="minijuegos" class="max-w-7xl mx-auto px-4 py-10 w-full border-t border-slate-800">
-        <div class="text-center mb-8">
-            <span class="text-purple-400 font-semibold text-xs uppercase tracking-wider">Aprende Jugando</span>
-            <h2 class="text-3xl font-extrabold text-white mt-1">Minijuegos Interactivos PAA</h2>
-            <p class="text-slate-400 text-sm mt-2">Refuerza tus habilidades bajo presión de forma divertida.</p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <a href="minijuegos/conecta4_mat.html" class="bg-slate-800/50 border border-slate-700 hover:border-purple-500/50 p-4 rounded-2xl transition-all hover:-translate-y-1 block">
-                <h4 class="font-bold text-purple-400 text-sm mb-1"><i class="fa-solid fa-gamepad mr-2"></i> Conecta 4 Matemáticas</h4>
-                <p class="text-slate-400 text-xs">Resuelve rápido para colocar tu ficha y conectar 4 en línea.</p>
-            </a>
-
-            <a href="minijuegos/conecta4_espanol.html" class="bg-slate-800/50 border border-slate-700 hover:border-purple-500/50 p-4 rounded-2xl transition-all hover:-translate-y-1 block">
-                <h4 class="font-bold text-purple-400 text-sm mb-1"><i class="fa-solid fa-gamepad mr-2"></i> Conecta 4 Español</h4>
-                <p class="text-slate-400 text-xs">Acierta preguntas de lectura y redacción para ganar la partida.</p>
-            </a>
-
-            <a href="minijuegos/conquista_mat.html" class="bg-slate-800/50 border border-slate-700 hover:border-purple-500/50 p-4 rounded-2xl transition-all hover:-translate-y-1 block">
-                <h4 class="font-bold text-purple-400 text-sm mb-1"><i class="fa-solid fa-chess mr-2"></i> Conquista Matemáticas</h4>
-                <p class="text-slate-400 text-xs">Conquista territorios resolviendo ejercicios algebraicos y geométricos.</p>
-            </a>
-
-            <a href="minijuegos/cronicas_mat.html" class="bg-slate-800/50 border border-slate-700 hover:border-purple-500/50 p-4 rounded-2xl transition-all hover:-translate-y-1 block">
-                <h4 class="font-bold text-purple-400 text-sm mb-1"><i class="fa-solid fa-trophy mr-2"></i> Crónicas PAA</h4>
-                <p class="text-slate-400 text-xs">Completa desafíos de razonamiento por niveles de dificultad.</p>
-            </a>
-        </div>
-    </section>
-
-    <!-- MODAL DE AUTENTICACIÓN (LOGIN / REGISTRO) -->
-    <div id="modal-auth" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-800 border border-slate-700 rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl relative">
-            <button onclick="cerrarModalAuth()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-            
-            <h3 id="modal-auth-title" class="text-2xl font-bold text-white mb-2">Iniciar Sesión</h3>
-            <p id="modal-auth-desc" class="text-slate-400 text-xs mb-6">Ingresa a tu cuenta para verificar tu suscripción y guardar tus avances.</p>
-
-            <form id="form-auth" onsubmit="procesarAuth(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Correo Electrónico</label>
-                    <input type="email" id="auth-email" required placeholder="tu@correo.com" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Contraseña</label>
-                    <input type="password" id="auth-password" required placeholder="••••••••" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500">
-                </div>
-
-                <div id="auth-error-msg" class="hidden p-3 bg-red-500/10 border border-red-500/30 text-red-400 text-xs rounded-xl"></div>
-
-                <button type="submit" id="btn-auth-submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm rounded-xl transition-all shadow-lg shadow-indigo-600/30">
-                    Ingresar
-                </button>
-            </form>
-
-            <div class="mt-4 text-center">
-                <button onclick="toggleModoAuth()" id="btn-toggle-auth" class="text-xs text-indigo-400 hover:underline">
-                    ¿No tienes cuenta? Regístrate aquí
-                </button>
-            </div>
-        </div>
+    <!-- Tabs -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Iniciar sesión</button>
+      <button class="auth-tab" onclick="switchTab('register')">Crear cuenta</button>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-slate-800/80 border-t border-slate-700 py-6 text-center text-xs text-slate-400">
-        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p>© PrepMaster PAA - Plataforma de estudio para admisión UDG</p>
-            <div class="flex space-x-4">
-                <a href="examenes/testvocacional.html" class="hover:text-white transition-colors">Test Vocacional</a>
-                <a href="calculadora.html" class="hover:text-white transition-colors">Calculadora PAA</a>
+    <!-- Demo buttons -->
+    <div style="margin-bottom:20px;">
+      <p style="font-size:11px;color:#8888aa;text-align:center;margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;">🎯 Prueba sin registrarte</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <a href="examenes/simulacionmathgratis.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ff6b3540;border-radius:10px;color:#ff6b35;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
+          📐 Simulación Matemáticas
+        </a>
+        <a href="examenes/simulacionespanolgratis.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #7c3aed40;border-radius:10px;color:#a78bfa;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
+          ✍️ Simulación Español
+        </a>
+        <a href="examenes/explicaciones/Guiapaa.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ffffff1a;border-radius:10px;color:#f0f0f8;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
+          🎓 Guía PAA
+        </a>
+        <a href="examenes/explicaciones/Funciones.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ffffff1a;border-radius:10px;color:#f0f0f8;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
+          📈 Explicación: Funciones
+        </a>
+        <a href="https://el-bicho-paa.vercel.app/" target="_blank" rel="noopener" style="grid-column:span 2;display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #10b98140;border-radius:10px;color:#10b981;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
+          🐛 El Bicho en el Examen PAA
+        </a>
+        <a href="minijuegos/conecta4_espanol.html" target="_blank" style="grid-column:span 2;display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ffffff1a;border-radius:10px;color:#f0f0f8;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
+          🔵 Conecta 4 — Español
+        </a>
+        <a href="minijuegos/conecta4_mat.html" target="_blank" style="grid-column:span 2;display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ff6b3540;border-radius:10px;color:#ff6b35;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
+          🔴 Conecta 4 — Matemáticas
+        </a>
+        <a href="examenes/practicos/mat/probabilidad.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ff6b3540;border-radius:10px;color:#ff6b35;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
+          📊 Práctica: Estadística
+        </a>
+        <a href="examenes/practicos/esp/narrativas.html" target="_blank" style="display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #7c3aed40;border-radius:10px;color:#a78bfa;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
+          📖 Práctica: Narrativas
+        </a>
+        <a href="calculadora.html" target="_blank" style="grid-column:span 2;display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #fbbf2440;border-radius:10px;color:#fbbf24;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
+          🧮 Calculadora de Puntajes
+        </a>
+        <a href="minijuegos/dominando_el_paa.html" target="_blank" style="grid-column:span 2;display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #e11d4840;border-radius:10px;color:#fb7185;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
+          🎮 Juego: Dominando el PAA
+        </a>
+        <a href="https://www.tiktok.com/@prepmasterudg" target="_blank" rel="noopener" style="grid-column:span 2;display:block;text-align:center;padding:10px 8px;background:#1a1a26;border:1px solid #ffffff20;border-radius:10px;color:#f0f0f8;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;">
+          🎵 Síguenos en TikTok @prepmasterudg
+        </a>
+      </div>
+    </div>
+
+    <!-- LOGIN PANEL -->
+    <div id="panel-login" class="auth-panel active">
+      <div class="input-group"><label>Correo</label><input type="email" id="login-email" placeholder="correo@ejemplo.com"/></div>
+      <div class="input-group"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      <button class="btn-primary" onclick="doLogin()">Entrar →</button>
+      <div class="auth-error" id="login-error"></div>
+
+      <div class="auth-divider">o prueba gratis</div>
+      <p style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:10px;">Sin registro — acceso libre</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;color:#ff6b35;border-color:#ff6b3540;" onclick="window.open('examenes/simulacionmathgratis.html','_blank')">📐 Simulación Matemáticas</button>
+        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;color:#a78bfa;border-color:#7c3aed40;" onclick="window.open('examenes/simulacionespanolgratis.html','_blank')">✍️ Simulación Español</button>
+        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;" onclick="window.open('examenes/explicaciones/Guiapaa.html','_blank')">🎓 Guía PAA</button>
+        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;" onclick="window.open('examenes/explicaciones/Funciones.html','_blank')">📈 Explicación: Funciones</button>
+        <a href="https://el-bicho-paa.vercel.app/" target="_blank" rel="noopener" class="btn-secondary" style="font-size:12px;padding:10px 8px;grid-column:span 2;color:#10b981;border-color:#10b98140;text-decoration:none;display:block;text-align:center;">🐛 El Bicho en el Examen PAA</a>
+        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;grid-column:span 2;" onclick="window.open('minijuegos/conecta4_espanol.html','_blank')">🔵 Conecta 4 — Español</button>
+        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;grid-column:span 2;color:#ff6b35;border-color:#ff6b3540;" onclick="window.open('minijuegos/conecta4_mat.html','_blank')">🔴 Conecta 4 — Matemáticas</button>
+        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;color:#ff6b35;border-color:#ff6b3540;" onclick="window.open('examenes/practicos/mat/probabilidad.html','_blank')">📊 Práctica: Estadística</button>
+        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;color:#a78bfa;border-color:#7c3aed40;" onclick="window.open('examenes/practicos/esp/narrativas.html','_blank')">📖 Práctica: Narrativas</button>
+        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;grid-column:span 2;color:#fbbf24;border-color:#fbbf2440;" onclick="window.open('calculadora.html','_blank')">🧮 Calculadora de Puntajes</button>
+        <button class="btn-secondary" style="font-size:12px;padding:10px 8px;grid-column:span 2;color:#fb7185;border-color:#e11d4840;" onclick="window.open('minijuegos/dominando_el_paa.html','_blank')">🎮 Juego: Dominando el PAA</button>
+        <a href="https://www.tiktok.com/@prepmasterudg" target="_blank" rel="noopener" class="btn-secondary" style="font-size:12px;padding:10px 8px;grid-column:span 2;color:#f0f0f8;border-color:#ffffff20;text-decoration:none;display:block;text-align:center;">🎵 TikTok @prepmasterudg</a>
+      </div>
+    </div>
+
+    <!-- REGISTER PANEL -->
+    <div id="panel-register" class="auth-panel">
+      <div class="price-badge">💳 $89 MXN · Acceso 3 meses</div>
+      <div class="input-group"><label>Correo</label><input type="email" id="reg-email" placeholder="correo@ejemplo.com"/></div>
+      <div class="input-group"><label>Contraseña</label><input type="password" id="reg-pass" placeholder="Mínimo 6 caracteres"/></div>
+      <div class="input-group"><label>Confirmar contraseña</label><input type="password" id="reg-pass2" placeholder="Repite tu contraseña"/></div>
+      <button class="btn-primary" onclick="doRegisterAndPay()" id="btn-register">Crear cuenta y pagar →</button>
+      <div class="auth-error" id="register-error"></div>
+      <div class="auth-success" id="register-success"></div>
+
+      <!-- Free code toggle -->
+      <div class="auth-divider">o</div>
+      <div class="free-code-toggle" onclick="toggleFreeCode()">🎁 ¿Tienes un código de acceso gratuito?</div>
+      <div id="free-code-section">
+        <div class="input-group" style="margin-bottom:10px"><label>Código de acceso</label><input type="text" id="free-code-input" placeholder="CÓDIGO" style="text-transform:uppercase;letter-spacing:.1em"/></div>
+        <button class="btn-secondary" onclick="doActivateFree()">Activar acceso gratuito →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="app">
+  <nav>
+    <div class="nav-logo">Prep<span>Master</span></div>
+    <div class="nav-right">
+      <span class="nav-user" id="nav-user-email"></span>
+      <button class="btn-logout" onclick="doLogout()">Salir</button>
+    </div>
+  </nav>
+
+
+  <!-- Aviso persistente: no guarda datos -->
+  <div class="data-banner">
+    <div class="banner-dot"></div>
+    <span>
+      <strong>📋 Aviso:</strong>
+      Esta plataforma <strong>no guarda tu progreso</strong> entre sesiones. 
+      <span class="banner-highlight">Anota tu puntaje</span> al terminar cada simulación o minijuego para llevar tu avance.
+    </span>
+    <div class="banner-dot"></div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-badge">🎯 Simulación PAA Oficial</div>
+    <h1>Prepárate para<br/><em>el PAA</em></h1>
+    <p>Simulaciones reales de Matemáticas, Redacción y Lectura con respuestas y procedimientos explicados.</p>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- GUÍA PAA -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">🎓 ¿Qué es la PAA?</h2>
+      <div class="section-line"></div>
+      <span class="section-count">Estructura · Puntajes · Temario</span>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:20px;padding:32px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;">
+      <div style="font-size:48px;">🎓</div>
+      <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;">Todo lo que necesitas saber antes del examen</div>
+      <p style="font-size:14px;color:var(--muted);max-width:480px;line-height:1.7;">Estructura del examen, puntajes por sección, temario completo de Matemáticas, Redacción, Lectura e Inglés.</p>
+      <button onclick="openExam('examenes/explicaciones/Guiapaa.html','Guía Maestra PAA')" style="padding:14px 32px;background:linear-gradient(135deg,#7c3aed,#5b21b6);border:none;border-radius:12px;color:white;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        📖 Ver Guía PAA completa
+      </button>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- RUTA DE ESTUDIO RECOMENDADA -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">🗺️ Orden recomendado de estudio</h2>
+      <div class="section-line"></div>
+      <span class="section-count">De menos a más difícil</span>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:20px;padding:28px;">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.7;">Sigue esta ruta para maximizar tu preparación. Empieza por las explicaciones de cada tema, luego practica con los ejercicios de supervivencia y cierra con las simulaciones completas.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
+
+        <!-- Matemáticas -->
+        <div style="background:var(--surface2);border:1px solid #ff6b3530;border-radius:16px;padding:20px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+            <div style="width:36px;height:36px;background:#ff6b35;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">📐</div>
+            <div>
+              <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;">Matemáticas</div>
+              <div style="font-size:11px;color:#ff6b35;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">800 puntos</div>
             </div>
+          </div>
+          <ol style="list-style:none;padding:0;margin:0;counter-reset:step-mat;">
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">1</span><span><b style="color:var(--text);">Fracciones y Aritmética</b> — Base de todo</span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">2</span><span><b style="color:var(--text);">Regla de 3 y Proporciones</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">3</span><span><b style="color:var(--text);">Sucesiones y Patrones</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">4</span><span><b style="color:var(--text);">Exponentes y Radicales</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">5</span><span><b style="color:var(--text);">Valor Absoluto y Desigualdades</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">6</span><span><b style="color:var(--text);">Álgebra y Ecuaciones</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">7</span><span><b style="color:var(--text);">Sistemas de Ecuaciones</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">8</span><span><b style="color:var(--text);">Funciones y Gráficas</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">9</span><span><b style="color:var(--text);">Geometría y Volúmenes</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;flex-shrink:0;">10</span><span><b style="color:var(--text);">Diagramas de Venn y Probabilidad</b></span></li>
+          </ol>
         </div>
-    </footer>
 
-    <!-- LÓGICA DE FIREBASE, STRIPE Y TABS -->
-    <script>
-    // 1. CONFIGURACIÓN DE FIREBASE (Reemplazar con tus credenciales)
-    const firebaseConfig = {
-        apiKey: "TU_API_KEY_AQUI",
-        authDomain: "prepmaster-paa.firebaseapp.com",
-        projectId: "prepmaster-paa",
-        storageBucket: "prepmaster-paa.appspot.com",
-        messagingSenderId: "1234567890",
-        appId: "1:1234567890:web:abcdef123456"
-    };
+        <!-- Español -->
+        <div style="background:var(--surface2);border:1px solid #7c3aed30;border-radius:16px;padding:20px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+            <div style="width:36px;height:36px;background:#7c3aed;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">✍️</div>
+            <div>
+              <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;">Redacción y Lectura</div>
+              <div style="font-size:11px;color:#7c3aed;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">800 puntos combinados</div>
+            </div>
+          </div>
+          <ol style="list-style:none;padding:0;margin:0;">
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">1</span><span><b style="color:var(--text);">Tipos de Texto</b> — Base conceptual</span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">2</span><span><b style="color:var(--text);">Vocabulario en Contexto</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">3</span><span><b style="color:var(--text);">Comprensión de Lectura</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">4</span><span><b style="color:var(--text);">Idea Principal y Generalización</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">5</span><span><b style="color:var(--text);">Análisis Dual de Textos</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">6</span><span><b style="color:var(--text);">Figuras Retóricas</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">7</span><span><b style="color:var(--text);">Redacción e Indirecta</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">8</span><span><b style="color:var(--text);">Combinando Oraciones</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">9</span><span><b style="color:var(--text);">Eliminación de Enunciados</b></span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;flex-shrink:0;">10</span><span><b style="color:var(--text);">Idea Principal y Analogías</b> — Nivel avanzado</span></li>
+          </ol>
+        </div>
 
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
+      </div>
+      <div style="margin-top:20px;padding:16px 20px;background:var(--surface2);border:1px solid var(--border-bright);border-radius:14px;font-size:13px;color:var(--muted);line-height:1.7;">
+        💡 <strong style="color:var(--text);">Estrategia recomendada:</strong> Lee la explicación del tema → Practica con el ejercicio de supervivencia correspondiente → Haz una simulación completa → Revisa tus errores con las respuestas en PDF.
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- EXPLICACIONES RÁPIDAS (movidas aquí, antes de exámenes) -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">⚡ Explicaciones rápidas</h2>
+      <div class="section-line"></div>
+      <span class="section-count">24 temas · Matemáticas · Redacción · Lectura</span>
+    </div>
+    <div class="exp-grid">
+      <!-- MATEMÁTICAS -->
+      <div class="exp-card" data-area="mat" onclick="openExam('examenes/explicaciones/Fracciones.html','Fracciones PAA')">
+        <div class="exp-icon">➗</div><div class="exp-area-tag">Matemáticas</div>
+        <div class="exp-name">Fracciones y Aritmética</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="mat" onclick="openExam('examenes/explicaciones/Proporciones.html','Razones y Proporciones PAA')">
+        <div class="exp-icon">⚖️</div><div class="exp-area-tag">Matemáticas</div>
+        <div class="exp-name">Razones y Proporciones</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="mat" onclick="openExam('examenes/explicaciones/Sucesiones.html','Sucesiones y Patrones PAA')">
+        <div class="exp-icon">🔢</div><div class="exp-area-tag">Matemáticas</div>
+        <div class="exp-name">Sucesiones y Patrones</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="mat" onclick="openExam('examenes/explicaciones/Exponentes.html','Exponentes y Radicales PAA')">
+        <div class="exp-icon">🚀</div><div class="exp-area-tag">Matemáticas</div>
+        <div class="exp-name">Exponentes y Radicales</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="mat" onclick="openExam('examenes/explicaciones/Valorabsoluto.html','Valor Absoluto PAA')">
+        <div class="exp-icon">📏</div><div class="exp-area-tag">Matemáticas</div>
+        <div class="exp-name">Valor Absoluto</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="mat" onclick="openExam('examenes/explicaciones/Desigualdades.html','Desigualdades PAA')">
+        <div class="exp-icon">⚠️</div><div class="exp-area-tag">Matemáticas</div>
+        <div class="exp-name">Desigualdades</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="mat" onclick="openExam('examenes/explicaciones/Ecuaciones.html','Álgebra y Ecuaciones PAA')">
+        <div class="exp-icon">🔣</div><div class="exp-area-tag">Matemáticas</div>
+        <div class="exp-name">Álgebra y Ecuaciones</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="mat" onclick="openExam('examenes/explicaciones/Sistemaecuaciones.html','Sistemas de Ecuaciones PAA')">
+        <div class="exp-icon">📊</div><div class="exp-area-tag">Matemáticas</div>
+        <div class="exp-name">Sistemas de Ecuaciones</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="mat" onclick="openExam('examenes/explicaciones/Funciones.html','Funciones PAA')">
+        <div class="exp-icon">📈</div><div class="exp-area-tag">Matemáticas</div>
+        <div class="exp-name">Funciones</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="mat" onclick="openExam('examenes/explicaciones/Geometria.html','Geometría PAA')">
+        <div class="exp-icon">📐</div><div class="exp-area-tag">Matemáticas</div>
+        <div class="exp-name">Geometría</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="mat" onclick="openExam('examenes/explicaciones/Volumenes.html','Volúmenes PAA')">
+        <div class="exp-icon">📦</div><div class="exp-area-tag">Matemáticas</div>
+        <div class="exp-name">Volúmenes</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="mat" onclick="openExam('examenes/explicaciones/DiagramasVenn.html','Diagramas de Venn PAA')">
+        <div class="exp-icon">⭕</div><div class="exp-area-tag">Matemáticas</div>
+        <div class="exp-name">Diagramas de Venn</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="mat" onclick="openExam('examenes/explicaciones/Probabilidad.html','Probabilidad y Estadística PAA')">
+        <div class="exp-icon">🎲</div><div class="exp-area-tag">Matemáticas</div>
+        <div class="exp-name">Probabilidad y Estadística</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="mat" onclick="openExam('examenes/explicaciones/Reglade3.html','Regla de 3 PAA')">
+        <div class="exp-icon">✖️</div><div class="exp-area-tag">Matemáticas</div>
+        <div class="exp-name">Regla de 3</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <!-- REDACCIÓN -->
+      <div class="exp-card" data-area="red" onclick="openExam('examenes/explicaciones/Tiposdetexto.html','Tipos de Texto PAA')">
+        <div class="exp-icon">📄</div><div class="exp-area-tag">Redacción</div>
+        <div class="exp-name">Tipos de Texto</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="red" onclick="openExam('examenes/explicaciones/Redaccion.html','Redacción PAA')">
+        <div class="exp-icon">✍️</div><div class="exp-area-tag">Redacción</div>
+        <div class="exp-name">Redacción e Indirecta</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="red" onclick="openExam('examenes/explicaciones/Combinandooraciones.html','Combinando Oraciones PAA')">
+        <div class="exp-icon">🔗</div><div class="exp-area-tag">Redacción</div>
+        <div class="exp-name">Combinando Oraciones</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="red" onclick="openExam('examenes/explicaciones/Eliminarenunciados.html','Eliminación de Enunciados PAA')">
+        <div class="exp-icon">✂️</div><div class="exp-area-tag">Redacción</div>
+        <div class="exp-name">Eliminación de Enunciados</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="red" onclick="openExam('examenes/explicaciones/Figuras_retoricas.html','Figuras Retóricas PAA')">
+        <div class="exp-icon">🎭</div><div class="exp-area-tag">Redacción</div>
+        <div class="exp-name">Figuras Retóricas</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <!-- LECTURA -->
+      <div class="exp-card" data-area="lec" onclick="openExam('examenes/explicaciones/Vocabulariocontexto.html','Vocabulario en Contexto PAA')">
+        <div class="exp-icon">📖</div><div class="exp-area-tag">Lectura</div>
+        <div class="exp-name">Vocabulario en Contexto</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="lec" onclick="openExam('examenes/explicaciones/Comprensiondelectura.html','Comprensión de Lectura PAA')">
+        <div class="exp-icon">🧠</div><div class="exp-area-tag">Lectura</div>
+        <div class="exp-name">Comprensión de Lectura</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="lec" onclick="openExam('examenes/explicaciones/Generalizacion.html','Idea Principal y Títulos PAA')">
+        <div class="exp-icon">🎯</div><div class="exp-area-tag">Lectura</div>
+        <div class="exp-name">Idea Principal y Títulos</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="lec" onclick="openExam('examenes/explicaciones/Analisisdual.html','Análisis Dual de Textos PAA')">
+        <div class="exp-icon">🎙️</div><div class="exp-area-tag">Lectura</div>
+        <div class="exp-name">Análisis Dual de Textos</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+      <div class="exp-card" data-area="lec" onclick="openExam('examenes/explicaciones/Ideaprincipalyanalogia.html','Idea Principal y Analogías PAA')">
+        <div class="exp-icon">💡</div><div class="exp-area-tag">Lectura</div>
+        <div class="exp-name">Idea Principal y Analogías</div>
+        <button class="exp-btn">📖 Ver explicación</button>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Exámenes de simulación</h2>
+      <div class="section-line"></div>
+      <span class="section-count">33 simulaciones en total · 3 áreas</span>
+    </div>
+    <div class="categories-grid">
+      <div>
+        <div class="cat-card" data-cat="mat" onclick="togglePanel('panel-mat')">
+          <div class="cat-icon">📐</div>
+          <div class="cat-name">Matemáticas</div>
+          <div class="cat-desc">Aritmética, Álgebra, Geometría, Estadística y Probabilidad.</div>
+          <div class="cat-footer"><span class="cat-count">8 simulaciones · 55 reactivos c/u</span><span class="cat-arrow" id="arrow-panel-mat">›</span></div>
+        </div>
+        <div class="exam-panel" id="panel-mat">
+          <div class="exam-panel-header"><span class="exam-panel-dot" style="background:var(--mat)"></span>Matemáticas — Elige una simulación</div>
+          <div id="exams-mat"></div>
+        </div>
+      </div>
+      <div>
+        <div class="cat-card" data-cat="red" onclick="togglePanel('panel-red')">
+          <div class="cat-icon">✍️</div>
+          <div class="cat-name">Redacción</div>
+          <div class="cat-desc">Coherencia, cohesión, integración, elisión y estilo textual.</div>
+          <div class="cat-footer"><span class="cat-count">8 simulaciones · 25 reactivos c/u</span><span class="cat-arrow" id="arrow-panel-red">›</span></div>
+        </div>
+        <div class="exam-panel" id="panel-red">
+          <div class="exam-panel-header"><span class="exam-panel-dot" style="background:var(--red)"></span>Redacción — Elige una simulación</div>
+          <div id="exams-red"></div>
+        </div>
+      </div>
+      <div>
+        <div class="cat-card" data-cat="lec" onclick="togglePanel('panel-lec')">
+          <div class="cat-icon">📖</div>
+          <div class="cat-name">Lectura</div>
+          <div class="cat-desc">Comprensión lectora, inferencia, vocabulario y análisis literario.</div>
+          <div class="cat-footer"><span class="cat-count">8 simulaciones · 45 reactivos c/u</span><span class="cat-arrow" id="arrow-panel-lec">›</span></div>
+        </div>
+        <div class="exam-panel" id="panel-lec">
+          <div class="exam-panel-header"><span class="exam-panel-dot" style="background:var(--lec)"></span>Lectura — Elige una simulación</div>
+          <div id="exams-lec"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- ══ EJERCICIOS PRÁCTICOS POR TEMA ══ -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">📝 Ejercicios prácticos por tema</h2>
+      <div class="section-line"></div>
+      <span class="section-count">Matemáticas · Español · Con soluciones incluidas</span>
+    </div>
+
+    <!-- Matemáticas -->
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div style="width:32px;height:32px;background:#ff6b35;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">📐</div>
+        <span style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);">Matemáticas</span>
+        <span style="font-size:11px;color:#ff6b35;font-weight:700;text-transform:uppercase;letter-spacing:.5px;">12 temas</span>
+      </div>
+      <div class="exp-grid">
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/operaciones.html','Práctica: Operaciones Básicas')">
+          <div class="exp-icon">🔢</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Operaciones Básicas</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/fracciones.html','Práctica: Fracciones')">
+          <div class="exp-icon">➗</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Fracciones</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/regla3.html','Práctica: Regla de 3')">
+          <div class="exp-icon">⚖️</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Regla de 3</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/algebra.html','Práctica: Álgebra')">
+          <div class="exp-icon">🔣</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Álgebra</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/ecuaciones.html','Práctica: Ecuaciones')">
+          <div class="exp-icon">📊</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Ecuaciones</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/inecuaciones.html','Práctica: Inecuaciones')">
+          <div class="exp-icon">⚠️</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Desigualdades e Inecuaciones</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/funciones.html','Práctica: Álgebra y Funciones')">
+          <div class="exp-icon">📈</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Álgebra y Funciones</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/linearecta.html','Práctica: Línea Recta')">
+          <div class="exp-icon">📉</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Línea Recta</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/angulos.html','Práctica: Ángulos')">
+          <div class="exp-icon">📐</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Ángulos</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/areas.html','Práctica: Áreas y Geometría')">
+          <div class="exp-icon">🔷</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Áreas y Geometría</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/probabilidad.html','Práctica: Probabilidad y Estadística')">
+          <div class="exp-icon">🎲</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Probabilidad y Estadística</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="mat" onclick="openExam('examenes/practicos/mat/combinatoria.html','Práctica: Combinatoria')">
+          <div class="exp-icon">🧮</div><div class="exp-area-tag">Matemáticas</div>
+          <div class="exp-name">Combinatoria</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Español -->
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div style="width:32px;height:32px;background:#7c3aed;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">✍️</div>
+        <span style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);">Español</span>
+        <span style="font-size:11px;color:#a78bfa;font-weight:700;text-transform:uppercase;letter-spacing:.5px;">6 temas</span>
+      </div>
+      <div class="exp-grid">
+        <div class="exp-card" data-area="esp" onclick="openExam('examenes/practicos/esp/figurasretoricas.html','Práctica: Figuras Retóricas')">
+          <div class="exp-icon">🎭</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Español</div>
+          <div class="exp-name">Figuras Retóricas</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="esp" onclick="openExam('examenes/practicos/esp/inferenciasygenerosliterarios.html','Práctica: Inferencias y Géneros Literarios')">
+          <div class="exp-icon">🔍</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Español</div>
+          <div class="exp-name">Inferencias y Géneros Literarios</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="esp" onclick="openExam('examenes/practicos/esp/narrativas.html','Práctica: Elementos Narrativos')">
+          <div class="exp-icon">📖</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Español</div>
+          <div class="exp-name">Elementos Narrativos</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="esp" onclick="openExam('examenes/practicos/esp/signosdepuntuacion.html','Práctica: Signos de Puntuación')">
+          <div class="exp-icon">✒️</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Español</div>
+          <div class="exp-name">Signos de Puntuación</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="esp" onclick="openExam('examenes/practicos/esp/tiposdetexto.html','Práctica: Tipos de Texto')">
+          <div class="exp-icon">📝</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Español</div>
+          <div class="exp-name">Tipos de Texto</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+        <div class="exp-card" data-area="esp" onclick="openExam('examenes/practicos/esp/tituloideaprincipal.html','Práctica: Título e Idea Principal')">
+          <div class="exp-icon">💡</div><div class="exp-area-tag" style="background:#7c3aed22;color:#a78bfa;">Español</div>
+          <div class="exp-name">Título e Idea Principal</div>
+          <button class="exp-btn">✏️ Practicar</button>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <hr class="divider"/>
+
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Ejercicios de supervivencia</h2>
+      <div class="section-line"></div>
+      <span class="section-count">Matemáticas · Redacción · Lectura</span>
+    </div>
+    <div class="tools-grid" id="survival-grid"></div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">⚡ Reto de Lectura Rápida</h2>
+      <div class="section-line"></div>
+      <span class="section-count">4 niveles · 15 lecturas aleatorias c/u</span>
+    </div>
+    <div class="reto-intro">
+      <div class="reto-intro-icon">📖</div>
+      <div class="reto-intro-text">
+        <strong>Entrena tu velocidad y comprensión lectora.</strong> Cada nivel te presenta 3 lecturas aleatorias de un banco de 15 textos. Lee en el tiempo indicado y responde preguntas de comprensión. Ideal para dominar la sección de Lectura del PAA.
+      </div>
+    </div>
+    <div class="reto-grid" id="reto-grid"></div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">🎮 Minijuegos</h2>
+      <div class="section-line"></div>
+      <span class="section-count">7 juegos · Matemáticas · Español · 1 vs 1</span>
+    </div>
+    <div class="mini-note">
+      <strong>📋 Aviso:</strong> La plataforma <strong>no guarda datos</strong> entre sesiones. Para llevar tu progresión, <strong>anota tu puntaje</strong> al terminar cada simulación o minijuego y compara en cada sesión tu avance.
+    </div>
+    <div class="mini-grid">
+      <div class="mini-card">
+        <div class="mini-icon">⚔️</div>
+        <span class="mini-tag">Español · 1 jugador</span>
+        <div class="mini-name">Reading Conquest</div>
+        <div class="mini-desc">Conquista zonas respondiendo preguntas de Lectura, Redacción y Vocabulario. Sistema de energía y puntos.</div>
+        <button class="mini-btn" onclick="openExam('minijuegos/conquista_espanol.html','Reading Conquest: Misión PAA')">▶ Jugar</button>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">📚</div>
+        <span class="mini-tag">Español · 1 jugador</span>
+        <div class="mini-name">PAA Chronicles</div>
+        <div class="mini-desc">Mega banco de preguntas de español. El Archivo del Saber con múltiples niveles y desafíos.</div>
+        <button class="mini-btn" onclick="openExam('minijuegos/conquista_espanol2.html','PAA Chronicles: El Archivo del Saber')">▶ Jugar</button>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">🔢</div>
+        <span class="mini-tag">Matemáticas · 1 jugador</span>
+        <div class="mini-name">Math Conquest</div>
+        <div class="mini-desc">Conquista territorios matemáticos dominando Aritmética, Álgebra, Geometría y Probabilidad.</div>
+        <button class="mini-btn" onclick="openExam('minijuegos/conquista_mat.html','Math Conquest: Operación PAA')">▶ Jugar</button>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">🌌</div>
+        <span class="mini-tag">Matemáticas · 1 jugador</span>
+        <div class="mini-name">Crónicas Matemáticas</div>
+        <div class="mini-desc">La Odisea Numérica. Viaja por zonas matemáticas resolviendo problemas con mecánica de RPG.</div>
+        <button class="mini-btn" onclick="openExam('minijuegos/cronicas_mat.html','Math Chronicles: La Odisea Numérica')">▶ Jugar</button>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">🔵</div>
+        <span class="mini-tag">Español · 2 jugadores</span>
+        <div class="mini-name">Conecta 4 — Español</div>
+        <div class="mini-desc">Duelo 1 vs 1. Responde preguntas de Lectura PAA para ganar columnas y conectar 4 fichas.</div>
+        <button class="mini-btn" onclick="openExam('minijuegos/conecta4_espanol.html','Reading Duel: Connect 4 PAA')">▶ Jugar</button>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">🔴</div>
+        <span class="mini-tag">Matemáticas · 2 jugadores</span>
+        <div class="mini-name">Conecta 4 — Matemáticas</div>
+        <div class="mini-desc">Duelo matemático 1 vs 1. Resuelve problemas para colocar fichas y vencer a tu rival.</div>
+        <button class="mini-btn" onclick="openExam('minijuegos/conecta4_mat.html','Connect 4: Math Duel PAA')">▶ Jugar</button>
+      </div>
+      <div class="mini-card" style="border-color:#e11d4840;background:linear-gradient(135deg,var(--surface),#1a0a0e);">
+        <div class="mini-icon">🎮</div>
+        <span class="mini-tag" style="background:#e11d4818;color:#fb7185;border-color:#e11d4840;">Matemáticas · 1 jugador</span>
+        <div class="mini-name">Dominando el PAA</div>
+        <div class="mini-desc">Juego de acción y reflejos. Responde preguntas de Matemáticas bajo presión para avanzar de nivel y dominar el PAA.</div>
+        <button class="mini-btn" style="background:#e11d4820;border-color:#e11d4840;color:#fb7185;" onclick="openExam('minijuegos/dominando_el_paa.html','Dominando el PAA')">▶ Jugar</button>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">🇺🇸 Inglés — ESLAT</h2>
+      <div class="section-line"></div>
+      <span class="section-count">5 simulaciones · 50 reactivos c/u</span>
+    </div>
+    <div class="eng-note">
+      <strong>⚠️ Nota importante:</strong> El inglés (ESLAT) <strong>no cuenta para el puntaje final de admisión</strong> a la UDG. Sin embargo, obtener un buen desempeño puede apoyarte para acceder a certificaciones como el <strong>TOEFL</strong>, especialmente si tienes un buen promedio académico y tu carrera lo requiere.
+      <br/><br/>
+      Aun así, practicarlo te da ventaja y es parte del examen completo PAA.
+    </div>
+    <div class="categories-grid" style="grid-template-columns:1fr;">
+      <div>
+        <div class="cat-card" data-cat="lec" onclick="togglePanel('panel-ing')" style="--cc:#fbbf24;">
+          <div class="cat-icon" style="background:#fbbf24;">🇺🇸</div>
+          <div class="cat-name">Inglés (ESLAT)</div>
+          <div class="cat-desc">Language Use & Vocabulary · Reading Comprehension · Indirect Writing.</div>
+          <div class="cat-footer">
+            <span class="cat-count">5 simulaciones · 50 reactivos c/u</span>
+            <span class="cat-arrow" id="arrow-panel-ing">›</span>
+          </div>
+        </div>
+        <div class="exam-panel" id="panel-ing">
+          <div class="exam-panel-header">
+            <span class="exam-panel-dot" style="background:#fbbf24;"></span>
+            Inglés ESLAT — Elige una simulación
+            <span class="eng-badge" style="margin-left:auto;">No cuenta para admisión</span>
+          </div>
+          <div id="exams-ing"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Herramientas</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card" data-accent="calc" onclick="openTool('calculadora.html','Calculadora de Puntajes PAA')">
+        <div class="tool-badge">Herramienta</div>
+        <div class="tool-name">🧮 Calculadora de puntajes</div>
+        <div class="tool-desc">Calcula tu puntaje estimado de ingreso y descubre cuánto necesitas para entrar.</div>
+        <button class="tool-run-btn">▶ Abrir calculadora</button>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">📚 Recursos oficiales · Apoyo</h2>
+      <div class="section-line"></div>
+      <span class="section-count">Guías · PDFs · Video curso · Explicaciones</span>
+    </div>
+    <div class="recursos-note">
+      <strong>Material de apoyo oficial para tu preparación.</strong> Descarga las guías publicadas por la UDG y College Board, accede al curso en video y consulta las explicaciones rápidas de cada tema.
+    </div>
+    <div class="recursos-grid">
+
+      <a class="recurso-card" data-type="pdf" href="https://escolar.udg.mx/sites/default/files/adjuntos/paa-prueba-practica.pdf" target="_blank" rel="noopener">
+        <div class="recurso-type-badge">📄 PDF Descargable</div>
+        <div class="recurso-org">UDG · Escolar</div>
+        <div class="recurso-title">Guía PAA — Prueba Práctica</div>
+        <div class="recurso-desc">Guía oficial de la Universidad de Guadalajara con ejercicios de práctica para Matemáticas, Redacción y Lectura. Formato examen real.</div>
+        <span class="recurso-action">⬇ Descargar PDF · 2.17 MB</span>
+      </a>
+
+      <a class="recurso-card" data-type="pdf" href="https://escolar.udg.mx/sites/default/files/adjuntos/paa-prueba-practica-en-linea.pdf" target="_blank" rel="noopener">
+        <div class="recurso-type-badge">📄 PDF Descargable</div>
+        <div class="recurso-org">UDG · Escolar</div>
+        <div class="recurso-title">Guía PAA — Prueba en Línea</div>
+        <div class="recurso-desc">Versión compacta orientada al formato de examen en línea. Ideal para repasar la estructura y tipo de reactivos antes del día del examen.</div>
+        <span class="recurso-action">⬇ Descargar PDF · 203 KB</span>
+      </a>
+
+      <a class="recurso-card" data-type="web" href="https://latam.collegeboard.org/publicaciones/guia-de-estudio-paa/" target="_blank" rel="noopener">
+        <div class="recurso-type-badge">🌐 Sitio Oficial</div>
+        <div class="recurso-org">College Board Latinoamérica</div>
+        <div class="recurso-title">Guía de Estudio Oficial PAA</div>
+        <div class="recurso-desc">Publicación oficial de College Board con la estructura completa del examen, ejemplos de preguntas y consejos estratégicos para cada sección.</div>
+        <span class="recurso-action">→ Visitar sitio College Board</span>
+      </a>
+
+    </div>
+  </section>
+
+  <footer>PrepMaster © 2025 · Todos los derechos reservados · Acceso exclusivo para usuarios registrados</footer>
+</div>
+
+<div class="iframe-modal" id="iframe-modal">
+  <div class="iframe-topbar">
+    <span class="iframe-title" id="iframe-title">Examen</span>
+    <button class="btn-close-modal" onclick="closeIframe()">✕ Cerrar</button>
+  </div>
+  <iframe id="main-iframe" src="" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+</div>
+
+<div class="pdf-modal" id="pdf-modal" onclick="closePDFOnBg(event)">
+  <div class="pdf-container">
+    <div class="pdf-topbar">
+      <span class="pdf-title" id="pdf-title">Respuestas</span>
+      <span class="pdf-readonly">📄 Solo lectura</span>
+      <button class="btn-close-pdf" onclick="closePDF()">×</button>
+    </div>
+    <div class="pdf-frame-wrap">
+      <iframe id="pdf-iframe" src="" oncontextmenu="return false;"></iframe>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// UI functions must be in a regular (non-module) script so onclick handlers work immediately
+function togglePanel(id) {
+  const p=document.getElementById(id), a=document.getElementById('arrow-panel-'+id.replace('panel-','')), open=p&&p.classList.contains('open');
+  document.querySelectorAll('.exam-panel').forEach(x=>x.classList.remove('open'));
+  document.querySelectorAll('[id^="arrow-panel"]').forEach(x=>x.textContent='›');
+  if(!open&&p){p.classList.add('open'); if(a) a.textContent='↓';}
+}
+function openExam(src,title) {
+  document.getElementById('main-iframe').src=src;
+  document.getElementById('iframe-title').textContent=title;
+  document.getElementById('iframe-modal').classList.add('open');
+}
+function openTool(src,title){ openExam(src,title); }
+function closeIframe() { document.getElementById('iframe-modal').classList.remove('open'); document.getElementById('main-iframe').src=''; }
+function openPDF(src,title) {
+  document.getElementById('pdf-iframe').src=src+'#toolbar=0&navpanes=0';
+  document.getElementById('pdf-title').textContent=title;
+  document.getElementById('pdf-modal').classList.add('open');
+}
+function closePDF() { document.getElementById('pdf-modal').classList.remove('open'); document.getElementById('pdf-iframe').src=''; }
+function closePDFOnBg(e) { if(e.target===document.getElementById('pdf-modal')) closePDF(); }
+document.addEventListener('keydown', e => {
+  if(document.getElementById('pdf-modal').classList.contains('open')){if((e.ctrlKey||e.metaKey)&&e.key==='s')e.preventDefault(); if(e.key==='Escape')closePDF();}
+  if(document.getElementById('iframe-modal').classList.contains('open')&&e.key==='Escape')closeIframe();
+});
+// Also expose to window for any dynamic calls
+window.togglePanel=togglePanel; window.openExam=openExam; window.openTool=openTool;
+window.closeIframe=closeIframe; window.openPDF=openPDF; window.closePDF=closePDF;
+window.closePDFOnBg=closePDFOnBg;
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const app  = initializeApp({
+  apiKey:"AIzaSyA2-54Gk9NXW-Ebr3mSdHNP8TA7BlLuQWU",
+  authDomain:"simulador-udg-2026.firebaseapp.com",
+  projectId:"simulador-udg-2026",
+  storageBucket:"simulador-udg-2026.firebasestorage.app",
+  messagingSenderId:"346117076783",
+  appId:"1:346117076783:web:65f9859b09cea4f64893da",
+  measurementId:"G-E70MD5J2WX"
+});
+const auth = getAuth(app);
+auth.settings.appVerificationDisabledForTesting = true;
+const db   = getFirestore(app);
+
+const EXAM_FILES = {
+  mat: ['mat_01','mat_02','mat_03','mat_04','mat_05','mat_06','mat_07','mat_08','mat_09','mat_10','mat_11'],
+  red: ['red_01','red_02','red_03','red_04','red_05','red_06','red_07','red_08','red_09','red_10','red_11'],
+  lec: ['lec_01','lec_02','lec_03','lec_04','lec_05','lec_06','lec_07','lec_08','lec_09','lec_10','lec_11'],
+};
+const EXAM_META = { mat:'55 reactivos', red:'30 reactivos', lec:'45 reactivos' };
+const EXAMS = {
+  mat: EXAM_FILES.mat.map((f,i)=>({name:`Simulación Matemáticas ${i+1}`,file:`examenes/mat/${f}.html`,pdf:`respuestas/mat/${f}_resp.pdf`,meta:EXAM_META.mat})),
+  red: EXAM_FILES.red.map((f,i)=>({name:`Simulación Redacción ${i+1}`,file:`examenes/red/${f}.html`,pdf:`respuestas/red/${f}_resp.pdf`,meta:EXAM_META.red})),
+  lec: EXAM_FILES.lec.map((f,i)=>({name:`Simulación Lectura ${i+1}`,file:`examenes/lec/${f}.html`,pdf:`respuestas/lec/${f}_resp.pdf`,meta:EXAM_META.lec})),
+};
+const COLORS = {mat:'#ff6b35',red:'#7c3aed',lec:'#059669'};
+const SURVIVAL = [
+  {name:'Supervivencia Aritmética',      desc:'Operaciones, fracciones y porcentajes contra el reloj.',  file:'examenes/supervivencia/surviveARITMETICA.html',                icon:'🔢'},
+  {name:'Supervivencia Álgebra',         desc:'Ecuaciones y expresiones algebraicas bajo presión.',       file:'examenes/supervivencia/surviveALGEBRA.html',                   icon:'📐'},
+  {name:'Supervivencia Funciones',       desc:'Funciones y gráficas en modo contrarreloj.',               file:'examenes/supervivencia/survivefunciones.html',                 icon:'📈'},
+  {name:'Supervivencia Probabilidad',    desc:'Estadística y probabilidad a contrarreloj.',               file:'examenes/supervivencia/surviveprobabilidadyestadistica.html',  icon:'🎲'},
+  {name:'Supervivencia Diagramas Venn',  desc:'Conjuntos y diagramas de Venn bajo presión.',              file:'examenes/supervivencia/SurviveDiagramasdeVenn.html',           icon:'⭕'},
+  {name:'Supervivencia Redacción',       desc:'Coherencia y cohesión contra el reloj.',                   file:'examenes/supervivencia/sv_01.html',                            icon:'✍️'},
+  {name:'Supervivencia Lectura',         desc:'Comprensión lectora en modo contrarreloj.',                file:'examenes/supervivencia/sv_03.html',                            icon:'📖'},
+  {name:'Survival Math: Reto 100',       desc:'60 reactivos de matemáticas en modo supervivencia. Vidas limitadas, sin tregua.',  file:'examenes/supervivencia/Supervivencia_Matematicas.html', icon:'🧮'},
+];
+
+function renderExams(key, containerId) {
+  const cont = document.getElementById(containerId);
+  if (!cont) return;
+  const color = COLORS[key];
+  EXAMS[key].forEach((ex,i) => {
+    const div = document.createElement('div');
+    div.className = 'exam-item';
+    div.innerHTML = `
+      <div class="exam-item-left">
+        <div class="exam-num">${String(i+1).padStart(2,'0')}</div>
+        <div>
+          <div class="exam-info-name">${ex.name}</div>
+          <div class="exam-info-meta">${ex.meta} · ${i < 8 ? "PDF con procedimientos incluido" : "Respuestas incluidas en el examen"}</div>
+        </div>
+      </div>
+      <div class="exam-item-actions">
+        <button class="btn-exam btn-exam-start" style="background:${color};border-color:${color}"
+          onclick="event.stopPropagation();openExam('${ex.file}','${ex.name}')">▶ Iniciar</button>
+        ${i < 8 ? `<button class="btn-exam btn-exam-pdf"
+          onclick="event.stopPropagation();openPDF('${ex.pdf}','Respuestas — ${ex.name}')">📄 Respuestas</button>` : ''}
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+['mat','red','lec'].forEach(k => renderExams(k, `exams-${k}`));
+
+const EXAMS_ING = [
+  {name:'Simulation 0: English PAA (ESLAT)',file:'examenes/singl1.html',pdf:'respuestas/ing/singl1_resp.pdf',meta:'50 reactivos'},
+  {name:'Simulation 1: English PAA (ESLAT)',file:'examenes/singl2.html',pdf:'respuestas/ing/singl2_resp.pdf',meta:'50 reactivos'},
+  {name:'Simulation 2: English PAA (ESLAT)',file:'examenes/singl3.html',pdf:'respuestas/ing/singl3_resp.pdf',meta:'50 reactivos'},
+  {name:'Simulation 3: English PAA (ESLAT)',file:'examenes/singl4.html',pdf:'respuestas/ing/singl4_resp.pdf',meta:'50 reactivos'},
+  {name:'Simulation 4: English PAA (ESLAT)',file:'examenes/singl5.html',pdf:'respuestas/ing/singl5_resp.pdf',meta:'50 reactivos'},
+];
+
+// Render English exams
+const ingCont = document.getElementById('exams-ing');
+if (ingCont) EXAMS_ING.forEach((ex,i) => {
+  const div = document.createElement('div');
+  div.className = 'exam-item';
+  div.innerHTML = `
+    <div class="exam-item-left">
+      <div class="exam-num">${String(i).padStart(2,'0')}</div>
+      <div>
+        <div class="exam-info-name">${ex.name}</div>
+        <div class="exam-info-meta">${ex.meta} · Language Use · Reading · Indirect Writing · Clave de respuestas incluida</div>
+      </div>
+    </div>
+    <div class="exam-item-actions">
+      <button class="btn-exam btn-exam-start" style="background:#fbbf24;border-color:#fbbf24"
+        onclick="event.stopPropagation();openExam('${ex.file}','${ex.name}')">▶ Iniciar</button>
+      <button class="btn-exam btn-exam-pdf"
+        onclick="event.stopPropagation();openPDF('${ex.pdf}','Answer Key — ${ex.name}')">📄 Clave</button>
+    </div>`;
+  ingCont.appendChild(div);
+});
+
+
+const svGrid = document.getElementById('survival-grid');
+if (svGrid) SURVIVAL.forEach(sv => {
+  const d = document.createElement('div');
+  d.className='tool-card'; d.dataset.accent='surv'; d.onclick=()=>openExam(sv.file,sv.name);
+  d.innerHTML=`<div class="tool-badge">🔥 Supervivencia</div><div class="tool-name">${sv.icon} ${sv.name}</div><div class="tool-desc">${sv.desc}</div><button class="tool-run-btn">▶ Comenzar</button>`;
+  svGrid.appendChild(d);
+});
+
+const RETOS = [
+  {ppm:100, name:'Iniciante', label:'Nivel Iniciante', icon:'📗', desc:'Lee textos de ~100 palabras en 60 segundos. Ideal para empezar a entrenar tu velocidad lectora.', tags:['60s lectura','40s pregunta','3 de 15 textos'], color:'#6366f1', file:'examenes/lec/Lectura_100.html'},
+  {ppm:200, name:'Pro',       label:'Nivel Pro',       icon:'📘', desc:'Lee textos de ~200 palabras en 60 segundos. Aumenta tu velocidad sin perder comprensión.', tags:['60s lectura','40s pregunta','3 de 15 textos'], color:'#059669', file:'examenes/lec/Lectura_200.html'},
+  {ppm:300, name:'Élite',     label:'Nivel Élite',     icon:'📙', desc:'Lee textos densos de ~300 palabras en 60 segundos. Requiere fijación visual amplia.', tags:['60s lectura','40s pregunta','3 de 15 textos'], color:'#7c3aed', file:'examenes/lec/Lectura_300.html'},
+  {ppm:400, name:'Master',    label:'⚠️ Nivel Master', icon:'📕', desc:'Lee textos de ~400 palabras en 60 segundos. El mayor reto: el texto desaparece al terminar.', tags:['60s lectura','40s pregunta','texto sin vuelta'], color:'#e11d48', file:'examenes/lec/Lectura_400.html'},
+];
+const retoGrid = document.getElementById('reto-grid');
+if (retoGrid) RETOS.forEach(r => {
+  const d = document.createElement('div');
+  d.className = 'reto-card'; d.dataset.ppm = r.ppm;
+  d.onclick = () => openExam(r.file, `Reto de Lectura — ${r.label}`);
+  d.innerHTML = `
+    <div class="reto-ppm-badge">${r.icon} ${r.label}</div>
+    <div class="reto-speed">${r.ppm}</div>
+    <div class="reto-unit">palabras por minuto</div>
+    <div class="reto-name">${r.name}</div>
+    <div class="reto-desc">${r.desc}</div>
+    <div class="reto-tags">${r.tags.map(t=>`<span class="reto-tag">${t}</span>`).join('')}</div>
+    <button class="reto-btn">▶ Iniciar reto</button>`;
+  retoGrid.appendChild(d);
+});
+
+
+// ── Session management (max 3 simultaneous) ─────────────────────────────────
+const MAX_SESSIONS = 3;
+let mySessionId = null;
+
+function genSessionId() {
+  return Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
+
+async function registerSession(uid) {
+  // Clean sessions older than 2 hours
+  const sessionsRef = collection(db, 'sessions', uid, 'active');
+  const snap = await getDocs(sessionsRef);
+  const now = Date.now();
+  const active = [];
+  for (const d of snap.docs) {
+    const data = d.data();
+    const age = now - (data.ts?.toMillis?.() || 0);
+    if (age > 2 * 60 * 60 * 1000) {
+      await deleteDoc(d.ref); // expired
+    } else {
+      active.push(d.id);
     }
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+  }
+  if (active.length >= MAX_SESSIONS) return false; // limit reached
+  mySessionId = genSessionId();
+  await setDoc(doc(db, 'sessions', uid, 'active', mySessionId), {
+    ts: serverTimestamp(),
+    ua: navigator.userAgent.slice(0, 80)
+  });
+  return true;
+}
 
-    let modoAuth = 'login'; // 'login' o 'register'
-    let usuarioActual = null;
+async function unregisterSession(uid) {
+  if (mySessionId) {
+    try { await deleteDoc(doc(db, 'sessions', uid, 'active', mySessionId)); } catch(e) {}
+    mySessionId = null;
+  }
+}
 
-    // 2. OBSERVADOR DE ESTADO DE AUTENTICACIÓN
-    auth.onAuthStateChanged(async (user) => {
-        const divLoggedOut = document.getElementById('auth-logged-out');
-        const divLoggedIn = document.getElementById('auth-logged-in');
-        const userDisplayName = document.getElementById('user-display-name');
-        const badgeSub = document.getElementById('user-subscription-badge');
-        const btnBuy = document.getElementById('btn-buy-subscription');
-
-        if (user) {
-            usuarioActual = user;
-            divLoggedOut.classList.add('hidden');
-            divLoggedIn.classList.remove('hidden');
-            userDisplayName.innerText = user.email.split('@')[0];
-
-            // Verificar estatus de suscripción en Firestore
-            try {
-                const userDoc = await db.collection('users').doc(user.uid).get();
-                if (userDoc.exists && userDoc.data().subscriptionStatus === 'active') {
-                    const data = userDoc.data();
-                    const fechaExp = data.expiresAt ? new Date(data.expiresAt.toDate()) : null;
-                    badgeSub.innerText = "PRO Activo";
-                    badgeSub.className = "inline-block text-[10px] px-2 py-0.5 rounded-full font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
-                    btnBuy.classList.add('hidden');
-                } else {
-                    badgeSub.innerText = "Plan Gratuito";
-                    badgeSub.className = "inline-block text-[10px] px-2 py-0.5 rounded-full font-semibold bg-amber-500/20 text-amber-400 border border-amber-500/30";
-                    btnBuy.classList.remove('hidden');
-                }
-            } catch (err) {
-                console.error("Error al consultar suscripción:", err);
-            }
-        } else {
-            usuarioActual = null;
-            divLoggedOut.classList.remove('hidden');
-            divLoggedIn.classList.add('hidden');
-        }
-    });
-
-    // 3. FUNCIONES DE MODAL Y LOGIN / REGISTRO
-    function abrirModalAuth(modo) {
-        modoAuth = modo;
-        actualizarUIModalAuth();
-        document.getElementById('modal-auth').classList.remove('hidden');
+// Heartbeat — refresh session timestamp every 10 min to keep it alive
+function startHeartbeat(uid) {
+  setInterval(async () => {
+    if (mySessionId) {
+      try {
+        await setDoc(doc(db, 'sessions', uid, 'active', mySessionId), 
+          { ts: serverTimestamp(), ua: navigator.userAgent.slice(0,80) }, { merge: true });
+      } catch(e) {}
     }
+  }, 10 * 60 * 1000);
+}
 
-    function cerrarModalAuth() {
-        document.getElementById('modal-auth').classList.add('hidden');
-        document.getElementById('auth-error-msg').classList.add('hidden');
-    }
+// Unregister session on tab close
+window.addEventListener('beforeunload', () => {
+  if (auth.currentUser && mySessionId) {
+    // Use sendBeacon for reliability on tab close
+    navigator.sendBeacon && navigator.sendBeacon('/ping'); // just to trigger beforeunload
+    unregisterSession(auth.currentUser.uid);
+  }
+});
 
-    function toggleModoAuth() {
-        modoAuth = (modoAuth === 'login') ? 'register' : 'login';
-        actualizarUIModalAuth();
-    }
-
-    function actualizarUIModalAuth() {
-        const title = document.getElementById('modal-auth-title');
-        const desc = document.getElementById('modal-auth-desc');
-        const btnSubmit = document.getElementById('btn-auth-submit');
-        const btnToggle = document.getElementById('btn-toggle-auth');
-
-        if (modoAuth === 'login') {
-            title.innerText = "Iniciar Sesión";
-            desc.innerText = "Ingresa a tu cuenta para acceder a tus prácticas y verificar tu suscripción.";
-            btnSubmit.innerText = "Ingresar";
-            btnToggle.innerText = "¿No tienes cuenta? Regístrate aquí";
-        } else {
-            title.innerText = "Crear Cuenta";
-            desc.innerText = "Regístrate para guardar tu progreso y obtener tu plan de 3 meses.";
-            btnSubmit.innerText = "Crear Cuenta";
-            btnToggle.innerText = "¿Ya tienes cuenta? Inicia sesión aquí";
-        }
-    }
-
-    async function procesarAuth(e) {
-        e.preventDefault();
-        const email = document.getElementById('auth-email').value;
-        const password = document.getElementById('auth-password').value;
-        const errorMsg = document.getElementById('auth-error-msg');
-        errorMsg.classList.add('hidden');
-
-        try {
-            if (modoAuth === 'login') {
-                await auth.signInWithEmailAndPassword(email, password);
-            } else {
-                const res = await auth.createUserWithEmailAndPassword(email, password);
-                // Inicializar usuario en Firestore
-                await db.collection('users').doc(res.user.uid).set({
-                    email: email,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    subscriptionStatus: 'inactive'
-                });
-            }
-            cerrarModalAuth();
-        } catch (err) {
-            errorMsg.innerText = err.message;
-            errorMsg.classList.remove('hidden');
-        }
-    }
-
-    function cerrarSesion() {
-        auth.signOut();
-    }
-
-    // 4. FLUJO DE PAGO CON STRIPE (Serverless via Vercel)
-    async function iniciarPagoStripe() {
-        if (!usuarioActual) {
-            abrirModalAuth('register');
+onAuthStateChanged(auth, async user => {
+  if (user) {
+    try {
+      const subDoc = await getDoc(doc(db, 'subscriptions', user.uid));
+      if (subDoc.exists()) {
+        const sub = subDoc.data();
+        const now = new Date();
+        const expires = sub.expiresAt?.toDate();
+        if (sub.active && expires && expires > now) {
+          // Check session limit
+          const sessionOk = await registerSession(user.uid);
+          if (!sessionOk) {
+            document.getElementById('auth-screen').style.display = 'flex';
+            document.getElementById('app').style.display = 'none';
+            const errEl = document.getElementById('login-error');
+            errEl.textContent = '⚠️ Límite de 3 dispositivos alcanzado. Cierra sesión en otro dispositivo e intenta de nuevo.';
+            errEl.style.display = 'block';
+            await signOut(auth);
             return;
+          }
+          startHeartbeat(user.uid);
+          document.getElementById('auth-screen').style.display = 'none';
+          document.getElementById('app').style.display = 'block';
+          const days = Math.ceil((expires - now) / (1000*60*60*24));
+          const userEl = document.getElementById('nav-user-email');
+          userEl.textContent = user.displayName || user.email;
+          userEl.title = `Acceso válido hasta ${expires.toLocaleDateString('es-MX')} (${days} días restantes)`;
+          return;
         }
+      }
+    } catch(e) { console.error('Error verificando suscripción:', e); }
+    // No active subscription
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
+    const errEl = document.getElementById('login-error');
+    errEl.textContent = '⚠️ Tu acceso no está activo o expiró. Crea una cuenta y paga para entrar.';
+    errEl.style.display = 'block';
+    await signOut(auth);
+  } else {
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
+  }
+});
 
-        try {
-            const response = await fetch('/api/create-checkout', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    userId: usuarioActual.uid,
-                    email: usuarioActual.email
-                })
-            });
+// ── Tab switch ──────────────────────────────────────────────────────────────
+window.switchTab = (tab) => {
+  const loginErr = document.getElementById('login-error');
+  const regErr = document.getElementById('register-error');
+  const regOk = document.getElementById('register-success');
+  if (loginErr) loginErr.style.display = 'none';
+  if (regErr) regErr.style.display = 'none';
+  if (regOk) regOk.style.display = 'none';
+  document.querySelectorAll('.auth-tab').forEach((t,i) => {
+    t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register'));
+  });
+  document.getElementById('panel-login').classList.toggle('active', tab==='login');
+  document.getElementById('panel-register').classList.toggle('active', tab==='register');
+};
 
-            const data = await response.json();
-            if (data.url) {
-                window.location.href = data.url; // Redirige a Stripe Checkout
-            } else {
-                alert("Ocurrió un error al iniciar la compra. Inténtalo nuevamente.");
-            }
-        } catch (err) {
-            console.error("Error en checkout:", err);
-            alert("No se pudo conectar con el servidor de pago.");
-        }
+window.toggleFreeCode = () => {
+  const sec = document.getElementById('free-code-section');
+  if (!sec) return;
+  sec.style.display = sec.style.display === 'block' ? 'none' : 'block';
+};
+
+// ── Login ───────────────────────────────────────────────────────────────────
+window.doLogin = async () => {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-pass').value;
+  const err   = document.getElementById('login-error');
+  err.style.display = 'none';
+  if (!email || !pass) { err.textContent = 'Completa todos los campos.'; err.style.display='block'; return; }
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch(e) {
+    const msgs = {
+      'auth/invalid-email':'Correo inválido.',
+      'auth/user-not-found':'No existe esa cuenta.',
+      'auth/wrong-password':'Contraseña incorrecta.',
+      'auth/invalid-credential':'Correo o contraseña incorrectos.',
+    };
+    err.textContent = msgs[e.code] || 'Error al iniciar sesión.';
+    err.style.display = 'block';
+  }
+};
+
+// ── Register + Redirect to Stripe ───────────────────────────────────────────
+window.doRegisterAndPay = async () => {
+  const email  = document.getElementById('reg-email').value.trim();
+  const pass   = document.getElementById('reg-pass').value;
+  const pass2  = document.getElementById('reg-pass2').value;
+  const err    = document.getElementById('register-error');
+  const ok     = document.getElementById('register-success');
+  const btn    = document.getElementById('btn-register');
+  err.style.display = 'none'; ok.style.display = 'none';
+
+  if (!email || !pass || !pass2) { err.textContent='Completa todos los campos.'; err.style.display='block'; return; }
+  if (pass !== pass2)             { err.textContent='Las contraseñas no coinciden.'; err.style.display='block'; return; }
+  if (pass.length < 6)            { err.textContent='La contraseña debe tener al menos 6 caracteres.'; err.style.display='block'; return; }
+
+  btn.textContent = 'Creando cuenta...'; btn.disabled = true;
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    const uid  = cred.user.uid;
+
+    ok.textContent = '✅ Cuenta creada. Redirigiendo a pago...';
+    ok.style.display = 'block';
+
+    // Call Netlify function to create Stripe Checkout session
+    const res = await fetch('https://us-central1-simulador-udg-2026.cloudfunctions.net/createCheckout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, uid }),
+    });
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      throw new Error(data.error || 'No se pudo crear la sesión de pago.');
+    }
+  } catch(e) {
+    const msgs = {
+      'auth/email-already-in-use':'Este correo ya tiene una cuenta. Inicia sesión.',
+      'auth/invalid-email':'Correo inválido.',
+      'auth/weak-password':'Contraseña muy débil.',
+    };
+    err.textContent = msgs[e.code] || e.message;
+    err.style.display = 'block';
+    btn.textContent = 'Crear cuenta y pagar →'; btn.disabled = false;
+  }
+};
+
+// ── Activate free code ───────────────────────────────────────────────────────
+window.doActivateFree = async () => {
+  const email = document.getElementById('reg-email').value.trim();
+  const pass  = document.getElementById('reg-pass').value;
+  const pass2 = document.getElementById('reg-pass2').value;
+  const code  = document.getElementById('free-code-input').value.trim();
+  const err   = document.getElementById('register-error');
+  const ok    = document.getElementById('register-success');
+  err.style.display = 'none'; ok.style.display = 'none';
+
+  if (!email || !pass) { err.textContent='Ingresa correo y contraseña primero.'; err.style.display='block'; return; }
+  if (pass !== pass2 && pass2) { err.textContent='Las contraseñas no coinciden.'; err.style.display='block'; return; }
+  if (!code) { err.textContent='Ingresa el código de acceso.'; err.style.display='block'; return; }
+
+  try {
+    // Create account if new, or get existing
+    let uid;
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      uid = cred.user.uid;
+    } catch(e) {
+      if (e.code === 'auth/email-already-in-use') {
+        const cred = await signInWithEmailAndPassword(auth, email, pass);
+        uid = cred.user.uid;
+      } else throw e;
     }
 
-    // 5. NAVEGACIÓN POR PESTAÑAS (TABS) PARA EXPLICACIONES
-    function filtrarExplicaciones(categoria) {
-        const bloques = document.querySelectorAll('.categoria-bloque');
-        bloques.forEach(bloque => bloque.classList.add('hidden'));
-
-        const bloqueActivo = document.getElementById(`bloque-${categoria}`);
-        if (bloqueActivo) {
-            bloqueActivo.classList.remove('hidden');
-        }
-
-        const botones = document.querySelectorAll('.tab-btn');
-        botones.forEach(btn => {
-            btn.className = "tab-btn px-6 py-3 rounded-xl font-bold text-sm transition-all duration-200 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white flex items-center space-x-2";
-        });
-
-        const btnActivo = document.getElementById(`btn-${categoria}`);
-        if (btnActivo) {
-            if (categoria === 'matematicas') {
-                btnActivo.className = "tab-btn px-6 py-3 rounded-xl font-bold text-sm transition-all duration-200 bg-amber-500 text-slate-900 shadow-lg shadow-amber-500/20 flex items-center space-x-2";
-            } else if (categoria === 'redaccion') {
-                btnActivo.className = "tab-btn px-6 py-3 rounded-xl font-bold text-sm transition-all duration-200 bg-emerald-500 text-slate-900 shadow-lg shadow-emerald-500/20 flex items-center space-x-2";
-            } else if (categoria === 'lectura') {
-                btnActivo.className = "tab-btn px-6 py-3 rounded-xl font-bold text-sm transition-all duration-200 bg-blue-500 text-slate-900 shadow-lg shadow-blue-500/20 flex items-center space-x-2";
-            }
-        }
+    const res = await fetch('https://us-central1-simulador-udg-2026.cloudfunctions.net/activateFree', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uid, email, code }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      ok.textContent = '✅ ¡Acceso activado! Entrando...';
+      ok.style.display = 'block';
+      // onAuthStateChanged will detect the subscription and show the app
+    } else {
+      throw new Error(data.error || 'Código inválido.');
     }
-    </script>
+  } catch(e) {
+    const msgs = {
+      'auth/invalid-email':'Correo inválido.',
+      'auth/weak-password':'Contraseña muy débil (mínimo 6 caracteres).',
+      'auth/wrong-password':'Contraseña incorrecta para esa cuenta.',
+    };
+    err.textContent = msgs[e.code] || e.message;
+    err.style.display = 'block';
+  }
+};
+
+
+const EXPLICACIONES = [
+  {name:'Fracciones',            desc:'Operaciones con fracciones: suma, resta, multiplicación y división.',    file:'examenes/explicaciones/Fracciones.html',              icon:'½',  color:'#ff6b35'},
+  {name:'Ecuaciones',            desc:'Ecuaciones lineales y cuadráticas paso a paso.',                          file:'examenes/explicaciones/Ecuaciones.html',              icon:'x=',  color:'#ff6b35'},
+  {name:'Funciones',             desc:'Funciones, gráficas y análisis de comportamiento.',                       file:'examenes/explicaciones/Funciones.html',               icon:'f(x)', color:'#ff6b35'},
+  {name:'Geometría',             desc:'Perímetros, áreas, volúmenes y teorema de Pitágoras.',                    file:'examenes/explicaciones/Geometria.html',               icon:'📐',  color:'#ff6b35'},
+  {name:'Probabilidad',          desc:'Probabilidad clásica, estadística y combinatoria.',                       file:'examenes/explicaciones/Probabilidad.html',            icon:'🎲',  color:'#ff6b35'},
+  {name:'Diagramas de Venn',     desc:'Conjuntos, intersecciones y uniones con diagramas.',                      file:'examenes/explicaciones/DiagramasVenn.html',           icon:'⭕',  color:'#ff6b35'},
+  {name:'Regla de 3',            desc:'Proporciones directas e inversas con la regla de tres.',                  file:'examenes/explicaciones/Reglade3.html',                icon:'3x',  color:'#ff6b35'},
+  {name:'Sistema de Ecuaciones', desc:'Resolución de sistemas por sustitución y eliminación.',                   file:'examenes/explicaciones/Sistemaecuaciones.html',       icon:'∑',   color:'#ff6b35'},
+  {name:'Redacción',             desc:'Coherencia, cohesión, conectores y estilo textual.',                      file:'examenes/explicaciones/Redaccion.html',               icon:'✍️', color:'#7c3aed'},
+  {name:'Figuras Retóricas',     desc:'Metáfora, símil, hipérbole y más figuras del lenguaje.',                  file:'examenes/explicaciones/Figuras_retoricas.html',       icon:'💬',  color:'#7c3aed'},
+  {name:'Tipos de Texto',        desc:'Narrativo, descriptivo, argumentativo y expositivo.',                     file:'examenes/explicaciones/Tiposdetexto.html',            icon:'📝',  color:'#7c3aed'},
+  {name:'Comprensión de Lectura',desc:'Idea principal, inferencias y análisis de párrafos.',                     file:'examenes/explicaciones/Comprensiondelectura.html',    icon:'📖',  color:'#059669'},
+  {name:'Idea Principal y Analogía',desc:'Cómo identificar la idea principal y resolver analogías.',             file:'examenes/explicaciones/Ideaprincipalyanalogia.html',  icon:'💡',  color:'#059669'},
+];
+
+// explicaciones rendered in HTML
+
+window.doLogout = async () => {
+  if (auth.currentUser) await unregisterSession(auth.currentUser.uid);
+  await signOut(auth);
+};
+</script>
+
 
 </body>
 </html>
