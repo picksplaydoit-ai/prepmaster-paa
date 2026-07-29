@@ -388,7 +388,7 @@
   </div>
 
   <!-- ═══════════════════════════════════════════════ -->
-  <!-- 🏠 HOME VIEW                                    -->
+  <!-- 🏠 HOME VIEW (DASHBOARD POR CAPAS)              -->
   <!-- ═══════════════════════════════════════════════ -->
   <div id="view-home" class="view-container active">
     <div class="home-hero">
@@ -410,7 +410,7 @@
         <div>
           <div class="home-card-icon">🗺️</div>
           <div class="home-card-title">Ruta de estudio</div>
-          <div class="home-card-desc">Plan semanal recomendado organizado de menos a más dificultad.</div>
+          <div class="home-card-desc">Plan semanal recomendado paso a paso para asegurar tu puntaje.</div>
         </div>
         <div class="home-card-action">Consultar ruta →</div>
       </div>
@@ -498,51 +498,58 @@
     </div>
   </div>
 
-  <!-- 🗺️ RUTA DE ESTUDIO -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- 🗺️ VIEW: RUTA DE ESTUDIO (ACTUALIZADA)          -->
+  <!-- ═══════════════════════════════════════════════ -->
   <div id="view-ruta" class="view-container">
     <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
-      <h2 class="section-title">🗺️ Orden recomendado de estudio</h2>
+      <h2 class="section-title">🗺️ Ruta de estudio recomendada</h2>
       <div class="section-line"></div>
     </div>
-    <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:20px;padding:28px;">
-      <p style="font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.7;">Sigue esta ruta para maximizar tu preparación. Empieza por las explicaciones de cada tema, luego practica con los ejercicios y cierra con las simulaciones.</p>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
-        <div style="background:var(--surface2);border:1px solid #ff6b3530;border-radius:16px;padding:20px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-            <div style="width:36px;height:36px;background:#ff6b35;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">📐</div>
-            <div>
-              <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;">Matemáticas</div>
-              <div style="font-size:11px;color:#ff6b35;font-weight:600;text-transform:uppercase;">800 puntos</div>
-            </div>
-          </div>
-          <ol style="list-style:none;padding:0;margin:0;">
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;">1</span><span><b style="color:var(--text);">Fracciones y Aritmética</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;">2</span><span><b style="color:var(--text);">Regla de 3 y Proporciones</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;">3</span><span><b style="color:var(--text);">Álgebra y Ecuaciones</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#ff6b3520;border:1px solid #ff6b3540;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ff6b35;">4</span><span><b style="color:var(--text);">Geometría y Probabilidad</b></span></li>
-          </ol>
+    <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:20px;padding:32px;">
+      <p style="font-size:14px;color:var(--muted);margin-bottom:28px;line-height:1.7;">Sigue este orden metodológico cada semana para garantizar tu progreso óptimo hacia la PAA UDG:</p>
+      
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;">
+        <!-- Paso 1 -->
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:22px;position:relative;">
+          <div style="font-size:24px;margin-bottom:12px;">⚡</div>
+          <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Paso 1</div>
+          <h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;">Estudia la Teoría</h3>
+          <p style="font-size:13px;color:var(--muted);line-height:1.5;">Revisa las <strong style="color:var(--text);">Explicaciones rápidas</strong> de cada tema para comprender fórmulas, reglas gramaticales y conceptos clave.</p>
         </div>
-        <div style="background:var(--surface2);border:1px solid #7c3aed30;border-radius:16px;padding:20px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-            <div style="width:36px;height:36px;background:#7c3aed;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">✍️</div>
-            <div>
-              <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;">Redacción y Lectura</div>
-              <div style="font-size:11px;color:#7c3aed;font-weight:600;text-transform:uppercase;">800 puntos</div>
-            </div>
-          </div>
-          <ol style="list-style:none;padding:0;margin:0;">
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;">1</span><span><b style="color:var(--text);">Tipos de Texto y Vocabulario</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;">2</span><span><b style="color:var(--text);">Comprensión de Lectura</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;">3</span><span><b style="color:var(--text);">Redacción Indirecta</b></span></li>
-            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);"><span style="min-width:22px;height:22px;background:#7c3aed20;border:1px solid #7c3aed40;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#7c3aed;">4</span><span><b style="color:var(--text);">Análisis Dual y Retórica</b></span></li>
-          </ol>
+
+        <!-- Paso 2 -->
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:22px;position:relative;">
+          <div style="font-size:24px;margin-bottom:12px;">📝</div>
+          <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Paso 2</div>
+          <h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;">Practica y Supervive</h3>
+          <p style="font-size:13px;color:var(--muted);line-height:1.5;">Resuelve los <strong style="color:var(--text);">Ejercicios prácticos</strong> o pon a prueba tu velocidad con los módulos de <strong style="color:var(--text);">Supervivencia</strong> de cada tema.</p>
+        </div>
+
+        <!-- Paso 3 -->
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:22px;position:relative;">
+          <div style="font-size:24px;margin-bottom:12px;">🎮</div>
+          <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Paso 3</div>
+          <h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;">Refuerza Jugando</h3>
+          <p style="font-size:13px;color:var(--muted);line-height:1.5;">Gana agilidad mental y destreza practicando constantemente con los <strong style="color:var(--text);">Minijuegos</strong> interactivos.</p>
+        </div>
+
+        <!-- Paso 4 -->
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:22px;position:relative;">
+          <div style="font-size:24px;margin-bottom:12px;">📄</div>
+          <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Paso 4</div>
+          <h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;">Simulacro Semanal</h3>
+          <p style="font-size:13px;color:var(--muted);line-height:1.5;">Realiza <strong style="color:var(--text);">al menos un examen de cada tipo en cada semana</strong> bajo condiciones de tiempo real.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ⚡ EXPLICACIONES RÁPIDAS -->
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- ⚡ VIEW: EXPLICACIONES RÁPIDAS                  -->
+  <!-- ═══════════════════════════════════════════════ -->
   <div id="view-explicaciones" class="view-container">
     <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
@@ -833,7 +840,7 @@ function switchLayerTab(type, area, event) {
 
   container.querySelectorAll('.exp-card').forEach(card => {
     const group = card.getAttribute('data-group');
-    if (group === area) {
+    if (area === 'todas' || group === area) {
       card.style.display = 'flex';
     } else {
       card.style.display = 'none';
@@ -1028,17 +1035,17 @@ async function registerSession(uid) {
   const sessionsRef = collection(db, 'sessions', uid, 'active');
   const snap = await getDocs(sessionsRef);
   const now = Date.now();
-  const active = [];
   for (const d of snap.docs) {
     const data = d.data();
     const age = now - (data.ts?.toMillis?.() || 0);
-    if (age > 2 * 60 * 60 * 1000) {
+    // Limpiar sesiones inactivas mayores a 45 minutos para evitar bloqueos fantasma
+    if (age > 45 * 60 * 1000) {
       await deleteDoc(d.ref);
-    } else {
-      active.push(d.id);
     }
   }
-  if (active.length >= MAX_SESSIONS) return false;
+  const snapAfterClean = await getDocs(sessionsRef);
+  if (snapAfterClean.size >= MAX_SESSIONS) return false;
+
   mySessionId = genSessionId();
   await setDoc(doc(db, 'sessions', uid, 'active', mySessionId), {
     ts: serverTimestamp(),
@@ -1062,7 +1069,7 @@ function startHeartbeat(uid) {
           { ts: serverTimestamp(), ua: navigator.userAgent.slice(0,80) }, { merge: true });
       } catch(e) {}
     }
-  }, 10 * 60 * 1000);
+  }, 5 * 60 * 1000);
 }
 
 window.addEventListener('beforeunload', () => {
@@ -1086,7 +1093,7 @@ onAuthStateChanged(auth, async user => {
             document.getElementById('auth-screen').style.display = 'flex';
             document.getElementById('app').style.display = 'none';
             const errEl = document.getElementById('login-error');
-            errEl.textContent = '⚠️ Límite de 3 dispositivos alcanzado. Cierra sesión en otro dispositivo e intenta de nuevo.';
+            errEl.textContent = '⚠️ Límite de 3 dispositivos alcanzado. Cierra sesión en otro dispositivo o espera unos minutos.';
             errEl.style.display = 'block';
             await signOut(auth);
             return;
