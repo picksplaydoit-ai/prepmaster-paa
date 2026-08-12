@@ -3,27 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador PAA Matemáticas - Interactivos</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Simulador PAA 5 - Matemáticas</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .sticky-header { position: sticky; top: 0; z-index: 50; }
-        .ans-correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
-        .ans-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
-        .progress-bar { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-        .fade-in { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .ans-correct {
+            border-color: #10b981 !important;
+            background-color: #ecfdf5 !important;
+            color: #065f46 !important;
+        }
+        .ans-wrong {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            color: #991b1b !important;
+        }
+        .progress-bar {
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
         .glass-card {
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
-        .custom-scroll::-webkit-scrollbar { width: 4px; }
-        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+        .figure-container {
+            display: flex;
+            justify-content: center;
+            margin: 12px 0 16px 0;
+        }
+        .figure-container svg {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #ffffff;
+            padding: 8px;
+        }
+        .pictogram-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 12px 0 16px 0;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            background: #ffffff;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        .pictogram-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 44px;
+        }
+        .pictogram-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e293b;
+            min-width: 70px;
+            text-align: right;
+        }
+        .pictogram-bars {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            flex-wrap: wrap;
+        }
+        .pictogram-icon {
+            font-size: 30px;
+            line-height: 1.1;
+        }
+        .pictogram-value {
+            font-size: 14px;
+            font-weight: 800;
+            color: #2563eb;
+            margin-left: 8px;
+            min-width: 36px;
+        }
+        .pictogram-clave {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 2px dashed #e2e8f0;
+        }
+        .table-container {
+            display: flex;
+            justify-content: center;
+            margin: 12px 0 16px 0;
+            font-size: 13px;
+        }
+        .table-container table {
+            border-collapse: collapse;
+            border: 2px solid #2563eb;
+            border-radius: 8px;
+        }
+        .table-container th,
+        .table-container td {
+            border: 1px solid #cbd5e1;
+            padding: 6px 14px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .table-container th {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        .pictogram {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin: 8px 0 12px 0;
+            font-size: 28px;
+        }
+        .shaded-label {
+            font-size: 13px;
+            font-weight: bold;
+            fill: #ffffff;
+            text-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
+        }
+        .venn-label {
+            font-size: 20px;
+            font-weight: 800;
+            fill: #1e40af;
+        }
+        .venn-number {
+            font-size: 22px;
+            font-weight: 800;
+            fill: #1e293b;
+        }
+        .venn-number-intersection {
+            font-size: 22px;
+            font-weight: 800;
+            fill: #dc2626;
+        }
+        .venn-number-outside {
+            font-size: 18px;
+            font-weight: 700;
+            fill: #64748b;
+        }
+        .measure-label {
+            font-size: 13px;
+            font-weight: bold;
+            fill: #1e40af;
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen flex flex-col">
@@ -32,27 +191,23 @@
     <div id="start-screen" class="flex-grow flex items-center justify-center p-4 overflow-y-auto">
         <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
             <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg rotate-3">
-                
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
             </div>
-            <h1 class="text-2xl font-extrabold text-slate-900 mb-2 uppercase tracking-tight">Simulador PAA N° 5</h1>
-            <p class="text-slate-500 mb-4 font-medium text-sm">Quinta Batería (55 Reactivos)</p>
-            
+            <h1 class="text-2xl font-extrabold text-slate-900 mb-2 uppercase tracking-tight">Simulador PAA 5</h1>
+            <p class="text-slate-500 mb-4 font-medium text-sm">Matemáticas (55 Reactivos) - Nivel Avanzado</p>
             <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 text-left rounded-r-xl">
                 <div class="flex">
                     <div class="ml-1">
-                        <p class="text-xs text-amber-900 leading-relaxed font-semibold">
-                            ¡Importante! Obtendrás de <span class="underline">200 a 800</span> puntos.
-                        </p>
-                        <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold tracking-tighter italic">
-                            Anota el resultado para tu cálculo final de ingreso.
-                        </p>
+                        <p class="text-xs text-amber-900 leading-relaxed font-semibold">¡Importante! Obtendrás de <span class="underline">200 a 800</span> puntos.</p>
+                        <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold tracking-tighter italic">Anota el resultado para tu cálculo final.</p>
                     </div>
                 </div>
             </div>
-
-            <button onclick="startExam()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">
-                COMENZAR EXAMEN
-            </button>
+            <div class="space-y-3">
+                <button onclick="startExam()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">COMENZAR EXAMEN</button>
+            </div>
         </div>
     </div>
 
@@ -78,7 +233,6 @@
                 </div>
             </div>
         </div>
-
         <main class="flex-grow flex items-center justify-center p-4 overflow-y-auto">
             <div id="question-box" class="max-w-xl w-full pb-4"></div>
         </main>
@@ -94,7 +248,6 @@
                     <p class="text-slate-500 font-bold text-lg">/ 800</p>
                 </div>
             </div>
-            
             <div class="p-6 md:p-8 flex-grow overflow-y-auto custom-scroll">
                 <div class="grid grid-cols-3 gap-3 mb-6">
                     <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
@@ -110,18 +263,14 @@
                         <p class="text-xs font-bold leading-tight">Perfil Analizado</p>
                     </div>
                 </div>
-
                 <div id="area-breakdown" class="grid grid-cols-2 gap-3 mb-6"></div>
-
                 <div class="p-5 bg-blue-600 rounded-3xl text-white relative overflow-hidden shadow-lg">
                     <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
                         <div>
                             <h4 class="text-lg font-black leading-none mb-1 uppercase tracking-tight">¡Anota tu resultado!</h4>
                             <p class="text-blue-100 text-[10px]">Usa este puntaje para la simulación de ingreso.</p>
                         </div>
-                        <button onclick="location.reload()" class="bg-white text-blue-600 font-black px-6 py-2 rounded-xl hover:bg-blue-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0">
-                            Reiniciar
-                        </button>
+                        <button onclick="location.reload()" class="bg-white text-blue-600 font-black px-6 py-2 rounded-xl hover:bg-blue-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0">Reiniciar</button>
                     </div>
                 </div>
             </div>
@@ -129,65 +278,685 @@
     </div>
 
     <script>
-        const questions = [
-            { id: 1, area: "Estadística", type: "multiple", q: "¿Cuál es la moda del conjunto {1, 1, 2, 2, 2, 3}?", options: ["1", "2", "3", "1.5"], ans: 1 },
-            { id: 2, area: "Álgebra I", type: "multiple", q: "Los valores que satisfacen la ecuación |3x| = 12 son:", options: ["4, -4", "4", "-4", "0, 4"], ans: 0 },
-            { id: 3, area: "Aritmética", type: "multiple", q: "¿A cuánto equivalen los 4/9 de 360?", options: ["120", "160", "200", "240"], ans: 1 },
-            { id: 4, area: "Geometría", type: "multiple", q: "El área de un trapecio con bases de 5 y 7, y altura de 3 es:", options: ["18", "24", "35", "72"], ans: 0 },
-            { id: 5, area: "Probabilidad", type: "multiple", q: "En una urna hay 6 bolas blancas y 4 negras. Probabilidad de blanca:", options: ["0.4", "0.5", "0.6", "1.0"], ans: 2 },
-            { id: 6, area: "Álgebra II", type: "multiple", q: "La pendiente de la recta que une los puntos (0, 2) y (4, 0) es:", options: ["2", "-2", "1/2", "-1/2"], ans: 3 },
-            { id: 7, area: "Aritmética", type: "multiple", q: "$150 repartidos en razón 2:3. La parte menor recibe:", options: ["$30", "$50", "$60", "$90"], ans: 2 },
-            { id: 8, area: "Geometría", type: "multiple", q: "Si un círculo tiene un área de 49π, ¿su circunferencia es?", options: ["7π", "14π", "21π", "49π"], ans: 1 },
-            { id: 9, area: "Álgebra I", type: "multiple", q: "Resultado de multiplicar (x−6)(x+2):", options: ["x²−4x−12", "x²+4x−12", "x²−12", "x²−8x−12"], ans: 0 },
-            { id: 10, area: "Estadística", type: "multiple", q: "El promedio de 10, x, y 20 es 15. ¿Cuánto vale x?", options: ["10", "12", "15", "20"], ans: 2 },
-            { id: 11, area: "Aritmética", type: "multiple", q: "La división de fracciones (3/4) ÷ (2/5) resulta en:", options: ["3/10", "8/15", "15/8", "6/20"], ans: 2 },
-            { id: 12, area: "Álgebra II", type: "multiple", q: "¿Cuál es la intersección en el eje y de la recta 3x−5y = 15?", options: ["3", "-3", "5", "-5"], ans: 1 },
-            { id: 13, area: "Geometría", type: "multiple", q: "Volumen de un cilindro de radio 4 y altura 10:", options: ["40π", "80π", "160π", "320π"], ans: 2 },
-            { id: 14, area: "Probabilidad", type: "multiple", q: "Al tirar un dado, probabilidad de sacar un número MENOR que 3:", options: ["1/6", "1/3", "1/2", "2/3"], ans: 1 },
-            { id: 15, area: "Álgebra I", type: "multiple", q: "El conjunto solución para la inecuación 4x−2 < 10 es:", options: ["x < 3", "x > 3", "x < 8", "x > 8"], ans: 0 },
-            { id: 16, area: "Aritmética", type: "multiple", q: "El Máximo Común Divisor (MCD) de 20 y 30 es:", options: ["5", "10", "20", "60"], ans: 1 },
-            { id: 17, area: "Geometría", type: "multiple", q: "Triángulo rectángulo con lados 5, 12 y 13 cm. Perímetro:", options: ["20", "25", "30", "60"], ans: 2 },
-            { id: 18, area: "Álgebra II", type: "multiple", q: "El vértice de la parábola y = x² + 5 se encuentra en:", options: ["(0, 5)", "(5, 0)", "(0, -5)", "(-5, 0)"], ans: 0 },
-            { id: 19, area: "Estadística", type: "multiple", q: "La mediana del conjunto {4, 1, 9, 7} es:", options: ["4", "5.5", "6", "7"], ans: 1 },
-            { id: 20, area: "Aritmética", type: "multiple", q: "El 30% de un número x es 60. ¿Cuánto vale x?", options: ["100", "150", "200", "300"], ans: 2 },
-            { id: 21, area: "Álgebra I", type: "multiple", q: "La factorización de x² − 81 es:", options: ["(x−9)²", "(x+9)(x−9)", "(x−81)(x+1)", "x(x−81)"], ans: 1 },
-            { id: 22, area: "Geometría", type: "multiple", q: "Dos ángulos suplementarios miden 2x y 3x. El menor mide:", options: ["36°", "72°", "108°", "180°"], ans: 1 },
-            { id: 23, area: "Probabilidad", type: "multiple", q: "Al tirar dos dados, probabilidad de que las caras sumen 7:", options: ["1/6", "1/12", "1/36", "1/4"], ans: 0 },
-            { id: 24, area: "Álgebra II", type: "multiple", q: "La distancia entre el origen (0,0) y el punto (-3,4) es:", options: ["3", "4", "5", "7"], ans: 2 },
-            { id: 25, area: "Aritmética", type: "multiple", q: "El decimal 0.045 como fracción más simple es:", options: ["45/100", "9/20", "9/200", "45/1000"], ans: 2 },
-            { id: 26, area: "Geometría", type: "multiple", q: "La suma de los ángulos internos de un pentágono regular:", options: ["360°", "540°", "720°", "900°"], ans: 1 },
-            { id: 27, area: "Álgebra I", type: "multiple", q: "La suma de radicales √18 + √8 es equivalente a:", options: ["√26", "5√2", "6√2", "10√2"], ans: 1 },
-            { id: 28, area: "Estadística", type: "multiple", q: "El rango del conjunto de datos {5, 5, 5, 5} es:", options: ["0", "1", "5", "20"], ans: 0 },
-            { id: 29, area: "Aritmética", type: "multiple", q: "Trabajador A: 10 días, B: 15 días. Juntos tardan:", options: ["5", "6", "12.5", "25"], ans: 1 },
-            { id: 30, area: "Geometría", type: "multiple", q: "Área de un romboide con base 10 y altura 7 es:", options: ["35", "70", "140", "17"], ans: 1 },
-            { id: 31, area: "Álgebra II", type: "multiple", q: "El punto medio entre (2, 2) y (8, 10) es:", options: ["(5, 6)", "(4, 5)", "(6, 8)", "(10, 12)"], ans: 0 },
-            { id: 32, area: "Probabilidad", type: "multiple", q: "Probabilidad de obtener 'cara' y un '6' (moneda + dado):", options: ["1/12", "1/8", "1/6", "1/4"], ans: 0 },
-            { id: 33, area: "Álgebra I", type: "multiple", q: "En la ecuación 5/x − 1 = 3, el valor de x es:", options: ["10", "1.25", "1.5", "25"], ans: 1 },
-            { id: 34, area: "Aritmética", type: "multiple", q: "Mínimo Común Múltiplo (MCM) de 4, 6 y 8 es:", options: ["12", "16", "24", "48"], ans: 2 },
-            { id: 35, area: "Geometría", type: "multiple", q: "Si un círculo tiene una circunferencia de 18π, su diámetro es:", options: ["9", "18", "36", "81"], ans: 1 },
-            { id: 36, area: "Álgebra II", type: "multiple", q: "En el sistema x+2y=7 y 2x−y=4, ¿cuánto vale x?", options: ["1", "2", "3", "4"], ans: 2 },
-            { id: 37, area: "Estadística", type: "multiple", q: "¿Grados que ocupa un sector que representa el 40%?", options: ["40°", "90°", "144°", "180°"], ans: 2 },
-            { id: 38, area: "Aritmética", type: "multiple", q: "Auto a 90 km/h durante 3 horas. Distancia recorrida:", options: ["30 km", "93 km", "180 km", "270 km"], ans: 3 },
-            { id: 39, area: "Álgebra I", type: "multiple", q: "Al restar (2x−5) − (x−2) se obtiene:", options: ["x−7", "x−3", "3x−7", "3x−3"], ans: 1 },
-            { id: 40, area: "Geometría", type: "multiple", q: "Si la diagonal de un cuadrado mide 4√2, ¿cuánto mide su lado?", options: ["2", "4", "8", "16"], ans: 1 },
-            { id: 41, area: "Probabilidad", type: "multiple", q: "La probabilidad de NO sacar un 5 al lanzar un dado:", options: ["1/6", "2/6", "4/6", "5/6"], ans: 3 },
-            { id: 42, area: "Álgebra II", type: "multiple", q: "El radio de la circunferencia (x−2)² + (y+1)² = 9 es:", options: ["2", "3", "8", "9"], ans: 1 },
-            { id: 43, area: "Aritmética", type: "multiple", q: "Al aplicar leyes de exponentes en 5⁴ / 5², se obtiene:", options: ["5", "10", "25", "125"], ans: 2 },
-            { id: 44, area: "Estadística", type: "multiple", q: "Moda de: {10, 10, 11, 12, 12, 12, 13}:", options: ["10", "11", "12", "13"], ans: 2 },
-            { id: 45, area: "Geometría", type: "multiple", q: "Distancia en la recta numérica entre 8 y -3:", options: ["5", "8", "11", "12"], ans: 2 },
-            // Respuestas abiertas (IDs 46 - 55)
-            { id: 46, area: "Aritmética", type: "open", q: "Resuelva la operación: 30 − 2³ × 3.", ans: "6" },
-            { id: 47, area: "Álgebra I", type: "open", q: "Si se cumple que 4(x − 2) = 16, ¿cuánto vale x?", ans: "6" },
-            { id: 48, area: "Geometría", type: "open", q: "Volumen de un cubo perfecto cuya arista mide 4 cm:", ans: "64" },
-            { id: 49, area: "Estadística", type: "open", q: "Determine el promedio (media) de 20, 30 y 40.", ans: "30" },
-            { id: 50, area: "Álgebra II", type: "open", q: "En la ecuación y = 8x + 2, valor de la pendiente (m):", ans: "8" },
-            { id: 51, area: "Probabilidad", type: "open", q: "Lanza moneda 2 veces, probabilidad de dos cruces (decimal):", ans: "0.25" },
-            { id: 52, area: "Aritmética", type: "open", q: "Escriba la raíz cuadrada exacta de 144:", ans: "12" },
-            { id: 53, area: "Geometría", type: "open", q: "Área de rectángulo de 12 de largo por 5 de ancho:", ans: "60" },
-            { id: 54, area: "Álgebra I", type: "open", q: "Si |x − 1| = 9, escriba el valor POSITIVO de x:", ans: "10" },
-            { id: 55, area: "Álgebra II", type: "open", q: "Si 3^x = 81, ¿cuál es el valor de x?", ans: "4" }
-        ];
+        // ============================================================
+        // BANCO DE REACTIVOS - SIMULADOR PAA 5 (CORREGIDO)
+        // Reactivo 6: ans cambiado de 0 a 1 (4:5)
+        // ============================================================
+        const questions = [{
+            // REACTIVO 1 - PICTOGRAMA
+            id: 1,
+            area: "Estadística",
+            type: "multiple",
+            q: "Según el pictograma de ventas de gorras, donde cada 🧢 representa 10 gorras, ¿cuántas gorras se vendieron en total en los 3 meses?",
+            options: ["130", "140", "150", "160"],
+            ans: 2,
+            figure: `<div class="pictogram-container">
+                <div class="pictogram-row"><span class="pictogram-label">Enero</span><span class="pictogram-bars"><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span></span><span class="pictogram-value">50</span></div>
+                <div class="pictogram-row"><span class="pictogram-label">Febrero</span><span class="pictogram-bars"><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span></span><span class="pictogram-value">60</span></div>
+                <div class="pictogram-row"><span class="pictogram-label">Marzo</span><span class="pictogram-bars"><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span></span><span class="pictogram-value">40</span></div>
+                <div class="pictogram-clave">Cada 🧢 = 10 gorras</div>
+            </div>`
+        }, {
+            // REACTIVO 2 - PICTOGRAMA COMPARACIÓN
+            id: 2,
+            area: "Estadística",
+            type: "multiple",
+            q: "Según el pictograma, ¿cuántas gorras más se vendieron en febrero que en marzo?",
+            options: ["10", "15", "20", "25"],
+            ans: 2,
+            figure: `<div class="pictogram-container">
+                <div class="pictogram-row"><span class="pictogram-label">Enero</span><span class="pictogram-bars"><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span></span><span class="pictogram-value">50</span></div>
+                <div class="pictogram-row"><span class="pictogram-label">Febrero</span><span class="pictogram-bars"><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span></span><span class="pictogram-value">60</span></div>
+                <div class="pictogram-row"><span class="pictogram-label">Marzo</span><span class="pictogram-bars"><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span></span><span class="pictogram-value">40</span></div>
+                <div class="pictogram-clave">Cada 🧢 = 10 gorras</div>
+            </div>`
+        }, {
+            // REACTIVO 3 - PICTOGRAMA MEDIA
+            id: 3,
+            area: "Estadística",
+            type: "multiple",
+            q: "Según el pictograma, ¿cuál es la media de gorras vendidas por mes?",
+            options: ["45", "48", "50", "52"],
+            ans: 2,
+            figure: `<div class="pictogram-container">
+                <div class="pictogram-row"><span class="pictogram-label">Enero</span><span class="pictogram-bars"><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span></span><span class="pictogram-value">50</span></div>
+                <div class="pictogram-row"><span class="pictogram-label">Febrero</span><span class="pictogram-bars"><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span></span><span class="pictogram-value">60</span></div>
+                <div class="pictogram-row"><span class="pictogram-label">Marzo</span><span class="pictogram-bars"><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span></span><span class="pictogram-value">40</span></div>
+                <div class="pictogram-clave">Cada 🧢 = 10 gorras</div>
+            </div>`
+        }, {
+            // REACTIVO 4 - INECUACIÓN CON GRÁFICA (x < -4.5)
+            id: 4,
+            area: "Álgebra II",
+            type: "multiple",
+            q: "¿Cuál de las siguientes opciones representa la solución de 3x + 5 < x − 4?",
+            options: ["x < -4.5", "x < -4", "x < -3", "x < -2"],
+            ans: 0,
+            figure: `<div class="figure-container"><svg width="300" height="80" viewBox="0 0 300 80">
+                <line x1="20" y1="40" x2="280" y2="40" stroke="#94a3b8" stroke-width="2.5"/>
+                <line x1="40" y1="35" x2="40" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="80" y1="35" x2="80" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="120" y1="35" x2="120" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="160" y1="35" x2="160" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="200" y1="35" x2="200" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="240" y1="35" x2="240" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <text x="34" y="65" font-size="13" font-weight="700" fill="#475569">-6</text>
+                <text x="74" y="65" font-size="13" font-weight="700" fill="#475569">-5</text>
+                <text x="114" y="65" font-size="13" font-weight="700" fill="#475569">-4</text>
+                <text x="154" y="65" font-size="13" font-weight="700" fill="#475569">-3</text>
+                <text x="194" y="65" font-size="13" font-weight="700" fill="#475569">-2</text>
+                <text x="234" y="65" font-size="13" font-weight="700" fill="#475569">-1</text>
+                <circle cx="130" cy="40" r="8" fill="#ffffff" stroke="#dc2626" stroke-width="3"/>
+                <line x1="20" y1="40" x2="122" y2="40" stroke="#dc2626" stroke-width="5" stroke-linecap="round"/>
+                <polygon points="20,35 8,40 20,45" fill="#dc2626"/>
+            </svg></div>`
+        }, {
+            // REACTIVO 5 - DIAGRAMA DE VENN
+            id: 5,
+            area: "Probabilidad",
+            type: "multiple",
+            q: "Según el diagrama de Venn, ¿cuántos elementos tiene la intersección de A y B (A ∩ B)?",
+            options: ["2", "3", "4", "5"],
+            ans: 2,
+            figure: `<div class="figure-container"><svg width="280" height="200" viewBox="0 0 280 200">
+                <ellipse cx="100" cy="100" rx="75" ry="65" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/>
+                <ellipse cx="170" cy="100" rx="75" ry="65" fill="#fde68a" stroke="#2563eb" stroke-width="3"/>
+                <text x="30" y="40" font-size="22" font-weight="800" fill="#1e40af">A</text>
+                <text x="210" y="40" font-size="22" font-weight="800" fill="#1e40af">B</text>
+                <text x="65" y="95" font-size="22" font-weight="800" fill="#1e40af">5</text>
+                <text x="125" y="95" font-size="24" font-weight="800" fill="#dc2626">3</text>
+                <text x="185" y="95" font-size="22" font-weight="800" fill="#1e40af">7</text>
+                <text x="125" y="165" font-size="18" font-weight="700" fill="#64748b">4</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 6 - GRÁFICA DE BARRAS CON RAZÓN (CORREGIDO: 4:5)
+            id: 6,
+            area: "Estadística",
+            type: "multiple",
+            q: "La gráfica muestra el número de estudiantes por computadora en tres niveles. ¿Cuál es la razón de estudiantes de nivel superior a estudiantes de nivel intermedio?",
+            options: ["5:4", "4:5", "2:1", "1:2"],
+            ans: 1,
+            figure: `<div class="figure-container"><svg width="240" height="180" viewBox="0 0 240 180">
+                <rect x="20" y="110" width="50" height="40" fill="#2563eb"/><text x="28" y="105" font-size="10" font-weight="bold" fill="#2563eb">16</text><text x="22" y="165" font-size="10" font-weight="bold" fill="#1e293b">Elem.</text>
+                <rect x="90" y="130" width="50" height="20" fill="#dc2626"/><text x="98" y="125" font-size="10" font-weight="bold" fill="#dc2626">10</text><text x="95" y="165" font-size="10" font-weight="bold" fill="#1e293b">Inter.</text>
+                <rect x="160" y="140" width="50" height="10" fill="#10b981"/><text x="168" y="135" font-size="10" font-weight="bold" fill="#10b981">8</text><text x="162" y="165" font-size="10" font-weight="bold" fill="#1e293b">Super.</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 7 - ÁREA SOMBREADA
+            id: 7,
+            area: "Geometría",
+            type: "multiple",
+            q: "¿Cuál es el área de la región sombreada si el cuadrado mide 10 cm de lado y el círculo está inscrito?",
+            options: ["(100 − 25π) cm²", "(100 − 50π) cm²", "(100 − 75π) cm²", "(100 − 100π) cm²"],
+            ans: 0,
+            figure: `<div class="figure-container"><svg width="220" height="220" viewBox="0 0 220 220">
+                <rect x="10" y="10" width="200" height="200" fill="#dc2626" opacity="0.4" stroke="#2563eb" stroke-width="3"/>
+                <circle cx="110" cy="110" r="100" fill="#ffffff" stroke="#2563eb" stroke-width="3"/>
+                <circle cx="110" cy="110" r="100" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="8,4"/>
+                <text x="65" y="215" font-size="15" font-weight="bold" fill="#2563eb">10 cm</text>
+                <text x="35" y="50" font-size="13" font-weight="bold" fill="#ffffff" style="text-shadow:0 0 4px rgba(0,0,0,0.7);">Área sombreada</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 8 - FUNCIÓN COMPUESTA
+            id: 8,
+            area: "Álgebra II",
+            type: "multiple",
+            q: "Si f(x) = 3x + 2 y g(x) = x² − 1, ¿cuál es el valor de f(g(3))?",
+            options: ["26", "28", "30", "32"],
+            ans: 0
+        }, {
+            // REACTIVO 9 - TRIÁNGULO RECTÁNGULO
+            id: 9,
+            area: "Geometría",
+            type: "multiple",
+            q: "Un poste de 12 m se sujeta con un cable de 15 m desde el suelo. ¿A qué distancia del poste se encuentra el cable?",
+            options: ["6 m", "8 m", "9 m", "10 m"],
+            ans: 2,
+            figure: `<div class="figure-container"><svg width="200" height="160" viewBox="0 0 200 160">
+                <polygon points="25,145 25,25 155,145" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/>
+                <line x1="25" y1="25" x2="155" y2="145" stroke="#dc2626" stroke-width="3.5"/>
+                <text x="0" y="95" font-size="14" font-weight="bold" fill="#2563eb">12 m</text>
+                <text x="80" y="158" font-size="14" font-weight="bold" fill="#2563eb">? m</text>
+                <text x="75" y="80" font-size="14" font-weight="bold" fill="#dc2626">15 m</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 10 - DATO FALTANTE
+            id: 10,
+            area: "Estadística",
+            type: "multiple",
+            q: "¿Cuál es el dato faltante en el conjunto {6, 12, 18, x, 30, 36} si la media es 22?",
+            options: ["26", "28", "30", "32"],
+            ans: 2,
+            figure: `<div class="table-container"><table>
+                <tr><th>Dato</th><th>Valor</th></tr>
+                <tr><td>1</td><td>6</td></tr><tr><td>2</td><td>12</td></tr>
+                <tr><td>3</td><td>18</td></tr><tr><td>4</td><td>x</td></tr>
+                <tr><td>5</td><td>30</td></tr><tr><td>6</td><td>36</td></tr>
+                <tr><td>Media</td><td>22</td></tr>
+            </table></div>`
+        }, {
+            // REACTIVO 11 - PROBABILIDAD
+            id: 11,
+            area: "Probabilidad",
+            type: "multiple",
+            q: "En una caja hay 12 bolas rojas, 8 azules y 5 verdes. ¿Cuál es la probabilidad de sacar una bola que NO sea roja?",
+            options: ["8/25", "13/25", "12/25", "17/25"],
+            ans: 1,
+            figure: `<div class="pictogram">🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴 🔵🔵🔵🔵🔵🔵🔵🔵 🟢🟢🟢🟢🟢</div>`
+        }, {
+            // REACTIVO 12 - SUCESIÓN
+            id: 12,
+            area: "Aritmética",
+            type: "multiple",
+            q: "¿Cuál es el número que falta en la sucesión: 4, 10, 22, 46, 94, __, 382?",
+            options: ["178", "182", "190", "198"],
+            ans: 2
+        }, {
+            // REACTIVO 13 - ÁNGULOS
+            id: 13,
+            area: "Geometría",
+            type: "multiple",
+            q: "Dos ángulos son suplementarios y uno mide 4 veces el otro. ¿Cuánto mide el ángulo mayor?",
+            options: ["36°", "72°", "108°", "144°"],
+            ans: 3,
+            figure: `<div class="figure-container"><svg width="160" height="80" viewBox="0 0 160 80">
+                <line x1="10" y1="40" x2="150" y2="40" stroke="#94a3b8" stroke-width="2.5"/>
+                <line x1="90" y1="40" x2="90" y2="10" stroke="#2563eb" stroke-width="2.5"/>
+                <circle cx="90" cy="40" r="22" fill="none" stroke="#dc2626" stroke-width="2"/>
+                <text x="70" y="28" font-size="13" font-weight="bold" fill="#dc2626">x</text>
+                <text x="108" y="58" font-size="13" font-weight="bold" fill="#2563eb">4x</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 14 - PICTOGRAMA CALIFICACIONES
+            id: 14,
+            area: "Estadística",
+            type: "multiple",
+            q: "Según el pictograma de calificaciones, donde cada ⭐ representa 2 estudiantes, ¿cuántos estudiantes obtuvieron calificación de 8 o más?",
+            options: ["12", "14", "16", "18"],
+            ans: 2,
+            figure: `<div class="pictogram-container">
+                <div class="pictogram-row"><span class="pictogram-label">Calif. 6</span><span class="pictogram-bars"><span class="pictogram-icon">⭐</span><span class="pictogram-icon">⭐</span><span class="pictogram-icon">⭐</span><span class="pictogram-icon">⭐</span><span class="pictogram-icon">⭐</span></span><span class="pictogram-value">10</span></div>
+                <div class="pictogram-row"><span class="pictogram-label">Calif. 7</span><span class="pictogram-bars"><span class="pictogram-icon">⭐</span><span class="pictogram-icon">⭐</span><span class="pictogram-icon">⭐</span><span class="pictogram-icon">⭐</span><span class="pictogram-icon">⭐</span><span class="pictogram-icon">⭐</span><span class="pictogram-icon">⭐</span></span><span class="pictogram-value">14</span></div>
+                <div class="pictogram-row"><span class="pictogram-label">Calif. 8</span><span class="pictogram-bars"><span class="pictogram-icon">⭐</span><span class="pictogram-icon">⭐</span><span class="pictogram-icon">⭐</span><span class="pictogram-icon">⭐</span><span class="pictogram-icon">⭐</span><span class="pictogram-icon">⭐</span></span><span class="pictogram-value">12</span></div>
+                <div class="pictogram-row"><span class="pictogram-label">Calif. 9</span><span class="pictogram-bars"><span class="pictogram-icon">⭐</span><span class="pictogram-icon">⭐</span></span><span class="pictogram-value">4</span></div>
+                <div class="pictogram-clave">Cada ⭐ = 2 estudiantes</div>
+            </div>`
+        }, {
+            // REACTIVO 15 - VALOR ABSOLUTO
+            id: 15,
+            area: "Álgebra I",
+            type: "multiple",
+            q: "¿Cuáles son los valores de x que satisfacen |3x − 9| = 6?",
+            options: ["1 y 5", "−1 y 5", "1 y −5", "3 y 5"],
+            ans: 0
+        }, {
+            // REACTIVO 16 - FUNCIÓN LINEAL
+            id: 16,
+            area: "Álgebra II",
+            type: "multiple",
+            q: "¿Cuál es la ecuación de la recta que pasa por (2, 7) y tiene pendiente 4?",
+            options: ["y = 4x − 1", "y = 4x + 1", "y = 4x − 2", "y = 4x + 2"],
+            ans: 0
+        }, {
+            // REACTIVO 17 - ÁREA SOMBREADA ROMBO
+            id: 17,
+            area: "Geometría",
+            type: "multiple",
+            q: "¿Cuál es el área de la región sombreada (el rombo) si el rectángulo mide 20 cm × 14 cm?",
+            options: ["70 cm²", "140 cm²", "280 cm²", "420 cm²"],
+            ans: 0,
+            figure: `<div class="figure-container"><svg width="240" height="180" viewBox="0 0 240 180">
+                <rect x="15" y="15" width="210" height="150" fill="#e6f0fa" stroke="#2563eb" stroke-width="3"/>
+                <polygon points="120,15 225,90 120,165 15,90" fill="#dc2626" opacity="0.5" stroke="#dc2626" stroke-width="2.5"/>
+                <text x="75" y="175" font-size="14" font-weight="bold" fill="#2563eb">20 cm</text>
+                <text x="2" y="95" font-size="14" font-weight="bold" fill="#2563eb">14 cm</text>
+                <text x="85" y="100" font-size="13" font-weight="bold" fill="#ffffff" style="text-shadow:0 0 4px rgba(0,0,0,0.7);">Área sombreada</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 18 - INECUACIÓN CON GRÁFICA (x ≥ 12)
+            id: 18,
+            area: "Álgebra II",
+            type: "multiple",
+            q: "¿Cuál es el conjunto solución de 2x + 5 ≤ 3x − 7?",
+            options: ["[12, ∞)", "(12, ∞)", "(-∞, 12]", "(-∞, 12)"],
+            ans: 0,
+            figure: `<div class="figure-container"><svg width="300" height="80" viewBox="0 0 300 80">
+                <line x1="20" y1="40" x2="280" y2="40" stroke="#94a3b8" stroke-width="2.5"/>
+                <line x1="40" y1="35" x2="40" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="70" y1="35" x2="70" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="100" y1="35" x2="100" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="130" y1="35" x2="130" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="160" y1="35" x2="160" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="190" y1="35" x2="190" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="220" y1="35" x2="220" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="250" y1="35" x2="250" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <text x="34" y="65" font-size="13" font-weight="700" fill="#475569">8</text>
+                <text x="64" y="65" font-size="13" font-weight="700" fill="#475569">9</text>
+                <text x="94" y="65" font-size="13" font-weight="700" fill="#475569">10</text>
+                <text x="124" y="65" font-size="13" font-weight="700" fill="#475569">11</text>
+                <text x="154" y="65" font-size="13" font-weight="700" fill="#475569">12</text>
+                <text x="184" y="65" font-size="13" font-weight="700" fill="#475569">13</text>
+                <text x="214" y="65" font-size="13" font-weight="700" fill="#475569">14</text>
+                <text x="244" y="65" font-size="13" font-weight="700" fill="#475569">15</text>
+                <circle cx="160" cy="40" r="8" fill="#dc2626" stroke="#dc2626" stroke-width="2"/>
+                <line x1="168" y1="40" x2="280" y2="40" stroke="#dc2626" stroke-width="5" stroke-linecap="round"/>
+                <polygon points="280,35 292,40 280,45" fill="#dc2626"/>
+            </svg></div>`
+        }, {
+            // REACTIVO 19 - DIAGRAMA DE VENN UNIÓN
+            id: 19,
+            area: "Probabilidad",
+            type: "multiple",
+            q: "Según el diagrama de Venn, ¿cuántos elementos tiene A ∪ B?",
+            options: ["12", "14", "15", "17"],
+            ans: 1,
+            figure: `<div class="figure-container"><svg width="280" height="200" viewBox="0 0 280 200">
+                <ellipse cx="100" cy="100" rx="75" ry="65" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/>
+                <ellipse cx="170" cy="100" rx="75" ry="65" fill="#fde68a" stroke="#2563eb" stroke-width="3"/>
+                <text x="30" y="40" font-size="22" font-weight="800" fill="#1e40af">A</text>
+                <text x="210" y="40" font-size="22" font-weight="800" fill="#1e40af">B</text>
+                <text x="60" y="95" font-size="22" font-weight="800" fill="#1e40af">4</text>
+                <text x="122" y="95" font-size="24" font-weight="800" fill="#dc2626">5</text>
+                <text x="185" y="95" font-size="22" font-weight="800" fill="#1e40af">6</text>
+                <text x="125" y="165" font-size="18" font-weight="700" fill="#64748b">2</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 20 - GRÁFICA DE BARRAS RANGO
+            id: 20,
+            area: "Estadística",
+            type: "multiple",
+            q: "Según la gráfica de barras de temperaturas, ¿cuál es el rango de temperaturas?",
+            options: ["5°C", "8°C", "10°C", "12°C"],
+            ans: 1,
+            figure: `<div class="figure-container"><svg width="280" height="150" viewBox="0 0 280 150">
+                <rect x="20" y="90" width="40" height="25" fill="#2563eb"/><text x="22" y="83" font-size="10" font-weight="bold" fill="#2563eb">Lun 22°</text>
+                <rect x="80" y="70" width="40" height="45" fill="#dc2626"/><text x="82" y="63" font-size="10" font-weight="bold" fill="#dc2626">Mar 26°</text>
+                <rect x="140" y="50" width="40" height="65" fill="#10b981"/><text x="142" y="43" font-size="10" font-weight="bold" fill="#10b981">Mié 30°</text>
+                <rect x="200" y="80" width="40" height="35" fill="#f59e0b"/><text x="202" y="73" font-size="10" font-weight="bold" fill="#f59e0b">Jue 23°</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 21 - ECUACIÓN RACIONAL
+            id: 21,
+            area: "Álgebra I",
+            type: "multiple",
+            q: "¿Cuál es el valor de x en la ecuación (x+3)/(x−2) = 4?",
+            options: ["5", "7", "9", "11"],
+            ans: 1
+        }, {
+            // REACTIVO 22 - ÁREA CORONA
+            id: 22,
+            area: "Geometría",
+            type: "multiple",
+            q: "¿Cuál es el área de la región sombreada (corona circular) si R = 10 cm y r = 6 cm?",
+            options: ["16π cm²", "36π cm²", "64π cm²", "100π cm²"],
+            ans: 2,
+            figure: `<div class="figure-container"><svg width="220" height="220" viewBox="0 0 220 220">
+                <circle cx="110" cy="110" r="85" fill="#e6f0fa" stroke="#2563eb" stroke-width="3"/>
+                <circle cx="110" cy="110" r="85" fill="#dc2626" opacity="0.4" stroke="none"/>
+                <circle cx="110" cy="110" r="51" fill="#ffffff" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="6,3"/>
+                <text x="15" y="215" font-size="14" font-weight="bold" fill="#2563eb">R = 10 cm</text>
+                <text x="140" y="215" font-size="14" font-weight="bold" fill="#2563eb">r = 6 cm</text>
+                <text x="60" y="120" font-size="13" font-weight="bold" fill="#ffffff" style="text-shadow:0 0 4px rgba(0,0,0,0.7);">Área sombreada</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 23 - PROBABILIDAD DADOS
+            id: 23,
+            area: "Probabilidad",
+            type: "multiple",
+            q: "Se lanzan dos dados. ¿Cuál es la probabilidad de que la suma sea mayor que 8?",
+            options: ["1/6", "5/18", "1/3", "5/12"],
+            ans: 1,
+            figure: `<div class="pictogram">🎲🎲 <span style="font-size:16px;font-weight:bold;color:#2563eb;margin:0 8px;">→</span> 3+6, 4+5, 4+6, 5+4, 5+5, 5+6, 6+3, 6+4, 6+5, 6+6</div>`
+        }, {
+            // REACTIVO 24 - FUNCIÓN COMPUESTA
+            id: 24,
+            area: "Álgebra II",
+            type: "multiple",
+            q: "Si f(x) = x² + 1 y g(x) = 2x − 3, ¿cuál es g(f(2))?",
+            options: ["7", "9", "11", "13"],
+            ans: 0
+        }, {
+            // REACTIVO 25 - TRIÁNGULO RECTÁNGULO
+            id: 25,
+            area: "Geometría",
+            type: "multiple",
+            q: "Un avión vuela a 1800 m de altura con un ángulo de elevación de 30°. ¿Qué distancia horizontal ha recorrido?",
+            options: ["1800√3 m", "3600 m", "900√3 m", "5400 m"],
+            ans: 0,
+            figure: `<div class="figure-container"><svg width="240" height="160" viewBox="0 0 240 160">
+                <polygon points="20,140 200,140 110,20" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/>
+                <text x="18" y="155" font-size="14" font-weight="bold" fill="#dc2626">30°</text>
+                <text x="85" y="85" font-size="14" font-weight="bold" fill="#2563eb">1800 m</text>
+                <text x="65" y="158" font-size="14" font-weight="bold" fill="#2563eb">? m</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 26 - SISTEMA
+            id: 26,
+            area: "Álgebra II",
+            type: "multiple",
+            q: "Resuelve el sistema: 2x + y = 13; 3x − y = 7. ¿Cuál es el valor de x?",
+            options: ["2", "3", "4", "5"],
+            ans: 2
+        }, {
+            // REACTIVO 27 - SUCESIÓN
+            id: 27,
+            area: "Aritmética",
+            type: "multiple",
+            q: "¿Cuál es el siguiente número en la sucesión: 1, 3, 9, 27, 81, __?",
+            options: ["162", "243", "324", "405"],
+            ans: 1
+        }, {
+            // REACTIVO 28 - SECTOR CIRCULAR
+            id: 28,
+            area: "Geometría",
+            type: "multiple",
+            q: "¿Cuál es el área del sector circular sombreado si el radio es 20 cm y el ángulo central es 45°?",
+            options: ["50π cm²", "100π cm²", "150π cm²", "200π cm²"],
+            ans: 0,
+            figure: `<div class="figure-container"><svg width="220" height="220" viewBox="0 0 220 220">
+                <circle cx="110" cy="110" r="85" fill="#e6f0fa" stroke="#2563eb" stroke-width="3"/>
+                <path d="M110,110 L25,110 A85,85 0 0,1 170,25 Z" fill="#dc2626" opacity="0.5" stroke="#dc2626" stroke-width="2.5"/>
+                <text x="45" y="95" font-size="14" font-weight="bold" fill="#dc2626">45°</text>
+                <text x="15" y="215" font-size="14" font-weight="bold" fill="#2563eb">r = 20 cm</text>
+                <text x="55" y="125" font-size="13" font-weight="bold" fill="#ffffff" style="text-shadow:0 0 4px rgba(0,0,0,0.7);">Área sombreada</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 29 - PICTOGRAMA RAZÓN
+            id: 29,
+            area: "Estadística",
+            type: "multiple",
+            q: "Según el pictograma, ¿cuál es la razón de ventas de febrero a marzo?",
+            options: ["3:2", "2:3", "4:3", "3:4"],
+            ans: 0,
+            figure: `<div class="pictogram-container">
+                <div class="pictogram-row"><span class="pictogram-label">Enero</span><span class="pictogram-bars"><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span></span><span class="pictogram-value">50</span></div>
+                <div class="pictogram-row"><span class="pictogram-label">Febrero</span><span class="pictogram-bars"><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span></span><span class="pictogram-value">60</span></div>
+                <div class="pictogram-row"><span class="pictogram-label">Marzo</span><span class="pictogram-bars"><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span></span><span class="pictogram-value">40</span></div>
+                <div class="pictogram-clave">Cada 🧢 = 10 gorras</div>
+            </div>`
+        }, {
+            // REACTIVO 30 - FACTORIZACIÓN
+            id: 30,
+            area: "Álgebra I",
+            type: "multiple",
+            q: "Factoriza: 16x² − 81",
+            options: ["(4x − 9)(4x + 9)", "(4x − 9)²", "(16x − 9)(x + 9)", "4(4x² − 81)"],
+            ans: 0
+        }, {
+            // REACTIVO 31 - CUADRÁTICA
+            id: 31,
+            area: "Álgebra II",
+            type: "multiple",
+            q: "¿Cuáles son las soluciones de x² − 5x − 14 = 0?",
+            options: ["x = 2, x = 7", "x = −2, x = 7", "x = 2, x = −7", "x = −2, x = −7"],
+            ans: 1
+        }, {
+            // REACTIVO 32 - PITÁGORAS
+            id: 32,
+            area: "Geometría",
+            type: "multiple",
+            q: "Una cancha de fútbol mide 110 m × 70 m. ¿Cuánto mide su diagonal?",
+            options: ["120 m", "125 m", "130 m", "135 m"],
+            ans: 2,
+            figure: `<div class="figure-container"><svg width="250" height="160" viewBox="0 0 250 160">
+                <rect x="15" y="15" width="220" height="130" fill="#e6f0fa" stroke="#2563eb" stroke-width="3"/>
+                <line x1="15" y1="15" x2="235" y2="145" stroke="#dc2626" stroke-width="3" stroke-dasharray="8,5"/>
+                <text x="70" y="158" font-size="14" font-weight="bold" fill="#2563eb">110 m</text>
+                <text x="238" y="85" font-size="14" font-weight="bold" fill="#2563eb">70 m</text>
+                <text x="75" y="80" font-size="13" font-weight="bold" fill="#dc2626">diagonal = ?</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 33 - TABLA PROBABILIDAD
+            id: 33,
+            area: "Probabilidad",
+            type: "multiple",
+            q: "Según la tabla de distribución, ¿cuál es la probabilidad de que una persona tenga 40-49 años?",
+            options: ["0.20", "0.25", "0.30", "0.35"],
+            ans: 1,
+            figure: `<div class="table-container"><table>
+                <tr><th>Edad</th><th>Frecuencia</th></tr>
+                <tr><td>20-29</td><td>15</td></tr>
+                <tr><td>30-39</td><td>20</td></tr>
+                <tr><td>40-49</td><td>25</td></tr>
+                <tr><td>50-59</td><td>30</td></tr>
+                <tr><td>60-69</td><td>10</td></tr>
+            </table></div>`
+        }, {
+            // REACTIVO 34 - INECUACIÓN CON GRÁFICA (x ≥ 6)
+            id: 34,
+            area: "Álgebra II",
+            type: "multiple",
+            q: "¿Cuál es la solución de 2x − 5 ≥ 7?",
+            options: ["x ≥ 6", "x > 6", "x ≤ 6", "x < 6"],
+            ans: 0,
+            figure: `<div class="figure-container"><svg width="300" height="80" viewBox="0 0 300 80">
+                <line x1="20" y1="40" x2="280" y2="40" stroke="#94a3b8" stroke-width="2.5"/>
+                <line x1="40" y1="35" x2="40" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="70" y1="35" x2="70" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="100" y1="35" x2="100" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="130" y1="35" x2="130" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="160" y1="35" x2="160" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="190" y1="35" x2="190" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="220" y1="35" x2="220" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="250" y1="35" x2="250" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <text x="34" y="65" font-size="13" font-weight="700" fill="#475569">0</text>
+                <text x="64" y="65" font-size="13" font-weight="700" fill="#475569">1</text>
+                <text x="94" y="65" font-size="13" font-weight="700" fill="#475569">2</text>
+                <text x="124" y="65" font-size="13" font-weight="700" fill="#475569">3</text>
+                <text x="154" y="65" font-size="13" font-weight="700" fill="#475569">4</text>
+                <text x="184" y="65" font-size="13" font-weight="700" fill="#475569">5</text>
+                <text x="214" y="65" font-size="13" font-weight="700" fill="#475569">6</text>
+                <text x="244" y="65" font-size="13" font-weight="700" fill="#475569">7</text>
+                <circle cx="220" cy="40" r="8" fill="#dc2626" stroke="#dc2626" stroke-width="2"/>
+                <line x1="228" y1="40" x2="280" y2="40" stroke="#dc2626" stroke-width="5" stroke-linecap="round"/>
+                <polygon points="280,35 292,40 280,45" fill="#dc2626"/>
+            </svg></div>`
+        }, {
+            // REACTIVO 35 - DATO FALTANTE (MODA)
+            id: 35,
+            area: "Estadística",
+            type: "multiple",
+            q: "En el conjunto {4, 7, 9, 9, 12, x}, la moda es 9. ¿Cuál es el valor de x?",
+            options: ["7", "9", "12", "14"],
+            ans: 1
+        }, {
+            // REACTIVO 36 - FUNCIÓN EXPONENCIAL
+            id: 36,
+            area: "Álgebra II",
+            type: "multiple",
+            q: "Si f(x) = 2·3ˣ, ¿cuál es el valor de f(3)?",
+            options: ["18", "27", "54", "81"],
+            ans: 2
+        }, {
+            // REACTIVO 37 - ÁREA HEXÁGONO
+            id: 37,
+            area: "Geometría",
+            type: "multiple",
+            q: "¿Cuál es el área de la región sombreada (fuera del hexágono) si el círculo tiene radio 8 cm?",
+            options: ["(64π − 96√3) cm²", "(64π − 192√3) cm²", "(128π − 96√3) cm²", "(128π − 192√3) cm²"],
+            ans: 0,
+            figure: `<div class="figure-container"><svg width="220" height="220" viewBox="0 0 220 220">
+                <circle cx="110" cy="110" r="90" fill="#e6f0fa" stroke="#2563eb" stroke-width="3"/>
+                <circle cx="110" cy="110" r="90" fill="#dc2626" opacity="0.4" stroke="none"/>
+                <polygon points="110,20 180,65 180,155 110,200 40,155 40,65" fill="#ffffff" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="8,4"/>
+                <text x="20" y="215" font-size="14" font-weight="bold" fill="#2563eb">r = 8 cm</text>
+                <text x="50" y="120" font-size="13" font-weight="bold" fill="#ffffff" style="text-shadow:0 0 4px rgba(0,0,0,0.7);">Área sombreada</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 38 - SISTEMA
+            id: 38,
+            area: "Álgebra II",
+            type: "multiple",
+            q: "Resuelve: 3x + 2y = 18; 2x − y = 5. ¿Cuál es el valor de y?",
+            options: ["2", "3", "4", "5"],
+            ans: 1
+        }, {
+            // REACTIVO 39 - PROBABILIDAD MONEDA+DADO
+            id: 39,
+            area: "Probabilidad",
+            type: "multiple",
+            q: "Se lanzan una moneda y un dado. ¿Cuál es la probabilidad de obtener cara y un número par?",
+            options: ["1/6", "1/4", "1/3", "1/2"],
+            ans: 1,
+            figure: `<div class="pictogram">🪙 <span style="font-size:16px;font-weight:bold;color:#2563eb;margin:0 4px;">+</span> 🎲 <span style="font-size:16px;font-weight:bold;color:#2563eb;margin:0 4px;">→</span> Cara + (2,4,6)</div>`
+        }, {
+            // REACTIVO 40 - GRÁFICA PORCENTAJE
+            id: 40,
+            area: "Estadística",
+            type: "multiple",
+            q: "Según la gráfica de preferencias, ¿qué porcentaje prefiere chocolate?",
+            options: ["25%", "30%", "35%", "40%"],
+            ans: 0,
+            figure: `<div class="figure-container"><svg width="280" height="150" viewBox="0 0 280 150">
+                <rect x="20" y="80" width="50" height="40" fill="#2563eb"/><text x="28" y="73" font-size="11" font-weight="bold" fill="#2563eb">Fresa 20</text>
+                <rect x="90" y="60" width="50" height="60" fill="#dc2626"/><text x="98" y="53" font-size="11" font-weight="bold" fill="#dc2626">Vainilla 25</text>
+                <rect x="160" y="40" width="50" height="80" fill="#10b981"/><text x="168" y="33" font-size="11" font-weight="bold" fill="#10b981">Chocolate 40</text>
+                <rect x="230" y="70" width="50" height="50" fill="#f59e0b"/><text x="238" y="63" font-size="11" font-weight="bold" fill="#f59e0b">Menta 15</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 41 - ESCALERA
+            id: 41,
+            area: "Geometría",
+            type: "multiple",
+            q: "Una escalera de 25 m se apoya en una pared. Si la base está a 7 m de la pared, ¿a qué altura llega?",
+            options: ["20 m", "22 m", "24 m", "26 m"],
+            ans: 2,
+            figure: `<div class="figure-container"><svg width="200" height="160" viewBox="0 0 200 160">
+                <polygon points="25,145 25,25 155,145" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/>
+                <line x1="25" y1="25" x2="155" y2="145" stroke="#dc2626" stroke-width="3.5"/>
+                <text x="0" y="95" font-size="14" font-weight="bold" fill="#2563eb">? m</text>
+                <text x="80" y="158" font-size="14" font-weight="bold" fill="#2563eb">7 m</text>
+                <text x="75" y="80" font-size="14" font-weight="bold" fill="#dc2626">25 m</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 42 - LOGARITMO
+            id: 42,
+            area: "Álgebra II",
+            type: "multiple",
+            q: "Si log₂(x) = 5, ¿cuál es el valor de x?",
+            options: ["16", "25", "32", "64"],
+            ans: 2
+        }, {
+            // REACTIVO 43 - SUCESIÓN
+            id: 43,
+            area: "Aritmética",
+            type: "multiple",
+            q: "¿Cuál es el siguiente número en la sucesión: 2, 6, 12, 20, 30, 42, __?",
+            options: ["54", "56", "58", "60"],
+            ans: 1
+        }, {
+            // REACTIVO 44 - VÉRTICE
+            id: 44,
+            area: "Álgebra II",
+            type: "multiple",
+            q: "¿Cuál es el vértice de la parábola y = (x − 2)² + 5?",
+            options: ["(2, 5)", "(-2, 5)", "(2, -5)", "(-2, -5)"],
+            ans: 0
+        }, {
+            // REACTIVO 45 - PICTOGRAMA TOTAL (OPEN)
+            id: 45,
+            area: "Estadística",
+            type: "open",
+            q: "Según el pictograma, ¿cuántas gorras se vendieron en total? (escribe solo el número)",
+            ans: "150",
+            figure: `<div class="pictogram-container">
+                <div class="pictogram-row"><span class="pictogram-label">Enero</span><span class="pictogram-bars"><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span></span><span class="pictogram-value">50</span></div>
+                <div class="pictogram-row"><span class="pictogram-label">Febrero</span><span class="pictogram-bars"><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span></span><span class="pictogram-value">60</span></div>
+                <div class="pictogram-row"><span class="pictogram-label">Marzo</span><span class="pictogram-bars"><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span><span class="pictogram-icon">🧢</span></span><span class="pictogram-value">40</span></div>
+                <div class="pictogram-clave">Cada 🧢 = 10 gorras</div>
+            </div>`
+        }, {
+            // REACTIVO 46 - ÁREA SOMBREADA (OPEN)
+            id: 46,
+            area: "Geometría",
+            type: "open",
+            q: "¿Cuál es el área de la región sombreada (fuera del triángulo) si el rectángulo mide 24 cm × 16 cm? (escribe solo el número)",
+            ans: "192",
+            figure: `<div class="figure-container"><svg width="240" height="180" viewBox="0 0 240 180">
+                <rect x="15" y="15" width="210" height="150" fill="#dc2626" opacity="0.4" stroke="#2563eb" stroke-width="3"/>
+                <polygon points="15,15 225,15 15,165" fill="#ffffff" stroke="#2563eb" stroke-width="3"/>
+                <polygon points="15,15 225,15 15,165" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="8,4"/>
+                <text x="70" y="175" font-size="14" font-weight="bold" fill="#2563eb">24 cm</text>
+                <text x="2" y="95" font-size="14" font-weight="bold" fill="#2563eb">16 cm</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 47 - EXPONENTES
+            id: 47,
+            area: "Álgebra I",
+            type: "open",
+            q: "Si 2⁵ × 2ˣ = 1024, ¿cuál es el valor de x?",
+            ans: "5"
+        }, {
+            // REACTIVO 48 - ÁREA TRIÁNGULO
+            id: 48,
+            area: "Geometría",
+            type: "open",
+            q: "El área de un triángulo rectángulo es 60 cm². Si un cateto mide 10 cm, ¿cuánto mide el otro?",
+            ans: "12",
+            figure: `<div class="figure-container"><svg width="200" height="150" viewBox="0 0 200 150">
+                <polygon points="15,135 15,15 175,135" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/>
+                <text x="0" y="90" font-size="14" font-weight="bold" fill="#2563eb">10 cm</text>
+                <text x="75" y="148" font-size="14" font-weight="bold" fill="#2563eb">A = 60 cm²</text>
+                <text x="85" y="75" font-size="14" font-weight="bold" fill="#dc2626">? cm</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 49 - MEDIA
+            id: 49,
+            area: "Estadística",
+            type: "open",
+            q: "Calcula la media de: 18, 24, 30, 36, 42, 48",
+            ans: "33"
+        }, {
+            // REACTIVO 50 - EXPONENCIAL
+            id: 50,
+            area: "Álgebra II",
+            type: "open",
+            q: "Si 9ˣ⁻¹ = 729, ¿cuál es el valor de x?",
+            ans: "4"
+        }, {
+            // REACTIVO 51 - PRIMOS
+            id: 51,
+            area: "Aritmética",
+            type: "open",
+            q: "¿Cuántos números primos hay entre 80 y 90?",
+            ans: "2"
+        }, {
+            // REACTIVO 52 - FUNCIÓN
+            id: 52,
+            area: "Álgebra I",
+            type: "open",
+            q: "Si f(x) = 5x³ − 4x² + 7x − 9, ¿cuál es f(2)?",
+            ans: "29"
+        }, {
+            // REACTIVO 53 - ÁNGULO INTERIOR
+            id: 53,
+            area: "Geometría",
+            type: "open",
+            q: "¿Cuántos grados mide cada ángulo interior de un polígono regular de 20 lados?",
+            ans: "162",
+            figure: `<div class="figure-container"><svg width="170" height="160" viewBox="0 0 170 160">
+                <polygon points="85,15 155,50 155,100 85,145 15,100 15,50" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/>
+                <text x="72" y="90" font-size="15" font-weight="bold" fill="#dc2626">x°</text>
+            </svg></div>`
+        }, {
+            // REACTIVO 54 - PORCENTAJE
+            id: 54,
+            area: "Estadística",
+            type: "open",
+            q: "En una clase, 16 de 40 estudiantes usan lentes. ¿Qué porcentaje usa lentes? (Responde solo el número)",
+            ans: "40"
+        }, {
+            // REACTIVO 55 - INTERCEPTO
+            id: 55,
+            area: "Álgebra II",
+            type: "open",
+            q: "¿Cuál es el intercepto en y de la recta 12x − 18y = 72? (Responde solo el número)",
+            ans: "-4"
+        }];
 
+        // ============================================================
+        // LÓGICA DEL SIMULADOR
+        // ============================================================
         let currentIndex = 0;
         let correctCount = 0;
         let areaStats = {};
@@ -212,9 +981,13 @@
             let html = `
                 <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-lg border border-slate-100 fade-in">
                     <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-widest mb-4 inline-block">${q.area}</span>
-                    <h2 class="text-lg font-bold text-slate-800 mb-6 leading-tight">${q.q}</h2>
-                    <div id="options-grid" class="space-y-3">
             `;
+
+            if (q.figure) {
+                html += q.figure;
+            }
+
+            html += `<h2 class="text-lg font-bold text-slate-800 mb-6 leading-tight">${q.q}</h2><div id="options-grid" class="space-y-3">`;
 
             if (q.type === 'multiple') {
                 q.options.forEach((opt, i) => {
@@ -238,37 +1011,50 @@
         }
 
         function checkAnswer(index) {
-            if(!canAnswer) return;
+            if (!canAnswer) return;
             canAnswer = false;
             const q = questions[currentIndex];
             const isCorrect = (index === q.ans);
-            if(isCorrect) { correctCount++; document.getElementById('correct-counter').innerText = correctCount; }
-            if(!areaStats[q.area]) areaStats[q.area] = { ok: 0, total: 0 };
-            areaStats[q.area].total++; if(isCorrect) areaStats[q.area].ok++;
-            
+            if (isCorrect) { correctCount++;
+                document.getElementById('correct-counter').innerText = correctCount; }
+            if (!areaStats[q.area]) areaStats[q.area] = { ok: 0, total: 0 };
+            areaStats[q.area].total++;
+            if (isCorrect) areaStats[q.area].ok++;
+
             const btns = document.querySelectorAll('#options-grid button');
             btns[q.ans].classList.add('ans-correct');
-            if(!isCorrect) btns[index].classList.add('ans-wrong');
-            setTimeout(() => { currentIndex++; if(currentIndex < 55) showQuestion(); else finishExam(); }, 1000);
+            if (!isCorrect) btns[index].classList.add('ans-wrong');
+            setTimeout(() => { currentIndex++; if (currentIndex < 55) showQuestion();
+                else finishExam(); }, 1000);
         }
 
         function checkAnswerOpen() {
-            if(!canAnswer) return;
+            if (!canAnswer) return;
             const input = document.getElementById('open-ans');
             const val = input.value.trim();
-            if(val === "") return;
+            if (val === "") return;
             canAnswer = false;
             const q = questions[currentIndex];
             const isCorrect = (val === q.ans);
-            if(isCorrect) { correctCount++; document.getElementById('correct-counter').innerText = correctCount; }
-            if(!areaStats[q.area]) areaStats[q.area] = { ok: 0, total: 0 };
-            areaStats[q.area].total++; if(isCorrect) areaStats[q.area].ok++;
+            if (isCorrect) { correctCount++;
+                document.getElementById('correct-counter').innerText = correctCount; }
+            if (!areaStats[q.area]) areaStats[q.area] = { ok: 0, total: 0 };
+            areaStats[q.area].total++;
+            if (isCorrect) areaStats[q.area].ok++;
             input.classList.add(isCorrect ? 'ans-correct' : 'ans-wrong');
-            setTimeout(() => { currentIndex++; if(currentIndex < 55) showQuestion(); else finishExam(); }, 1200);
+            setTimeout(() => { currentIndex++; if (currentIndex < 55) showQuestion();
+                else finishExam(); }, 1200);
         }
 
         function startTimer() {
-            timerInterval = setInterval(() => { if(timerSeconds > 0) { timerSeconds--; let m = Math.floor(timerSeconds/60); let s = timerSeconds%60; document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`; } else finishExam(); }, 1000);
+            timerInterval = setInterval(() => {
+                if (timerSeconds > 0) {
+                    timerSeconds--;
+                    let m = Math.floor(timerSeconds / 60);
+                    let s = timerSeconds % 60;
+                    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
+                } else finishExam();
+            }, 1000);
         }
 
         function finishExam() {
@@ -277,15 +1063,14 @@
             document.getElementById('start-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
 
-            const score = Math.round((correctCount/55)*600)+200;
+            const score = Math.round((correctCount / 55) * 600) + 200;
             document.getElementById('final-scale-score').innerText = score;
             document.getElementById('total-correct').innerText = correctCount;
             document.getElementById('total-percent').innerText = `${Math.round((correctCount/55)*100)}%`;
-            document.getElementById('label-score-final').innerText = score;
 
             let html = "";
             for (const area in areaStats) {
-                let p = Math.round((areaStats[area].ok/areaStats[area].total)*100);
+                let p = Math.round((areaStats[area].ok / areaStats[area].total) * 100);
                 html += `
                     <div class="bg-slate-50/50 p-2 rounded-xl border border-slate-100">
                         <div class="flex justify-between text-[7px] font-black uppercase mb-1 text-slate-400"><span>${area}</span><span>${areaStats[area].ok}/${areaStats[area].total}</span></div>
