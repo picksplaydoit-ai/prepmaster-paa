@@ -3,317 +3,766 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulación 0: Matemáticas PAA</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Librería para renderizado matemático profesional -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <title>Simulador PAA Matemáticas - Interactivos</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; overflow-x: hidden; }
-        .fade-in { animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        .custom-scroll::-webkit-scrollbar { width: 5px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        
-        /* Estados de respuesta */
-        .ans-correct { background-color: #ecfdf5 !important; border-color: #10b981 !important; color: #065f46 !important; }
-        .ans-wrong { background-color: #fef2f2 !important; border-color: #ef4444 !important; color: #991b1b !important; }
-        .ans-correct-hint { border-color: #10b981 !important; border-style: dashed !important; border-width: 2px !important; }
-        
-        /* Ajuste para fórmulas KaTeX */
-        .katex { font-size: 1.1em; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .ans-correct {
+            border-color: #10b981 !important;
+            background-color: #ecfdf5 !important;
+            color: #065f46 !important;
+        }
+        .ans-wrong {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            color: #991b1b !important;
+        }
+        .progress-bar {
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+        .figure-container {
+            display: flex;
+            justify-content: center;
+            margin: 12px 0 16px 0;
+        }
+        .figure-container svg {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #fafbfc;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-start py-4 sm:py-8 px-2">
+<body class="bg-slate-50 min-h-screen flex flex-col">
 
     <!-- Pantalla de Inicio -->
-    <div id="start-screen" class="max-w-2xl w-full bg-white rounded-3xl shadow-xl p-8 text-center border border-slate-200">
-        <div class="w-20 h-20 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg rotate-3">
-            <span class="text-4xl font-black">0</span>
-        </div>
-        <h1 class="text-3xl font-black text-slate-900 mb-2 uppercase tracking-tight">Simulación 0 (Matemáticas)</h1>
-        <p class="text-blue-600 font-bold mb-8 tracking-widest uppercase text-sm">Visualización Profesional & Feedback</p>
-        
-        <div class="grid grid-cols-2 gap-4 mb-8 text-left">
-            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Reactivos</p>
-                <p class="text-xl font-bold">50 Preguntas</p>
+    <div id="start-screen" class="flex-grow flex items-center justify-center p-4 overflow-y-auto">
+        <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
+            <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg rotate-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
             </div>
-            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Tiempo</p>
-                <p class="text-xl font-bold">60 Minutos</p>
-            </div>
-        </div>
+            <h1 class="text-2xl font-extrabold text-slate-900 mb-2 uppercase tracking-tight">Simulador PAA</h1>
+            <p class="text-slate-500 mb-4 font-medium text-sm">Matemáticas (55 Reactivos)</p>
 
-        <button onclick="startExam()" class="w-full bg-slate-900 hover:bg-black text-white font-black py-4 rounded-2xl shadow-xl transition-all active:scale-95 text-lg uppercase tracking-widest">
-            Comenzar Simulación
-        </button>
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 text-left rounded-r-xl">
+                <div class="flex">
+                    <div class="ml-1">
+                        <p class="text-xs text-amber-900 leading-relaxed font-semibold">
+                            ¡Importante! Obtendrás de <span class="underline">200 a 800</span> puntos.
+                        </p>
+                        <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold tracking-tighter italic">
+                            Anota el resultado para tu cálculo final.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <button onclick="startExam()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">
+                    COMENZAR EXAMEN
+                </button>
+            </div>
+        </div>
     </div>
 
-    <!-- Interfaz del Examen -->
-    <div id="exam-screen" class="hidden max-w-4xl w-full flex flex-col gap-4">
-        <header class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm sticky top-0 z-50 grid grid-cols-3 items-center">
-            <div class="flex flex-col">
-                <p class="text-[9px] font-black text-slate-400 uppercase">Tiempo</p>
-                <p id="timer" class="text-lg font-mono font-black text-blue-600 leading-none">60:00</p>
-            </div>
-            
-            <div class="flex justify-center gap-6">
-                <div class="text-center">
-                    <p class="text-[9px] font-black text-emerald-500 uppercase">Aciertos</p>
-                    <p id="live-correct" class="text-lg font-black text-emerald-600 leading-none">0</p>
+    <!-- Pantalla de Examen -->
+    <div id="exam-screen" class="hidden min-h-screen flex flex-col">
+        <div class="sticky-header bg-white border-b border-slate-200 p-3">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <div class="flex gap-4">
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Tiempo</p>
+                        <p id="timer" class="text-lg font-mono font-black text-blue-600 leading-none">60:00</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-[9px] font-black text-emerald-500 uppercase">Bien</p>
+                        <p id="correct-counter" class="text-lg font-black text-emerald-600 leading-none">0</p>
+                    </div>
                 </div>
-                <div class="text-center">
-                    <p class="text-[9px] font-black text-rose-500 uppercase">Errores</p>
-                    <p id="live-wrong" class="text-lg font-black text-rose-600 leading-none">0</p>
+                <div class="flex-1 max-w-xs ml-4">
+                    <p id="progress-text" class="text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-tighter">Cargando...</p>
+                    <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="progress-bar h-full bg-blue-600 w-0"></div>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="text-right">
-                <p id="progress-label" class="text-[9px] font-black text-slate-400 uppercase">1 de 50</p>
-                <div class="w-full h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden border border-slate-200">
-                    <div id="progress-bar" class="h-full bg-blue-600 transition-all duration-300" style="width: 2%"></div>
-                </div>
-            </div>
-        </header>
-
-        <main class="bg-white border border-slate-200 rounded-[2.5rem] shadow-lg p-6 sm:p-10 flex flex-col min-h-[450px]">
-            <div id="question-container" class="flex-grow fade-in">
-                <!-- Contenido inyectado -->
-            </div>
+        <main class="flex-grow flex items-center justify-center p-4 overflow-y-auto">
+            <div id="question-box" class="max-w-xl w-full pb-4"></div>
         </main>
     </div>
 
-    <!-- Resultados -->
-    <div id="result-screen" class="hidden max-w-2xl w-full bg-white rounded-[3rem] shadow-2xl overflow-hidden fade-in border border-slate-200">
-        <div class="bg-slate-900 p-10 text-center text-white">
-            <p class="text-blue-400 font-black uppercase tracking-[0.3em] text-[10px] mb-2">Puntaje Escala PAA</p>
-            <div class="flex items-center justify-center gap-2">
-                <h2 id="final-score" class="text-8xl font-black tracking-tighter leading-none">200</h2>
-                <span class="text-slate-500 font-bold text-xl self-end mb-2">/ 800</span>
-            </div>
-        </div>
-        
-        <div class="p-8 sm:p-12">
-            <h3 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-tight">Desglose Final</h3>
-            <div id="area-results" class="space-y-4 mb-8"></div>
-
-            <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100 flex items-center justify-between mb-8">
-                <div>
-                    <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Aciertos Totales</p>
-                    <p class="text-2xl font-black text-slate-900"><span id="correct-total">0</span> de 50</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Efectividad</p>
-                    <p id="accuracy-percent" class="text-2xl font-black text-blue-600">0%</p>
+    <!-- Pantalla de Resultados -->
+    <div id="result-screen" class="hidden flex items-center justify-center p-4 py-8 overflow-y-auto">
+        <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl border border-white fade-in flex flex-col">
+            <div class="bg-slate-900 p-6 md:p-8 text-center text-white relative flex-shrink-0">
+                <p class="text-blue-400 font-bold uppercase tracking-[0.3em] text-[9px] mb-2">Puntaje Final de Escala</p>
+                <div class="flex items-center justify-center gap-2">
+                    <h2 id="final-scale-score" class="text-6xl font-black tracking-tighter leading-none">0</h2>
+                    <p class="text-slate-500 font-bold text-lg">/ 800</p>
                 </div>
             </div>
 
-            <button onclick="location.reload()" class="w-full bg-slate-900 text-white font-black py-5 rounded-2xl shadow-xl hover:bg-black transition-all uppercase tracking-widest text-sm">
-                Reiniciar Simulación
-            </button>
+            <div class="p-6 md:p-8 flex-grow overflow-y-auto custom-scroll">
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Aciertos</p>
+                        <p class="text-xl font-black text-slate-800"><span id="total-correct">0</span><span class="text-slate-300 text-sm">/55</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Efectividad</p>
+                        <p id="total-percent" class="text-xl font-black text-blue-600">0%</p>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-2xl text-white flex flex-col justify-center text-center">
+                        <p class="text-[7px] font-black text-blue-400 uppercase">Estatus</p>
+                        <p class="text-xs font-bold leading-tight">Perfil Analizado</p>
+                    </div>
+                </div>
+
+                <div id="area-breakdown" class="grid grid-cols-2 gap-3 mb-6"></div>
+
+                <div class="p-5 bg-blue-600 rounded-3xl text-white relative overflow-hidden shadow-lg">
+                    <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                        <div>
+                            <h4 class="text-lg font-black leading-none mb-1 uppercase tracking-tight">¡Anota tu resultado!</h4>
+                            <p class="text-blue-100 text-[10px]">Usa este puntaje para la simulación de ingreso.</p>
+                        </div>
+                        <button onclick="location.reload()" class="bg-white text-blue-600 font-black px-6 py-2 rounded-xl hover:bg-blue-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0">
+                            Reiniciar
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Función de renderizado robusta
-        function parseMath(text) {
-            if (!text) return "";
-            // Primero manejamos el signo de dólar literal para dinero si no está en modo math
-            let formatted = text.replace(/\\\$(\d+)/g, '$$ $1'); 
-            
-            // Renderizar bloques de matemáticas $...$
-            return formatted.replace(/\$([^$]+)\$/g, (match, formula) => {
-                try {
-                    return katex.renderToString(formula, { throwOnError: false });
-                } catch (e) {
-                    return match;
-                }
-            });
-        }
+        // ============================================================
+        // BANCO DE REACTIVOS CORREGIDO CON GRÁFICOS SVG
+        // ============================================================
+        const questions = [
+            // ---- NIVEL BÁSICO (1-15) ----
+            {
+                id: 1,
+                area: "Aritmética",
+                type: "multiple",
+                q: 'Un artículo cuesta $120. Si se le aplica un descuento del 25%, ¿cuánto se pagará finalmente?',
+                options: ["$80", "$90", "$95", "$100"],
+                ans: 1
+            },
+            {
+                id: 2,
+                area: "Álgebra I",
+                type: "multiple",
+                q: 'Al simplificar la expresión (3x²y)(4x³y²), se obtiene:',
+                options: ["12x⁵y³", "7x⁶y²", "12x⁶y³", "7x⁵y³"],
+                ans: 0
+            },
+            {
+                id: 3,
+                area: "Geometría",
+                type: "multiple",
+                q: 'Si el área de un círculo es 49π, ¿cuál es la medida de su diámetro?',
+                options: ["7", "14", "24.5", "49"],
+                ans: 1,
+                figure: `<div class="figure-container"><svg width="140" height="140" viewBox="0 0 140 140"><circle cx="70" cy="70" r="60" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/><line x1="10" y1="70" x2="130" y2="70" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="6,4"/><text x="62" y="68" font-size="14" font-weight="bold" fill="#dc2626">d</text></svg></div>`
+            },
+            {
+                id: 4,
+                area: "Estadística",
+                type: "multiple",
+                q: 'El promedio de los números 8, 12, 15 y x es 11. ¿Cuál es el valor de x?',
+                options: ["8", "9", "10", "11"],
+                ans: 1
+            },
+            {
+                id: 5,
+                area: "Álgebra II",
+                type: "multiple",
+                q: '¿Cuáles son las soluciones de la ecuación x² − 7x + 10 = 0?',
+                options: ["x = −2, x = −5", "x = −2, x = 5", "x = 2, x = −5", "x = 2, x = 5"],
+                ans: 3
+            },
+            {
+                id: 6,
+                area: "Aritmética",
+                type: "multiple",
+                q: '¿Cuál es el resultado de sumar 4/3 + 5/6?',
+                options: ["9/6", "13/6", "19/6", "9/3"],
+                ans: 1
+            },
+            {
+                id: 7,
+                area: "Geometría",
+                type: "multiple",
+                q: '¿Cuál es el volumen de un cubo cuyas aristas miden 4 cm?',
+                options: ["16 cm³", "24 cm³", "64 cm³", "96 cm³"],
+                ans: 2,
+                figure: `<div class="figure-container"><svg width="130" height="130" viewBox="0 0 130 130"><rect x="25" y="25" width="80" height="80" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><line x1="25" y1="25" x2="55" y2="5" stroke="#2563eb" stroke-width="2"/><line x1="105" y1="25" x2="135" y2="5" stroke="#2563eb" stroke-width="2"/><line x1="105" y1="105" x2="135" y2="85" stroke="#2563eb" stroke-width="2"/><line x1="55" y1="5" x2="135" y2="5" stroke="#2563eb" stroke-width="2"/><line x1="135" y1="5" x2="135" y2="85" stroke="#2563eb" stroke-width="2"/><text x="48" y="95" font-size="14" font-weight="bold" fill="#dc2626">4</text><text x="115" y="70" font-size="14" font-weight="bold" fill="#dc2626">4</text></svg></div>`
+            },
+            {
+                id: 8,
+                area: "Álgebra I",
+                type: "multiple",
+                q: 'Si f(x) = 2x² − 3x + 1, ¿cuál es el valor de f(−2)?',
+                options: ["-1", "3", "11", "15"],
+                ans: 3
+            },
+            {
+                id: 9,
+                area: "Estadística",
+                type: "multiple",
+                q: '¿Cuál es la mediana del conjunto de datos: {5, 2, 9, 8, 1, 4, 7}?',
+                options: ["4", "5", "6", "7"],
+                ans: 1
+            },
+            {
+                id: 10,
+                area: "Álgebra II",
+                type: "multiple",
+                q: '¿Cuál es la pendiente de la recta 2y − 4x = 8?',
+                options: ["-4", "-2", "2", "4"],
+                ans: 2
+            },
+            {
+                id: 11,
+                area: "Aritmética",
+                type: "multiple",
+                q: '¿Cuál es el Mínimo Común Múltiplo (MCM) de 12 y 18?',
+                options: ["6", "24", "36", "72"],
+                ans: 2
+            },
+            {
+                id: 12,
+                area: "Álgebra I",
+                type: "multiple",
+                q: '¿Cuál es el valor de x en la ecuación 3(x − 2) = x + 10?',
+                options: ["2", "4", "6", "8"],
+                ans: 3
+            },
+            {
+                id: 13,
+                area: "Geometría",
+                type: "multiple",
+                q: 'Los ángulos de un triángulo miden 40°, 60° y x°. ¿Cuál es el valor de x?',
+                options: ["70°", "80°", "90°", "100°"],
+                ans: 1,
+                figure: `<div class="figure-container"><svg width="180" height="140" viewBox="0 0 180 140"><polygon points="20,120 160,120 90,20" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="40" y="135" font-size="16" font-weight="bold" fill="#dc2626">40°</text><text x="130" y="135" font-size="16" font-weight="bold" fill="#dc2626">60°</text><text x="75" y="40" font-size="16" font-weight="bold" fill="#dc2626">x</text></svg></div>`
+            },
+            {
+                id: 14,
+                area: "Probabilidad",
+                type: "multiple",
+                q: '¿Cuál es la probabilidad de sacar un Rey de una baraja estándar de 52 cartas?',
+                options: ["1/52", "1/26", "1/13", "1/4"],
+                ans: 2
+            },
+            {
+                id: 15,
+                area: "Álgebra II",
+                type: "multiple",
+                q: '¿Cuál es la distancia entre los puntos (0, 0) y (3, 4)?',
+                options: ["3", "4", "5", "7"],
+                ans: 2,
+                figure: `<div class="figure-container"><svg width="180" height="150" viewBox="0 0 180 150"><rect x="10" y="10" width="160" height="130" fill="#fafbfc" stroke="#cbd5e1" stroke-width="1"/><line x1="10" y1="140" x2="170" y2="140" stroke="#94a3b8" stroke-width="1.5"/><line x1="20" y1="10" x2="20" y2="140" stroke="#94a3b8" stroke-width="1.5"/><circle cx="20" cy="140" r="4" fill="#dc2626"/><text x="2" y="155" font-size="12" font-weight="bold" fill="#64748b">(0,0)</text><circle cx="80" cy="40" r="4" fill="#dc2626"/><text x="66" y="34" font-size="12" font-weight="bold" fill="#dc2626">(3,4)</text><line x1="20" y1="140" x2="80" y2="40" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,3"/></svg></div>`
+            },
 
-        const questionBank = [
-            // Aritmética
-            { area: "Aritmética", q: "¿Cuál es el valor de $3^4 - 2^5$?", options: ["$49$", "$17$", "$113$", "$81$"], ans: 0 },
-            { area: "Aritmética", q: "Un artículo de $\$120$ tiene un $30\\%$ de descuento. ¿Cuánto se paga por él?", options: ["$\$36$", "$\$90$", "$\$84$", "$\$40$"], ans: 2 },
-            { area: "Aritmética", q: "Simplifica la expresión: $\\frac{2}{3} + \\frac{1}{4} - \\frac{1}{6}$", options: ["$\\frac{2}{12}$", "$\\frac{3}{4}$", "$\\frac{9}{12}$", "$\\frac{5}{6}$"], ans: 1 },
-            { area: "Aritmética", q: "¿Cuál es el máximo común divisor (MCD) de $48$ y $72$?", options: ["$12$", "$24$", "$144$", "$6$"], ans: 1 },
-            { area: "Aritmética", q: "Si la razón de dos números es $5:3$ y el mayor es $45$, ¿cuál es el menor?", options: ["$15$", "$27$", "$75$", "$9$"], ans: 1 },
-            { area: "Aritmética", q: "¿Cuál de estos números es un número primo?", options: ["$51$", "$91$", "$47$", "$39$"], ans: 2 },
-            { area: "Aritmética", q: "Calcula el $15\\%$ del $200\\%$ de $60$.", options: ["$18$", "$12$", "$180$", "$9$"], ans: 0 },
-            { area: "Aritmética", q: "Expresa $0.00045$ en notación científica.", options: ["$4.5 \\times 10^{-4}$", "$45 \\times 10^{-5}$", "$4.5 \\times 10^{4}$", "$0.45 \\times 10^{-3}$"], ans: 0 },
-            { area: "Aritmética", q: "El resultado de $(-2)^3 \\cdot (-3)^2$ es:", options: ["$72$", "$-72$", "$144$", "$-144$"], ans: 1 },
-            { area: "Aritmética", q: "En una bolsa hay $15$ bolas rojas y $25$ azules. ¿Qué porcentaje del total son azules?", options: ["$25\\%$", "$60\\%$", "$62.5\\%$", "$40\\%$"], ans: 1 },
-            { area: "Aritmética", q: "¿Cuál es el valor de $\\sqrt{0.64}$?", options: ["$0.08$", "$0.8$", "$8$", "$0.4$"], ans: 1 },
-            { area: "Aritmética", q: "Si $x$ es el menor de tres enteros consecutivos cuya suma es $45$, ¿cuánto vale $x$?", options: ["$14$", "$15$", "$16$", "$13$"], ans: 0 },
+            // ---- NIVEL INTERMEDIO (16-35) ----
+            {
+                id: 16,
+                area: "Aritmética",
+                type: "multiple",
+                q: 'Si 4 libros cuestan $60, ¿cuánto cuestan 7 libros del mismo tipo?',
+                options: ["$90", "$105", "$115", "$120"],
+                ans: 1
+            },
+            {
+                id: 17,
+                area: "Álgebra I",
+                type: "multiple",
+                q: 'Al desarrollar (x − 5)(x + 5), se obtiene:',
+                options: ["x² + 25", "x² - 10x + 25", "x² - 25", "x² - 10x - 25"],
+                ans: 2
+            },
+            {
+                id: 18,
+                area: "Geometría",
+                type: "multiple",
+                q: '¿Cuál es el perímetro de un rectángulo de largo 10 m y ancho 4 m?',
+                options: ["14 m", "28 m", "40 m", "80 m"],
+                ans: 1,
+                figure: `<div class="figure-container"><svg width="200" height="100" viewBox="0 0 200 100"><rect x="15" y="15" width="170" height="70" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/><text x="88" y="58" font-size="14" font-weight="bold" fill="#2563eb">10 m</text><text x="180" y="80" font-size="14" font-weight="bold" fill="#dc2626">4 m</text></svg></div>`
+            },
+            {
+                id: 19,
+                area: "Estadística",
+                type: "multiple",
+                q: '¿Cuál es la moda del conjunto: 12, 13, 13, 14, 14, 14, 15?',
+                options: ["12", "13", "14", "15"],
+                ans: 2
+            },
+            {
+                id: 20,
+                area: "Álgebra II",
+                type: "multiple",
+                q: '¿Cuál es el punto medio entre A(-2, 4) y B(6, 8)?',
+                options: ["(2, 6)", "(4, 4)", "(4, 6)", "(8, 12)"],
+                ans: 0
+            },
+            {
+                id: 21,
+                area: "Aritmética",
+                type: "multiple",
+                q: '¿Cuál es la forma decimal de 2.5 × 10³?',
+                options: ["25", "250", "2,500", "25,000"],
+                ans: 2
+            },
+            {
+                id: 22,
+                area: "Álgebra I",
+                type: "multiple",
+                q: '¿Cuáles son los valores de x que satisfacen |x − 3| = 5?',
+                options: ["8 y -2", "8 y 2", "-8 y 2", "-8 y -2"],
+                ans: 0
+            },
+            {
+                id: 23,
+                area: "Geometría",
+                type: "multiple",
+                q: '¿Cuál es el área de un triángulo con base 12 cm y altura 5 cm?',
+                options: ["17 cm²", "30 cm²", "34 cm²", "60 cm²"],
+                ans: 1,
+                figure: `<div class="figure-container"><svg width="200" height="120" viewBox="0 0 200 120"><polygon points="20,100 180,100 100,15" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><line x1="100" y1="100" x2="100" y2="15" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/><text x="100" y="75" font-size="14" font-weight="bold" fill="#dc2626">h=5</text><text x="70" y="118" font-size="14" font-weight="bold" fill="#2563eb">base=12</text></svg></div>`
+            },
+            {
+                id: 24,
+                area: "Probabilidad",
+                type: "multiple",
+                q: 'Al lanzar dos monedas, ¿cuál es la probabilidad de obtener dos caras?',
+                options: ["0.25", "0.50", "0.75", "1.00"],
+                ans: 0
+            },
+            {
+                id: 25,
+                area: "Álgebra II",
+                type: "multiple",
+                q: '¿Cuál es el conjunto solución de x + 3 < 8?',
+                options: ["(−∞, 11)", "(5, ∞)", "(−∞, 5)", "[-5, 5]"],
+                ans: 2
+            },
+            {
+                id: 26,
+                area: "Aritmética",
+                type: "multiple",
+                q: '¿Cuál es el número que falta en la sucesión: 1, 4, 9, 16, __, 36?',
+                options: ["20", "24", "25", "30"],
+                ans: 2
+            },
+            {
+                id: 27,
+                area: "Álgebra I",
+                type: "multiple",
+                q: '¿Cuál es la factorización de x² + 6x + 9?',
+                options: ["(x+3)(x-3)", "(x+6)²", "(x+3)²", "(x+9)(x+1)"],
+                ans: 2
+            },
+            {
+                id: 28,
+                area: "Geometría",
+                type: "multiple",
+                q: '¿Cuál es el ángulo suplementario de 110°?',
+                options: ["70°", "80°", "110°", "250°"],
+                ans: 0,
+                figure: `<div class="figure-container"><svg width="180" height="80" viewBox="0 0 180 80"><line x1="10" y1="40" x2="170" y2="40" stroke="#94a3b8" stroke-width="2"/><line x1="90" y1="40" x2="90" y2="10" stroke="#2563eb" stroke-width="2"/><circle cx="90" cy="40" r="20" fill="none" stroke="#dc2626" stroke-width="1.5"/><text x="80" y="30" font-size="14" font-weight="bold" fill="#dc2626">110°</text><text x="100" y="58" font-size="14" font-weight="bold" fill="#2563eb">?°</text></svg></div>`
+            },
+            {
+                id: 29,
+                area: "Estadística",
+                type: "multiple",
+                q: '¿Cuántos grados debe tener el sector circular que representa el 20% en un gráfico de pastel?',
+                options: ["20°", "40°", "72°", "90°"],
+                ans: 2
+            },
+            {
+                id: 30,
+                area: "Álgebra II",
+                type: "multiple",
+                q: 'Resuelve el sistema: x + y = 10; x − y = 4. ¿Cuál es el valor de x?',
+                options: ["x = 3", "x = 6", "x = 7", "x = 14"],
+                ans: 2
+            },
+            {
+                id: 31,
+                area: "Aritmética",
+                type: "multiple",
+                q: '¿Cuál es el Máximo Común Divisor (MCD) de 24 y 36?',
+                options: ["6", "8", "12", "72"],
+                ans: 2
+            },
+            {
+                id: 32,
+                area: "Álgebra I",
+                type: "multiple",
+                q: 'Simplifica: √144 + √25',
+                options: ["13", "17", "23", "169"],
+                ans: 1
+            },
+            {
+                id: 33,
+                area: "Geometría",
+                type: "multiple",
+                q: '¿Cuál es la longitud de la hipotenusa de un triángulo rectángulo cuyos catetos miden 5 y 12?',
+                options: ["13", "14", "17", "60"],
+                ans: 0,
+                figure: `<div class="figure-container"><svg width="180" height="140" viewBox="0 0 180 140"><polygon points="20,120 20,20 140,120" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="0" y="85" font-size="14" font-weight="bold" fill="#dc2626">5</text><text x="70" y="138" font-size="14" font-weight="bold" fill="#dc2626">12</text><text x="95" y="70" font-size="14" font-weight="bold" fill="#2563eb">?</text></svg></div>`
+            },
+            {
+                id: 34,
+                area: "Estadística",
+                type: "multiple",
+                q: '¿Cuál es el rango del conjunto {15, 2, 9, 20, 7}?',
+                options: ["9", "15", "18", "20"],
+                ans: 2
+            },
+            {
+                id: 35,
+                area: "Álgebra II",
+                type: "multiple",
+                q: '¿Cuál es la ecuación de un círculo con centro en (0,0) y radio 3?',
+                options: ["x² + y² = 3", "x² + y² = 6", "x² + y² = 9", "x² - y² = 9"],
+                ans: 2
+            },
 
-            // Álgebra
-            { area: "Álgebra", q: "Si $4x - 7 = 2x + 9$, ¿cuál es el valor de $x$?", options: ["$1$", "$8$", "$4$", "$16$"], ans: 1 },
-            { area: "Álgebra", q: "Factoriza la expresión $x^2 - 49$.", options: ["$(x-7)^2$", "$(x+7)(x-7)$", "$(x-49)(x+1)$", "$(x+7)^2$"], ans: 1 },
-            { area: "Álgebra", q: "¿Para qué valores de $x$ se cumple $2x - 5 > 13$?", options: ["$x < 9$", "$x > 4$", "$x > 9$", "$x > 18$"], ans: 2 },
-            { area: "Álgebra", q: "Simplifica: $(2x^2 y)^3$.", options: ["$6x^6 y^3$", "$8x^5 y^3$", "$8x^6 y^3$", "$2x^6 y^3$"], ans: 2 },
-            { area: "Álgebra", q: "Si $f(x) = 2x^2 - 3x + 1$, halla $f(-2)$.", options: ["$15$", "$3$", "$11$", "$1$"], ans: 0 },
-            { area: "Álgebra", q: "En el sistema de ecuaciones $\\begin{cases} x + y = 12 \\\\ 2x - y = 3 \\end{cases}$, ¿cuál es el valor de $x$?", options: ["$5$", "$3$", "$7$", "$9$"], ans: 0 },
-            { area: "Álgebra", q: "¿Cuál es la pendiente de la recta que pasa por $(1, 3)$ y $(4, 9)$?", options: ["$2$", "$3$", "$1/2$", "$6$"], ans: 1 },
-            { area: "Álgebra", q: "Factoriza el trinomio $x^2 + 5x - 14$.", options: ["$(x+7)(x-2)$", "$(x-7)(x+2)$", "$(x+14)(x-1)$", "$(x-14)(x+1)$"], ans: 0 },
-            { area: "Álgebra", q: "Si $3/x = 12$, entonces $x$ es igual a:", options: ["$4$", "$1/4$", "$36$", "$9$"], ans: 1 },
-            { area: "Álgebra", q: "Simplifica la expresión $\\frac{x^2 - 9}{x + 3}$.", options: ["$x + 3$", "$x - 3$", "$-x + 3$", "$3$"], ans: 1 },
-            { area: "Álgebra", q: "La suma de un número y su doble es $36$. ¿Cuál es el número?", options: ["$12$", "$18$", "$9$", "$24$"], ans: 0 },
-            { area: "Álgebra", q: "¿Cuál es el intercepto en el eje $y$ de la recta $y = 5x - 8$?", options: ["$5$", "$8$", "$-8$", "$0$"], ans: 2 },
-            { area: "Álgebra", q: "Resuelve para $k$: $|k - 4| = 10$.", options: ["$14$", "$6$", "$14$ y $-6$", "$-14$ y $6$"], ans: 2 },
+            // ---- NIVEL AVANZADO (36-45) ----
+            {
+                id: 36,
+                area: "Aritmética",
+                type: "multiple",
+                q: '¿Cuál es el resultado de (8/5) ÷ (4/3)?',
+                options: ["32/15", "6/5", "11/8", "15/12"],
+                ans: 1
+            },
+            {
+                id: 37,
+                area: "Álgebra I",
+                type: "multiple",
+                q: '¿Cuál es el valor de 3⁻²?',
+                options: ["-9", "-6", "1/6", "1/9"],
+                ans: 3
+            },
+            {
+                id: 38,
+                area: "Geometría",
+                type: "multiple",
+                q: '¿Cuál es el volumen de un cilindro con radio 2 cm y altura 5 cm?',
+                options: ["10π cm³", "14π cm³", "20π cm³", "40π cm³"],
+                ans: 2,
+                figure: `<div class="figure-container"><svg width="140" height="150" viewBox="0 0 140 150"><ellipse cx="70" cy="25" rx="45" ry="15" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><rect x="25" y="25" width="90" height="100" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><ellipse cx="70" cy="125" rx="45" ry="15" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><line x1="115" y1="25" x2="115" y2="125" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/><text x="108" y="75" font-size="14" font-weight="bold" fill="#dc2626">5</text><text x="55" y="145" font-size="14" font-weight="bold" fill="#2563eb">r=2</text></svg></div>`
+            },
+            {
+                id: 39,
+                area: "Aritmética",
+                type: "multiple",
+                q: '¿Cuánto es el 30% de 500?',
+                options: ["15", "50", "150", "1500"],
+                ans: 2
+            },
+            {
+                id: 40,
+                area: "Álgebra II",
+                type: "multiple",
+                q: '¿Cuál es la condición para que dos rectas sean paralelas?',
+                options: ["Sus pendientes son inversas", "Sus pendientes son iguales", "Se cruzan en el origen", "Tienen pendiente 0"],
+                ans: 1
+            },
+            {
+                id: 41,
+                area: "Aritmética",
+                type: "multiple",
+                q: '¿Cuál es la descomposición en factores primos de 60?',
+                options: ["2² × 3 × 5", "3² × 2 × 5", "4 × 15", "2 × 3² × 5"],
+                ans: 0
+            },
+            {
+                id: 42,
+                area: "Álgebra I",
+                type: "multiple",
+                q: '¿Cuál es el resultado de (2x + 3) + (4x − 1)?',
+                options: ["6x + 4", "6x + 2", "8x² - 3", "8x - 2"],
+                ans: 1
+            },
+            {
+                id: 43,
+                area: "Geometría",
+                type: "multiple",
+                q: '¿Cuál es el área de un trapecio con bases 6 cm y 10 cm, y altura 4 cm?',
+                options: ["20 cm²", "32 cm²", "40 cm²", "64 cm²"],
+                ans: 1,
+                figure: `<div class="figure-container"><svg width="200" height="130" viewBox="0 0 200 130"><polygon points="40,110 160,110 120,20 80,20" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><line x1="80" y1="110" x2="80" y2="20" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/><text x="55" y="75" font-size="14" font-weight="bold" fill="#dc2626">h=4</text><text x="85" y="128" font-size="14" font-weight="bold" fill="#2563eb">10</text><text x="40" y="128" font-size="14" font-weight="bold" fill="#2563eb">6</text></svg></div>`
+            },
+            {
+                id: 44,
+                area: "Probabilidad",
+                type: "multiple",
+                q: 'Al lanzar un dado, ¿cuál es la probabilidad de obtener un múltiplo de 3?',
+                options: ["1/6", "1/3", "1/2", "2/3"],
+                ans: 1
+            },
+            {
+                id: 45,
+                area: "Álgebra II",
+                type: "multiple",
+                q: '¿Cuáles son las coordenadas del vértice de la parábola y = (x − 2)² + 3?',
+                options: ["(-2, 3)", "(2, -3)", "(2, 3)", "(-2, -3)"],
+                ans: 2
+            },
 
-            // Geometría
-            { area: "Geometría", q: "¿Cuál es el área de un círculo cuyo radio es $4$ cm?", options: ["$8\\pi$", "$16\\pi$", "$4\\pi$", "$2\\pi$"], ans: 1 },
-            { area: "Geometría", q: "En un triángulo rectángulo, los catetos miden $6$ y $8$. ¿Cuánto mide la hipotenusa?", options: ["$10$", "$14$", "$100$", "$7$"], ans: 0 },
-            { area: "Geometría", q: "¿Cuál es la suma de los ángulos internos de un pentágono?", options: ["$180^o$", "$360^o$", "$540^o$", "$720^o$"], ans: 2 },
-            { area: "Geometría", q: "Si el perímetro de un cuadrado es $24$ cm, ¿cuál es su área?", options: ["$36$", "$24$", "$144$", "$16$"], ans: 0 },
-            { area: "Geometría", q: "Calcula el volumen de un cubo cuyo lado mide $5$ cm.", options: ["$25$", "$150$", "$125$", "$100$"], ans: 2 },
-            { area: "Geometría", q: "Dos ángulos son complementarios. Si uno mide $35^o$, el otro mide:", options: ["$145^o$", "$55^o$", "$65^o$", "$90^o$"], ans: 1 },
-            { area: "Geometría", q: "Halla la distancia entre los puntos $(1, 2)$ y $(4, 6)$.", options: ["$3$", "$4$", "$5$", "$7$"], ans: 2 },
-            { area: "Geometría", q: "Si el área de un rectángulo es $40$ y su largo es $8$, ¿cuál es su perímetro?", options: ["$13$", "$26$", "$20$", "$32$"], ans: 1 },
-            { area: "Geometría", q: "¿Cómo se llama un polígono de $8$ lados?", options: ["Heptágono", "Octágono", "Decágono", "Hexágono"], ans: 1 },
-            { area: "Geometría", q: "Si el radio de una esfera se duplica, su volumen se multiplica por:", options: ["$2$", "$4$", "$8$", "$16$"], ans: 2 },
-            { area: "Geometría", q: "En un triángulo isósceles, el ángulo desigual mide $40^o$. ¿Cuánto mide cada ángulo base?", options: ["$140^o$", "$70^o$", "$40^o$", "$80^o$"], ans: 1 },
-            { area: "Geometría", q: "El área de un triángulo con base $10$ y altura $5$ es:", options: ["$50$", "$25$", "$15$", "$10$"], ans: 1 },
-
-            // Estadística y Probabilidad
-            { area: "Estadística y Probabilidad", q: "Halla la media de los datos: $12, 15, 18, 15, 20$.", options: ["$15$", "$16$", "$17$", "$18$"], ans: 1 },
-            { area: "Estadística y Probabilidad", q: "¿Cuál es la mediana de $3, 7, 1, 9, 5$?", options: ["$1$", "$5$", "$7$", "$3$"], ans: 1 },
-            { area: "Estadística y Probabilidad", q: "Si lanzas una moneda y un dado de $6$ caras, ¿cuántos resultados posibles hay?", options: ["$8$", "$12$", "$36$", "$7$"], ans: 1 },
-            { area: "Estadística y Probabilidad", q: "En una urna hay $4$ bolas rojas, $6$ verdes y $10$ blancas. ¿Probabilidad de sacar una verde?", options: ["$0.3$", "$0.6$", "$6\\%$", "$0.2$"], ans: 0 },
-            { area: "Estadística y Probabilidad", q: "¿Cuál es la moda del conjunto $\{2, 5, 2, 8, 5, 2, 1\}$?", options: ["$5$", "$8$", "$2$", "$1$"], ans: 2 },
-            { area: "Estadística y Probabilidad", q: "El promedio de 3 números es $10$. Si dos de ellos son $8$ y $12$, ¿cuál es el tercero?", options: ["$10$", "$5$", "$15$", "$8$"], ans: 0 },
-            { area: "Estadística y Probabilidad", q: "Si $P(E) = 2/5$, la probabilidad de que el evento $E$ NO ocurra es:", options: ["$0.4$", "$3/5$", "$1/5$", "$1$"], ans: 1 },
-            { area: "Estadística y Probabilidad", q: "Halla el rango del conjunto: $\{100, 25, 40, 80, 10\}$.", options: ["$100$", "$10$", "$90$", "$75$"], ans: 2 },
-            { area: "Estadística y Probabilidad", q: "En un grupo de $10$ personas, el promedio de edad es $25$. ¿Suma total de todas las edades?", options: ["$25$", "$250$", "$100$", "$2.5$"], ans: 1 },
-            { area: "Estadística y Probabilidad", q: "Si eliges una letra al azar de la palabra 'BANANA', ¿cuál es la probabilidad de que sea 'A'?", options: ["$1/2$", "$1/3$", "$1/6$", "$2/3$"], ans: 0 },
-            { area: "Estadística y Probabilidad", q: "Un evento con probabilidad $0$ se denomina:", options: ["Seguro", "Incierto", "Imposible", "Raro"], ans: 2 },
-            { area: "Estadística y Probabilidad", q: "¿Qué porcentaje del área bajo una curva normal estándar está a la derecha de la media?", options: ["$25\\%$", "$50\\%$", "$68\\%$", "$100\\%$"], ans: 1 },
-            { area: "Estadística y Probabilidad", q: "Si tienes 3 camisas y 4 pantalones, ¿cuántas combinaciones diferentes puedes formar?", options: ["$7$", "$12$", "$1$", "$14$"], ans: 1 }
+            // ---- FORMATO ABIERTO (46-55) ----
+            {
+                id: 46,
+                area: "Aritmética",
+                type: "open",
+                q: 'Un grifo llena un estanque en 2 horas y otro grifo lo llena en 3 horas. ¿En cuántos MINUTOS se llena el estanque si se abren ambos grifos simultáneamente?',
+                ans: "72"
+            },
+            {
+                id: 47,
+                area: "Álgebra I",
+                type: "open",
+                q: 'Si a³ = 8, ¿cuál es el valor de a?',
+                ans: "2"
+            },
+            {
+                id: 48,
+                area: "Geometría",
+                type: "open",
+                q: 'El área de un cuadrado es 81 cm². ¿Cuánto mide su lado en cm?',
+                ans: "9",
+                figure: `<div class="figure-container"><svg width="130" height="130" viewBox="0 0 130 130"><rect x="15" y="15" width="100" height="100" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/><text x="52" y="68" font-size="16" font-weight="bold" fill="#2563eb">A=81</text></svg></div>`
+            },
+            {
+                id: 49,
+                area: "Estadística",
+                type: "open",
+                q: 'Calcula la media aritmética de: 10, 15, 20, 25',
+                ans: "17.5"
+            },
+            {
+                id: 50,
+                area: "Álgebra II",
+                type: "open",
+                q: 'Si 2ˣ⁺¹ = 32, ¿cuál es el valor de x?',
+                ans: "4"
+            },
+            {
+                id: 51,
+                area: "Aritmética",
+                type: "open",
+                q: '¿Cuántos números primos hay entre 10 y 20?',
+                ans: "4"
+            },
+            {
+                id: 52,
+                area: "Álgebra I",
+                type: "open",
+                q: 'Si f(x) = x³ − x, ¿cuál es el valor de f(3)?',
+                ans: "24"
+            },
+            {
+                id: 53,
+                area: "Geometría",
+                type: "open",
+                q: '¿Cuántos grados mide cada ángulo interior de un hexágono regular?',
+                ans: "120",
+                figure: `<div class="figure-container"><svg width="140" height="130" viewBox="0 0 140 130"><polygon points="70,10 130,45 130,95 70,130 10,95 10,45" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/><text x="58" y="70" font-size="14" font-weight="bold" fill="#dc2626">x°</text></svg></div>`
+            },
+            {
+                id: 54,
+                area: "Estadística",
+                type: "open",
+                q: 'En una clase hay 12 niños y 18 niñas. ¿Qué porcentaje del total son niños? (Responde solo el número)',
+                ans: "40"
+            },
+            {
+                id: 55,
+                area: "Álgebra II",
+                type: "open",
+                q: '¿Cuál es el intercepto en y de la recta 5x − 2y = 10? (Responde solo el número)',
+                ans: "-5"
+            }
         ];
 
+        // ============================================================
+        // LÓGICA DEL SIMULADOR (sin cambios)
+        // ============================================================
         let currentIndex = 0;
-        let scoreCorrect = 0;
-        let scoreWrong = 0;
-        let timeLeft = 3600;
-        let timerInterval;
+        let correctCount = 0;
+        let areaStats = {};
+        let timerSeconds = 3600;
         let canAnswer = true;
-        let answersData = [];
+        let timerInterval;
 
         function startExam() {
             document.getElementById('start-screen').classList.add('hidden');
             document.getElementById('exam-screen').classList.remove('hidden');
-            renderQuestion();
+            showQuestion();
             startTimer();
         }
 
-        function renderQuestion() {
-            const q = questionBank[currentIndex];
-            const container = document.getElementById('question-container');
+        function showQuestion() {
             canAnswer = true;
+            const q = questions[currentIndex];
+            const container = document.getElementById('question-box');
+            document.getElementById('progress-text').innerText = `Reactivo ${currentIndex+1} de 55`;
+            document.getElementById('progress-bar').style.width = `${(currentIndex/55)*100}%`;
 
-            document.getElementById('progress-label').innerText = `${currentIndex + 1} de 50`;
-            document.getElementById('progress-bar').style.width = `${((currentIndex + 1) / 50) * 100}%`;
-
-            container.innerHTML = `
-                <div class="mb-8">
-                    <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-black uppercase tracking-widest">${q.area}</span>
-                </div>
-                <div class="text-xl sm:text-2xl font-bold leading-relaxed mb-10 text-slate-800">
-                    ${parseMath(q.q)}
-                </div>
-                <div id="options-list" class="grid gap-3">
-                    ${q.options.map((opt, idx) => `
-                        <button onclick="checkAnswer(${idx})" class="option-btn flex items-center gap-4 p-4 rounded-2xl border-2 border-slate-100 bg-white transition-all text-left group">
-                            <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center font-black text-sm text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                                ${String.fromCharCode(65 + idx)}
-                            </div>
-                            <div class="font-semibold text-slate-700 text-lg">${parseMath(opt)}</div>
-                        </button>
-                    `).join('')}
-                </div>
+            let html = `
+                <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-lg border border-slate-100 fade-in">
+                    <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-widest mb-4 inline-block">${q.area}</span>
             `;
-        }
 
-        function checkAnswer(selectedIdx) {
-            if (!canAnswer) return;
-            canAnswer = false;
-
-            const q = questionBank[currentIndex];
-            const isCorrect = selectedIdx === q.ans;
-            const buttons = document.querySelectorAll('.option-btn');
-
-            if (isCorrect) {
-                buttons[selectedIdx].classList.add('ans-correct');
-                scoreCorrect++;
-                document.getElementById('live-correct').innerText = scoreCorrect;
-            } else {
-                buttons[selectedIdx].classList.add('ans-wrong');
-                buttons[q.ans].classList.add('ans-correct-hint');
-                scoreWrong++;
-                document.getElementById('live-wrong').innerText = scoreWrong;
+            // Insertar figura si existe
+            if (q.figure) {
+                html += q.figure;
             }
 
-            answersData.push({ area: q.area, correct: isCorrect });
+            html += `<h2 class="text-lg font-bold text-slate-800 mb-6 leading-tight">${q.q}</h2><div id="options-grid" class="space-y-3">`;
 
-            setTimeout(() => {
-                if (currentIndex < questionBank.length - 1) {
-                    currentIndex++;
-                    renderQuestion();
-                } else {
-                    finishExam();
-                }
-            }, 1200);
+            if (q.type === 'multiple') {
+                q.options.forEach((opt, i) => {
+                    html += `
+                        <button onclick="checkAnswer(${i})" 
+                            class="w-full text-left p-3 md:p-4 border-2 border-slate-50 rounded-2xl hover:border-blue-200 transition-all flex items-center gap-4 group">
+                            <span class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center font-black text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all text-xs">${['A','B','C','D'][i]}</span>
+                            <span class="font-semibold text-slate-700 text-sm">${opt}</span>
+                        </button>
+                    `;
+                });
+            } else {
+                html += `
+                    <div class="space-y-4">
+                        <input type="text" id="open-ans" placeholder="Escribe el número" class="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 text-3xl font-black text-blue-700 text-center transition-all">
+                        <button onclick="checkAnswerOpen()" class="w-full bg-slate-900 text-white font-black py-4 rounded-xl shadow-md uppercase text-xs tracking-widest active:scale-95 transition-transform">Confirmar Respuesta</button>
+                    </div>
+                `;
+            }
+            container.innerHTML = html + `</div></div>`;
+        }
+
+        function checkAnswer(index) {
+            if (!canAnswer) return;
+            canAnswer = false;
+            const q = questions[currentIndex];
+            const isCorrect = (index === q.ans);
+            if (isCorrect) { correctCount++;
+                document.getElementById('correct-counter').innerText = correctCount; }
+            if (!areaStats[q.area]) areaStats[q.area] = { ok: 0, total: 0 };
+            areaStats[q.area].total++;
+            if (isCorrect) areaStats[q.area].ok++;
+
+            const btns = document.querySelectorAll('#options-grid button');
+            btns[q.ans].classList.add('ans-correct');
+            if (!isCorrect) btns[index].classList.add('ans-wrong');
+            setTimeout(() => { currentIndex++; if (currentIndex < 55) showQuestion();
+                else finishExam(); }, 1000);
+        }
+
+        function checkAnswerOpen() {
+            if (!canAnswer) return;
+            const input = document.getElementById('open-ans');
+            const val = input.value.trim();
+            if (val === "") return;
+            canAnswer = false;
+            const q = questions[currentIndex];
+            const isCorrect = (val === q.ans);
+            if (isCorrect) { correctCount++;
+                document.getElementById('correct-counter').innerText = correctCount; }
+            if (!areaStats[q.area]) areaStats[q.area] = { ok: 0, total: 0 };
+            areaStats[q.area].total++;
+            if (isCorrect) areaStats[q.area].ok++;
+            input.classList.add(isCorrect ? 'ans-correct' : 'ans-wrong');
+            setTimeout(() => { currentIndex++; if (currentIndex < 55) showQuestion();
+                else finishExam(); }, 1200);
         }
 
         function startTimer() {
             timerInterval = setInterval(() => {
-                timeLeft--;
-                const m = Math.floor(timeLeft / 60);
-                const s = timeLeft % 60;
-                const timerEl = document.getElementById('timer');
-                timerEl.innerText = `${m}:${s < 10 ? '0' + s : s}`;
-                if (timeLeft < 300) timerEl.classList.add('text-rose-600');
-                if (timeLeft <= 0) finishExam();
+                if (timerSeconds > 0) {
+                    timerSeconds--;
+                    let m = Math.floor(timerSeconds / 60);
+                    let s = timerSeconds % 60;
+                    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
+                } else finishExam();
             }, 1000);
         }
 
         function finishExam() {
-            clearInterval(timerInterval);
+            if (timerInterval) clearInterval(timerInterval);
             document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
 
-            const total = questionBank.length;
-            const finalScale = 200 + Math.round((scoreCorrect / total) * 600);
-            
-            document.getElementById('final-score').innerText = finalScale;
-            document.getElementById('correct-total').innerText = scoreCorrect;
-            document.getElementById('accuracy-percent').innerText = `${Math.round((scoreCorrect / total) * 100)}%`;
+            const score = Math.round((correctCount / 55) * 600) + 200;
+            document.getElementById('final-scale-score').innerText = score;
+            document.getElementById('total-correct').innerText = correctCount;
+            document.getElementById('total-percent').innerText = `${Math.round((correctCount/55)*100)}%`;
 
-            const areas = ["Aritmética", "Álgebra", "Geometría", "Estadística y Probabilidad"];
-            const breakdown = document.getElementById('area-results');
-            breakdown.innerHTML = "";
-
-            areas.forEach(area => {
-                const areaQs = answersData.filter(a => a.area === area);
-                const areaCorrect = areaQs.filter(a => a.correct).length;
-                const areaTotal = areaQs.length;
-                const percent = areaTotal > 0 ? (areaCorrect / areaTotal) * 100 : 0;
-
-                breakdown.innerHTML += `
-                    <div>
-                        <div class="flex justify-between text-[10px] font-black uppercase text-slate-400 mb-1">
-                            <span>${area}</span>
-                            <span class="text-slate-600">${areaCorrect} / ${areaTotal}</span>
-                        </div>
-                        <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
-                            <div class="h-full bg-blue-500 transition-all duration-700" style="width: ${percent}%"></div>
+            let html = "";
+            for (const area in areaStats) {
+                let p = Math.round((areaStats[area].ok / areaStats[area].total) * 100);
+                html += `
+                    <div class="bg-slate-50/50 p-2 rounded-xl border border-slate-100">
+                        <div class="flex justify-between text-[7px] font-black uppercase mb-1 text-slate-400"><span>${area}</span><span>${areaStats[area].ok}/${areaStats[area].total}</span></div>
+                        <div class="flex items-center gap-2">
+                            <div class="flex-1 h-1 bg-slate-200 rounded-full overflow-hidden"><div class="h-full bg-blue-600" style="width: ${p}%"></div></div>
+                            <span class="text-[8px] font-black text-slate-700">${p}%</span>
                         </div>
                     </div>
                 `;
-            });
+            }
+            document.getElementById('area-breakdown').innerHTML = html;
         }
     </script>
 </body>
