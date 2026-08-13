@@ -68,7 +68,7 @@
             height: auto;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
-            background: #fafbfc;
+            background: #ffffff;
             padding: 8px;
         }
         .table-container {
@@ -101,32 +101,92 @@
             margin: 8px 0 12px 0;
             font-size: 28px;
         }
+        .pictogram-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 12px 0 16px 0;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            background: #ffffff;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        .pictogram-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 44px;
+        }
+        .pictogram-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e293b;
+            min-width: 70px;
+            text-align: right;
+        }
+        .pictogram-bars {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            flex-wrap: wrap;
+        }
+        .pictogram-icon {
+            font-size: 30px;
+            line-height: 1.1;
+        }
+        .pictogram-value {
+            font-size: 14px;
+            font-weight: 800;
+            color: #2563eb;
+            margin-left: 8px;
+            min-width: 36px;
+        }
+        .pictogram-clave {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 2px dashed #e2e8f0;
+        }
+        .shaded-label {
+            font-size: 13px;
+            font-weight: bold;
+            fill: #ffffff;
+            text-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
+        }
+        .venn-label {
+            font-size: 20px;
+            font-weight: 800;
+            fill: #1e40af;
+        }
+        .venn-number {
+            font-size: 22px;
+            font-weight: 800;
+            fill: #1e293b;
+        }
+        .venn-number-intersection {
+            font-size: 22px;
+            font-weight: 800;
+            fill: #dc2626;
+        }
+        .venn-number-outside {
+            font-size: 18px;
+            font-weight: 700;
+            fill: #64748b;
+        }
         .measure-label {
             font-size: 13px;
             font-weight: bold;
             fill: #1e40af;
         }
-        .measure-label-red {
-            font-size: 13px;
-            font-weight: bold;
-            fill: #dc2626;
-        }
-        .shaded-label {
-            font-size: 12px;
-            font-weight: bold;
-            fill: #dc2626;
-        }
-        .shaded-label-white {
-            font-size: 11px;
-            font-weight: bold;
-            fill: #ffffff;
-            text-shadow: 0 0 4px rgba(0,0,0,0.7);
-        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen flex flex-col">
 
-    <!-- Pantalla de Inicio -->
     <div id="start-screen" class="flex-grow flex items-center justify-center p-4 overflow-y-auto">
         <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
             <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg rotate-3">
@@ -136,29 +196,20 @@
             </div>
             <h1 class="text-2xl font-extrabold text-slate-900 mb-2 uppercase tracking-tight">Simulador PAA 3</h1>
             <p class="text-slate-500 mb-4 font-medium text-sm">Matemáticas (55 Reactivos)</p>
-
             <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 text-left rounded-r-xl">
                 <div class="flex">
                     <div class="ml-1">
-                        <p class="text-xs text-amber-900 leading-relaxed font-semibold">
-                            ¡Importante! Obtendrás de <span class="underline">200 a 800</span> puntos.
-                        </p>
-                        <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold tracking-tighter italic">
-                            Anota el resultado para tu cálculo final.
-                        </p>
+                        <p class="text-xs text-amber-900 leading-relaxed font-semibold">¡Importante! Obtendrás de <span class="underline">200 a 800</span> puntos.</p>
+                        <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold tracking-tighter italic">Anota el resultado para tu cálculo final.</p>
                     </div>
                 </div>
             </div>
-
             <div class="space-y-3">
-                <button onclick="startExam()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">
-                    COMENZAR EXAMEN
-                </button>
+                <button onclick="startExam()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">COMENZAR EXAMEN</button>
             </div>
         </div>
     </div>
 
-    <!-- Pantalla de Examen -->
     <div id="exam-screen" class="hidden min-h-screen flex flex-col">
         <div class="sticky-header bg-white border-b border-slate-200 p-3">
             <div class="max-w-4xl mx-auto flex justify-between items-center">
@@ -180,13 +231,11 @@
                 </div>
             </div>
         </div>
-
         <main class="flex-grow flex items-center justify-center p-4 overflow-y-auto">
             <div id="question-box" class="max-w-xl w-full pb-4"></div>
         </main>
     </div>
 
-    <!-- Pantalla de Resultados -->
     <div id="result-screen" class="hidden flex items-center justify-center p-4 py-8 overflow-y-auto">
         <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl border border-white fade-in flex flex-col">
             <div class="bg-slate-900 p-6 md:p-8 text-center text-white relative flex-shrink-0">
@@ -196,7 +245,6 @@
                     <p class="text-slate-500 font-bold text-lg">/ 800</p>
                 </div>
             </div>
-
             <div class="p-6 md:p-8 flex-grow overflow-y-auto custom-scroll">
                 <div class="grid grid-cols-3 gap-3 mb-6">
                     <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
@@ -212,18 +260,14 @@
                         <p class="text-xs font-bold leading-tight">Perfil Analizado</p>
                     </div>
                 </div>
-
                 <div id="area-breakdown" class="grid grid-cols-2 gap-3 mb-6"></div>
-
                 <div class="p-5 bg-blue-600 rounded-3xl text-white relative overflow-hidden shadow-lg">
                     <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
                         <div>
                             <h4 class="text-lg font-black leading-none mb-1 uppercase tracking-tight">¡Anota tu resultado!</h4>
                             <p class="text-blue-100 text-[10px]">Usa este puntaje para la simulación de ingreso.</p>
                         </div>
-                        <button onclick="location.reload()" class="bg-white text-blue-600 font-black px-6 py-2 rounded-xl hover:bg-blue-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0">
-                            Reiniciar
-                        </button>
+                        <button onclick="location.reload()" class="bg-white text-blue-600 font-black px-6 py-2 rounded-xl hover:bg-blue-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0">Reiniciar</button>
                     </div>
                 </div>
             </div>
@@ -232,8 +276,8 @@
 
     <script>
         // ============================================================
-        // BANCO DE REACTIVOS - SIMULADOR PAA 3
-        // Áreas sombreadas: área NO sombreada = transparente, área SOMBREADA = con color
+        // BANCO DE REACTIVOS - SIMULADOR PAA 3 (CORREGIDO)
+        // Reactivos 3, 7, 18, 29, 38, 51, 52 corregidos
         // ============================================================
         const questions = [{
             id: 1,
@@ -241,7 +285,7 @@
             type: "multiple",
             q: "¿Cuál es el resultado de 18 ÷ 3 × 2 + 4² − 10?",
             options: ["10", "14", "18", "22"],
-            ans: 1
+            ans: 2
         }, {
             id: 2,
             area: "Álgebra I",
@@ -250,13 +294,20 @@
             options: ["−38", "−22", "24x − 38", "24x − 22"],
             ans: 0
         }, {
+            // REACTIVO 3 - CORREGIDO
             id: 3,
             area: "Geometría",
             type: "multiple",
-            q: "¿Cuál es el área de la región sombreada (la que está fuera del círculo) si el cuadrado mide 8 cm de lado?",
-            options: ["(64 − 16π) cm²", "(64 − 32π) cm²", "(64 − 8π) cm²", "(64 − 64π) cm²"],
-            ans: 0,
-            figure: `<div class="figure-container"><svg width="220" height="220" viewBox="0 0 220 220"><!-- Cuadrado con fondo sombreado (ROJO) --><rect x="10" y="10" width="200" height="200" fill="#dc2626" opacity="0.4" stroke="#2563eb" stroke-width="3"/><!-- Círculo SIN SOMBREAR (transparente/blanco) --><circle cx="110" cy="110" r="100" fill="#ffffff" stroke="#2563eb" stroke-width="3"/><!-- Borde del círculo para que se vea --><circle cx="110" cy="110" r="100" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="8,4"/><!-- Etiquetas --><text x="70" y="215" font-size="15" font-weight="bold" fill="#2563eb">8 cm</text><text x="35" y="50" font-size="13" font-weight="bold" fill="#dc2626">Área sombreada</text></svg></div>`
+            q: "¿Cuál es el área de la región sombreada (fuera de los dos círculos) si el cuadrado mide 12 cm de lado?",
+            options: ["(144 − 36π) cm²", "(144 − 72π) cm²", "(144 − 18π) cm²", "(144 − 54π) cm²"],
+            ans: 2,
+            figure: `<div class="figure-container"><svg width="220" height="220" viewBox="0 0 220 220">
+                <rect x="10" y="10" width="200" height="200" fill="#dc2626" opacity="0.4" stroke="#2563eb" stroke-width="3"/>
+                <circle cx="65" cy="110" r="45" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+                <circle cx="155" cy="110" r="45" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+                <text x="65" y="215" font-size="14" font-weight="bold" fill="#2563eb">12 cm</text>
+                <text x="30" y="50" font-size="13" font-weight="bold" fill="#ffffff" style="text-shadow:0 0 4px rgba(0,0,0,0.7);">Área sombreada</text>
+            </svg></div>`
         }, {
             id: 4,
             area: "Estadística",
@@ -279,13 +330,20 @@
             options: ["5/4", "7/6", "11/12", "13/12"],
             ans: 0
         }, {
+            // REACTIVO 7 - CORREGIDO
             id: 7,
             area: "Geometría",
             type: "multiple",
-            q: "¿Cuál es el área de la región sombreada (el triángulo) si la base es 12 cm y la altura es 8 cm?",
-            options: ["48 cm²", "96 cm²", "24 cm²", "12 cm²"],
-            ans: 0,
-            figure: `<div class="figure-container"><svg width="240" height="180" viewBox="0 0 240 180"><!-- Rectángulo fondo --><rect x="15" y="15" width="210" height="150" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/><!-- Triángulo sombreado (ROJO) --><polygon points="15,15 225,15 15,165" fill="#dc2626" opacity="0.5" stroke="#dc2626" stroke-width="2.5"/><text x="85" y="175" font-size="14" font-weight="bold" fill="#2563eb">base = 12 cm</text><text x="2" y="95" font-size="14" font-weight="bold" fill="#2563eb">altura = 8 cm</text><text x="75" y="105" font-size="13" font-weight="bold" fill="#ffffff" style="text-shadow: 0 0 4px rgba(0,0,0,0.7);">Área sombreada</text></svg></div>`
+            q: "¿Cuál es el área de la región sombreada (el triángulo) si el rectángulo mide 12 cm × 8 cm?",
+            options: ["12 cm²", "16 cm²", "24 cm²", "48 cm²"],
+            ans: 3,
+            figure: `<div class="figure-container"><svg width="240" height="180" viewBox="0 0 240 180">
+                <rect x="15" y="15" width="210" height="150" fill="#e6f0fa" stroke="#2563eb" stroke-width="3"/>
+                <polygon points="15,15 225,15 120,165" fill="#dc2626" opacity="0.5" stroke="#dc2626" stroke-width="2.5"/>
+                <text x="75" y="175" font-size="14" font-weight="bold" fill="#2563eb">12 cm</text>
+                <text x="2" y="95" font-size="14" font-weight="bold" fill="#2563eb">8 cm</text>
+                <text x="90" y="100" font-size="13" font-weight="bold" fill="#ffffff" style="text-shadow:0 0 4px rgba(0,0,0,0.7);">Área sombreada</text>
+            </svg></div>`
         }, {
             id: 8,
             area: "Álgebra I",
@@ -329,7 +387,13 @@
             q: "Una escalera de 10 m se apoya en una pared a 6 m del suelo. ¿A qué distancia está la base de la escalera de la pared?",
             options: ["4 m", "6 m", "8 m", "10 m"],
             ans: 2,
-            figure: `<div class="figure-container"><svg width="200" height="160" viewBox="0 0 200 160"><polygon points="25,145 25,25 155,145" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/><line x1="25" y1="25" x2="155" y2="145" stroke="#dc2626" stroke-width="3.5"/><text x="0" y="95" font-size="14" font-weight="bold" fill="#2563eb">6 m</text><text x="80" y="158" font-size="14" font-weight="bold" fill="#2563eb">? m</text><text x="75" y="80" font-size="14" font-weight="bold" fill="#dc2626">10 m</text></svg></div>`
+            figure: `<div class="figure-container"><svg width="200" height="160" viewBox="0 0 200 160">
+                <polygon points="25,145 25,25 155,145" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/>
+                <line x1="25" y1="25" x2="155" y2="145" stroke="#dc2626" stroke-width="3.5"/>
+                <text x="0" y="95" font-size="14" font-weight="bold" fill="#2563eb">6 m</text>
+                <text x="80" y="158" font-size="14" font-weight="bold" fill="#2563eb">? m</text>
+                <text x="75" y="80" font-size="14" font-weight="bold" fill="#dc2626">10 m</text>
+            </svg></div>`
         }, {
             id: 14,
             area: "Probabilidad",
@@ -360,13 +424,20 @@
             options: ["4x² − 25", "4x² + 25", "4x² − 20x + 25", "4x² + 20x + 25"],
             ans: 2
         }, {
+            // REACTIVO 18 - CORREGIDO
             id: 18,
             area: "Geometría",
             type: "multiple",
-            q: "¿Cuál es el área de la región sombreada (el anillo entre dos círculos concéntricos) si R = 8 cm y r = 4 cm?",
-            options: ["48π cm²", "64π cm²", "32π cm²", "16π cm²"],
-            ans: 0,
-            figure: `<div class="figure-container"><svg width="220" height="220" viewBox="0 0 220 220"><!-- Círculo grande (fondo) --><circle cx="110" cy="110" r="90" fill="#e6f0fa" stroke="#2563eb" stroke-width="3"/><!-- Anillo sombreado (ROJO) --><circle cx="110" cy="110" r="90" fill="#dc2626" opacity="0.4" stroke="none"/><!-- Círculo pequeño SIN SOMBREAR (transparente/blanco) --><circle cx="110" cy="110" r="45" fill="#ffffff" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="6,3"/><text x="15" y="215" font-size="14" font-weight="bold" fill="#2563eb">R = 8 cm</text><text x="140" y="215" font-size="14" font-weight="bold" fill="#2563eb">r = 4 cm</text><text x="60" y="120" font-size="13" font-weight="bold" fill="#ffffff" style="text-shadow: 0 0 4px rgba(0,0,0,0.7);">Área sombreada</text></svg></div>`
+            q: "¿Cuál es el área de la región sombreada (fuera del círculo) si el cuadrado mide 8 cm de lado y el círculo está inscrito?",
+            options: ["(16 − 4π) cm²", "(16 − 8π) cm²", "(16 − 16π) cm²", "(64 − 16π) cm²"],
+            ans: 3,
+            figure: `<div class="figure-container"><svg width="220" height="220" viewBox="0 0 220 220">
+                <rect x="10" y="10" width="200" height="200" fill="#dc2626" opacity="0.4" stroke="#2563eb" stroke-width="3"/>
+                <circle cx="110" cy="110" r="100" fill="#ffffff" stroke="#2563eb" stroke-width="3"/>
+                <circle cx="110" cy="110" r="100" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="8,4"/>
+                <text x="65" y="215" font-size="14" font-weight="bold" fill="#2563eb">8 cm</text>
+                <text x="35" y="50" font-size="13" font-weight="bold" fill="#ffffff" style="text-shadow:0 0 4px rgba(0,0,0,0.7);">Área sombreada</text>
+            </svg></div>`
         }, {
             id: 19,
             area: "Estadística",
@@ -403,7 +474,7 @@
             q: "Un avión vuela a 1200 m de altura y un observador lo ve con un ángulo de 30° sobre la horizontal. ¿A qué distancia horizontal está el avión del observador?",
             options: ["400√3 m", "600√3 m", "1200√3 m", "2400 m"],
             ans: 2,
-            figure: `<div class="figure-container"><svg width="240" height="160" viewBox="0 0 240 160"><polygon points="20,140 190,140 110,20" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/><text x="18" y="155" font-size="14" font-weight="bold" fill="#dc2626">30°</text><text x="85" y="85" font-size="14" font-weight="bold" fill="#2563eb">1200 m</text><text x="65" y="158" font-size="14" font-weight="bold" fill="#2563eb">? m</text></svg></div>`
+            figure: `<div class="figure-container"><svg width="220" height="150" viewBox="0 0 220 150"><polygon points="20,130 180,130 100,20" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/><text x="18" y="142" font-size="13" font-weight="bold" fill="#dc2626">30°</text><text x="80" y="80" font-size="13" font-weight="bold" fill="#2563eb">1200 m</text><text x="60" y="148" font-size="13" font-weight="bold" fill="#2563eb">? m</text></svg></div>`
         }, {
             id: 24,
             area: "Probabilidad",
@@ -440,13 +511,14 @@
             q: "Dos ángulos son suplementarios y uno mide 65°. ¿Cuánto mide el otro?",
             options: ["25°", "65°", "115°", "125°"],
             ans: 2,
-            figure: `<div class="figure-container"><svg width="180" height="80" viewBox="0 0 180 80"><line x1="10" y1="40" x2="170" y2="40" stroke="#94a3b8" stroke-width="2.5"/><line x1="90" y1="40" x2="90" y2="10" stroke="#2563eb" stroke-width="2.5"/><circle cx="90" cy="40" r="22" fill="none" stroke="#dc2626" stroke-width="2"/><text x="78" y="28" font-size="14" font-weight="bold" fill="#dc2626">65°</text><text x="108" y="58" font-size="14" font-weight="bold" fill="#2563eb">?°</text></svg></div>`
+            figure: `<div class="figure-container"><svg width="180" height="80" viewBox="0 0 180 80"><line x1="10" y1="40" x2="170" y2="40" stroke="#94a3b8" stroke-width="2"/><line x1="90" y1="40" x2="90" y2="10" stroke="#2563eb" stroke-width="2"/><circle cx="90" cy="40" r="20" fill="none" stroke="#dc2626" stroke-width="1.5"/><text x="80" y="30" font-size="13" font-weight="bold" fill="#dc2626">65°</text><text x="105" y="58" font-size="13" font-weight="bold" fill="#2563eb">?°</text></svg></div>`
         }, {
+            // REACTIVO 29 - CORREGIDO
             id: 29,
             area: "Estadística",
             type: "multiple",
             q: "Según la gráfica de barras, ¿cuál fue la venta total en los 5 días?",
-            options: ["$500", "$575", "$625", "$675"],
+            options: ["$500", "$550", "$590", "$675"],
             ans: 2,
             figure: `<div class="figure-container"><svg width="280" height="130" viewBox="0 0 280 130"><rect x="15" y="85" width="35" height="30" fill="#2563eb"/><text x="18" y="78" font-size="10" font-weight="bold" fill="#2563eb">$80</text><rect x="65" y="65" width="35" height="50" fill="#dc2626"/><text x="68" y="58" font-size="10" font-weight="bold" fill="#dc2626">$120</text><rect x="115" y="45" width="35" height="70" fill="#10b981"/><text x="118" y="38" font-size="10" font-weight="bold" fill="#10b981">$150</text><rect x="165" y="55" width="35" height="60" fill="#f59e0b"/><text x="168" y="48" font-size="10" font-weight="bold" fill="#f59e0b">$140</text><rect x="215" y="75" width="35" height="40" fill="#8b5cf6"/><text x="218" y="68" font-size="10" font-weight="bold" fill="#8b5cf6">$100</text></svg></div>`
         }, {
@@ -455,7 +527,7 @@
             type: "multiple",
             q: "Resuelve el sistema: 2x + y = 7; 3x − y = 3. ¿Cuál es el valor de y?",
             options: ["1", "3", "5", "7"],
-            ans: 0
+            ans: 1
         }, {
             id: 31,
             area: "Aritmética",
@@ -477,7 +549,7 @@
             q: "Un campo de fútbol mide 100 m de largo y 60 m de ancho. ¿Cuánto mide la diagonal del campo?",
             options: ["80 m", "100 m", "116.6 m", "120 m"],
             ans: 2,
-            figure: `<div class="figure-container"><svg width="250" height="160" viewBox="0 0 250 160"><rect x="15" y="15" width="220" height="130" fill="#e6f0fa" stroke="#2563eb" stroke-width="3"/><line x1="15" y1="15" x2="235" y2="145" stroke="#dc2626" stroke-width="3" stroke-dasharray="8,5"/><text x="70" y="158" font-size="14" font-weight="bold" fill="#2563eb">100 m</text><text x="238" y="85" font-size="14" font-weight="bold" fill="#2563eb">60 m</text><text x="75" y="80" font-size="13" font-weight="bold" fill="#dc2626">diagonal = ?</text></svg></div>`
+            figure: `<div class="figure-container"><svg width="240" height="150" viewBox="0 0 240 150"><rect x="15" y="15" width="210" height="120" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/><line x1="15" y1="15" x2="225" y2="135" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="6,3"/><text x="65" y="148" font-size="13" font-weight="bold" fill="#2563eb">100 m</text><text x="228" y="80" font-size="13" font-weight="bold" fill="#2563eb">60 m</text><text x="70" y="75" font-size="12" font-weight="bold" fill="#dc2626">diagonal = ?</text></svg></div>`
         }, {
             id: 34,
             area: "Estadística",
@@ -507,13 +579,21 @@
             options: ["-36", "-12", "1/36", "1/12"],
             ans: 2
         }, {
+            // REACTIVO 38 - CORREGIDO
             id: 38,
             area: "Geometría",
             type: "multiple",
-            q: "¿Cuál es el área de la región sombreada (fuera del cuadrado) si el círculo tiene radio 6 cm?",
-            options: ["(36π − 72) cm²", "(72π − 144) cm²", "(36π − 144) cm²", "(72π − 72) cm²"],
-            ans: 0,
-            figure: `<div class="figure-container"><svg width="220" height="220" viewBox="0 0 220 220"><!-- Círculo (fondo) --><circle cx="110" cy="110" r="90" fill="#e6f0fa" stroke="#2563eb" stroke-width="3"/><!-- Área sombreada (fuera del cuadrado) - ROJO --><circle cx="110" cy="110" r="90" fill="#dc2626" opacity="0.4" stroke="none"/><!-- Cuadrado SIN SOMBREAR (transparente/blanco) --><rect x="50" y="50" width="120" height="120" fill="#ffffff" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="8,4"/><text x="30" y="215" font-size="14" font-weight="bold" fill="#2563eb">r = 6 cm</text><text x="55" y="120" font-size="13" font-weight="bold" fill="#ffffff" style="text-shadow: 0 0 4px rgba(0,0,0,0.7);">Área sombreada</text></svg></div>`
+            q: "¿Cuál es el área de la región sombreada (el anillo entre dos círculos concéntricos) si R = 6 cm y r = 3 cm?",
+            options: ["9π cm²", "18π cm²", "27π cm²", "36π cm²"],
+            ans: 2,
+            figure: `<div class="figure-container"><svg width="220" height="220" viewBox="0 0 220 220">
+                <circle cx="110" cy="110" r="85" fill="#e6f0fa" stroke="#2563eb" stroke-width="3"/>
+                <circle cx="110" cy="110" r="85" fill="#dc2626" opacity="0.4" stroke="none"/>
+                <circle cx="110" cy="110" r="42" fill="#ffffff" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="6,3"/>
+                <text x="15" y="215" font-size="14" font-weight="bold" fill="#2563eb">R = 6 cm</text>
+                <text x="140" y="215" font-size="14" font-weight="bold" fill="#2563eb">r = 3 cm</text>
+                <text x="60" y="120" font-size="13" font-weight="bold" fill="#ffffff" style="text-shadow:0 0 4px rgba(0,0,0,0.7);">Área sombreada</text>
+            </svg></div>`
         }, {
             id: 39,
             area: "Probabilidad",
@@ -547,10 +627,10 @@
             id: 43,
             area: "Geometría",
             type: "multiple",
-            q: "¿Cuál es el área de la región sombreada (el sector circular) si el radio es 10 cm y el ángulo central es 60°?",
-            options: ["(50π/3) cm²", "(100π/3) cm²", "(25π/3) cm²", "(200π/3) cm²"],
+            q: "¿Cuál es el perímetro de un sector circular con radio 8 cm y ángulo 60°?",
+            options: ["(16 + 8π/3) cm", "(16 + 16π/3) cm", "(8 + 8π/3) cm", "(8 + 16π/3) cm"],
             ans: 0,
-            figure: `<div class="figure-container"><svg width="220" height="220" viewBox="0 0 220 220"><!-- Círculo (fondo) --><circle cx="110" cy="110" r="85" fill="#e6f0fa" stroke="#2563eb" stroke-width="3"/><!-- Sector sombreado (ROJO) --><path d="M110,110 L25,110 A85,85 0 0,1 183,45 Z" fill="#dc2626" opacity="0.5" stroke="#dc2626" stroke-width="2.5"/><text x="45" y="95" font-size="14" font-weight="bold" fill="#dc2626">60°</text><text x="15" y="215" font-size="14" font-weight="bold" fill="#2563eb">r = 10 cm</text><text x="55" y="125" font-size="13" font-weight="bold" fill="#ffffff" style="text-shadow: 0 0 4px rgba(0,0,0,0.7);">Área sombreada</text></svg></div>`
+            figure: `<div class="figure-container"><svg width="140" height="140" viewBox="0 0 140 140"><circle cx="70" cy="70" r="50" fill="#e6f0fa" stroke="#2563eb" stroke-width="2"/><path d="M70,70 L20,70 A50,50 0 0,1 95,20 Z" fill="#dc2626" opacity="0.3"/><text x="30" y="75" font-size="12" font-weight="bold" fill="#dc2626">60°</text></svg></div>`
         }, {
             id: 44,
             area: "Probabilidad",
@@ -583,7 +663,7 @@
             type: "open",
             q: "El área de un triángulo rectángulo es 54 cm². Si un cateto mide 9 cm, ¿cuánto mide el otro cateto?",
             ans: "12",
-            figure: `<div class="figure-container"><svg width="200" height="150" viewBox="0 0 200 150"><polygon points="15,135 15,15 175,135" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/><text x="0" y="90" font-size="14" font-weight="bold" fill="#2563eb">9 cm</text><text x="75" y="148" font-size="14" font-weight="bold" fill="#2563eb">A = 54 cm²</text><text x="85" y="75" font-size="14" font-weight="bold" fill="#dc2626">? cm</text></svg></div>`
+            figure: `<div class="figure-container"><svg width="180" height="140" viewBox="0 0 180 140"><polygon points="15,125 15,15 155,125" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/><text x="0" y="85" font-size="13" font-weight="bold" fill="#2563eb">9 cm</text><text x="70" y="138" font-size="13" font-weight="bold" fill="#2563eb">A = 54 cm²</text><text x="75" y="70" font-size="13" font-weight="bold" fill="#dc2626">? cm</text></svg></div>`
         }, {
             id: 49,
             area: "Estadística",
@@ -597,24 +677,26 @@
             q: "Si 4ˣ⁻¹ = 64, ¿cuál es el valor de x?",
             ans: "4"
         }, {
+            // REACTIVO 51 - CORREGIDO
             id: 51,
             area: "Aritmética",
             type: "open",
             q: "¿Cuántos números compuestos hay entre 40 y 50?",
-            ans: "8"
+            ans: "7"
         }, {
+            // REACTIVO 52 - CORREGIDO
             id: 52,
             area: "Álgebra I",
             type: "open",
             q: "Si f(x) = 2x³ + x² − 5x + 7, ¿cuál es f(−1)?",
-            ans: "13"
+            ans: "11"
         }, {
             id: 53,
             area: "Geometría",
             type: "open",
             q: "¿Cuántos grados mide cada ángulo interior de un polígono regular de 9 lados?",
             ans: "140",
-            figure: `<div class="figure-container"><svg width="170" height="160" viewBox="0 0 170 160"><polygon points="85,15 155,50 155,100 85,145 15,100 15,50" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/><text x="72" y="90" font-size="15" font-weight="bold" fill="#dc2626">x°</text></svg></div>`
+            figure: `<div class="figure-container"><svg width="160" height="150" viewBox="0 0 160 150"><polygon points="80,15 145,45 145,95 80,135 15,95 15,45" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/><text x="68" y="85" font-size="14" font-weight="bold" fill="#dc2626">x°</text></svg></div>`
         }, {
             id: 54,
             area: "Estadística",
@@ -710,7 +792,9 @@
             if (val === "") return;
             canAnswer = false;
             const q = questions[currentIndex];
-            const isCorrect = (val === q.ans);
+            const normalizedVal = val.replace(/\s/g, '').toLowerCase();
+            const normalizedAns = q.ans.replace(/\s/g, '').toLowerCase();
+            const isCorrect = (normalizedVal === normalizedAns || val === q.ans);
             if (isCorrect) { correctCount++;
                 document.getElementById('correct-counter').innerText = correctCount; }
             if (!areaStats[q.area]) areaStats[q.area] = { ok: 0, total: 0 };
