@@ -1,408 +1,912 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual Maestro: Fracciones PAA Pro</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>PrepMaster PAA — Guía Completa de Fracciones</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Configuración de MathJax para fórmulas perfectas -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- MathJax para fórmulas (sin Polyfill) -->
     <script>
         window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true
-            },
-            options: {
-                enableMenu: false
-            }
+            tex: { inlineMath: [
+                    ['$', '$'],
+                    ['\\(', '\\)']
+                ] },
+            svg: { fontCache: 'global' }
         };
     </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async>
+    </script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        
+        :root {
+            --bg: #080810;
+            --surface: #0f0f1a;
+            --surface2: #161624;
+            --surface3: #1e1e30;
+            --border: #ffffff08;
+            --border-bright: #ffffff14;
+            --text: #eeeef8;
+            --muted: #7070a0;
+            --mat: #ff6b35;
+            --gold: #fbbf24;
+            --accent: #7c3aed;
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 22px;
+            --happy: #34d399;
+            --sad: #fb7185;
+        }
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: #f8fafc;
-            color: #1e293b;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
             margin: 0;
-            overflow: hidden;
-            touch-action: manipulation;
+            padding: 20px 16px;
+            -webkit-font-smoothing: antialiased;
         }
-
-        .slide {
-            display: none;
-            height: 100vh;
-            width: 100vw;
-            padding: 1rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
         }
-
-        .slide.active {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 1;
-        }
-
-        .card {
-            background: white;
-            border-radius: 2rem;
-            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.08);
-            max-width: 800px;
-            width: 100%;
-            padding: 2.5rem;
+        .header-card {
+            background: var(--surface);
+            border: 1px solid var(--border-bright);
+            border-radius: var(--radius-lg);
+            padding: 32px 24px;
+            margin-bottom: 24px;
+            text-align: center;
             position: relative;
-            border: 1px solid #f1f5f9;
-            max-height: 95vh;
-            overflow-y: auto;
+            overflow: hidden;
         }
-
-        @media (max-width: 640px) {
-            .card {
-                padding: 1.5rem;
-                border-radius: 1.5rem;
-                width: 95%;
-            }
-            h2 { font-size: 1.2rem !important; }
+        .header-card::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, #ff6b3525 0%, transparent 70%);
+            pointer-events: none;
         }
-
-        .badge-fraction {
-            background: #10b981;
-            color: white;
-            padding: 4px 14px;
-            border-radius: 999px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
+        .badge-area {
             display: inline-block;
+            padding: 4px 12px;
+            background: #ff6b3518;
+            border: 1px solid #ff6b3535;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--mat);
             text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        .title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(24px, 4vw, 34px);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: var(--muted);
+            font-size: 14px;
+            max-width: 580px;
+            margin: 0 auto;
+            line-height: 1.6;
         }
 
-        .btn-nav {
-            background: #1e293b;
+        .tabs-bar {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 24px;
+        }
+        .tab-btn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            background: var(--surface2);
+            color: var(--muted);
+            border: 1px solid var(--border);
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover {
+            color: var(--text);
+            border-color: var(--border-bright);
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--mat), #e65c24);
             color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
+            border-color: transparent;
+            box-shadow: 0 4px 16px #ff6b3540;
         }
 
-        .option-btn {
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.25s ease;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0;
+                transform: translateY(4px); }
+            to { opacity: 1;
+                transform: translateY(0); }
+        }
+
+        .block-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .block-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .block-title i {
+            color: var(--mat);
+        }
+
+        .tip-box {
+            background: #fbbf2410;
+            border: 1px solid #fbbf2430;
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-top: 16px;
+            font-size: 13px;
+            color: #fef08a;
+            line-height: 1.6;
+        }
+        .tip-box strong {
+            color: var(--gold);
+        }
+
+        .solucion-guiada {
+            margin-top: 16px;
+            padding: 18px;
+            background: var(--surface3);
+            border-radius: 14px;
+            border-left: 4px solid var(--mat);
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: var(--text);
+        }
+        .solucion-guiada .paso {
+            margin-bottom: 8px;
+        }
+        .solucion-guiada .resultado {
+            font-weight: 700;
+            color: var(--gold);
+            font-size: 16px;
+            margin-top: 6px;
+        }
+
+        .pratice-box {
+            background: var(--surface2);
+            border: 1px solid var(--border-bright);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-top: 24px;
+        }
+        .pratice-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .opcion-btn {
             width: 100%;
-            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             padding: 12px 16px;
-            border: 2px solid #f1f5f9;
+            background: var(--surface);
+            border: 1px solid var(--border);
             border-radius: 12px;
             margin-bottom: 8px;
+            cursor: pointer;
+            transition: all .2s;
+            text-align: left;
+            font-size: 14px;
+            color: var(--text);
+        }
+        .opcion-btn:hover {
+            border-color: var(--mat);
+            background: var(--surface3);
+        }
+        .opcion-letra {
+            width: 28px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--surface2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-family: 'Syne', sans-serif;
+            color: var(--muted);
+            flex-shrink: 0;
+        }
+
+        .opcion-btn.correct {
+            background: #05966920 !important;
+            border-color: #10b981 !important;
+            color: #34d399 !important;
+        }
+        .opcion-btn.correct .opcion-letra {
+            background: #10b981;
+            color: white;
+        }
+        .opcion-btn.incorrect {
+            background: #e11d4820 !important;
+            border-color: #f43f5e !important;
+            color: #fb7185 !important;
+        }
+        .opcion-btn.incorrect .opcion-letra {
+            background: #f43f5e;
+            color: white;
+        }
+
+        .frac-visual {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            justify-content: center;
+            margin: 8px 0;
+            flex-wrap: wrap;
+        }
+        .frac-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--surface2);
+            border-radius: 8px;
+            padding: 4px 12px;
+            border: 1px solid var(--border-bright);
+        }
+        .frac-block .num {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--gold);
+        }
+        .frac-block .den {
+            font-weight: 400;
+            font-size: 14px;
+            color: var(--muted);
+        }
+        .frac-block .bar {
+            width: 24px;
+            height: 2px;
+            background: var(--muted);
+            margin: 2px 0;
+        }
+        .frac-op {
+            color: var(--muted);
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .concepto-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 12px 0;
+        }
+        @media (max-width: 600px) {
+            .concepto-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .concepto-card {
+            background: var(--surface3);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid var(--border-bright);
+            text-align: center;
+        }
+        .concepto-card .icono {
+            font-size: 32px;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+        .concepto-card .titulo {
+            font-weight: 700;
+            color: var(--text);
+            font-size: 14px;
+        }
+        .concepto-card .desc {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .metodo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 12px 0;
+        }
+        @media (max-width: 600px) {
+            .metodo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .metodo-card {
+            background: var(--surface3);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid var(--border-bright);
+        }
+        .metodo-card .titulo {
+            font-weight: 700;
+            color: var(--gold);
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+        .metodo-card .ejemplo {
+            color: var(--text);
+            font-size: 13px;
+        }
+
+        .pasos-lista {
+            padding-left: 20px;
+            margin: 8px 0;
+        }
+        .pasos-lista li {
+            margin-bottom: 4px;
+            color: var(--muted);
+            font-size: 13.5px;
+        }
+        .pasos-lista li strong {
+            color: var(--text);
+        }
+
+        .highlight {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .pizza-visual {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            margin: 8px 0;
+            flex-wrap: wrap;
+        }
+        .pizza-slice {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--mat);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+        }
+        .pizza-slice.empty {
+            background: var(--surface2);
+            border: 1px solid var(--border-bright);
+            color: var(--muted);
+        }
+
+        /* Método de la carita feliz */
+        .happy-method {
+            background: var(--surface3);
+            border-radius: 14px;
+            padding: 20px;
+            margin: 16px 0;
+            border: 2px solid var(--gold);
+            position: relative;
+        }
+        .happy-method .emoji-big {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .happy-method .paso-happy {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            background: var(--surface2);
+            border-radius: 10px;
+            margin-bottom: 6px;
+            border-left: 3px solid var(--gold);
+        }
+        .happy-method .paso-happy .num-paso {
+            font-weight: 700;
+            color: var(--gold);
+            font-size: 14px;
+            min-width: 28px;
+        }
+        .happy-method .paso-happy .texto-paso {
+            color: var(--text);
+            font-size: 13.5px;
+        }
+        .happy-method .paso-happy .texto-paso .math {
+            color: var(--mat);
+            font-weight: 600;
+        }
+
+        .operacion-card {
+            background: var(--surface3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0;
+            border: 1px solid var(--border-bright);
+        }
+        .operacion-card .titulo-op {
+            font-weight: 700;
+            color: var(--gold);
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+        .operacion-card .regla {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        .operacion-card .ejemplo-op {
+            color: var(--text);
+            font-size: 14px;
             font-weight: 500;
-            transition: all 0.2s ease;
-            background: #fff;
-            font-size: 0.9rem;
         }
-
-        .option-btn:hover { border-color: #10b981; background: #ecfdf5; }
-        .option-correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
-        .option-incorrect { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
-
-        .progress-indicator {
-            position: fixed;
-            bottom: 0; left: 0; height: 5px;
-            background: #10b981; transition: width 0.3s ease; z-index: 100;
-        }
-
-        .step-pill {
-            background: #dcfce7; color: #166534; padding: 2px 8px;
-            border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-right: 8px;
-        }
-
-        .formula-box {
-            background: #f0fdf4; border-left: 4px solid #10b981;
-            padding: 1.5rem; border-radius: 1rem; margin: 1.5rem 0;
-        }
-
-        /* Colores para rastreo de números */
-        .num-a { color: #3b82f6; font-weight: 800; } /* Azul */
-        .num-b { color: #ef4444; font-weight: 800; } /* Rojo */
-        .num-c { color: #f59e0b; font-weight: 800; } /* Naranja */
-        .num-d { color: #8b5cf6; font-weight: 800; } /* Morado */
-        .num-res { color: #10b981; font-weight: 800; } /* Verde esmeralda */
     </style>
 </head>
 <body>
+    <div class="container">
 
-    <!-- Slide 0: Intro -->
-    <div class="slide active" id="slide-0">
-        <div class="card text-center">
-            <h1 class="text-4xl font-extrabold text-slate-900 mb-4">Fracciones: El Manual Definitivo 🍰</h1>
-            <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
-                ¿Sumar, restar, multiplicar o dividir? Vamos a explicarlo tan claro que no necesitarás calculadora nunca más.
-            </p>
-            <button class="btn-nav bg-emerald-600 px-12 py-4 text-lg" onclick="nextSlide()">¡Empecemos!</button>
+        <!-- HEADER -->
+        <div class="header-card">
+            <span class="badge-area">Matemáticas · Aritmética</span>
+            <h1 class="title">Guía Completa de Fracciones</h1>
+            <p class="subtitle">Aprende qué es una fracción, suma y resta con mismo y diferente denominador (método de la carita feliz), multiplicación y división.</p>
         </div>
-    </div>
 
-    <!-- Slide 1: Suma y Resta (Denominador Igual) -->
-    <div class="slide" id="slide-1">
-        <div class="card">
-            <div class="badge-fraction">Nivel 1</div>
-            <h2 class="text-2xl font-bold mb-4 text-emerald-700">Suma y Resta: El caso fácil 😎</h2>
-            <div class="space-y-4 text-slate-600 text-sm">
-                <p>Si los números de abajo (denominadores) son **iguales**, ¡estás de suerte! No hagas nada loco.</p>
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <p class="font-bold mb-2 text-center text-lg">
-                        \( \frac{1}{5} + \frac{2}{5} = \frac{1+2}{5} = \mathbf{\frac{3}{5}} \)
-                    </p>
-                </div>
-            </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Suma: El método de Colores</button>
-            </div>
+        <!-- TABS -->
+        <div class="tabs-bar">
+            <button class="tab-btn active" onclick="switchTab('tab-concepto')">🧩 Concepto</button>
+            <button class="tab-btn" onclick="switchTab('tab-suma-resta')">➕➖ Suma y Resta</button>
+            <button class="tab-btn" onclick="switchTab('tab-carita')">😊 Carita Feliz</button>
+            <button class="tab-btn" onclick="switchTab('tab-multi-div')">✖️➗ Multiplicación y División</button>
+            <button class="tab-btn" onclick="switchTab('tab-practica')">✏️ Práctica</button>
         </div>
-    </div>
 
-    <!-- Slide 2: Suma (Diferente Denominador) -->
-    <div class="slide" id="slide-2">
-        <div class="card">
-            <div class="badge-fraction">Nivel 2</div>
-            <h2 class="text-2xl font-bold mb-4 text-emerald-700">Suma con la Carita de Colores 🎨😃</h2>
-            <div class="space-y-3 text-slate-600 text-sm">
-                <p>Sigue los colores para no perderte en la cruz:</p>
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono">
-                    <p class="mb-2 text-center text-xl">
-                        \( \frac{\color{#3b82f6}{1}}{\color{#ef4444}{2}} + \frac{\color{#f59e0b}{1}}{\color{#8b5cf6}{3}} \)
-                    </p>
-                    <div class="space-y-1">
-                        <p><span class="step-pill">1</span> <b>La Sonrisa:</b> <span class="num-b">2</span> \(\times\) <span class="num-d">3</span> \(=\) <span class="num-res">6</span> (va abajo)</p>
-                        <p><span class="step-pill">2</span> <b>Ceja 1:</b> <span class="num-a">1</span> \(\times\) <span class="num-d">3</span> \(=\) <span class="num-res">3</span></p>
-                        <p><span class="step-pill">3</span> <b>Ceja 2:</b> <span class="num-b">2</span> \(\times\) <span class="num-c">1</span> \(=\) <span class="num-res">2</span></p>
+        <!-- ============================================================ -->
+        <!-- TAB 1: CONCEPTO DE FRACCIÓN                                    -->
+        <!-- ============================================================ -->
+        <div id="tab-concepto" class="tab-pane active">
+            <div class="block-card">
+                <div class="block-title"><i class="fa-solid fa-pizza-slice"></i> ¿Qué es una Fracción?</div>
+                <p style="font-size:14px; color:var(--muted); line-height:1.6;">
+                    Una <strong>fracción</strong> es una forma de representar una <strong>parte de un todo</strong>. Se escribe como \(\frac{a}{b}\), donde:
+                </p>
+
+                <div class="concepto-grid">
+                    <div class="concepto-card">
+                        <div class="icono"><i class="fa-solid fa-arrow-up"></i></div>
+                        <div class="titulo">Numerador (a)</div>
+                        <div class="desc">Indica <strong>cuántas partes</strong> se toman del total.</div>
+                        <div style="margin-top:6px; font-size:13px; color:var(--gold);">Ej: En \(\frac{3}{4}\), el numerador es 3 → se toman 3 partes.</div>
+                    </div>
+                    <div class="concepto-card">
+                        <div class="icono"><i class="fa-solid fa-arrow-down"></i></div>
+                        <div class="titulo">Denominador (b)</div>
+                        <div class="desc">Indica en <strong>cuántas partes iguales</strong> se divide el total.</div>
+                        <div style="margin-top:6px; font-size:13px; color:var(--gold);">Ej: En \(\frac{3}{4}\), el denominador es 4 → el total se divide en 4 partes.</div>
                     </div>
                 </div>
-                <p class="font-bold text-center text-xl mt-4">
-                    \( \frac{\mathbf{3 + 2}}{\mathbf{6}} = \frac{5}{6} \)
-                </p>
-            </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Reto Suma</button>
-            </div>
-        </div>
-    </div>
 
-    <!-- Slide 3: Reto Suma -->
-    <div class="slide" id="slide-3">
-        <div class="card text-center">
-            <div class="badge-fraction">Tu Reto</div>
-            <h2 class="text-xl font-bold mb-6 italic">¿Cuánto es \( \frac{2}{3} + \frac{1}{4} \)?</h2>
-            <div class="space-y-3 max-w-xs mx-auto text-left">
-                <button class="option-btn" onclick="checkAnswer(this, false, 'qs1')">A) \( \frac{3}{7} \)</button>
-                <button class="option-btn" onclick="checkAnswer(this, true, 'qs1')">B) \( \frac{11}{12} \)</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'qs1')">C) \( \frac{8}{12} \)</button>
-            </div>
-            <div id="feedback-qs1" class="mt-4 font-bold h-6"></div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Resta: Sigue el rastro</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 4: Resta (Diferente Denominador) -->
-    <div class="slide" id="slide-4">
-        <div class="card">
-            <div class="badge-fraction">Nivel 3</div>
-            <h2 class="text-2xl font-bold mb-4 text-emerald-700">Resta: ¡El mismo rastro de color! ➖🎨</h2>
-            <div class="space-y-3 text-slate-600 text-sm">
-                <p>Es igual a la suma, pero cambiamos el signo al final:</p>
-                <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 font-mono">
-                    <p class="mb-2 text-center text-xl">
-                        \( \frac{\color{#3b82f6}{3}}{\color{#ef4444}{4}} - \frac{\color{#f59e0b}{1}}{\color{#8b5cf6}{2}} \)
-                    </p>
-                    <div class="space-y-1">
-                        <p><span class="step-pill">1</span> <span class="num-b">4</span> \(\times\) <span class="num-d">2</span> \(=\) <span class="num-res">8</span> (abajo)</p>
-                        <p><span class="step-pill">2</span> <span class="num-a">3</span> \(\times\) <span class="num-d">2</span> \(=\) <span class="num-res">6</span></p>
-                        <p><span class="step-pill">3</span> <span class="num-b">4</span> \(\times\) <span class="num-c">1</span> \(=\) <span class="num-res">4</span></p>
+                <!-- Representación visual -->
+                <div style="background: var(--surface3); border-radius: 14px; padding: 16px; margin: 16px 0;">
+                    <div style="text-align: center; font-weight: 700; color: var(--text); margin-bottom: 8px;">
+                        Representación de \(\frac{3}{4}\)
+                    </div>
+                    <div class="pizza-visual">
+                        <div class="pizza-slice">1</div>
+                        <div class="pizza-slice">2</div>
+                        <div class="pizza-slice">3</div>
+                        <div class="pizza-slice empty">4</div>
+                    </div>
+                    <div style="text-align: center; color: var(--muted); font-size: 13px;">
+                        <span style="color: var(--gold);">■</span> Partes tomadas (3 de 4)
                     </div>
                 </div>
-                <p class="font-bold text-center text-xl mt-4">
-                    \( \frac{\mathbf{6 - 4}}{\mathbf{8}} = \frac{2}{8} = \frac{1}{4} \)
-                </p>
-            </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Reto Resta</button>
-            </div>
-        </div>
-    </div>
 
-    <!-- Slide 5: Reto Resta -->
-    <div class="slide" id="slide-5">
-        <div class="card text-center">
-            <div class="badge-fraction">Tu Reto</div>
-            <h2 class="text-xl font-bold mb-6 italic">¿Cuál es el resultado de \( \frac{4}{5} - \frac{1}{3} \)?</h2>
-            <div class="space-y-3 max-w-xs mx-auto text-left">
-                <button class="option-btn" onclick="checkAnswer(this, true, 'qr1')">A) \( \frac{7}{15} \)</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'qr1')">B) \( \frac{3}{15} \)</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'qr1')">C) \( \frac{3}{2} \)</button>
-            </div>
-            <div id="feedback-qr1" class="mt-4 font-bold h-6"></div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Multiplicación</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 6: Multiplicación -->
-    <div class="slide" id="slide-6">
-        <div class="card">
-            <div class="badge-fraction">Nivel 4</div>
-            <h2 class="text-2xl font-bold mb-4 text-emerald-700">Multiplicación: ¡Derechito! ➡️</h2>
-            <div class="space-y-4 text-slate-600 text-sm">
-                <p>Aquí no hay cruces. Los de arriba se multiplican entre ellos y los de abajo igual.</p>
-                <div class="p-4 bg-slate-50 rounded-xl border text-center font-mono">
-                    <p class="text-xl font-bold">
-                        \( \frac{\color{#3b82f6}{2}}{\color{#ef4444}{3}} \times \frac{\color{#f59e0b}{4}}{\color{#8b5cf6}{5}} = \frac{\color{#3b82f6}{2} \times \color{#f59e0b}{4}}{\color{#ef4444}{3} \times \color{#8b5cf6}{5}} = \mathbf{\frac{8}{15}} \)
-                    </p>
+                <!-- Tipos de fracciones -->
+                <div style="font-weight: 700; color: var(--text); margin-top: 16px; font-size: 15px;">
+                    Tipos de fracciones:
                 </div>
-            </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Reto Multiplicación</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 7: Reto Multiplicación -->
-    <div class="slide" id="slide-7">
-        <div class="card text-center">
-            <div class="badge-fraction">Tu Reto</div>
-            <h2 class="text-xl font-bold mb-6 italic">¿Cuánto es \( \frac{5}{2} \times \frac{3}{4} \)?</h2>
-            <div class="space-y-3 max-w-xs mx-auto text-left">
-                <button class="option-btn" onclick="checkAnswer(this, false, 'qm1')">A) \( \frac{8}{6} \)</button>
-                <button class="option-btn" onclick="checkAnswer(this, true, 'qm1')">B) \( \frac{15}{8} \)</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'qm1')">C) \( \frac{15}{6} \)</button>
-            </div>
-            <div id="feedback-qm1" class="mt-4 font-bold h-6"></div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">División</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 8: División -->
-    <div class="slide" id="slide-8">
-        <div class="card">
-            <div class="badge-fraction">Nivel 5</div>
-            <h2 class="text-2xl font-bold mb-4 text-emerald-700">División: El Zig-Zag de Colores ⚡🎨</h2>
-            <div class="space-y-4 text-slate-600 text-sm">
-                <p>Dividir es como una pelota rebotando:</p>
-                <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 font-mono">
-                    <p class="mb-4 text-center text-xl">
-                        \( \frac{\color{#3b82f6}{1}}{\color{#ef4444}{2}} \div \frac{\color{#f59e0b}{3}}{\color{#8b5cf6}{4}} \)
-                    </p>
-                    <div class="space-y-2">
-                        <p><span class="step-pill">Subida</span> <span class="num-a">1</span> \(\times\) <span class="num-d">4</span> \(=\) <span class="num-res">4</span> (va arriba)</p>
-                        <p><span class="step-pill">Bajada</span> <span class="num-b">2</span> \(\times\) <span class="num-c">3</span> \(=\) <span class="num-res">6</span> (va abajo)</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 8px 0;">
+                    <div style="background: var(--surface3); border-radius: 8px; padding: 10px; text-align: center;">
+                        <div style="font-weight: 700; color: var(--gold);">Propia</div>
+                        <div style="font-size: 13px; color: var(--muted);">Numerador &lt; Denominador</div>
+                        <div style="font-size: 14px; color: var(--text);">\(\frac{3}{4}\)</div>
+                    </div>
+                    <div style="background: var(--surface3); border-radius: 8px; padding: 10px; text-align: center;">
+                        <div style="font-weight: 700; color: var(--gold);">Impropria</div>
+                        <div style="font-size: 13px; color: var(--muted);">Numerador ≥ Denominador</div>
+                        <div style="font-size: 14px; color: var(--text);">\(\frac{5}{3}\)</div>
+                    </div>
+                    <div style="background: var(--surface3); border-radius: 8px; padding: 10px; text-align: center;">
+                        <div style="font-weight: 700; color: var(--gold);">Mixta</div>
+                        <div style="font-size: 13px; color: var(--muted);">Entero + Fracción propia</div>
+                        <div style="font-size: 14px; color: var(--text);">\(1\frac{2}{3}\)</div>
                     </div>
                 </div>
-                <p class="text-center font-bold text-xl mt-4">
-                    \( \frac{4}{6} = \frac{2}{3} \)
+
+                <div class="tip-box">
+                    <i class="fa-solid fa-lightbulb" style="margin-right: 6px;"></i>
+                    <strong>Tip PAA:</strong> Una fracción es una división. \(\frac{3}{4}\) significa \(3 \div 4\). Siempre puedes convertir fracciones a decimales o porcentajes si te resulta más fácil.
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- TAB 2: SUMA Y RESTA                                            -->
+        <!-- ============================================================ -->
+        <div id="tab-suma-resta" class="tab-pane">
+            <div class="block-card">
+                <div class="block-title"><i class="fa-solid fa-plus"></i><i class="fa-solid fa-minus" style="margin-left: 4px;"></i> Suma y Resta de Fracciones</div>
+                <p style="font-size:14px; color:var(--muted); line-height:1.6;">
+                    Para sumar o restar fracciones, el <strong>denominador debe ser el mismo</strong>. Si no lo es, hay que encontrar un <strong>común denominador</strong>.
                 </p>
-            </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Reto División</button>
+
+                <!-- Mismo denominador -->
+                <div class="operacion-card" style="border-color: var(--happy);">
+                    <div class="titulo-op">✅ Mismo Denominador</div>
+                    <div class="regla"><strong>Regla:</strong> Suma o resta los numeradores y conserva el denominador.</div>
+                    <div class="ejemplo-op">
+                        <div class="frac-visual">
+                            <div class="frac-block"><span class="num">3</span><span class="bar"></span><span class="den">8</span></div>
+                            <span class="frac-op">+</span>
+                            <div class="frac-block"><span class="num">2</span><span class="bar"></span><span class="den">8</span></div>
+                            <span class="frac-op">=</span>
+                            <div class="frac-block"><span class="num">5</span><span class="bar"></span><span class="den">8</span></div>
+                        </div>
+                        <div class="frac-visual" style="margin-top: 4px;">
+                            <div class="frac-block"><span class="num">7</span><span class="bar"></span><span class="den">10</span></div>
+                            <span class="frac-op">−</span>
+                            <div class="frac-block"><span class="num">3</span><span class="bar"></span><span class="den">10</span></div>
+                            <span class="frac-op">=</span>
+                            <div class="frac-block"><span class="num">4</span><span class="bar"></span><span class="den">10</span></div>
+                            <span class="frac-op" style="font-size:14px;">= \(\frac{2}{5}\)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Diferente denominador -->
+                <div class="operacion-card" style="border-color: var(--mat);">
+                    <div class="titulo-op">🔄 Diferente Denominador</div>
+                    <div class="regla"><strong>Regla:</strong> Encuentra el MCM (mínimo común múltiplo) de los denominadores, convierte y luego suma o resta.</div>
+                    <div class="ejemplo-op">
+                        <div class="frac-visual">
+                            <div class="frac-block"><span class="num">2</span><span class="bar"></span><span class="den">3</span></div>
+                            <span class="frac-op">+</span>
+                            <div class="frac-block"><span class="num">1</span><span class="bar"></span><span class="den">4</span></div>
+                            <span class="frac-op">=</span>
+                            <div class="frac-block"><span class="num">8</span><span class="bar"></span><span class="den">12</span></div>
+                            <span class="frac-op">+</span>
+                            <div class="frac-block"><span class="num">3</span><span class="bar"></span><span class="den">12</span></div>
+                            <span class="frac-op">=</span>
+                            <div class="frac-block"><span class="num">11</span><span class="bar"></span><span class="den">12</span></div>
+                        </div>
+                        <div style="color: var(--muted); font-size: 13px; text-align: center; margin-top: 4px;">
+                            MCM de 3 y 4 = 12
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLO GUIADO -->
+                <div style="font-weight:700; font-size:15px; margin-top:16px; color:var(--text);">
+                    📌 Ejemplo: \(\frac{5}{6} - \frac{1}{4}\)
+                </div>
+                <div class="solucion-guiada">
+                    <p class="paso"><strong>Paso 1:</strong> Encuentra el MCM de 6 y 4 = 12.</p>
+                    <p class="paso"><strong>Paso 2:</strong> Convierte:</p>
+                    <ul class="pasos-lista">
+                        <li>• \(\frac{5}{6} = \frac{5 \times 2}{6 \times 2} = \frac{10}{12}\)</li>
+                        <li>• \(\frac{1}{4} = \frac{1 \times 3}{4 \times 3} = \frac{3}{12}\)</li>
+                    </ul>
+                    <p class="paso"><strong>Paso 3:</strong> Resta los numeradores: \(10 - 3 = 7\).</p>
+                    <div class="resultado">Resultado: \(\frac{7}{12}\)</div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Slide 9: Reto División -->
-    <div class="slide" id="slide-9">
-        <div class="card text-center">
-            <div class="badge-fraction">Tu Reto Final</div>
-            <h2 class="text-xl font-bold mb-6 italic">¿Cuál es el resultado de \( \frac{2}{5} \div \frac{1}{3} \)?</h2>
-            <div class="space-y-3 max-w-xs mx-auto text-left">
-                <button class="option-btn" onclick="checkAnswer(this, false, 'qd1')">A) \( \frac{2}{15} \)</button>
-                <button class="option-btn" onclick="checkAnswer(this, true, 'qd1')">B) \( \frac{6}{5} \)</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'qd1')">C) \( \frac{5}{6} \)</button>
-            </div>
-            <div id="feedback-qd1" class="mt-4 font-bold h-6"></div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">¡Dominado!</button>
+        <!-- ============================================================ -->
+        <!-- TAB 3: MÉTODO DE LA CARITA FELIZ                              -->
+        <!-- ============================================================ -->
+        <div id="tab-carita" class="tab-pane">
+            <div class="block-card">
+                <div class="block-title"><i class="fa-regular fa-face-smile"></i> Método de la Carita Feliz 😊</div>
+                <p style="font-size:14px; color:var(--muted); line-height:1.6;">
+                    El <strong>método de la carita feliz</strong> es una forma visual y rápida de sumar o restar fracciones con diferente denominador. Se llama así porque los pasos dibujan una carita feliz.
+                </p>
+
+                <div class="happy-method">
+                    <div class="emoji-big">😊</div>
+
+                    <div class="paso-happy">
+                        <span class="num-paso">1.</span>
+                        <span class="texto-paso"><strong>Multiplica cruzado</strong> (los brazos de la carita):</span>
+                    </div>
+                    <div class="paso-happy" style="padding-left: 36px; border-left-color: var(--happy);">
+                        <span class="texto-paso">• \(a \times d\) (primer numerador × segundo denominador)</span>
+                    </div>
+                    <div class="paso-happy" style="padding-left: 36px; border-left-color: var(--happy);">
+                        <span class="texto-paso">• \(c \times b\) (segundo numerador × primer denominador)</span>
+                    </div>
+
+                    <div class="paso-happy">
+                        <span class="num-paso">2.</span>
+                        <span class="texto-paso"><strong>Suma o resta</strong> los resultados (la boca de la carita).</span>
+                    </div>
+                    <div class="paso-happy" style="padding-left: 36px; border-left-color: var(--gold);">
+                        <span class="texto-paso">• Para suma: \( (a \times d) + (c \times b) \)</span>
+                    </div>
+                    <div class="paso-happy" style="padding-left: 36px; border-left-color: var(--gold);">
+                        <span class="texto-paso">• Para resta: \( (a \times d) - (c \times b) \)</span>
+                    </div>
+
+                    <div class="paso-happy">
+                        <span class="num-paso">3.</span>
+                        <span class="texto-paso"><strong>Multiplica los denominadores</strong> (los ojos de la carita): \(b \times d\).</span>
+                    </div>
+
+                    <div class="paso-happy" style="border-left-color: var(--mat);">
+                        <span class="num-paso">🎯</span>
+                        <span class="texto-paso"><strong>Resultado:</strong> \(\frac{(a \times d) \pm (c \times b)}{b \times d}\)</span>
+                    </div>
+                </div>
+
+                <!-- Ejemplo con carita feliz -->
+                <div style="font-weight:700; font-size:15px; margin-top:16px; color:var(--text);">
+                    📌 Ejemplo: \(\frac{3}{5} + \frac{2}{7}\) con Carita Feliz 😊
+                </div>
+                <div class="solucion-guiada" style="border-left-color: var(--gold);">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
+                        <span style="font-size: 24px;">😊</span>
+                        <span style="color: var(--muted);">Paso a paso:</span>
+                    </div>
+                    <ul class="pasos-lista">
+                        <li><strong>Paso 1:</strong> Multiplica cruzado: \(3 \times 7 = 21\) y \(2 \times 5 = 10\)</li>
+                        <li><strong>Paso 2:</strong> Suma: \(21 + 10 = 31\) → numerador</li>
+                        <li><strong>Paso 3:</strong> Multiplica denominadores: \(5 \times 7 = 35\) → denominador</li>
+                    </ul>
+                    <div class="resultado">Resultado: \(\frac{31}{35}\)</div>
+                </div>
+
+                <!-- Otro ejemplo -->
+                <div style="font-weight:700; font-size:15px; margin-top:16px; color:var(--text);">
+                    📌 Ejemplo: \(\frac{5}{6} - \frac{1}{4}\) con Carita Feliz 😊
+                </div>
+                <div class="solucion-guiada" style="border-left-color: var(--gold);">
+                    <ul class="pasos-lista">
+                        <li><strong>Paso 1:</strong> Multiplica cruzado: \(5 \times 4 = 20\) y \(1 \times 6 = 6\)</li>
+                        <li><strong>Paso 2:</strong> Resta: \(20 - 6 = 14\) → numerador</li>
+                        <li><strong>Paso 3:</strong> Multiplica denominadores: \(6 \times 4 = 24\) → denominador</li>
+                    </ul>
+                    <div class="resultado">Resultado: \(\frac{14}{24} = \frac{7}{12}\)</div>
+                </div>
+
+                <div class="tip-box">
+                    <i class="fa-regular fa-face-smile" style="margin-right: 6px;"></i>
+                    <strong>Ventaja:</strong> El método de la carita feliz es más rápido que el MCM cuando los denominadores son <strong>primos entre sí</strong> o cuando no quieres calcular el MCM. ¡Solo multiplica cruzado y listo!
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Slide Final -->
-    <div class="slide" id="slide-10">
-        <div class="card text-center">
-            <div class="mb-6 flex justify-center text-6xl">🎊</div>
-            <h2 class="text-4xl font-extrabold text-slate-900 mb-6">¡Fracciones bajo control!</h2>
-            <p class="text-lg text-slate-500 mb-10 leading-relaxed max-w-md mx-auto">
-                Has repasado suma, resta, multiplicación y división. En la PAA, recuerda siempre **simplificar** tu respuesta al final si es posible. ¡Vas por excelente camino!
-            </p>
-            <button class="btn-nav px-12 py-4" onclick="goToStart()">Reiniciar Aventura</button>
+        <!-- ============================================================ -->
+        <!-- TAB 4: MULTIPLICACIÓN Y DIVISIÓN                              -->
+        <!-- ============================================================ -->
+        <div id="tab-multi-div" class="tab-pane">
+            <div class="block-card">
+                <div class="block-title"><i class="fa-solid fa-times"></i><i class="fa-solid fa-divide" style="margin-left: 4px;"></i> Multiplicación y División</div>
+
+                <!-- Multiplicación -->
+                <div class="operacion-card" style="border-color: var(--accent);">
+                    <div class="titulo-op">✖️ Multiplicación de Fracciones</div>
+                    <div class="regla"><strong>Regla:</strong> Multiplica <strong>numerador por numerador</strong> y <strong>denominador por denominador</strong>.</div>
+                    <div class="ejemplo-op">
+                        <div class="frac-visual">
+                            <div class="frac-block"><span class="num">2</span><span class="bar"></span><span class="den">3</span></div>
+                            <span class="frac-op">×</span>
+                            <div class="frac-block"><span class="num">4</span><span class="bar"></span><span class="den">5</span></div>
+                            <span class="frac-op">=</span>
+                            <div class="frac-block"><span class="num">2×4</span><span class="bar"></span><span class="den">3×5</span></div>
+                            <span class="frac-op">=</span>
+                            <div class="frac-block"><span class="num">8</span><span class="bar"></span><span class="den">15</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLO GUIADO MULTIPLICACIÓN -->
+                <div style="font-weight:700; font-size:15px; margin-top:16px; color:var(--text);">
+                    📌 Ejemplo: \(\frac{3}{4} \times \frac{2}{9}\)
+                </div>
+                <div class="solucion-guiada" style="border-left-color: var(--accent);">
+                    <p class="paso"><strong>Paso 1:</strong> Multiplica numeradores: \(3 \times 2 = 6\).</p>
+                    <p class="paso"><strong>Paso 2:</strong> Multiplica denominadores: \(4 \times 9 = 36\).</p>
+                    <p class="paso"><strong>Paso 3:</strong> Simplifica: \(\frac{6}{36} = \frac{1}{6}\).</p>
+                    <div class="resultado">Resultado: \(\frac{1}{6}\)</div>
+                </div>
+
+                <!-- División -->
+                <div class="operacion-card" style="border-color: var(--mat); margin-top: 20px;">
+                    <div class="titulo-op">➗ División de Fracciones</div>
+                    <div class="regla"><strong>Regla:</strong> <strong>Invierte la segunda fracción</strong> (encuentra su recíproco) y <strong>multiplica</strong>.</div>
+                    <div class="ejemplo-op">
+                        <div class="frac-visual">
+                            <div class="frac-block"><span class="num">3</span><span class="bar"></span><span class="den">4</span></div>
+                            <span class="frac-op">÷</span>
+                            <div class="frac-block"><span class="num">2</span><span class="bar"></span><span class="den">5</span></div>
+                            <span class="frac-op">=</span>
+                            <div class="frac-block"><span class="num">3</span><span class="bar"></span><span class="den">4</span></div>
+                            <span class="frac-op">×</span>
+                            <div class="frac-block"><span class="num">5</span><span class="bar"></span><span class="den">2</span></div>
+                            <span class="frac-op">=</span>
+                            <div class="frac-block"><span class="num">15</span><span class="bar"></span><span class="den">8</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLO GUIADO DIVISIÓN -->
+                <div style="font-weight:700; font-size:15px; margin-top:16px; color:var(--text);">
+                    📌 Ejemplo: \(\frac{5}{6} \div \frac{2}{3}\)
+                </div>
+                <div class="solucion-guiada" style="border-left-color: var(--mat);">
+                    <p class="paso"><strong>Paso 1:</strong> Invierte la segunda fracción: \(\frac{2}{3} \rightarrow \frac{3}{2}\).</p>
+                    <p class="paso"><strong>Paso 2:</strong> Convierte en multiplicación: \(\frac{5}{6} \times \frac{3}{2}\).</p>
+                    <p class="paso"><strong>Paso 3:</strong> Multiplica: \(\frac{5 \times 3}{6 \times 2} = \frac{15}{12}\).</p>
+                    <p class="paso"><strong>Paso 4:</strong> Simplifica: \(\frac{15}{12} = \frac{5}{4}\).</p>
+                    <div class="resultado">Resultado: \(\frac{5}{4}\)</div>
+                </div>
+
+                <div class="tip-box">
+                    <i class="fa-solid fa-lightbulb" style="margin-right: 6px;"></i>
+                    <strong>Tip PAA:</strong> "Dividir entre una fracción" es lo mismo que "multiplicar por su inverso". Ejemplo: \(3 \div \frac{1}{2} = 3 \times 2 = 6\).
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="progress-indicator" id="progress"></div>
+        <!-- ============================================================ -->
+        <!-- TAB 5: PRÁCTICA                                                -->
+        <!-- ============================================================ -->
+        <div id="tab-practica" class="tab-pane">
+            <div class="block-card">
+                <div class="block-title"><i class="fa-solid fa-pen-to-square"></i> ¡Practica lo aprendido!</div>
+                <p style="font-size:14px; color:var(--muted); line-height:1.6;">
+                    Resuelve los siguientes ejercicios y selecciona la respuesta correcta.
+                </p>
+
+                <!-- Ejercicio 1: Suma con diferente denominador -->
+                <div class="pratice-box">
+                    <div class="pratice-title"><i class="fa-solid fa-1"></i> Suma con diferente denominador</div>
+                    <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
+                        \(\frac{3}{4} + \frac{2}{5} = ?\)
+                    </div>
+                    <div id="opts-ej1">
+                        <button class="opcion-btn" onclick="responder('ej1', 0, false, this)"><div class="opcion-letra">A</div><span>\(\frac{5}{9}\)</span></button>
+                        <button class="opcion-btn" onclick="responder('ej1', 1, false, this)"><div class="opcion-letra">B</div><span>\(\frac{6}{20}\)</span></button>
+                        <button class="opcion-btn" onclick="responder('ej1', 2, true, this)"><div class="opcion-letra">C</div><span>\(\frac{23}{20}\)</span></button>
+                        <button class="opcion-btn" onclick="responder('ej1', 3, false, this)"><div class="opcion-letra">D</div><span>\(\frac{7}{9}\)</span></button>
+                    </div>
+                    <div id="fb-ej1" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
+                </div>
+
+                <!-- Ejercicio 2: Resta con diferente denominador -->
+                <div class="pratice-box">
+                    <div class="pratice-title"><i class="fa-solid fa-2"></i> Resta con diferente denominador</div>
+                    <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
+                        \(\frac{5}{6} - \frac{1}{4} = ?\)
+                    </div>
+                    <div id="opts-ej2">
+                        <button class="opcion-btn" onclick="responder('ej2', 0, false, this)"><div class="opcion-letra">A</div><span>\(\frac{4}{2}\)</span></button>
+                        <button class="opcion-btn" onclick="responder('ej2', 1, false, this)"><div class="opcion-letra">B</div><span>\(\frac{6}{24}\)</span></button>
+                        <button class="opcion-btn" onclick="responder('ej2', 2, true, this)"><div class="opcion-letra">C</div><span>\(\frac{7}{12}\)</span></button>
+                        <button class="opcion-btn" onclick="responder('ej2', 3, false, this)"><div class="opcion-letra">D</div><span>\(\frac{11}{12}\)</span></button>
+                    </div>
+                    <div id="fb-ej2" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
+                </div>
+
+                <!-- Ejercicio 3: Multiplicación -->
+                <div class="pratice-box">
+                    <div class="pratice-title"><i class="fa-solid fa-3"></i> Multiplicación</div>
+                    <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
+                        \(\frac{3}{8} \times \frac{4}{9} = ?\)
+                    </div>
+                    <div id="opts-ej3">
+                        <button class="opcion-btn" onclick="responder('ej3', 0, false, this)"><div class="opcion-letra">A</div><span>\(\frac{12}{72}\)</span></button>
+                        <button class="opcion-btn" onclick="responder('ej3', 1, false, this)"><div class="opcion-letra">B</div><span>\(\frac{7}{17}\)</span></button>
+                        <button class="opcion-btn" onclick="responder('ej3', 2, true, this)"><div class="opcion-letra">C</div><span>\(\frac{1}{6}\)</span></button>
+                        <button class="opcion-btn" onclick="responder('ej3', 3, false, this)"><div class="opcion-letra">D</div><span>\(\frac{3}{4}\)</span></button>
+                    </div>
+                    <div id="fb-ej3" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
+                </div>
+
+                <!-- Ejercicio 4: División -->
+                <div class="pratice-box">
+                    <div class="pratice-title"><i class="fa-solid fa-4"></i> División</div>
+                    <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
+                        \(\frac{7}{8} \div \frac{3}{4} = ?\)
+                    </div>
+                    <div id="opts-ej4">
+                        <button class="opcion-btn" onclick="responder('ej4', 0, false, this)"><div class="opcion-letra">A</div><span>\(\frac{21}{32}\)</span></button>
+                        <button class="opcion-btn" onclick="responder('ej4', 1, false, this)"><div class="opcion-letra">B</div><span>\(\frac{3}{4}\)</span></button>
+                        <button class="opcion-btn" onclick="responder('ej4', 2, true, this)"><div class="opcion-letra">C</div><span>\(\frac{7}{6}\)</span></button>
+                        <button class="opcion-btn" onclick="responder('ej4', 3, false, this)"><div class="opcion-letra">D</div><span>\(\frac{1}{2}\)</span></button>
+                    </div>
+                    <div id="fb-ej4" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
     <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const progressBar = document.getElementById('progress');
+        // Switch tabs
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
 
-        function updateUI() {
-            slides.forEach((slide, index) => {
-                slide.classList.remove('active');
-                if (index === currentSlide) slide.classList.add('active');
-            });
-            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
-            progressBar.style.width = `${progressPercent}%`;
-            if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
-        }
+            if (event && event.target) event.target.classList.add('active');
+            const targetPane = document.getElementById(tabId);
+            if (targetPane) targetPane.classList.add('active');
 
-        function checkAnswer(btn, isCorrect, qId) {
-            const fb = document.getElementById(`feedback-${qId}`);
-            btn.parentElement.querySelectorAll('.option-btn').forEach(b => {
-                b.classList.remove('option-correct', 'option-incorrect');
-            });
-            if (isCorrect) {
-                btn.classList.add('option-correct');
-                fb.textContent = "¡Dominado! ✨";
-                fb.className = "mt-4 font-bold text-green-600 block scale-110 transition-transform text-center";
-            } else {
-                btn.classList.add('option-incorrect');
-                fb.textContent = "¡Casi! Revisa la técnica ❌";
-                fb.className = "mt-4 font-bold text-red-600 block text-center";
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise();
             }
         }
 
-        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
-        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
-        function goToStart() {
-            currentSlide = 0;
-            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
-            document.querySelectorAll('[id^="feedback-"]').forEach(f => f.textContent = "");
-            updateUI();
+        // Respuesta interactiva
+        function responder(seccion, idxOpt, esCorrecta, btnElem) {
+            const contenedor = document.getElementById(`opts-${seccion}`);
+            const feedback = document.getElementById(`fb-${seccion}`);
+
+            contenedor.querySelectorAll('.opcion-btn').forEach(btn => {
+                btn.style.pointerEvents = 'none';
+            });
+
+            if (esCorrecta) {
+                btnElem.classList.add('correct');
+                feedback.style.color = '#34d399';
+                feedback.innerHTML = '<i class="fa-solid fa-circle-check"></i> ¡Excelente! Respuesta correcta.';
+            } else {
+                btnElem.classList.add('incorrect');
+                feedback.style.color = '#fb7185';
+                feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. Revisa el procedimiento arriba.';
+            }
+            feedback.style.display = 'block';
         }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
-            if (e.key === 'ArrowLeft') prevSlide();
-        });
-
-        updateUI();
     </script>
 </body>
 </html>
