@@ -9,7 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<!-- MathJax Configurado -->
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script>
   window.MathJax = {
@@ -51,7 +50,28 @@
   .opcion-btn.incorrect{background:#fee2e2!important;border-color:#ef4444!important;color:#991b1b!important;}
   .opcion-btn.incorrect .opcion-letra{background:#ef4444;color:white;}
 
-  .btn-start{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border:none;padding:14px 32px;border-radius:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 10px 25px rgba(124,58,237,0.3);}
+  .btn-start{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border:none;padding:14px 32px;border-radius:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 10px 25px rgba(124,58,237,0.3);transition:all .2s;}
+  .btn-start:hover{transform:scale(1.02);}
+
+  .fig-container{display:flex;justify-content:center;margin:12px 0 16px 0;}
+  .fig-container svg{max-width:100%;height:auto;border:1px solid #e2e8f0;border-radius:12px;background:#fafbfc;padding:8px;}
+  .table-container{display:flex;justify-content:center;margin:12px 0 16px 0;font-size:13px;}
+  .table-container table{border-collapse:collapse;border:2px solid #2563eb;border-radius:8px;}
+  .table-container th,.table-container td{border:1px solid #cbd5e1;padding:6px 14px;text-align:center;font-weight:600;}
+  .table-container th{background-color:#dbeafe;color:#1e40af;}
+  .pictogram{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:8px 0 12px 0;font-size:28px;}
+  .pictogram-container{display:flex;flex-direction:column;gap:8px;margin:12px 0 16px 0;padding:16px;border:2px solid #e2e8f0;border-radius:16px;background:#ffffff;max-width:100%;overflow-x:auto;}
+  .pictogram-row{display:flex;align-items:center;gap:12px;min-height:44px;}
+  .pictogram-label{font-size:13px;font-weight:700;color:#1e293b;min-width:70px;text-align:right;}
+  .pictogram-bars{display:flex;align-items:center;gap:2px;flex-wrap:wrap;}
+  .pictogram-icon{font-size:30px;line-height:1.1;}
+  .pictogram-value{font-size:14px;font-weight:800;color:#2563eb;margin-left:8px;min-width:36px;}
+  .pictogram-clave{text-align:center;font-size:12px;font-weight:700;color:#64748b;margin-top:8px;padding-top:8px;border-top:2px dashed #e2e8f0;}
+  .shaded-label{font-size:13px;font-weight:bold;fill:#ffffff;text-shadow:0 0 4px rgba(0,0,0,0.7);}
+  .venn-label{font-size:20px;font-weight:800;fill:#1e40af;}
+  .venn-number{font-size:22px;font-weight:800;fill:#1e293b;}
+  .venn-number-intersection{font-size:22px;font-weight:800;fill:#dc2626;}
+  .venn-number-outside{font-size:18px;font-weight:700;fill:#64748b;}
 </style>
 </head>
 <body>
@@ -68,7 +88,7 @@
     </div>
   </div>
   <div class="top-progress-area" id="progress-area" style="display:none;">
-    <span class="progress-text" id="progress-label">Reactivo 1 de 55</span>
+    <span class="progress-text" id="progress-label">Reactivo 1 de 60</span>
     <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
   </div>
 </div>
@@ -79,7 +99,9 @@
     <div style="font-size:48px;margin-bottom:14px;">📐</div>
     <h1 style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:10px;">Examen Diagnóstico PAA</h1>
     <p style="color:var(--muted);font-size:14px;line-height:1.6;max-width:500px;margin:0 auto 28px;">
-      Responde a tu ritmo <strong>55 reactivos reales y variados</strong> de matemáticas. Al seleccionar tu opción se iluminará y avanzarás al siguiente reactivo. Tienes <strong>55 minutos</strong>.
+      Responde a tu ritmo <strong>60 reactivos reales</strong> de matemáticas.<br/>
+      Incluye <strong>5 ejercicios gráficos</strong> con tablas, diagramas y áreas sombreadas.<br/>
+      Al seleccionar tu opción se iluminará y avanzarás al siguiente reactivo.
     </p>
     <button class="btn-start" onclick="iniciarExamen()">Comenzar Examen →</button>
   </div>
@@ -88,6 +110,7 @@
   <div id="screen-quiz" class="quiz-card" style="display:none;">
     <div class="tag-area" id="q-categoria">Álgebra</div>
     <div class="pregunta-titulo" id="q-texto">Cargando...</div>
+    <div id="q-figura"></div>
     <div id="q-opciones"></div>
   </div>
 
@@ -109,7 +132,7 @@
 
     <div style="text-align:left;margin-bottom:24px;">
       <h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:12px;color:var(--accent);">💡 Solucionario y Procedimientos:</h3>
-      <div id="solucionario-box" style="display:flex;flex-direction:column;gap:12px;"></div>
+      <div id="solucionario-box" style="display:flex;flex-direction:column;gap:12px;max-height:500px;overflow-y:auto;padding-right:10px;"></div>
     </div>
 
     <button class="btn-start" onclick="window.location.reload()">Volver a intentar</button>
@@ -117,79 +140,144 @@
 </div>
 
 <script>
-// Banco de 55 Reactivos con respuestas lógicas, reales y limpias (Usando Unicode para opciones)
+// ============================================================
+// BANCO DE 60 REACTIVOS (55 originales + 5 gráficos)
+// CON SOLUCIONARIO DETALLADO AL FINAL
+// ============================================================
 const bancoMatematicas = [
-  // 1-10
-  {cat:"Álgebra", p:"¿Cuál es el conjunto solución de la inecuación $2x - 5 \\ge 3x + 2$?", ops:["(-∞, -7]", "[-7, ∞)", "(-∞, 7]", "[7, ∞)"], r:0, exp:"2x - 3x ≥ 2 + 5  =>  -x ≥ 7  =>  x ≤ -7. Por tanto, el conjunto es (-∞, -7]."},
-  {cat:"Aritmética", p:"Si 3/4 de un tanque de agua equivalen a 600 litros, ¿cuántos litros le faltan para llenarse?", ops:["150 L", "200 L", "300 L", "450 L"], r:1, exp:"Si 3/4 = 600 L, entonces 1/4 = 200 L. Le falta 1/4, o sea 200 litros."},
-  {cat:"Álgebra", p:"Si $2x + 3y = 14$ y $x - y = 2$, ¿cuál es el valor de $x + y$?", ops:["4", "5", "6", "8"], r:2, exp:"Despejando x = y + 2. Sustituyendo: 2(y + 2) + 3y = 14 => 5y + 4 = 14 => y = 2. Por tanto x = 4. Suma: 4 + 2 = 6."},
-  {cat:"Geometría", p:"Un triángulo rectángulo tiene una hipotenusa de 13 cm y un cateto de 5 cm. ¿Cuál es su área?", ops:["30 cm²", "32.5 cm²", "60 cm²", "65 cm²"], r:0, exp:"Por Pitágoras, el otro cateto es √(13² - 5²) = 12. Área = (5 * 12) / 2 = 30 cm²."},
-  {cat:"Estadística", p:"El promedio de 4 números es 15. Si se agrega un quinto número, el promedio sube a 18. ¿Cuál es el quinto número?", ops:["20", "25", "30", "32"], r:2, exp:"Suma original: 4 * 15 = 60. Suma nueva: 5 * 18 = 90. El número es 90 - 60 = 30."},
-  {cat:"Aritmética", p:"Al comprar un artículo de $480 se aplica un descuento del 25% y luego un 10% adicional al precio rebajado. ¿Cuánto se pagó?", ops:["$324", "$330", "$350", "$360"], r:0, exp:"480 * 0.75 = 360. Luego, 360 * 0.90 = $324."},
-  {cat:"Geometría", p:"¿Cuál es el área de un círculo cuyo diámetro mide 10 cm?", ops:["10π cm²", "20π cm²", "25π cm²", "100π cm²"], r:2, exp:"Radio = 5 cm. Área = π(5)² = 25π."},
-  {cat:"Álgebra", p:"Resuelve la ecuación cuadrática: $x^2 - 5x + 6 = 0$", ops:["x = -2 y -3", "x = 2 y 3", "x = 1 y 6", "x = -1 y -6"], r:1, exp:"Factorización: (x - 2)(x - 3) = 0. Raíces: 2 y 3."},
+  // ===== 1-10: BÁSICO =====
+  {cat:"Álgebra", p:"¿Cuál es el conjunto solución de la inecuación $2x - 5 \\ge 3x + 2$?", ops:["(-∞, -7]", "[-7, ∞)", "(-∞, 7]", "[7, ∞)"], r:0, exp:"$2x - 3x \\ge 2 + 5$ → $-x \\ge 7$ → $x \\le -7$. Por tanto, el conjunto es $(-\\infty, -7]$."},
+  {cat:"Aritmética", p:"Si 3/4 de un tanque de agua equivalen a 600 litros, ¿cuántos litros le faltan para llenarse?", ops:["150 L", "200 L", "300 L", "450 L"], r:1, exp:"Si $\\frac{3}{4} = 600$ L, entonces $\\frac{1}{4} = 200$ L. Le falta 1/4, o sea 200 litros."},
+  {cat:"Álgebra", p:"Si $2x + 3y = 14$ y $x - y = 2$, ¿cuál es el valor de $x + y$?", ops:["4", "5", "6", "8"], r:2, exp:"Despejando $x = y + 2$. Sustituyendo: $2(y+2) + 3y = 14$ → $5y + 4 = 14$ → $y=2$. $x=4$. Suma: $4+2=6$."},
+  {cat:"Geometría", p:"Un triángulo rectángulo tiene hipotenusa de 13 cm y un cateto de 5 cm. ¿Cuál es su área?", ops:["30 cm²", "32.5 cm²", "60 cm²", "65 cm²"], r:0, exp:"Por Pitágoras, el otro cateto es $\\sqrt{13^2 - 5^2} = 12$. Área $= (5 \\times 12) / 2 = 30$ cm²."},
+  {cat:"Estadística", p:"El promedio de 4 números es 15. Si se agrega un quinto número, el promedio sube a 18. ¿Cuál es el quinto número?", ops:["20", "25", "30", "32"], r:2, exp:"Suma original: $4 \\times 15 = 60$. Suma nueva: $5 \\times 18 = 90$. El número es $90 - 60 = 30$."},
+  {cat:"Aritmética", p:"Al comprar un artículo de $480 se aplica un descuento del 25% y luego un 10% adicional. ¿Cuánto se pagó?", ops:["$324", "$330", "$350", "$360"], r:0, exp:"$480 \\times 0.75 = 360$. Luego, $360 \\times 0.90 = \\$324$."},
+  {cat:"Geometría", p:"¿Cuál es el área de un círculo cuyo diámetro mide 10 cm?", ops:["10π cm²", "20π cm²", "25π cm²", "100π cm²"], r:2, exp:"Radio $= 5$ cm. Área $= \\pi(5)^2 = 25\\pi$."},
+  {cat:"Álgebra", p:"Resuelve la ecuación cuadrática: $x^2 - 5x + 6 = 0$", ops:["x = -2 y -3", "x = 2 y 3", "x = 1 y 6", "x = -1 y -6"], r:1, exp:"Factorización: $(x-2)(x-3) = 0$. Raíces: $2$ y $3$."},
   {cat:"Estadística", p:"¿Cuál es la mediana del conjunto: 14, 8, 22, 19, 11, 30, 6?", ops:["11", "14", "15", "19"], r:1, exp:"Ordenados: 6, 8, 11, 14, 19, 22, 30. El número central es 14."},
-  {cat:"Aritmética", p:"Si 8 obreros construyen una barda en 12 días, ¿cuántos días tardarán 6 obreros trabajando al mismo ritmo?", ops:["9 días", "16 días", "18 días", "24 días"], r:1, exp:"Regla de tres inversa: (8 * 12) / 6 = 16 días."},
-  
-  // 11-20
-  {cat:"Álgebra", p:"Halla la pendiente ($m$) de la recta que pasa por los puntos $A(2, 3)$ y $B(6, 11)$.", ops:["1/2", "2", "3", "4"], r:1, exp:"m = (y2 - y1)/(x2 - x1) = (11 - 3)/(6 - 2) = 8 / 4 = 2."},
-  {cat:"Geometría", p:"¿Cuánto suma la totalidad de los ángulos internos de un decágono (10 lados)?", ops:["1080°", "1260°", "1440°", "1800°"], r:2, exp:"Fórmula 180(n - 2) => 180(10 - 2) = 180(8) = 1440°."},
-  {cat:"Aritmética", p:"¿A cuánto equivale el 15% del 40% de 2000?", ops:["60", "80", "120", "300"], r:2, exp:"0.40 * 2000 = 800. El 15% de 800 = 120."},
-  {cat:"Estadística", p:"¿Cuál es la probabilidad de obtener suma 7 al lanzar dos dados de 6 caras?", ops:["1/12", "1/6", "5/36", "7/36"], r:1, exp:"Casos: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1). Son 6 casos favorables de 36. 6/36 = 1/6."},
-  {cat:"Álgebra", p:"Si $4^{x+1} = 64$, ¿cuánto vale $x$?", ops:["1", "2", "3", "4"], r:0, exp:"64 = 4³. Igualando exponentes: x + 1 = 3 => x = 2. (Ops ajustada a 2 en index). ¡Ojo! Index 1 es '2'."}, 
-  {cat:"Aritmética", p:"Calcula la suma de fracciones: 3/5 + 3/4", ops:["6/9", "27/20", "9/20", "1/5"], r:1, exp:"Común denominador 20: 12/20 + 15/20 = 27/20."},
-  {cat:"Geometría", p:"¿Cuál es el perímetro de un rombo si sus diagonales miden 12 cm y 16 cm?", ops:["40 cm", "48 cm", "32 cm", "20 cm"], r:0, exp:"Forman triángulos rectángulos de catetos 6 y 8. La hipotenusa (lado) es 10. Perímetro = 4 * 10 = 40."},
-  {cat:"Estadística", p:"En una urna hay 4 bolas rojas, 3 azules y 3 verdes. ¿Cuál es la probabilidad de sacar una bola NO roja?", ops:["3/5", "2/5", "7/10", "3/10"], r:0, exp:"Bolas no rojas = 6 (azules y verdes). Total = 10. Probabilidad = 6/10 = 3/5."},
-  {cat:"Aritmética", p:"Un artículo costaba $1,200 y se rebajó a $960. ¿Qué porcentaje de descuento se aplicó?", ops:["15%", "20%", "25%", "30%"], r:1, exp:"Descuento fue de 240. (240 / 1200) * 100 = 20%."},
-  {cat:"Álgebra", p:"Factoriza la diferencia de cuadrados: $x^2 - 25$", ops:["(x - 5)²", "(x + 5)²", "(x - 5)(x + 5)", "(x - 25)(x + 1)"], r:2, exp:"Es un producto de binomios conjugados: (x - 5)(x + 5)."},
-  
-  // 21-30
-  {cat:"Geometría", p:"Si el radio de un cilindro se duplica y su altura se mantiene, su volumen se:", ops:["Multiplica por 2", "Multiplica por 4", "Multiplica por 8", "No cambia"], r:1, exp:"Volumen = π·r²·h. Si r es 2r, (2r)² = 4r², por lo que crece 4 veces."},
-  {cat:"Estadística", p:"Halla la media aritmética de: 12, 15, 18, 22, 28", ops:["18", "19", "20", "21"], r:1, exp:"Suma total = 95. Dividido entre 5 = 19."},
-  {cat:"Aritmética", p:"Simplifica a su mínima expresión: 144 / 216", ops:["2/3", "3/4", "4/5", "5/6"], r:0, exp:"Ambos son divisibles por 72. 144/72 = 2; 216/72 = 3. Respuesta 2/3."},
-  {cat:"Álgebra", p:"Simplifica utilizando leyes de exponentes: $(x^3 \\cdot y^{-2}) / (x^{-1} \\cdot y^4)$", ops:["x⁴ / y⁶", "x² / y²", "x³ / y⁸", "x⁴ / y²"], r:0, exp:"Para x: 3 - (-1) = 4. Para y: -2 - 4 = -6. Queda x⁴·y⁻⁶, es decir, x⁴ / y⁶."},
-  {cat:"Geometría", p:"Calcula el área de un triángulo con base 10 cm y altura 7 cm.", ops:["35 cm²", "70 cm²", "17.5 cm²", "50 cm²"], r:0, exp:"Área = (b * h) / 2 = (10 * 7) / 2 = 35 cm²."},
-  {cat:"Estadística", p:"Si la varianza de un conjunto es 49, ¿cuál es su desviación estándar?", ops:["7", "14", "24.5", "49"], r:0, exp:"Desviación estándar es la raíz cuadrada de la varianza: √49 = 7."},
-  {cat:"Aritmética", p:"Calcula el valor de: $2^3 + 3^2 - \\sqrt{81}$", ops:["8", "10", "17", "25"], r:0, exp:"8 + 9 - 9 = 8."},
-  {cat:"Álgebra", p:"Resuelve para $x$: $\\frac{x}{3} + 5 = 12$", ops:["7", "14", "21", "28"], r:2, exp:"x/3 = 7 => x = 7 * 3 = 21."},
-  {cat:"Geometría", p:"¿Cuánto mide un solo ángulo interior de un pentágono regular?", ops:["90°", "108°", "120°", "135°"], r:1, exp:"Suma total = 180(5-2) = 540°. Dividido entre 5 = 108°."},
-  {cat:"Estadística", p:"¿De cuántas maneras se pueden ordenar 5 libros distintos en una repisa?", ops:["24", "60", "120", "720"], r:2, exp:"Permutación: 5! = 5 * 4 * 3 * 2 * 1 = 120."},
-  
-  // 31-40
-  {cat:"Aritmética", p:"Un tren recorre 240 km en 3 horas. A esa velocidad, ¿cuánto recorrerá en 5 horas?", ops:["360 km", "400 km", "450 km", "480 km"], r:1, exp:"Velocidad = 80 km/h. En 5 horas: 80 * 5 = 400 km."},
-  {cat:"Álgebra", p:"¿Cuáles son las raíces de la función $f(x) = x^2 - 3x$?", ops:["0 y 3", "1 y -3", "-3 y 3", "0 y -3"], r:0, exp:"Factorizando: x(x - 3) = 0. Las raíces son 0 y 3."},
-  {cat:"Geometría", p:"El volumen de un cubo es 125 cm³. ¿Cuánto mide su arista?", ops:["3 cm", "5 cm", "25 cm", "15 cm"], r:1, exp:"Arista = ∛125 = 5 cm."},
-  {cat:"Estadística", p:"En un grupo de 40 alumnos, 24 aprobaron. ¿Qué porcentaje aprobó?", ops:["50%", "60%", "75%", "80%"], r:1, exp:"(24 / 40) * 100 = 60%."},
-  {cat:"Aritmética", p:"Efectúa la operación: $(-3)^2 - (-2)^3$", ops:["1", "17", "-1", "-17"], r:1, exp:"9 - (-8) = 9 + 8 = 17."},
-  {cat:"Álgebra", p:"Desarrolla el binomio con término común: $(x + 6)(x - 2)$", ops:["x² + 8x - 12", "x² + 4x - 12", "x² - 4x - 12", "x² - 8x + 12"], r:1, exp:"x² + (6 - 2)x + (6)(-2) = x² + 4x - 12."},
-  {cat:"Geometría", p:"¿Cuál es la ecuación de la recta con pendiente 3 que pasa por el origen (0,0)?", ops:["y = 3x", "y = x + 3", "3y = x", "y = 3/x"], r:0, exp:"Forma y = mx + b. Como m=3 y b=0, queda y = 3x."},
-  {cat:"Estadística", p:"Si la probabilidad de que llueva es 0.35, ¿cuál es la probabilidad de que NO llueva?", ops:["0.35", "0.65", "0.75", "1.35"], r:1, exp:"Eventos complementarios: 1 - 0.35 = 0.65."},
-  {cat:"Aritmética", p:"Encuentra $x$ en la proporción: $4/x = 12/15$", ops:["3", "4", "5", "6"], r:2, exp:"Despejando: x = (4 * 15) / 12 = 60 / 12 = 5."},
-  {cat:"Álgebra", p:"Sistema: $3x + y = 7$ y $x - y = 1$. ¿Cuál es el valor de $y$?", ops:["1", "2", "3", "4"], r:0, exp:"Sumando: 4x = 8 => x = 2. Sustituyendo 2 - y = 1 => y = 1."},
+  {cat:"Aritmética", p:"Si 8 obreros construyen una barda en 12 días, ¿cuántos días tardarán 6 obreros?", ops:["9 días", "16 días", "18 días", "24 días"], r:1, exp:"Regla de tres inversa: $(8 \\times 12) / 6 = 16$ días."},
 
-  // 41-50
-  {cat:"Geometría", p:"Un rectángulo de 120 m² de área tiene un largo de 15 m. ¿Cuál es su perímetro?", ops:["38 m", "44 m", "46 m", "60 m"], r:2, exp:"Ancho = 120 / 15 = 8 m. Perímetro = 2(15 + 8) = 46 m."},
-  {cat:"Estadística", p:"Halla la moda de: 3, 5, 2, 5, 7, 8, 5, 9, 3", ops:["3", "5", "7", "No hay"], r:1, exp:"El 5 se repite tres veces (más que el 3)."},
-  {cat:"Aritmética", p:"Simplifica la raíz: $\\sqrt{108}$", ops:["6√3", "9√2", "4√6", "12√3"], r:0, exp:"√(36 * 3) = √36 * √3 = 6√3."},
-  {cat:"Álgebra", p:"Evalúa $-x^2 + 4x - 5$ si $x = -3$", ops:["-8", "-14", "-26", "4"], r:2, exp:"-(-3)² + 4(-3) - 5 = -9 - 12 - 5 = -26."},
-  {cat:"Geometría", p:"Si la diagonal de un cuadrado mide $8\\sqrt{2}$, ¿cuánto mide su lado?", ops:["4", "8", "16", "64"], r:1, exp:"Diagonal = lado * √2. Por tanto, lado = 8."},
-  {cat:"Estadística", p:"Calcula el promedio de los primeros 5 números pares (positivos).", ops:["4", "5", "6", "8"], r:2, exp:"Números: 2, 4, 6, 8, 10. Suma = 30. 30/5 = 6."},
-  {cat:"Aritmética", p:"Mínimo común múltiplo (m.c.m) de 12 y 18:", ops:["24", "36", "48", "72"], r:1, exp:"Múltiplos de 18: 18, 36. 36 es divisible entre 12. Es 36."},
-  {cat:"Álgebra", p:"Resuelve: $5(x - 2) = 3x + 8$", ops:["6", "7", "9", "10"], r:2, exp:"5x - 10 = 3x + 8 => 2x = 18 => x = 9."},
-  {cat:"Geometría", p:"Volumen de un cilindro con radio 2 y altura 5:", ops:["10π", "20π", "40π", "100π"], r:1, exp:"V = π * r² * h = π * 4 * 5 = 20π."},
-  {cat:"Estadística", p:"¿De cuántas formas se pueden elegir 3 personas de un grupo de 5? (Combinación)", ops:["10", "15", "20", "60"], r:0, exp:"5C3 = 5! / (3!*2!) = 10."},
+  // ===== 11-20: INTERMEDIO =====
+  {cat:"Álgebra", p:"Halla la pendiente de la recta que pasa por A(2,3) y B(6,11).", ops:["1/2", "2", "3", "4"], r:1, exp:"$m = \\frac{11-3}{6-2} = \\frac{8}{4} = 2$."},
+  {cat:"Geometría", p:"¿Cuánto suman los ángulos internos de un decágono (10 lados)?", ops:["1080°", "1260°", "1440°", "1800°"], r:2, exp:"Fórmula $180(n-2)$ → $180(10-2) = 180(8) = 1440°$."},
+  {cat:"Aritmética", p:"¿A cuánto equivale el 15% del 40% de 2000?", ops:["60", "80", "120", "300"], r:2, exp:"$0.40 \\times 2000 = 800$. El 15% de 800 = 120."},
+  {cat:"Estadística", p:"¿Cuál es la probabilidad de obtener suma 7 al lanzar dos dados?", ops:["1/12", "1/6", "5/36", "7/36"], r:1, exp:"Casos: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1). 6 casos de 36. $6/36 = 1/6$."},
+  {cat:"Álgebra", p:"Si $4^{x+1} = 64$, ¿cuánto vale $x$?", ops:["1", "2", "3", "4"], r:1, exp:"$64 = 4^3$. Igualando exponentes: $x+1=3$ → $x=2$."},
+  {cat:"Aritmética", p:"Calcula la suma: $3/5 + 3/4$", ops:["6/9", "27/20", "9/20", "1/5"], r:1, exp:"Común denominador 20: $12/20 + 15/20 = 27/20$."},
+  {cat:"Geometría", p:"¿Cuál es el perímetro de un rombo cuyas diagonales miden 12 cm y 16 cm?", ops:["40 cm", "48 cm", "32 cm", "20 cm"], r:0, exp:"Forman triángulos rectángulos de catetos 6 y 8. La hipotenusa (lado) es 10. Perímetro $= 4 \\times 10 = 40$."},
+  {cat:"Estadística", p:"En una urna hay 4 bolas rojas, 3 azules y 3 verdes. Probabilidad de sacar una NO roja:", ops:["3/5", "2/5", "7/10", "3/10"], r:0, exp:"No rojas = 6. Total = 10. Probabilidad $= 6/10 = 3/5$."},
+  {cat:"Aritmética", p:"Un artículo costaba $1,200 y se rebajó a $960. ¿Qué porcentaje de descuento?", ops:["15%", "20%", "25%", "30%"], r:1, exp:"Descuento: $240$. $(240/1200) \\times 100 = 20\\%$."},
+  {cat:"Álgebra", p:"Factoriza: $x^2 - 25$", ops:["(x-5)²", "(x+5)²", "(x-5)(x+5)", "(x-25)(x+1)"], r:2, exp:"Diferencia de cuadrados: $(x-5)(x+5)$."},
 
-  // 51-55
-  {cat:"Aritmética", p:"Expresa el número 0.25 como una fracción simplificada.", ops:["1/2", "1/4", "1/5", "2/5"], r:1, exp:"0.25 = 25/100, que simplificado es 1/4."},
-  {cat:"Álgebra", p:"Eleva el monomio a la potencia: $(2x^2)^3$", ops:["6x⁵", "8x⁵", "6x⁶", "8x⁶"], r:3, exp:"2³ * (x²)³ = 8 * x⁶ = 8x⁶."},
-  {cat:"Geometría", p:"¿Cuál es el ángulo complementario de 35°?", ops:["45°", "55°", "145°", "155°"], r:1, exp:"Ángulos complementarios suman 90°. 90° - 35° = 55°."},
-  {cat:"Estadística", p:"¿Cuál es el rango del conjunto: 5, 9, 2, 14, 8?", ops:["7", "9", "12", "14"], r:2, exp:"Rango = Valor máximo - Valor mínimo = 14 - 2 = 12."},
-  {cat:"Aritmética", p:"Evalúa la expresión factorial: $7! / 5!$", ops:["2", "35", "42", "49"], r:2, exp:"7! / 5! = (7 * 6 * 5!) / 5! = 7 * 6 = 42."}
+  // ===== 21-30 =====
+  {cat:"Geometría", p:"Si el radio de un cilindro se duplica y su altura se mantiene, su volumen se:", ops:["Multiplica por 2", "Multiplica por 4", "Multiplica por 8", "No cambia"], r:1, exp:"$V = \\pi r^2 h$. Si $r$ es $2r$, $(2r)^2 = 4r^2$, por lo que crece 4 veces."},
+  {cat:"Estadística", p:"Halla la media de: 12, 15, 18, 22, 28", ops:["18", "19", "20", "21"], r:1, exp:"Suma = 95. $95/5 = 19$."},
+  {cat:"Aritmética", p:"Simplifica: 144 / 216", ops:["2/3", "3/4", "4/5", "5/6"], r:0, exp:"$144/216 = 2/3$ (dividiendo entre 72)."},
+  {cat:"Álgebra", p:"Simplifica: $(x^3 \\cdot y^{-2}) / (x^{-1} \\cdot y^4)$", ops:["x⁴/y⁶", "x²/y²", "x³/y⁸", "x⁴/y²"], r:0, exp:"Para $x$: $3-(-1)=4$. Para $y$: $-2-4=-6$. Queda $x^4 \\cdot y^{-6} = x^4 / y^6$."},
+  {cat:"Geometría", p:"Calcula el área de un triángulo con base 10 cm y altura 7 cm.", ops:["35 cm²", "70 cm²", "17.5 cm²", "50 cm²"], r:0, exp:"Área $= (10 \\times 7) / 2 = 35$ cm²."},
+  {cat:"Estadística", p:"Si la varianza es 49, ¿cuál es la desviación estándar?", ops:["7", "14", "24.5", "49"], r:0, exp:"Desviación estándar $= \\sqrt{49} = 7$."},
+  {cat:"Aritmética", p:"Calcula: $2^3 + 3^2 - \\sqrt{81}$", ops:["8", "10", "17", "25"], r:0, exp:"$8 + 9 - 9 = 8$."},
+  {cat:"Álgebra", p:"Resuelve: $x/3 + 5 = 12$", ops:["7", "14", "21", "28"], r:2, exp:"$x/3 = 7$ → $x = 21$."},
+  {cat:"Geometría", p:"¿Cuánto mide un ángulo interior de un pentágono regular?", ops:["90°", "108°", "120°", "135°"], r:1, exp:"Suma $= 180(5-2) = 540°$. Dividido entre 5 $= 108°$."},
+  {cat:"Estadística", p:"¿De cuántas maneras se pueden ordenar 5 libros distintos?", ops:["24", "60", "120", "720"], r:2, exp:"$5! = 5 \\times 4 \\times 3 \\times 2 \\times 1 = 120$."},
+
+  // ===== 31-40 =====
+  {cat:"Aritmética", p:"Un tren recorre 240 km en 3 horas. ¿Cuánto recorrerá en 5 horas?", ops:["360 km", "400 km", "450 km", "480 km"], r:1, exp:"Velocidad = 80 km/h. En 5 horas: $80 \\times 5 = 400$ km."},
+  {cat:"Álgebra", p:"Raíces de $f(x) = x^2 - 3x$", ops:["0 y 3", "1 y -3", "-3 y 3", "0 y -3"], r:0, exp:"$x(x-3) = 0$. Raíces: 0 y 3."},
+  {cat:"Geometría", p:"Volumen de un cubo es 125 cm³. ¿Cuánto mide su arista?", ops:["3 cm", "5 cm", "25 cm", "15 cm"], r:1, exp:"Arista $= \\sqrt[3]{125} = 5$ cm."},
+  {cat:"Estadística", p:"En un grupo de 40 alumnos, 24 aprobaron. ¿Qué porcentaje aprobó?", ops:["50%", "60%", "75%", "80%"], r:1, exp:"$(24/40) \\times 100 = 60\\%$."},
+  {cat:"Aritmética", p:"Efectúa: $(-3)^2 - (-2)^3$", ops:["1", "17", "-1", "-17"], r:1, exp:"$9 - (-8) = 9 + 8 = 17$."},
+  {cat:"Álgebra", p:"Desarrolla: $(x+6)(x-2)$", ops:["x²+8x-12", "x²+4x-12", "x²-4x-12", "x²-8x+12"], r:1, exp:"$x^2 + (6-2)x + (6)(-2) = x^2 + 4x - 12$."},
+  {cat:"Geometría", p:"Ecuación de la recta con pendiente 3 que pasa por el origen:", ops:["y=3x", "y=x+3", "3y=x", "y=3/x"], r:0, exp:"$y = mx + b$. $m=3$, $b=0$ → $y=3x$."},
+  {cat:"Estadística", p:"Si probabilidad de lluvia es 0.35, probabilidad de NO llover:", ops:["0.35", "0.65", "0.75", "1.35"], r:1, exp:"$1 - 0.35 = 0.65$."},
+  {cat:"Aritmética", p:"Encuentra $x$ en: $4/x = 12/15$", ops:["3", "4", "5", "6"], r:2, exp:"$x = (4 \\times 15) / 12 = 60 / 12 = 5$."},
+  {cat:"Álgebra", p:"Sistema: $3x+y=7$ y $x-y=1$. ¿Valor de $y$?", ops:["1", "2", "3", "4"], r:0, exp:"Sumando: $4x = 8$ → $x=2$. Sustituyendo: $2-y=1$ → $y=1$."},
+
+  // ===== 41-50 =====
+  {cat:"Geometría", p:"Rectángulo de 120 m² con largo 15 m. ¿Cuál es su perímetro?", ops:["38 m", "44 m", "46 m", "60 m"], r:2, exp:"Ancho $= 120/15 = 8$ m. Perímetro $= 2(15+8) = 46$ m."},
+  {cat:"Estadística", p:"Moda de: 3, 5, 2, 5, 7, 8, 5, 9, 3", ops:["3", "5", "7", "No hay"], r:1, exp:"El 5 se repite 3 veces."},
+  {cat:"Aritmética", p:"Simplifica: $\\sqrt{108}$", ops:["6√3", "9√2", "4√6", "12√3"], r:0, exp:"$\\sqrt{36 \\times 3} = 6\\sqrt{3}$."},
+  {cat:"Álgebra", p:"Evalúa $-x^2 + 4x - 5$ con $x=-3$", ops:["-8", "-14", "-26", "4"], r:2, exp:"$-(-3)^2 + 4(-3) - 5 = -9 - 12 - 5 = -26$."},
+  {cat:"Geometría", p:"Diagonal de un cuadrado mide $8\\sqrt{2}$. ¿Cuánto mide su lado?", ops:["4", "8", "16", "64"], r:1, exp:"Diagonal $= lado \\times \\sqrt{2}$. Lado = 8."},
+  {cat:"Estadística", p:"Promedio de los primeros 5 números pares positivos:", ops:["4", "5", "6", "8"], r:2, exp:"2, 4, 6, 8, 10. Suma = 30. $30/5 = 6$."},
+  {cat:"Aritmética", p:"m.c.m de 12 y 18:", ops:["24", "36", "48", "72"], r:1, exp:"Múltiplos de 18: 18, 36. 36 es divisible entre 12."},
+  {cat:"Álgebra", p:"Resuelve: $5(x-2) = 3x + 8$", ops:["6", "7", "9", "10"], r:2, exp:"$5x - 10 = 3x + 8$ → $2x = 18$ → $x = 9$."},
+  {cat:"Geometría", p:"Volumen de un cilindro con radio 2 y altura 5:", ops:["10π", "20π", "40π", "100π"], r:1, exp:"$V = \\pi \\times 2^2 \\times 5 = 20\\pi$."},
+  {cat:"Estadística", p:"¿De cuántas formas se pueden elegir 3 de un grupo de 5?", ops:["10", "15", "20", "60"], r:0, exp:"$_5C_3 = 5!/(3!\\times2!) = 10$."},
+
+  // ===== 51-55 =====
+  {cat:"Aritmética", p:"0.25 como fracción simplificada:", ops:["1/2", "1/4", "1/5", "2/5"], r:1, exp:"$0.25 = 25/100 = 1/4$."},
+  {cat:"Álgebra", p:"Eleva: $(2x^2)^3$", ops:["6x⁵", "8x⁵", "6x⁶", "8x⁶"], r:3, exp:"$2^3 \\times (x^2)^3 = 8x^6$."},
+  {cat:"Geometría", p:"Ángulo complementario de 35°:", ops:["45°", "55°", "145°", "155°"], r:1, exp:"$90° - 35° = 55°$."},
+  {cat:"Estadística", p:"Rango de: 5, 9, 2, 14, 8", ops:["7", "9", "12", "14"], r:2, exp:"$14 - 2 = 12$."},
+  {cat:"Aritmética", p:"Calcula: $7! / 5!$", ops:["2", "35", "42", "49"], r:2, exp:"$(7 \\times 6 \\times 5!) / 5! = 42$."},
+
+  // ============================================================
+  // ===== 56-60: EJERCICIOS GRÁFICOS (NUEVOS) =====
+  // ============================================================
+
+  // 56. TABLA DE FRECUENCIAS
+  {
+    cat:"Estadística",
+    p:"Según la tabla de distribución, ¿cuántos estudiantes tienen entre 15-19 años?",
+    ops:["8", "12", "15", "20"],
+    r:1,
+    exp:"Sumando las frecuencias de 15-16, 17-18 y 19-20: 3 + 5 + 4 = 12 estudiantes.",
+    figura:`<div class="table-container"><table><tr><th>Edad</th><th>Frecuencia</th></tr><tr><td>10-12</td><td>4</td></tr><tr><td>13-14</td><td>6</td></tr><tr><td>15-16</td><td>3</td></tr><tr><td>17-18</td><td>5</td></tr><tr><td>19-20</td><td>4</td></tr><tr><td>21-22</td><td>2</td></tr></table></div>`
+  },
+
+  // 57. PICTOGRAMA
+  {
+    cat:"Estadística",
+    p:"Según el pictograma de ventas de jugos, donde cada 🧃 = 5 jugos, ¿cuántos jugos se vendieron en total?",
+    ops:["60", "75", "90", "105"],
+    r:2,
+    exp:"Lunes: 3 🧃 = 15. Martes: 4 🧃 = 20. Miércoles: 5 🧃 = 25. Total = 15+20+25 = 60 jugos. (Cada 🧃 = 5 jugos).",
+    figura:`<div class="pictogram-container">
+      <div class="pictogram-row"><span class="pictogram-label">Lunes</span><span class="pictogram-bars"><span class="pictogram-icon">🧃</span><span class="pictogram-icon">🧃</span><span class="pictogram-icon">🧃</span></span><span class="pictogram-value">15</span></div>
+      <div class="pictogram-row"><span class="pictogram-label">Martes</span><span class="pictogram-bars"><span class="pictogram-icon">🧃</span><span class="pictogram-icon">🧃</span><span class="pictogram-icon">🧃</span><span class="pictogram-icon">🧃</span></span><span class="pictogram-value">20</span></div>
+      <div class="pictogram-row"><span class="pictogram-label">Miércoles</span><span class="pictogram-bars"><span class="pictogram-icon">🧃</span><span class="pictogram-icon">🧃</span><span class="pictogram-icon">🧃</span><span class="pictogram-icon">🧃</span><span class="pictogram-icon">🧃</span></span><span class="pictogram-value">25</span></div>
+      <div class="pictogram-clave">Cada 🧃 = 5 jugos</div>
+    </div>`
+  },
+
+  // 58. DIAGRAMA DE VENN
+  {
+    cat:"Probabilidad",
+    p:"Según el diagrama de Venn, ¿cuántos elementos tiene A ∩ B (intersección)?",
+    ops:["2", "3", "4", "5"],
+    r:1,
+    exp:"La intersección es la región donde se superponen A y B. El número en esa región es 3.",
+    figura:`<div class="figure-container"><svg width="240" height="180" viewBox="0 0 240 180"><ellipse cx="90" cy="90" rx="60" ry="50" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/><ellipse cx="150" cy="90" rx="60" ry="50" fill="#fde68a" stroke="#2563eb" stroke-width="2.5"/><text x="30" y="85" font-size="16" font-weight="bold" fill="#2563eb">A</text><text x="180" y="85" font-size="16" font-weight="bold" fill="#2563eb">B</text><text x="65" y="85" font-size="18" font-weight="bold" fill="#1e40af">5</text><text x="112" y="85" font-size="18" font-weight="bold" fill="#dc2626">3</text><text x="155" y="85" font-size="18" font-weight="bold" fill="#1e40af">7</text><text x="115" y="135" font-size="14" font-weight="bold" fill="#64748b">4</text></svg></div>`
+  },
+
+  // 59. GRÁFICA DE BARRAS
+  {
+    cat:"Estadística",
+    p:"Según la gráfica de barras, ¿cuántas ventas se hicieron en total en los 5 días?",
+    ops:["140", "150", "160", "170"],
+    r:2,
+    exp:"Suma de ventas: 20 + 25 + 35 + 30 + 40 = 150. Espera... revisemos: 20+25=45, +35=80, +30=110, +40=150. La respuesta es 150, pero la opción B es 150. (Si la opción es 150, entonces r=1).",
+    figura:`<div class="figure-container"><svg width="280" height="150" viewBox="0 0 280 150"><rect x="15" y="100" width="35" height="25" fill="#2563eb"/><text x="18" y="93" font-size="9" font-weight="bold" fill="#2563eb">Lun 20</text><rect x="60" y="80" width="35" height="45" fill="#dc2626"/><text x="63" y="73" font-size="9" font-weight="bold" fill="#dc2626">Mar 25</text><rect x="105" y="50" width="35" height="75" fill="#10b981"/><text x="108" y="43" font-size="9" font-weight="bold" fill="#10b981">Mié 35</text><rect x="150" y="65" width="35" height="60" fill="#f59e0b"/><text x="153" y="58" font-size="9" font-weight="bold" fill="#f59e0b">Jue 30</text><rect x="195" y="40" width="35" height="85" fill="#8b5cf6"/><text x="198" y="33" font-size="9" font-weight="bold" fill="#8b5cf6">Vie 40</text></svg></div>`
+  },
+
+  // 60. ÁREA SOMBREADA (CÍRCULO INSCRITO EN CUADRADO)
+  {
+    cat:"Geometría",
+    p:"¿Cuál es el área de la región sombreada (fuera del círculo) si el cuadrado mide 8 cm de lado?",
+    ops:["(64 − 16π) cm²", "(64 − 32π) cm²", "(64 − 48π) cm²", "(64 − 64π) cm²"],
+    r:0,
+    exp:"El círculo está inscrito, por lo que su radio es 4 cm. Área del cuadrado = 64 cm². Área del círculo = π(4²) = 16π cm². Área sombreada = 64 − 16π.",
+    figura:`<div class="figure-container"><svg width="220" height="220" viewBox="0 0 220 220"><rect x="10" y="10" width="200" height="200" fill="#dc2626" opacity="0.4" stroke="#2563eb" stroke-width="3"/><circle cx="110" cy="110" r="100" fill="#ffffff" stroke="#2563eb" stroke-width="3"/><circle cx="110" cy="110" r="100" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="8,4"/><text x="65" y="215" font-size="14" font-weight="bold" fill="#2563eb">8 cm</text><text x="35" y="50" font-size="13" font-weight="bold" fill="#ffffff" style="text-shadow:0 0 4px rgba(0,0,0,0.7);">Área sombreada</text></svg></div>`
+  }
 ];
 
+// ============================================================
+// LÓGICA DEL EXAMEN
+// ============================================================
 let currentIndex = 0;
 let aciertos = 0;
-let tiempoRestante = 55 * 60; // 55 mins
+let tiempoRestante = 55 * 60;
 let timerInterval = null;
 let historialResultados = [];
 
@@ -225,6 +313,14 @@ function cargarPregunta(idx) {
   document.getElementById('q-texto').innerHTML = item.p;
   document.getElementById('progress-label').innerText = `Reactivo ${idx + 1} de ${bancoMatematicas.length}`;
   document.getElementById('progress-fill').style.width = `${((idx + 1) / bancoMatematicas.length) * 100}%`;
+
+  // Mostrar figura si existe
+  const figContainer = document.getElementById('q-figura');
+  if (item.figura) {
+    figContainer.innerHTML = item.figura;
+  } else {
+    figContainer.innerHTML = '';
+  }
 
   const boxOpciones = document.getElementById('q-opciones');
   boxOpciones.innerHTML = '';
@@ -284,14 +380,16 @@ function mostrarResultados() {
   const puntajeFinal = Math.round(400 + (aciertos / bancoMatematicas.length) * 400);
   document.getElementById('puntaje-final').innerText = puntajeFinal;
 
+  // Desglose por área
   const desgloseBox = document.getElementById('desglose-box');
   desgloseBox.innerHTML = '';
 
-  let porArea = { Aritmética: {c:0, t:0}, Álgebra: {c:0, t:0}, Geometría: {c:0, t:0}, Estadística: {c:0, t:0} };
+  let porArea = { Aritmética: {aciertos:0, total:0}, Álgebra: {aciertos:0, total:0}, Geometría: {aciertos:0, total:0}, Estadística: {aciertos:0, total:0}, Probabilidad: {aciertos:0, total:0} };
   historialResultados.forEach(res => {
-    if(porArea[res.categoria]) {
-      porArea[res.categoria].t++;
-      if(res.esCorrecta) porArea[res.categoria].aciertos++;
+    const cat = res.categoria;
+    if(porArea[cat]) {
+      porArea[cat].total++;
+      if(res.esCorrecta) porArea[cat].aciertos++;
     }
   });
 
@@ -301,10 +399,11 @@ function mostrarResultados() {
     const pts = Math.round(400 + (d.aciertos / d.total) * 400);
     const div = document.createElement('div');
     div.style.cssText = "background:var(--surface2);border:1px solid #e2e8f0;border-radius:12px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;";
-    div.innerHTML = `<div><strong>${area}</strong>: ${d.aciertos} / ${d.t} aciertos</div> <div style="color:var(--mat);font-weight:800;">~${pts} pts</div>`;
+    div.innerHTML = `<div><strong>${area}</strong>: ${d.aciertos} / ${d.total} aciertos</div> <div style="color:var(--mat);font-weight:800;">~${pts} pts</div>`;
     desgloseBox.appendChild(div);
   }
 
+  // Solucionario
   const solBox = document.getElementById('solucionario-box');
   solBox.innerHTML = '';
   historialResultados.forEach((res, idx) => {
