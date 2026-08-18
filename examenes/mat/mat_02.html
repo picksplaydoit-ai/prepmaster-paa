@@ -34,30 +34,17 @@
             animation: fadeIn 0.4s ease-out;
         }
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .glass-card {
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .custom-scroll::-webkit-scrollbar {
-            width: 4px;
-        }
-        .custom-scroll::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .custom-scroll::-webkit-scrollbar-thumb {
-            background: #e2e8f0;
-            border-radius: 10px;
-        }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
         .figure-container {
             display: flex;
             justify-content: center;
@@ -68,9 +55,27 @@
             height: auto;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
-            background: #fafbfc;
+            background: #ffffff;
             padding: 8px;
         }
+        .table-container {
+            display: flex;
+            justify-content: center;
+            margin: 12px 0 16px 0;
+            font-size: 13px;
+        }
+        .table-container table {
+            border-collapse: collapse;
+            border: 2px solid #2563eb;
+            border-radius: 8px;
+        }
+        .table-container th, .table-container td {
+            border: 1px solid #cbd5e1;
+            padding: 6px 14px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .table-container th { background-color: #dbeafe; color: #1e40af; }
         .pictogram {
             display: flex;
             justify-content: center;
@@ -79,11 +84,102 @@
             margin: 8px 0 12px 0;
             font-size: 28px;
         }
+        .pictogram-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 12px 0 16px 0;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            background: #ffffff;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        .pictogram-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 44px;
+        }
+        .pictogram-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e293b;
+            min-width: 70px;
+            text-align: right;
+        }
+        .pictogram-bars {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            flex-wrap: wrap;
+        }
+        .pictogram-icon {
+            font-size: 30px;
+            line-height: 1.1;
+        }
+        .pictogram-value {
+            font-size: 14px;
+            font-weight: 800;
+            color: #2563eb;
+            margin-left: 8px;
+            min-width: 36px;
+        }
+        .pictogram-clave {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 2px dashed #e2e8f0;
+        }
+        .shaded-label {
+            font-size: 13px;
+            font-weight: bold;
+            fill: #ffffff;
+            text-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
+        }
+        .venn-label {
+            font-size: 20px;
+            font-weight: 800;
+            fill: #1e40af;
+        }
+        .venn-number {
+            font-size: 22px;
+            font-weight: 800;
+            fill: #1e293b;
+        }
+        .venn-number-intersection {
+            font-size: 22px;
+            font-weight: 800;
+            fill: #dc2626;
+        }
+        .venn-number-outside {
+            font-size: 18px;
+            font-weight: 700;
+            fill: #64748b;
+        }
+        .measure-label {
+            font-size: 13px;
+            font-weight: bold;
+            fill: #1e40af;
+        }
+        .coord-label {
+            font-size: 12px;
+            font-weight: 700;
+            fill: #2563eb;
+        }
+        .coord-label-red {
+            font-size: 12px;
+            font-weight: 700;
+            fill: #dc2626;
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen flex flex-col">
 
-    <!-- Pantalla de Inicio -->
     <div id="start-screen" class="flex-grow flex items-center justify-center p-4 overflow-y-auto">
         <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-xl p-6 md:p-10 text-center border border-slate-100">
             <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg rotate-3">
@@ -93,29 +189,20 @@
             </div>
             <h1 class="text-2xl font-extrabold text-slate-900 mb-2 uppercase tracking-tight">Simulador PAA 2</h1>
             <p class="text-slate-500 mb-4 font-medium text-sm">Matemáticas (55 Reactivos)</p>
-
             <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 text-left rounded-r-xl">
                 <div class="flex">
                     <div class="ml-1">
-                        <p class="text-xs text-amber-900 leading-relaxed font-semibold">
-                            ¡Importante! Obtendrás de <span class="underline">200 a 800</span> puntos.
-                        </p>
-                        <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold tracking-tighter italic">
-                            Anota el resultado para tu cálculo final.
-                        </p>
+                        <p class="text-xs text-amber-900 leading-relaxed font-semibold">¡Importante! Obtendrás de <span class="underline">200 a 800</span> puntos.</p>
+                        <p class="text-[10px] text-amber-800 mt-1 uppercase font-bold tracking-tighter italic">Anota el resultado para tu cálculo final.</p>
                     </div>
                 </div>
             </div>
-
             <div class="space-y-3">
-                <button onclick="startExam()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">
-                    COMENZAR EXAMEN
-                </button>
+                <button onclick="startExam()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-[1.01] active:scale-95 text-lg">COMENZAR EXAMEN</button>
             </div>
         </div>
     </div>
 
-    <!-- Pantalla de Examen -->
     <div id="exam-screen" class="hidden min-h-screen flex flex-col">
         <div class="sticky-header bg-white border-b border-slate-200 p-3">
             <div class="max-w-4xl mx-auto flex justify-between items-center">
@@ -137,13 +224,11 @@
                 </div>
             </div>
         </div>
-
         <main class="flex-grow flex items-center justify-center p-4 overflow-y-auto">
             <div id="question-box" class="max-w-xl w-full pb-4"></div>
         </main>
     </div>
 
-    <!-- Pantalla de Resultados -->
     <div id="result-screen" class="hidden flex items-center justify-center p-4 py-8 overflow-y-auto">
         <div class="max-w-2xl w-full glass-card rounded-[2.5rem] shadow-2xl border border-white fade-in flex flex-col">
             <div class="bg-slate-900 p-6 md:p-8 text-center text-white relative flex-shrink-0">
@@ -153,7 +238,6 @@
                     <p class="text-slate-500 font-bold text-lg">/ 800</p>
                 </div>
             </div>
-
             <div class="p-6 md:p-8 flex-grow overflow-y-auto custom-scroll">
                 <div class="grid grid-cols-3 gap-3 mb-6">
                     <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
@@ -169,18 +253,14 @@
                         <p class="text-xs font-bold leading-tight">Perfil Analizado</p>
                     </div>
                 </div>
-
                 <div id="area-breakdown" class="grid grid-cols-2 gap-3 mb-6"></div>
-
                 <div class="p-5 bg-blue-600 rounded-3xl text-white relative overflow-hidden shadow-lg">
                     <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
                         <div>
                             <h4 class="text-lg font-black leading-none mb-1 uppercase tracking-tight">¡Anota tu resultado!</h4>
                             <p class="text-blue-100 text-[10px]">Usa este puntaje para la simulación de ingreso.</p>
                         </div>
-                        <button onclick="location.reload()" class="bg-white text-blue-600 font-black px-6 py-2 rounded-xl hover:bg-blue-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0">
-                            Reiniciar
-                        </button>
+                        <button onclick="location.reload()" class="bg-white text-blue-600 font-black px-6 py-2 rounded-xl hover:bg-blue-50 transition-all text-[10px] uppercase tracking-widest flex-shrink-0">Reiniciar</button>
                     </div>
                 </div>
             </div>
@@ -189,400 +269,410 @@
 
     <script>
         // ============================================================
-        // BANCO DE REACTIVOS - SIMULADOR PAA 2
-        // Basado en los exámenes 804, 807 y Atenas
+        // BANCO DE REACTIVOS - SIMULADOR PAA 2 (CORREGIDO)
+        // Reactivos 1, 8, 45, 50, 55 corregidos
         // ============================================================
         const questions = [{
+            // REACTIVO 1 - CORREGIDO
             id: 1,
             area: "Aritmética",
             type: "multiple",
-            q: "¿Cuál es el resultado de 12 + 3 × (8 − 5)² − 9 ÷ 3?",
-            options: ["12", "18", "24", "30"],
+            q: "Calcula: 8 + 2 × (7 − 3)² − 10 ÷ 2",
+            options: ["25", "31", "35", "39"],
             ans: 2
         }, {
             id: 2,
             area: "Álgebra I",
             type: "multiple",
-            q: "Simplifica: 5(2x − 3) − 3(4x + 1)",
-            options: ["−2x − 18", "−2x − 12", "22x − 18", "22x − 12"],
+            q: "Simplifica: 4(3x − 2) − 3(2x + 5)",
+            options: ["6x − 23", "6x − 7", "18x − 23", "18x − 7"],
             ans: 0
         }, {
             id: 3,
-            area: "Geometría",
+            area: "Aritmética",
             type: "multiple",
-            q: "¿Cuál es el área de un círculo con diámetro de 10 cm?",
-            options: ["10π cm²", "20π cm²", "25π cm²", "100π cm²"],
-            ans: 2,
-            figure: `<div class="figure-container"><svg width="140" height="140" viewBox="0 0 140 140"><circle cx="70" cy="70" r="50" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/><line x1="20" y1="70" x2="120" y2="70" stroke="#dc2626" stroke-width="2" stroke-dasharray="6,4"/><text x="58" y="68" font-size="14" font-weight="bold" fill="#dc2626">d=10</text></svg></div>`
+            q: "Calcula: 2/3 + 3/4 − 1/6",
+            options: ["5/4", "4/3", "7/6", "5/6"],
+            ans: 0
         }, {
             id: 4,
-            area: "Estadística",
+            area: "Aritmética",
             type: "multiple",
-            q: "¿Cuál es la mediana del conjunto: 4, 9, 11, 15, 18, 21, 25?",
-            options: ["11", "15", "16", "18"],
-            ans: 1
+            q: "Calcula: 3³ + 2⁵ − 4²",
+            options: ["16", "19", "27", "43"],
+            ans: 3
         }, {
             id: 5,
-            area: "Álgebra II",
+            area: "Álgebra I",
             type: "multiple",
-            q: "Resuelve: 3x² − 12x = 0",
-            options: ["x = 0, x = 2", "x = 0, x = 4", "x = 2, x = 4", "x = −2, x = 4"],
-            ans: 1
+            q: "¿Cuál de las siguientes expresiones es equivalente a 2(5x + 3) − (3x − 4)?",
+            options: ["7x + 10", "7x − 2", "13x + 10", "13x − 2"],
+            ans: 0
         }, {
             id: 6,
             area: "Aritmética",
             type: "multiple",
-            q: "¿Cuál es el resultado de 7/8 + 1/4 − 1/2?",
-            options: ["3/8", "5/8", "3/4", "7/8"],
-            ans: 1,
-            figure: `<div class="pictogram">🍕🍕🍕🍕🍕🍕🍕 <span style="font-size:16px;font-weight:bold;color:#2563eb;">+</span> 🍕🍕 <span style="font-size:16px;font-weight:bold;color:#2563eb;">−</span> 🍕🍕🍕🍕</div>`
+            q: "Calcula: 5/8 ÷ 3/4",
+            options: ["5/6", "15/32", "6/5", "20/24"],
+            ans: 0
         }, {
             id: 7,
-            area: "Geometría",
-            type: "multiple",
-            q: "Un cubo tiene aristas de 3 cm. ¿Cuál es su volumen?",
-            options: ["9 cm³", "18 cm³", "27 cm³", "81 cm³"],
-            ans: 2,
-            figure: `<div class="figure-container"><svg width="130" height="130" viewBox="0 0 130 130"><rect x="20" y="20" width="60" height="60" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><line x1="20" y1="20" x2="45" y2="8" stroke="#2563eb" stroke-width="2"/><line x1="80" y1="20" x2="105" y2="8" stroke="#2563eb" stroke-width="2"/><line x1="80" y1="80" x2="105" y2="68" stroke="#2563eb" stroke-width="2"/><line x1="45" y1="8" x2="105" y2="8" stroke="#2563eb" stroke-width="2"/><line x1="105" y1="8" x2="105" y2="68" stroke="#2563eb" stroke-width="2"/><text x="38" y="72" font-size="14" font-weight="bold" fill="#dc2626">3</text><text x="88" y="55" font-size="14" font-weight="bold" fill="#dc2626">3</text></svg></div>`
-        }, {
-            id: 8,
             area: "Álgebra I",
             type: "multiple",
-            q: "Si f(x) = 4x² − 3x + 2, ¿cuál es f(1)?",
-            options: ["1", "3", "5", "9"],
+            q: "Si 3x − 5 = 16, ¿cuál es el valor de 2x + 3?",
+            options: ["7", "10", "14", "17"],
+            ans: 3
+        }, {
+            // REACTIVO 8 - CORREGIDO
+            id: 8,
+            area: "Aritmética",
+            type: "multiple",
+            q: "Calcula: √81 + ∛64 − √25",
+            options: ["4", "8", "12", "14"],
             ans: 1
         }, {
             id: 9,
-            area: "Estadística",
+            area: "Aritmética",
             type: "multiple",
-            q: "¿Cuál es la moda del conjunto: 3, 5, 5, 7, 8, 8, 8, 9, 9?",
-            options: ["5", "7", "8", "9"],
-            ans: 2
+            q: "Un artículo cuesta $120 y tiene un descuento del 15%. ¿Cuál es el precio después del descuento?",
+            options: ["$18", "$102", "$105", "$108"],
+            ans: 1
         }, {
             id: 10,
-            area: "Álgebra II",
+            area: "Álgebra I",
             type: "multiple",
-            q: "¿Cuál es la pendiente de la recta 4x − 2y = 8?",
-            options: ["-4", "-2", "2", "4"],
-            ans: 2
+            q: "Simplifica: 12a⁴b³ / 4a²b",
+            options: ["3a²b²", "3a²b³", "3a⁶b⁴", "3a²b"],
+            ans: 0
         }, {
             id: 11,
             area: "Aritmética",
             type: "multiple",
-            q: "¿Cuál es el MCM de 6, 10 y 15?",
-            options: ["15", "30", "60", "90"],
-            ans: 1
+            q: "¿Cuál es el mínimo común múltiplo (mcm) de 4, 10 y 15?",
+            options: ["30", "45", "60", "90"],
+            ans: 2
         }, {
             id: 12,
-            area: "Álgebra I",
+            area: "Aritmética",
             type: "multiple",
-            q: "¿Cuál es el valor de x en 4(x − 3) = 2x + 2?",
-            options: ["5", "7", "9", "11"],
-            ans: 1
+            q: "Calcula: (-4)² − (-3)² + (-2)³",
+            options: ["-1", "3", "11", "15"],
+            ans: 0
         }, {
             id: 13,
-            area: "Geometría",
+            area: "Álgebra I",
             type: "multiple",
-            q: "Los ángulos de un triángulo miden 45°, 75° y x°. ¿Cuál es el valor de x?",
-            options: ["50°", "55°", "60°", "65°"],
-            ans: 2,
-            figure: `<div class="figure-container"><svg width="180" height="140" viewBox="0 0 180 140"><polygon points="20,120 160,120 80,20" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="38" y="135" font-size="16" font-weight="bold" fill="#dc2626">45°</text><text x="128" y="135" font-size="16" font-weight="bold" fill="#dc2626">75°</text><text x="68" y="40" font-size="16" font-weight="bold" fill="#dc2626">x</text></svg></div>`
+            q: "Si x = 3 y y = -2, ¿cuál es el valor de x² − 2xy + y²?",
+            options: ["-1", "1", "5", "25"],
+            ans: 3
         }, {
             id: 14,
-            area: "Probabilidad",
+            area: "Aritmética",
             type: "multiple",
-            q: "Al lanzar un dado, ¿cuál es la probabilidad de obtener un número primo?",
-            options: ["1/6", "1/3", "1/2", "2/3"],
-            ans: 2,
-            figure: `<div class="pictogram">🎲 <span style="font-size:16px;font-weight:bold;color:#2563eb;">→</span> 2, 3, 5 <span style="font-size:16px;font-weight:bold;color:#2563eb;">→</span> ⚁ ⚂ ⚄</div>`
+            q: "¿Cuál de los siguientes números es MAYOR?",
+            options: ["0.625", "5/8", "3/4", "0.6"],
+            ans: 2
         }, {
             id: 15,
-            area: "Álgebra II",
+            area: "Álgebra I",
             type: "multiple",
-            q: "¿Cuál es la distancia entre los puntos (−2, 1) y (4, 9)?",
-            options: ["6", "8", "10", "12"],
-            ans: 2,
-            figure: `<div class="figure-container"><svg width="180" height="140" viewBox="0 0 180 140"><rect x="10" y="10" width="160" height="120" fill="#fafbfc" stroke="#cbd5e1" stroke-width="1"/><line x1="20" y1="120" x2="170" y2="120" stroke="#94a3b8" stroke-width="1.5"/><line x1="30" y1="10" x2="30" y2="130" stroke="#94a3b8" stroke-width="1.5"/><circle cx="30" cy="90" r="4" fill="#dc2626"/><text x="2" y="85" font-size="12" font-weight="bold" fill="#dc2626">(-2,1)</text><circle cx="70" cy="50" r="4" fill="#dc2626"/><text x="58" y="44" font-size="12" font-weight="bold" fill="#dc2626">(4,9)</text><line x1="30" y1="90" x2="70" y2="50" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,3"/></svg></div>`
+            q: "Si 2^n = 32, ¿cuál es el valor de 2^(n+2)?",
+            options: ["34", "64", "128", "256"],
+            ans: 2
         }, {
             id: 16,
             area: "Aritmética",
             type: "multiple",
-            q: "Si 8 libretas cuestan $96, ¿cuánto cuestan 5 libretas del mismo tipo?",
-            options: ["$50", "$55", "$60", "$65"],
+            q: "La razón de hombres a mujeres en una oficina es de 3:2. Si hay 30 hombres, ¿cuántas mujeres hay?",
+            options: ["10", "15", "20", "45"],
             ans: 2
         }, {
             id: 17,
-            area: "Álgebra I",
+            area: "Aritmética",
             type: "multiple",
-            q: "Desarrolla: (3x + 2)(3x − 2)",
-            options: ["9x² − 4", "9x² + 4", "9x² − 12x + 4", "9x² + 12x + 4"],
-            ans: 0
+            q: "Un producto cuesta $60 y tiene un descuento del 40%. ¿Cuál es el precio final?",
+            options: ["$24", "$36", "$40", "$48"],
+            ans: 1
         }, {
             id: 18,
-            area: "Geometría",
+            area: "Aritmética",
             type: "multiple",
-            q: "¿Cuál es el perímetro de un cuadrado con área de 49 cm²?",
-            options: ["14 cm", "21 cm", "28 cm", "49 cm"],
-            ans: 2,
-            figure: `<div class="figure-container"><svg width="130" height="130" viewBox="0 0 130 130"><rect x="15" y="15" width="100" height="100" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/><text x="48" y="68" font-size="16" font-weight="bold" fill="#2563eb">A=49</text></svg></div>`
+            q: "El precio de un celular aumentó de $300 a $360. ¿Cuál fue el porcentaje de aumento?",
+            options: ["10%", "15%", "20%", "25%"],
+            ans: 2
         }, {
             id: 19,
-            area: "Estadística",
+            area: "Aritmética",
             type: "multiple",
-            q: "¿Cuál es el rango del conjunto: 8, 12, 5, 20, 15, 3, 9?",
-            options: ["12", "15", "17", "20"],
+            q: "Tres amigos invierten $1,000, $1,500 y $2,500 en un negocio. Si la ganancia es de $5,000, ¿cuánto recibe el que invirtió $2,500?",
+            options: ["$1,500", "$2,000", "$2,500", "$3,000"],
             ans: 2
         }, {
             id: 20,
-            area: "Álgebra II",
+            area: "Aritmética",
             type: "multiple",
-            q: "El punto medio entre (−6, 2) y (4, 10) es:",
-            options: ["(−1, 6)", "(−2, 6)", "(−1, 5)", "(−2, 5)"],
-            ans: 0
+            q: "12 trabajadores construyen un muro en 20 días. ¿Cuántos días tardarían 16 trabajadores?",
+            options: ["10", "15", "20", "24"],
+            ans: 1
         }, {
             id: 21,
             area: "Aritmética",
             type: "multiple",
-            q: "¿Cuál es la forma decimal de 4.5 × 10²?",
-            options: ["45", "450", "4,500", "45,000"],
-            ans: 1
+            q: "Si 5 libros cuestan $75, ¿cuánto cuestan 8 libros?",
+            options: ["$100", "$110", "$115", "$120"],
+            ans: 3
         }, {
             id: 22,
-            area: "Álgebra I",
+            area: "Aritmética",
             type: "multiple",
-            q: "¿Cuáles son los valores de x que satisfacen |3x − 6| = 9?",
-            options: ["−1 y 5", "1 y −5", "−1 y −5", "1 y 5"],
-            ans: 0
+            q: "Un artículo cuesta $200 y tiene un descuento del 15%. Si pagas con tarjeta, tienes un 10% adicional. ¿Cuánto pagas?",
+            options: ["$150", "$153", "$170", "$180"],
+            ans: 1
         }, {
             id: 23,
-            area: "Geometría",
+            area: "Aritmética",
             type: "multiple",
-            q: "¿Cuál es el área de un triángulo con base 14 cm y altura 6 cm?",
-            options: ["20 cm²", "42 cm²", "84 cm²", "168 cm²"],
-            ans: 1,
-            figure: `<div class="figure-container"><svg width="200" height="120" viewBox="0 0 200 120"><polygon points="20,100 180,100 100,15" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><line x1="100" y1="100" x2="100" y2="15" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/><text x="100" y="75" font-size="14" font-weight="bold" fill="#dc2626">h=6</text><text x="65" y="118" font-size="14" font-weight="bold" fill="#2563eb">base=14</text></svg></div>`
+            q: "En una escuela, el 60% de los estudiantes son mujeres. Si hay 720 estudiantes, ¿cuántos hombres hay?",
+            options: ["288", "432", "480", "528"],
+            ans: 0
         }, {
             id: 24,
-            area: "Probabilidad",
+            area: "Aritmética",
             type: "multiple",
-            q: "Al lanzar dos dados, ¿cuál es la probabilidad de obtener una suma de 7?",
-            options: ["1/6", "1/12", "1/18", "5/36"],
-            ans: 0,
-            figure: `<div class="pictogram">🎲🎲 <span style="font-size:16px;font-weight:bold;color:#2563eb;">→</span> 1+6, 2+5, 3+4, 4+3, 5+2, 6+1</div>`
+            q: "Una receta para 4 personas usa 2 tazas de harina. ¿Cuántas tazas para 10 personas?",
+            options: ["3", "4", "5", "6"],
+            ans: 2
         }, {
             id: 25,
-            area: "Álgebra II",
+            area: "Aritmética",
             type: "multiple",
-            q: "¿Cuál es el conjunto solución de 3x + 4 ≤ 19?",
-            options: ["(−∞, 5]", "(−∞, 5)", "[5, ∞)", "(-∞, 4]"],
-            ans: 0
+            q: "El precio de una bicicleta era de $450. Ahora cuesta $360. ¿Qué porcentaje de descuento tiene?",
+            options: ["10%", "15%", "20%", "25%"],
+            ans: 2
         }, {
             id: 26,
             area: "Aritmética",
             type: "multiple",
-            q: "¿Cuál es el número que falta en la sucesión: 5, 10, 20, 40, __, 160?",
-            options: ["60", "70", "80", "90"],
+            q: "La razón de estudiantes de ciencias a estudiantes de letras es de 2:5. Si hay 350 estudiantes de letras, ¿cuántos de ciencias hay?",
+            options: ["100", "120", "140", "160"],
             ans: 2
         }, {
             id: 27,
-            area: "Álgebra I",
+            area: "Aritmética",
             type: "multiple",
-            q: "Factoriza: 3x² − 12",
-            options: ["3(x² − 4)", "3(x − 2)(x + 2)", "(3x − 6)(x + 2)", "3(x − 2)²"],
+            q: "Un cuaderno cuesta $8. Si el precio aumenta un 25%, ¿cuánto cuesta ahora?",
+            options: ["$9", "$10", "$11", "$12"],
             ans: 1
         }, {
             id: 28,
-            area: "Geometría",
-            type: "multiple",
-            q: "¿Cuál es el ángulo complementario de 55°?",
-            options: ["25°", "35°", "45°", "125°"],
-            ans: 1,
-            figure: `<div class="figure-container"><svg width="160" height="80" viewBox="0 0 160 80"><line x1="10" y1="40" x2="150" y2="40" stroke="#94a3b8" stroke-width="2"/><line x1="80" y1="40" x2="80" y2="10" stroke="#2563eb" stroke-width="2"/><circle cx="80" cy="40" r="20" fill="none" stroke="#dc2626" stroke-width="1.5"/><text x="72" y="30" font-size="14" font-weight="bold" fill="#dc2626">55°</text><text x="92" y="58" font-size="14" font-weight="bold" fill="#2563eb">?°</text></svg></div>`
-        }, {
-            id: 29,
-            area: "Estadística",
-            type: "multiple",
-            q: "¿Qué porcentaje del círculo representa un sector de 54°?",
-            options: ["10%", "15%", "20%", "25%"],
-            ans: 1
-        }, {
-            id: 30,
-            area: "Álgebra II",
-            type: "multiple",
-            q: "Resuelve el sistema: 3x + y = 12; x − y = 0. ¿Cuál es el valor de x?",
-            options: ["2", "3", "4", "6"],
-            ans: 1
-        }, {
-            id: 31,
             area: "Aritmética",
             type: "multiple",
-            q: "¿Cuál es el MCD de 48 y 60?",
-            options: ["4", "6", "12", "24"],
+            q: "Una mezcla de concreto usa 3 partes de arena por cada 2 partes de cemento. Si se usan 90 kg de arena, ¿cuántos kg de cemento?",
+            options: ["30", "45", "60", "75"],
             ans: 2
         }, {
-            id: 32,
-            area: "Álgebra I",
+            id: 29,
+            area: "Aritmética",
             type: "multiple",
-            q: "Simplifica: √196 + √64",
-            options: ["18", "20", "22", "24"],
+            q: "8 pintores pintan una casa en 12 días. ¿Cuántos pintores para pintarla en 6 días?",
+            options: ["4", "12", "16", "18"],
+            ans: 2
+        }, {
+            id: 30,
+            area: "Aritmética",
+            type: "multiple",
+            q: "Un producto vale $50. Sube un 10% y al año siguiente baja un 10%. ¿Cuál es su precio final?",
+            options: ["$49.50", "$50", "$50.50", "$55"],
+            ans: 0
+        }, {
+            id: 31,
+            area: "Álgebra II",
+            type: "multiple",
+            q: "¿Cuál de las siguientes gráficas muestra una función creciente para todo valor de x?",
+            options: ["Opción A", "Opción B", "Opción C", "Opción D"],
+            ans: 3,
+            figure: `<div class="figure-container"><svg width="200" height="140" viewBox="0 0 200 140"><rect x="10" y="10" width="180" height="120" fill="#fafbfc" stroke="#cbd5e1" stroke-width="1"/><line x1="20" y1="110" x2="180" y2="110" stroke="#94a3b8" stroke-width="1.5"/><line x1="100" y1="10" x2="100" y2="130" stroke="#94a3b8" stroke-width="1.5"/><path d="M30,100 Q60,80 80,60 Q100,40 120,30 Q150,20 170,15" stroke="#dc2626" stroke-width="3" fill="none"/></svg></div>`
+        }, {
+            id: 32,
+            area: "Álgebra II",
+            type: "multiple",
+            q: "Los boletos para 2 adultos y 3 niños cuestan $67. Para 3 adultos y 2 niños cuestan $78. ¿Cuál es el precio del boleto de adulto?",
+            options: ["$29", "$20", "$15", "$9"],
             ans: 1
         }, {
             id: 33,
-            area: "Geometría",
+            area: "Álgebra II",
             type: "multiple",
-            q: "¿Cuál es la hipotenusa de un triángulo rectángulo con catetos 9 y 12?",
-            options: ["13", "15", "17", "21"],
-            ans: 1,
-            figure: `<div class="figure-container"><svg width="180" height="140" viewBox="0 0 180 140"><polygon points="20,120 20,20 140,120" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="0" y="85" font-size="14" font-weight="bold" fill="#dc2626">9</text><text x="70" y="138" font-size="14" font-weight="bold" fill="#dc2626">12</text><text x="100" y="70" font-size="14" font-weight="bold" fill="#2563eb">?</text></svg></div>`
+            q: "La recta y − 1 = 5(x − 1) contiene el punto (0, p). ¿Cuál es el valor de p?",
+            options: ["-4", "-3", "0", "6"],
+            ans: 0
         }, {
             id: 34,
-            area: "Estadística",
+            area: "Aritmética",
             type: "multiple",
-            q: "¿Cuál es el rango del conjunto {22, 15, 8, 30, 12, 5}?",
-            options: ["15", "20", "22", "25"],
-            ans: 2
+            q: "Dos camiones salen de puntos opuestos. Uno a 40 km/h y otro a 60 km/h. Si la distancia es 300 km, ¿cuántas horas tardan en encontrarse?",
+            options: ["3", "3.5", "4", "4.5"],
+            ans: 0
         }, {
             id: 35,
             area: "Álgebra II",
             type: "multiple",
-            q: "¿Cuál es la ecuación de una circunferencia con centro en (−3, 2) y radio 5?",
-            options: ["(x+3)²+(y−2)²=5", "(x+3)²+(y−2)²=25", "(x−3)²+(y+2)²=25", "(x+3)²+(y+2)²=25"],
-            ans: 1
+            q: "¿Cuál de las siguientes opciones corresponde a la región sombreada de la figura?",
+            options: ["y ≤ x + 1", "y < x + 1", "y = x + 1", "y ≥ x + 1"],
+            ans: 3,
+            figure: `<div class="figure-container"><svg width="200" height="160" viewBox="0 0 200 160"><rect x="10" y="10" width="180" height="140" fill="#fafbfc" stroke="#cbd5e1" stroke-width="1"/><line x1="10" y1="120" x2="180" y2="20" stroke="#2563eb" stroke-width="2.5"/><polygon points="10,120 180,20 10,20" fill="#dc2626" opacity="0.3"/><text x="20" y="50" font-size="12" font-weight="bold" fill="#dc2626">Región sombreada</text></svg></div>`
         }, {
             id: 36,
-            area: "Aritmética",
+            area: "Geometría",
             type: "multiple",
-            q: "¿Cuál es el resultado de (15/8) × (16/5)?",
-            options: ["3", "4", "5", "6"],
-            ans: 1
+            q: "Un joven viaja 12 millas al norte y 16 millas al oeste. ¿A cuántas millas está de su casa?",
+            options: ["20", "24", "25", "26"],
+            ans: 0
         }, {
             id: 37,
-            area: "Álgebra I",
+            area: "Geometría",
             type: "multiple",
-            q: "¿Cuál es el valor de 4⁻²?",
-            options: ["-16", "-8", "1/16", "1/8"],
-            ans: 2
+            q: "El perímetro del cuadrado X es 12 y del cuadrado Z es 28. ¿Cuál es el perímetro del cuadrado V?",
+            options: ["40", "44", "100", "121"],
+            ans: 0,
+            figure: `<div class="figure-container"><svg width="240" height="140" viewBox="0 0 240 140"><rect x="20" y="20" width="40" height="40" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><rect x="80" y="20" width="40" height="40" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><rect x="60" y="50" width="80" height="80" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="28" y="50" font-size="12" font-weight="bold" fill="#2563eb">X</text><text x="88" y="50" font-size="12" font-weight="bold" fill="#2563eb">Z</text><text x="80" y="100" font-size="12" font-weight="bold" fill="#2563eb">V</text></svg></div>`
         }, {
             id: 38,
             area: "Geometría",
             type: "multiple",
-            q: "¿Cuál es el volumen de un cilindro con radio 4 cm y altura 6 cm?",
-            options: ["48π cm³", "72π cm³", "96π cm³", "120π cm³"],
+            q: "En la figura, AB ≅ BC, AC = 30 cm y BD = 20 cm. ¿Cuánto mide AB?",
+            options: ["20", "24", "25", "50"],
             ans: 2,
-            figure: `<div class="figure-container"><svg width="140" height="150" viewBox="0 0 140 150"><ellipse cx="70" cy="25" rx="35" ry="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><rect x="35" y="25" width="70" height="80" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><ellipse cx="70" cy="105" rx="35" ry="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><line x1="105" y1="25" x2="105" y2="105" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/><text x="100" y="70" font-size="14" font-weight="bold" fill="#dc2626">6</text><text x="50" y="125" font-size="14" font-weight="bold" fill="#2563eb">r=4</text></svg></div>`
+            figure: `<div class="figure-container"><svg width="200" height="160" viewBox="0 0 200 160"><polygon points="100,20 180,140 20,140" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/><line x1="100" y1="20" x2="100" y2="140" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/><text x="95" y="80" font-size="13" font-weight="bold" fill="#dc2626">20</text><text x="60" y="155" font-size="13" font-weight="bold" fill="#2563eb">30</text></svg></div>`
         }, {
             id: 39,
-            area: "Aritmética",
-            type: "multiple",
-            q: "¿Cuánto es el 15% de 400?",
-            options: ["40", "50", "60", "75"],
-            ans: 2
-        }, {
-            id: 40,
-            area: "Álgebra II",
-            type: "multiple",
-            q: "Dos rectas son paralelas si sus pendientes son:",
-            options: ["iguales", "inversas", "opuestas", "producto = -1"],
-            ans: 0
-        }, {
-            id: 41,
-            area: "Aritmética",
-            type: "multiple",
-            q: "¿Cuál es la factorización prima de 84?",
-            options: ["2² × 3 × 7", "2² × 3² × 7", "2³ × 3 × 7", "2 × 3 × 7²"],
-            ans: 0
-        }, {
-            id: 42,
-            area: "Álgebra I",
-            type: "multiple",
-            q: "Resta: (6x² − 4x + 5) − (3x² + 2x − 3)",
-            options: ["3x² − 6x + 8", "3x² − 2x + 2", "9x² − 2x + 2", "3x² − 6x + 2"],
-            ans: 0
-        }, {
-            id: 43,
-            area: "Geometría",
-            type: "multiple",
-            q: "¿Cuál es el área de un trapecio con bases 10 cm y 14 cm, y altura 6 cm?",
-            options: ["48 cm²", "72 cm²", "84 cm²", "144 cm²"],
-            ans: 1,
-            figure: `<div class="figure-container"><svg width="200" height="130" viewBox="0 0 200 130"><polygon points="40,110 160,110 120,20 80,20" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><line x1="80" y1="110" x2="80" y2="20" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/><text x="55" y="75" font-size="14" font-weight="bold" fill="#dc2626">h=6</text><text x="88" y="128" font-size="14" font-weight="bold" fill="#2563eb">14</text><text x="40" y="128" font-size="14" font-weight="bold" fill="#2563eb">10</text></svg></div>`
-        }, {
-            id: 44,
             area: "Probabilidad",
             type: "multiple",
-            q: "Al lanzar un dado, ¿cuál es la probabilidad de obtener un múltiplo de 2?",
-            options: ["1/6", "1/3", "1/2", "2/3"],
-            ans: 2,
-            figure: `<div class="pictogram">🎲 <span style="font-size:16px;font-weight:bold;color:#2563eb;">→</span> 2, 4, 6 <span style="font-size:16px;font-weight:bold;color:#2563eb;">→</span> ⚁ ⚃ ⚅</div>`
+            q: "¿Cuál es la probabilidad de obtener una B y un 5 al girar cada ruleta una sola vez?",
+            options: ["1/10", "1/24", "5/24", "10/24"],
+            ans: 1,
+            figure: `<div class="pictogram">🎯 <span style="font-size:16px;font-weight:bold;color:#2563eb;margin:0 8px;">→</span> 4 sectores y 6 sectores</div>`
         }, {
-            id: 45,
+            id: 40,
+            area: "Probabilidad",
+            type: "multiple",
+            q: "¿Cuántos números diferentes de tres dígitos se pueden formar si cada dígito es MENOR que 5?",
+            options: ["15", "100", "125", "500"],
+            ans: 1
+        }, {
+            id: 41,
             area: "Álgebra II",
             type: "multiple",
-            q: "¿Cuál es el vértice de la parábola y = (x − 3)² + 2?",
-            options: ["(3, 2)", "(-3, 2)", "(3, -2)", "(-3, -2)"],
+            q: "En el diagrama de Venn, A = múltiplos de 3 y B = múltiplos de 2. ¿Cuál número pertenece a la región sombreada?",
+            options: ["5", "8", "12", "21"],
+            ans: 2,
+            figure: `<div class="figure-container"><svg width="240" height="180" viewBox="0 0 240 180"><ellipse cx="90" cy="90" rx="60" ry="50" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/><ellipse cx="150" cy="90" rx="60" ry="50" fill="#fde68a" stroke="#2563eb" stroke-width="2.5"/><text x="30" y="85" font-size="16" font-weight="bold" fill="#2563eb">A</text><text x="180" y="85" font-size="16" font-weight="bold" fill="#2563eb">B</text><text x="112" y="85" font-size="16" font-weight="bold" fill="#dc2626">Sombreado</text></svg></div>`
+        }, {
+            id: 42,
+            area: "Álgebra II",
+            type: "multiple",
+            q: "¿Cuál es la pendiente de la recta que contiene los puntos (5, -4) y (8, -10)?",
+            options: ["2", "-3/6", "-2", "-14/3"],
+            ans: 2
+        }, {
+            id: 43,
+            area: "Álgebra II",
+            type: "multiple",
+            q: "Las soluciones de 3x² + 11x + 10 = 0 son:",
+            options: ["x = -2, x = -5/3", "x = -2, x = 3/5", "x = 2, x = -5/3", "x = 2, x = 5/3"],
+            ans: 0
+        }, {
+            id: 44,
+            area: "Geometría",
+            type: "multiple",
+            q: "En la figura, la altura del triángulo es 6 unidades y PQ = 10 unidades. ¿Cuáles son las coordenadas de Q?",
+            options: ["(8, 6)", "(8, 10)", "(10, 8)", "(6, 10)"],
+            ans: 0,
+            figure: `<div class="figure-container"><svg width="180" height="140" viewBox="0 0 180 140"><polygon points="20,120 160,120 80,20" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/><text x="70" y="80" font-size="13" font-weight="bold" fill="#dc2626">6</text><text x="85" y="130" font-size="13" font-weight="bold" fill="#2563eb">10</text></svg></div>`
+        }, {
+            // REACTIVO 45 - CORREGIDO
+            id: 45,
+            area: "Álgebra I",
+            type: "multiple",
+            q: "Si (5^m)^n = 5^m × 5^k, ¿cuál es el valor de k en términos de m y n?",
+            options: ["m(n−1)", "n(m−1)", "mn−m", "mn"],
             ans: 0
         }, {
             id: 46,
-            area: "Aritmética",
-            type: "open",
-            q: "Dos grifos llenan un tanque en 4 y 6 horas respectivamente. ¿En cuántos MINUTOS se llena si se abren ambos?",
-            ans: "144"
+            area: "Geometría",
+            type: "multiple",
+            q: "Un círculo tiene radio 5 cm. ¿Cuántos centímetros mide su circunferencia?",
+            options: ["25π", "10π", "6π", "5π"],
+            ans: 1
         }, {
             id: 47,
-            area: "Álgebra I",
-            type: "open",
-            q: "Si 2⁴ × 2ˣ = 128, ¿cuál es el valor de x?",
-            ans: "3"
+            area: "Geometría",
+            type: "multiple",
+            q: "En la figura, BC ∥ AD. ¿Cuál es el área del trapecio ABCD?",
+            options: ["20", "22", "24", "32"],
+            ans: 1,
+            figure: `<div class="figure-container"><svg width="200" height="140" viewBox="0 0 200 140"><polygon points="40,110 160,110 120,20 80,20" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/><text x="85" y="128" font-size="13" font-weight="bold" fill="#2563eb">10</text><text x="40" y="128" font-size="13" font-weight="bold" fill="#2563eb">6</text><text x="55" y="75" font-size="13" font-weight="bold" fill="#dc2626">4</text></svg></div>`
         }, {
             id: 48,
             area: "Geometría",
-            type: "open",
-            q: "El área de un cuadrado es 100 cm². ¿Cuánto mide su diagonal en cm?",
-            ans: "10√2",
-            figure: `<div class="figure-container"><svg width="130" height="130" viewBox="0 0 130 130"><rect x="15" y="15" width="100" height="100" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/><line x1="15" y1="15" x2="115" y2="115" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/><text x="48" y="68" font-size="16" font-weight="bold" fill="#2563eb">A=100</text></svg></div>`
+            type: "multiple",
+            q: "El perímetro del rectángulo es 62 cm. ¿Cuántos centímetros mide su largo?",
+            options: ["28", "20", "17", "11"],
+            ans: 2,
+            figure: `<div class="figure-container"><svg width="200" height="120" viewBox="0 0 200 120"><rect x="20" y="20" width="140" height="80" fill="#e6f0fa" stroke="#2563eb" stroke-width="2.5"/><text x="55" y="68" font-size="14" font-weight="bold" fill="#2563eb">? cm</text><text x="150" y="80" font-size="13" font-weight="bold" fill="#dc2626">14 cm</text></svg></div>`
         }, {
             id: 49,
-            area: "Estadística",
-            type: "open",
-            q: "Calcula la media de: 14, 21, 28, 35, 42",
-            ans: "28"
+            area: "Geometría",
+            type: "multiple",
+            q: "En la figura, las rectas M y N son paralelas. ¿Cuánto mide el ángulo BAC?",
+            options: ["30", "40", "70", "110"],
+            ans: 2,
+            figure: `<div class="figure-container"><svg width="220" height="140" viewBox="0 0 220 140"><line x1="20" y1="40" x2="200" y2="40" stroke="#94a3b8" stroke-width="2.5"/><line x1="20" y1="110" x2="200" y2="110" stroke="#94a3b8" stroke-width="2.5"/><line x1="80" y1="40" x2="160" y2="110" stroke="#dc2626" stroke-width="2.5"/><text x="100" y="65" font-size="14" font-weight="bold" fill="#dc2626">?°</text><text x="130" y="95" font-size="13" font-weight="bold" fill="#dc2626">70°</text></svg></div>`
         }, {
+            // REACTIVO 50 - CORREGIDO
             id: 50,
-            area: "Álgebra II",
-            type: "open",
-            q: "Si 5ˣ⁻² = 125, ¿cuál es el valor de x?",
-            ans: "5"
+            area: "Geometría",
+            type: "multiple",
+            q: "De acuerdo con la figura, ¿a qué distancia está el punto A del punto B?",
+            options: ["2√5", "4√5", "6√5", "8√5"],
+            ans: 0,
+            figure: `<div class="figure-container"><svg width="200" height="160" viewBox="0 0 200 160"><rect x="10" y="10" width="180" height="140" fill="#fafbfc" stroke="#cbd5e1" stroke-width="1"/><line x1="20" y1="140" x2="190" y2="140" stroke="#94a3b8" stroke-width="1.5"/><line x1="40" y1="10" x2="40" y2="150" stroke="#94a3b8" stroke-width="1.5"/><circle cx="40" cy="120" r="4" fill="#dc2626"/><text x="20" y="115" font-size="11" font-weight="700" fill="#dc2626">A(1,3)</text><circle cx="100" cy="80" r="4" fill="#dc2626"/><text x="85" y="75" font-size="11" font-weight="700" fill="#dc2626">B(3,7)</text><line x1="40" y1="120" x2="100" y2="80" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,3"/></svg></div>`
         }, {
             id: 51,
-            area: "Aritmética",
-            type: "open",
-            q: "¿Cuántos números primos hay entre 30 y 40?",
-            ans: "2"
+            area: "Geometría",
+            type: "multiple",
+            q: "En el ΔPQR, PQ = RQ y PR = x. Si PQ = x + 5 y el perímetro es 31 cm, ¿cuánto mide RQ?",
+            options: ["12", "13", "21", "26"],
+            ans: 0
         }, {
             id: 52,
-            area: "Álgebra I",
-            type: "open",
-            q: "Si f(x) = 3x³ − 2x² + 4x − 6, ¿cuál es f(2)?",
-            ans: "18"
+            area: "Estadística",
+            type: "multiple",
+            q: "La gráfica muestra el número de estudiantes por computadora. La razón de nivel superior a nivel intermedio es:",
+            options: ["5:4", "4:5", "2:1", "1:2"],
+            ans: 1,
+            figure: `<div class="figure-container"><svg width="240" height="180" viewBox="0 0 240 180"><rect x="20" y="110" width="50" height="40" fill="#2563eb"/><text x="28" y="105" font-size="10" font-weight="bold" fill="#2563eb">16</text><text x="22" y="165" font-size="10" font-weight="bold" fill="#1e293b">Elem.</text><rect x="90" y="130" width="50" height="20" fill="#dc2626"/><text x="98" y="125" font-size="10" font-weight="bold" fill="#dc2626">10</text><text x="95" y="165" font-size="10" font-weight="bold" fill="#1e293b">Inter.</text><rect x="160" y="140" width="50" height="10" fill="#10b981"/><text x="168" y="135" font-size="10" font-weight="bold" fill="#10b981">8</text><text x="162" y="165" font-size="10" font-weight="bold" fill="#1e293b">Super.</text></svg></div>`
         }, {
             id: 53,
-            area: "Geometría",
-            type: "open",
-            q: "¿Cuántos grados mide cada ángulo interior de un pentágono regular?",
-            ans: "108",
-            figure: `<div class="figure-container"><svg width="140" height="130" viewBox="0 0 140 130"><polygon points="70,10 130,45 105,120 35,120 10,45" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/><text x="58" y="70" font-size="14" font-weight="bold" fill="#dc2626">x°</text></svg></div>`
+            area: "Probabilidad",
+            type: "multiple",
+            q: "Una caja contiene 4 canicas de colores diferentes. ¿De cuántas maneras se pueden sacar las 4 una después de otra?",
+            options: ["4", "24", "26", "30"],
+            ans: 1
         }, {
             id: 54,
             area: "Estadística",
-            type: "open",
-            q: "En una clase hay 18 niños y 27 niñas. ¿Qué porcentaje del total son niños? (Responde solo el número)",
-            ans: "40"
+            type: "multiple",
+            q: "Si el promedio de cinco enteros consecutivos es 10, ¿cuál es el entero MAYOR?",
+            options: ["11", "12", "25", "50"],
+            ans: 1
         }, {
+            // REACTIVO 55 - CORREGIDO
             id: 55,
-            area: "Álgebra II",
+            area: "Álgebra I",
             type: "open",
-            q: "¿Cuál es el intercepto en y de la recta 2x − 5y = 10? (Responde solo el número)",
-            ans: "-2"
+            q: "Si 3/(5x) = 9, entonces 5x = ? (escribe tu respuesta como fracción simplificada)",
+            ans: "1/3"
         }];
 
         // ============================================================
@@ -633,7 +723,7 @@
             } else {
                 html += `
                     <div class="space-y-4">
-                        <input type="text" id="open-ans" placeholder="Escribe el número" class="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 text-3xl font-black text-blue-700 text-center transition-all">
+                        <input type="text" id="open-ans" placeholder="Escribe el número o expresión" class="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 text-3xl font-black text-blue-700 text-center transition-all">
                         <button onclick="checkAnswerOpen()" class="w-full bg-slate-900 text-white font-black py-4 rounded-xl shadow-md uppercase text-xs tracking-widest active:scale-95 transition-transform">Confirmar Respuesta</button>
                     </div>
                 `;
@@ -666,7 +756,9 @@
             if (val === "") return;
             canAnswer = false;
             const q = questions[currentIndex];
-            const isCorrect = (val === q.ans);
+            const normalizedVal = val.replace(/\s/g, '').toLowerCase();
+            const normalizedAns = q.ans.replace(/\s/g, '').toLowerCase();
+            const isCorrect = (normalizedVal === normalizedAns || val === q.ans);
             if (isCorrect) { correctCount++;
                 document.getElementById('correct-counter').innerText = correctCount; }
             if (!areaStats[q.area]) areaStats[q.area] = { ok: 0, total: 0 };
