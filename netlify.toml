@@ -10,6 +10,51 @@
   to   = "/.netlify/functions/:splat"
   status = 200
 
+[[redirects]]
+  from = "/examenes/singl:id.html"
+  to   = "/examenes/ing/singl:id.html"
+  status = 301
+
+[[redirects]]
+  from = "/examenes/demo_mat.html"
+  to   = "/examenes/demos/demo_mat.html"
+  status = 301
+
+[[redirects]]
+  from = "/examenes/demo_red.html"
+  to   = "/examenes/demos/demo_red.html"
+  status = 301
+
+[[redirects]]
+  from = "/examenes/demo_conquista.html"
+  to   = "/examenes/demos/demo_conquista.html"
+  status = 301
+
+[[redirects]]
+  from = "/examenes/demogeneral.html"
+  to   = "/examenes/demos/demogeneral.html"
+  status = 301
+
+[[redirects]]
+  from = "/examenes/simulacionespanolgratis.html"
+  to   = "/examenes/demos/simulacionespanolgratis.html"
+  status = 301
+
+[[redirects]]
+  from = "/examenes/simulacionmathgratis.html"
+  to   = "/examenes/demos/simulacionmathgratis.html"
+  status = 301
+
+[[redirects]]
+  from = "/examenes/testvocacional.html"
+  to   = "/examenes/demos/testvocacional.html"
+  status = 301
+
+[[redirects]]
+  from = "/examenes/red/diagnostico-español.html"
+  to   = "/examenes/red/diagnostico-espanol.html"
+  status = 301
+
 [build.environment]
   SECRETS_SCAN_OMIT_KEYS = "FIREBASE_API_KEY,FIREBASE_PROJECT_ID,FIREBASE_CLIENT_EMAIL,FIREBASE_MESSAGING_SENDER_ID,FIREBASE_APP_ID,FIREBASE_MEASUREMENT_ID"
   SECRETS_SCAN_OMIT_PATHS = "index.html,pago-exitoso.html"
