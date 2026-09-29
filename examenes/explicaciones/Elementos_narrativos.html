@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Elementos Narrativos PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(52, 211, 153, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(52, 211, 153, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #34d399, #059669); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(52, 211, 153, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #34d399; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #34d399, #059669); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #34d399; }
+        .box-highlight { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #34d399; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge" style="background:#34d399;">Comprensión de Lectura PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Elementos Narrativos, Conflicto y Personajes 📖</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Domina las preguntas sobre textos literarios en la PAA: tipos de narrador (protagonista, testigo, omnisciente), identificación del conflicto central, evolución de personajes y atmósferas.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">🗣️ Tipos de Narrador</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">⚔️ Conflicto Central</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">👤 Arco de Personaje</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Elementos Narrativos →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Punto de Vista: ¿Quién Narra la Historia? 👤</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>La PAA evalúa distinguir con precisión la voz que relata los acontecimientos:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-slate-900 p-3 rounded-xl border border-emerald-500/30">
+                    <p class="font-bold text-emerald-300">1. Narrador Protagonista (1ª persona):</p>
+                    <p class="text-slate-300 mt-1">Narra su propia vida y vivencias. Visión subjetiva y limitada a lo que él siente y ve: <i>"Caminé hacia la vieja estación sintiendo un nudo en la garganta."</i></p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-xl border border-emerald-500/30">
+                    <p class="font-bold text-emerald-300">2. Narrador Testigo (1ª persona):</p>
+                    <p class="text-slate-300 mt-1">Usa la 1ª persona pero él no es el centro; relata la historia de alguien más (ej. Watson respecto a Sherlock Holmes): <i>"Observé cómo mi tío examinaba las cartas con temor."</i></p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-xl border border-emerald-500/30">
+                    <p class="font-bold text-emerald-300">3. Narrador Omnisciente (3ª persona):</p>
+                    <p class="text-slate-300 mt-1">Como un dios: conoce los pensamientos secretos, temores pasados y el futuro de todos los personajes: <i>"Pedro creía estar a salvo, ignorando que Elena ya conocía su plan."</i></p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-xl border border-emerald-500/30">
+                    <p class="font-bold text-emerald-300">4. Narrador Observador / Cámara (3ª persona):</p>
+                    <p class="text-slate-300 mt-1">Solo relata lo que se puede ver y escuchar desde fuera, sin penetrar en la mente de nadie.</p>
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Ejemplo Resuelto: Identificación del Narrador 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Fragmento Literario PAA:</p>
+                <p class="italic text-slate-200">"El capitán miraba el horizonte con el semblante pétreo de quien ya no espera milagros. Por dentro, sin embargo, un torbellino de culpa le recordaba la orden dada tres días atrás en el estrecho, una orden que ahora conducía a su tripulación a una tumba de coral."</p>
+                <p class="text-xs text-emerald-300 mt-2 font-semibold">¿Qué tipo de narrador relata este fragmento?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Narrador Identificado:</b> <b>Narrador Omnisciente en 3ª persona</b>.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Por qué:</b> Utiliza verbos en tercera persona (<i>"miraba", "le recordaba"</i>) y penetra de forma total en la conciencia íntima del personaje (<i>"Por dentro, un torbellino de culpa le recordaba..."</i>). Un narrador testigo o cámara exterior jamás podría saber lo que el capitán siente "por dentro".
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">¿Qué tipo de narrador predomina en el pasaje? 🎯</h2>
+            
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30 text-xs sm:text-sm text-slate-200 mb-3 leading-relaxed">
+            <i>"Durante todo aquel verano acompañé a don Silvestre en sus largas caminatas por los viñedos. Yo llevaba su cuaderno de cuero y observaba cómo sus dedos curtidos acariciaban los racimos. Jamás lo escuché quejarse del sol canicular, aunque sus pasos se volvían más pesados cada mediodía."</i>
+        </div>
+        <p class="text-slate-300 text-xs mb-3">La voz narrativa corresponde a un:</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'en1', 'Error: el protagonista de las acciones admiradas es don Silvestre; quien habla es su acompañante.')">A) Narrador protagonista que relata su consagración como viticultor.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'en1', '¡Exacto! El relato está en primera persona (\'acompañé\', \'llevaba\', \'yo\'), pero el foco central de la atención y descripción es otro personaje: don Silvestre. Es el clásico narrador testigo.')">B) Narrador testigo en primera persona que observa y describe a don Silvestre.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'en1', 'Error: no sabe lo que don Silvestre piensa por dentro, solo observa lo exterior (\'observaba cómo sus dedos...\').')">C) Narrador omnisciente que revela los pensamientos ocultos de don Silvestre.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'en1', 'Error: está en primera persona, no en segunda (no le habla a un \'tú\').')">D) Narrador en segunda persona que interpela directamente al lector.</button>
+        </div>
+        <div id="feedback-en1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Conflicto y Personajes →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">El Conflicto Central y la Atmósfera ⚔️</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>El <b>conflicto</b> es el motor dramático de cualquier relato en la PAA. Se divide en dos grandes tipos:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-slate-900 p-3 rounded-xl border border-emerald-500/30">
+                    <p class="font-bold text-emerald-300">Conflicto Interno (Hombre vs Sí mismo):</p>
+                    <p class="text-slate-300 mt-1">Dilema moral, lucha contra los propios miedos, la culpa, el deber contra el deseo. El antagonista vive dentro del personaje.</p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-xl border border-emerald-500/30">
+                    <p class="font-bold text-emerald-300">Conflicto Externo:</p>
+                    <p class="text-slate-300 mt-1">El personaje lucha contra otro individuo (hombre vs hombre), contra la sociedad/leyes (hombre vs sociedad) o contra las fuerzas naturales (hombre vs naturaleza).</p>
+                </div>
+            </div>
+            <div class="box-highlight text-xs">
+                💡 <b>La Atmósfera:</b> Es el "clima emocional" que envuelve la escena mediante adjetivos sensoriales (opresiva, desoladora, festiva, onírica, enigmática).
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Ejemplo Resuelto: Análisis del Dilema Central 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Fragmento Narrativo PAA:</p>
+                <p class="italic text-slate-200">"El juez sostenía el expediente del acusado. Las pruebas legales exigían una condena de diez años; sin embargo, en los ojos de aquel muchacho desamparado reconocía la misma desesperación que lo había llevado a él, cuarenta años atrás, a robar pan para sus hermanos. Firmar la sentencia significaba cumplir la ley, pero destruir su propia alma."</p>
+                <p class="text-xs text-emerald-300 mt-2 font-semibold">¿Cuál es el conflicto central que enfrenta el protagonista?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Conflicto Central:</b> Una <b>tensión ética interna</b> entre el deber institucional de aplicar la ley rígida y su compasión moral nacida de su propia historia.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Análisis:</b> La lucha no es a golpes con el acusado ni contra los abogados; es un desgarro en la conciencia del juez (<i>"cumplir la ley, pero destruir su propia alma"</i>).
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">¿Qué conflicto describe con precisión la escena? 🎯</h2>
+            
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30 text-xs sm:text-sm text-slate-200 mb-3 leading-relaxed">
+            <i>"Durante meses, Clara guardó silencio sobre las fallas de diseño en los frenos del nuevo ferrocarril. Sabía que denunciarlo a la prensa provocaría el cierre de la fábrica y dejaría a trescientas familias de su pueblo sin sustento, incluyendo la suya; pero callar la convertía en cómplice de una catástrofe humana inevitable."</i>
+        </div>
+        <p class="text-slate-300 text-xs mb-3">El dilema fundamental que aqueja a Clara es:</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'en2', 'El texto no menciona que ella quiera una compensación económica ni aumento.')">A) Una disputa salarial con los dueños de la fábrica para obtener un ascenso.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'en2', '¡Excelente discernimiento! Se debate entre la lealtad comunitaria/económica inmediata y la responsabilidad ética universal de prevenir pérdidas de vidas humanas.')">B) Un conflicto moral entre la lealtad socioeconómica a su comunidad y el deber ético de evitar una tragedia humana.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'en2', 'No es un problema técnico de ingeniería; ella ya sabe perfectamente que los frenos fallan.')">C) Una dificultad técnica para comprender el sistema de frenado del ferrocarril.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'en2', 'No lucha contra las familias del pueblo; su preocupación es no dejarlas sin sustento.')">D) Una enemistad personal contra los trabajadores de la fábrica.</button>
+        </div>
+        <div id="feedback-en2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
+        <div class="card text-center">
+            <span class="badge" style="background:#34d399;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Machete de Elementos Narrativos 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Voz Narrativa</div>
+                <div class="text-slate-300 mt-1">¿Dice "yo" (protagonista/testigo) o relata desde fuera en "él/ellos" (omnisciente/observador)?</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Conflicto = La Paradoja</div>
+                <div class="text-slate-300 mt-1">¿Qué fuerzas chocan? Casi siempre es un deber contra un deseo, o una verdad contra un secreto.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Evolución de Personaje</div>
+                <div class="text-slate-300 mt-1">Compara el estado anímico del personaje en el párrafo 1 vs en el desenlace final.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Atmósfera Textual</div>
+                <div class="text-slate-300 mt-1">Los adjetivos del entorno (niebla, penumbra, sol radiante) reflejan el estado emocional interior.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Los textos literarios de la PAA ya no tendrán misterios para ti.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa PAA:</b><br/>${explanation}`;
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>

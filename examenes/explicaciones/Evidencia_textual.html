@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Evidencia Textual Pareada PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(52, 211, 153, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(52, 211, 153, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #34d399, #059669); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(52, 211, 153, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #34d399; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #34d399, #059669); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #34d399; }
+        .box-highlight { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #34d399; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge" style="background:#34d399;">Comprensión de Lectura PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Evidencia Textual Pareada: La "Doble Pregunta" 🔗</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Domina el formato insignia del College Board: el par de preguntas donde la primera pide una inferencia y la segunda exige identificar las líneas exactas que la demuestran.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">⚓ Anclaje en Tándem</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">📍 Lectura por Líneas</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">🛡️ Descarte Cruzado</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Evidencia Textual →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Estrategia Secreta</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">El Método de Anclaje en Tándem ⚓</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>En el examen PAA te toparás frecuentemente con dos preguntas encadenadas:</p>
+            <div class="box-highlight text-xs space-y-1">
+                <p><b>Pregunta 1:</b> <i>"¿Qué actitud manifiesta el autor respecto a...?"</i> o <i>"¿Cuál es la causa principal de...?"</i></p>
+                <p><b>Pregunta 2:</b> <i>"¿Cuál opción provee la MEJOR EVIDENCIA para la respuesta a la pregunta anterior?"</i></p>
+                <p class="text-slate-400 pl-4">A) Líneas 4-6 ("Cuando el barco...")<br/>B) Líneas 12-14 ("Ningún marinero...")<br/>C) Líneas 20-22 ("La tormenta cesó...")<br/>D) Líneas 28-30 ("El capitán sonrió...")</p>
+            </div>
+            <div class="box-warning text-xs">
+                <b>💡 EL TRUCO SUPREMO (Resolución Inversa):</b><br/>
+                ¡No intentes adivinar la Pregunta 1 a ciegas! Lee primero las 4 citas de la Pregunta 2. Solo <b>UNA</b> de esas 4 citas contiene la respuesta a la Pregunta 1. Las otras tres citas hablan de temas diferentes. Al encontrar la cita que contesta directamente la duda, tienes resueltas <b>AMBAS PREGUNTAS</b> con 100% de seguridad.
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Ejemplo Resuelto: Pareja de Reactivos Modelo 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Texto de muestra (Fragmento):</p>
+                <p class="text-slate-300 leading-relaxed italic">
+                    [1] Don Fernando era un médico jubilado cuya pasión secreta era la astronomía. [4] Aunque su familia creía que perdía el tiempo en el ático, él sentía que observar los cometas le devolvía la serenidad perdida en las salas de hospital. [8] "Los astros tienen una puntualidad matemática que los humanos jamás alcanzaremos", escribió en su diario en 1994.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700">
+                    <b>Pregunta 1:</b> Para Don Fernando, mirar los astros representaba:<br/>
+                    <span class="text-emerald-400 font-bold">✔️ Respuesta: Un refugio de paz interior frente a su pasado clínico.</span>
+                </div>
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>Pregunta 2 (Evidencia):</b> ¿Qué líneas lo demuestran?<br/>
+                    <span class="font-bold">✔️ Líneas 4-8:</span> <i>"...él sentía que observar los cometas le devolvía la serenidad perdida en las salas de hospital."</i>
+                </div>
+            </div>
+            <div class="box-highlight text-xs">
+                <b>Comprobación matemática:</b> "Serenidad perdida en el hospital" = "paz interior frente a su pasado clínico". ¡El vínculo es exacto e inexpugnable!
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica Tándem →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Reactivo Pareado (Parte 1)</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Doble Reactivo: Pregunta de Inferencia 🎯</h2>
+            
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30 text-xs sm:text-sm text-slate-200 mb-3 leading-relaxed">
+            <p><b>[Línea 1]</b> Durante siglos, los apicultores tradicionales confiaron en saberes orales heredados.</p>
+            <p><b>[Línea 4]</b> Sin embargo, la llegada del ácaro Varroa en la década de 1980 diezmó colmenas enteras de forma fulminante.</p>
+            <p><b>[Línea 7]</b> Los métodos empíricos resultaron impotentes ante la agresividad del parásito foráneo.</p>
+            <p><b>[Línea 10]</b> Solo aquellos productores que adoptaron protocolos microbiológicos rigurosos consiguieron salvar sus colonias de abejas.</p>
+        </div>
+        <p class="text-slate-300 text-xs mb-2"><b>Pregunta 1:</b> Del fragmento se desprende que frente a la invasión del ácaro Varroa:</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'ev1', 'El texto no dice que las abejas desarrollaran defensas naturales, sino que los apicultores tuvieron que intervenir.')">A) Las abejas desarrollaron defensas genéticas autónomas sin intervención humana.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'ev1', '¡Muy bien! Las técnicas tradicionales fueron insuficientes y fue obligatoria la adopción de métodos científicos formales.')">B) Las prácticas ancestrales fueron insuficientes, obligando a una transición hacia la ciencia formal.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'ev1', 'El texto dice que los productores con protocolos rigurosos sí salvaron sus colonias.')">C) La apicultura desapareció por completo como actividad económica rentable.</button>
+        </div>
+        <div id="feedback-ev1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Pregunta 2: Localiza la Evidencia →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 4: Práctica 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Reactivo Pareado (Parte 2)</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Doble Reactivo: Selección de la Evidencia Exacta 📍</h2>
+            
+        <p class="text-slate-300 text-sm mb-3"><b>Pregunta 2:</b> ¿Qué segmento del texto provee la MEJOR EVIDENCIA para respaldar que <i>las prácticas ancestrales fueron insuficientes y exigieron ciencia formal</i>?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'ev2', 'Líneas 1-3 solo describen la tradición previa, no demuestran la insuficiencia ni la solución.')">A) Líneas 1-3 ("Durante siglos, los apicultores tradicionales confiaron en saberes orales heredados.")</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'ev2', 'Líneas 4-6 señalan la llegada del ácaro y la muerte de colmenas, pero no la necesidad de ciencia.')">B) Líneas 4-6 ("Sin embargo, la llegada del ácaro Varroa en la década de 1980 diezmó colmenas enteras...")</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'ev2', '¡Perfección absoluta! Líneas 7-12 contrastan directamente la impotencia empírica con el éxito exclusivo de los protocolos microbiológicos rigurosos. ¡Has resuelto ambas con éxito!')">C) Líneas 7-12 ("Los métodos empíricos resultaron impotentes... Solo aquellos productores que adoptaron protocolos microbiológicos consiguieron salvar sus colonias.")</button>
+        </div>
+        <div id="feedback-ev2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 5: Resumen -->
+    <div class="slide " id="slide-5">
+        <div class="card text-center">
+            <span class="badge" style="background:#34d399;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Machete de Evidencia Textual Pareada 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Resuelve en Pareja</div>
+                <div class="text-slate-300 mt-1">Nunca valides la respuesta 1 sin haber encontrado su cita idéntica en la respuesta 2.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Cita Literal y Directa</div>
+                <div class="text-slate-300 mt-1">La cita ganadora contiene sinónimos directos de la opción elegida en la primera pregunta.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Evita Citas Vecinas</div>
+                <div class="text-slate-300 mt-1">College Board suele colocar como trampas los renglones justo arriba o abajo de la cita correcta.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">2 Aciertos Garantizados</div>
+                <div class="text-slate-300 mt-1">Este método convierte un punto vulnerable en 2 aciertos seguros para tu puntaje global.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Has dominado el mecanismo tándem de las preguntas pareadas de la PAA.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa PAA:</b><br/>${explanation}`;
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>

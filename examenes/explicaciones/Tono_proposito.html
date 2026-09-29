@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Tono y Propósito del Autor PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(52, 211, 153, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(52, 211, 153, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #34d399, #059669); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(52, 211, 153, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #34d399; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #34d399, #059669); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #34d399; }
+        .box-highlight { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #34d399; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge" style="background:#34d399;">Comprensión de Lectura PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Tono, Perspectiva y Propósito del Autor 🎭</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Descifra la actitud emocional del autor (escéptico, reverente, solemne, irónico, crítico) y distingue entre persuadir, advertir, divulgar y refutar en los reactivos de intención comunicativa.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">🎭 Catálogo de Tonos</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">🎯 Propósito del Autor</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">🔎 Carga Semántica</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Tono y Propósito →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">El Diccionario de Tonos del College Board 🎭</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>El <b>tono</b> es la actitud emocional o intelectual del autor hacia el tema que expone. Se detecta analizando los <b>adjetivos y verbos valorativos</b> que emplea:</p>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-emerald-500/30">
+                    <b class="text-emerald-300">Objetivo / Neutro:</b> Expone hechos y datos sin emitir juicios ni adjetivos emocionales (artículos científicos).
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-emerald-500/30">
+                    <b class="text-emerald-300">Escéptico / Dubitativo:</b> Expresa dudas, cuestiona certezas aparentes: <i>"aún es prematuro concluir..."</i>.
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-emerald-500/30">
+                    <b class="text-emerald-300">Crítico / Censurador:</b> Señala fallas, condena abusos o errores morales/sociales.
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-emerald-500/30">
+                    <b class="text-emerald-300">Reverente / Admirativo:</b> Rinde tributo a un personaje, arte o proeza con elogios sinceros.
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-emerald-500/30">
+                    <b class="text-emerald-300">Nostálgico / Melancólico:</b> Evoca el pasado con añoranza y tristeza por lo perdido.
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-emerald-500/30">
+                    <b class="text-emerald-300">Irónico / Sarcástico:</b> Dice lo contrario de lo que piensa con tono burlón sutil para ridiculizar una postura.
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Ejemplo Resuelto: Caza de Pistas de Tono 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Fragmento PAA:</p>
+                <p class="italic text-slate-200">"Nos prometieron que los algoritmos liberarían a la humanidad del tedio laboral. Hoy contemplamos con estupor cómo la gente dedica catorce horas diarias a alimentar redes neuronales con clics mecánicos, llamando 'progreso' a la servidumbre voluntaria mejor empaquetada de la historia."</p>
+                <p class="text-xs text-emerald-300 mt-2 font-semibold">¿Cuál es el tono predominante del autor?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Tono Identificado:</b> <b>Crítico e irónico</b>.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Pistas léxicas en el texto:</b>
+                    <ul class="list-disc list-inside mt-1 space-y-1">
+                        <li><i>"Nos prometieron..."</i> contrapuesto a <i>"con estupor..."</i> (desencanto mordaz).</li>
+                        <li>Uso de ironía cáustica: llamar <i>"servidumbre voluntaria mejor empaquetada"</i> a lo que otros llaman <i>"progreso"</i>.</li>
+                        <li>No es neutro (emite fuertes juicios de valor) ni nostálgico (ataca la realidad presente).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">¿Qué tono manifiesta el fragmento? 🎯</h2>
+            
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30 text-xs sm:text-sm text-slate-200 mb-3 leading-relaxed">
+            <i>"A pesar de los ruidosos titulares que anuncian la cura definitiva del envejecimiento celular cada trimestre, conviene examinar con sobriedad los ensayos clínicos: las muestras siguen siendo minúsculas y los efectos secundarios a largo plazo son, por ahora, una incógnita inexplorada."</i>
+        </div>
+        <p class="text-slate-300 text-xs mb-3">El tono del autor en este pasaje se describe MEJOR como:</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'tp1', 'El autor no siente admiración ni optimismo; advierte sobre los peligros del sensacionalismo.')">A) Entusiasta y optimista ante los logros científicos.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'tp1', '¡Exacto! Pide \'examinar con sobriedad\', califica de \'ruidosos titulares\' y subraya que los efectos son \'una incógnita\'. Es la definición clásica de cautela escéptica.')">B) Cauto y escéptico frente a las afirmaciones sensacionalistas.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'tp1', 'No busca ridiculizar mediante sarcasmo, sino llamar a la prudencia y al rigor metodológico.')">C) Burlón y sarcástico con los investigadores médicos.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'tp1', 'El autor no expresa tristeza por el pasado.')">D) Melancólico y resignado ante la vejez humana.</button>
+        </div>
+        <div id="feedback-tp1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Propósito del Autor →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">El Propósito del Autor: Verbos de Acción 🎯</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>La pregunta de propósito indaga <b>para qué escribió el texto el autor</b>. Se responde analizando los verbos de inicio de cada opción:</p>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="p-2 rounded bg-slate-900 border border-slate-700">
+                    <b class="text-emerald-400">Persuadir / Convencer:</b> Busca que el lector adopte una postura o modifique su conducta mediante argumentos.
+                </div>
+                <div class="p-2 rounded bg-slate-900 border border-slate-700">
+                    <b class="text-emerald-400">Divulgar / Explicar:</b> Hace accesible un concepto técnico o descubrimiento sin tomar partido apasionado.
+                </div>
+                <div class="p-2 rounded bg-slate-900 border border-slate-700">
+                    <b class="text-emerald-400">Alertar / Advertir:</b> Llama la atención sobre un peligro inminente (ej. crisis climática, pérdida de privacidad).
+                </div>
+                <div class="p-2 rounded bg-slate-900 border border-slate-700">
+                    <b class="text-emerald-400">Refutar / Impugnar:</b> Demuestra la falsedad de una creencia común o teoría previa de otro autor.
+                </div>
+            </div>
+            <div class="box-highlight text-xs">
+                💡 <b>Filtro de Descarte:</b> Si el texto solo explica cómo funciona la fotosíntesis, el propósito NO es "persuadir", sino "explicar/describir". Si el texto denuncia la destrucción de un río, el propósito NO es "narrar", sino "denunciar/concientizar".
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Ejemplo Resuelto: Propósito Global del Texto 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Fragmento (Editorial de prensa):</p>
+                <p class="italic text-slate-200">"No podemos seguir considerando las humanidades como un lujo ornamental en las universidades. Sin filosofía, literatura e historia, formaremos técnicos hiperespecializados pero éticamente ciegos ante los dilemas del siglo XXI. Urge una reforma curricular que devuelva las artes liberales al centro de la formación ciudadana."</p>
+                <p class="text-xs text-emerald-300 mt-2 font-semibold">¿Cuál es el propósito principal del autor?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Propósito Principal:</b> <b>Exhortar</b> a la comunidad académica a revalorizar las humanidades en la educación moderna.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Descarte:</b> No busca "narrar la historia de las humanidades" (no cuenta hechos pasados), ni "describir las asignaturas técnicas" (solo las menciona para contrastar). Su meta es un llamado a la acción directa (<i>"urge una reforma..."</i>).
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">¿Cuál es el propósito principal del texto? 🎯</h2>
+            
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30 text-xs sm:text-sm text-slate-200 mb-3 leading-relaxed">
+            <i>"Durante décadas, la doctrina económica dominante sostuvo que el incremento del producto interno bruto garantizaba automáticamente el bienestar social. Sin embargo, los datos recopilados en cincuenta países a lo largo de cuatro décadas demuestran que la desigualdad y la degradación ecológica crecieron a la par del PIB. Es imperativo abandonar esta métrica simplista y adoptar indicadores multidimensionales de desarrollo humano."</i>
+        </div>
+        <p class="text-slate-300 text-xs mb-3">El objetivo fundamental del autor al redactar este texto es:</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'tp2', 'El texto no enseña fórmulas de cálculo matemático del PIB.')">A) Enseñar a los estudiantes cómo se calcula matemáticamente el PIB nacional.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'tp2', '¡Extraordinario! Inicia refutando la doctrina tradicional y concluye con una propuesta imperativa de cambio hacia nuevos indicadores.')">B) Cuestionar la idoneidad del PIB como indicador de progreso e instar a la adopción de nuevas métricas.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'tp2', 'Solo es un dato secundario de apoyo, no el propósito nuclear del ensayo.')">C) Detallar la historia de los cincuenta países que recopilaron datos económicos.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'tp2', 'El texto rechaza explícitamente la primacía del PIB, no la defiende.')">D) Defender la primacía del crecimiento económico por encima de cualquier otro factor.</button>
+        </div>
+        <div id="feedback-tp2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
+        <div class="card text-center">
+            <span class="badge" style="background:#34d399;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Machete de Tono y Propósito 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Caza Adjetivos Clave</div>
+                <div class="text-slate-300 mt-1">Los adjetivos revelan el alma del autor: ¿son fríos y técnicos o apasionados y críticos?</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Verbo del Propósito</div>
+                <div class="text-slate-300 mt-1">Fíjate en el primer verbo: <i>Persuadir, denunciar, divulgar, comparar, rendir tributo</i>.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Ironía en la PAA</div>
+                <div class="text-slate-300 mt-1">Si el autor usa comillas irónicas o elogios exagerados con desenlace ridículo, hay sátira.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">El Cierre Revela Todo</div>
+                <div class="text-slate-300 mt-1">El último párrafo suele condensar la verdadera intención del autor. Léelo con doble atención.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Ya cuentas con las herramientas para descifrar la perspectiva del autor con total nitidez.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa PAA:</b><br/>${explanation}`;
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>

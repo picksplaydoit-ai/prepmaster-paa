@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Concordancia Gramatical PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(192, 132, 252, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(192, 132, 252, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #c084fc, #9333ea); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(192, 132, 252, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #c084fc; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #c084fc, #9333ea); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #c084fc; }
+        .box-highlight { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(192, 132, 252, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #c084fc; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge" style="background:#c084fc;">Redacción Indirecta PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Concordancia Gramatical y Sintaxis ⚖️</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Aprende a descifrar las trampas favoritas del College Board: sujetos colectivos con modificador plural, núcleos distantes del verbo e impersonalidad con "haber" y "hacer".
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">👥 Sujetos Colectivos</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">📏 Núcleo Distante</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">🚫 "Habían / Hacen"</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Concordancia →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Sujetos Colectivos y Núcleos Distantes 🎯</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>La PAA siempre busca engañar tu oído colocando palabras en plural entre el sujeto singular y el verbo:</p>
+            <div class="box-highlight">
+                <p class="font-bold text-purple-300">1. Núcleo con modificadores extensos:</p>
+                <p class="text-xs">El verbo concuerda <b>únicamente con el núcleo del sujeto</b>, no con las palabras que están en medio:</p>
+                <div class="p-2 rounded bg-slate-900/90 border border-slate-700 text-xs mt-1">
+                    <i>"El <b>descubrimiento</b> [de nuevas fósiles y vasijas antiguas en las cuevas] <b>confirmó</b> la hipótesis."</i><br/>
+                    <span class="text-emerald-400">✔️ Núcleo = descubrimiento (singular) ➔ Verbo = confirmó (singular).</span><br/>
+                    <span class="text-rose-400">❌ Error común: decir "confirmaron" por contagio con fósiles y vasijas.</span>
+                </div>
+            </div>
+            <div class="box-highlight">
+                <p class="font-bold text-purple-300">2. Sujetos colectivos partitivos ("La mayoría de...", "El grupo de..."):</p>
+                <p class="text-xs">En la PAA académica formal se privilegia la concordancia con el núcleo singular: <i>"El grupo de manifestantes <b>avanzó</b> pacíficamente"</i> (núcleo: el grupo). Aunque en habla coloquial se acepte el plural, en el examen la norma culta prefiere el singular.</p>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Ejemplo Resuelto: La Trampa de la Distancia 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Reactivo Modelo PAA:</p>
+                <p class="italic text-slate-200">"La serie de conferencias magistrales sobre energías renovables y cambio climático impartidas por especialistas extranjeros [ causó / causaron ] gran expectación."</p>
+                <p class="text-xs text-purple-300 mt-2 font-semibold">¿Cuál forma verbal es la correcta y por qué?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Respuesta Correcta:</b> <b>"causó"</b> (en singular).
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>🧠 Análisis sintáctico:</b>
+                    <ul class="list-disc list-inside mt-1 space-y-1">
+                        <li>Elimina mentalmente los complementos preposicionales: <i>"La serie [de conferencias...] [sobre energías...] [impartidas por...]"</i>.</li>
+                        <li>El núcleo real que ejecuta la acción es <b>"La serie"</b> (femenino singular).</li>
+                        <li>Por tanto: <i>"La serie... <b>causó</b> gran expectación"</i>. ¡Ignora los plurales intermedios!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">¿Qué opción mantiene la concordancia estricta? ✍️</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">Selecciona el enunciado redactado con impecable concordancia gramatical:</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'cg1', 'Error de concordancia: el núcleo es \'El análisis\', por lo que el verbo debe ser \'arrojó\', no \'arrojaron\'.')">A) El análisis minucioso de las muestras biológicas arrojaron resultados concluyentes.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'cg1', '¡Exacto! El núcleo es \'El conjunto\' (singular) y su verbo \'demuestra\' concuerda perfectamente en singular, sin dejarse contagiar por \'datos y estadísticas\'.')">B) El conjunto de datos y estadísticas demográficas demuestra una tendencia favorable.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'cg1', 'Error: \'La colección de pinturas\' tiene como núcleo singular \'La colección\', por lo que debe decir \'fue trasladada\', no \'fueron trasladadas\'.')">C) La colección de pinturas barrocas fueron trasladadas al nuevo museo.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'cg1', 'Error: el núcleo \'La proliferación\' es singular; el verbo debe ser \'preocupa\', no \'preocupan\'.')">D) La proliferación de noticias falsas y rumores infundados preocupan a la comunidad.</button>
+        </div>
+        <div id="feedback-cg1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Impersonales "Haber" y "Hacer" →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">La Regla de Oro: "Había" y "Hace" NUNCA se pluralizan 🚫</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>El verbo <b>haber</b> cuando indica existencia y el verbo <b>hacer</b> cuando indica paso del tiempo son <b>impersonales</b>: carecen de sujeto y por ley gramatical solo se conjugan en <b>3ª persona del singular</b>:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-rose-950/30 border border-rose-500/30 p-3 rounded-xl text-rose-300">
+                    <p class="font-bold">❌ ERRORES TÍPICOS PAA:</p>
+                    <ul class="list-disc list-inside mt-1 space-y-1">
+                        <li><i>"<b>Habían</b> muchas personas..."</i></li>
+                        <li><i>"<b>Hubieron</b> varios inconvenientes..."</i></li>
+                        <li><i>"<b>Hacen</b> tres meses que no viene..."</i></li>
+                    </ul>
+                </div>
+                <div class="bg-emerald-950/30 border border-emerald-500/30 p-3 rounded-xl text-emerald-300">
+                    <p class="font-bold">✔️ FORMAS CORRECTAS:</p>
+                    <ul class="list-disc list-inside mt-1 space-y-1">
+                        <li><i>"<b>Había</b> muchas personas..."</i></li>
+                        <li><i>"<b>Hubo</b> varios inconvenientes..."</i></li>
+                        <li><i>"<b>Hace</b> tres meses que no viene..."</i></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="box-highlight text-xs">
+                💡 <b>¿Por qué?</b> Lo que sigue a "haber" no es el sujeto, sino el <b>objeto directo</b> (muchas personas las había). Al no haber sujeto, el verbo permanece siempre en singular.
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Ejemplo Resuelto: Verbos Impersonales en Contexto Formal 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Reactivo Modelo PAA:</p>
+                <p class="italic text-slate-200">"Durante la sesión plenaria de ayer, [ hubieron / hubo ] acalorados debates entre los congresistas."</p>
+                <p class="text-xs text-purple-300 mt-2 font-semibold">¿Cuál es la forma verbal correcta?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Respuesta:</b> Debe usarse <b>"hubo"</b>.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Explicación técnica:</b> "Acalorados debates" es el objeto directo (los hubo). "Haber" jamás se conjuga como "hubieron" para indicar existencia de elementos en plural. "Hubieron" solo existe en desuso como auxiliar anterior ("cuando hubieron terminado").
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">¿Qué enunciado presenta error de impersonalidad? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">Identifica la oración que contiene un <b>error gramatical</b> según la norma culta de la PAA:</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'cg2', 'Esta oración es correcta: \'había\' se mantiene en singular con objeto plural.')">A) En la biblioteca antigua había suficientes ejemplares para todos los estudiantes.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'cg2', '¡Excelente ojo crítico! El verbo impersonal \'hacer\' para tiempo cronológico nunca se pluraliza: debe decir \'Hace cinco años\', no \'Hacen cinco años\'.')">B) Hacen cinco años que el proyecto de reforestación comenzó a dar frutos en la cuenca.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'cg2', 'Esta oración es correcta: \'hubo\' en singular concuerda con la regla impersonal.')">C) Hubo diversas opiniones encontradas respecto a la reforma tributaria.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'cg2', 'Esta oración es correcta: \'ha habido\' en singular es la forma correcta.')">D) Ha habido notables avances en la tecnología de almacenamiento de baterías.</button>
+        </div>
+        <div id="feedback-cg2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
+        <div class="card text-center">
+            <span class="badge" style="background:#c084fc;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Machete de Concordancia PAA 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Aislar el Núcleo Real</div>
+                <div class="text-slate-300 mt-1">Borra mentalmente los "de...", "con...", "sobre...". El verbo responde solo al núcleo.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Haber = Siempre Singular</div>
+                <div class="text-slate-300 mt-1"><i>Había, hubo, ha habido</i> (¡NUNCA "habían" ni "hubieron" existenciales!).</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Hacer Temporal = Singular</div>
+                <div class="text-slate-300 mt-1"><i>"Hace dos semanas"</i> (¡NUNCA "hacen dos semanas"!).</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Adjetivos Pospuestos Mixtos</div>
+                <div class="text-slate-300 mt-1">Sustantivo fem + masc = Adjetivo en masculino plural: <i>"camisa y pantalón oscuros"</i>.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Con este entrenamiento no caerás en las trampas de concordancia del College Board.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa PAA:</b><br/>${explanation}`;
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>

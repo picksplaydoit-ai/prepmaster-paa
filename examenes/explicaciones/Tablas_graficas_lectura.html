@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Tablas y Gráficas en Lectura PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(52, 211, 153, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(52, 211, 153, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #34d399, #059669); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(52, 211, 153, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #34d399; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #34d399, #059669); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #34d399; }
+        .box-highlight { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #34d399; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge" style="background:#34d399;">Comprensión de Lectura PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Lectura Crítica de Gráficas y Tablas 📊</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Domina los textos mixtos de divulgación científica y ciencias sociales: aprende a cruzar los datos cuantitativos de tablas y gráficos con los argumentos centrales del autor.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">📈 Cruce Texto-Gráfica</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">⚖️ Corroborar Hipótesis</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">🔢 Lectura Exacta</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Gráficas en Lectura →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Los Dos Tipos de Reactivos Gráficos en PAA 📊</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>En las lecturas científicas de la PAA (como en el simulador 1 de microplásticos), encontrarás dos tipos de preguntas:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-slate-900 p-3 rounded-xl border border-emerald-500/30">
+                    <p class="font-bold text-emerald-300">1. Lectura Directa de Datos:</p>
+                    <p class="text-slate-300 mt-1">Exige identificar el valor más alto, más bajo o sumar dos categorías de la tabla/gráfica. No requiere interpretar el texto argumentativo, solo leer bien títulos y ejes.</p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-xl border border-emerald-500/30">
+                    <p class="font-bold text-emerald-300">2. Pregunta de Síntesis Mixta (Texto + Gráfico):</p>
+                    <p class="text-slate-300 mt-1">¿Qué dato de la tabla respalda o contradice la afirmación del autor en las líneas X? Requiere validar si los números respaldan la tesis teórica expuesta.</p>
+                </div>
+            </div>
+            <div class="box-highlight text-xs">
+                💡 <b>Regla Cardinal:</b> Nunca asumas tendencias que no aparezcan en la gráfica. Si la gráfica solo muestra datos hasta 2020, no des por sentado lo que ocurrió en 2025 aunque te parezca obvio.
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Ejemplo Resuelto: Cruce de Datos con Argumentos 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Texto y Tabla PAA:</p>
+                <p class="italic text-slate-200">"El biólogo sostiene que la contaminación marina por microplásticos no proviene mayormente de la pesca ni de los barcos mercantes, sino de actividades cotidianas en tierra firme."</p>
+                <div class="mt-2 p-2 bg-slate-900 rounded border border-slate-700">
+                    <b>Tabla 1: Fuentes de Microplásticos en Costas del Pacífico</b>
+                    <div class="grid grid-cols-2 gap-1 text-[11px] mt-1 text-slate-300">
+                        <div>Fibras textiles sintéticas: <b>35%</b></div>
+                        <div>Desgaste de neumáticos: <b>28%</b></div>
+                        <div>Polvo de ciudades: <b>24%</b></div>
+                        <div>Cosméticos y cuidado personal: <b>13%</b></div>
+                    </div>
+                </div>
+                <p class="text-emerald-300 font-semibold mt-2">¿Cómo apoya la Tabla 1 la afirmación del biólogo?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Demostración:</b> El 100% de las fuentes listadas en la tabla (textiles, neumáticos, polvo urbano y cosméticos) son de origen continental o doméstico terrestre.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Razonamiento:</b> Ninguna de las fuentes corresponde a flotas pesqueras ni a buques marítimos directos, lo cual ratifica plenamente la tesis del autor de que el problema se engendra en tierra firme.
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">¿Qué afirmación es consistente con la tabla? 🎯</h2>
+            
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30 text-xs sm:text-sm text-slate-200 mb-3">
+            <p class="font-bold text-emerald-300 mb-2">Tabla: Generación de Energía Renovable por Fuente (Región Andina, 2024)</p>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="bg-slate-800 p-2 rounded">Hidroeléctrica: <b>52%</b></div>
+                <div class="bg-slate-800 p-2 rounded">Solar Fotovoltaica: <b>26%</b></div>
+                <div class="bg-slate-800 p-2 rounded">Eólica: <b>16%</b></div>
+                <div class="bg-slate-800 p-2 rounded">Biomasa / Geotérmica: <b>6%</b></div>
+            </div>
+        </div>
+        <p class="text-slate-300 text-xs mb-3">Con base exclusivamente en la tabla, es CORRECTO afirmar que:</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'tg1', 'Error de cálculo: Solar (26%) + Eólica (16%) suman 42%, que es menor que Hidroeléctrica (52%).')">A) La energía solar y la eólica combinadas superan a la generación hidroeléctrica.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'tg1', '¡Cálculo y análisis impecables! 26% (solar) es más del cuádruple de 6% (biomasa). La afirmación es estrictamente matemática y exacta.')">B) La energía solar fotovoltaica genera más de cuatro veces la proporción atribuida a la biomasa y geotermia juntas.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'tg1', 'Extrapolación sin datos: la tabla solo muestra datos de 2024, no menciona tendencias para 2030.')">C) Para el año 2030, la energía eólica será la principal fuente de la región andina.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'tg1', 'Falso: la hidroeléctrica representa más de la mitad (52%), no un tercio.')">D) La generación hidroeléctrica representa menos de un tercio del total renovable.</button>
+        </div>
+        <div id="feedback-tg1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Contraste de Datos y Afirmaciones →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">¿Qué dato DESAFÍA la hipótesis del autor? ⚠️</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>Otro reactivo muy codiciado en la PAA pregunta qué dato de una gráfica <b>debilitaría</b> o <b>desafiaría</b> una afirmación del texto:</p>
+            <div class="box-highlight text-xs space-y-2">
+                <p class="font-bold text-emerald-300">Estrategia de Búsqueda de la Anomalía:</p>
+                <p>1. Identifica la afirmación general del autor (ej. <i>"A mayor inversión educativa, mayor crecimiento económico"</i>).</p>
+                <p>2. Busca en la gráfica la <b>excepción a la regla</b>: un país o punto que tenga altísima inversión pero bajísimo crecimiento, o viceversa.</p>
+                <p>3. Esa excepción o discrepancia estadística es la respuesta correcta que desafía la generalización.</p>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Ejemplo Resuelto: Desafiando una Tesis 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Tesis del Autor:</p>
+                <p class="italic text-slate-200">"El autor postula que el consumo de azúcar per cápita se incrementa de forma directamente proporcional al ingreso per cápita en todas las naciones desarrolladas."</p>
+                <p class="text-emerald-300 font-semibold mt-2">¿Qué dato de la gráfica desafiaría directamente esta afirmación?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Respuesta Correcta:</b> La existencia de un país con uno de los ingresos más elevados pero con uno de los consumos de azúcar más bajos del registro.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Razón:</b> Si el autor afirmó que esto ocurre "en todas las naciones desarrolladas", un solo caso inverso rompe el postulado universal.
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">¿Qué información debilita la tesis del texto? 🎯</h2>
+            
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30 text-xs sm:text-sm text-slate-200 mb-3 leading-relaxed">
+            <i>"El autor argumenta que la digitalización bancaria elimina por completo el uso de dinero en efectivo en las economías emergentes debido a la comodidad de las transferencias móviles."</i>
+        </div>
+        <p class="text-slate-300 text-xs mb-3">¿Cuál de los siguientes datos gráficos debilitaría con mayor contundencia la afirmación del autor?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'tg2', 'Esto apoya la tesis del autor, no la debilita.')">A) Una gráfica que muestra que el número de usuarios con billeteras digitales creció 300% en cinco años.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'tg2', '¡Extraordinario razonamiento crítico! Si la demanda de billetes físicos creció o se mantuvo en 70%, es falso que la digitalización haya \'eliminado por completo\' el efectivo.')">B) Una gráfica del Banco Central que demuestra que la emisión y circulación de billetes físicos creció un 15% en el mismo periodo.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'tg2', 'El precio de los teléfonos es un dato periférico que no mide el uso de efectivo.')">C) Un informe que indica que el precio promedio de los teléfonos móviles disminuyó.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'tg2', 'No contradice el postulado central sobre el efectivo.')">D) Una encuesta que revela que a la gente le agrada la interfaz gráfica de las aplicaciones bancarias.</button>
+        </div>
+        <div id="feedback-tg2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
+        <div class="card text-center">
+            <span class="badge" style="background:#34d399;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Machete de Gráficas y Tablas en Lectura 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Lee Títulos y Ejes Primero</div>
+                <div class="text-slate-300 mt-1">Verifica unidades: ¿son porcentajes, miles de dólares o toneladas métricas?</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Cero Suposiciones Futuras</div>
+                <div class="text-slate-300 mt-1">Limítate rigurosamente a los años y variables tabuladas en el gráfico.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Respaldo a la Tesis</div>
+                <div class="text-slate-300 mt-1">Busca si los números corroboran la afirmación teórica o si presentan una excepción.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Aritmética Simple</div>
+                <div class="text-slate-300 mt-1">Comprueba sumas, diferencias y proporciones ("el doble", "la mitad", "cuatro veces más").</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Los reactivos mixtos de tablas y textos de divulgación científica serán ahora aciertos automáticos.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa PAA:</b><br/>${explanation}`;
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>

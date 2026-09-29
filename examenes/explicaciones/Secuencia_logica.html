@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Secuencia Lógica PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(192, 132, 252, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(192, 132, 252, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #c084fc, #9333ea); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(192, 132, 252, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #c084fc; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #c084fc, #9333ea); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #c084fc; }
+        .box-highlight { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(192, 132, 252, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #c084fc; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge" style="background:#c084fc;">Redacción Indirecta PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Secuencia Lógica y Cohesión de Párrafos 🧩</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Domina las preguntas de reordenamiento de enunciados y ubicación de oraciones nuevas mediante el método de anclaje cronológico, causal y anafórico.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">🏗️ Estructura Clásica</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">🔗 Pistas de Anclaje</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">📍 Dónde Insertar</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Secuencia Lógica →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">La Fórmula de la Secuencia Perfecta 🏗️</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>Todo párrafo académico cohesivo en la PAA sigue una progresión lógica invariable:</p>
+            <div class="box-highlight text-xs space-y-2">
+                <div class="flex items-center gap-2">
+                    <span class="p-1 px-2 rounded bg-purple-500 text-slate-950 font-black">1</span>
+                    <div><b>Introducción / Definición:</b> Presenta el concepto general o protagonista sin asumir conocimiento previo.</div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="p-1 px-2 rounded bg-purple-500 text-slate-950 font-black">2</span>
+                    <div><b>Antecedentes o Causas:</b> Explica el origen histórico o el motivo que detonó el fenómeno.</div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="p-1 px-2 rounded bg-purple-500 text-slate-950 font-black">3</span>
+                    <div><b>Desarrollo / Características:</b> Desglosa datos, funcionamientos o eventos específicos.</div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="p-1 px-2 rounded bg-purple-500 text-slate-950 font-black">4</span>
+                    <div><b>Consecuencia / Conclusión:</b> Impacto final, legado o proyección hacia el futuro.</div>
+                </div>
+            </div>
+            <div class="box-warning text-xs">
+                💡 <b>Regla del Pronombre Huérfano:</b> Un enunciado que inicie con <i>"Este descubrimiento..."</i>, <i>"Por dicha razón..."</i> o <i>"Posteriormente..."</i> NUNCA puede ser la primera oración, porque necesita un antecedente que ya fue mencionado.
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Ejemplo Resuelto: Reordenamiento de Enunciados 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Reactivo Modelo PAA (Ordena los enunciados):</p>
+                <div class="text-xs space-y-1 text-slate-200">
+                    <p><b>(1)</b> Estas diminutas cápsulas liberan el fármaco únicamente al hacer contacto con células malignas.</p>
+                    <p><b>(2)</b> La nanomedicina es una rama interdisciplinaria que aplica la nanotecnología a la salud humana.</p>
+                    <p><b>(3)</b> Gracias a esta precisión celular, los efectos secundarios de la quimioterapia se reducen drásticamente.</p>
+                    <p><b>(4)</b> Una de sus aplicaciones más prometedoras es el diseño de nanopartículas transportadoras.</p>
+                </div>
+                <p class="text-xs text-purple-300 mt-2 font-semibold">¿Cuál es el orden lógico y cohesivo?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Orden Correcto:</b> <b>2 ➔ 4 ➔ 1 ➔ 3</b>.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Cadena lógica de pistas:</b>
+                    <ul class="list-disc list-inside mt-1 space-y-1">
+                        <li><b>(2)</b> inicia definiendo qué es la nanomedicina (definición general).</li>
+                        <li><b>(4)</b> conecta con <i>"Una de sus aplicaciones..."</i> presentando las nanopartículas.</li>
+                        <li><b>(1)</b> retoma las nanopartículas llamándolas <i>"Estas diminutas cápsulas..."</i> y explica cómo actúan.</li>
+                        <li><b>(3)</b> cierra con el beneficio/conclusión final: <i>"Gracias a esta precisión..."</i>.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">¿Cuál es el orden secuencial correcto? 🎯</h2>
+            
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30 text-xs text-slate-200 mb-3 space-y-1">
+            <p><b>(1)</b> Este hallazgo accidental transformó radicalmente la medicina del siglo XX.</p>
+            <p><b>(2)</b> Al regresar de vacaciones, observó que un hongo microscópico había destruido las colonias de bacterias en sus placas.</p>
+            <p><b>(3)</b> Alexander Fleming fue un bacteriólogo británico que investigaba sustancias antibacterianas.</p>
+            <p><b>(4)</b> En septiembre de 1928, realizó un experimento que cambiaría el curso de la historia biológica.</p>
+        </div>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'sl1', '¡Excelente deducción! (3) Presenta al protagonista, (4) introduce el momento del experimento, (2) narra la observación concreta del hongo, y (1) concluye con el impacto trascendental del hallazgo.')">A) 3 - 4 - 2 - 1</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'sl1', 'Error: el enunciado (1) dice \'Este hallazgo accidental\'; no puede ir al inicio sin haber explicado cuál fue el hallazgo.')">B) 1 - 3 - 4 - 2</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'sl1', 'Error cronológico: (2) \'Al regresar de vacaciones\' debe ir después de establecer en (4) que realizó el experimento en 1928.')">C) 3 - 2 - 4 - 1</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'sl1', 'No tiene sentido narrativo ubicar la introducción del científico después de la acción.')">D) 4 - 2 - 1 - 3</button>
+        </div>
+        <div id="feedback-sl1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Dónde Insertar un Enunciado →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">¿Dónde Insertar un Enunciado Nuevo? 📍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>Otro reactivo muy frecuente pregunta: <i>"¿Entre qué enunciados debe insertarse la siguiente oración para mantener la coherencia?"</i></p>
+            <div class="box-highlight text-xs space-y-2">
+                <p class="font-bold text-purple-300">Técnica de los Eslabones Dobles:</p>
+                <p>La oración que vas a insertar tiene <b>dos conexiones obligatorias</b>:</p>
+                <div class="grid grid-cols-2 gap-2 text-slate-300 mt-1">
+                    <div class="p-2 rounded bg-slate-900 border border-slate-700">
+                        <b>1. Eslabón Izquierdo:</b> Debe apoyarse en una palabra o idea dicha en la oración anterior.
+                    </div>
+                    <div class="p-2 rounded bg-slate-900 border border-slate-700">
+                        <b>2. Eslabón Derecho:</b> Debe darle sentido natural y fluido a la oración que viene inmediatamente después.
+                    </div>
+                </div>
+            </div>
+            <div class="box-highlight text-xs">
+                💡 <b>Si el enunciado a insertar contiene un conector de contraste (ej. <i>"Sin embargo,..."</i>):</b><br/>
+                Debe colocarse justo después de la afirmación positiva que contradice y antes de la explicación del problema.
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Ejemplo Resuelto: Inserción Estratégica 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Reactivo Modelo PAA:</p>
+                <p class="italic text-slate-200">Enunciado a insertar: <b>"Sin embargo, las altas temperaturas diurnas en el desierto evaporan el agua antes de que la vegetación logre absorberla."</b></p>
+                <div class="text-xs space-y-1 mt-2 text-slate-300">
+                    <p>(1) Los desiertos reciben precipitaciones esporádicas pero torrenciales durante ciertas estaciones del año.</p>
+                    <p>(2) Por esta razón, las plantas xerófitas han desarrollado raíces sumamente profundas y tejidos especiales para almacenar humedad.</p>
+                    <p>(3) Este ingenioso sistema adaptativo les permite subsistir durante meses de prolongada sequía.</p>
+                </div>
+                <p class="text-xs text-purple-300 mt-2 font-semibold">¿Dónde debe insertarse el enunciado?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Ubicación Perfecta:</b> <b>Entre el enunciado (1) y el enunciado (2)</b>.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Razonamiento:</b> El enunciado (1) dice que llueve de forma torrencial. La oración nueva introduce el contraste esencial (<i>"Sin embargo, el calor evapora el agua..."</i>), lo cual explica perfectamente por qué el enunciado (2) empieza diciendo: <i>"<b>Por esta razón</b>, las plantas han desarrollado raíces profundas..."</i>. ¡El eslabón queda perfectamente soldado!
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">¿Dónde debe ubicarse el enunciado propuesto? 🎯</h2>
+            
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30 text-xs text-slate-200 mb-3 space-y-2">
+            <p class="text-purple-300 font-bold">Enunciado a insertar:</p>
+            <p class="italic">"A pesar de este entusiasmo inicial, los altos costos de producción obligaron a la compañía a suspender temporalmente el proyecto."</p>
+            <div class="text-[11px] space-y-1 text-slate-400 mt-2">
+                <p>(1) La empresa automotriz presentó con bombos y platillos su primer prototipo de vehículo impulsado por hidrógeno.</p>
+                <p>(2) Tanto los críticos especializados como el público elogiaron con fervor la audacia del diseño ecológico.</p>
+                <p>(3) Tras dos años de rediseño presupuestario, la manufactura finalmente se reanudó en la planta central.</p>
+            </div>
+        </div>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'sl2', 'Error: antes del enunciado 1 aún no se ha mencionado el prototipo ni el entusiasmo.')">A) Antes del enunciado (1)</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'sl2', 'Error: el enunciado 2 continúa el entusiasmo; colocarlo aquí corta abruptamente la descripción de los elogios.')">B) Entre el enunciado (1) y el (2)</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'sl2', '¡Extraordinario análisis! \'A pesar de este entusiasmo inicial\' se ancla directamente con los elogios del enunciado (2), y la suspensión del proyecto da pie coherente a la reanudación mencionada en el enunciado (3).')">C) Entre el enunciado (2) y el (3)</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'sl2', 'Error: después del 3 ya se reanudó la producción; no tendría sentido suspenderla a posteriori.')">D) Después del enunciado (3)</button>
+        </div>
+        <div id="feedback-sl2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
+        <div class="card text-center">
+            <span class="badge" style="background:#c084fc;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Machete de Secuencia y Cohesión 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Definición Primero</div>
+                <div class="text-slate-300 mt-1">El primer enunciado define o presenta al sujeto sin pronombres demostrativos huérfanos.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Causa antes de Efecto</div>
+                <div class="text-slate-300 mt-1">Primero ocurre el evento o descubrimiento; después sus repercusiones y consecuencias.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Rastro de Pronombres</div>
+                <div class="text-slate-300 mt-1">Si una oración dice <i>"Este método..."</i>, busca inmediatamente la oración previa que nombró dicho método.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Eslabones de Inserción</div>
+                <div class="text-slate-300 mt-1">La frase insertada debe armonizar en 360 grados: con la que le precede y con la que le sucede.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Con estos 6 módulos de Redacción Indirecta estás listo para obtener el máximo puntaje en la sección de lengua española.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa PAA:</b><br/>${explanation}`;
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>

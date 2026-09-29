@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Precisión Léxica y Homófonos PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(192, 132, 252, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(192, 132, 252, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #c084fc, #9333ea); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(192, 132, 252, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #c084fc; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #c084fc, #9333ea); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #c084fc; }
+        .box-highlight { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(192, 132, 252, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #c084fc; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge" style="background:#c084fc;">Redacción Indirecta PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Precisión Léxica y Homófonos Clave 🎯</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Elimina las palabras comodín que empobrecen los textos y domina la distinción entre los cuatro "porqué", "sino / si no", "haber / a ver" y homófonos tramposos de la PAA.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">🧩 Los 4 Porqué</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">⚖️ Sino vs Si no</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">💎 Vocabulario Preciso</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Precisión Léxica →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Los 4 "Porqué" de la PAA: El Cuadro Maestro 📋</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-slate-900 p-3 rounded-xl border border-purple-500/30">
+                    <p class="font-bold text-purple-300 text-sm">1. Por qué (Separado con tilde)</p>
+                    <p class="text-slate-300 mt-1">Interrogativo o exclamativo (directo o indirecto):</p>
+                    <p class="text-emerald-400 mt-1"><i>"¿<b>Por qué</b> no asististe?"</i> / <i>"No entiendo <b>por qué</b> ocurrió."</i></p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-xl border border-purple-500/30">
+                    <p class="font-bold text-purple-300 text-sm">2. Porque (Junto sin tilde)</p>
+                    <p class="text-slate-300 mt-1">Causal (equivale a <i>ya que / puesto que</i>):</p>
+                    <p class="text-emerald-400 mt-1"><i>"Llegué tarde <b>porque</b> había demasiado tráfico."</i></p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-xl border border-purple-500/30">
+                    <p class="font-bold text-purple-300 text-sm">3. El porqué (Junto con tilde)</p>
+                    <p class="text-slate-300 mt-1">Sustantivo masculino (equivale a <i>la causa / el motivo</i>). Siempre lleva artículo o determinante:</p>
+                    <p class="text-emerald-400 mt-1"><i>"Nunca reveló el <b>porqué</b> de su renuncia."</i> (admite plural: <i>sus porqués</i>).</p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-xl border border-purple-500/30">
+                    <p class="font-bold text-purple-300 text-sm">4. Por que (Separado sin tilde)</p>
+                    <p class="text-slate-300 mt-1">Equivale a <i>por el cual / por la cual</i> o preposición <i>por</i> + conjunción <i>que</i>:</p>
+                    <p class="text-emerald-400 mt-1"><i>"Esa fue la razón <b>por que</b> [por la cual] calló."</i></p>
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Ejemplo Resuelto: Los Porqués en un Párrafo PAA 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Reactivo Modelo PAA:</p>
+                <p class="italic text-slate-200">"El fiscal investigó [ 1 ] el testigo mintió en el juicio, [ 2 ] su testimonio contradecía las grabaciones; sin embargo, nadie comprende aún el [ 3 ] de su actitud."</p>
+                <p class="text-xs text-purple-300 mt-2 font-semibold">¿Qué secuencia completa correctamente los espacios?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución:</b> [ 1 ] <b>por qué</b> | [ 2 ] <b>porque</b> | [ 3 ] <b>porqué</b>.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Razonamiento paso a paso:</b>
+                    <ul class="list-disc list-inside mt-1 space-y-1">
+                        <li>En [ 1 ] es una interrogación indirecta (investigó <i>por qué motivo</i>) ➔ <b>por qué</b>.</li>
+                        <li>En [ 2 ] introduce la justificación causal (<i>ya que su testimonio...</i>) ➔ <b>porque</b>.</li>
+                        <li>En [ 3 ] viene precedido por el artículo "el" y funciona como sustantivo sinónimo de "motivo" ➔ <b>el porqué</b>.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">¿Qué opción completa correctamente el reactivo? 🎯</h2>
+            
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30 text-xs sm:text-sm text-slate-200 mb-3">
+            "No se comprende [ 1 ] la delegación rechazó la propuesta, especialmente [ 2 ] los términos eran ampliamente favorables para ambas naciones."
+        </div>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'pl1', '¡Excelente! [1] es interrogativa indirecta (por qué) y [2] es una conjunción causal que introduce la razón (porque).')">A) [ 1 ] por qué  |  [ 2 ] porque</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'pl1', 'En [1] no puede ir junto porque no está dando una explicación o causa; es una pregunta indirecta.')">B) [ 1 ] porque  |  [ 2 ] por qué</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'pl1', 'En [1] no lleva artículo \'el\', por lo que no es el sustantivo \'el porqué\'.')">C) [ 1 ] porqué  |  [ 2 ] porque</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'pl1', 'En [2] no es una interrogativa, sino la justificación causal.')">D) [ 1 ] por qué  |  [ 2 ] por qué</button>
+        </div>
+        <div id="feedback-pl1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Sino vs Si no & Homófonos →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Sino vs Si no & Palabras Comodín 💎</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-slate-900 p-3 rounded-xl border border-purple-500/30">
+                    <p class="font-bold text-purple-300">Sino (Junto):</p>
+                    <p>Conjunción adversativa que opone una afirmación a una negación previa: <i>"No busca fama, <b>sino</b> justicia."</i> O como sustantivo (destino): <i>"su trágico sino"</i>.</p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-xl border border-purple-500/30">
+                    <p class="font-bold text-purple-300">Si no (Separado):</p>
+                    <p>Conjunción condicional <i>si</i> + adverbio de negación <i>no</i>: <i>"<b>Si no</b> entregas el reporte hoy, habrá sanciones."</i> (Prueba: puedes intercalar una palabra: <i>"Si tú no entregas..."</i>).</p>
+                </div>
+            </div>
+            <div class="box-highlight text-xs">
+                <p class="font-bold text-purple-300 mb-1">Erradicación de palabras comodín en la PAA:</p>
+                <p>En el examen se penaliza el léxico vago. Sustituye siempre:</p>
+                <div class="grid grid-cols-2 gap-1 text-[11px] mt-1 text-slate-300">
+                    <div>❌ <i>"hacer un ensayo"</i> ➔ ✔️ <b>redactar / elaborar</b></div>
+                    <div>❌ <i>"tener dudas"</i> ➔ ✔️ <b>albergar / experimentar</b></div>
+                    <div>❌ <i>"esa cosa"</i> ➔ ✔️ <b>aquel fenómeno / artefacto</b></div>
+                    <div>❌ <i>"poner atención"</i> ➔ ✔️ <b>prestar atención</b></div>
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Ejemplo Resuelto: Precisión Léxica en Redacción PAA 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Reactivo Modelo PAA:</p>
+                <p class="italic text-slate-200">"El comité científico decidió que el objetivo de la expedición no era extraer recursos, [ 1 ] documentar la biodiversidad marina; advirtieron que, [ 2 ] se tomaban medidas urgentes, el arrecife colapsaría."</p>
+                <p class="text-xs text-purple-300 mt-2 font-semibold">¿Qué opción completa con corrección gramatical y léxica?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución:</b> [ 1 ] <b>sino</b>  |  [ 2 ] <b>si no</b>.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Análisis:</b>
+                    <ul class="list-disc list-inside mt-1 space-y-1">
+                        <li>En [ 1 ] hay una estructura de contraste directo: <i>"no era X, sino Y"</i> ➔ <b>sino</b> (adversativo).</li>
+                        <li>En [ 2 ] hay una cláusula condicional de consecuencia: <i>"en caso de que no se tomen medidas..."</i> ➔ <b>si no</b> (condicional negativa).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">¿Qué opción reemplaza con mayor PRECISIÓN el texto? ✍️</h2>
+            
+        <p class="text-slate-300 text-sm mb-3"><i>"El médico le dijo que debía <b>hacer</b> un cambio drástico en sus hábitos alimenticios, <b>sino</b> su salud empeoraría."</i> ¿Cuál es la corrección ideal?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'pl2', '¡Impecable! \'Adoptar\' o \'implementar\' es infinitamente más preciso que \'hacer\', y \'si no\' es la condicional requerida (en caso de que no lo haga).')">A) ...debía <b>adoptar</b> un cambio drástico en sus hábitos alimenticios, <b>si no</b> su salud empeoraría.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'pl2', 'Mantiene el comodín \'hacer\' y el error \'sino\' conjunto.')">B) ...debía <b>hacer</b> un cambio drástico en sus hábitos alimenticios, <b>sino</b> su salud empeoraría.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'pl2', 'Aunque usa \'implementar\', confunde el conector: debió usar \'si no\' separado (condición).')">C) ...debía <b>implementar</b> un cambio drástico en sus hábitos alimenticios, <b>sino</b> su salud empeoraría.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'pl2', 'Mantiene el verbo impreciso \'hacer\'.')">D) ...debía <b>hacer</b> un cambio drástico en sus hábitos alimenticios, <b>si no</b> su salud empeoraría.</button>
+        </div>
+        <div id="feedback-pl2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
+        <div class="card text-center">
+            <span class="badge" style="background:#c084fc;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Machete de Precisión Léxica 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Por qué vs Porque</div>
+                <div class="text-slate-300 mt-1"><i>¿Por qué preguntas?</i> (pregunta) vs <i>Porque quiero saber</i> (causa).</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Sino vs Si no</div>
+                <div class="text-slate-300 mt-1"><i>No azul, sino rojo</i> (oposición) vs <i>Si no vienes, me voy</i> (condición).</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Haber vs A ver</div>
+                <div class="text-slate-300 mt-1"><i>Debe haber agua</i> (existencia) vs <i>Vamos a ver</i> (mirar/comprobar).</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Echo vs Hecho</div>
+                <div class="text-slate-300 mt-1"><i>Te echo una mano</i> (tirar/dar) vs <i>Está bien hecho</i> (hacer).</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Con este dominio léxico responderás con total soltura los reactivos de edición de texto.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa PAA:</b><br/>${explanation}`;
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>

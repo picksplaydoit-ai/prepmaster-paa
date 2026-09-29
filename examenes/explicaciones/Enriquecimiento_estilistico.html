@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Enriquecimiento Estilístico PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(192, 132, 252, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(192, 132, 252, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #c084fc, #9333ea); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(192, 132, 252, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #c084fc; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #c084fc, #9333ea); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #c084fc; }
+        .box-highlight { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(192, 132, 252, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #c084fc; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge" style="background:#c084fc;">Redacción Indirecta PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Enriquecimiento Estilístico y Tono 🎨</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Aprende a resolver el clásico reactivo de la PAA: "¿Qué opción enriquece estilísticamente el enunciado X sin romper la coherencia ni el registro formal del texto?".
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">✨ Lenguaje Sensorial</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">🎭 Coherencia de Tono</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">🚫 Cero Coloquialismos</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Enriquecimiento Estilístico →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Las 3 Leyes del Enriquecimiento Estilístico 🌟</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>Cuando la PAA te pide enriquecer estilísticamente una oración, busca una opción que:</p>
+            <div class="box-highlight">
+                <p class="font-bold text-purple-300">1. Aporte vivacidad, plasticidad o fuerza sensorial:</p>
+                <p class="text-xs">Uso de adjetivos pertinentes, metáforas sobrias o detalles que permitan al lector visualizar la escena o comprender la magnitud de una idea.</p>
+            </div>
+            <div class="box-highlight">
+                <p class="font-bold text-purple-300">2. NO altere el sentido ni agregue información contradictoria:</p>
+                <p class="text-xs">Si el texto original describe un atardecer apacible, la opción no puede introducir un peligro sorpresivo que rompa el argumento.</p>
+            </div>
+            <div class="box-warning text-xs">
+                <b>3. Trampas típicas que debes descartar de inmediato:</b>
+                <ul class="list-disc list-inside mt-1 space-y-1">
+                    <li><b>Exceso de sentimentalismo o cursilería barata</b> que no cuadre con un ensayo.</li>
+                    <li><b>Expresiones coloquiales o informales</b> (<i>"muy padre", "a todo dar", "súper genial"</i>).</li>
+                    <li><b>Datos nuevos irrelevantes</b> que desvíen el tema del párrafo.</li>
+                </ul>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Ejemplo Resuelto: Descarte de Opciones Trampa 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Contexto PAA (Texto narrativo sobre un explorador):</p>
+                <p class="italic text-slate-200">"Enunciado 8: El anciano contempló la cumbre de la montaña desde el campamento base."</p>
+                <p class="text-xs text-purple-300 mt-2 font-semibold">¿Qué opción añade información que enriquece ESTILÍSTICAMENTE el enunciado 8?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Opción Correcta:</b> <i>"...contempló la cumbre de la montaña, <b>erguida como un titán de roca y nieve que desafiaba el paso de los siglos</b>."</i>
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>¿Por qué las otras son trampas?</b>
+                    <ul class="list-disc list-inside mt-1 space-y-1">
+                        <li><i>"...porque tenía unos binoculares muy caros comprados en rebaja"</i> ➔ <b>Irrelevancia y tono vulgar</b>.</li>
+                        <li><i>"...mientras pensaba que su tía le cocinaba muy rico"</i> ➔ <b>Ruptura temática</b>.</li>
+                        <li><i>"...y la montaña medía 6,400 metros de altura sobre el nivel del mar"</i> ➔ <b>Dato técnico seco</b> (aporta dato, pero no enriquece estilísticamente).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">¿Cuál opción enriquece estilísticamente la oración? 🎯</h2>
+            
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30 text-xs sm:text-sm text-slate-200 mb-3">
+            <i>"Enunciado original: El río atravesaba la llanura en silencio."</i>
+        </div>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'ee1', '¡Brillante! Utiliza una metáfora elegante (\'cinta de plata\') y personificación sutil (\'acariciaba\') que eleva el estilo estético del fragmento sin cambiar su significado.')">A) ...serpenteando la llanura como una cinta de plata líquida que acariciaba la tierra dormida.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'ee1', 'Error: aporta un dato estadístico/hidrológico, pero no enriquece la belleza estética o estilística.')">B) ...porque su caudal medía aproximadamente 40 metros cúbicos por segundo según la presa.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'ee1', 'Error de registro: uso de lenguaje coloquial (\'súper rápido\', \'un montón\') inapropiado para un texto formal.')">C) ...moviéndose súper rápido para llevar un montón de agua a los pueblos de abajo.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'ee1', 'Error: agrega una opinión externa prosaica que rompe la atmósfera narrativa.')">D) ...lo cual era muy conveniente para que la gente no se despertara en la noche.</button>
+        </div>
+        <div id="feedback-ee1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Registro Formal y Tono →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Coherencia de Registro y Tono Textual 🎩</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>Los textos de la PAA (sean ensayos históricos, artículos científicos o crónicas) exigen una <b>unidad de tono rigurosa</b>:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-slate-900 p-3 rounded-xl border border-purple-500/30">
+                    <p class="font-bold text-purple-300">En Textos Expositivos y Científicos:</p>
+                    <p class="text-slate-300 mt-1">El tono debe ser objetivo, preciso y sereno. Las metáforas deben ser explicativas, no líricas desbordadas.</p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-xl border border-purple-500/30">
+                    <p class="font-bold text-purple-300">En Textos Literarios y Narrativos:</p>
+                    <p class="text-slate-300 mt-1">El estilo busca recrear atmósferas, emociones y descripciones visuales o introspectivas.</p>
+                </div>
+            </div>
+            <div class="box-highlight text-xs">
+                💡 <b>Regla del Camaleón PAA:</b> La frase que agregues debe sonar exactamente igual que el resto del texto. Si una opción suena "demasiado moderna", "demasiado coloquial" o "excesivamente dramática", descártala.
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Ejemplo Resuelto: Adecuación al Registro Científico 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Contexto PAA (Artículo de divulgación sobre el telescopio James Webb):</p>
+                <p class="italic text-slate-200">"El telescopio capturó las imágenes más profundas del universo primitivo jamás obtenidas."</p>
+                <p class="text-xs text-purple-300 mt-2 font-semibold">¿Qué frase final armoniza MEJOR con el registro académico y formal del artículo?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Frase Adecuada:</b> <i>"...abriendo una ventana sin precedentes hacia los primeros destellos del cosmos infantil."</i>
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Descarte de distractores:</b>
+                    <ul class="list-disc list-inside mt-1 space-y-1">
+                        <li><i>"...dejando a todos los científicos con la boca abierta de la emoción"</i> ➔ <b>Coloquialismo informal</b>.</li>
+                        <li><i>"...y costó muchísimos millones de dólares que algunos criticaron"</i> ➔ <b>Juicio secundario fuera de tono</b>.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">¿Qué opción se adapta mejor al registro del texto? ✍️</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">En un ensayo sobre la preservación de los bosques tropicales, ¿cuál de los siguientes enunciados mantiene el tono formal y elocuente?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'ee2', 'Coloquial: \'un broncón tremendo\' degrada el nivel ensayístico formal.')">A) Si no cuidamos los árboles, las futuras generaciones van a tener un broncón tremendo.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'ee2', '¡Excelente! Utiliza vocabulario culto (\'custodiar\', \'patrimonio ecológico\', \'imperativo ético\') perfectamente armónico con un ensayo académico.')">B) La salvaguarda de estos pulmones vegetales no constituye una simple opción ambiental, sino un imperativo ético indispensable para la supervivencia planetaria.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'ee2', 'Informal y simplista: \'está súper mal\'.')">C) La tala indiscriminada está súper mal y todos los gobiernos deberían prohibirla ya mismo.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'ee2', 'Dramatismo exagerado y melodramático, carente de rigor argumentativo.')">D) Los pobres arbolitos lloran silenciosamente cada vez que las despiadadas sierras desgarran su tierna madera.</button>
+        </div>
+        <div id="feedback-ee2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
+        <div class="card text-center">
+            <span class="badge" style="background:#c084fc;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Machete de Enriquecimiento Estilístico 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Metáforas Claras</div>
+                <div class="text-slate-300 mt-1">Busca imágenes que iluminen el tema, no que lo vuelvan confuso o rebuscado.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Registro Culto</div>
+                <div class="text-slate-300 mt-1">Elimina de inmediato cualquier opción con palabras coloquiales o modismos locales.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Coherencia Temática</div>
+                <div class="text-slate-300 mt-1">La opción correcta NUNCA introduce una contradicción ni cambia el foco del párrafo.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">La Prueba del Oído</div>
+                <div class="text-slate-300 mt-1">Lee mentalmente el párrafo completo con la frase insertada; debe fluir con naturalidad armónica.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Con estos criterios seleccionarás la respuesta correcta en enriquecimiento estilístico al primer intento.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa PAA:</b><br/>${explanation}`;
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Inferencias y Deducción Crítica PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(52, 211, 153, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(52, 211, 153, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #34d399, #059669); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(52, 211, 153, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #34d399; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #34d399, #059669); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #34d399; }
+        .box-highlight { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #34d399; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge" style="background:#34d399;">Comprensión de Lectura PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Inferencias y Deducción Crítica 🔍</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Aprende a leer entre líneas sin caer en la trampa mortal de la sobreinterpretación. Descubre cómo extraer conclusiones lógicamente válidas a partir de las pistas textuales del autor.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">🧠 Inferencia vs Opinión</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">🚫 Cero Suposiciones</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">🎯 Pistas Textuales</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Inferencias →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Inferencia vs Sobreinterpretación: La Gran Diferencia 🎯</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>En la PAA, una <b>inferencia</b> no es lo que tú imaginas ni lo que es verdad en el mundo real, sino una <b>consecuencia lógica necesaria</b> respaldada por el texto:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-emerald-950/30 border border-emerald-500/30 p-3 rounded-xl text-emerald-300">
+                    <p class="font-bold">✔️ INFERENCIA VÁLIDA:</p>
+                    <p class="mt-1">Deducción 100% justificada por premisas explícitas. Si el texto dice: <i>"Don Ramón cerró la ventana con seguro y apagó las luces de la sala antes de recostarse"</i> ➔ <b>Inferencia:</b> Don Ramón se disponía a dormir.</p>
+                </div>
+                <div class="bg-rose-950/30 border border-rose-500/30 p-3 rounded-xl text-rose-300">
+                    <p class="font-bold">❌ SOBREINTERPRETACIÓN (TRAMPA PAA):</p>
+                    <p class="mt-1">Agregar ideas tuyas que el texto no afirma: <i>"Don Ramón tenía miedo a los ladrones porque su barrio es inseguro."</i> ➔ <b>Falso:</b> El texto jamás mencionó miedo ni inseguridad.</p>
+                </div>
+            </div>
+            <div class="box-highlight text-xs">
+                💡 <b>Regla de Oro PAA:</b> La respuesta correcta de inferencia casi siempre es <b>cauta y moderada</b> (usa palabras como <i>sugiere, tiende a, es probable</i>). Desconfía de opciones absolutistas con <i>siempre, nunca, todos, imposible</i>.
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Ejemplo Resuelto: Desentrañando la Inferencia 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Fragmento Breve PAA:</p>
+                <p class="italic text-slate-200">"A pesar de que el manuscrito del siglo XII fue hallado en una abadía francesa, la caligrafía anglosajona y el tipo de pergamino revelan que el copista se formó en las islas británicas."</p>
+                <p class="text-xs text-emerald-300 mt-2 font-semibold">¿Qué se puede INFERIR válidamente del fragmento?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Inferencia Correcta:</b> Existía intercambio cultural y movilidad de religiosos entre las islas británicas y el continente europeo en la época medieval.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>¿Por qué las otras opciones son trampas?</b>
+                    <ul class="list-disc list-inside mt-1 space-y-1">
+                        <li><i>"Los monjes franceses no sabían escribir manuscritos"</i> ➔ <b>Generalización insultante no dicha en el texto</b>.</li>
+                        <li><i>"El manuscrito fue robado durante una guerra"</i> ➔ <b>Especulación novelesca sin evidencia</b>.</li>
+                        <li><i>"Todos los copistas británicos emigraban a Francia"</i> ➔ <b>Extrapolación absolutista ("todos")</b>.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">¿Qué inferencia está respaldada por el texto? 🎯</h2>
+            
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30 text-xs sm:text-sm text-slate-200 mb-3 leading-relaxed">
+            <i>"Cuando la orquesta concluyó el último movimiento de la sinfonía, la sala permaneció en un silencio inmóvil durante casi diez segundos antes de que estallara una ovación ensordecedora y el público se pusiera de pie."</i>
+        </div>
+        <p class="text-slate-300 text-xs mb-3">De la reacción del público se puede INFERIR que:</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'inf1', 'Error: el texto dice que el público se puso de pie en ovación ensordecedora; el silencio inicial no fue disgusto sino conmoción.')">A) La audiencia quedó decepcionada con la ejecución de la orquesta.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'inf1', '¡Exacto! El silencio momentáneo de 10 segundos seguido de ovación de pie revela una audiencia profundamente conmovida y absorta por la magnitud de la interpretación.')">B) La interpretación musical produjo un profundo impacto emocional que dejó absorto al público antes del aplauso.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'inf1', 'Sobreinterpretación: el texto no menciona que la sinfonía fuera corta ni compleja.')">C) El público tardó en aplaudir porque no entendía la estructura de la pieza musical.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'inf1', 'El texto no menciona la acústica de la sala como causa del retraso.')">D) La acústica del recinto impedía escuchar con claridad el final de la obra.</button>
+        </div>
+        <div id="feedback-inf1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Frases Clave de Inferencia →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">El Semáforo de Respuestas en Lectura Crítica 🚦</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>Las opciones de inferencia en la PAA tienen señales léxicas muy claras que te indican si debes confiar o desconfiar:</p>
+            <div class="box-highlight text-xs space-y-2">
+                <div class="p-2 rounded bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>🟢 LUZ VERDE (Opciones que suelen ser correctas):</b><br/>
+                    Contienen matizadores prudentes: <i>"sugiere una correlación", "es factible que", "contribuye a", "evidencia una inclinación hacia", "tiende a favorecer"</i>.
+                </div>
+                <div class="p-2 rounded bg-rose-950/40 border border-rose-500/40 text-rose-200">
+                    <b>🔴 LUZ ROJA (Opciones que son casi siempre distractores):</b><br/>
+                    Afirmaciones tajantes y extremas: <i>"demuestra categóricamente", "es la única causa de", "siempre desemboca en", "ningún individuo es capaz de", "carece totalmente de valor"</i>.
+                </div>
+            </div>
+            <div class="box-highlight text-xs">
+                💡 <b>La regla del paraguas:</b> En ciencias sociales y literatura, la verdad casi nunca es 100% absoluta. La opción moderada es la que resiste el rigor del College Board.
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Ejemplo Resuelto: Descarte por Lenguaje Absolutista 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Fragmento (Texto de Divulgación Científica):</p>
+                <p class="italic text-slate-200">"Diversas investigaciones sugieren que las personas bilingües muestran mayor flexibilidad cognitiva en tareas de resolución de problemas, aunque los efectos varían según la edad de adquisición del segundo idioma."</p>
+                <p class="text-xs text-emerald-300 mt-2 font-semibold">¿Cuál afirmación se deriva legítimamente del texto?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Inferencia Prévidente:</b> El aprendizaje de dos lenguas se asocia con ventajas cognitivas que dependen de factores temporales en el desarrollo.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Opciones Trampa Descartadas por Absolutismo:</b>
+                    <ul class="list-disc list-inside mt-1 space-y-1">
+                        <li><i>"Cualquier persona monolingüe fracasará en resolver problemas complejos"</i> ➔ <b>Absoluta y falsa</b>.</li>
+                        <li><i>"Aprender un segundo idioma garantiza el éxito académico de por vida"</i> ➔ <b>Exageración sin sustento ("garantiza")</b>.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">¿Qué deducción respeta el rigor del texto? 🎯</h2>
+            
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30 text-xs sm:text-sm text-slate-200 mb-3 leading-relaxed">
+            <i>"Aunque los automóviles eléctricos reducen a cero las emisiones directas del tubo de escape en las ciudades, la huella de carbono de su manufactura y la procedencia de la electricidad para cargarlos determinan su beneficio ecológico neto real."</i>
+        </div>
+        <p class="text-slate-300 text-xs mb-3">A partir del fragmento se puede concluir que:</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'inf2', 'Absolutista: el texto no dice que sean inútiles, sino que su beneficio depende de la red eléctrica y manufactura.')">A) Los vehículos eléctricos son completamente inútiles para combatir el calentamiento global.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'inf2', '¡Excelente rigor analítico! El impacto ecológico positivo no es automático, sino que está condicionado a la limpieza de la matriz energética y los procesos industriales.')">B) La sostenibilidad integral del transporte eléctrico está condicionada por el ciclo productivo y las fuentes de generación energética.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'inf2', 'El texto reconoce explícitamente que sí reducen las emisiones directas urbanas a cero.')">C) Los motores de combustión interna siguen siendo más ecológicos que los motores eléctricos.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'inf2', 'Afirmación no respaldada: el autor analiza el presente técnico, no profetiza el año 2030.')">D) Para el año 2030 todos los países habrán resuelto la manufactura de baterías limpias.</button>
+        </div>
+        <div id="feedback-inf2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
+        <div class="card text-center">
+            <span class="badge" style="background:#34d399;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Machete de Inferencias Críticas 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Todo está en el Texto</div>
+                <div class="text-slate-300 mt-1">Si una opción suena muy inteligente pero no tiene sustento en los renglones, es trampa.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Huye de los Absolutos</div>
+                <div class="text-slate-300 mt-1"><i>Todos, nunca, jamás, siempre, el único</i> suelen ser el señuelo de las opciones incorrectas.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Premisas ➔ Conclusión</div>
+                <div class="text-slate-300 mt-1">La inferencia es un puente lógico obligado: premisa A + premisa B = deducción necesaria.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Lenguaje Moderado</div>
+                <div class="text-slate-300 mt-1">Las opciones correctas de College Board prefieren formularse con mesura y precisión.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Con esta técnica evitarás las sobreinterpretaciones que confunden al 90% de los aspirantes.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa PAA:</b><br/>${explanation}`;
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>

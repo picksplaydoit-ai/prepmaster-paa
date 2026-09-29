@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Vicios del Lenguaje PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(192, 132, 252, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(192, 132, 252, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #c084fc, #9333ea); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(192, 132, 252, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #c084fc; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #c084fc, #9333ea); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #c084fc; }
+        .box-highlight { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(192, 132, 252, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #c084fc; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge" style="background:#c084fc;">Redacción Indirecta PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Vicios del Lenguaje y Corrección Idiomática 🚫</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Elimina los tres grandes distractores del examen: el gerundio de posterioridad, el queísmo/dequeísmo y los pleonasmos redundantes que restan claridad a los textos.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">⏳ Gerundio Erróneo</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">❓ Queísmo / Dequeísmo</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">✂️ Pleonasmos</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Vicios del Lenguaje →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Trampa #1 de la PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">El Gerundio de Posterioridad y Consecuencia ⚠️</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>El gerundio (terminaciones <b>-ando, -iendo</b>) es un modificador verbal con reglas estrictas:</p>
+            <div class="box-highlight">
+                <p class="font-bold text-purple-300">¿Cuándo SÍ es correcto?</p>
+                <ul class="list-disc list-inside text-xs space-y-1">
+                    <li><b>Simultaneidad:</b> La acción ocurre al mismo tiempo que el verbo principal: <i>"Caminaba <b>escuchando</b> música."</i></li>
+                    <li><b>Anterioridad inmediata:</b> <i>"<b>Habiendo terminado</b> el examen, salió del aula."</i></li>
+                </ul>
+            </div>
+            <div class="box-warning text-xs">
+                <b>❌ EL ERROR CAPITAL: Gerundio de Posterioridad o Consecuencia</b><br/>
+                El gerundio NUNCA debe expresar una acción que sucede DESPUÉS o como RESULTADO del verbo principal:<br/>
+                <span class="text-rose-300">❌ "El atleta tropezó en la curva <b>fracturándose</b> el tobillo."</span><br/>
+                <span class="text-emerald-300">✔️ "El atleta tropezó en la curva <b>y se fracturó</b> el tobillo."</span> (Acción consecutiva ➔ se usa conjunción copulativa "y" con verbo conjugado).
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Ejemplo Resuelto: Corrección de Gerundio Ilícito 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Reactivo Modelo PAA:</p>
+                <p class="italic text-slate-200">"El presidente promulgó el decreto el lunes por la tarde, entrando en vigor a primera hora del miércoles."</p>
+                <p class="text-xs text-purple-300 mt-2 font-semibold">¿Cómo debe corregirse la frase subrayada para cumplir con la norma culta?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Opción Correcta:</b> <i>"...el lunes por la tarde, <b>el cual entró en vigor</b> a primera hora..."</i> o <i>"...<b>y entró en vigor</b> a primera hora..."</i>.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Explicación:</b> La entrada en vigor ocurre el miércoles (días después de la promulgación del lunes). Al ser una acción posterior en el tiempo, el gerundio <i>"entrando"</i> es gramaticalmente incorrecto. Debe reemplazarse por una oración coordinada o subordinada adjetiva.
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">¿Cuál opción usa el gerundio de forma CORRECTA? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">Identifica la oración que NO comete el vicio de posterioridad:</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'vl1', 'Error de posterioridad: primero aprobó la ley y años más tarde murió; no pueden unirse con gerundio.')">A) El jurista redactó la ley fundamental, muriendo años después en el exilio.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'vl1', '¡Correcto! \'Tomando apuntes\' ocurre al mismo tiempo que \'escuchaban\'; es un uso impecable de simultaneidad.')">B) Los estudiantes escuchaban la ponencia del astrofísico tomando apuntes minuciosos.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'vl1', 'Error de consecuencia/posterioridad: \'siendo inaugurado\' es el resultado posterior del rescate.')">C) El gobierno rescató el teatro histórico, siendo inaugurado el mes siguiente.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'vl1', 'Error: el envío ocurrió después de la redacción.')">D) Redactó el memorándum urgente, enviándolo a primera hora de la mañana.</button>
+        </div>
+        <div id="feedback-vl1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Dequeísmo vs Queísmo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">El Método Infalible: ¿"Que" o "De que"? 🧠</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>El <b>dequeísmo</b> es añadir "de" cuando no se necesita; el <b>queísmo</b> es suprimir "de" cuando es obligatorio. Usa la <b>Regla del "¿Qué?" o "¿De qué?"</b>:</p>
+            <div class="box-highlight text-xs space-y-2">
+                <p><b>Paso 1:</b> Formula la pregunta asociada al verbo.</p>
+                <div class="p-2 rounded bg-slate-900 border border-slate-700">
+                    <p class="text-purple-300 font-bold">Caso Pienso:</p>
+                    <p>¿Preguntas <i>"¿Qué piensas?"</i> o <i>"¿De qué piensas?"</i> ➔ Preguntas <b>¿Qué piensas?</b><br/>
+                    ➔ Por tanto es: <i>"Pienso <b>que</b> es buena idea."</i> ✔️ (Decir <i>"Pienso de que..."</i> es dequeísmo ❌).</p>
+                </div>
+                <div class="p-2 rounded bg-slate-900 border border-slate-700">
+                    <p class="text-purple-300 font-bold">Caso Estoy seguro:</p>
+                    <p>¿Preguntas <i>"¿Qué estás seguro?"</i> o <i>"¿De qué estás seguro?"</i> ➔ Preguntas <b>¿De qué estás seguro?</b><br/>
+                    ➔ Por tanto es: <i>"Estoy seguro <b>de que</b> triunfaremos."</i> ✔️ (Decir <i>"Estoy seguro que..."</i> es queísmo ❌).</p>
+                </div>
+            </div>
+            <div class="box-highlight text-xs">
+                💡 <b>Atajo alternativo (Sustituir por "ESO"):</b><br/>
+                <i>"Me alegro DE ESO"</i> ➔ <i>"Me alegro <b>de que</b> vinieras."</i><br/>
+                <i>"Afirmo ESO"</i> (no "Afirmo de eso") ➔ <i>"Afirmo <b>que</b> es verdad."</i>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Ejemplo Resuelto: Detección de Dequeísmo 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Reactivo Modelo PAA:</p>
+                <p class="italic text-slate-200">"El vicerrector opinó de que las nuevas tecnologías deben integrarse de forma paulatina en el currículo escolar."</p>
+                <p class="text-xs text-purple-300 mt-2 font-semibold">¿Qué corrección exige la norma culta?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Corrección:</b> Eliminar la preposición <b>"de"</b> (<i>"opinó <b>que</b> las nuevas tecnologías..."</i>).
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Aplicando el método:</b><br/>
+                    ¿Qué opinó el vicerrector? Opinó <b>ESO</b> (no "opinó de eso"). Al admitir objeto directo puro, el verbo <i>opinar</i> rechaza la preposición "de". Usar "opinó de que" es un dequeísmo vicioso penalizado en la PAA.
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">¿Qué opción NO comete dequeísmo ni queísmo? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">Identifica la oración correcta según la norma idiomática:</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'vl2', 'Queísmo: el verbo \'darse cuenta\' rige \'de\' (¿De qué te diste cuenta? Me di cuenta DE eso). Debe ser \'se dio cuenta de que\'.')">A) El testigo se dio cuenta que el sospechoso había huido por la puerta trasera.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'vl2', 'Dequeísmo: el verbo \'temer\' lleva objeto directo (¿Qué temía? Temía eso). Debe ser \'temía que\'.')">B) La comunidad temía de que la tormenta destruyera los cultivos de la ribera.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'vl2', '¡Excelente! \'Estar convencido\' rige la preposición \'de\' (¿De qué está convencido? Estoy convencido DE eso). Por lo tanto \'convencido de que\' es 100% impecable.')">C) El científico está convencido de que los datos respaldan su hipótesis original.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'vl2', 'Dequeísmo: el verbo \'informar\' o \'afirmar\' en este contexto no lleva \'de\' (afirmó eso, no afirmó de eso).')">D) El comunicado oficial afirmó de que no habría aumentos en el precio del combustible.</button>
+        </div>
+        <div id="feedback-vl2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
+        <div class="card text-center">
+            <span class="badge" style="background:#c084fc;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Machete de Vicios del Lenguaje 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Gerundio = Simultáneo</div>
+                <div class="text-slate-300 mt-1">Nunca posterior en el tiempo. Si pasó después, usa <i>"y + verbo"</i> o <i>"el cual + verbo"</i>.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Prueba de "ESO"</div>
+                <div class="text-slate-300 mt-1">¿Dices "pienso eso" o "pienso de eso"? Así descubres si lleva <i>"que"</i> o <i>"de que"</i>.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Cero Pleonasmos</div>
+                <div class="text-slate-300 mt-1">Elimina: <i>lapso de tiempo, funcionario público, reiterar de nuevo, persona humana</i>.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Concisión Académica</div>
+                <div class="text-slate-300 mt-1">En la PAA, la opción más directa y sin rodeos casi siempre es la correcta.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Ya dominas la corrección de estilo y vicios más exigida en la PAA.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa PAA:</b><br/>${explanation}`;
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>

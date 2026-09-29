@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Análisis de Poesía y Simbolismo PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(52, 211, 153, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(52, 211, 153, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #34d399, #059669); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(52, 211, 153, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #34d399; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #34d399, #059669); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #34d399; }
+        .box-highlight { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #34d399; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge" style="background:#34d399;">Comprensión de Lectura PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Análisis de Poesía y Lenguaje Simbólico 📜</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Descifra los textos poéticos de la PAA (como en el simulador 1, segmento V): identificación del hablante lírico, temple de ánimo, interpretación de alegorías y símbolos clásicos del tiempo y la existencia.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">🎭 Hablante Lírico</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">⏳ Símbolos Clásicos</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-emerald-500/20">💡 Temple de Ánimo</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Análisis Poético →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">El Hablante Lírico y el Objeto Poético 🎭</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>La PAA evalúa tres componentes nucleares en los poemas:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-emerald-500/30">
+                    <p class="font-bold text-emerald-300">1. Hablante Lírico:</p>
+                    <p class="text-slate-300 mt-1">La voz ficticia que habla en el poema. <b>NO es el poeta de carne y hueso</b>, sino un personaje creado (un anciano melancólico, un amante desdichado, un soldado moribundo).</p>
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-emerald-500/30">
+                    <p class="font-bold text-emerald-300">2. Objeto Lírico:</p>
+                    <p class="text-slate-300 mt-1">La persona, objeto o circunstancia que inspira el poema (la amada ausente, el río, el otoño, la patria perdida).</p>
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-emerald-500/30">
+                    <p class="font-bold text-emerald-300">3. Temple de Ánimo:</p>
+                    <p class="text-slate-300 mt-1">El estado emocional predominante (resignación, éxtasis, angustia existencial, serenidad, desesperanza).</p>
+                </div>
+            </div>
+            <div class="box-highlight text-xs">
+                💡 <b>Clave de Oro:</b> No te preocupes por métrica ni rimas difíciles; College Board se enfoca 100% en el <b>significado figurado de los versos</b> y en qué emoción proyecta la voz poética.
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Ejemplo Resuelto: Descodificando el Temple Anímico 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Estrofas Poéticas PAA (Segmento V):</p>
+                <div class="italic text-slate-200 pl-3 border-l-2 border-emerald-500/50 space-y-1">
+                    <p>"Corre el reloj, tirano silencioso, / devorando los días y las horas.</p>
+                    <p>El niño que jugaba en la pradera / hoy mira en el cristal a un hombre cano.</p>
+                    <p>Voló fugaz la dulce primavera, / y el invierno le aprieta ya la mano."</p>
+                </div>
+                <p class="text-emerald-300 font-semibold mt-2">¿Qué simboliza la expresión <i>'el invierno le aprieta ya la mano'</i>?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Significado Simbólico:</b> La llegada inevitable de la <b>vejez</b> y la cercanía del fin de la vida.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Desglose metafórico:</b>
+                    <ul class="list-disc list-inside mt-1 space-y-1">
+                        <li><i>"Primavera"</i> = Infancia y juventud fértil.</li>
+                        <li><i>"Hombre cano"</i> = Cabello blanco por los años.</li>
+                        <li><i>"Invierno"</i> = En la literatura universal, es el símbolo arquetípico de la senectud y la proximidad de la muerte.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">¿Cuál es el temple de ánimo del hablante lírico? 🎯</h2>
+            
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30 text-xs sm:text-sm text-slate-200 mb-3 leading-relaxed">
+            <div class="italic pl-3 border-l-2 border-emerald-400 space-y-1 text-xs">
+                <p>"Mas no temas el polvo que se asienta,</p>
+                <p>ni el tictac que retumba en la pared,</p>
+                <p>que el alma que ha vivido no lamenta</p>
+                <p>apagar, al final, su inmensa sed."</p>
+            </div>
+        </div>
+        <p class="text-slate-300 text-xs mb-3">En estos versos, la actitud del hablante frente a la muerte se caracteriza por:</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'ap1', 'El poema dice explícitamente \'no temas\'; rechaza el terror.')">A) Un terror pánico y desesperado ante la aniquilación del ser.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'ap1', '¡Brillante interpretación poética! \'No temas el tictac... el alma que ha vivido no lamenta\'. Es una postura de madura aceptación serena de la finitud tras haber vivido plenamente.')">B) Una serenidad reflexiva y aceptación pacífica de la muerte como culminación natural de una vida plena.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'ap1', 'No busca venganza ni rebeldía violenta contra el tiempo.')">C) Un resentimiento furioso contra el paso del reloj.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'ap1', 'No es indiferencia; es una profunda reflexión consoladora.')">D) Indiferencia fría y desprecio absoluto por los recuerdos humanos.</button>
+        </div>
+        <div id="feedback-ap1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Los Símbolos Clásicos de la Poesía →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Los Arquetipos Simbólicos en la PAA ⏳</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>La poesía que selecciona College Board utiliza símbolos universales de la tradición hispánica:</p>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-emerald-500/30">
+                    <b class="text-emerald-300">El Río / El Mar:</b> El río es la vida que corre sin detenerse; el mar representa la muerte o la eternidad (<i>"Nuestras vidas son los ríos que van a dar a la mar..."</i>).
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-emerald-500/30">
+                    <b class="text-emerald-300">El Espejo / El Cristal:</b> La confrontación con la verdad, la pérdida de la juventud y el paso inexorable de los años.
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-emerald-500/30">
+                    <b class="text-emerald-300">La Rosa / La Flor:</b> La belleza efímera y fugaz que se marchita en poco tiempo.
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-emerald-500/30">
+                    <b class="text-emerald-300">La Noche / La Sombra:</b> La incertidumbre, el misterio, la soledad o el descanso final.
+                </div>
+            </div>
+            <div class="box-highlight text-xs">
+                💡 <b>Truco PAA:</b> Cuando te pregunten qué sugiere una imagen poética, traslada siempre el objeto material (río, espejo, reloj, rosa) a su dimensión existencial humana.
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Ejemplo Resuelto: Interpretación Alegórica 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Verso poético:</p>
+                <p class="italic text-slate-200">"Navegamos en una barca sin remos por una corriente que no permite virar la proa."</p>
+                <p class="text-emerald-300 font-semibold mt-2">¿Cuál es el sentido de la alegoría?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Decodificación:</b> La impotencia del ser humano para frenar o revertir el paso del tiempo.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Elementos:</b> <i>"Barca sin remos"</i> = falta de control sobre el destino biológico. <i>"Corriente que no permite virar"</i> = el tiempo solo corre en una dirección hacia adelante.
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#34d399;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">¿Qué representa simbólicamente la imagen poética? 🎯</h2>
+            
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30 text-xs sm:text-sm text-slate-200 mb-3 leading-relaxed">
+            <i>"Ayer era un capullo sonrosado abierto al rocío del alba; hoy sus pétalos yertos alfombran la tierra húmeda del sendero."</i>
+        </div>
+        <p class="text-slate-300 text-xs mb-3">En el contexto del poema, esta imagen simboliza principalmente:</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'ap2', 'Error: reduce una metáfora existencial a un simple fenómeno botánico superficial.')">A) Las técnicas de cultivo para proteger las rosas de la lluvia matutina.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'ap2', '¡Extraordinario! El contraste entre el alba (juventud floreciente) y los pétalos marchitos en la tierra es la alegoría arquetípica de la fugacidad de la juventud y la belleza.')">B) La brevedad efímera de la juventud y el rápido marchitamiento de la hermosura física.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'ap2', 'El poema no trata sobre comercio agrícola ni jardinería.')">C) El valor económico de las flores en el mercado local.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'ap2', 'No hay rabia, sino contemplación lírica de la fragilidad de la vida.')">D) La ira del campesino al perder su cosecha por el viento.</button>
+        </div>
+        <div id="feedback-ap2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
+        <div class="card text-center">
+            <span class="badge" style="background:#34d399;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#34d399;">Machete de Poesía y Simbolismo 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Hablante ≠ Poeta</div>
+                <div class="text-slate-300 mt-1">El hablante lírico es el personaje que siente y habla dentro del universo del poema.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Símbolos Universales</div>
+                <div class="text-slate-300 mt-1"><i>Río = vida/tiempo, Mar = muerte/infinito, Invierno = vejez, Primavera = juventud</i>.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Temple de Ánimo</div>
+                <div class="text-slate-300 mt-1">Detecta si la emoción es de serenidad, angustia, exaltación o resignación melancólica.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-emerald-500/30">
+                <div class="font-bold text-emerald-300 text-sm">Traducción a lo Humano</div>
+                <div class="text-slate-300 mt-1">Toda imagen natural en el poema habla en realidad de una verdad sobre la condición humana.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Con estos 6 módulos de Lectura Crítica tienes el arsenal completo para dominar la comprensión de textos en la PAA.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa PAA:</b><br/>${explanation}`;
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>

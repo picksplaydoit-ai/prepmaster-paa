@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Signos de Puntuación PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(192, 132, 252, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(192, 132, 252, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #c084fc, #9333ea); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(192, 132, 252, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #c084fc; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #c084fc, #9333ea); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #c084fc; }
+        .box-highlight { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(192, 132, 252, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #c084fc; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge" style="background:#c084fc;">Redacción Indirecta PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Signos de Puntuación Esenciales ✒️</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Domina las reglas de puntuación que más puntos restan en la PAA: la coma del vocativo, la coma hiperbática, los incisos explicativos y el uso maestro del punto y coma y dos puntos.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">📍 Coma Hiperbática</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">🗣️ Vocativo</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-purple-500/20">⚖️ Punto y Coma</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Comenzar Puntuación →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Coma del Vocativo y Coma Hiperbática 🎯</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>En la PAA hay dos comas obligatorias que los estudiantes suelen ignorar:</p>
+            <div class="box-highlight">
+                <p class="font-bold text-purple-300">1. Coma de Vocativo:</p>
+                <p>El vocativo es la persona o entidad a quien nos dirigimos directamente. <b>Siempre va aislado por comas</b>.</p>
+                <p class="text-xs text-slate-400 mt-1">Ejemplo: <i>"Jóvenes, entreguen sus pruebas a tiempo."</i> / <i>"No olvides, Carlos, revisar tu texto."</i></p>
+            </div>
+            <div class="box-highlight">
+                <p class="font-bold text-purple-300">2. Coma Hiperbática (Circunstancial al inicio):</p>
+                <p>Cuando un complemento circunstancial (tiempo, lugar, condición o modo) se traslada al inicio de la oración, <b>debe llevar coma obligatoria</b> antes del sujeto o verbo principal.</p>
+                <p class="text-xs text-slate-400 mt-1">Ejemplo: <i>"Durante la expedición botánica de 1804<b>,</b> los naturalistas catalogaron cien nuevas especies."</i></p>
+            </div>
+            <div class="box-warning text-xs">
+                ⚠️ <b>La Coma Criminal (Error gravísimo PAA):</b> NUNCA coloques una sola coma entre el sujeto y su verbo principal. Ejemplo incorrecto: <i>"El director del instituto de investigaciones<b>,</b> convocó a la prensa."</i> ❌ (Esa coma separa al sujeto de su acción).
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Ejemplo Resuelto: Detección de Coma Hiperbática 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Reactivo Modelo PAA:</p>
+                <p class="italic text-slate-200">"A pesar de las severas inclemencias del invierno ártico los exploradores lograron establecer la base científica."</p>
+                <p class="text-xs text-purple-300 mt-2 font-semibold">¿Qué cambio de puntuación es necesario realizar?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución Correcta:</b> Colocar una coma después de <b>"ártico"</b>.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700">
+                    <b>🧠 Paso a paso del análisis:</b>
+                    <ul class="list-disc list-inside mt-1 space-y-1 text-slate-300">
+                        <li>El segmento <i>"A pesar de las severas inclemencias del invierno ártico"</i> es un complemento concesivo/circunstancial extenso colocado al inicio.</li>
+                        <li>El sujeto principal es <i>"los exploradores"</i> y el predicado es <i>"lograron establecer..."</i>.</li>
+                        <li>Al haberse alterado el orden natural (Sujeto + Verbo + Complemento), la <b>coma hiperbática</b> es obligatoria para delimitar dónde termina el bloque inicial y dónde inicia el sujeto.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">¿Cuál opción está correctamente puntuada? ✍️</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">Identifica la oración que aplica correctamente las reglas del vocativo y la coma hiperbática:</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, false, 'sp1', 'Error: \'El comité científico\' es el sujeto y \'publicó\' es el verbo; esa coma intermedia es la llamada \'coma criminal\'.')">A) El comité científico del congreso, publicó los hallazgos en la revista oficial.</button>
+            <button class="option-btn" onclick="checkPractice(this, true, 'sp1', '¡Correcto! \'Al caer la tarde en el valle\' es un circunstancial al inicio que lleva su coma hiperbática, y \'estimados colegas\' es un vocativo correctamente delimitado por comas.')">B) Al caer la tarde en el valle, debemos reunirnos, estimados colegas, en la tienda central.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'sp1', 'Falta la coma de vocativo: al dirigirse a los colegas debe aislarse con comas.')">C) Al caer la tarde en el valle debemos reunirnos estimados colegas en la tienda central.</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'sp1', 'Puntuación caótica: separa de manera indebida el verbo de su complemento de lugar.')">D) Al caer la tarde, en el valle debemos reunirnos estimados colegas, en la tienda central.</button>
+        </div>
+        <div id="feedback-sp1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Punto y Coma vs Dos Puntos →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Punto y Coma (;) y Dos Puntos (:) ⚖️</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-highlight">
+                <p class="font-bold text-purple-300">¿Cuándo usar Punto y Coma (;)?</p>
+                <ul class="list-disc list-inside mt-1 space-y-1 text-xs">
+                    <li><b>Separar proposiciones con vínculo estrecho:</b> Cuando dos oraciones independientes tienen una relación causal o de contraste inmediato sin conector: <i>"El cielo se oscureció repentinamente; sabíamos que la tormenta era inminente."</i></li>
+                    <li><b>Antes de conectores adversativos extensos:</b> Antes de <i>sin embargo, por consiguiente, no obstante</i>, cuando la primera oración ya es larga o contiene comas internas: <i>"El equipo entrenó durante meses bajo condiciones extremas; sin embargo, el clima adverso obligó a suspender la prueba."</i></li>
+                    <li><b>Enumeraciones complejas con comas internas:</b> <i>"En el viaje visitamos Tokio, la capital; Kioto, la ciudad histórica; y Osaka, el centro gastronómico."</i></li>
+                </ul>
+            </div>
+            <div class="box-highlight">
+                <p class="font-bold text-purple-300">¿Cuándo usar Dos Puntos (:)?</p>
+                <p class="text-xs">Para <b>anunciar</b> lo que viene: una enumeración previamente anunciada, una cita textual entrecomillada, o una conclusión/consecuencia directa del enunciado precedente: <i>"Solo quedaba una alternativa sensata: reiniciar el experimento desde cero."</i></p>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Ejemplo Resuelto: Enumeraciones Complejas y Conectores 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example">
+                <p class="font-bold text-white mb-2">Reactivo Modelo PAA:</p>
+                <p class="italic text-slate-200">"El museo exhibe tres piezas maestras: una escultura de mármol del siglo V, que representa a Atenea, un lienzo al óleo de la época renacentista, restaurado en 2018, y un manuscrito medieval ilustrado con pan de oro."</p>
+                <p class="text-xs text-purple-300 mt-2 font-semibold">¿Por qué este enunciado resulta confuso y cómo se soluciona?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Diagnóstico y Solución:</b> Las comas de las descripciones subordinadas se confunden con las comas que separan los tres elementos. Deben usarse <b>puntos y coma (;)</b> para separar cada bloque mayor.
+                </div>
+                <div class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+                    <b>Versión corregida PAA:</b><br/>
+                    <i>"...tres piezas maestras: una escultura de mármol del siglo V, que representa a Atenea<b>;</b> un lienzo al óleo de la época renacentista, restaurado en 2018<b>;</b> y un manuscrito medieval ilustrado con pan de oro."</i>
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#c084fc;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">¿Qué puntuación completa correctamente el enunciado? 🎯</h2>
+            
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30 text-xs sm:text-sm text-slate-200 mb-3">
+            "Las negociaciones diplomáticas parecían estancadas tras semanas de tensión [ <b>1</b> ] no obstante [ <b>2</b> ] ambas delegaciones alcanzaron un acuerdo preliminar sobre los aranceles."
+        </div>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'sp2', '¡Excelente! Antes de \'no obstante\' en oraciones extensas va punto y coma (;), y después del conector va coma (,) obligatoria.')">A) [ 1 ] ;  |  [ 2 ] ,</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'sp2', 'Una coma simple antes de \'no obstante\' es insuficiente cuando ambas proposiciones son oraciones independientes extensas.')">B) [ 1 ] ,  |  [ 2 ] ,</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'sp2', 'Los dos puntos solo se usan para anunciar enumeraciones o conclusiones directas, no antes de conectores adversativos.')">C) [ 1 ] :  |  [ 2 ] ;</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'sp2', 'Falta la coma obligatoria posterior al conector discursivo \'no obstante\'.')">D) [ 1 ] ;  |  [ 2 ] (sin signo)</button>
+        </div>
+        <div id="feedback-sp2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
+        <div class="card text-center">
+            <span class="badge" style="background:#c084fc;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3" style="color:#c084fc;">Resumen de Puntuación PAA 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Coma de Vocativo</div>
+                <div class="text-slate-300 mt-1">Aisla a la persona a quien le hablas: <i>"Amigo, escucha."</i></div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Coma Hiperbática</div>
+                <div class="text-slate-300 mt-1">Circunstancial al inicio: <i>"Ayer por la tarde, llovió."</i></div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">Punto y Coma (;)</div>
+                <div class="text-slate-300 mt-1">Antes de <i>sin embargo / por tanto</i> o listas con comas internas.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                <div class="font-bold text-purple-300 text-sm">La Coma Prohibida</div>
+                <div class="text-slate-300 mt-1">NUNCA separes Sujeto de Verbo con una sola coma.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Con estas 4 reglas asegurarás las preguntas de puntuación indirecta en el examen.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa PAA:</b><br/>${explanation}`;
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>
