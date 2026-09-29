@@ -1011,8 +1011,9 @@ function openExam(src,title) {
 function openTool(src,title){ openExam(src,title); }
 function closeIframe() { document.getElementById('iframe-modal').classList.remove('open'); document.getElementById('main-iframe').src=''; }
 function openPDF(src,title) {
-  document.getElementById('pdf-iframe').src=src+'#toolbar=0&navpanes=0';
-  document.getElementById('pdf-title').textContent=title;
+  const cacheBust = '?v=' + Date.now();
+  document.getElementById('pdf-iframe').src = src + cacheBust + '#toolbar=0&navpanes=0';
+  document.getElementById('pdf-title').textContent = title;
   document.getElementById('pdf-modal').classList.add('open');
 }
 function closePDF() { document.getElementById('pdf-modal').classList.remove('open'); document.getElementById('pdf-iframe').src=''; }
