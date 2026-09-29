@@ -553,8 +553,8 @@
         <button class="nav-link" data-view="ruta" onclick="switchView('ruta')">
           <span class="nav-icon">🗺️</span> Ruta
         </button>
-        <button class="nav-link" data-view="supervivencia" onclick="switchView('supervivencia')">
-          <span class="nav-icon">🏋️</span> Retos
+        <button class="nav-link" data-view="retos" onclick="switchView('retos')">
+          <span class="nav-icon">🏋️</span> Retos y Juegos
         </button>
         <button class="nav-link" data-view="recursos" onclick="switchView('recursos')">
           <span class="nav-icon">📚</span> Recursos
@@ -893,8 +893,6 @@
   </div>
   <!-- Alias view-supervivencia para compatibilidad -->
   <div id="view-supervivencia" class="view-container" style="display:none;"></div>
-    <div class="tools-grid" id="survival-grid"></div>
-  </div>
 
   <!-- 📄 VIEW: EXÁMENES DE SIMULACIÓN -->
   <div id="view-simulaciones" class="view-container">
@@ -1224,7 +1222,7 @@
       <span class="mob-icon">📝</span>
       <span>Práctica</span>
     </button>
-    <button class="mobile-nav-item" data-view="supervivencia" onclick="switchView('supervivencia')">
+    <button class="mobile-nav-item" data-view="retos" onclick="switchView('retos')">
       <span class="mob-icon">🏋️</span>
       <span>Retos</span>
     </button>
@@ -1270,21 +1268,54 @@
 
 <script>
 // Sistema de navegación por capas (Views) de manera aislada y robusta
-function switchView(viewId) {
-  document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
+function switchView(viewId, subTab) {
+  if (viewId === 'supervivencia') {
+    viewId = 'retos';
+    subTab = subTab || 'surv';
+  } else if (viewId === 'minijuegos') {
+    viewId = 'retos';
+    subTab = subTab || 'mini';
+  }
+
+  // Ocultar todos los contenedores de vistas
+  document.querySelectorAll('.view-container').forEach(v => {
+    v.classList.remove('active');
+  });
+
   const target = document.getElementById('view-' + viewId);
   if (target) {
     target.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  // Si entramos a la vista unificada de Retos, seleccionar la pestaña solicitada
+  if (viewId === 'retos') {
+    selectRetosTab(subTab || 'todos');
+  }
+
   // Sincronizar estado activo en navegación superior (desktop)
   document.querySelectorAll('.nav-link').forEach(link => {
-    link.classList.toggle('active', link.getAttribute('data-view') === viewId);
+    const lView = link.getAttribute('data-view');
+    link.classList.toggle('active', lView === viewId || (viewId === 'retos' && (lView === 'supervivencia' || lView === 'retos')));
   });
+
   // Sincronizar estado activo en barra inferior (móvil)
   document.querySelectorAll('.mobile-nav-item').forEach(item => {
-    item.classList.toggle('active', item.getAttribute('data-view') === viewId);
+    const mView = item.getAttribute('data-view');
+    item.classList.toggle('active', mView === viewId || (viewId === 'retos' && (mView === 'supervivencia' || mView === 'retos')));
   });
+}
+
+function selectRetosTab(tab) {
+  document.querySelectorAll('#retos-tabs-bar .exam-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-retotab') === tab);
+  });
+  const survSec = document.getElementById('retos-sec-surv');
+  const ppmSec  = document.getElementById('retos-sec-ppm');
+  const miniSec = document.getElementById('retos-sec-mini');
+  if (survSec) survSec.style.display = (tab === 'todos' || tab === 'surv') ? 'block' : 'none';
+  if (ppmSec)  ppmSec.style.display  = (tab === 'todos' || tab === 'ppm')  ? 'block' : 'none';
+  if (miniSec) miniSec.style.display = (tab === 'todos' || tab === 'mini') ? 'block' : 'none';
 }
 
 function selectExamTab(tab) {
