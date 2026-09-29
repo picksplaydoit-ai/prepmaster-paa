@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: MCM y MCD en la PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0c1428; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 240, 255, 0.12); max-width: 820px; width: 100%; padding: 2.5rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge-mcm { background: #06b6d4; color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 10px 22px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #00f0ff, #0077ff); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 13px 18px; border: 2px solid rgba(56, 189, 248, 0.2); border-radius: 12px; margin-bottom: 9px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.92rem; }
+        .option-btn:hover { border-color: #00f0ff; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #00f0ff, #0077ff); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #00f0ff; }
+        .step-pill { background: rgba(0, 240, 255, 0.15); color: #00f0ff; padding: 2px 9px; border-radius: 6px; font-size: 0.72rem; font-weight: 800; margin-right: 8px; border: 1px solid rgba(0, 240, 255, 0.3); }
+        .box-highlight { background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 16px; margin: 12px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 16px; margin: 12px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 0: Intro -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge-mcm">Aritmética Aplicada PAA</span>
+            <h1 class="text-4xl font-extrabold text-white mb-4">MCM y MCD Sin Complicaciones 🔄</h1>
+            <p class="text-base text-slate-300 mb-8 max-w-lg mx-auto leading-relaxed">
+                Descubre cómo saber de inmediato si un problema de la PAA pide Mínimo Común Múltiplo o Máximo Común Divisor con solo leer las palabras clave.
+            </p>
+            <button class="btn-nav btn-primary-action px-10 py-4 text-base" onclick="nextSlide()">¡Aprender la Diferencia! →</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: ¿Cuál usar? Las Palabras Clave -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <span class="badge-mcm">El Truco Clave</span>
+            <h2 class="text-2xl font-bold mb-3 text-cyan-400">¿Cuándo uso MCM y cuándo uso MCD? 🕵️‍♂️</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>En el examen no te dirán "calcula el MCM". Te pondrán una historia. Aprende a detectarlo:</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-3">
+                    <div class="box-highlight">
+                        <div class="font-extrabold text-cyan-300 text-base mb-1">⏰ M.C.M. (Múltiplo = Mayor)</div>
+                        <p class="text-xs text-slate-300 mb-2">Se busca el momento de <b>coincidencia futura</b> en ciclos que se repiten.</p>
+                        <div class="text-xs bg-slate-900/90 p-2.5 rounded-lg border border-cyan-500/20">
+                            <b>Palabras clave PAA:</b><br/>
+                            "Vuelven a coincidir", "sonarán juntos de nuevo", "se cruzan simultáneamente".
+                        </div>
+                    </div>
+                    <div class="box-highlight">
+                        <div class="font-extrabold text-sky-300 text-base mb-1">✂️ M.C.D. (Divisor = Menor)</div>
+                        <p class="text-xs text-slate-300 mb-2">Se busca <b>cortar, dividir o repartir</b> en partes iguales sin que sobre nada.</p>
+                        <div class="text-xs bg-slate-900/90 p-2.5 rounded-lg border border-sky-500/20">
+                            <b>Palabras clave PAA:</b><br/>
+                            "De la mayor longitud posible", "máxima cantidad de bolsas", "en partes iguales sin sobrantes".
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Cómo Calcularlos Rápido →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: El Método de la Tabla Simultánea -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <span class="badge-mcm">Técnica Rápida</span>
+            <h2 class="text-2xl font-bold mb-3 text-cyan-400">La Tabla Simultánea con Primos 🧪</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>Usa los números primos en orden: <b>2, 3, 5, 7, 11...</b></p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-3">
+                    <div class="box-highlight text-xs space-y-1">
+                        <div class="font-bold text-cyan-300 text-sm">Para MCM (llegar hasta el 1):</div>
+                        <p>Divides mientras al menos UNO se pueda dividir. Multiplicas <b>todos</b> los números primos usados.</p>
+                        <p class="font-mono text-cyan-200 pt-1">MCM(6, 8):<br/>
+                        6, 8 | $\mathbf{2}$<br/>
+                        3, 4 | $\mathbf{2}$<br/>
+                        3, 2 | $\mathbf{2}$<br/>
+                        3, 1 | $\mathbf{3}$<br/>
+                        1, 1 | $\text{MCM} = 2 \times 2 \times 2 \times 3 = \mathbf{24}$</p>
+                    </div>
+                    <div class="box-highlight text-xs space-y-1">
+                        <div class="font-bold text-sky-300 text-sm">Para MCD (solo si divide a TODOS):</div>
+                        <p>Solo anotas el primo si divide a <b>todos los números al mismo tiempo</b>. Cuando ya no haya primo común, paras.</p>
+                        <p class="font-mono text-sky-200 pt-1">MCD(24, 36):<br/>
+                        24, 36 | $\mathbf{2}$ (divide a ambos)<br/>
+                        12, 18 | $\mathbf{2}$ (divide a ambos)<br/>
+                        6, 9   | $\mathbf{3}$ (divide a ambos)<br/>
+                        2, 3   | ¡Fin! (ya no hay divisor común)<br/>
+                        $\text{MCD} = 2 \times 2 \times 3 = \mathbf{12}$</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ejemplo Guiado: MCM →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Ejemplo Guiado 1 (MCM - Coincidencia) -->
+    <div class="slide" id="slide-3">
+        <div class="card">
+            <span class="badge-mcm">Yo lo resuelvo (MCM)</span>
+            <h2 class="text-xl font-bold mb-2 text-cyan-300">Ejemplo Guiado: Rutas de Autobús 🚌</h2>
+            <p class="text-slate-400 text-sm mb-4 italic">"En una terminal, la ruta A sale cada 12 minutos y la ruta B sale cada 18 minutos. Si salieron juntos a las 7:00 a.m., ¿a qué hora volverán a salir juntos?"</p>
+            <div class="box-highlight text-sm space-y-2">
+                <p><span class="step-pill">1</span> <b>Detecta la clave:</b> Dice "volverán a salir juntos" (coincidencia de ciclo) $\rightarrow$ ¡Es <b>M.C.M.</b>!</p>
+                <p><span class="step-pill">2</span> <b>Calcula MCM(12, 18):</b><br/>
+                Múltiplos de 18: $18, \mathbf{36}, 54...$<br/>
+                ¿36 es divisible entre 12? ¡Sí! ($12 \times 3 = 36$).<br/>
+                Por lo tanto, coinciden cada <b>36 minutos</b>.</p>
+                <p><span class="step-pill">3</span> <b>Suma a la hora de partida:</b> $7:00\text{ a.m.} + 36\text{ min} = \mathbf{7:36\text{ a.m.}}$</p>
+                <div class="font-extrabold text-emerald-400 text-base mt-2 text-center">
+                    Resultado: Volverán a salir a las 7:36 a.m.
+                </div>
+            </div>
+            <div class="mt-6 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ejemplo Guiado: MCD →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Ejemplo Guiado 2 (MCD - Corte / Reparto) -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <span class="badge-mcm">Yo lo resuelvo (MCD)</span>
+            <h2 class="text-xl font-bold mb-2 text-cyan-300">Ejemplo Guiado: Cortar Cintas sin Desperdicio ✂️</h2>
+            <p class="text-slate-400 text-sm mb-4 italic">"Un carpintero tiene dos tablas de madera de 60 cm y 90 cm de largo. Desea cortarlas en pedazos del mayor tamaño posible, todos de la misma longitud y sin que sobre nada. ¿Cuánto debe medir cada pedazo?"</p>
+            <div class="box-highlight text-sm space-y-2">
+                <p><span class="step-pill">1</span> <b>Detecta la clave:</b> "Mayor tamaño posible", "cortar sin que sobre" $\rightarrow$ ¡Es <b>M.C.D.</b>!</p>
+                <p><span class="step-pill">2</span> <b>Buscamos el divisor más grande común entre 60 y 90:</b><br/>
+                Ambos terminan en cero $\rightarrow$ son divisibles entre 10.<br/>
+                $60 / 10 = 6$, y $90 / 10 = 9$.<br/>
+                El 6 y el 9 comparten el divisor 3.<br/>
+                Divisor total común = $10 \times 3 = \mathbf{30}$.</p>
+                <div class="font-extrabold text-emerald-400 text-base mt-2 text-center">
+                    Resultado: Cada pedazo debe medir 30 cm (obtiene 2 pedazos de la de 60 y 3 de la de 90).
+                </div>
+            </div>
+            <div class="mt-6 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébate en los Retos! →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Reto 1 -->
+    <div class="slide" id="slide-5">
+        <div class="card text-center">
+            <span class="badge-mcm">Tu Reto 1</span>
+            <h2 class="text-xl font-bold mb-6 text-white text-balance">
+                Tres luces parpadean en un faro: la primera cada 4 segundos, la segunda cada 6 segundos y la tercera cada 10 segundos. Si encienden juntas ahora, ¿dentro de cuántos segundos volverán a coincidir?
+            </h2>
+            <div class="space-y-3 max-w-sm mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'r1')">A) 24 segundos</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'r1')">B) 60 segundos (MCM de 4, 6 y 10 es 60)</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'r1')">C) 120 segundos</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'r1')">D) 40 segundos</button>
+            </div>
+            <div id="feedback-r1" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-6 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente Reto →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Reto 2 -->
+    <div class="slide" id="slide-6">
+        <div class="card text-center">
+            <span class="badge-mcm">Tu Reto 2 (MCD)</span>
+            <h2 class="text-xl font-bold mb-6 text-white text-balance">
+                Se tienen 48 manzanas y 72 naranjas. Se quieren armar bolsas con la misma cantidad exacta de cada fruta, usando la máxima cantidad posible sin que sobre ninguna. ¿Cuántas bolsas idénticas se pueden armar?
+            </h2>
+            <div class="space-y-3 max-w-sm mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'r2')">A) 12 bolsas</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'r2')">B) 16 bolsas</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'r2')">C) 24 bolsas (MCD de 48 y 72 es 24)</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'r2')">D) 8 bolsas</button>
+            </div>
+            <div id="feedback-r2" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-6 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Terminar y Repasar ↺</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        }
+
+        function checkAnswer(btn, isCorrect, qId) {
+            const fb = document.getElementById(`feedback-${qId}`);
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.textContent = "¡Dominado! Sabes distinguir entre MCM y MCD ✨";
+                fb.className = "mt-4 font-bold text-emerald-400 block scale-105 transition-transform text-center";
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.textContent = "¡Cuidado! Revisa si buscabas múltiplo o divisor ❌";
+                fb.className = "mt-4 font-bold text-rose-400 block text-center";
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Jerarquía de Operaciones PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0c1428; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 240, 255, 0.12); max-width: 820px; width: 100%; padding: 2.5rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge-pemdas { background: #38bdf8; color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 10px 22px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #00f0ff, #0077ff); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 13px 18px; border: 2px solid rgba(56, 189, 248, 0.2); border-radius: 12px; margin-bottom: 9px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.92rem; }
+        .option-btn:hover { border-color: #00f0ff; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #00f0ff, #0077ff); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #00f0ff; }
+        .step-pill { background: rgba(0, 240, 255, 0.15); color: #00f0ff; padding: 2px 9px; border-radius: 6px; font-size: 0.72rem; font-weight: 800; margin-right: 8px; border: 1px solid rgba(0, 240, 255, 0.3); }
+        .box-highlight { background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 16px; margin: 12px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 16px; margin: 12px 0; color: #fca5a5; }
+        .pemdas-letter { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; font-weight: 800; margin-right: 10px; font-size: 15px; }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 0: Intro -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge-pemdas">Aritmética Fundamental PAA</span>
+            <h1 class="text-4xl font-extrabold text-white mb-4">Jerarquía de Operaciones 🔢</h1>
+            <p class="text-base text-slate-300 mb-8 max-w-lg mx-auto leading-relaxed">
+                El método PEMDAS infalible para resolver cualquier cálculo sin caer en las trampas de signos y paréntesis del College Board.
+            </p>
+            <button class="btn-nav btn-primary-action px-10 py-4 text-base" onclick="nextSlide()">¡Entender la Jerarquía! →</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: La Escalera PEMDAS -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <span class="badge-pemdas">Regla de Oro</span>
+            <h2 class="text-2xl font-bold mb-3 text-cyan-400">La Escalera PEMDAS: ¿Quién va primero? 🪜</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>En matemáticas hay un orden sagrado. Las operaciones se hacen de arriba hacia abajo:</p>
+                <div class="space-y-2 my-3">
+                    <div class="bg-slate-900/90 p-3 rounded-xl border border-sky-500/25 flex items-center">
+                        <span class="pemdas-letter bg-cyan-400 text-slate-950">P</span>
+                        <div><b>Paréntesis y corchetes:</b> $( \ ), [ \ ], \{ \ \}$. Resuelve lo de adentro primero.</div>
+                    </div>
+                    <div class="bg-slate-900/90 p-3 rounded-xl border border-sky-500/25 flex items-center">
+                        <span class="pemdas-letter bg-sky-500 text-white">E</span>
+                        <div><b>Exponentes y Raíces:</b> $x^2, \sqrt{x}$.</div>
+                    </div>
+                    <div class="bg-slate-900/90 p-3 rounded-xl border border-sky-500/25 flex items-center">
+                        <span class="pemdas-letter bg-blue-600 text-white">MD</span>
+                        <div><b>Multiplicación y División:</b> Tienen el mismo peso. Se resuelven <b>de izquierda a derecha</b>.</div>
+                    </div>
+                    <div class="bg-slate-900/90 p-3 rounded-xl border border-sky-500/25 flex items-center">
+                        <span class="pemdas-letter bg-indigo-600 text-white">AS</span>
+                        <div><b>Adición y Sustracción:</b> Sumas y restas al final, de izquierda a derecha.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ley de Signos →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Ley de los Signos Sin Confusión -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <span class="badge-pemdas">Cuidado con los Signos</span>
+            <h2 class="text-2xl font-bold mb-3 text-cyan-400">Ley de Signos: No mezcles peras con manzanas ⚠️</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>El $80\%$ de los errores en la PAA ocurren por confundir la regla de la multiplicación con la de la suma:</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-3">
+                    <div class="box-highlight">
+                        <div class="font-bold text-cyan-300 mb-1">✖️ Multiplicación y División:</div>
+                        <ul class="text-xs space-y-1 text-slate-300">
+                            <li>• $(+) \times (+) = \mathbf{+}$ &nbsp;|&nbsp; $(-) \times (-) = \mathbf{+}$ &nbsp;(Iguales = Positivo)</li>
+                            <li>• $(+) \times (-) = \mathbf{-}$ &nbsp;|&nbsp; $(-) \times (+) = \mathbf{-}$ &nbsp;(Diferentes = Negativo)</li>
+                            <li class="pt-1 text-cyan-200">• $(-3) \times (-4) = \mathbf{+12}$</li>
+                        </ul>
+                    </div>
+                    <div class="box-highlight">
+                        <div class="font-bold text-sky-300 mb-1">➕ Suma y Resta ("Debo y Tengo"):</div>
+                        <ul class="text-xs space-y-1 text-slate-300">
+                            <li>• <b>Mismo signo:</b> Se suman y conservan el signo.<br/>$-5 - 3 = \mathbf{-8}$ (Debo 5 y debo 3, debo 8).</li>
+                            <li>• <b>Signos contrarios:</b> Se restan y manda el más grande.<br/>$-9 + 4 = \mathbf{-5}$ (Debo 9 y tengo 4, quedo a deber 5).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Las 2 Trampas PAA →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Las 2 Trampas del College Board -->
+    <div class="slide" id="slide-3">
+        <div class="card">
+            <span class="badge-pemdas">⚠️ Alerta Examen</span>
+            <h2 class="text-2xl font-bold mb-3 text-rose-400">Las Trampas Favoritas del College Board 🎯</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-warning text-xs space-y-1">
+                    <div class="font-bold text-sm text-rose-300">Trampa 1: El dilema del signo y el cuadrado:</div>
+                    <p>• $(-4)^2 = (-4) \times (-4) = \mathbf{+16}$ (el paréntesis abraza al negativo).</p>
+                    <p>• $-4^2 = -(4 \times 4) = \mathbf{-16}$ (el cuadrado solo afecta al 4, el signo espera afuera).</p>
+                </div>
+                <div class="box-highlight text-xs space-y-1">
+                    <div class="font-bold text-sm text-cyan-300">Trampa 2: La carrera de izquierda a derecha:</div>
+                    <p class="italic text-slate-300">¿Cuánto es $16 \div 4 \times 2$?</p>
+                    <p>❌ Error común: hacer primero $4 \times 2 = 8$ y luego $16 \div 8 = 2$.</p>
+                    <p>✅ Correcto: División y multiplicación tienen la misma fuerza. Se hace <b>estrictamente de izquierda a derecha</b>: $16 \div 4 = 4$, luego $4 \times 2 = \mathbf{8}$.</p>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ejemplo Guiado →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Ejemplo Guiado Completo -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <span class="badge-pemdas">Yo lo resuelvo</span>
+            <h2 class="text-xl font-bold mb-2 text-cyan-300">Ejemplo Guiado: Operación Encadenada 🧩</h2>
+            <p class="text-slate-400 text-sm mb-4 italic">"Calcula el valor exacto de: $10 - 2 \times (3 + 1)^2 \div 8 + 5$"</p>
+            <div class="box-highlight text-sm space-y-2">
+                <p><span class="step-pill">1</span> <b>Paréntesis primero:</b> $(3 + 1) = 4$.<br/>$\rightarrow 10 - 2 \times 4^2 \div 8 + 5$</p>
+                <p><span class="step-pill">2</span> <b>Exponente:</b> $4^2 = 16$.<br/>$\rightarrow 10 - 2 \times 16 \div 8 + 5$</p>
+                <p><span class="step-pill">3</span> <b>Multiplicación y División de izquierda a derecha:</b><br/>$2 \times 16 = 32 \rightarrow 32 \div 8 = 4$.<br/>$\rightarrow 10 - 4 + 5$</p>
+                <p><span class="step-pill">4</span> <b>Sumas y restas finales:</b> $10 - 4 = 6 \rightarrow 6 + 5 = \mathbf{11}$.</p>
+                <div class="font-extrabold text-emerald-400 text-base mt-2 text-center">
+                    Resultado Final: 11
+                </div>
+            </div>
+            <div class="mt-6 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébate en los Retos! →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Reto 1 -->
+    <div class="slide" id="slide-5">
+        <div class="card text-center">
+            <span class="badge-pemdas">Tu Reto 1</span>
+            <h2 class="text-xl font-bold mb-6 text-white text-balance">
+                ¿Cuál es el resultado de la siguiente expresión?<br/>
+                $$20 - 3 \times 4 + 2^3$$
+            </h2>
+            <div class="space-y-3 max-w-sm mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'r1')">A) 76</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'r1')">B) 16 ($2^3=8$, luego $3 \times 4=12$, $20 - 12 + 8 = 16$)</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'r1')">C) 24</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'r1')">D) 12</button>
+            </div>
+            <div id="feedback-r1" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-6 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente Reto →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Reto 2 -->
+    <div class="slide" id="slide-6">
+        <div class="card text-center">
+            <span class="badge-pemdas">Tu Reto 2 (Trampa de Signos)</span>
+            <h2 class="text-xl font-bold mb-6 text-white text-balance">
+                ¿Cuál es el valor numérico de:<br/>
+                $$-5 - (-2)^2 + 3(-4)$$
+            </h2>
+            <div class="space-y-3 max-w-sm mx-auto text-left">
+                <button class="option-btn" onclick="checkAnswer(this, false, 'r2')">A) -13</button>
+                <button class="option-btn" onclick="checkAnswer(this, true, 'r2')">B) -21 ($(-2)^2=4 \rightarrow -5 - 4 - 12 = -21$)</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'r2')">C) -17</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'r2')">D) +11</button>
+            </div>
+            <div id="feedback-r2" class="mt-4 font-bold h-6 text-center"></div>
+            <div class="mt-6 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Terminar y Repasar ↺</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        }
+
+        function checkAnswer(btn, isCorrect, qId) {
+            const fb = document.getElementById(`feedback-${qId}`);
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.textContent = "¡Exacto! Aplicaste PEMDAS a la perfección ✨";
+                fb.className = "mt-4 font-bold text-emerald-400 block scale-105 transition-transform text-center";
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.textContent = "¡Cuidado! Revisa el orden de operaciones ❌";
+                fb.className = "mt-4 font-bold text-rose-400 block text-center";
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>
