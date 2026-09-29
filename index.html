@@ -80,6 +80,12 @@
   .nav-user{font-size:13px;color:var(--muted);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .btn-logout{padding:7px 16px;background:transparent;border:1px solid var(--border-bright);border-radius:8px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
   .btn-logout:hover{border-color:#ff6b35;color:#ff6b35;background:rgba(255,107,53,0.08);}
+  .btn-clean-other-devices{padding:7px 12px;background:var(--surface2);border:1px solid var(--border-bright);border-radius:8px;color:var(--muted2);font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;transition:all .2s;}
+  .btn-clean-other-devices:hover{border-color:var(--gold);color:var(--gold);background:rgba(251,191,36,0.08);}
+  .btn-clean-sessions-link{background:transparent;border:none;color:var(--gold);font-size:12.5px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .2s;text-decoration:underline;text-underline-offset:3px;}
+  .btn-clean-sessions-link:hover{color:#fde047;filter:brightness(1.15);}
+  .btn-danger-sessions{background:rgba(225,29,72,0.15)!important;border:1px solid rgba(225,29,72,0.4)!important;color:#fb7185!important;font-weight:700!important;padding:12px!important;}
+  .btn-danger-sessions:hover{background:rgba(225,29,72,0.25)!important;border-color:#f43f5e!important;color:#fff!important;}
 
   /* Barra de Navegación Inferior en Móvil */
   .mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:100;height:calc(62px + env(safe-area-inset-bottom,0px));padding:6px 8px env(safe-area-inset-bottom,6px);background:rgba(10,10,18,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border-bright);align-items:center;justify-content:space-around;}
@@ -430,7 +436,16 @@
       <div class="input-group"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
       <button class="btn-primary" onclick="doLogin()">Entrar →</button>
       <div class="auth-error" id="login-error"></div>
-      <button class="btn-secondary" id="btn-close-sessions" style="display:none;margin-top:10px;width:100%;" onclick="closeAllSessions()">🔒 Cerrar todas mis sesiones activas y entrar aquí</button>
+      <button class="btn-secondary btn-danger-sessions" id="btn-close-sessions" style="display:none;margin-top:12px;width:100%;" onclick="closeAllSessionsAndLogin()">🔓 Cerrar todas las sesiones activas y entrar</button>
+
+      <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);text-align:center;">
+        <button type="button" class="btn-clean-sessions-link" id="btn-close-sessions-direct" onclick="closeAllSessionsAndLogin()">
+          🔒 Cerrar todas las sesiones de esta cuenta
+        </button>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4;">
+          ¿Límite de 3 dispositivos alcanzado o dejaste tu cuenta abierta? Ingresa correo y contraseña y pulsa este botón para restablecer tus sesiones y entrar de inmediato.
+        </div>
+      </div>
     </div>
 
     <!-- REGISTER PANEL -->
@@ -526,6 +541,7 @@
     </div>
     <div class="nav-right">
       <span class="nav-user" id="nav-user-email"></span>
+      <button class="btn-clean-other-devices" onclick="cleanOtherSessions()" title="Cerrar sesiones en otros dispositivos">📱 Sesiones</button>
       <button class="btn-logout" onclick="doLogout()">Salir</button>
     </div>
   </nav>
@@ -1395,8 +1411,8 @@ async function registerSession(uid) {
   for (const d of snap.docs) {
     const data = d.data();
     const age = now - (data.ts?.toMillis?.() || 0);
-    // Limpiar sesiones inactivas mayores a 45 minutos para evitar bloqueos fantasma
-    if (age > 45 * 60 * 1000) {
+    // Limpiar sesiones inactivas mayores a 20 minutos para evitar bloqueos fantasma
+    if (age > 20 * 60 * 1000) {
       await deleteDoc(d.ref);
     }
   }
@@ -1450,46 +1466,113 @@ function grantAccess(user, expires) {
   userEl.title = `Acceso válido hasta ${expires.toLocaleDateString('es-MX')} (${days} días restantes)`;
 }
 
-window.closeAllSessions = async () => {
-  const btn = document.getElementById('btn-close-sessions');
+window.closeAllSessionsAndLogin = async () => {
+  const emailInput = document.getElementById('login-email');
+  const passInput  = document.getElementById('login-pass');
+  const email = emailInput ? emailInput.value.trim() : '';
+  const pass  = passInput ? passInput.value : '';
   const errEl = document.getElementById('login-error');
-  const uid = auth.currentUser && auth.currentUser.uid;
-  if (!uid || !pendingLimitUid || uid !== pendingLimitUid) {
-    errEl.textContent = '⚠️ Tu sesión expiró, vuelve a iniciar sesión para poder cerrar tus dispositivos.';
+  const btnClose = document.getElementById('btn-close-sessions');
+  const btnDirect = document.getElementById('btn-close-sessions-direct');
+
+  errEl.style.display = 'none';
+
+  if (!email || !pass) {
+    errEl.textContent = '⚠️ Ingresa tu correo y contraseña en los campos de arriba para cerrar tus sesiones.';
     errEl.style.display = 'block';
-    btn.style.display = 'none';
+    if (emailInput && !email) emailInput.focus();
+    else if (passInput && !pass) passInput.focus();
     return;
   }
-  btn.disabled = true;
-  btn.textContent = 'Cerrando sesiones...';
+
+  const setLoading = (loading) => {
+    if (btnClose) {
+      btnClose.disabled = loading;
+      btnClose.textContent = loading ? '⏳ Cerrando sesiones...' : '🔓 Cerrar todas las sesiones activas y entrar';
+    }
+    if (btnDirect) {
+      btnDirect.disabled = loading;
+      btnDirect.textContent = loading ? '⏳ Cerrando sesiones...' : '🔒 Cerrar todas las sesiones de esta cuenta';
+    }
+  };
+
+  setLoading(true);
+
   try {
-    const sessionsRef = collection(db, 'sessions', uid, 'active');
+    // 1. Iniciar sesión o verificar autenticación del usuario
+    let user = auth.currentUser;
+    if (!user || (user.email && user.email.toLowerCase() !== email.toLowerCase())) {
+      const cred = await signInWithEmailAndPassword(auth, email, pass);
+      user = cred.user;
+    }
+
+    // 2. Verificar suscripción activa
+    const subDoc = await getDoc(doc(db, 'subscriptions', user.uid));
+    if (!subDoc.exists()) {
+      throw new Error('No se encontró una suscripción para esta cuenta.');
+    }
+    const sub = subDoc.data();
+    const now = new Date();
+    const expires = sub.expiresAt?.toDate();
+    if (!sub.active || !expires || expires <= now) {
+      throw new Error('Tu suscripción no está activa o ya expiró.');
+    }
+
+    // 3. Borrar todas las sesiones activas anteriores en Firestore
+    const sessionsRef = collection(db, 'sessions', user.uid, 'active');
     const snap = await getDocs(sessionsRef);
-    for (const d of snap.docs) {
-      await deleteDoc(d.ref);
-    }
+    const deleteOps = [];
+    snap.forEach(d => deleteOps.push(deleteDoc(d.ref)));
+    await Promise.all(deleteOps);
+
+    // 4. Registrar este dispositivo como la sesión activa
     mySessionId = null;
-    const sessionOk = await registerSession(uid);
+    const sessionOk = await registerSession(user.uid);
     if (!sessionOk) {
-      errEl.textContent = '⚠️ No se pudieron cerrar las sesiones. Intenta de nuevo en unos segundos.';
-      errEl.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = '🔒 Cerrar todas mis sesiones activas y entrar aquí';
-      return;
+      throw new Error('No se pudo inicializar la sesión. Intenta de nuevo.');
     }
+
+    // 5. Entrar directamente al sistema
     errEl.style.display = 'none';
-    btn.style.display = 'none';
-    btn.disabled = false;
-    btn.textContent = '🔒 Cerrar todas mis sesiones activas y entrar aquí';
-    grantAccess(auth.currentUser, pendingLimitExpires);
+    if (btnClose) btnClose.style.display = 'none';
     pendingLimitUid = null;
     pendingLimitExpires = null;
-  } catch(e) {
-    console.error('Error cerrando sesiones:', e);
-    errEl.textContent = '⚠️ Ocurrió un error al cerrar tus sesiones. Intenta de nuevo.';
+    grantAccess(user, expires);
+  } catch (e) {
+    console.error('Error al cerrar todas las sesiones:', e);
+    const msgs = {
+      'auth/invalid-email': 'Correo inválido.',
+      'auth/user-not-found': 'No existe esa cuenta.',
+      'auth/wrong-password': 'Contraseña incorrecta.',
+      'auth/invalid-credential': 'Correo o contraseña incorrectos.',
+    };
+    errEl.textContent = '⚠️ ' + (msgs[e.code] || e.message || 'Error al cerrar sesiones.');
     errEl.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = '🔒 Cerrar todas mis sesiones activas y entrar aquí';
+  } finally {
+    setLoading(false);
+  }
+};
+
+window.closeAllSessions = window.closeAllSessionsAndLogin;
+
+window.cleanOtherSessions = async () => {
+  const user = auth.currentUser;
+  if (!user) return;
+  const ok = confirm('¿Deseas cerrar las sesiones abiertas en tus otros dispositivos y mantener activa solo esta?');
+  if (!ok) return;
+  try {
+    const sessionsRef = collection(db, 'sessions', user.uid, 'active');
+    const snap = await getDocs(sessionsRef);
+    let count = 0;
+    for (const d of snap.docs) {
+      if (d.id !== mySessionId) {
+        await deleteDoc(d.ref);
+        count++;
+      }
+    }
+    alert(`✅ Se cerraron ${count} sesiones en otros dispositivos. Este dispositivo permanece activo.`);
+  } catch (e) {
+    alert('Error al cerrar otras sesiones: ' + e.message);
   }
 };
 
@@ -1507,11 +1590,12 @@ onAuthStateChanged(auth, async user => {
             document.getElementById('auth-screen').style.display = 'flex';
             document.getElementById('app').style.display = 'none';
             const errEl = document.getElementById('login-error');
-            errEl.textContent = '⚠️ Límite de 3 dispositivos alcanzado.';
+            errEl.textContent = '⚠️ Límite de 3 dispositivos alcanzado. Cierra tus sesiones anteriores para entrar aquí.';
             errEl.style.display = 'block';
             pendingLimitUid = user.uid;
             pendingLimitExpires = expires;
-            document.getElementById('btn-close-sessions').style.display = 'block';
+            const btnClose = document.getElementById('btn-close-sessions');
+            if (btnClose) btnClose.style.display = 'block';
             // No cerramos sesión aquí a propósito: se necesita mantener al usuario
             // autenticado para poder cerrar sus propias sesiones desde el botón.
             return;
