@@ -1,444 +1,295 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>PrepMaster PAA — Explicación: Funciones y Traslaciones</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<!-- MathJax para fórmulas -->
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script>
-  window.MathJax = {
-    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-    svg: { fontCache: 'global' }
-  };
-</script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-<style>
-  :root{
-    --bg:#080810;--surface:#0f0f1a;--surface2:#161624;--surface3:#1e1e30;
-    --border:#ffffff08;--border-bright:#ffffff14;
-    --text:#eeeef8;--muted:#7070a0;--mat:#ff6b35;--gold:#fbbf24;--accent:#7c3aed;
-    --radius-sm:10px;--radius-md:16px;--radius-lg:22px;
-  }
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;margin:0;padding:20px 16px;-webkit-font-smoothing:antialiased;}
-  .container{max-width:850px;margin:0 auto;}
-  
-  .header-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:var(--radius-lg);padding:32px 24px;margin-bottom:24px;text-align:center;position:relative;overflow:hidden;}
-  .header-card::before{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;background:radial-gradient(circle,#ff6b3525 0%,transparent 70%);pointer-events:none;}
-  .badge-area{display:inline-block;padding:4px 12px;background:#ff6b3518;border:1px solid #ff6b3535;border-radius:100px;font-size:11px;font-weight:700;color:var(--mat);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
-  .title{font-family:'Syne',sans-serif;font-size:clamp(24px,4vw,34px);font-weight:800;line-height:1.2;margin-bottom:10px;}
-  .subtitle{color:var(--muted);font-size:14px;max-width:600px;margin:0 auto;line-height:1.6;}
-
-  /* PESTAÑAS (TABS) */
-  .tabs-bar{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:24px;}
-  .tab-btn{padding:10px 18px;border-radius:12px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all 0.2s;}
-  .tab-btn:hover{color:var(--text);border-color:var(--border-bright);}
-  .tab-btn.active{background:linear-gradient(135deg,var(--mat),#e65c24);color:white;border-color:transparent;box-shadow:0 4px 16px #ff6b3540;}
-
-  .tab-pane{display:none;animation:fadeIn 0.25s ease;}
-  .tab-pane.active{display:block;}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
-
-  .block-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:24px;margin-bottom:20px;}
-  .block-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
-  .block-title i{color:var(--mat);}
-
-  .tip-box{background:#fbbf2410;border:1px solid #fbbf2430;border-radius:var(--radius-sm);padding:16px;margin-top:16px;font-size:13px;color:#fef08a;line-height:1.6;}
-  .tip-box strong{color:var(--gold);}
-
-  /* Solución explicada paso a paso */
-  .solucion-guiada{margin-top:16px;padding:18px;background:var(--surface3);border-radius:14px;border-left:4px solid var(--mat);font-size:13.5px;line-height:1.6;color:var(--text);}
-  
-  /* Ejercicio de práctica (Resuélvelo tú mismo) */
-  .pratice-box{background:var(--surface2);border:1px solid var(--border-bright);border-radius:var(--radius-md);padding:20px;margin-top:24px;}
-  .pratice-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-  
-  .opcion-btn{width:100%;display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;cursor:pointer;transition:all .2s;text-align:left;font-size:14px;color:var(--text);}
-  .opcion-btn:hover{border-color:var(--mat);background:var(--surface3);}
-  .opcion-letra{width:28px;height:32px;border-radius:8px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Syne',sans-serif;color:var(--muted);flex-shrink:0;}
-  
-  .opcion-btn.correct{background:#05966920!important;border-color:#10b981!important;color:#34d399!important;}
-  .opcion-btn.correct .opcion-letra{background:#10b981;color:white;}
-  .opcion-btn.incorrect{background:#e11d4820!important;border-color:#f43f5e!important;color:#fb7185!important;}
-  .opcion-btn.incorrect .opcion-letra{background:#f43f5e;color:white;}
-
-  /* Contenedores de Gráficas */
-  .svg-container{background:#161624;border:1px solid var(--border-bright);border-radius:16px;padding:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;margin:16px 0;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Funciones y Notación f(x) PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(56, 189, 248, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #38bdf8; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
+        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
 </head>
 <body>
 
-<div class="container">
+    
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge" style="background:#38bdf8;">Álgebra PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Funciones y Notación $f(x)$ 📈</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Comprende la función como una máquina de entrada y salida, resuelve composiciones $f(g(x))$, traslaciones de gráficas y lecturas en tablas.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">📥 Entrada y Salida</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🧩 Composición f(g(x))</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🔄 Traslación Gráfica</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Funciones →</button>
+            </div>
+        </div>
+    </div>
   
-  <!-- HEADER -->
-  <div class="header-card">
-    <span class="badge-area">Matemáticas · Álgebra Superior</span>
-    <h1 class="title">Funciones y Traslaciones PAA</h1>
-    <p class="subtitle">Guía gráfica interactiva para dominar la evaluación de funciones, composición y el análisis visual de traslaciones horizontales y verticales.</p>
-  </div>
 
-  <!-- NAVEGACIÓN POR PESTAÑAS (TABS) -->
-  <div class="tabs-bar">
-    <button class="tab-btn active" onclick="switchTab('tab-simple')">🔢 1. Función Simple</button>
-    <button class="tab-btn" onclick="switchTab('tab-comp-num')">🔄 2. Composición Numérica $f(g(k))$</button>
-    <button class="tab-btn" onclick="switchTab('tab-comp-alg')">🧩 3. Composición Algebraica $f(g(x))$</button>
-    <button class="tab-btn" onclick="switchTab('tab-traslacion-simple')">↔️ 4. Traslaciones Simples</button>
-    <button class="tab-btn" onclick="switchTab('tab-traslacion-vertice')">🎯 5. Traslación de Vértice</button>
-  </div>
-
-
-  <!-- ================================================================= -->
-  <!-- PESTAÑA 1: FUNCIÓN SIMPLE                                         -->
-  <!-- ================================================================= -->
-  <div id="tab-simple" class="tab-pane active">
-    <div class="block-card">
-      <div class="block-title"><i class="fa-solid fa-calculator"></i> Evaluación Directa y Despeje de Entradas</div>
-      <p style="font-size:14px; color:var(--muted); line-height:1.6;">
-        Evaluar una función $f(x)$ significa sustituir $x$ por un valor numérico. Si en cambio te piden hallar $a$ sabiendo que $f(a) = K$, debes **igualar la regla a $K$ y despejar $a$**.
-      </p>
-
-      <div class="tip-box">
-        <strong>💡 Cuida los Signos Negativos:</strong> Si evalúas un número negativo en potencias pares (ej. $x^2$), el resultado siempre es positivo: $(-3)^2 = 9$.
-      </div>
-
-      <!-- EJEMPLO GUIADO PASO A PASO -->
-      <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
-        📌 Ejemplo Guiado 1 (Evaluación Directa): Si $f(x) = 3x^2 - 4x + 1$, halla el valor de $f(-3)$.
-      </div>
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">La Regla de la Sustitución: $f(\text{caja})$ 📥</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>La notación $f(x)$ significa simplemente que donde veas una $x$, debes <b>reemplazarla por lo que esté dentro del paréntesis</b>:</p>
+            <div class="box-highlight text-xs space-y-1">
+                <p>Si $f(x) = 2x^2 - 3x$, entonces:</p>
+                <p>$f(4) = 2(4)^2 - 3(4) = 2(16) - 12 = 20$.</p>
+                <p>$f(-1) = 2(-1)^2 - 3(-1) = 2(1) + 3 = 5$.</p>
+                <p>$f(a + 1) = 2(a + 1)^2 - 3(a + 1)$.</p>
+            </div>
+            <div class="box-warning text-xs">
+                ⚠️ Recuerda que $f(x)$ es exactamente igual a la variable $y$ en el plano cartesiano: $(x, f(x)) = (x, y)$.
+            </div>
+        </div>
       
-      <div class="solucion-guiada">
-        <p style="margin-bottom:8px;"><strong>Paso 1:</strong> Sustituye $x = -3$ usando paréntesis:</p>
-        $$f(-3) = 3(-3)^2 - 4(-3) + 1$$
-        <p style="margin-bottom:8px;"><strong>Paso 2:</strong> Eleva la potencia $(-3)^2 = 9$ y multiplica signos $(-4)(-3) = 12$:</p>
-        $$f(-3) = 3(9) + 12 + 1 = 27 + 12 + 1 = 40$$
-        <p><strong>Respuesta:</strong> $f(-3) = 40$.</p>
-      </div>
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+            </div>
+        </div>
+    </div>
+  
 
-      <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
-        📌 Ejemplo Guiado 2 (Despeje de Entrada): Si $f(a) = 15$ para $f(x) = 4x - 5$, halla el valor de $a$.
-      </div>
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Evaluación Inversa de $f(x)$ 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
+                <p class="text-slate-200">Dada la función $g(x) = 3x - 7$, si $g(k) = 14$, ¿cuál es el valor de $k$?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución Paso a Paso:</b><br/>
+                    1. $g(k)$ significa evaluar la función en $k$: $g(k) = 3k - 7$.<br/>
+                    2. Igualamos al resultado dado: $3k - 7 = 14$.<br/>
+                    3. Despejamos $k$: $3k = 21 \implies \mathbf{k = 7}$.
+                </div>
+            </div>
+        </div>
       
-      <div class="solucion-guiada">
-        <p style="margin-bottom:8px;"><strong>Paso 1:</strong> Iguala la expresión de la función a $15$:</p>
-        $$4a - 5 = 15$$
-        <p style="margin-bottom:8px;"><strong>Paso 2:</strong> Suma $5$ a ambos lados y luego divide entre $4$:</p>
-        $$4a = 15 + 5 \implies 4a = 20 \implies a = 5$$
-        <p><strong>Respuesta:</strong> $a = 5$.</p>
-      </div>
-
-      <!-- RESUÉLVELO TÚ MISMO -->
-      <div class="pratice-box">
-        <div class="pratice-title"><i class="fa-solid fa-pen-to-square"></i> ¡Resuélvelo tú mismo!</div>
-        <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
-          Dada la función $g(x) = \frac{x^2 - 4}{x + 3}$, ¿cuál es el valor de $g(-5)$?
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+            </div>
         </div>
-
-        <div id="opts-simple">
-          <button class="opcion-btn" onclick="responder('simple', 0, false, this)"><div class="opcion-letra">A</div><span>10.5</span></button>
-          <button class="opcion-btn" onclick="responder('simple', 1, false, this)"><div class="opcion-letra">B</div><span>-7</span></button>
-          <button class="opcion-btn" onclick="responder('simple', 2, true, this)"><div class="opcion-letra">C</div><span>-10.5</span></button>
-          <button class="opcion-btn" onclick="responder('simple', 3, false, this)"><div class="opcion-letra">D</div><span>-21</span></button>
-        </div>
-        <div id="fb-simple" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
-      </div>
-
     </div>
-  </div>
+  
 
-
-  <!-- ================================================================= -->
-  <!-- PESTAÑA 2: COMPOSICIÓN NUMÉRICA f(g(k))                           -->
-  <!-- ================================================================= -->
-  <div id="tab-comp-num" class="tab-pane">
-    <div class="block-card">
-      <div class="block-title"><i class="fa-solid fa-layer-group"></i> Evaluación Cadena: $f(g(k))$ y $g(f(k))$</div>
-      <p style="font-size:14px; color:var(--muted); line-height:1.6;">
-        En la evaluación numérica en cadena, **el orden importa**. $f(g(k))$ NO es lo mismo que $g(f(k))$.
-      </p>
-
-      <div style="background:var(--surface2); padding:16px; border-radius:12px; font-size:13.5px; border:1px solid var(--border); margin-top:12px;">
-        <strong style="color:var(--gold);">Regla de Adentro hacia Afuera:</strong>
-        <p style="margin-top:4px; color:var(--muted);">Para calcular $g(f(2))$, evalúa primero la función pegada al número $f(2)$ y luego introduce ese valor dentro de $g(x)$.</p>
-      </div>
-
-      <!-- EJEMPLO GUIADO PASO A PASO -->
-      <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
-        📌 Ejemplo Guiado: Si $f(x) = x^2 + 2$ y $g(x) = 3x - 1$, halla el valor de $g(f(2))$.
-      </div>
-
-      <div class="solucion-guiada">
-        <p style="margin-bottom:8px;"><strong>Paso 1:</strong> Evalúa la función interna $f(2)$:</p>
-        $$f(2) = (2)^2 + 2 = 4 + 2 = 6$$
-        <p style="margin-bottom:8px;"><strong>Paso 2:</strong> Evalúa el resultado $6$ en la función externa $g(x)$:</p>
-        $$g(6) = 3(6) - 1 = 18 - 1 = 17$$
-        <p><strong>Respuesta:</strong> $g(f(2)) = 17$.</p>
-      </div>
-
-      <!-- RESUÉLVELO TÚ MISMO -->
-      <div class="pratice-box">
-        <div class="pratice-title"><i class="fa-solid fa-pen-to-square"></i> ¡Resuélvelo tú mismo!</div>
-        <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
-          Si $f(x) = 2x + 1$ y $g(x) = x^2 - 2$, ¿cuál es el valor de $g(f(3))$?
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el valor de f(-2)? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">Si $f(x) = 3x^2 - 5x + 4$, ¿cuál es el valor de $f(-2)$?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'fn1', '¡Correcto! f(-2) = 3(-2)^2 - 5(-2) + 4 = 3(4) + 10 + 4 = 12 + 10 + 4 = 26.')">A) 26</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'fn1', 'Cuidado con el signo: -5(-2) es +10, no -10.')">B) 6</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'fn1', 'Cuidado con (-2)^2: da +4, no -4.')">C) -18</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'fn1', 'Cálculo erróneo.')">D) 22</button>
         </div>
-
-        <div id="opts-comp-num">
-          <button class="opcion-btn" onclick="responder('comp-num', 0, false, this)"><div class="opcion-letra">A</div><span>$12$</span></button>
-          <button class="opcion-btn" onclick="responder('comp-num', 1, false, this)"><div class="opcion-letra">B</div><span>$23$</span></button>
-          <button class="opcion-btn" onclick="responder('comp-num', 2, true, this)"><div class="opcion-letra">C</div><span>$47$</span></button>
-          <button class="opcion-btn" onclick="responder('comp-num', 3, false, this)"><div class="opcion-letra">D</div><span>$49$</span></button>
+        <div id="feedback-fn1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Composición de Funciones f(g(x)) →</button>
+            </div>
         </div>
-        <div id="fb-comp-num" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
-      </div>
-
     </div>
-  </div>
+  
 
-
-  <!-- ================================================================= -->
-  <!-- PESTAÑA 3: COMPOSICIÓN ALGEBRAICA f(g(x))                         -->
-  <!-- ================================================================= -->
-  <div id="tab-comp-alg" class="tab-pane">
-    <div class="block-card">
-      <div class="block-title"><i class="fa-solid fa-puzzle-piece"></i> Composición Algebraica de Expresiones</div>
-      <p style="font-size:14px; color:var(--muted); line-height:1.6;">
-        Cuando te piden $f(g(x))$ en términos de $x$, debes **insertar la fórmula completa de $g(x)$** en cada lugar donde aparezca $x$ dentro de la regla de $f(x)$.
-      </p>
-
-      <!-- EJEMPLO GUIADO PASO A PASO -->
-      <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
-        📌 Ejemplo Guiado: Si $f(x) = 4x - 5$ y $g(x) = x + 2$, halla la expresión simplificada de $f(g(x))$.
-      </div>
-
-      <div class="solucion-guiada">
-        <p style="margin-bottom:8px;"><strong>Paso 1:</strong> Reemplaza la $x$ de $f(x)$ por toda la expresión $(x + 2)$:</p>
-        $$f(g(x)) = 4(x + 2) - 5$$
-        <p style="margin-bottom:8px;"><strong>Paso 2:</strong> Aplica propiedad distributiva y simplifica términos semejantes:</p>
-        $$f(g(x)) = 4x + 8 - 5 = 4x + 3$$
-        <p><strong>Respuesta:</strong> $f(g(x)) = 4x + 3$.</p>
-      </div>
-
-      <!-- RESUÉLVELO TÚ MISMO -->
-      <div class="pratice-box">
-        <div class="pratice-title"><i class="fa-solid fa-pen-to-square"></i> ¡Resuélvelo tú mismo!</div>
-        <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
-          Si $f(x) = 3x - 1$ y $g(x) = 2x + 4$, ¿cuál es la expresión simplificada de $g(f(x))$?
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Composición de Funciones: $f(g(x))$ 🧩</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>La composición $f(g(x))$ se lee <b>de adentro hacia afuera</b>:</p>
+            <div class="box-highlight text-xs space-y-1">
+                <p>1. Primero calcula el valor de la función interior $g(x)$.</p>
+                <p>2. El resultado numérico obtenido se mete como entrada en la función exterior $f$.</p>
+                <p>Ejemplo: Si $g(x) = 2x + 1$ y $f(x) = x^2$, para hallar $f(g(3))$:<br/>
+                $g(3) = 2(3) + 1 = 7$.<br/>
+                Luego $f(7) = 7^2 = 49$.</p>
+            </div>
         </div>
-
-        <div id="opts-comp-alg">
-          <button class="opcion-btn" onclick="responder('comp-alg', 0, true, this)"><div class="opcion-letra">A</div><span>$6x + 2$</span></button>
-          <button class="opcion-btn" onclick="responder('comp-alg', 1, false, this)"><div class="opcion-letra">B</div><span>$6x + 11$</span></button>
-          <button class="opcion-btn" onclick="responder('comp-alg', 2, false, this)"><div class="opcion-letra">C</div><span>$6x + 3$</span></button>
-          <button class="opcion-btn" onclick="responder('comp-alg', 3, false, this)"><div class="opcion-letra">D</div><span>$6x - 2$</span></button>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+            </div>
         </div>
-        <div id="fb-comp-alg" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
-      </div>
-
     </div>
-  </div>
+  
 
-
-  <!-- ================================================================= -->
-  <!-- PESTAÑA 4: TRASLACIONES SIMPLES (CÓMO MEDIR UNIDADES)            -->
-  <!-- ================================================================= -->
-  <div id="tab-traslacion-simple" class="tab-pane">
-    <div class="block-card">
-      <div class="block-title"><i class="fa-solid fa-up-down-left-right"></i> ¿Cómo saber cuántas unidades y hacia dónde se movió?</div>
-      <p style="font-size:14px; color:var(--muted); line-height:1.6;">
-        En la PAA te darán la gráfica original $f(x)$ (punteada) y la nueva gráfica $g(x)$ (sólida). Para saber el movimiento exacto, **selecciona un punto de referencia (como el vértice o una intersección) y mide el desplazamiento en los ejes**.
-      </p>
-
-      <!-- GRAFICA SVG DE TRASLACIÓN HORIZONTAL Y VERTICAL -->
-      <div class="svg-container">
-        <div style="font-family:'Syne',sans-serif; font-size:14px; font-weight:700; margin-bottom:12px; color:var(--text);">
-          Desplazamiento de $f(x)$ [Morada] a $g(x)$ [Naranja]
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Doble Evaluación Compuesta 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
+                <p class="text-slate-200">Sean $f(x) = x^2 - 1$ y $g(x) = 2x + 3$. ¿Cuál es el valor de $g(f(3))$?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución Paso a Paso:</b><br/>
+                    1. Función interior primero: $f(3) = 3^2 - 1 = 9 - 1 = 8$.<br/>
+                    2. Ahora evaluamos la función exterior en ese resultado: $g(8) = 2(8) + 3 = 16 + 3 = \mathbf{19}$.
+                </div>
+            </div>
         </div>
-        <svg width="100%" height="200" viewBox="0 0 320 200" style="max-width:420px;">
-          <!-- Cuadrícula / Ejes -->
-          <line x1="20" y1="120" x2="300" y2="120" stroke="#7070a0" stroke-width="2"/>
-          <line x1="100" y1="20" x2="100" y2="180" stroke="#7070a0" stroke-width="2"/>
-
-          <!-- Guías de Unidades en Ejes -->
-          <text x="92" y="135" fill="#9090b8" font-size="10">0</text>
-          <text x="160" y="135" fill="#9090b8" font-size="10">3</text>
-          <text x="90" y="70" fill="#9090b8" font-size="10">2</text>
-
-          <!-- Gráfica Original f(x) con Vértice en (0, 0) -> SVG (100, 120) -->
-          <path d="M 60,40 Q 100,120 140,40" fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="4"/>
-          <circle cx="100" cy="120" r="5" fill="#7c3aed"/>
-          <text x="40" y="30" fill="#7c3aed" font-size="11" font-weight="bold">f(x) original en (0,0)</text>
-
-          <!-- Gráfica Trasladada g(x) con Vértice en (3, 2) -> SVG (160, 70) -->
-          <path d="M 120,-10 Q 160,70 200,-10" fill="none" stroke="#ff6b35" stroke-width="3"/>
-          <circle cx="160" cy="70" r="5" fill="#fbbf24"/>
-          <text x="170" y="65" fill="#fbbf24" font-size="11" font-weight="bold">g(x) trasladada en (3,2)</text>
-
-          <!-- Flecha de Desplazamiento -->
-          <line x1="100" y1="120" x2="160" y2="70" stroke="#fbbf24" stroke-width="2" stroke-dasharray="3"/>
-        </svg>
-      </div>
-
-      <div style="background:var(--surface2); padding:16px; border-radius:12px; font-size:13px; border:1px solid var(--border); margin-top:10px;">
-        <strong style="color:var(--gold);">Reglas Clave para Interpretar la Ecuación:</strong>
-        <ul style="margin-top:8px; margin-left:14px; color:var(--text); line-height:1.8;">
-          <li>• Movimiento a la <strong>DERECHA</strong> de $h$ unidades $\implies (x - h)$ dentro del paréntesis.</li>
-          <li>• Movimiento a la <strong>IZQUIERDA</strong> de $h$ unidades $\implies (x + h)$ dentro del paréntesis.</li>
-          <li>• Movimiento hacia <strong>ARRIBA</strong> de $k$ unidades $\implies + k$ fuera del paréntesis.</li>
-          <li>• Movimiento hacia <strong>ABAJO</strong> de $k$ unidades $\implies - k$ fuera del paréntesis.</li>
-        </ul>
-      </div>
-
-      <!-- EJEMPLO GUIADO PASO A PASO -->
-      <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
-        📌 Ejemplo Guiado: Analizando la gráfica anterior, ¿cuántas unidades y hacia dónde se trasladó $f(x)$ para convertirse en $g(x)$?
-      </div>
-
-      <div class="solucion-guiada">
-        <p style="margin-bottom:8px;"><strong>Paso 1 (Eje X):</strong> Compara el vértice morado en $x = 0$ con el vértice amarillo en $x = 3$. Se movió <strong>3 unidades a la DERECHA</strong>.</p>
-        <p style="margin-bottom:8px;"><strong>Paso 2 (Eje Y):</strong> Compara la altura del vértice morado en $y = 0$ con el amarillo en $y = 2$. Subió <strong>2 unidades hacia ARRIBA</strong>.</p>
-        <p><strong>Ecuación Resultante:</strong> $g(x) = (x - 3)^2 + 2$.</p>
-      </div>
-
-      <!-- RESUÉLVELO TÚ MISMO -->
-      <div class="pratice-box">
-        <div class="pratice-title"><i class="fa-solid fa-pen-to-square"></i> ¡Resuélvelo tú mismo!</div>
-        <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
-          Si la función original $f(x) = x^2$ se traslada hasta tener su vértice en el punto $(-4, -1)$, ¿cuál es su nueva ecuación?
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+            </div>
         </div>
-
-        <div id="opts-traslacion-simple">
-          <button class="opcion-btn" onclick="responder('traslacion-simple', 0, false, this)"><div class="opcion-letra">A</div><span>$g(x) = (x - 4)^2 - 1$</span></button>
-          <button class="opcion-btn" onclick="responder('traslacion-simple', 1, true, this)"><div class="opcion-letra">B</div><span>$g(x) = (x + 4)^2 - 1$</span></button>
-          <button class="opcion-btn" onclick="responder('traslacion-simple', 2, false, this)"><div class="opcion-letra">C</div><span>$g(x) = (x + 4)^2 + 1$</span></button>
-          <button class="opcion-btn" onclick="responder('traslacion-simple', 3, false, this)"><div class="opcion-letra">D</div><span>$g(x) = (x - 4)^2 + 1$</span></button>
-        </div>
-        <div id="fb-traslacion-simple" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
-      </div>
-
     </div>
-  </div>
+  
 
-
-  <!-- ================================================================= -->
-  <!-- PESTAÑA 5: TRASLACIÓN DE VÉRTICE Y PUNTOS ESPECÍFICOS             -->
-  <!-- ================================================================= -->
-  <div id="tab-traslacion-vertice" class="tab-pane">
-    <div class="block-card">
-      <div class="block-title"><i class="fa-solid fa-location-crosshairs"></i> Traslación Aplicada a Puntos $P(x, y)$</div>
-      <p style="font-size:14px; color:var(--muted); line-height:1.6;">
-        En algunos reactivos de la PAA no te dan toda la gráfica, sino únicamente las **coordenadas de un punto $(x, y)$ de la función original** y te preguntan la nueva posición tras aplicar $g(x) = f(x \pm h) \pm k$.
-      </p>
-
-      <!-- GRAFICA DE RASTREO DE PUNTO -->
-      <div class="svg-container">
-        <div style="font-family:'Syne',sans-serif; font-size:14px; font-weight:700; margin-bottom:12px; color:var(--text);">
-          Rastreo del Punto P(3, 8) al aplicar g(x) = f(x) - 5
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el valor de f(g(2))? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">Si $f(x) = 4x - 5$ y $g(x) = x^2 + 1$, ¿cuánto vale $f(g(2))$?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'fn2', '¡Excelente! Interior primero: g(2) = 2^2 + 1 = 5. Exterior: f(5) = 4(5) - 5 = 20 - 5 = 15.')">A) 15</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'fn2', '10 es el resultado si hubieras hecho g(f(2)) al revés.')">B) 10</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'fn2', 'Cálculo erróneo.')">C) 12</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'fn2', 'Revisa la multiplicación 4 * 5 = 20.')">D) 25</button>
         </div>
-        <svg width="100%" height="160" viewBox="0 0 300 160" style="max-width:400px;">
-          <line x1="30" y1="130" x2="270" y2="130" stroke="#7070a0" stroke-width="2"/>
-          <line x1="80" y1="20" x2="80" y2="140" stroke="#7070a0" stroke-width="2"/>
-
-          <!-- Punto Original P(3, 8) -> SVG (180, 40) -->
-          <circle cx="180" cy="40" r="6" fill="#7c3aed"/>
-          <text x="192" y="42" fill="#7c3aed" font-size="11" font-weight="bold">Punto Original P(3, 8)</text>
-
-          <!-- Flecha de descenso de 5 unidades en Y -->
-          <line x1="180" y1="40" x2="180" y2="90" stroke="#fbbf24" stroke-width="2" stroke-dasharray="3"/>
-
-          <!-- Punto Trasladado P'(3, 3) -> SVG (180, 90) -->
-          <circle cx="180" cy="90" r="6" fill="#34d399"/>
-          <text x="192" y="95" fill="#34d399" font-size="11" font-weight="bold">Punto Trasladado P'(3, 3)</text>
-        </svg>
-      </div>
-
-      <!-- EJEMPLO GUIADO PASO A PASO -->
-      <div style="font-weight:700; font-size:15px; margin-top:20px; color:var(--text);">
-        📌 Ejemplo Guiado: Si el punto $(3, 8)$ pertenece a la función $f(x)$, ¿por qué punto pasa obligatoriamente la función $g(x) = f(x) - 5$?
-      </div>
-
-      <div class="solucion-guiada">
-        <p style="margin-bottom:8px;"><strong>Análisis:</strong> Restar $5$ fuera de la función es una traslación vertical de 5 unidades hacia **abajo**.</p>
-        <p style="margin-bottom:8px;">• Coordenada $X$: No cambia nada dentro del paréntesis $\implies x = 3$.</p>
-        <p style="margin-bottom:8px;">• Coordenada $Y$: Resta 5 unidades al valor original $\implies y = 8 - 5 = 3$.</p>
-        <p><strong>Respuesta:</strong> El nuevo punto es <strong>$(3, 3)$</strong>.</p>
-      </div>
-
-      <!-- RESUÉLVELO TÚ MISMO -->
-      <div class="pratice-box">
-        <div class="pratice-title"><i class="fa-solid fa-pen-to-square"></i> ¡Resuélvelo tú mismo!</div>
-        <div style="font-size:14px; margin-bottom:14px; font-weight:600;">
-          Si la función $f(x)$ tiene su punto más bajo en $(-2, 4)$, ¿cuál será el punto más bajo de la función $g(x) = f(x + 3) + 2$?
+        <div id="feedback-fn2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
         </div>
-
-        <div id="opts-traslacion-vertice">
-          <button class="opcion-btn" onclick="responder('traslacion-vertice', 0, false, this)"><div class="opcion-letra">A</div><span>$(1, 6)$</span></button>
-          <button class="opcion-btn" onclick="responder('traslacion-vertice', 1, true, this)"><div class="opcion-letra">B</div><span>$(-5, 6)$</span></button>
-          <button class="opcion-btn" onclick="responder('traslacion-vertice', 2, false, this)"><div class="opcion-letra">C</div><span>$(-5, 2)$</span></button>
-          <button class="opcion-btn" onclick="responder('traslacion-vertice', 3, false, this)"><div class="opcion-letra">D</div><span>$(1, 2)$</span></button>
-        </div>
-        <div id="fb-traslacion-vertice" style="margin-top:10px; font-size:13px; font-weight:700; display:none;"></div>
-      </div>
-
     </div>
-  </div>
+  
 
-</div>
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
+        <div class="card text-center">
+            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Funciones 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Notación $f(x)$</div>
+                <div class="text-slate-300 mt-1">Sustituye en cada $x$ el valor entre paréntesis. $f(x) = y$.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Composición $f(g(x))$</div>
+                <div class="text-slate-300 mt-1">De adentro hacia afuera: calcula $g$ primero, luego mete el resultado en $f$.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Traslaciones Verticales</div>
+                <div class="text-slate-300 mt-1">$f(x) + c$ sube $c$ unidades. $f(x) - c$ baja $c$ unidades.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Traslaciones Horizontales</div>
+                <div class="text-slate-300 mt-1">$f(x - c)$ mueve a la DERECHA. $f(x + c)$ mueve a la IZQUIERDA.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> La notación de funciones y composiciones ya está bajo control.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+  
 
-<script>
-// Cambiar pestañas (Tabs)
-function switchTab(tabId) {
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+    <div class="progress-indicator" id="progress"></div>
 
-  if(event && event.target) event.target.classList.add('active');
-  const targetPane = document.getElementById(tabId);
-  if(targetPane) targetPane.classList.add('active');
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
 
-  if (window.MathJax && window.MathJax.typesetPromise) {
-    MathJax.typesetPromise();
-  }
-}
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        }
 
-// Lógica interactiva para calificar la pregunta "Resuélvelo tú mismo"
-function responder(seccion, idxOpt, esCorrecta, btnElem) {
-  const contenedor = document.getElementById(`opts-${seccion}`);
-  const feedback = document.getElementById(`fb-${seccion}`);
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+            }
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([fb]);
+            }
+        }
 
-  contenedor.querySelectorAll('.opcion-btn').forEach(btn => {
-    btn.style.pointerEvents = 'none';
-  });
-
-  if (esCorrecta) {
-    btnElem.classList.add('correct');
-    feedback.style.color = '#34d399';
-    feedback.innerHTML = '<i class="fa-solid fa-circle-check"></i> ¡Excelente! Respuesta correcta.';
-  } else {
-    btnElem.classList.add('incorrect');
-    feedback.style.color = '#fb7185';
-    if(seccion === 'simple') {
-      feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. g(-5) = [(-5)² - 4] / [-5 + 3] = (25 - 4) / (-2) = 21 / (-2) = -10.5.';
-    } else if(seccion === 'comp-num') {
-      feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. Primero f(3) = 2(3) + 1 = 7. Luego g(7) = 7² - 2 = 49 - 2 = 47.';
-    } else if(seccion === 'comp-alg') {
-      feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. g(f(x)) = 2(3x - 1) + 4 = 6x - 2 + 4 = 6x + 2.';
-    } else if(seccion === 'traslacion-simple') {
-      feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. Mover a la derecha 4 resta dentro: (x - 4)². Mover abajo 1 resta fuera: - 1. Queda g(x) = (x - 4)² - 1.';
-    } else if(seccion === 'traslacion-vertice') {
-      feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Incorrecto. f(x + 3) mueve 3 a la izquierda (-2 - 3 = -5 en X). + 2 mueve 2 hacia arriba (4 + 2 = 6 en Y). Nuevo punto (-5, 6).';
-    }
-  }
-  feedback.style.display = 'block';
-
-  if (window.MathJax && window.MathJax.typesetPromise) {
-    MathJax.typesetPromise();
-  }
-}
-</script>
-
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
 </body>
 </html>

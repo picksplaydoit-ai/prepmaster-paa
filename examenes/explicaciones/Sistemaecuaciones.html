@@ -3,313 +3,256 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual Maestro: Sistemas Lineales PAA</title>
+    <title>Manual Maestro: Sistemas de Ecuaciones 2x2 PAA</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Configuración de MathJax para fórmulas perfectas -->
     <script>
         window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true
-            },
-            options: {
-                enableMenu: false
-            }
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
         };
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: #f8fafc;
-            color: #1e293b;
-            margin: 0;
-            overflow: hidden;
-            touch-action: manipulation;
-        }
-
-        .slide {
-            display: none;
-            height: 100vh;
-            width: 100vw;
-            padding: 1rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .slide.active {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 1;
-        }
-
-        .card {
-            background: white;
-            border-radius: 2rem;
-            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.08);
-            max-width: 800px;
-            width: 100%;
-            padding: 2.5rem;
-            position: relative;
-            border: 1px solid #f1f5f9;
-            max-height: 95vh;
-            overflow-y: auto;
-        }
-
-        @media (max-width: 640px) {
-            .card {
-                padding: 1.5rem;
-                border-radius: 1.5rem;
-                width: 95%;
-            }
-            h2 { font-size: 1.25rem !important; }
-        }
-
-        .badge-system {
-            background: #6366f1;
-            color: white;
-            padding: 4px 14px;
-            border-radius: 999px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            display: inline-block;
-            text-transform: uppercase;
-        }
-
-        .btn-nav {
-            background: #1e293b;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
-        }
-
-        .option-btn {
-            width: 100%;
-            text-align: left;
-            padding: 12px 16px;
-            border: 2px solid #f1f5f9;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            background: #fff;
-            font-size: 0.9rem;
-        }
-
-        .option-btn:hover { border-color: #6366f1; background: #f5f3ff; }
-        .option-correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
-        .option-incorrect { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
-
-        .progress-indicator {
-            position: fixed;
-            bottom: 0; left: 0; height: 5px;
-            background: #6366f1; transition: width 0.3s ease; z-index: 100;
-        }
-
-        .step-pill {
-            background: #e0e7ff; color: #4338ca; padding: 2px 8px;
-            border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-right: 8px;
-        }
-
-        .formula-box {
-            background: #f5f3ff; border-left: 4px solid #6366f1;
-            padding: 1.5rem; border-radius: 1rem; margin: 1.5rem 0;
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(56, 189, 248, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #38bdf8; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
+        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
     </style>
 </head>
 <body>
 
-    <!-- Slide 0: Intro -->
+    
+    <!-- Slide 0: Portada -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <h1 class="text-4xl font-extrabold text-slate-900 mb-4 text-balance">Sistemas Lineales: Buscando el Cruce 🤝</h1>
-            <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
-                Un sistema son dos ecuaciones buscando un punto en común. Vamos a aprender a resolverlos rápido para que no te quiten tiempo valioso.
-            </p>
-            <button class="btn-nav bg-indigo-600 px-12 py-4 text-lg" onclick="nextSlide()">¡Empecemos!</button>
+            <span class="badge" style="background:#38bdf8;">Álgebra PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Sistemas de Ecuaciones 2x2 📊</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Aprende a resolver sistemas 2x2 por eliminación rápida (suma y resta), a interpretar soluciones gráficas (rectas que se cruzan, paralelas o coincidentes) y problemas de planteamiento.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">⚡ Eliminación Rápida</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">📉 Intersección Rectas</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🚫 Sin Solución</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Sistemas 2x2 →</button>
+            </div>
         </div>
     </div>
+  
 
-    <!-- Slide 1: ¿Qué es un sistema? -->
-    <div class="slide" id="slide-1">
-        <div class="card">
-            <div class="badge-system">Concepto 01</div>
-            <h2 class="text-2xl font-bold mb-4 text-indigo-700">¿Qué rayos es un sistema? 🤔</h2>
-            <div class="space-y-4 text-slate-600 text-sm">
-                <p>Imagina que dos amigos caminan por rutas distintas. El sistema de ecuaciones nos dice <b>en qué punto exacto se van a encontrar</b>.</p>
-                <div class="formula-box">
-                    <p class="font-bold">Se ve algo así:</p>
-                    <p>$$ \begin{cases} x + y = 10 \\ x - y = 2 \end{cases} $$</p>
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">El Método de Eliminación (Suma y Resta) ⚡</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>Es el método más veloz para la PAA. Multiplica una o ambas ecuaciones para que los coeficientes de una variable sean <b>iguales en magnitud pero con signo contrario</b>:</p>
+            <div class="box-highlight text-xs space-y-1">
+                <p>Al sumar las ecuaciones verticalmente, esa variable <b>se cancela a cero</b> al instante, dejando una ecuación simple con una sola incógnita.</p>
+                <p>💡 <b>Atajo PAA:</b> Lee bien la pregunta. A veces la PAA no pide $x$ ni $y$, sino <i>"¿Cuánto vale $x + y$?"</i> o <i>"¿Cuánto vale $2x - y$?"</i>. En muchos casos basta con <b>sumar o restar las dos ecuaciones directamente</b> sin despejar las variables individuales.</p>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: El Atajo de la Suma Directa 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
+                <p class="text-slate-200">Si $\begin{cases} 4x + 3y = 25 \\ 2x + 5y = 35 \end{cases}$, ¿cuál es el valor de $x + y$?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución Maestra (Sin despejar $x$ ni $y$):</b><br/>
+                    1. Sumamos ambas ecuaciones miembro a miembro:<br/>
+                    $(4x + 2x) + (3y + 5y) = 25 + 35$<br/>
+                    $6x + 6y = 60$<br/>
+                    2. Dividimos toda la igualdad entre 6:<br/>
+                    $\mathbf{x + y = 10}$. ¡Resuelto en 10 segundos!
                 </div>
-                <p>Resolverlo es encontrar cuánto vale $x$ y cuánto vale $y$ para que <b>ambas</b> frases sean ciertas al mismo tiempo.</p>
             </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Método 1: El Francotirador</button>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 2: Eliminación (TEORÍA) -->
-    <div class="slide" id="slide-2">
-        <div class="card">
-            <div class="badge-system">Método 01</div>
-            <h2 class="text-2xl font-bold mb-4 text-indigo-700">El Francotirador (Eliminación) 🎯</h2>
-            <div class="space-y-3 text-slate-600 text-sm">
-                <p>Es el más rápido para la PAA. El objetivo es <b>sumar las dos ecuaciones</b> para que una de las letras desaparezca (¡PUM!).</p>
-                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                    <p class="font-bold mb-2">¿Cuándo usarlo?</p>
-                    <p>Cuando veas una letra que tiene el mismo número pero signo diferente (ej. $+y$ y $-y$).</p>
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el valor de x en el sistema? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">Resuelve el sistema para $x$: $\begin{cases} 3x - 2y = 13 \\ 2x + 2y = 12 \end{cases}$</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'sis1', '¡Correcto! Suma directa: las 2y se cancelan: (3x + 2x) = 13 + 12 -> 5x = 25 -> x = 5.')">A) $x = 5$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'sis1', 'y = 1 es el valor de la otra variable, te piden x.')">B) $x = 1$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'sis1', 'Cálculo erróneo.')">C) $x = 4$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'sis1', 'Revisa la suma 13 + 12 = 25.')">D) $x = 6$</button>
+        </div>
+        <div id="feedback-sis1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Casos Especiales de Solución →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Geometría del Sistema: ¿Cuántas Soluciones Hay? 📉</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-cyan-500/30">
+                    <p class="font-bold text-cyan-300">1 Solución Única</p>
+                    <p class="text-slate-300 mt-1">Las rectas tienen <b>distinta pendiente</b> y se cruzan en un único punto $(x, y)$.</p>
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-cyan-500/30">
+                    <p class="font-bold text-cyan-300">0 Soluciones (Sin solución)</p>
+                    <p class="text-slate-300 mt-1">Las rectas son <b>paralelas</b> (misma pendiente, distinto corte $b$). Al resolver da una falsedad: $0 = 7$.</p>
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-cyan-500/30">
+                    <p class="font-bold text-cyan-300">Infinitas Soluciones</p>
+                    <p class="text-slate-300 mt-1">Es la <b>misma recta</b> disfrazada (una ecuación es múltiplo de la otra). Da una identidad: $0 = 0$.</p>
                 </div>
             </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Eliminación</button>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 3: Ejemplo Eliminación (YO RESUELVO) -->
-    <div class="slide" id="slide-3">
-        <div class="card">
-            <div class="badge-system">Yo lo resuelvo</div>
-            <h2 class="text-xl font-bold mb-4">Eliminando la Y 🔫</h2>
-            <p class="text-slate-600 text-sm mb-4 italic text-center">"Resuelve: $x + y = 10$ y $x - y = 4$"</p>
-            <div class="bg-indigo-50 p-5 rounded-xl border border-indigo-100 text-sm">
-                <p class="font-semibold text-indigo-900 mb-2">Paso a paso:</p>
-                <p class="mb-2"><span class="step-pill">1</span> <b>Sumo:</b> $(x+x)$ y $(y-y)$. Las $y$ se cancelan. Me queda: $2x = 14$.</p>
-                <p class="mb-2"><span class="step-pill">2</span> <b>Despejo:</b> $x = 14 / 2 = \mathbf{7}$.</p>
-                <p class="mb-2"><span class="step-pill">3</span> <b>Encuentro Y:</b> Si $x$ es 7 y $x+y=10$, entonces $y = 10 - 7 = \mathbf{3}$.</p>
-                <p class="mt-4 font-bold text-center text-indigo-600 italic">¡Solución: (7, 3)!</p>
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Condición para que NO Tenga Solución 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
+                <p class="text-slate-200">¿Para qué valor de $k$ el sistema $\begin{cases} 3x - 6y = 12 \\ kx - 4y = 8 \end{cases}$ tiene infinitas soluciones?</p>
             </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Reto Eliminación</button>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución Paso a Paso:</b><br/>
+                    1. Para infinitas soluciones, las razones de coeficientes deben ser idénticas en todo:<br/>
+                    $\frac{3}{k} = \frac{-6}{-4} = \frac{12}{8}$.<br/>
+                    2. Simplificamos la razón numérica: $\frac{-6}{-4} = \frac{3}{2}$.<br/>
+                    3. Igualamos: $\frac{3}{k} = \frac{3}{2} \implies \mathbf{k = 2}$.
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 4: Reto Eliminación (INTERACTIVO) -->
-    <div class="slide" id="slide-4">
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Para qué valor de k NO tiene solución? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">¿Para qué valor de la constante $k$ el sistema de ecuaciones $\begin{cases} 2x - 5y = 10 \\ kx - 15y = 20 \end{cases}$ NO tiene ninguna solución?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'sis2', '¡Excelente! Para rectas paralelas (sin solución), las pendientes deben ser iguales pero los términos independientes distintos: 2/k = -5/(-15) = 1/3 -> k = 6. Comprobación: 10/20 = 1/2 != 1/3.')">A) $k = 6$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'sis2', 'Cuidado con el signo: (-5)/(-15) es positivo (+1/3), por lo que k = +6.')">B) $k = -6$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'sis2', 'Cálculo erróneo.')">C) $k = 4$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'sis2', 'Revisa la proporción 2/k = 5/15.')">D) $k = 10$</button>
+        </div>
+        <div id="feedback-sis2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
         <div class="card text-center">
-            <div class="badge-system">Tu Reto</div>
-            <h2 class="text-lg font-bold mb-6 italic">
-                En el sistema: <br> $2x + y = 8$ <br> $x - y = 1$ <br> ¿Cuánto vale $x$?
-            </h2>
-            <div class="space-y-3 max-w-xs mx-auto text-left">
-                <button class="option-btn" onclick="checkAnswer(this, false, 'rs1')">A) 7</button>
-                <button class="option-btn" onclick="checkAnswer(this, true, 'rs1')">B) 3 (Suma: $3x = 9$)</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'rs1')">C) 1</button>
+            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Sistemas 2x2 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Preguntas de Combinación</div>
+                <div class="text-slate-300 mt-1">Si piden $x + y$ o $x - y$, suma o resta las dos ecuaciones directamente.</div>
             </div>
-            <div id="feedback-rs1" class="mt-4 font-bold h-6"></div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Método 2: El Espía</button>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Eliminación Rápida</div>
+                <div class="text-slate-300 mt-1">Multiplica cruzado para igualar coeficientes y suma verticalmente.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Sin Solución = Paralelas</div>
+                <div class="text-slate-300 mt-1">Misma relación en $x$ e $y$ ($\frac{a_1}{a_2} = \frac{b_1}{b_2}$), pero distinta en $c$.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Infinitas = Misma Recta</div>
+                <div class="text-slate-300 mt-1">Todo proporcional: $\frac{a_1}{a_2} = \frac{b_1}{b_2} = \frac{c_1}{c_2}$.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Los sistemas 2x2 ya no serán una prueba de resistencia en el examen.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
-
-    <!-- Slide 5: Sustitución (TEORÍA) -->
-    <div class="slide" id="slide-5">
-        <div class="card">
-            <div class="badge-system">Método 02</div>
-            <h2 class="text-2xl font-bold mb-4 text-indigo-700">El Espía (Sustitución) 🕵️‍♂️</h2>
-            <div class="space-y-4 text-slate-600 text-sm">
-                <p>Aquí una variable se "disfraza" de otra cosa y se mete en la otra ecuación. </p>
-                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                    <p class="font-bold mb-2">¿Cuándo usarlo?</p>
-                    <p>Cuando una letra ya está sola (ej. $y = 2x$) o es muy fácil de despejar.</p>
-                </div>
-            </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo Sustitución</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 6: Ejemplo Sustitución (YO RESUELVO) -->
-    <div class="slide" id="slide-6">
-        <div class="card">
-            <div class="badge-system">Yo lo resuelvo</div>
-            <h2 class="text-xl font-bold mb-4">Infiltrando la X 🕵️‍♀️</h2>
-            <p class="text-slate-600 text-sm mb-4 italic text-center">"Resuelve: $y = 3x$ y $x + y = 8$"</p>
-            <div class="bg-indigo-50 p-5 rounded-xl border border-indigo-100 text-sm">
-                <p class="font-semibold text-indigo-900 mb-2">Paso a paso:</p>
-                <p class="mb-2"><span class="step-pill">1</span> <b>Sustituyo:</b> Como sé que $y$ es "$3x$", lo pongo en la segunda ecuación: $x + \mathbf{3x} = 8$.</p>
-                <p class="mb-2"><span class="step-pill">2</span> <b>Sumo:</b> $4x = 8$.</p>
-                <p class="mb-2"><span class="step-pill">3</span> <b>Final:</b> $x = 8 / 4 = \mathbf{2}$.</p>
-                <p class="mt-4 text-xs italic text-slate-400">¿Y cuánto vale $y$? Pues $3 \times 2 = 6$. ¡Solución (2, 6)!</p>
-            </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Reto Sustitución</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 7: Reto Sustitución (INTERACTIVO) -->
-    <div class="slide" id="slide-7">
-        <div class="card text-center">
-            <div class="badge-system">Tu Reto</div>
-            <h2 class="text-lg font-bold mb-6 italic">
-                Si $x = y + 2$ <br> y $x + y = 10$. <br> ¿Cuánto vale $y$?
-            </h2>
-            <div class="space-y-3 max-w-xs mx-auto text-left">
-                <button class="option-btn" onclick="checkAnswer(this, true, 'rs2')">A) 4 (Porque $4+2=6$ y $6+4=10$)</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'rs2')">B) 6</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'rs2')">C) 10</button>
-            </div>
-            <div id="feedback-rs2" class="mt-4 font-bold h-6"></div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Problemas Aplicados</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 8: Problemas Aplicados (TEORÍA) -->
-    <div class="slide" id="slide-8">
-        <div class="card">
-            <div class="badge-system">Aplicación</div>
-            <h2 class="text-2xl font-bold mb-4 text-indigo-700">De palabras a letras 📖➡️🔢</h2>
-            <div class="space-y-4 text-slate-600 text-sm">
-                <p>En la PAA te contarán historias sobre granjas o compras. No te asustes, solo traduce:</p>
-                <div class="bg-slate-50 p-4 rounded-xl border">
-                    <p class="mb-2 italic">"La suma de dos números es 20 y su diferencia es 4..."</p>
-                    <p class="font-bold text-center">$$ \begin{cases} x + y = 20 \\ x - y = 4 \end{cases} $$</p>
-                </div>
-                <p class="text-xs text-center text-slate-400">💡 Truco: Casi siempre se resuelven con el "Francotirador" (Eliminación).</p>
-            </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Finalizar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide Final -->
-    <div class="slide" id="slide-9">
-        <div class="card text-center">
-            <div class="mb-6 flex justify-center text-6xl">🔓</div>
-            <h2 class="text-4xl font-extrabold text-slate-900 mb-6">¡Sistemas Desbloqueados!</h2>
-            <p class="text-lg text-slate-500 mb-10 leading-relaxed max-w-md mx-auto text-balance">
-                Ya sabes cuándo disparar (eliminar) y cuándo infiltrar (sustituir). Estas dos herramientas son oro puro para tu examen. ¡Sigue practicando!
-            </p>
-            <button class="btn-nav px-12 py-4" onclick="goToStart()">Reiniciar Guía</button>
-        </div>
-    </div>
+  
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -328,36 +271,29 @@
             if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         }
 
-        function checkAnswer(btn, isCorrect, qId) {
-            const fb = document.getElementById(`feedback-${qId}`);
-            btn.parentElement.querySelectorAll('.option-btn').forEach(b => {
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
                 b.classList.remove('option-correct', 'option-incorrect');
             });
+            const fb = document.getElementById(`feedback-${qId}`);
             if (isCorrect) {
                 btn.classList.add('option-correct');
-                fb.textContent = "¡Perfecto! ✨";
-                fb.className = "mt-4 font-bold text-green-600 block scale-110 transition-transform text-center";
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
-                fb.textContent = "¡Casi! Revisa la cuenta ❌";
-                fb.className = "mt-4 font-bold text-red-600 block text-center";
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+            }
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([fb]);
             }
         }
 
         function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
         function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
-        function goToStart() {
-            currentSlide = 0;
-            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
-            document.querySelectorAll('[id^="feedback-"]').forEach(f => f.textContent = "");
-            updateUI();
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
-            if (e.key === 'ArrowLeft') prevSlide();
-        });
-
+        function goToStart() { currentSlide = 0; updateUI(); }
         updateUI();
     </script>
 </body>

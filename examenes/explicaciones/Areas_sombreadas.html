@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual Maestro: Regiones Sombreadas y Áreas PAA</title>
+    <title>Manual Maestro: Áreas Sombreadas PAA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = {
@@ -16,224 +16,239 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
         .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: #0c1428; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 240, 255, 0.12); max-width: 820px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
-        .badge-geo { background: #38bdf8; color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
-        .badge-quiz { background: #f59e0b; color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
         .btn-nav:hover { background: #334155; }
-        .btn-primary-action { background: linear-gradient(135deg, #00f0ff, #0077ff); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
         .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
-        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(56, 189, 248, 0.2); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
-        .option-btn:hover { border-color: #00f0ff; background: #0f1b36; }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(56, 189, 248, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #38bdf8; background: #0f1b36; }
         .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
         .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
-        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #00f0ff, #0077ff); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #00f0ff; }
-        .box-highlight { background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
+        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
         .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
     </style>
 </head>
 <body>
 
+    
     <!-- Slide 0: Portada -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <span class="badge-geo">Geometría Estratégica PAA</span>
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Regiones Sombreadas y Áreas 🔷</h1>
-            <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
-                Aprende la estrategia maestra de la <b>"Resta de Formas"</b>, sectores circulares y el método de reubicación de piezas con prácticas intercaladas paso a paso.
-            </p>
-            <button class="btn-nav btn-primary-action px-9 py-3 text-base" onclick="nextSlide()">¡Iniciar Explicación y Prácticas! →</button>
+            <span class="badge" style="background:#38bdf8;">Geometría PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Áreas y Regiones Sombreadas 🔷</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Aprende a resolver áreas sombreadas con el método universal de resta de figuras (Área Total - Área Blanca) y la técnica de traslación de regiones simétricas.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">➖ Resta de Figuras</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🧩 Traslación Simétrica</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">⭕ Círculos en Cuadrados</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Áreas Sombreadas →</button>
+            </div>
         </div>
     </div>
+  
 
-    <!-- Slide 1: Concepto 1 - Resta de Áreas -->
-    <div class="slide" id="slide-1">
-        <div class="card">
-            <span class="badge-geo">Estrategia Maestra #1</span>
-            <h2 class="text-2xl font-bold mb-2 text-cyan-400">La Estrategia de la Resta de Áreas ✂️</h2>
-            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-                <p>Casi nunca existe una fórmula directa para una región sombreada extraña. La regla de oro PAA es:</p>
-                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
-                    <span class="text-lg sm:text-xl font-bold text-cyan-300">$$\text{Área Sombreada} = \mathbf{\text{Área Total (Figura Externa)} - \text{Área Blanca (Hueco)}}$$</span>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm my-2">
-                    <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700">
-                        <span class="text-cyan-400 font-bold">Cuadrado con Círculo Inscrito:</span><br/>
-                        Lado $= L$, Radio $= r = L/2$<br/>
-                        $\text{Área Sombreada} = L^2 - \pi r^2$
-                    </div>
-                    <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700">
-                        <span class="text-cyan-400 font-bold">Corona Circular:</span><br/>
-                        Dos círculos concéntricos ($R$ y $r$):<br/>
-                        $\text{Área Sombreada} = \pi R^2 - \pi r^2 = \pi(R^2 - r^2)$
-                    </div>
-                </div>
-                <div class="box-highlight">
-                    💡 <b>Atajo PAA:</b> En el examen las respuestas suelen venir expresadas <b>en términos de $\pi$</b> (por ejemplo $100 - 25\pi$). ¡Casi nunca tienes que multiplicar por $3.1416$!
-                </div>
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">El Principio Universal: Área Total menos Área No Sombreada ➖</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>El 90% de los reactivos de áreas sombreadas en la PAA se resuelven con una resta sencilla:</p>
+            <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
+                <span class="text-xl font-bold text-cyan-300">$$\text{Área Sombreada} = \text{Área Exterior (Mayor)} - \text{Área Blanca (Hueco)}$$</span>
             </div>
-            <div class="mt-4 flex justify-between">
+            <div class="box-highlight text-xs">
+                Fórmulas básicas imprescindibles:<br/>
+                Círculo: $A = \pi r^2$.<br/>
+                Cuadrado: $A = l^2$.<br/>
+                Triángulo: $A = \frac{b \cdot h}{2}$.<br/>
+                Trapecio: $A = \frac{(B + b) \cdot h}{2}$.
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 1! →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 2: Práctica 1 Inmediata -->
-    <div class="slide" id="slide-2">
-        <div class="card">
-            <span class="badge-quiz">🎯 Práctica Inmediata #1</span>
-            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
-                Un cuadrado tiene un lado de $10\text{ cm}$. En su interior se inscribe un círculo que toca los cuatro lados. ¿Cuál es el área de la región exterior al círculo pero dentro del cuadrado?
-            </h2>
-            <div class="space-y-2 max-w-md mx-auto text-left">
-                <button class="option-btn" onclick="checkPractice(this, true, 'p1', '¡Correcto! El área del cuadrado es $10 \\times 10 = 100$. El diámetro del círculo es igual al lado ($10$), por tanto su radio es $r = 5$. El área del círculo es $\\pi(5)^2 = 25\\pi$. Restando ambas: $100 - 25\\pi$.')">A) $100 - 25\pi$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'Cuidado con el radio: si el lado es 10, el radio es la mitad ($r = 5$), no $10$. $\\pi(10)^2 = 100\\pi$ sería con radio 10.')">B) $100 - 100\pi$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'El área del cuadrado es $10^2 = 100$, no $25$. Revisa la fórmula de base por altura.')">C) $25 - 5\pi$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'Cuidado: la fórmula del área circular es $\\pi r^2$, no el perímetro $2\\pi r$.')">D) $100 - 10\pi$</button>
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Círculo Inscrito en un Cuadrado 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
+                <p class="text-slate-200">Un círculo está perfectamente inscrito en un cuadrado cuyo lado mide 10 cm. ¿Cuál es el área de la región sombreada comprendida entre el cuadrado y el círculo?</p>
             </div>
-            <div id="feedback-p1" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
-            <div class="mt-5 flex justify-between">
-                <button class="btn-nav" onclick="prevSlide()">← Repasar Concepto</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Sectores Circulares →</button>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución Paso a Paso:</b><br/>
+                    1. Área del cuadrado: $A_{\text{cuadrado}} = 10^2 = 100 \text{ cm}^2$.<br/>
+                    2. Radio del círculo: al estar inscrito, el diámetro es 10 cm ➔ $r = 5 \text{ cm}$.<br/>
+                    3. Área del círculo: $A_{\text{círculo}} = \pi (5)^2 = 25\pi \text{ cm}^2$.<br/>
+                    4. Área sombreada = $A_{\text{cuadrado}} - A_{\text{círculo}} = \mathbf{100 - 25\pi \text{ cm}^2}$.
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- Slide 3: Concepto 2 - Sectores Circulares -->
-    <div class="slide" id="slide-3">
-        <div class="card">
-            <span class="badge-geo">Estrategia Maestra #2</span>
-            <h2 class="text-2xl font-bold mb-2 text-cyan-400">Sectores Circulares: La Fracción de Pastel 🍰</h2>
-            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-                <p>Un sector circular es una rebanada de círculo con ángulo $\theta$. Su tamaño es la fracción correspondiente de los $360^\circ$ totales:</p>
-                <div class="bg-slate-900/90 border border-sky-500/30 rounded-xl p-3 text-center my-2">
-                    <span class="text-base sm:text-lg font-bold text-sky-300">$$\text{Área del Sector} = \left(\frac{\theta}{360^\circ}\right) \times \pi r^2$$</span>
-                </div>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs my-2">
-                    <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700">
-                        <div class="font-bold text-cyan-300 text-sm">$\theta = 90^\circ$</div>
-                        <div class="text-slate-400 mt-1">$\frac{90}{360} = \mathbf{\frac{1}{4}}$ del círculo</div>
-                    </div>
-                    <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700">
-                        <div class="font-bold text-cyan-300 text-sm">$\theta = 60^\circ$</div>
-                        <div class="text-slate-400 mt-1">$\frac{60}{360} = \mathbf{\frac{1}{6}}$ del círculo</div>
-                    </div>
-                    <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700">
-                        <div class="font-bold text-cyan-300 text-sm">$\theta = 45^\circ$</div>
-                        <div class="text-slate-400 mt-1">$\frac{45}{360} = \mathbf{\frac{1}{8}}$ del círculo</div>
-                    </div>
-                    <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700">
-                        <div class="font-bold text-cyan-300 text-sm">$\theta = 180^\circ$</div>
-                        <div class="text-slate-400 mt-1">$\frac{180}{360} = \mathbf{\frac{1}{2}}$ (Mitad)</div>
-                    </div>
-                </div>
-                <p class="text-xs text-slate-400">
-                    ⚡ <b>Longitud de Arco:</b> La misma fracción se aplica al perímetro de la circunferencia: $\text{Arco} = \left(\frac{\theta}{360}\right) \times 2\pi r$.
-                </p>
-            </div>
-            <div class="mt-4 flex justify-between">
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 2! →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 4: Práctica 2 Inmediata -->
-    <div class="slide" id="slide-4">
-        <div class="card">
-            <span class="badge-quiz">🎯 Práctica Inmediata #2</span>
-            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
-                En un círculo de radio $r = 6\text{ cm}$, se tiene un sector circular con un ángulo central de $60^\circ$. ¿Cuál es el área de dicho sector?
-            </h2>
-            <div class="space-y-2 max-w-md mx-auto text-left">
-                <button class="option-btn" onclick="checkPractice(this, true, 'p2', '¡Excelente! El área total del círculo es $\\pi r^2 = \\pi (6)^2 = 36\\pi$. El ángulo de $60^\\circ$ representa $\\frac{60}{360} = \\frac{1}{6}$ del círculo. Por lo tanto, el área del sector es $\\frac{1}{6} \\times 36\\pi = 6\\pi\\text{ cm}^2$.')">A) $6\pi\text{ cm}^2$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'p2', 'Cuidado: $12\\pi$ sería $\\frac{1}{3}$ del círculo ($120^\\circ$), pero el ángulo central es $60^\\circ$ ($\\\\frac{1}{6}$).')">B) $12\pi\text{ cm}^2$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'p2', '$36\\pi$ es el área de todo el círculo completo. Falta multiplicarlo por la fracción $\\frac{1}{6}$.')">C) $36\pi\text{ cm}^2$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'p2', 'Revisa el cálculo: $36\\pi \\div 6 = 6\\pi$, no $3\\pi$.')">D) $3\pi\text{ cm}^2$</button>
-            </div>
-            <div id="feedback-p2" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
-            <div class="mt-5 flex justify-between">
-                <button class="btn-nav" onclick="prevSlide()">← Repasar Sectores</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Reubicación de Piezas →</button>
-            </div>
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el área sombreada? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">En un rectángulo de $8 \times 6$ cm se inscribe un triángulo cuya base coincide con la base mayor del rectángulo (8 cm) y su vértice toca el lado superior opuesto. ¿Cuál es el área de la región NO ocupada por el triángulo?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'as1', '¡Correcto! Área del rectángulo: 8 * 6 = 48 cm^2. Área del triángulo: (8 * 6) / 2 = 24 cm^2. Área restante: 48 - 24 = 24 cm^2.')">A) $24 \text{ cm}^2$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'as1', '48 es el área total del rectángulo.')">B) $48 \text{ cm}^2$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'as1', 'Cálculo erróneo.')">C) $16 \text{ cm}^2$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'as1', 'Revisa la fórmula del área del triángulo.')">D) $32 \text{ cm}^2$</button>
         </div>
-    </div>
-
-    <!-- Slide 5: Concepto 3 - Reubicación de Piezas y Trampa del Perímetro -->
-    <div class="slide" id="slide-5">
-        <div class="card">
-            <span class="badge-geo">Estrategia Maestra #3</span>
-            <h2 class="text-2xl font-bold mb-2 text-cyan-400">Reubicación de Piezas y Perímetros 🧩</h2>
-            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-                <div class="bg-slate-900/80 p-3 rounded-xl border border-sky-500/30">
-                    <span class="font-bold text-sky-300">El Truco del Rompecabezas (Mover piezas):</span><br/>
-                    Cuando veas pétalos de flor, hojas o esquinas onduladas que parecen imposibles de calcular, <b>imagina trasladar un fragmento sombreado a un hueco blanco simétrico</b>. En la mayoría de los casos forman la mitad exacta de un cuadrado ($\frac{1}{2}L^2$) o un triángulo regular.
-                </div>
-                <div class="box-warning">
-                    🚨 <b>La Trampa Mortal del Perímetro Sombreado:</b><br/>
-                    El perímetro de una región sombreada NO es solo el borde exterior. Es la <b>longitud de TODAS las líneas que tocan la sombra</b> (tanto la frontera externa como la frontera interna si tiene un agujero).
-                </div>
-            </div>
-            <div class="mt-4 flex justify-between">
+        <div id="feedback-as1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 3! →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Traslación y Simetría →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 6: Práctica 3 Inmediata (Reto PAA) -->
-    <div class="slide" id="slide-6">
-        <div class="card">
-            <span class="badge-quiz">🎯 Reto Maestro PAA #3</span>
-            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
-                Un rectángulo mide $8\text{ cm}$ de base por $6\text{ cm}$ de altura. Se traza una de sus diagonales y se sombrea uno de los dos triángulos formados. Si dentro de esa mitad sombreada se recorta un triángulo blanco de base $4\text{ cm}$ y altura $3\text{ cm}$, ¿cuál es el área sombreada final?
-            </h2>
-            <div class="space-y-2 max-w-md mx-auto text-left">
-                <button class="option-btn" onclick="checkPractice(this, true, 'p3', '¡Brillante! Área del rectángulo completo: $8 \\times 6 = 48$. La diagonal divide en dos mitades de área $24$. El triángulo blanco recortado tiene área $\\frac{4 \\times 3}{2} = 6$. Restando: $24 - 6 = 18\\text{ cm}^2$.')">A) $18\text{ cm}^2$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'p3', '$24\\text{ cm}^2$ es la mitad del rectángulo antes de recortar el triángulo blanco. Falta restar el área de ese hueco.')">B) $24\text{ cm}^2$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'p3', 'Cuidado: el área del triángulo que se recorta es $\\frac{4 \\times 3}{2} = 6$, no $12$. No olvides dividir entre 2.')">C) $12\text{ cm}^2$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'p3', 'Calculaste sobre el rectángulo completo sin considerar que solo se había sombreado la mitad.')">D) $42\text{ cm}^2$</button>
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Técnica de Traslación de Regiones (Pétalos y Hojas) 🧩</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>Cuando veas figuras curvas complejas (como hojas o pétalos en un cuadrado):</p>
+            <div class="box-highlight text-xs space-y-1">
+                <p>1. <b>Divide la figura con sus ejes de simetría</b> (diagonales o medianas).</p>
+                <p>2. Mueve mentalmente los pedazos sombreados para llenar los huecos blancos.</p>
+                <p>3. En la mayoría de los reactivos PAA, los pétalos se recomponen para formar exactamente <b>la mitad del cuadrado</b> ($\frac{l^2}{2}$) o un triángulo simple.</p>
             </div>
-            <div id="feedback-p3" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
-            <div class="mt-5 flex justify-between">
-                <button class="btn-nav" onclick="prevSlide()">← Repasar Reubicación</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Resumen Mental →</button>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 7: Resumen Mental -->
-    <div class="slide" id="slide-7">
-        <div class="card">
-            <span class="badge-geo">Cheat Sheet Resumen</span>
-            <h2 class="text-2xl font-bold mb-3 text-cyan-400">Tu Brújula de Regiones Sombreadas 🧭</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center my-3 text-xs sm:text-sm">
-                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                    <div class="font-bold text-cyan-300 text-sm">Resta Clásica</div>
-                    <div class="text-slate-300 mt-1">$\text{Total} - \text{Hueco}$</div>
-                    <div class="text-emerald-400 font-semibold text-xs mt-1">Cuadrado menos círculo</div>
-                </div>
-                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                    <div class="font-bold text-cyan-300 text-sm">Sector Circular</div>
-                    <div class="text-slate-300 mt-1">$\frac{\theta}{360} \cdot \pi r^2$</div>
-                    <div class="text-emerald-400 font-semibold text-xs mt-1">Fracción de los $360^\circ$</div>
-                </div>
-                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                    <div class="font-bold text-cyan-300 text-sm">Simetría y Piezas</div>
-                    <div class="text-slate-300 mt-1">Mover piezas</div>
-                    <div class="text-emerald-400 font-semibold text-xs mt-1">Rellena huecos simétricos</div>
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Corona Circular 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
+                <p class="text-slate-200">Dos círculos concéntricos tienen radios de $R = 6$ cm y $r = 4$ cm. ¿Cuál es el área de la corona circular (el anillo sombreado entre ambos)?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución Paso a Paso:</b><br/>
+                    1. Área del círculo exterior: $\pi R^2 = \pi (6^2) = 36\pi$.<br/>
+                    2. Área del círculo interior: $\pi r^2 = \pi (4^2) = 16\pi$.<br/>
+                    3. Resta: $36\pi - 16\pi = \mathbf{20\pi \text{ cm}^2}$.
                 </div>
             </div>
-            <div class="box-highlight text-center text-sm text-slate-300">
-                🎉 <b>¡Módulo completado con éxito!</b> Ya dominas las preguntas de áreas sombreadas más recurrentes de la prueba PAA.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
             </div>
-            <div class="mt-5 flex justify-between">
+        </div>
+    </div>
+  
+
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el área de la corona circular? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">Si dos círculos concéntricos tienen radios de 10 cm y 8 cm, ¿cuál es el área de la región comprendida entre ellos?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'as2', '¡Excelente! pi * (10^2 - 8^2) = pi * (100 - 64) = 36*pi cm^2.')">A) $36\pi \text{ cm}^2$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'as2', 'Cuidado: la resta es de los cuadrados (100 - 64 = 36), no (10 - 8)^2 = 4.')">B) $4\pi \text{ cm}^2$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'as2', 'Cálculo erróneo.')">C) $64\pi \text{ cm}^2$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'as2', 'Revisa la resta 100 - 64.')">D) $18\pi \text{ cm}^2$</button>
+        </div>
+        <div id="feedback-as2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
+        <div class="card text-center">
+            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Áreas Sombreadas 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Resta Clásica</div>
+                <div class="text-slate-300 mt-1">$\text{Área Sombreada} = \text{Área Mayor} - \text{Área Blanca}$.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Corona Circular</div>
+                <div class="text-slate-300 mt-1">$A = \pi(R^2 - r^2)$. ¡Resta primero los cuadrados!</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Traslación Simétrica</div>
+                <div class="text-slate-300 mt-1">Corta pedazos curvos simétricos y rellena huecos para formar figuras exactas.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Deja $\pi$ en la Respuesta</div>
+                <div class="text-slate-300 mt-1">En la PAA casi nunca se multiplica por 3.1416; las respuestas mantienen el símbolo $\pi$.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Áreas sombreadas dominadas al 100%.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
                 <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
+  
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -261,11 +276,11 @@
             if (isCorrect) {
                 btn.classList.add('option-correct');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
-                fb.innerHTML = `<b>🎉 ¡Excelente acierto!</b><br/>${explanation}`;
+                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
-                fb.innerHTML = `<b>⚠️ ¡Ojo con ese paso!</b><br/>${explanation}`;
+                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
             }
             if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise([fb]);

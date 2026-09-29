@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual Maestro: MCM y MCD en la PAA</title>
+    <title>Manual Maestro: MCM y MCD PAA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = {
@@ -16,195 +16,250 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
         .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: #0c1428; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 240, 255, 0.12); max-width: 820px; width: 100%; padding: 2.5rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
-        .badge-mcm { background: #06b6d4; color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
-        .btn-nav { background: #1e293b; color: white; padding: 10px 22px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.1); }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
         .btn-nav:hover { background: #334155; }
-        .btn-primary-action { background: linear-gradient(135deg, #00f0ff, #0077ff); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
         .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
-        .option-btn { width: 100%; text-align: left; padding: 13px 18px; border: 2px solid rgba(56, 189, 248, 0.2); border-radius: 12px; margin-bottom: 9px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.92rem; }
-        .option-btn:hover { border-color: #00f0ff; background: #0f1b36; }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(56, 189, 248, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #38bdf8; background: #0f1b36; }
         .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
         .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
-        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #00f0ff, #0077ff); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #00f0ff; }
-        .step-pill { background: rgba(0, 240, 255, 0.15); color: #00f0ff; padding: 2px 9px; border-radius: 6px; font-size: 0.72rem; font-weight: 800; margin-right: 8px; border: 1px solid rgba(0, 240, 255, 0.3); }
-        .box-highlight { background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 16px; margin: 12px 0; }
-        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 16px; margin: 12px 0; color: #fca5a5; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
+        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
     </style>
 </head>
 <body>
 
-    <!-- Slide 0: Intro -->
+    
+    <!-- Slide 0: Portada -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <span class="badge-mcm">Aritmética Aplicada PAA</span>
-            <h1 class="text-4xl font-extrabold text-white mb-4">MCM y MCD Sin Complicaciones 🔄</h1>
-            <p class="text-base text-slate-300 mb-8 max-w-lg mx-auto leading-relaxed">
-                Descubre cómo saber de inmediato si un problema de la PAA pide Mínimo Común Múltiplo o Máximo Común Divisor con solo leer las palabras clave.
-            </p>
-            <button class="btn-nav btn-primary-action px-10 py-4 text-base" onclick="nextSlide()">¡Aprender la Diferencia! →</button>
+            <span class="badge" style="background:#38bdf8;">Aritmética PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Mínimo Común Múltiplo y Máximo Común Divisor 🔄</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Aprende a identificar de inmediato si un problema verbal de la PAA pide MCM (coincidencias periódicas) o MCD (partición y división en partes iguales).
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">⏰ Coincidencia = MCM</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">✂️ Reparto = MCD</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">⚡ Factores Primos</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar MCM y MCD →</button>
+            </div>
         </div>
     </div>
+  
 
-    <!-- Slide 1: ¿Cuál usar? Las Palabras Clave -->
-    <div class="slide" id="slide-1">
-        <div class="card">
-            <span class="badge-mcm">El Truco Clave</span>
-            <h2 class="text-2xl font-bold mb-3 text-cyan-400">¿Cuándo uso MCM y cuándo uso MCD? 🕵️‍♂️</h2>
-            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-                <p>En el examen no te dirán "calcula el MCM". Te pondrán una historia. Aprende a detectarlo:</p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-3">
-                    <div class="box-highlight">
-                        <div class="font-extrabold text-cyan-300 text-base mb-1">⏰ M.C.M. (Múltiplo = Mayor)</div>
-                        <p class="text-xs text-slate-300 mb-2">Se busca el momento de <b>coincidencia futura</b> en ciclos que se repiten.</p>
-                        <div class="text-xs bg-slate-900/90 p-2.5 rounded-lg border border-cyan-500/20">
-                            <b>Palabras clave PAA:</b><br/>
-                            "Vuelven a coincidir", "sonarán juntos de nuevo", "se cruzan simultáneamente".
-                        </div>
-                    </div>
-                    <div class="box-highlight">
-                        <div class="font-extrabold text-sky-300 text-base mb-1">✂️ M.C.D. (Divisor = Menor)</div>
-                        <p class="text-xs text-slate-300 mb-2">Se busca <b>cortar, dividir o repartir</b> en partes iguales sin que sobre nada.</p>
-                        <div class="text-xs bg-slate-900/90 p-2.5 rounded-lg border border-sky-500/20">
-                            <b>Palabras clave PAA:</b><br/>
-                            "De la mayor longitud posible", "máxima cantidad de bolsas", "en partes iguales sin sobrantes".
-                        </div>
-                    </div>
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuándo usar MCM y cuándo MCD? 🎯</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-slate-900 p-3 rounded-xl border border-cyan-500/30">
+                    <p class="font-bold text-cyan-300">Usa MCM cuando el problema hable de:</p>
+                    <ul class="list-disc list-inside mt-1 space-y-1">
+                        <li><b>Coincidencia de eventos en el tiempo</b>: <i>"Un autobús sale cada 12 min y otro cada 18 min, ¿cuándo vuelven a coincidir?"</i></li>
+                        <li><b>Repeticiones periódicas cíclicas</b>.</li>
+                        <li>El resultado buscado es <b>mayor o igual</b> que los números dados.</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-xl border border-cyan-500/30">
+                    <p class="font-bold text-cyan-300">Usa MCD cuando el problema hable de:</p>
+                    <ul class="list-disc list-inside mt-1 space-y-1">
+                        <li><b>Cortar, dividir o envasar</b> en partes iguales del mayor tamaño posible.</li>
+                        <li><i>"Hacer paquetes iguales con dulces y chocolates sin que sobre nada."</i></li>
+                        <li>El resultado buscado es <b>menor o igual</b> que los números dados.</li>
+                    </ul>
                 </div>
             </div>
-            <div class="mt-6 flex justify-between">
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Cómo Calcularlos Rápido →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 2: El Método de la Tabla Simultánea -->
-    <div class="slide" id="slide-2">
-        <div class="card">
-            <span class="badge-mcm">Técnica Rápida</span>
-            <h2 class="text-2xl font-bold mb-3 text-cyan-400">La Tabla Simultánea con Primos 🧪</h2>
-            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-                <p>Usa los números primos en orden: <b>2, 3, 5, 7, 11...</b></p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-3">
-                    <div class="box-highlight text-xs space-y-1">
-                        <div class="font-bold text-cyan-300 text-sm">Para MCM (llegar hasta el 1):</div>
-                        <p>Divides mientras al menos UNO se pueda dividir. Multiplicas <b>todos</b> los números primos usados.</p>
-                        <p class="font-mono text-cyan-200 pt-1">MCM(6, 8):<br/>
-                        6, 8 | $\mathbf{2}$<br/>
-                        3, 4 | $\mathbf{2}$<br/>
-                        3, 2 | $\mathbf{2}$<br/>
-                        3, 1 | $\mathbf{3}$<br/>
-                        1, 1 | $\text{MCM} = 2 \times 2 \times 2 \times 3 = \mathbf{24}$</p>
-                    </div>
-                    <div class="box-highlight text-xs space-y-1">
-                        <div class="font-bold text-sky-300 text-sm">Para MCD (solo si divide a TODOS):</div>
-                        <p>Solo anotas el primo si divide a <b>todos los números al mismo tiempo</b>. Cuando ya no haya primo común, paras.</p>
-                        <p class="font-mono text-sky-200 pt-1">MCD(24, 36):<br/>
-                        24, 36 | $\mathbf{2}$ (divide a ambos)<br/>
-                        12, 18 | $\mathbf{2}$ (divide a ambos)<br/>
-                        6, 9   | $\mathbf{3}$ (divide a ambos)<br/>
-                        2, 3   | ¡Fin! (ya no hay divisor común)<br/>
-                        $\text{MCD} = 2 \times 2 \times 3 = \mathbf{12}$</p>
-                    </div>
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Coincidencia de Rutas (MCM) 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
+                <p class="text-slate-200">Tres faros costeros emiten destellos cada 12, 15 y 20 segundos respectivamente. Si coincidieron exactamente a las 9:00 p.m., ¿a qué hora volverán a coincidir por primera vez?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución Paso a Paso:</b><br/>
+                    1. Es un problema de coincidencia futura periódica ➔ Se calcula el <b>MCM(12, 15, 20)</b>.<br/>
+                    2. Descomposición simultánea en factores primos:<br/>
+                    $12 = 2^2 \times 3$, $15 = 3 \times 5$, $20 = 2^2 \times 5$.<br/>
+                    3. $\text{MCM} = 2^2 \times 3 \times 5 = 4 \times 3 \times 5 = \mathbf{60 \text{ segundos}}$ (1 minuto).<br/>
+                    4. Volverán a coincidir exactamente a las <b>9:01 p.m.</b>
                 </div>
             </div>
-            <div class="mt-6 flex justify-between">
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ejemplo Guiado: MCM →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 3: Ejemplo Guiado 1 (MCM - Coincidencia) -->
-    <div class="slide" id="slide-3">
-        <div class="card">
-            <span class="badge-mcm">Yo lo resuelvo (MCM)</span>
-            <h2 class="text-xl font-bold mb-2 text-cyan-300">Ejemplo Guiado: Rutas de Autobús 🚌</h2>
-            <p class="text-slate-400 text-sm mb-4 italic">"En una terminal, la ruta A sale cada 12 minutos y la ruta B sale cada 18 minutos. Si salieron juntos a las 7:00 a.m., ¿a qué hora volverán a salir juntos?"</p>
-            <div class="box-highlight text-sm space-y-2">
-                <p><span class="step-pill">1</span> <b>Detecta la clave:</b> Dice "volverán a salir juntos" (coincidencia de ciclo) $\rightarrow$ ¡Es <b>M.C.M.</b>!</p>
-                <p><span class="step-pill">2</span> <b>Calcula MCM(12, 18):</b><br/>
-                Múltiplos de 18: $18, \mathbf{36}, 54...$<br/>
-                ¿36 es divisible entre 12? ¡Sí! ($12 \times 3 = 36$).<br/>
-                Por lo tanto, coinciden cada <b>36 minutos</b>.</p>
-                <p><span class="step-pill">3</span> <b>Suma a la hora de partida:</b> $7:00\text{ a.m.} + 36\text{ min} = \mathbf{7:36\text{ a.m.}}$</p>
-                <div class="font-extrabold text-emerald-400 text-base mt-2 text-center">
-                    Resultado: Volverán a salir a las 7:36 a.m.
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuándo volverán a tomar la medicina juntos? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">Un paciente toma una pastilla cada 6 horas y un jarabe cada 8 horas. Si tomó ambos medicamentos juntos a las 8:00 a.m. del lunes, ¿a qué hora volverá a tomarlos simultáneamente?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'mc1', '¡Correcto! MCM(6, 8) = 24 horas. Por lo tanto, coincidirán exactamente 24 horas después: a las 8:00 a.m. del martes.')">A) A las 8:00 a.m. del martes (24 horas después)</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'mc1', '12 no es múltiplo de 8; a las 12 horas no le toca el jarabe.')">B) A las 8:00 p.m. del lunes (12 horas después)</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'mc1', '48 es múltiplo, pero no es el MÍNIMO primer encuentro.')">C) A las 8:00 a.m. del miércoles (48 horas después)</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'mc1', '16 no es múltiplo de 6.')">D) A las 12:00 a.m. del martes (16 horas después)</button>
+        </div>
+        <div id="feedback-mc1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Problemas de Reparto con MCD →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">El Máximo Común Divisor (MCD) en Repartos ✂️</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>Para hallar el <b>MCD</b> de varios números:</p>
+            <div class="box-highlight text-xs space-y-1">
+                <p>1. Descompón en factores primos.</p>
+                <p>2. Selecciona <b>únicamente los factores comunes</b> elevados a su <b>menor exponente</b>.</p>
+                <p>Ejemplo: $MCD(48, 72)$.<br/>
+                $48 = 2^4 \times 3$, $72 = 2^3 \times 3^2$.<br/>
+                Factores comunes con menor exponente: $2^3 \times 3^1 = 8 \times 3 = \mathbf{24}$.</p>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: División en Paquetes Iguales 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
+                <p class="text-slate-200">Se tienen tres cuerdas de 60 m, 84 m y 108 m. Se desea cortarlas en pedazos de igual longitud, lo más largos posible y sin que sobre nada. ¿Cuánto debe medir cada pedazo y cuántos pedazos se obtienen en total?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución Paso a Paso:</b><br/>
+                    1. Longitud de cada pedazo = $\text{MCD}(60, 84, 108)$.<br/>
+                    2. $60 = 2^2 \times 3 \times 5$, $84 = 2^2 \times 3 \times 7$, $108 = 2^2 \times 3^3$.<br/>
+                    3. $\text{MCD} = 2^2 \times 3 = \mathbf{12 \text{ metros}}$.<br/>
+                    4. Total de pedazos = $\frac{60}{12} + \frac{84}{12} + \frac{108}{12} = 5 + 7 + 9 = \mathbf{21 \text{ pedazos}}$.
                 </div>
             </div>
-            <div class="mt-6 flex justify-between">
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ejemplo Guiado: MCD →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 4: Ejemplo Guiado 2 (MCD - Corte / Reparto) -->
-    <div class="slide" id="slide-4">
-        <div class="card">
-            <span class="badge-mcm">Yo lo resuelvo (MCD)</span>
-            <h2 class="text-xl font-bold mb-2 text-cyan-300">Ejemplo Guiado: Cortar Cintas sin Desperdicio ✂️</h2>
-            <p class="text-slate-400 text-sm mb-4 italic">"Un carpintero tiene dos tablas de madera de 60 cm y 90 cm de largo. Desea cortarlas en pedazos del mayor tamaño posible, todos de la misma longitud y sin que sobre nada. ¿Cuánto debe medir cada pedazo?"</p>
-            <div class="box-highlight text-sm space-y-2">
-                <p><span class="step-pill">1</span> <b>Detecta la clave:</b> "Mayor tamaño posible", "cortar sin que sobre" $\rightarrow$ ¡Es <b>M.C.D.</b>!</p>
-                <p><span class="step-pill">2</span> <b>Buscamos el divisor más grande común entre 60 y 90:</b><br/>
-                Ambos terminan en cero $\rightarrow$ son divisibles entre 10.<br/>
-                $60 / 10 = 6$, y $90 / 10 = 9$.<br/>
-                El 6 y el 9 comparten el divisor 3.<br/>
-                Divisor total común = $10 \times 3 = \mathbf{30}$.</p>
-                <div class="font-extrabold text-emerald-400 text-base mt-2 text-center">
-                    Resultado: Cada pedazo debe medir 30 cm (obtiene 2 pedazos de la de 60 y 3 de la de 90).
-                </div>
-            </div>
-            <div class="mt-6 flex justify-between">
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el mayor número de bolsas iguales? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">Un comerciante tiene 45 manzanas y 60 naranjas. Desea armar bolsas idénticas con la misma cantidad de cada fruta sin que sobre ninguna. ¿Cuál es el número MÁXIMO de bolsas que puede preparar?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'mc2', '¡Excelente! MCD(45, 60): 45 = 3^2 * 5, 60 = 2^2 * 3 * 5. Factores comunes con menor exponente: 3 * 5 = 15 bolsas (cada bolsa tendrá 3 manzanas y 4 naranjas).')">A) 15 bolsas</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'mc2', 'Aunque 5 es divisor común, no es el MÁXIMO divisor común posible.')">B) 5 bolsas</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'mc2', '60 no es divisible entre 9 de forma exacta.')">C) 9 bolsas</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'mc2', '45 no es divisible entre 20.')">D) 20 bolsas</button>
+        </div>
+        <div id="feedback-mc2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébate en los Retos! →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 5: Reto 1 -->
-    <div class="slide" id="slide-5">
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
         <div class="card text-center">
-            <span class="badge-mcm">Tu Reto 1</span>
-            <h2 class="text-xl font-bold mb-6 text-white text-balance">
-                Tres luces parpadean en un faro: la primera cada 4 segundos, la segunda cada 6 segundos y la tercera cada 10 segundos. Si encienden juntas ahora, ¿dentro de cuántos segundos volverán a coincidir?
-            </h2>
-            <div class="space-y-3 max-w-sm mx-auto text-left">
-                <button class="option-btn" onclick="checkAnswer(this, false, 'r1')">A) 24 segundos</button>
-                <button class="option-btn" onclick="checkAnswer(this, true, 'r1')">B) 60 segundos (MCM de 4, 6 y 10 es 60)</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'r1')">C) 120 segundos</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'r1')">D) 40 segundos</button>
+            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de MCM y MCD 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">MCM = Coincidencia</div>
+                <div class="text-slate-300 mt-1">Llegadas simultáneas, vueltas a pistas, parpadeo de luces. Es mayor que los números.</div>
             </div>
-            <div id="feedback-r1" class="mt-4 font-bold h-6 text-center"></div>
-            <div class="mt-6 flex justify-between">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">MCD = Partición Máxima</div>
+                <div class="text-slate-300 mt-1">Cortes iguales, empacado sin sobrantes, trozos máximos. Es menor que los números.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Cálculo de MCD</div>
+                <div class="text-slate-300 mt-1">Factores comunes con MENOR exponente.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Cálculo de MCM</div>
+                <div class="text-slate-300 mt-1">Todos los factores (comunes y no comunes) con MAYOR exponente.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Sabrás de inmediato qué fórmula usar en cuanto leas el reactivo.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente Reto →</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
-
-    <!-- Slide 6: Reto 2 -->
-    <div class="slide" id="slide-6">
-        <div class="card text-center">
-            <span class="badge-mcm">Tu Reto 2 (MCD)</span>
-            <h2 class="text-xl font-bold mb-6 text-white text-balance">
-                Se tienen 48 manzanas y 72 naranjas. Se quieren armar bolsas con la misma cantidad exacta de cada fruta, usando la máxima cantidad posible sin que sobre ninguna. ¿Cuántas bolsas idénticas se pueden armar?
-            </h2>
-            <div class="space-y-3 max-w-sm mx-auto text-left">
-                <button class="option-btn" onclick="checkAnswer(this, false, 'r2')">A) 12 bolsas</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'r2')">B) 16 bolsas</button>
-                <button class="option-btn" onclick="checkAnswer(this, true, 'r2')">C) 24 bolsas (MCD de 48 y 72 es 24)</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'r2')">D) 8 bolsas</button>
-            </div>
-            <div id="feedback-r2" class="mt-4 font-bold h-6 text-center"></div>
-            <div class="mt-6 flex justify-between">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="goToStart()">Terminar y Repasar ↺</button>
-            </div>
-        </div>
-    </div>
+  
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -223,17 +278,23 @@
             if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         }
 
-        function checkAnswer(btn, isCorrect, qId) {
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
             const fb = document.getElementById(`feedback-${qId}`);
-            btn.parentElement.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
             if (isCorrect) {
                 btn.classList.add('option-correct');
-                fb.textContent = "¡Dominado! Sabes distinguir entre MCM y MCD ✨";
-                fb.className = "mt-4 font-bold text-emerald-400 block scale-105 transition-transform text-center";
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
-                fb.textContent = "¡Cuidado! Revisa si buscabas múltiplo o divisor ❌";
-                fb.className = "mt-4 font-bold text-rose-400 block text-center";
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+            }
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([fb]);
             }
         }
 

@@ -16,231 +16,246 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
         .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: #0c1428; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 240, 255, 0.12); max-width: 820px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
-        .badge-alg { background: #38bdf8; color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
-        .badge-quiz { background: #f59e0b; color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
         .btn-nav:hover { background: #334155; }
-        .btn-primary-action { background: linear-gradient(135deg, #00f0ff, #0077ff); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
         .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
-        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(56, 189, 248, 0.2); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
-        .option-btn:hover { border-color: #00f0ff; background: #0f1b36; }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(56, 189, 248, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #38bdf8; background: #0f1b36; }
         .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
         .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
-        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #00f0ff, #0077ff); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #00f0ff; }
-        .box-highlight { background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
+        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
         .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
     </style>
 </head>
 <body>
 
+    
     <!-- Slide 0: Portada -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <span class="badge-alg">Geometría Analítica PAA</span>
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Línea Recta y Pendiente 📉</h1>
-            <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
-                Descubre cómo calcular la pendiente $m$ al vuelo, descifrar la ecuación $y = mx + b$ y resolver reactivos de rectas paralelas y perpendiculares sin enredos.
-            </p>
-            <button class="btn-nav btn-primary-action px-9 py-3 text-base" onclick="nextSlide()">¡Iniciar Explicación y Prácticas! →</button>
+            <span class="badge" style="background:#38bdf8;">Geometría Analítica PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Línea Recta y Pendiente 📉</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Descubre cómo calcular la pendiente $m$ al vuelo, descifrar la ecuación $y = mx + b$ y resolver reactivos de rectas paralelas y perpendiculares sin enredos.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">📐 Pendiente m</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">⭐ Forma y = mx + b</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">⚡ Perpendiculares</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Línea Recta →</button>
+            </div>
         </div>
     </div>
+  
 
-    <!-- Slide 1: Concepto 1 - La Pendiente (m) -->
-    <div class="slide" id="slide-1">
-        <div class="card">
-            <span class="badge-alg">Concepto Esencial #1</span>
-            <h2 class="text-2xl font-bold mb-2 text-cyan-400">La Pendiente ($m$): Qué significa y cómo leerla 📐</h2>
-            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-                <p>La pendiente mide la <b>inclinación</b> de la recta: cuántas unidades sube o baja verticalmente por cada unidad que avanza a la derecha:</p>
-                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
-                    <span class="text-lg sm:text-xl font-bold text-cyan-300">$$m = \frac{\Delta y}{\Delta x} = \frac{y_2 - y_1}{x_2 - x_1} = \frac{\text{Arriba / Abajo}}{\text{Derecha}}$$</span>
-                </div>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs my-2">
-                    <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700">
-                        <div class="text-emerald-400 font-bold text-base">↗️ $m > 0$</div>
-                        <div class="text-slate-400 mt-1">Sube de izq. a der.</div>
-                    </div>
-                    <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700">
-                        <div class="text-rose-400 font-bold text-base">↘️ $m < 0$</div>
-                        <div class="text-slate-400 mt-1">Baja de izq. a der.</div>
-                    </div>
-                    <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700">
-                        <div class="text-cyan-400 font-bold text-base">➡️ $m = 0$</div>
-                        <div class="text-slate-400 mt-1">Recta horizontal</div>
-                    </div>
-                    <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700">
-                        <div class="text-amber-400 font-bold text-base">⬆️ No existe</div>
-                        <div class="text-slate-400 mt-1">Recta vertical</div>
-                    </div>
-                </div>
-                <div class="box-highlight">
-                    💡 <b>Atajo PAA:</b> Coloca el punto $(x_2, y_2)$ justo encima de $(x_1, y_1)$ y resta en columna: primero las $y$ arriba, luego las $x$ abajo. ¡Cero confusión con los signos!
-                </div>
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">La Pendiente ($m$): Fórmula e Inclinación 📐</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>La pendiente mide la inclinación: cuánto sube/baja ($y$) por cada unidad que avanza ($x$):</p>
+            <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
+                <span class="text-xl font-bold text-cyan-300">$$m = \frac{\Delta y}{\Delta x} = \frac{y_2 - y_1}{x_2 - x_1}$$</span>
             </div>
-            <div class="mt-4 flex justify-between">
+            <div class="grid grid-cols-4 gap-2 text-center text-xs text-slate-300">
+                <div class="bg-slate-900 p-2 rounded">↗️ $m > 0$<br/>Sube</div>
+                <div class="bg-slate-900 p-2 rounded">↘️ $m < 0$<br/>Baja</div>
+                <div class="bg-slate-900 p-2 rounded">➡️ $m = 0$<br/>Horizontal</div>
+                <div class="bg-slate-900 p-2 rounded">⬆️ Indefinida<br/>Vertical</div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 1! →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 2: Práctica 1 Inmediata -->
-    <div class="slide" id="slide-2">
-        <div class="card">
-            <span class="badge-quiz">🎯 Práctica Inmediata #1</span>
-            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
-                ¿Cuál es la pendiente de la recta que pasa por los puntos $A(2, 5)$ y $B(6, 17)$?
-            </h2>
-            <div class="space-y-2 max-w-md mx-auto text-left">
-                <button class="option-btn" onclick="checkPractice(this, true, 'p1', '¡Correcto! Aplicamos la fórmula: $m = \\frac{17 - 5}{6 - 2} = \\frac{12}{4} = 3$. Por cada unidad que avanza a la derecha, la recta sube 3 unidades.')">A) $m = 3$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'Cuidado con invertir la fórmula: las coordenadas $y$ van arriba en el numerador y las $x$ en el denominador (no al revés).')">B) $m = \\frac{1}{3}$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'Revisa el signo: ambos puntos suben hacia la derecha ($17 > 5$), por lo que la pendiente debe ser positiva.')">C) $m = -3$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'No sumes los puntos: la fórmula requiere restar las coordenadas finales menos iniciales.')">D) $m = 4$</button>
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Cálculo de Pendiente entre Dos Puntos 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
+                <p class="text-slate-200">Encuentra la pendiente de la recta que pasa por los puntos $P(-1, 4)$ y $Q(3, -8)$.</p>
             </div>
-            <div id="feedback-p1" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
-            <div class="mt-5 flex justify-between">
-                <button class="btn-nav" onclick="prevSlide()">← Repasar Pendiente</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Ecuación y = mx + b →</button>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución Paso a Paso:</b><br/>
+                    1. Identificar coordenadas: $x_1 = -1, y_1 = 4$; $x_2 = 3, y_2 = -8$.<br/>
+                    2. Aplicar fórmula: $m = \frac{-8 - 4}{3 - (-1)} = \frac{-12}{3 + 1} = \frac{-12}{4} = \mathbf{-3}$.<br/>
+                    3. Al ser $m = -3$ (negativa), la recta baja de izquierda a derecha.
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- Slide 3: Concepto 2 - La Forma Pendiente-Intersección -->
-    <div class="slide" id="slide-3">
-        <div class="card">
-            <span class="badge-alg">Concepto Esencial #2</span>
-            <h2 class="text-2xl font-bold mb-2 text-cyan-400">La Ecuación Estrella: $y = mx + b$ ⭐</h2>
-            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-                <p>Cualquier recta en el plano puede escribirse de forma que leas sus dos secretos de inmediato:</p>
-                <div class="bg-slate-900/90 border border-sky-500/30 rounded-xl p-3 text-center my-2">
-                    <span class="text-2xl font-extrabold text-white">
-                        $y = \mathbf{\color{#38bdf8}m}x + \mathbf{\color{#f59e0b}b}$
-                    </span>
-                    <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
-                        <div class="text-sky-300 font-bold">$m$ = Pendiente (Inclinación)</div>
-                        <div class="text-amber-400 font-bold">$b$ = Punto donde corta al eje $y$ $(0, b)$</div>
-                    </div>
-                </div>
-                <div class="box-highlight">
-                    🔑 <b>El Gran Secreto de la PAA (Forma General):</b><br/>
-                    Si la recta viene escrita como $2x + y = 8$, ¡no te asustes! Solo <b>despeja $y$</b>:<br/>
-                    $$y = -2x + 8 \implies m = -2 \quad \text{y} \quad b = 8$$
-                    Corta al eje vertical en $(0, 8)$ y desciende con pendiente $-2$.
-                </div>
-            </div>
-            <div class="mt-4 flex justify-between">
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 2! →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 4: Práctica 2 Inmediata -->
-    <div class="slide" id="slide-4">
-        <div class="card">
-            <span class="badge-quiz">🎯 Práctica Inmediata #2</span>
-            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
-                ¿Cuál es la pendiente ($m$) y el punto de intersección con el eje $y$ de la recta $4x - 2y = 10$?
-            </h2>
-            <div class="space-y-2 max-w-md mx-auto text-left">
-                <button class="option-btn" onclick="checkPractice(this, false, 'p2', 'Cuidado con los signos al dividir entre $-2$: $10 \\div (-2) = -5$, no $+5$.')">A) $m = 2$, corte en $(0, 5)$</button>
-                <button class="option-btn" onclick="checkPractice(this, true, 'p2', '¡Excelente! Despejamos $y$: $-2y = -4x + 10 \\implies y = \\frac{-4x}{-2} + \\frac{10}{-2} \\implies y = 2x - 5$. Por lo tanto, la pendiente es $m = 2$ y el corte en $y$ es $(0, -5)$.')">B) $m = 2$, corte en $(0, -5)$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'p2', 'No olvides despejar $y$: no puedes tomar directamente el número delante de la $x$ antes de dividir por el coeficiente de $y$.')">C) $m = 4$, corte en $(0, 10)$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'p2', 'El corte con el eje $y$ siempre tiene coordenada $x = 0$, es decir $(0, b)$, no $(b, 0)$.')">D) $m = -2$, corte en $(-5, 0)$</button>
-            </div>
-            <div id="feedback-p2" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
-            <div class="mt-5 flex justify-between">
-                <button class="btn-nav" onclick="prevSlide()">← Repasar y = mx + b</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Paralelas y Perpendiculares →</button>
-            </div>
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es la pendiente de la recta? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">Calcula la pendiente de la recta que pasa por los puntos $A(2, 5)$ y $B(6, 17)$:</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'lr1', '¡Correcto! m = (17 - 5) / (6 - 2) = 12 / 4 = 3.')">A) $m = 3$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'lr1', 'Cuidado con invertir: las y van arriba y las x abajo.')">B) $m = 1/3$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'lr1', 'Ambos puntos suben hacia la derecha, la pendiente debe ser positiva.')">C) $m = -3$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'lr1', 'Cálculo erróneo.')">D) $m = 4$</button>
         </div>
-    </div>
-
-    <!-- Slide 5: Concepto 3 - Paralelas vs Perpendiculares -->
-    <div class="slide" id="slide-5">
-        <div class="card">
-            <span class="badge-alg">Concepto Esencial #3</span>
-            <h2 class="text-2xl font-bold mb-2 text-cyan-400">Paralelas y Perpendiculares 🔄</h2>
-            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-2 text-xs sm:text-sm">
-                    <div class="bg-slate-900/80 p-3 rounded-xl border border-sky-500/30">
-                        <span class="text-sky-300 font-bold text-base">Rectas PARALELAS (||)</span><br/>
-                        Tienen la <b>MISMA pendiente exacta</b>:<br/>
-                        <div class="text-center my-2 text-base font-extrabold text-cyan-300">$m_1 = m_2$</div>
-                        Ejemplo: $y = \mathbf{3}x + 4$ &nbsp;y&nbsp; $y = \mathbf{3}x - 9$ nunca se tocarán.
-                    </div>
-                    <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
-                        <span class="text-purple-300 font-bold text-base">Rectas PERPENDICULARES ($\perp$)</span><br/>
-                        Se cruzan a $90^\circ$. Sus pendientes son <b>opuestas e inversas</b>:<br/>
-                        <div class="text-center my-2 text-base font-extrabold text-purple-300">$m_1 \times m_2 = -1$</div>
-                        <b>Truco de los 2 Pasos:</b> Voltea la fracción y cámbiale el signo.<br/>
-                        <span class="text-slate-300">Si $m_1 = \frac{2}{3} \implies m_2 = \mathbf{-\frac{3}{2}}$</span>
-                    </div>
-                </div>
-                <div class="box-warning">
-                    ⚠️ <b>Ojo:</b> Si una recta tiene pendiente entera $m = 4 = \frac{4}{1}$, su perpendicular es $m = -\frac{1}{4}$. ¡No olvides el recíproco!
-                </div>
-            </div>
-            <div class="mt-4 flex justify-between">
+        <div id="feedback-lr1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 3! →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Rectas Paralelas y Perpendiculares →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 6: Práctica 3 Inmediata (Reto PAA) -->
-    <div class="slide" id="slide-6">
-        <div class="card">
-            <span class="badge-quiz">🎯 Reto Maestro PAA #3</span>
-            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
-                ¿Cuál es la pendiente de una recta que es PERPENDICULAR a la recta dada por la ecuación $3x + 4y = 12$?
-            </h2>
-            <div class="space-y-2 max-w-md mx-auto text-left">
-                <button class="option-btn" onclick="checkPractice(this, false, 'p3', 'Esa es la pendiente de la recta original, no de la perpendicular: $4y = -3x + 12 \\implies y = -\\frac{3}{4}x + 3$. Falta aplicar el recíproco y cambio de signo.')">A) $m = -\\frac{3}{4}$</button>
-                <button class="option-btn" onclick="checkPractice(this, true, 'p3', '¡Brillante! Primero encontramos la pendiente original despejando $y$: $4y = -3x + 12 \\implies y = -\\frac{3}{4}x + 3 \\implies m_1 = -\\frac{3}{4}$. Para la perpendicular volteamos la fracción y cambiamos signo: $m_2 = +\\frac{4}{3}$.')">B) $m = \\frac{4}{3}$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'p3', 'Cuidado con el signo: la pendiente original es negativa ($-3/4$), por lo que su perpendicular debe ser positiva ($+4/3$).')">C) $m = -\\frac{4}{3}$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'p3', 'Solo cambiaste el signo sin voltear la fracción. Recuerda los 2 pasos: voltear y cambiar signo.')">D) $m = \\frac{3}{4}$</button>
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Paralelas y Perpendiculares ⭐</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-slate-900 p-3 rounded-xl border border-cyan-500/30">
+                    <p class="font-bold text-cyan-300">Rectas Paralelas ($L_1 \parallel L_2$):</p>
+                    <p class="text-slate-300 mt-1">Tienen <b>exactamente la misma pendiente</b>:</p>
+                    <p class="text-emerald-400 mt-1">$m_1 = m_2$</p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-xl border border-cyan-500/30">
+                    <p class="font-bold text-cyan-300">Rectas Perpendiculares ($L_1 \perp L_2$):</p>
+                    <p class="text-slate-300 mt-1">Sus pendientes son <b>opuestas e inversas</b>:</p>
+                    <p class="text-emerald-400 mt-1">$m_2 = -\frac{1}{m_1} \quad (m_1 \cdot m_2 = -1)$</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Voltea la fracción y cámbiale el signo: si $m_1 = \frac{2}{5} \implies m_2 = -\frac{5}{2}$.</p>
+                </div>
             </div>
-            <div id="feedback-p3" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
-            <div class="mt-5 flex justify-between">
-                <button class="btn-nav" onclick="prevSlide()">← Repasar Perpendiculares</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Resumen Mental →</button>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 7: Resumen Mental -->
-    <div class="slide" id="slide-7">
-        <div class="card">
-            <span class="badge-alg">Cheat Sheet Resumen</span>
-            <h2 class="text-2xl font-bold mb-3 text-cyan-400">Resumen Maestro de la Línea Recta 🧭</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center my-3 text-xs sm:text-sm">
-                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                    <div class="font-bold text-cyan-300 text-sm">Fórmula de Pendiente</div>
-                    <div class="text-slate-300 mt-1">$m = \frac{y_2 - y_1}{x_2 - x_1}$</div>
-                    <div class="text-emerald-400 font-semibold text-xs mt-1">Vertical sobre Horizontal</div>
-                </div>
-                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                    <div class="font-bold text-cyan-300 text-sm">Ecuación Clave</div>
-                    <div class="text-slate-300 mt-1">$y = mx + b$</div>
-                    <div class="text-emerald-400 font-semibold text-xs mt-1">$m$ = pendiente, $b$ = corte en $y$</div>
-                </div>
-                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                    <div class="font-bold text-cyan-300 text-sm">Perpendiculares</div>
-                    <div class="text-slate-300 mt-1">$m_1 \cdot m_2 = -1$</div>
-                    <div class="text-emerald-400 font-semibold text-xs mt-1">Voltea fracción y cambia signo</div>
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Recta Perpendicular 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
+                <p class="text-slate-200">¿Cuál es la ecuación de la recta perpendicular a $y = -\frac{3}{4}x + 2$ que pasa por el punto $(6, 5)$?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución Paso a Paso:</b><br/>
+                    1. Pendiente original: $m_1 = -\frac{3}{4}$.<br/>
+                    2. Pendiente perpendicular: voltea y cambia signo ➔ $m_{\perp} = +\frac{4}{3}$.<br/>
+                    3. Ecuación punto-pendiente: $y - y_1 = m(x - x_1)$<br/>
+                    $y - 5 = \frac{4}{3}(x - 6) \implies y - 5 = \frac{4}{3}x - 8$<br/>
+                    $\mathbf{y = \frac{4}{3}x - 3}$.
                 </div>
             </div>
-            <div class="box-highlight text-center text-sm text-slate-300">
-                🎉 <b>¡Completaste el módulo!</b> Las preguntas de geometría analítica y planos cartesianos ya no serán un obstáculo.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
             </div>
-            <div class="mt-5 flex justify-between">
+        </div>
+    </div>
+  
+
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es la pendiente perpendicular? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">Si una recta tiene como ecuación $2x + 6y = 15$, ¿cuál es la pendiente de cualquier recta PERPENDICULAR a ella?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'lr2', '¡Excelente! Despejando y: 6y = -2x + 15 -> y = (-2/6)x + 15/6 = (-1/3)x + 2.5. La pendiente original es m_1 = -1/3. La pendiente perpendicular es m_2 = -1 / (-1/3) = +3.')">A) $m = 3$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'lr2', '-1/3 es la pendiente original de la recta, no la perpendicular.')">B) $m = -1/3$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'lr2', '1/3 no tiene el signo invertido correspondiente.')">C) $m = 1/3$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'lr2', 'Cuidado: la perpendicular debe ser opuesta e inversa.')">D) $m = -3$</button>
+        </div>
+        <div id="feedback-lr2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
+        <div class="card text-center">
+            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Línea Recta 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Fórmula de Pendiente</div>
+                <div class="text-slate-300 mt-1">$m = (y_2 - y_1) / (x_2 - x_1)$. Arriba $y$, abajo $x$.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Forma $y = mx + b$</div>
+                <div class="text-slate-300 mt-1">$m$ = inclinación, $b$ = punto de corte con el eje $y$ $(0, b)$.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Paralelas = Mismo $m$</div>
+                <div class="text-slate-300 mt-1">$m_1 = m_2$. Nunca se cruzan en el plano.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Perpendiculares = Voltea Signo</div>
+                <div class="text-slate-300 mt-1">$m_2 = -1/m_1$. Si $m_1 = -2/7 \implies m_2 = +7/2$.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> La geometría analítica plana ya está totalmente afianzada.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
                 <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
+  
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -268,11 +283,11 @@
             if (isCorrect) {
                 btn.classList.add('option-correct');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
-                fb.innerHTML = `<b>🎉 ¡Excelente acierto!</b><br/>${explanation}`;
+                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
-                fb.innerHTML = `<b>⚠️ ¡Ojo con ese paso!</b><br/>${explanation}`;
+                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
             }
             if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise([fb]);

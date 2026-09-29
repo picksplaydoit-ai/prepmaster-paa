@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual Maestro: Sucesiones PAA</title>
+    <title>Manual Maestro: Sucesiones y Progresiones PAA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = {
@@ -13,131 +13,242 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color: #1e293b; margin: 0; overflow: hidden; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
         .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: white; border-radius: 2rem; box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.08); max-width: 800px; width: 100%; padding: 2.5rem; border: 1px solid #f1f5f9; max-height: 95vh; overflow-y: auto; }
-        .badge-seq { background: #ec4899; color: white; padding: 4px 14px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; }
-        .btn-nav { background: #1e293b; color: white; padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: all 0.2s ease; font-size: 0.9rem; }
-        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid #f1f5f9; border-radius: 12px; margin-bottom: 8px; font-weight: 500; transition: all 0.2s ease; background: #fff; font-size: 0.9rem; }
-        .option-btn:hover { border-color: #ec4899; background: #fdf2f8; }
-        .option-correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
-        .option-incorrect { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
-        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: #ec4899; transition: width 0.3s ease; z-index: 100; }
-        .seq-box { background: #fff1f2; padding: 1rem; border-radius: 1rem; font-family: monospace; font-size: 1.5rem; font-weight: bold; text-align: center; color: #be185d; margin: 1rem 0; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(56, 189, 248, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #38bdf8; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
+        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
     </style>
 </head>
 <body>
-    <!-- Slide 0: Intro -->
+
+    
+    <!-- Slide 0: Portada -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <h1 class="text-4xl font-extrabold text-slate-900 mb-4">Sucesiones y Patrones 🔢✨</h1>
-            <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
-                Los números no están ahí al azar. Vamos a encontrar el "código secreto" que los conecta para predecir el futuro de la serie.
-            </p>
-            <button class="btn-nav bg-pink-600 px-12 py-4 text-lg" onclick="nextSlide()">¡Empezar!</button>
+            <span class="badge" style="background:#38bdf8;">Álgebra PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Sucesiones y Patrones Numéricos 🔢</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Aprende a encontrar el término $n$-ésimo de sucesiones aritméticas y geométricas al instante, y a deducir patrones alfanuméricos sin fórmulas complejas.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">➕ Progresión Aritmética</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">✖️ Progresión Geométrica</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">⚡ Término General</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Sucesiones →</button>
+            </div>
         </div>
     </div>
+  
 
-    <!-- Slide 1: Tipos -->
-    <div class="slide" id="slide-1">
-        <div class="card">
-            <div class="badge-seq">Nivel 1</div>
-            <h2 class="text-2xl font-bold mb-4 text-pink-700">Las dos reglas de oro 🏆</h2>
-            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
-                <div class="p-4 bg-pink-50 rounded-xl border border-pink-100">
-                    <p class="font-bold">Aritmética (Suma/Resta):</p>
-                    <p>Vas sumando o restando lo mismo siempre. <br> Ej: $2, 5, 8, 11 \dots$ (Vas sumando 3).</p>
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Sucesiones Aritméticas (Diferencia Constante $d$) ➕</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>En una sucesión aritmética, cada término se obtiene sumando una diferencia fija $d$ al anterior:</p>
+            <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
+                <span class="text-xl font-bold text-cyan-300">$$a_n = a_1 + (n - 1)d = d \cdot n + (a_1 - d)$$</span>
+            </div>
+            <div class="box-highlight text-xs">
+                💡 <b>Atajo PAA de la tabla de multiplicar:</b> Si la sucesión sube de 4 en 4 ($d = 4$), la fórmula empieza con $4n$. Luego ajustas con el término cero ($a_0 = a_1 - d$).<br/>
+                Ejemplo: $5, 9, 13, 17...$ ➔ Sube de 4 en 4 ➔ $4n$. Para $n=1$, $4(1) = 4$, falta 1 para llegar a 5 ➔ <b>Fórmula: $4n + 1$</b>.
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: El Término Lejano 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
+                <p class="text-slate-200">En la sucesión aritmética $7, 12, 17, 22, ...$, ¿cuál es el valor del término en la posición 40 ($a_{40}$)?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución Paso a Paso:</b><br/>
+                    1. Identificar diferencia: $12 - 7 = 5$ ➔ $d = 5$.<br/>
+                    2. Primer término: $a_1 = 7$.<br/>
+                    3. Fórmula: $a_n = 5n + (7 - 5) = 5n + 2$.<br/>
+                    4. Para $n = 40$: $a_{40} = 5(40) + 2 = 200 + 2 = \mathbf{202}$.
                 </div>
-                <div class="p-4 bg-indigo-50 rounded-xl border border-indigo-100">
-                    <p class="font-bold">Geométrica (Mult/Div):</p>
-                    <p>Vas multiplicando por lo mismo. <br> Ej: $3, 6, 12, 24 \dots$ (Vas multiplicando por 2).</p>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el término en la posición 30? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">En la sucesión $4, 10, 16, 22, 28, ...$, ¿cuál es el valor del término número 30?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'su1', '¡Correcto! Diferencia d = 6. Fórmula: a_n = 6n - 2. Para n = 30: 6(30) - 2 = 180 - 2 = 178.')">A) 178</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'su1', '180 sería 6 * 30 sin ajustar el primer término (4).')">B) 180</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'su1', 'Cálculo erróneo.')">C) 184</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'su1', 'Revisa la resta del término base.')">D) 174</button>
+        </div>
+        <div id="feedback-su1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Sucesiones Geométricas y Cuadráticas →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Sucesiones Geométricas (Razón Multiplicativa $r$) ✖️</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>Cada término se obtiene multiplicando por una razón constante $r$:</p>
+            <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
+                <span class="text-xl font-bold text-cyan-300">$$a_n = a_1 \cdot r^{n-1}$$</span>
+            </div>
+            <div class="box-highlight text-xs">
+                Ejemplo: $3, 6, 12, 24, 48...$ ➔ Se duplica en cada paso ($r = 2$).<br/>
+                Para el 6º término: $a_6 = 3 \cdot (2^5) = 3 \cdot 32 = 96$.
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Patrón Fraccionario Geométrico 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
+                <p class="text-slate-200">¿Cuál es el siguiente número en la sucesión: $\frac{1}{2}, \frac{3}{4}, \frac{9}{8}, \frac{27}{16}, ...$?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución Paso a Paso:</b><br/>
+                    1. Analiza el numerador: $1, 3, 9, 27$ ➔ Se multiplica por 3 ($27 \times 3 = 81$).<br/>
+                    2. Analiza el denominador: $2, 4, 8, 16$ ➔ Se multiplica por 2 ($16 \times 2 = 32$).<br/>
+                    3. La razón geométrica es $r = \frac{3}{2}$.<br/>
+                    4. Siguiente término = $\frac{27}{16} \times \frac{3}{2} = \mathbf{\frac{81}{32}}$.
                 </div>
             </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo 1</button>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 2: Ejemplo 1 -->
-    <div class="slide" id="slide-2">
-        <div class="card">
-            <div class="badge-seq">Yo lo resuelvo</div>
-            <h2 class="text-xl font-bold mb-4">Cuadrados mágicos 🔎</h2>
-            <div class="seq-box">1, 4, 9, 16, ?</div>
-            <div class="bg-pink-50 p-5 rounded-xl border border-pink-100 text-sm">
-                <p class="mb-2"><b>Mi lógica:</b> Son los cuadrados perfectos: $1^2, 2^2, 3^2, 4^2 \dots$</p>
-                <p class="font-bold text-center mt-3 text-pink-700">Respuesta: $5^2 = \mathbf{25}$</p>
-            </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo 2</button>
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el término que continúa la serie? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">En la sucesión geométrica $5, 15, 45, 135, ...$, ¿cuál es el 6º término ($a_6$)?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'su2', '¡Excelente! Razón r = 3. Término 5: 135 * 3 = 405. Término 6: 405 * 3 = 1,215.')">A) 1,215</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'su2', '405 es el 5º término, te piden el 6º.')">B) 405</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'su2', 'Cálculo incorrecto.')">C) 1,350</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'su2', 'Revisa la multiplicación por 3.')">D) 945</button>
+        </div>
+        <div id="feedback-su2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 3: Ejemplo 2 (NUEVO) -->
-    <div class="slide" id="slide-3">
-        <div class="card">
-            <div class="badge-seq">Yo lo resuelvo</div>
-            <h2 class="text-xl font-bold mb-4">El salto creciente 📈</h2>
-            <div class="seq-box">5, 7, 10, 14, ?</div>
-            <div class="bg-pink-50 p-5 rounded-xl border border-pink-100 text-sm">
-                <p class="mb-2"><b>Mi lógica:</b></p>
-                <p class="mb-1">De 5 a 7: **+2**</p>
-                <p class="mb-1">De 7 a 10: **+3**</p>
-                <p class="mb-1">De 10 a 14: **+4**</p>
-                <p class="mb-2">El siguiente salto debe ser: **+5**</p>
-                <p class="font-bold text-center mt-3 text-pink-700">Respuesta: $14 + 5 = \mathbf{19}$</p>
-            </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Reto 1</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 4: Reto 1 -->
-    <div class="slide" id="slide-4">
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
         <div class="card text-center">
-            <div class="badge-seq">Tu Reto 1</div>
-            <h2 class="text-xl font-bold mb-6 italic text-balance">
-                ¿Qué número sigue? <br> 2, 6, 18, 54, ___
-            </h2>
-            <div class="space-y-3 max-w-xs mx-auto text-left">
-                <button class="option-btn" onclick="checkAnswer(this, false, 's1')">A) 108</button>
-                <button class="option-btn" onclick="checkAnswer(this, true, 's1')">B) 162 (x3 siempre)</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 's1')">C) 72</button>
+            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Sucesiones 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Aritmética = Suma fija</div>
+                <div class="text-slate-300 mt-1">Fórmula rápida: $d \cdot n + a_0$. Donde $a_0 = a_1 - d$.</div>
             </div>
-            <div id="feedback-s1" class="mt-4 font-bold h-6 text-center"></div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Reto 2</button>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Geométrica = Multiplica</div>
+                <div class="text-slate-300 mt-1">Fórmula: $a_n = a_1 \cdot r^{n-1}$.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Fracciones Independientes</div>
+                <div class="text-slate-300 mt-1">En sucesiones de fracciones, analiza numeradores y denominadores por separado.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Comprueba con $n=1$</div>
+                <div class="text-slate-300 mt-1">Sustituye $n=1$ en tu fórmula para comprobar si da exactamente el primer término.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Cualquier patrón o término lejano lo deducirás en segundos.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
-
-    <!-- Slide 5: Reto 2 (NUEVO) -->
-    <div class="slide" id="slide-5">
-        <div class="card text-center">
-            <div class="badge-seq">Tu Reto 2</div>
-            <h2 class="text-xl font-bold mb-6 italic text-balance">
-                Encuentra el valor de ?: <br> 1, 3, 7, 15, ?
-            </h2>
-            <div class="space-y-3 max-w-xs mx-auto text-left">
-                <button class="option-btn" onclick="checkAnswer(this, true, 's2')">A) 31 (Salto: +2, +4, +8, +16)</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 's2')">B) 30</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 's2')">C) 25</button>
-            </div>
-            <div id="feedback-s2" class="mt-4 font-bold h-6 text-center"></div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="goToStart()">Terminar</button>
-            </div>
-        </div>
-    </div>
+  
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -145,6 +256,7 @@
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         const progressBar = document.getElementById('progress');
+
         function updateUI() {
             slides.forEach((slide, index) => {
                 slide.classList.remove('active');
@@ -154,19 +266,27 @@
             progressBar.style.width = `${progressPercent}%`;
             if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         }
-        function checkAnswer(btn, isCorrect, qId) {
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
             const fb = document.getElementById(`feedback-${qId}`);
-            btn.parentElement.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
             if (isCorrect) {
                 btn.classList.add('option-correct');
-                fb.textContent = "¡Patrón encontrado! 🏆";
-                fb.className = "mt-4 font-bold text-green-600 block text-center";
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
-                fb.textContent = "¡Casi! Prueba restando o multiplicando ❌";
-                fb.className = "mt-4 font-bold text-red-600 block text-center";
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+            }
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([fb]);
             }
         }
+
         function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
         function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
         function goToStart() { currentSlide = 0; updateUI(); }

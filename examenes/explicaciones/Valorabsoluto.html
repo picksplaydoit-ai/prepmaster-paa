@@ -13,118 +13,247 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color: #1e293b; margin: 0; overflow: hidden; touch-action: manipulation; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
         .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: white; border-radius: 2rem; box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.08); max-width: 800px; width: 100%; padding: 2.5rem; border: 1px solid #f1f5f9; max-height: 95vh; overflow-y: auto; }
-        .badge-abs { background: #0ea5e9; color: white; padding: 4px 14px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; }
-        .btn-nav { background: #1e293b; color: white; padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: all 0.2s ease; font-size: 0.9rem; }
-        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid #f1f5f9; border-radius: 12px; margin-bottom: 8px; font-weight: 500; transition: all 0.2s ease; background: #fff; font-size: 0.9rem; }
-        .option-btn:hover { border-color: #0ea5e9; background: #f0f9ff; }
-        .option-correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
-        .option-incorrect { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
-        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: #0ea5e9; transition: width 0.3s ease; z-index: 100; }
-        .math-box { background: #f0f9ff; border-radius: 1rem; padding: 1.25rem; margin: 1rem 0; font-family: 'Courier New', Courier, monospace; font-weight: bold; text-align: center; color: #0369a1; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(56, 189, 248, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #38bdf8; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
+        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
     </style>
 </head>
 <body>
+
+    
+    <!-- Slide 0: Portada -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <h1 class="text-4xl font-extrabold text-slate-900 mb-4">Valor Absoluto 📏</h1>
-            <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
-                El valor absoluto es la distancia al cero. ¡Aprende por qué siempre es positivo!
-            </p>
-            <button class="btn-nav bg-sky-600 px-12 py-4 text-lg" onclick="nextSlide()">¡Empezar!</button>
+            <span class="badge" style="background:#38bdf8;">Álgebra PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Valor Absoluto y Distancia en la Recta 📏</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Comprende el valor absoluto como la distancia geométrica al origen, resuelve ecuaciones con dos casos $(\pm)$ y domina las desigualdades de intervalo $|x - c| \le d$.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">📍 Distancia Real</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">⚖️ Doble Caso (±)</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🚫 Cero Negativos</div>
         </div>
-    </div>
-
-    <div class="slide" id="slide-1">
-        <div class="card">
-            <div class="badge-abs">Teoría</div>
-            <h2 class="text-2xl font-bold mb-4 text-sky-700">La Distancia 📍</h2>
-            <div class="space-y-4 text-slate-600 text-sm leading-relaxed">
-                <p>No importa si caminas hacia la izquierda o derecha desde el cero, la distancia es la misma:</p>
-                <div class="math-box">$|-8| = 8 \quad \text{y} \quad |8| = 8$</div>
-            </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo 1</button>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Valor Absoluto →</button>
             </div>
         </div>
     </div>
+  
 
-    <div class="slide" id="slide-2">
-        <div class="card">
-            <div class="badge-abs">Yo lo resuelvo</div>
-            <h2 class="text-xl font-bold mb-4 text-sky-800">Cálculo Interno 🧮</h2>
-            <p class="text-slate-600 text-sm mb-4 italic text-center">"¿Cuánto es $|2 - 9| + 5$?"</p>
-            <div class="bg-sky-50 p-5 rounded-xl border border-sky-100 text-sm">
-                <p class="mb-2">1. Resuelvo adentro: $2 - 9 = -7$.</p>
-                <p class="mb-2">2. Aplico el valor absoluto: $|-7| = 7$.</p>
-                <p class="mb-2">3. Sumo el resto: $7 + 5 = 12$.</p>
-                <p class="font-bold text-center mt-3 text-sky-700">Resultado: 12</p>
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ecuaciones con Valor Absoluto: Los Dos Caminos ⚖️</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>La ecuación $|u| = c$ (con $c \ge 0$) se desdobla <b>obligatoriamente en dos ecuaciones lineales</b>:</p>
+            <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
+                <span class="text-xl font-bold text-cyan-300">$$u = c \quad \text{ó} \quad u = -c$$</span>
             </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Yo resuelvo 2</button>
+            <div class="box-warning text-xs">
+                ⚠️ <b>Trampa PAA Inmediata:</b> Si te ponen $|2x - 5| = -4$, la respuesta es <b>NO TIENE SOLUCIÓN</b>. La distancia nunca puede ser negativa.
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
             </div>
         </div>
     </div>
+  
 
-    <div class="slide" id="slide-3">
-        <div class="card">
-            <div class="badge-abs">Yo lo resuelvo</div>
-            <h2 class="text-xl font-bold mb-4 text-sky-800">Ecuación $|x|$ 🛣️</h2>
-            <p class="text-slate-600 text-sm mb-4 italic text-center">"Halla $x$ si $|x + 2| = 10$"</p>
-            <div class="bg-sky-50 p-5 rounded-xl border border-sky-100 text-sm">
-                <p class="mb-2">1. Opción 1: $x + 2 = 10 \rightarrow x = 8$.</p>
-                <p class="mb-2">2. Opción 2: $x + 2 = -10 \rightarrow x = -12$.</p>
-                <p class="font-bold text-center mt-3 text-sky-700">Resultados: 8 y -12</p>
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Doble Solución y Suma de Raíces 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
+                <p class="text-slate-200">Encuentra la suma de todas las soluciones reales de la ecuación $|3x - 7| = 14$.</p>
             </div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Tu Reto 1</button>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución Paso a Paso:</b><br/>
+                    <b>Caso 1 (Positivo):</b> $3x - 7 = 14 \implies 3x = 21 \implies x_1 = 7$.<br/>
+                    <b>Caso 2 (Negativo):</b> $3x - 7 = -14 \implies 3x = -7 \implies x_2 = -\frac{7}{3}$.<br/>
+                    <b>Suma de soluciones:</b> $7 + \left(-\frac{7}{3}\right) = \frac{21 - 7}{3} = \mathbf{\frac{14}{3}}$.
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
             </div>
         </div>
     </div>
+  
 
-    <div class="slide" id="slide-4">
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuáles son las soluciones de la ecuación? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">¿Qué valores de $x$ satisfacen la ecuación $|2x + 4| - 3 = 9$?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'va1', '¡Correcto! Primero despeja el valor absoluto: |2x + 4| = 12. Caso 1: 2x + 4 = 12 -> 2x = 8 -> x = 4. Caso 2: 2x + 4 = -12 -> 2x = -16 -> x = -8.')">A) $x = 4$ y $x = -8$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'va1', 'No olvides despejar el -3 primero sumándolo al 9.')">B) $x = 1$ y $x = -5$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'va1', 'Cuidado con los signos al despejar.')">C) $x = 4$ y $x = 8$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'va1', 'Cálculo erróneo.')">D) $x = 6$ y $x = -6$</button>
+        </div>
+        <div id="feedback-va1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Desigualdades con Valor Absoluto →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Desigualdades con Valor Absoluto 📏</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>La PAA evalúa si sabes transformar el valor absoluto en intervalos de la recta numérica:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-slate-900 p-3 rounded-xl border border-cyan-500/30">
+                    <p class="font-bold text-cyan-300">Menor que ($|x| < d$):</p>
+                    <p class="text-slate-300 mt-1">Es un <b>sándwich acotado</b> (intervalo cerrado o abierto continuo):</p>
+                    <p class="text-emerald-400 mt-1">$-d < x < d$</p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-xl border border-cyan-500/30">
+                    <p class="font-bold text-cyan-300">Mayor que ($|x| > d$):</p>
+                    <p class="text-slate-300 mt-1">Son <b>dos ramas hacia los extremos</b> (unión de intervalos):</p>
+                    <p class="text-emerald-400 mt-1">$x < -d \quad \text{ó} \quad x > d$</p>
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Desigualdad del Sándwich 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
+                <p class="text-slate-200">Resuelve la desigualdad $|x - 5| \le 3$.</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución Paso a Paso:</b><br/>
+                    1. Al ser "menor o igual", abrimos el sándwich:<br/>
+                    $-3 \le x - 5 \le 3$<br/>
+                    2. Sumamos $5$ a los tres miembros de la desigualdad:<br/>
+                    $-3 + 5 \le x \le 3 + 5$<br/>
+                    $2 \le x \le 8$<br/>
+                    3. Solución en intervalo: $\mathbf{[2, 8]}$. (Todos los números a una distancia máxima de 3 unidades del centro 5).
+                </div>
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el conjunto solución? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">¿Qué intervalo representa la solución de $|2x - 1| < 7$?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'va2', '¡Excelente! -7 < 2x - 1 < 7 -> suma 1: -6 < 2x < 8 -> divide entre 2: -3 < x < 4, es decir, el intervalo abierto (-3, 4).')">A) $(-3, 4)$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'va2', 'Cuidado: la desigualdad es estricta (<), los corchetes [ ] son para menor o igual (<=).')">B) $[-3, 4]$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'va2', 'Esa sería la solución para un caso de mayor que (>), no menor que.')">C) $x < -3$ ó $x > 4$</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'va2', 'Cálculo erróneo.')">D) $(-4, 3)$</button>
+        </div>
+        <div id="feedback-va2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
         <div class="card text-center">
-            <div class="badge-abs">Tu Reto 1</div>
-            <h2 class="text-xl font-bold mb-6 italic text-balance">
-                ¿Resultado de $|-15| - |5|$?
-            </h2>
-            <div class="space-y-3 max-w-xs mx-auto text-left">
-                <button class="option-btn" onclick="checkAnswer(this, true, 'a1')">A) 10 ($15 - 5 = 10$)</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'a1')">B) -20</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'a1')">C) 0</button>
+            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Valor Absoluto 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Despeja Primero</div>
+                <div class="text-slate-300 mt-1">Aisla las barras de valor absoluto antes de separar en los dos casos $\pm$.</div>
             </div>
-            <div id="feedback-a1" class="mt-4 font-bold h-6 text-center"></div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="nextSlide()">Tu Reto 2</button>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Menor Que = Sándwich</div>
+                <div class="text-slate-300 mt-1">$|u| \le d \iff -d \le u \le d$. Intervalo continuo conectado.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Mayor Que = Dos Ramas</div>
+                <div class="text-slate-300 mt-1">$|u| \ge d \iff u \le -d$ ó $u \ge d$. Unión hacia los extremos.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Igual a Negativo = Vacío</div>
+                <div class="text-slate-300 mt-1">Si $|expresión| = -k$, no pierdas tiempo calculando: la solución es $\emptyset$.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Ecuaciones e inecuaciones con valor absoluto resueltas con rigor absoluto.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
-
-    <div class="slide" id="slide-5">
-        <div class="card text-center">
-            <div class="badge-abs">Tu Reto 2</div>
-            <h2 class="text-xl font-bold mb-6 italic text-balance">
-                Si $|x - 1| = 4$, ¿cuál es un valor posible de $x$?
-            </h2>
-            <div class="space-y-3 max-w-xs mx-auto text-left">
-                <button class="option-btn" onclick="checkAnswer(this, true, 'a2')">A) 5 ($5 - 1 = 4$)</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'a2')">B) 3</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'a2')">C) -5</button>
-            </div>
-            <div id="feedback-a2" class="mt-4 font-bold h-6 text-center"></div>
-            <div class="mt-8 flex justify-between">
-                <button class="btn-nav bg-slate-100 !text-slate-900" onclick="prevSlide()">Atrás</button>
-                <button class="btn-nav" onclick="goToStart()">Terminar</button>
-            </div>
-        </div>
-    </div>
+  
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -132,6 +261,7 @@
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         const progressBar = document.getElementById('progress');
+
         function updateUI() {
             slides.forEach((slide, index) => {
                 slide.classList.remove('active');
@@ -141,19 +271,27 @@
             progressBar.style.width = `${progressPercent}%`;
             if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         }
-        function checkAnswer(btn, isCorrect, qId) {
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
             const fb = document.getElementById(`feedback-${qId}`);
-            btn.parentElement.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
             if (isCorrect) {
                 btn.classList.add('option-correct');
-                fb.textContent = "¡Muy bien! ✨";
-                fb.className = "mt-4 font-bold text-green-600 block text-center";
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
-                fb.textContent = "¡Casi! Prueba de nuevo ❌";
-                fb.className = "mt-4 font-bold text-red-600 block text-center";
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+            }
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([fb]);
             }
         }
+
         function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
         function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
         function goToStart() { currentSlide = 0; updateUI(); }

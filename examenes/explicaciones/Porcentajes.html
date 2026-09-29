@@ -16,222 +16,241 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
         .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: #0c1428; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 240, 255, 0.12); max-width: 820px; width: 100%; padding: 2.5rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
-        .badge-pct { background: #0ea5e9; color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
-        .btn-nav { background: #1e293b; color: white; padding: 10px 22px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.1); }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
         .btn-nav:hover { background: #334155; }
-        .btn-primary-action { background: linear-gradient(135deg, #00f0ff, #0077ff); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
         .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
-        .option-btn { width: 100%; text-align: left; padding: 13px 18px; border: 2px solid rgba(56, 189, 248, 0.2); border-radius: 12px; margin-bottom: 9px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.92rem; }
-        .option-btn:hover { border-color: #00f0ff; background: #0f1b36; }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(56, 189, 248, 0.25); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #38bdf8; background: #0f1b36; }
         .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
         .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
-        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #00f0ff, #0077ff); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #00f0ff; }
-        .step-pill { background: rgba(0, 240, 255, 0.15); color: #00f0ff; padding: 2px 9px; border-radius: 6px; font-size: 0.72rem; font-weight: 800; margin-right: 8px; border: 1px solid rgba(0, 240, 255, 0.3); }
-        .box-highlight { background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 16px; margin: 12px 0; }
-        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 16px; margin: 12px 0; color: #fca5a5; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
+        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
     </style>
 </head>
 <body>
 
-    <!-- Slide 0: Intro -->
+    
+    <!-- Slide 0: Portada -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <span class="badge-pct">Aritmética Esencial PAA</span>
-            <h1 class="text-4xl font-extrabold text-white mb-4">Porcentajes y Descuentos 🏷️</h1>
-            <p class="text-base text-slate-300 mb-8 max-w-lg mx-auto leading-relaxed">
-                Aprende los atajos de cálculo mental, cómo evitar la trampa de los descuentos sucesivos y cómo resolver reactivos del College Board en menos de 45 segundos sin calculadora.
-            </p>
-            <button class="btn-nav btn-primary-action px-10 py-4 text-base" onclick="nextSlide()">¡Comenzar Explicación! →</button>
+            <span class="badge" style="background:#38bdf8;">Aritmética PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Porcentajes y Descuentos Sucesivos 🏷️</h2>
+            
+        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Aprende a calcular aumentos, rebajas consecutivas sin sumar porcentajes directamente y a despejar el valor original antes del IVA o descuento.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">✖️ Factor Decimal</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">📉 Descuentos Dobles</div>
+            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🔍 Precio Original</div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <div></div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Porcentajes →</button>
+            </div>
         </div>
     </div>
+  
 
-    <!-- Slide 1: ¿Qué es y Atajos Mentales -->
-    <div class="slide" id="slide-1">
-        <div class="card">
-            <span class="badge-pct">Concepto Clave</span>
-            <h2 class="text-2xl font-bold mb-3 text-cyan-400">El Secreto de los Porcentajes Mentales ⚡</h2>
-            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-                <p>Un porcentaje significa <b>"partes por cada 100"</b> ($25\% = \frac{25}{100} = \frac{1}{4} = 0.25$). En la PAA no tienes calculadora, así que usa estos bloques maestros:</p>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center my-3">
-                    <div class="bg-slate-900/80 p-3 rounded-xl border border-sky-500/30">
-                        <div class="font-extrabold text-cyan-300 text-lg">10%</div>
-                        <div class="text-xs text-slate-400">Recorre el punto 1 lugar a la izq.</div>
-                    </div>
-                    <div class="bg-slate-900/80 p-3 rounded-xl border border-sky-500/30">
-                        <div class="font-extrabold text-cyan-300 text-lg">1%</div>
-                        <div class="text-xs text-slate-400">Recorre el punto 2 lugares a la izq.</div>
-                    </div>
-                    <div class="bg-slate-900/80 p-3 rounded-xl border border-sky-500/30">
-                        <div class="font-extrabold text-cyan-300 text-lg">50%</div>
-                        <div class="text-xs text-slate-400">Saca la mitad exacta ($\div 2$).</div>
-                    </div>
-                    <div class="bg-slate-900/80 p-3 rounded-xl border border-sky-500/30">
-                        <div class="font-extrabold text-cyan-300 text-lg">25%</div>
-                        <div class="text-xs text-slate-400">La mitad de la mitad ($\div 4$).</div>
-                    </div>
+    <!-- Slide 1: Concepto 1 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">El Atajo del Factor Multiplicador ⚡</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>Olvídate de la regla de tres de dos pasos. Aplica el <b>factor multiplicador directo</b>:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-slate-900 p-3 rounded-xl border border-cyan-500/30">
+                    <p class="font-bold text-cyan-300">Descuento de $X\%$:</p>
+                    <p class="text-slate-300 mt-1">Multiplica por $(1 - \frac{X}{100})$:</p>
+                    <p class="text-emerald-400 mt-1">Descuento de 20% ➔ Multiplica por <b>0.80</b>.<br/>Descuento de 15% ➔ Multiplica por <b>0.85</b>.</p>
                 </div>
-                <div class="box-highlight">
-                    💡 <b>Ejemplo relámpago:</b> ¿Cuánto es el $15\%$ de $240$?<br/>
-                    • $10\%$ de $240 = 24$<br/>
-                    • $5\%$ es la mitad del $10\% = 12$<br/>
-                    • Total: $24 + 12 = \mathbf{36}$. ¡Listo en 3 segundos!
+                <div class="bg-slate-900 p-3 rounded-xl border border-cyan-500/30">
+                    <p class="font-bold text-cyan-300">Aumento / IVA de $Y\%$:</p>
+                    <p class="text-slate-300 mt-1">Multiplica por $(1 + \frac{Y}{100})$:</p>
+                    <p class="text-emerald-400 mt-1">Aumento de 16% (IVA) ➔ Multiplica por <b>1.16</b>.<br/>Aumento de 25% ➔ Multiplica por <b>1.25</b>.</p>
                 </div>
             </div>
-            <div class="mt-6 flex justify-between">
+            <div class="box-warning text-xs">
+                ⚠️ <b>Trampa Clásica PAA:</b> Un descuento del 20% seguido de otro del 10% <b>NO es un descuento del 30%</b>. Se multiplican los factores: $0.80 \times 0.90 = 0.72$ (pagas el 72%, es decir, el descuento real es de solo <b>28%</b>).
+            </div>
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Aumentos y Descuentos →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 2: El Multiplicador Directo (Aumentos y Descuentos) -->
-    <div class="slide" id="slide-2">
-        <div class="card">
-            <span class="badge-pct">Técnica Pro</span>
-            <h2 class="text-2xl font-bold mb-3 text-cyan-400">Multiplicadores Directos: ¡En un solo paso! 🚀</h2>
-            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-                <p>No calcules el porcentaje por separado para luego sumarlo o restarlo. Hazlo en un solo movimiento multiplicando por el <b>factor decimal</b>:</p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-3">
-                    <div class="box-highlight">
-                        <div class="font-bold text-emerald-400 mb-1">📈 Si hay un AUMENTO del $X\%$:</div>
-                        <div class="text-xs text-slate-300">Suma a $100\%$ y pasa a decimal:</div>
-                        <ul class="text-xs mt-2 space-y-1">
-                            <li>• Aumento del $16\%$ (IVA): Multiplica por $\mathbf{1.16}$</li>
-                            <li>• Aumento del $25\%$: Multiplica por $\mathbf{1.25}$</li>
-                            <li>• Aumento del $5\%$: Multiplica por $\mathbf{1.05}$ (¡cuidado con el cero!)</li>
-                        </ul>
-                    </div>
-                    <div class="box-highlight">
-                        <div class="font-bold text-rose-400 mb-1">📉 Si hay un DESCUENTO del $X\%$:</div>
-                        <div class="text-xs text-slate-300">Resta de $100\%$ y paga lo que queda:</div>
-                        <ul class="text-xs mt-2 space-y-1">
-                            <li>• Descuento del $20\%$: Pagas el $80\% \rightarrow \mathbf{\times 0.80}$</li>
-                            <li>• Descuento del $35\%$: Pagas el $65\% \rightarrow \mathbf{\times 0.65}$</li>
-                            <li>• Descuento del $10\%$: Pagas el $90\% \rightarrow \mathbf{\times 0.90}$</li>
-                        </ul>
-                    </div>
+    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Descuentos Consecutivos 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
+                <p class="text-slate-200">Una tienda ofrece una chamarra con precio de lista de $1,200 con un 25% de descuento, y en caja aplican un 10% adicional sobre el precio ya rebajado. ¿Cuánto se paga en caja?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución en una sola línea:</b><br/>
+                    Precio Final = $1,200 \times (0.75) \times (0.90)$<br/>
+                    1. $1,200 \times 0.75 = 900$<br/>
+                    2. $900 \times 0.90 = \mathbf{\$810}$.
                 </div>
             </div>
-            <div class="mt-6 flex justify-between">
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ejemplo Guiado →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 3: Ejemplo Guiado 1 (Aumento / Descuento) -->
-    <div class="slide" id="slide-3">
-        <div class="card">
-            <span class="badge-pct">Yo lo resuelvo</span>
-            <h2 class="text-xl font-bold mb-2 text-cyan-300">Ejemplo Guiado: Precio Final con Descuento 🏷️</h2>
-            <p class="text-slate-400 text-sm mb-4 italic">"Una mochila cuesta $800 pesos. Si la tienda ofrece un descuento del 30%, ¿cuánto se paga por la mochila?"</p>
-            <div class="box-highlight text-sm space-y-2">
-                <p><span class="step-pill">1</span> <b>Identifica lo que pagas:</b> Si te descuentan el $30\%$, pagas el $70\%$ del precio original ($100\% - 30\% = 70\%$).</p>
-                <p><span class="step-pill">2</span> <b>Multiplicación directa:</b> $800 \times 0.70$.</p>
-                <p><span class="step-pill">3</span> <b>O por cálculo mental:</b> $10\%$ de $800 = 80 \rightarrow 80 \times 7 = \mathbf{560}$.</p>
-                <div class="font-extrabold text-emerald-400 text-base mt-2 text-center">
-                    Resultado: Se pagan $560 pesos
-                </div>
-            </div>
-            <div class="mt-6 flex justify-between">
+    <!-- Slide 3: Práctica 1 -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el descuento único equivalente? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">Si un artículo sufre dos aumentos sucesivos del 20% y del 30%, ¿cuál es el porcentaje total de incremento sobre el precio original?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'por1', '¡Exacto! Factor = 1.20 * 1.30 = 1.56, lo que representa un aumento del 56% (no del 50%).')">A) 56%</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'por1', 'Trampa común: no sumes 20 + 30; el segundo porcentaje actúa sobre el nuevo valor ya aumentado.')">B) 50%</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'por1', 'Cálculo erróneo.')">C) 60%</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'por1', 'Revisa la multiplicación de 1.20 * 1.30.')">D) 52%</button>
+        </div>
+        <div id="feedback-por1" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">La Gran Trampa PAA →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Cálculo del Precio Original →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 4: La Gran Trampa PAA (Descuentos Sucesivos) -->
-    <div class="slide" id="slide-4">
-        <div class="card">
-            <span class="badge-pct">⚠️ Alerta PAA</span>
-            <h2 class="text-2xl font-bold mb-3 text-rose-400">La Trampa Clásica: Descuentos Sucesivos 🎯</h2>
-            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-                <div class="box-warning font-semibold">
-                    Pregunta típica PAA: "Una tienda tiene 20% de descuento y adicionalmente un 10% con tarjeta. ¿Cuál es el descuento total real?"
-                </div>
-                <p>❌ <b>El error que comete el 70% de los aspirantes:</b> Sumar $20\% + 10\% = 30\%$. ¡ESTÁ MAL!</p>
-                <p>✅ <b>El método correcto (Efecto Cascada):</b> El segundo descuento se aplica sobre lo que YA tiene descuento.</p>
-                <div class="box-highlight text-xs space-y-1">
-                    <p>• Imagina un producto que cuesta <b>$100</b>.</p>
-                    <p>• Aplica el primer $20\%$: $100 - 20 = \mathbf{\$80}$.</p>
-                    <p>• Aplica el $10\%$ adicional sobre los $80$: el $10\%$ de $80$ es <b>$8</b>.</p>
-                    <p>• Precio final = $80 - 8 = \mathbf{\$72}$.</p>
-                    <p class="font-bold text-cyan-300 pt-1">Total descontado: de $100 a $72 hubo un descuento real del 28% (¡no del 30%!).</p>
-                </div>
+    <!-- Slide 4: Concepto 2 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Despeje Hacia Atrás: Encontrar el Precio Original 🔙</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <p>Cuando te dan el <b>precio final con descuento</b> y te piden el precio original, el error número uno es calcular el porcentaje sobre el precio final:</p>
+            <div class="box-highlight text-xs space-y-1">
+                <p><b>Fórmula de Despeje:</b> $\text{Precio Original} = \frac{\text{Precio Final}}{\text{Factor}}$</p>
+                <p>Ejemplo: Si pagaste $400 con un 20% de descuento incluido, <b>NO</b> le sumes el 20% a 400. Divide entre 0.80: $\frac{400}{0.80} = 500$.</p>
             </div>
-            <div class="mt-6 flex justify-between">
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Problemas Inversos →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 5: Problemas Inversos (De Reversa) -->
-    <div class="slide" id="slide-5">
-        <div class="card">
-            <span class="badge-pct">Nivel Avanzado</span>
-            <h2 class="text-2xl font-bold mb-3 text-cyan-400">El Problema Inverso: Hallar el Precio Original 🔄</h2>
-            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-                <p class="italic text-slate-400">"Con un 20% de descuento ya aplicado, una chamarra costó $480. ¿Cuál era su precio original sin descuento?"</p>
-                <p>❌ <b>Error común:</b> Sacarle el $20\%$ a $480$ ($96$) y sumarlo ($480 + 96 = 576$). ¡Eso es incorrecto porque el 20% era sobre el precio viejo!</p>
-                <div class="box-highlight text-sm space-y-2">
-                    <p><span class="step-pill">1</span> Si tuvo $20\%$ de descuento, significa que <b>$480 representa el $80\%$</b> ($0.80$).</p>
-                    <p><span class="step-pill">2</span> Ecuación: $\text{Precio Original} \times 0.80 = 480$.</p>
-                    <p><span class="step-pill">3</span> Despeja dividiendo: $\text{Precio Original} = \frac{480}{0.80} = \mathbf{600}$.</p>
-                    <div class="font-bold text-cyan-300 text-center">
-                        Regla de Oro PAA: Para ir "hacia atrás" en un descuento, divide entre el porcentaje pagado en decimal ($\frac{\text{Precio Final}}{1 - d}$).
-                    </div>
+    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Despeje del Precio Original 🔍</h2>
+            
+        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+            <div class="box-example text-xs">
+                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
+                <p class="text-slate-200">Un televisor costó $9,280 con el 16% de IVA incluido. ¿Cuál era el precio del televisor antes del impuesto?</p>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
+                    <b>✅ Solución Correcta:</b><br/>
+                    $\text{Precio Sin IVA} = \frac{\$9,280}{1.16} = \mathbf{\$8,000}$.<br/>
+                    <i>Comprobación:</i> $8,000 \times 0.16 = 1,280$ de IVA ➔ $8,000 + 1,280 = 9,280$.
                 </div>
             </div>
-            <div class="mt-6 flex justify-between">
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébate en los Retos! →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
             </div>
         </div>
     </div>
+  
 
-    <!-- Slide 6: Reto 1 -->
-    <div class="slide" id="slide-6">
+    <!-- Slide 6: Práctica 2 -->
+    <div class="slide " id="slide-6">
+        <div class="card ">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál era el precio antes del descuento? 🎯</h2>
+            
+        <p class="text-slate-300 text-sm mb-3">Un libro tiene un 30% de descuento y el cliente paga $420 en caja. ¿Cuál era el precio original del libro?</p>
+        <div class="space-y-2 max-w-lg mx-auto text-left">
+            <button class="option-btn" onclick="checkPractice(this, true, 'por2', '¡Impecable! Si pagó el 70% (factor 0.70), entonces Precio Original = 420 / 0.70 = $600.')">A) $600</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'por2', 'Error común: sumarle el 30% a 420 da 546, pero el descuento fue sobre el valor original mayor.')">B) $546</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'por2', 'Cálculo incorrecto.')">C) $580</button>
+            <button class="option-btn" onclick="checkPractice(this, false, 'por2', 'Revisa la división entre 0.70.')">D) $650</button>
+        </div>
+        <div id="feedback-por2" class="hidden"></div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Slide 7: Resumen -->
+    <div class="slide " id="slide-7">
         <div class="card text-center">
-            <span class="badge-pct">Tu Reto 1</span>
-            <h2 class="text-xl font-bold mb-6 text-white text-balance">
-                El precio de un boleto de avión de $3,000 MXN aumentó un 15%. ¿Cuál es el nuevo precio del boleto?
-            </h2>
-            <div class="space-y-3 max-w-sm mx-auto text-left">
-                <button class="option-btn" onclick="checkAnswer(this, false, 'r1')">A) $3,150 MXN</button>
-                <button class="option-btn" onclick="checkAnswer(this, true, 'r1')">B) $3,450 MXN (10% es 300 + 5% es 150 = 450)</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'r1')">C) $3,300 MXN</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'r1')">D) $3,500 MXN</button>
+            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Porcentajes 📋</h2>
+            
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Factor de Descuento</div>
+                <div class="text-slate-300 mt-1">Multiplica por $(1 - d)$: pagar con 25% desc = multiplicar por 0.75.</div>
             </div>
-            <div id="feedback-r1" class="mt-4 font-bold h-6 text-center"></div>
-            <div class="mt-6 flex justify-between">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Factor de Incremento</div>
+                <div class="text-slate-300 mt-1">Multiplica por $(1 + i)$: aumento de 16% = multiplicar por 1.16.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Sucesivos = Multiplicación</div>
+                <div class="text-slate-300 mt-1">Nunca sumes porcentajes sucesivos: multiplica sus factores decimales.</div>
+            </div>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                <div class="font-bold text-cyan-300 text-sm">Hacia Atrás = Divide</div>
+                <div class="text-slate-300 mt-1">Para hallar el precio original, divide el precio final entre el factor.</div>
+            </div>
+        </div>
+        <div class="box-highlight text-xs text-slate-300">
+            🎉 <b>¡Módulo completado!</b> Los porcentajes de la PAA ya son dominio tuyo.
+        </div>
+      
+            <div class="mt-5 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente Reto →</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
-
-    <!-- Slide 7: Reto 2 -->
-    <div class="slide" id="slide-7">
-        <div class="card text-center">
-            <span class="badge-pct">Tu Reto 2 (Clásico PAA)</span>
-            <h2 class="text-xl font-bold mb-6 text-white text-balance">
-                Un artículo tiene un descuento del 50% y sobre el precio rebajado se aplica un 20% adicional. ¿Cuál es el porcentaje de descuento total sobre el precio inicial?
-            </h2>
-            <div class="space-y-3 max-w-sm mx-auto text-left">
-                <button class="option-btn" onclick="checkAnswer(this, false, 'r2')">A) 70%</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'r2')">B) 55%</button>
-                <button class="option-btn" onclick="checkAnswer(this, true, 'r2')">C) 60% (100 - 50 = 50, y el 20% de 50 es 10; queda en 40)</button>
-                <button class="option-btn" onclick="checkAnswer(this, false, 'r2')">D) 65%</button>
-            </div>
-            <div id="feedback-r2" class="mt-4 font-bold h-6 text-center"></div>
-            <div class="mt-6 flex justify-between">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="goToStart()">Terminar y Repasar ↺</button>
-            </div>
-        </div>
-    </div>
+  
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -250,17 +269,23 @@
             if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         }
 
-        function checkAnswer(btn, isCorrect, qId) {
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
             const fb = document.getElementById(`feedback-${qId}`);
-            btn.parentElement.querySelectorAll('.option-btn').forEach(b => b.classList.remove('option-correct', 'option-incorrect'));
             if (isCorrect) {
                 btn.classList.add('option-correct');
-                fb.textContent = "¡Excelente! Has dominado el concepto ✨";
-                fb.className = "mt-4 font-bold text-emerald-400 block scale-105 transition-transform text-center";
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
-                fb.textContent = "¡Cuidado! Revisa el procedimiento ❌";
-                fb.className = "mt-4 font-bold text-rose-400 block text-center";
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+            }
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([fb]);
             }
         }
 
