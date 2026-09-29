@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Triángulos Notables y Semejanza PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0c1428; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 240, 255, 0.12); max-width: 820px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge-geo { background: #38bdf8; color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge-quiz { background: #f59e0b; color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #00f0ff, #0077ff); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(56, 189, 248, 0.2); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #00f0ff; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #00f0ff, #0077ff); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #00f0ff; }
+        .box-highlight { background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge-geo">Geometría Estratégica PAA</span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Triángulos Notables y Semejanza 📐</h1>
+            <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+                Aprende a resolver triángulos en <b>5 segundos sin trigonometría</b>: ternas pitagóricas instantáneas, triángulos $30^\circ-60^\circ-90^\circ$, $45^\circ-45^\circ-90^\circ$ y Teorema de Tales con prácticas intercaladas.
+            </p>
+            <button class="btn-nav btn-primary-action px-9 py-3 text-base" onclick="nextSlide()">¡Iniciar Explicación y Prácticas! →</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: Concepto 1 - Ternas Pitagóricas -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <span class="badge-geo">Atajo Maestro #1</span>
+            <h2 class="text-2xl font-bold mb-2 text-cyan-400">Ternas Pitagóricas: El Atajo de los 3 Segundos ⚡</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>En el examen PAA no hay tiempo para elevar al cuadrado ni sacar raíces gigantes ($a^2 + b^2 = c^2$). El 80% de los triángulos rectángulos pertenecen a estas familias exactas:</p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center text-xs my-2">
+                    <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                        <div class="font-extrabold text-cyan-300 text-base">Familia 3 - 4 - 5</div>
+                        <div class="text-slate-400 mt-1">Multiplicada por 2: <b>6 - 8 - 10</b><br/>Multiplicada por 3: <b>9 - 12 - 15</b><br/>Multiplicada por 5: <b>15 - 20 - 25</b></div>
+                    </div>
+                    <div class="bg-slate-900/80 p-3 rounded-xl border border-sky-500/30">
+                        <div class="font-extrabold text-sky-300 text-base">Familia 5 - 12 - 13</div>
+                        <div class="text-slate-400 mt-1">Multiplicada por 2:<br/><b>10 - 24 - 26</b><br/>Hipotenusa fija: $13$</div>
+                    </div>
+                    <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                        <div class="font-extrabold text-purple-300 text-base">Familia 8 - 15 - 17</div>
+                        <div class="text-slate-400 mt-1">Catetos: $8$ y $15$<br/>Hipotenusa fija: $17$</div>
+                    </div>
+                </div>
+                <div class="box-highlight">
+                    💡 <b>¿Cómo reconocerlas?</b> Si ves un cateto de $12$ y la hipotenusa es $15$, divide mentalmente entre $3$: obtienes $4$ y $5$. Por lo tanto, el cateto faltante es $3 \times 3 = \mathbf{9}$.
+                </div>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 1! →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Práctica 1 Inmediata -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <span class="badge-quiz">🎯 Práctica Inmediata #1</span>
+            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
+                Un triángulo rectángulo tiene un cateto de $15$ unidades y una hipotenusa de $25$ unidades. ¿Cuál es la longitud del otro cateto?
+            </h2>
+            <div class="space-y-2 max-w-md mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'p1', '¡Correcto! Es la terna pitagórica $3-4-5$ escalada por $5$: $3 \\times 5 = 15$, $5 \\times 5 = 25$. Por tanto, el cateto faltante es $4 \\times 5 = 20$. ¡Resuelto en segundos sin calculadora!')">A) $20$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'No restes directamente los lados ($25 - 15 = 10$): en el teorema de Pitágoras la relación es con los cuadrados de los catetos.')">B) $10$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p1', '$18$ no cumple la terna. Recuerda que la familia es $3, 4, 5$ multiplicada por $5$.')">C) $18$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'Cuidado con la raíz: $\\sqrt{25^2 - 15^2} = \\sqrt{625 - 225} = \\sqrt{400} = 20$, no $22$.')">D) $22$</button>
+            </div>
+            <div id="feedback-p1" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
+            <div class="mt-5 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Repasar Ternas</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Triángulos Especiales →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Concepto 2 - Triángulos Notables 45-45-90 y 30-60-90 -->
+    <div class="slide" id="slide-3">
+        <div class="card">
+            <span class="badge-geo">Atajo Maestro #2</span>
+            <h2 class="text-2xl font-bold mb-2 text-cyan-400">Los 2 Triángulos Especiales de la PAA ⭐</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-2 text-xs sm:text-sm">
+                    <div class="bg-slate-900/80 p-3 rounded-xl border border-sky-500/30">
+                        <span class="text-sky-300 font-bold text-base">Triángulo $45^\circ - 45^\circ - 90^\circ$</span><br/>
+                        (Mitad de un cuadrado perfecto)<br/>
+                        <ul class="list-disc pl-4 mt-1 space-y-1 text-slate-300">
+                            <li>Catetos iguales: $x$ y $x$</li>
+                            <li>Hipotenusa: $\mathbf{x\sqrt{2}}$</li>
+                        </ul>
+                        <span class="text-xs text-slate-400">Ej: Si un cuadrado tiene lado $7$, su diagonal mide exactamente $7\sqrt{2}$.</span>
+                    </div>
+                    <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                        <span class="text-purple-300 font-bold text-base">Triángulo $30^\circ - 60^\circ - 90^\circ$</span><br/>
+                        (Mitad de un triángulo equilátero)<br/>
+                        <ul class="list-disc pl-4 mt-1 space-y-1 text-slate-300">
+                            <li>Hipotenusa: $\mathbf{2x}$ (el doble)</li>
+                            <li>Opuesto a $30^\circ$: $\mathbf{x}$ (la mitad exacta)</li>
+                            <li>Opuesto a $60^\circ$: $\mathbf{x\sqrt{3}}$</li>
+                        </ul>
+                        <span class="text-xs text-slate-400">Regla mnemotécnica: ¡El cateto más corto siempre es la mitad de la hipotenusa!</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 2! →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Práctica 2 Inmediata -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <span class="badge-quiz">🎯 Práctica Inmediata #2</span>
+            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
+                En un triángulo rectángulo con ángulos de $30^\circ$ y $60^\circ$, la hipotenusa mide $10\text{ cm}$. ¿Cuánto mide el cateto opuesto al ángulo de $60^\circ$?
+            </h2>
+            <div class="space-y-2 max-w-md mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'p2', '¡Excelente! En el triángulo $30^\\circ-60^\\circ-90^\\circ$, el cateto menor (opuesto a $30^\\circ$) es la mitad de la hipotenusa: $\\frac{10}{2} = 5$. El cateto opuesto a $60^\\circ$ es el cateto menor multiplicado por $\\sqrt{3}$, es decir $5\\sqrt{3}\\text{ cm}$.')">A) $5\sqrt{3}\text{ cm}$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p2', '$5\\text{ cm}$ es el cateto opuesto a $30^\\circ$ (el más corto). La pregunta pide el cateto opuesto al ángulo de $60^\\circ$.')">B) $5\text{ cm}$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p2', 'Cuidado: no se multiplica la hipotenusa completa por $\\sqrt{3}$, sino el cateto menor ($5\\sqrt{3}$).')">C) $10\sqrt{3}\text{ cm}$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p2', '$\\sqrt{2}$ corresponde al triángulo de $45^\\circ-45^\\circ-90^\\circ$. Para $30^\\circ-60^\\circ$ el radical es $\\sqrt{3}$.')">D) $5\sqrt{2}\text{ cm}$</button>
+            </div>
+            <div id="feedback-p2" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
+            <div class="mt-5 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Repasar Especiales</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Semejanza y Tales →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Concepto 3 - Semejanza y Teorema de Tales -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <span class="badge-geo">Atajo Maestro #3</span>
+            <h2 class="text-2xl font-bold mb-2 text-cyan-400">Semejanza y Teorema de Tales (Sombras) ☀️</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>Dos triángulos son semejantes cuando tienen los mismos ángulos. Sus lados homólogos son <b>directamente proporcionales</b>:</p>
+                <div class="bg-slate-900/90 border border-sky-500/30 rounded-xl p-3 text-center my-2">
+                    <span class="text-base sm:text-lg font-bold text-sky-300">$$\frac{\text{Altura Mayor}}{\text{Altura Menor}} = \frac{\text{Sombra Mayor}}{\text{Sombra Menor}}$$</span>
+                </div>
+                <div class="box-warning">
+                    🚨 <b>La Trampa de las Áreas en Figuras Semejantes:</b><br/>
+                    Si la razón entre los lados es $k$ (por ejemplo, el doble: $k = 2$), <b>¡la razón entre sus áreas es $k^2$!</b> ($2^2 = 4$ veces mayor).<br/>
+                    Si un triángulo triplica sus lados ($k = 3$), su área se multiplica por $3^2 = 9$.
+                </div>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 3! →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Práctica 3 Inmediata (Reto PAA) -->
+    <div class="slide" id="slide-6">
+        <div class="card">
+            <span class="badge-quiz">🎯 Reto Maestro PAA #3</span>
+            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
+                Un poste vertical de $3\text{ metros}$ de altura proyecta una sombra en el piso de $2\text{ metros}$. En ese mismo instante, un edificio cercano proyecta una sombra de $18\text{ metros}$. ¿Cuál es la altura del edificio?
+            </h2>
+            <div class="space-y-2 max-w-md mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'p3', '¡Brillante! Planteamos la proporción de Tales: $\\frac{H}{3} = \\frac{18}{2} \\implies \\frac{H}{3} = 9 \\implies H = 9 \\times 3 = 27\\text{ metros}$. ¡Resuelto con una regla de 3 visual!')">A) $27\text{ m}$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p3', 'Cuidado: la sombra creció de $2$ a $18$, lo cual es $9$ veces más grande ($18 \\div 2 = 9$). Debes multiplicar la altura del poste por $9$, no por $4$.')">B) $12\text{ m}$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p3', 'Revisa la multiplicación: $3 \\times 9 = 27$, no $24$.')">C) $24\text{ m}$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p3', 'No dupliques la sombra: usa la razón de semejanza directa entre poste y edificio.')">D) $36\text{ m}$</button>
+            </div>
+            <div id="feedback-p3" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
+            <div class="mt-5 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Repasar Semejanza</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Resumen Mental →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Resumen Mental -->
+    <div class="slide" id="slide-7">
+        <div class="card">
+            <span class="badge-geo">Cheat Sheet Resumen</span>
+            <h2 class="text-2xl font-bold mb-3 text-cyan-400">Tu Brújula de Triángulos PAA 🧭</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center my-3 text-xs sm:text-sm">
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">Terna 3-4-5</div>
+                    <div class="text-slate-300 mt-1">Multiplicar por $k$</div>
+                    <div class="text-emerald-400 font-semibold text-xs mt-1">$6-8-10$, $9-12-15$, $15-20-25$</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">$30^\circ-60^\circ-90^\circ$</div>
+                    <div class="text-slate-300 mt-1">Lados: $x, x\sqrt{3}, 2x$</div>
+                    <div class="text-emerald-400 font-semibold text-xs mt-1">Menor es la mitad de hipotenusa</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">Semejanza (Tales)</div>
+                    <div class="text-slate-300 mt-1">Lados $\propto k$</div>
+                    <div class="text-emerald-400 font-semibold text-xs mt-1">Áreas $\propto k^2$</div>
+                </div>
+            </div>
+            <div class="box-highlight text-center text-sm text-slate-300">
+                🎉 <b>¡Módulo completado con éxito!</b> Ya dominas los triángulos y proporciones de geometría para el examen.
+            </div>
+            <div class="mt-5 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        }
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente acierto!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ ¡Ojo con ese paso!</b><br/>${explanation}`;
+            }
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([fb]);
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>

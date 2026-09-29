@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Conteo y Combinatoria PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0c1428; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 240, 255, 0.12); max-width: 820px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge-prob { background: #38bdf8; color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge-quiz { background: #f59e0b; color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #00f0ff, #0077ff); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(56, 189, 248, 0.2); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #00f0ff; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #00f0ff, #0077ff); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #00f0ff; }
+        .box-highlight { background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge-prob">Estadística y Probabilidad PAA</span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Técnicas de Conteo y Combinatoria 🧮</h1>
+            <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+                Descubre cómo saber al instante si <b>importa o no el orden</b>, el método de las ranuras multiplicativas y cómo calcular combinaciones y permutaciones en segundos con prácticas intercaladas.
+            </p>
+            <button class="btn-nav btn-primary-action px-9 py-3 text-base" onclick="nextSlide()">¡Iniciar Explicación y Prácticas! →</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: Concepto 1 - Principio Multiplicativo -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <span class="badge-prob">Principio Maestro #1</span>
+            <h2 class="text-2xl font-bold mb-2 text-cyan-400">El Principio Multiplicativo (Las Ranuras) 🎰</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>Si una actividad se realiza en varias etapas y la primera etapa tiene $n_1$ formas, la segunda $n_2$, la tercera $n_3$..., el total de maneras distintas es:</p>
+                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
+                    <span class="text-lg sm:text-xl font-bold text-cyan-300">$$\text{Total de Opciones} = n_1 \times n_2 \times n_3 \times \dots \times n_k$$</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm my-2">
+                    <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700">
+                        <span class="text-cyan-400 font-bold">Ejemplo Menús:</span><br/>
+                        3 sopas, 4 guisados y 2 postres:<br/>
+                        $3 \times 4 \times 2 = \mathbf{24\text{ comidas posibles}}$
+                    </div>
+                    <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700">
+                        <span class="text-cyan-400 font-bold">Ejemplo Códigos / Placas:</span><br/>
+                        Clave de 3 letras de la A a la C sin repetir:<br/>
+                        $3 \times 2 \times 1 = \mathbf{6\text{ códigos posibles}}$
+                    </div>
+                </div>
+                <div class="box-highlight">
+                    💡 <b>Atajo PAA:</b> Dibuja una línea por cada elección (ranura): $[ \quad ] \times [ \quad ] \times [ \quad ]$ y coloca adentro cuántas opciones disponibles te quedan en cada paso.
+                </div>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 1! →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Práctica 1 Inmediata -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <span class="badge-quiz">🎯 Práctica Inmediata #1</span>
+            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
+                Una cafetería ofrece $4$ tipos de pan, $3$ tipos de carne y $2$ aderezos. ¿Cuántos sándwiches diferentes se pueden armar eligiendo exactamente un pan, una carne y un aderezo?
+            </h2>
+            <div class="space-y-2 max-w-md mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'p1', '¡Correcto! Aplicamos el principio multiplicativo: $4 \\times 3 \\times 2 = 24$ combinaciones distintas. ¡Multiplicar directamente las opciones de cada etapa!')">A) $24$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'Error común: no sumes las opciones ($4 + 3 + 2 = 9$). Cuando se combinan etapas independientes, las opciones se MULTIPLICAN.')">B) $9$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'Falta incluir los aderezos: $4 \\times 3 = 12$, pero todavía hay 2 aderezos ($12 \\times 2 = 24$).')">C) $12$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'Revisa la multiplicación: $4 \\times 3 = 12$, y $12 \\times 2 = 24$, no $48$.')">D) $48$</button>
+            </div>
+            <div id="feedback-p1" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
+            <div class="mt-5 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Repasar Multiplicativo</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: ¿Importa el Orden? →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Concepto 2 - Permutación vs Combinación -->
+    <div class="slide" id="slide-3">
+        <div class="card">
+            <span class="badge-prob">Principio Maestro #2</span>
+            <h2 class="text-2xl font-bold mb-2 text-cyan-400">¿Importa o No el Orden? 🏆 vs 👥</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>Esta es la pregunta crucial que define todo en la PAA: <b>"Si cambio el orden de los elegidos, ¿el resultado es diferente o es el mismo?"</b></p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-2 text-xs sm:text-sm">
+                    <div class="bg-slate-900/80 p-3 rounded-xl border border-sky-500/30">
+                        <span class="text-sky-300 font-bold text-base">SÍ importa el orden $\implies$ PERMUTACIÓN</span><br/>
+                        <ul class="list-disc pl-4 mt-1 space-y-1 text-slate-300">
+                            <li>Podios (1º, 2º, 3º lugar)</li>
+                            <li>Puestos: Presidente, Secretario</li>
+                            <li>Filas, números telefónicos, claves</li>
+                        </ul>
+                        <span class="text-xs text-slate-400">Ana 1º y Beto 2º $\neq$ Beto 1º y Ana 2º.</span>
+                    </div>
+                    <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30">
+                        <span class="text-purple-300 font-bold text-base">NO importa el orden $\implies$ COMBINACIÓN</span><br/>
+                        <ul class="list-disc pl-4 mt-1 space-y-1 text-slate-300">
+                            <li>Equipos o comités de amigos</li>
+                            <li>Ingredientes de una ensalada/pizza</li>
+                            <li>Mano de cartas de juego</li>
+                        </ul>
+                        <span class="text-xs text-slate-400">Ana y Beto forman el mismo equipo que Beto y Ana.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 2! →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Práctica 2 Inmediata -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <span class="badge-quiz">🎯 Práctica Inmediata #2</span>
+            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
+                En una competencia de 6 atletas, ¿de cuántas formas distintas pueden quedar asignadas las medallas de Oro, Plata y Bronce (primer, segundo y tercer lugar)?
+            </h2>
+            <div class="space-y-2 max-w-md mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'p2', '¡Excelente! En este problema el orden SÍ importa (las medallas son distintas). Usamos ranuras: $6$ opciones para el Oro, $5$ para la Plata y $4$ para el Bronce: $6 \\times 5 \\times 4 = 120$ formas.')">A) $120$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p2', '$20$ sería si el orden no importara (combinación), pero ganar Oro es completamente diferente a ganar Bronce.')">B) $20$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p2', 'Cuidado: no sumes las ranuras ($6 + 5 + 4 = 15$). Se multiplican.')">C) $18$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p2', '$720$ es $6!$ (las formas de ordenar a los 6 atletas completos), pero solo se premian los primeros 3 lugares.')">D) $720$</button>
+            </div>
+            <div id="feedback-p2" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
+            <div class="mt-5 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Repasar Permutaciones</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Combinaciones Rápidas →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Concepto 3 - Combinaciones sin fórmulas largas -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <span class="badge-prob">Principio Maestro #3</span>
+            <h2 class="text-2xl font-bold mb-2 text-cyan-400">Atajo para Combinaciones (Equipos y Comités) 👥</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>Cuando el orden NO importa, simplemente haz una <b>cuenta regresiva arriba y abajo</b>:</p>
+                <div class="bg-slate-900/90 border border-sky-500/30 rounded-xl p-3 text-center my-2">
+                    <span class="text-base sm:text-lg font-bold text-sky-300">$$C(n, k) = \frac{\text{Cuenta regresiva de } k \text{ números desde } n}{\text{Multiplicar desde } k \text{ hasta } 1}$$</span>
+                </div>
+                <div class="box-highlight">
+                    💡 <b>Ejemplo relámpago: De 7 personas, elegir 3:</b><br/>
+                    $$C(7, 3) = \frac{7 \times 6 \times 5}{3 \times 2 \times 1}$$
+                    <b>¡Cancela antes de multiplicar!</b> Como $3 \times 2 = 6$, cancelas el $6$ de arriba y abajo:<br/>
+                    $$= 7 \times 5 = \mathbf{35}$$
+                    ¡Sin factoriales de 10 líneas ni cálculos engorrosos!
+                </div>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 3! →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Práctica 3 Inmediata (Reto PAA) -->
+    <div class="slide" id="slide-6">
+        <div class="card">
+            <span class="badge-quiz">🎯 Reto Maestro PAA #3</span>
+            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
+                Un profesor debe seleccionar a un comité de $3$ estudiantes a partir de un grupo de $8$ voluntarios. ¿Cuántos comités diferentes es posible formar?
+            </h2>
+            <div class="space-y-2 max-w-md mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'p3', '¡Brillante! El orden NO importa (todos son miembros del comité). Aplicamos el atajo de combinación: $\\frac{8 \\times 7 \\times 6}{3 \\times 2 \\times 1}$. Cancelamos el $(3 \\times 2 = 6)$ con el $6$ de arriba: queda $8 \\times 7 = 56$ comités.')">A) $56$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p3', '$336$ es $8 \\times 7 \\times 6$, pero eso contaría el orden como si hubiera presidente, secretario y tesorero. Falta dividir entre $3 \\times 2 \\times 1 = 6$.')">B) $336$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p3', 'Revisa el cálculo: $8 \\times 7 = 56$, no $24$.')">C) $24$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p3', 'No dividas entre 3: el denominador de elegir 3 es el factorial $3 \\times 2 \\times 1 = 6$.')">D) $112$</button>
+            </div>
+            <div id="feedback-p3" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
+            <div class="mt-5 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Repasar Combinaciones</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Resumen Mental →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Resumen Mental -->
+    <div class="slide" id="slide-7">
+        <div class="card">
+            <span class="badge-prob">Cheat Sheet Resumen</span>
+            <h2 class="text-2xl font-bold mb-3 text-cyan-400">Tu Brújula de Conteo y Combinatoria 🧭</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center my-3 text-xs sm:text-sm">
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">Ranuras / Etapas</div>
+                    <div class="text-slate-300 mt-1">$n_1 \times n_2 \times \dots$</div>
+                    <div class="text-emerald-400 font-semibold text-xs mt-1">Multiplicar opciones libres</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">¿Orden SÍ importa?</div>
+                    <div class="text-slate-300 mt-1">Permutación</div>
+                    <div class="text-emerald-400 font-semibold text-xs mt-1">Podios, puestos, claves</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">¿Orden NO importa?</div>
+                    <div class="text-slate-300 mt-1">Combinación</div>
+                    <div class="text-emerald-400 font-semibold text-xs mt-1">Equipos: divide y cancela</div>
+                </div>
+            </div>
+            <div class="box-highlight text-center text-sm text-slate-300">
+                🎉 <b>¡Módulo completado con éxito!</b> Ya dominas las técnicas de conteo y combinatoria para asegurar todos los puntos en el examen PAA.
+            </div>
+            <div class="mt-5 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        }
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente acierto!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ ¡Ojo con ese paso!</b><br/>${explanation}`;
+            }
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([fb]);
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>
