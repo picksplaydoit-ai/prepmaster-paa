@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Productos Notables y Factorización PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0c1428; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 240, 255, 0.12); max-width: 820px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge-alg { background: #38bdf8; color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge-quiz { background: #f59e0b; color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #00f0ff, #0077ff); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(56, 189, 248, 0.2); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #00f0ff; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #00f0ff, #0077ff); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #00f0ff; }
+        .box-highlight { background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge-alg">Álgebra Estratégica PAA</span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Productos Notables y Factorización 🧩</h1>
+            <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+                En la PAA, factorizar no es hacer cálculos largos: es <b>reconocer patrones visuales</b> para simplificar expresiones complejas en segundos. Aprende los 3 casos maestros con <b>prácticas inmediatas</b> entre cada tema.
+            </p>
+            <button class="btn-nav btn-primary-action px-9 py-3 text-base" onclick="nextSlide()">¡Comenzar Entrenamiento! →</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: Concepto 1 - Diferencia de Cuadrados -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <span class="badge-alg">Patrón Maestro #1</span>
+            <h2 class="text-2xl font-bold mb-2 text-cyan-400">Diferencia de Cuadrados ✂️</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>Es la fórmula más repetida de todo el examen College Board. La reconoces porque <b>solo tiene dos términos con signo de resta</b> y ambos tienen raíz cuadrada exacta:</p>
+                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
+                    <span class="text-xl sm:text-2xl font-extrabold text-cyan-300">$a^2 - b^2 = (a + b)(a - b)$</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-2 text-xs sm:text-sm">
+                    <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700">
+                        <span class="text-cyan-400 font-bold">Ejemplo 1:</span> $x^2 - 49$<br/>
+                        $\sqrt{x^2}=x$, $\sqrt{49}=7$<br/>
+                        $\implies \mathbf{(x + 7)(x - 7)}$
+                    </div>
+                    <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700">
+                        <span class="text-cyan-400 font-bold">Ejemplo 2 (Con coeficientes):</span> $4x^2 - 25$<br/>
+                        $\sqrt{4x^2}=2x$, $\sqrt{25}=5$<br/>
+                        $\implies \mathbf{(2x + 5)(2x - 5)}$
+                    </div>
+                </div>
+                <div class="box-highlight">
+                    ⚡ <b>¿Por qué la pregunta la PAA?</b> Porque la ponen dentro de fracciones para que canceles términos idénticos arriba y abajo sin hacer divisiones algebraicas largas.
+                </div>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 1! →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Práctica 1 Inmediata -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <span class="badge-quiz">🎯 Práctica Inmediata #1</span>
+            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
+                ¿Cuál es la forma simplificada de la expresión $\frac{x^2 - 36}{x + 6}$ para todo $x \neq -6$?
+            </h2>
+            <div class="space-y-2 max-w-md mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'p1', '¡Correcto! Factorizamos el numerador como diferencia de cuadrados: $x^2 - 36 = (x+6)(x-6)$. Cancelamos $(x+6)$ arriba y abajo, quedando únicamente $(x - 6)$.')">A) $x - 6$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'Cuidado: $x^2 - 36$ se factoriza como $(x+6)(x-6)$. Al cancelar con el $(x+6)$ de abajo, no queda una suma.')">B) $x + 6$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'Error común: no puedes cancelar las $x$ por separado restando números. Tienes que factorizar el binomio completo.')">C) $x - 30$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'No es correcto: recuerda que la raíz de $36$ es $6$, no se queda al cuadrado.')">D) $x^2 - 6$</button>
+            </div>
+            <div id="feedback-p1" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
+            <div class="mt-5 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Repasar Concepto</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Trinomios →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Concepto 2 - Trinomios x^2 + bx + c -->
+    <div class="slide" id="slide-3">
+        <div class="card">
+            <span class="badge-alg">Patrón Maestro #2</span>
+            <h2 class="text-2xl font-bold mb-2 text-cyan-400">Trinomio $x^2 + bx + c$ 🎲</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>El famoso <b>"juego de los dos números"</b>: buscas dos valores $p$ y $q$ tales que:</p>
+                <div class="bg-slate-900/90 border border-sky-500/30 rounded-xl p-3 text-center my-2">
+                    <span class="text-base sm:text-lg font-bold text-sky-300">$x^2 + bx + c = (x + p)(x + q)$</span><br/>
+                    <span class="text-xs text-slate-400">donde $p \times q = c$ (multiplicados) &nbsp;|&nbsp; $p + q = b$ (sumados)</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm">
+                    <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700">
+                        <span class="text-emerald-400 font-bold">Si $c$ es POSITIVO (+):</span><br/>
+                        Los dos números tienen el <b>mismo signo</b> (ambos $+$ o ambos $-$). El signo lo dicta $b$.<br/>
+                        Ej: $x^2 - 7x + 12 = \mathbf{(x - 3)(x - 4)}$<br/>
+                        <span class="text-slate-400">(-3)×(-4) = +12 &nbsp;|&nbsp; (-3)+(-4) = -7</span>
+                    </div>
+                    <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700">
+                        <span class="text-amber-400 font-bold">Si $c$ es NEGATIVO (−):</span><br/>
+                        Tienen <b>signos distintos</b> ($+$ y $-$). El número más grande se queda con el signo de $b$.<br/>
+                        Ej: $x^2 + 2x - 15 = \mathbf{(x + 5)(x - 3)}$<br/>
+                        <span class="text-slate-400">(+5)×(-3) = -15 &nbsp;|&nbsp; (+5)+(-3) = +2</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 2! →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Práctica 2 Inmediata -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <span class="badge-quiz">🎯 Práctica Inmediata #2</span>
+            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
+                ¿Cuál es la factorización correcta del trinomio $x^2 - 5x - 24$?
+            </h2>
+            <div class="space-y-2 max-w-md mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, false, 'p2', 'Cuidado con los signos: $(-8) \\times (+3) = -24$, pero $(x-8)(x-3)$ daría $(-8) \\times (-3) = +24$.')">A) $(x - 8)(x - 3)$</button>
+                <button class="option-btn" onclick="checkPractice(this, true, 'p2', '¡Excelente! Buscamos dos números que multiplicados den $-24$ y sumados $-5$. Esos números son $-8$ y $+3$: $(-8) \\times (+3) = -24$ y $(-8) + 3 = -5$.')">B) $(x - 8)(x + 3)$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p2', 'Si multiplicas $(x+8)(x-3)$ la suma daría $+8 - 3 = +5$, pero en el problema el término medio es $-5x$. El mayor debe ser negativo.')">C) $(x + 8)(x - 3)$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p2', '$12$ y $2$ restados dan $10$, no $5$. Revisa los factores de $24$.')">D) $(x - 12)(x + 2)$</button>
+            </div>
+            <div id="feedback-p2" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
+            <div class="mt-5 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Repasar Trinomios</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Binomio y Factor Común →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Concepto 3 - Binomio al cuadrado y Factor Común -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <span class="badge-alg">Patrón Maestro #3</span>
+            <h2 class="text-2xl font-bold mb-2 text-cyan-400">Binomio al Cuadrado y Factor Común ⚠️</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-warning">
+                    🚨 <b>La Trampa Mortal PAA:</b> Jamás olvides el término central:<br/>
+                    <div class="text-center font-extrabold text-white text-base my-1">
+                        $(a + b)^2 = a^2 + \mathbf{2ab} + b^2 \quad \text{y} \quad (a - b)^2 = a^2 - \mathbf{2ab} + b^2$
+                    </div>
+                    $(a + b)^2 \mathbf{\neq} a^2 + b^2$. El término $2ab$ es donde caen el 60% de los aspirantes.
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-sky-500/30">
+                    <span class="font-bold text-sky-300">Factor Común (Extracción Rápida):</span><br/>
+                    Saca el máximo común divisor de los números y la letra repetida con el <b>menor exponente</b>:<br/>
+                    $$6x^3 + 9x^2 = \mathbf{3x^2(2x + 3)}$$
+                </div>
+                <p class="text-xs text-slate-400">
+                    💡 <b>Atajo PAA para reactivos de suma y producto:</b> Si te dan $a+b$ y te piden $a^2+b^2$, siempre eleva al cuadrado ambos lados de la ecuación original.
+                </p>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 3! →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Práctica 3 Inmediata (Reto PAA) -->
+    <div class="slide" id="slide-6">
+        <div class="card">
+            <span class="badge-quiz">🎯 Reto Maestro PAA #3</span>
+            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
+                Si $a + b = 9$ y $ab = 14$, ¿cuál es el valor numérico de $a^2 + b^2$?
+            </h2>
+            <div class="space-y-2 max-w-md mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, false, 'p3', 'Error clásico: $81$ es $(a+b)^2$, pero eso incluye $+2ab$. Debes restar ese término central para obtener solo $a^2+b^2$.')">A) $81$</button>
+                <button class="option-btn" onclick="checkPractice(this, true, 'p3', '¡Brillante! Elevamos al cuadrado: $(a+b)^2 = 9^2 \\implies a^2 + 2ab + b^2 = 81$. Como $ab = 14$, entonces $2ab = 28$. Despejando: $a^2 + b^2 = 81 - 28 = 53$.')">B) $53$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p3', 'Cuidado con la resta: $81 - 2(14) = 81 - 28 = 53$.')">C) $67$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p3', 'No restes solo $ab$: la fórmula del binomio al cuadrado contiene $2ab$, debes restar el doble.')">D) $39$</button>
+            </div>
+            <div id="feedback-p3" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
+            <div class="mt-5 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Repasar Binomios</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Resumen Mental →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Resumen Mental -->
+    <div class="slide" id="slide-7">
+        <div class="card">
+            <span class="badge-alg">Cheat Sheet Resumen</span>
+            <h2 class="text-2xl font-bold mb-3 text-cyan-400">Tu Brújula de Factorización 🧭</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center my-3 text-xs sm:text-sm">
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">2 Términos con (−)</div>
+                    <div class="text-slate-300 mt-1">$a^2 - b^2$</div>
+                    <div class="text-emerald-400 font-semibold text-xs mt-1">$(a+b)(a-b)$</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">3 Términos</div>
+                    <div class="text-slate-300 mt-1">$x^2 + bx + c$</div>
+                    <div class="text-emerald-400 font-semibold text-xs mt-1">Multiplicados $c$, sumados $b$</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">Binomio al Cuadrado</div>
+                    <div class="text-slate-300 mt-1">$(a \pm b)^2$</div>
+                    <div class="text-emerald-400 font-semibold text-xs mt-1">$a^2 \pm 2ab + b^2$</div>
+                </div>
+            </div>
+            <div class="box-highlight text-center text-sm text-slate-300">
+                🎉 <b>¡Completaste el módulo!</b> Estás listo para resolver reactivos de simplificación y productos notables en la prueba.
+            </div>
+            <div class="mt-5 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        }
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente acierto!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ ¡Ojo con ese paso!</b><br/>${explanation}`;
+            }
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([fb]);
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>

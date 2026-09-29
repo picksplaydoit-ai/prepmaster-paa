@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Maestro: Ecuaciones Cuadráticas PAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
+        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .card { background: #0c1428; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 240, 255, 0.12); max-width: 820px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
+        .badge-alg { background: #38bdf8; color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge-quiz { background: #f59e0b; color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-nav:hover { background: #334155; }
+        .btn-primary-action { background: linear-gradient(135deg, #00f0ff, #0077ff); color: #020617; font-weight: 800; border: none; }
+        .btn-primary-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 12px 16px; border: 2px solid rgba(56, 189, 248, 0.2); border-radius: 12px; margin-bottom: 8px; font-weight: 600; transition: all 0.2s ease; background: #080d1a; color: #e2e8f0; font-size: 0.9rem; }
+        .option-btn:hover { border-color: #00f0ff; background: #0f1b36; }
+        .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
+        .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
+        .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #00f0ff, #0077ff); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #00f0ff; }
+        .box-highlight { background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
+        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 0: Portada -->
+    <div class="slide active" id="slide-0">
+        <div class="card text-center">
+            <span class="badge-alg">Álgebra Estratégica PAA</span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Ecuaciones Cuadráticas 🔲</h1>
+            <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
+                Olvídate de la fórmula general larga ("la chicharronera"). En la PAA el 95% de las ecuaciones de 2do grado se resuelven en <b>15 segundos</b> con 2 atajos infalibles.
+            </p>
+            <button class="btn-nav btn-primary-action px-9 py-3 text-base" onclick="nextSlide()">¡Aprender los Atajos! →</button>
+        </div>
+    </div>
+
+    <!-- Slide 1: Concepto 1 - Despeje Directo y Trampa de las 2 Soluciones -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <span class="badge-alg">Atajo Maestro #1</span>
+            <h2 class="text-2xl font-bold mb-2 text-cyan-400">Despeje Directo (Ecuaciones Puras) ⚡</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>Ocurre cuando <b>no hay término con $x$ simple</b> ($ax^2 - c = 0$). Solo despeja $x^2$ y saca raíz cuadrada.</p>
+                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
+                    <span class="text-lg sm:text-xl font-bold text-cyan-300">Si $x^2 = k \implies \mathbf{x = \pm \sqrt{k}}$</span>
+                </div>
+                <div class="box-warning">
+                    🚨 <b>La Trampa Clásica de la PAA:</b> ¡Toda raíz cuadrada en una ecuación tiene <b>DOS</b> soluciones (una positiva y una negativa)!<br/>
+                    Ejemplo: $x^2 = 25 \implies x = +5 \quad \text{y} \quad x = -5$.<br/>
+                    Si en las opciones marcas solo $+5$, ¡te costará puntos!
+                </div>
+                <div class="box-highlight">
+                    💡 <b>Pregunta típica del examen:</b> <i>"¿Cuál es el producto de las soluciones de $x^2 - 16 = 0$?"</i><br/>
+                    Las soluciones son $+4$ y $-4$. Su producto es $(4)(-4) = \mathbf{-16}$.
+                </div>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 1! →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Práctica 1 Inmediata -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <span class="badge-quiz">🎯 Práctica Inmediata #1</span>
+            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
+                ¿Cuáles son todos los valores reales de $x$ que satisfacen $2x^2 - 72 = 0$?
+            </h2>
+            <div class="space-y-2 max-w-md mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'Cuidado con olvidar el signo negativo: $(-6)^2 = 36$, por lo que $-6$ también satisface la ecuación.')">A) Solo $x = 6$</button>
+                <button class="option-btn" onclick="checkPractice(this, true, 'p1', '¡Exacto! Despejas: $2x^2 = 72 \\implies x^2 = 36 \\implies x = \\pm \\sqrt{36} = \\pm 6$. Ambas soluciones ($6$ y $-6$) son correctas.')">B) $x = 6$ y $x = -6$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'Revisa el despeje: no olvides dividir primero entre $2$ antes de sacar raíz cuadrada ($72 \\div 2 = 36$).')">C) $x = 12$ y $x = -12$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p1', 'Cuidado: $36$ es $x^2$, pero la incógnita a encontrar es $x$. Debes sacar la raíz cuadrada.')">D) $x = 36$</button>
+            </div>
+            <div id="feedback-p1" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
+            <div class="mt-5 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Repasar Despeje</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Producto Cero →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Concepto 2 - Principio del Producto Cero -->
+    <div class="slide" id="slide-3">
+        <div class="card">
+            <span class="badge-alg">Atajo Maestro #2</span>
+            <h2 class="text-2xl font-bold mb-2 text-cyan-400">El Principio del Producto Cero 🔄</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>Si la multiplicación de dos factores da cero, <b>al menos uno de ellos debe ser cero</b>:</p>
+                <div class="bg-slate-900/90 border border-sky-500/30 rounded-xl p-3 text-center my-2">
+                    <span class="text-base sm:text-lg font-bold text-sky-300">$(x - a)(x - b) = 0 \implies \mathbf{x = a} \quad \text{ó} \quad \mathbf{x = b}$</span>
+                </div>
+                <div class="box-highlight">
+                    🔑 <b>La Regla de Oro del Cambio de Signo:</b><br/>
+                    Las soluciones de la ecuación tienen el <b>signo OPUESTO</b> al número que ves dentro del paréntesis:
+                    <ul class="list-disc pl-5 mt-2 space-y-1 text-xs sm:text-sm">
+                        <li>Si ves $(x \mathbf{- 7}) = 0 \implies x = \mathbf{+7}$</li>
+                        <li>Si ves $(x \mathbf{+ 4}) = 0 \implies x = \mathbf{-4}$</li>
+                    </ul>
+                </div>
+                <p class="text-xs text-slate-400">
+                    ⚠️ <b>¡No multipliques!</b> Si en la PAA te dan la ecuación ya factorizada, jamás hagas la multiplicación distributiva; estás a un segundo de la respuesta cambiando los signos.
+                </p>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 2! →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Práctica 2 Inmediata -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <span class="badge-quiz">🎯 Práctica Inmediata #2</span>
+            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
+                ¿Cuáles son las soluciones o raíces de la ecuación cuadrática $x^2 - 8x + 12 = 0$?
+            </h2>
+            <div class="space-y-2 max-w-md mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, false, 'p2', 'Cuidado con los signos: factorizaste $(x-6)(x-2)=0$, por lo que las soluciones al igualar a cero cambian de signo a $+6$ y $+2$.')">A) $x = -6$ y $x = -2$</button>
+                <button class="option-btn" onclick="checkPractice(this, true, 'p2', '¡Excelente! Factorizamos buscando dos números que multiplicados den $+12$ y sumados $-8$: son $-6$ y $-2$. La ecuación queda $(x - 6)(x - 2) = 0$. Al despejar: $x = 6$ y $x = 2$.')">B) $x = 6$ y $x = 2$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p2', 'Revisa la suma: si fueran $12$ y $1$, la suma daría $13$, no $8$.')">C) $x = 12$ y $x = 1$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p2', 'Si multiplicas $-4$ por $-3$ daría $+12$, pero su suma es $-7$, no $-8$.')">D) $x = 4$ y $x = 3$</button>
+            </div>
+            <div id="feedback-p2" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
+            <div class="mt-5 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Repasar Producto Cero</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Sustitución de Raíz →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Concepto 3 - Sustitución de Raíz y Discriminante -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <span class="badge-alg">Atajo Maestro #3</span>
+            <h2 class="text-2xl font-bold mb-2 text-cyan-400">Sustitución Directa y Discriminante 🎯</h2>
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-sky-500/30">
+                    <span class="font-bold text-sky-300">Si te dan una de las soluciones ($x = k$):</span><br/>
+                    ¡No factorices ni uses fórmulas! Simplemente <b>sustituye el valor dado en la ecuación</b> para despejar la incógnita que te piden.<br/>
+                    <i>"Si $x=3$ es solución de $x^2 - 5x + c = 0$, entonces $(3)^2 - 5(3) + c = 0 \implies 9 - 15 + c = 0 \implies c = 6$."</i>
+                </div>
+                <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700">
+                    <span class="font-bold text-emerald-400">Discriminante ($b^2 - 4ac$): ¿Cuántas soluciones tiene?</span>
+                    <ul class="list-disc pl-5 mt-1 text-xs space-y-1">
+                        <li><b>Positivo ($>0$):</b> 2 soluciones reales distintas (cruza el eje $x$ dos veces).</li>
+                        <li><b>Cero ($=0$):</b> 1 solución real única (su vértice toca el eje $x$).</li>
+                        <li><b>Negativo ($<0$):</b> No tiene soluciones reales (la parábola flota y no toca el eje $x$).</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">¡Pruébalo en la Práctica 3! →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Práctica 3 Inmediata (Reto PAA) -->
+    <div class="slide" id="slide-6">
+        <div class="card">
+            <span class="badge-quiz">🎯 Reto Maestro PAA #3</span>
+            <h2 class="text-lg sm:text-xl font-bold mb-3 text-white">
+                Si $x = 4$ es una solución de la ecuación cuadrática $x^2 - kx + 12 = 0$, ¿cuál es el valor de $k$?
+            </h2>
+            <div class="space-y-2 max-w-md mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'p3', '¡Brillante! Como $x = 4$ es solución, sustituimos $x = 4$: $(4)^2 - k(4) + 12 = 0 \\implies 16 - 4k + 12 = 0 \\implies 28 - 4k = 0 \\implies 4k = 28 \\implies k = 7$. (Nota: la otra solución es $x = 3$, y la suma $4+3 = 7$).')">A) $k = 7$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p3', 'Cuidado con los signos al despejar: $16 + 12 = 28$. Pasando $4k$ al otro lado queda $4k = 28$, resultando positivo.')">B) $k = -7$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p3', '$3$ es la otra solución de la ecuación, pero la pregunta pide el valor del coeficiente $k$, que es la suma de ambas soluciones.')">C) $k = 3$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'p3', 'Revisa el procedimiento sustituyendo $x=4$ en la ecuación.')">D) $k = 16$</button>
+            </div>
+            <div id="feedback-p3" class="hidden rounded-xl p-3 text-sm mt-3 border transition-all"></div>
+            <div class="mt-5 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Repasar Sustitución</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Resumen Mental →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Resumen Mental -->
+    <div class="slide" id="slide-7">
+        <div class="card">
+            <span class="badge-alg">Cheat Sheet Resumen</span>
+            <h2 class="text-2xl font-bold mb-3 text-cyan-400">Resumen Estratégico Cuadrático 🧭</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center my-3 text-xs sm:text-sm">
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">Sin término $x$</div>
+                    <div class="text-slate-300 mt-1">$ax^2 = c$</div>
+                    <div class="text-emerald-400 font-semibold text-xs mt-1">Despeje directo: $x = \pm \sqrt{k}$</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">Factorizada</div>
+                    <div class="text-slate-300 mt-1">$(x-a)(x+b)=0$</div>
+                    <div class="text-emerald-400 font-semibold text-xs mt-1">Cambia signos: $x = +a, -b$</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">Te dan una raíz</div>
+                    <div class="text-slate-300 mt-1">$x = valor$</div>
+                    <div class="text-emerald-400 font-semibold text-xs mt-1">Sustituye directamente en la ec.</div>
+                </div>
+            </div>
+            <div class="box-highlight text-center text-sm text-slate-300">
+                🎉 <b>¡Módulo completado con éxito!</b> Ya dominas las preguntas de segundo grado sin perder tiempo en fórmulas infinitas.
+            </div>
+            <div class="mt-5 flex justify-between">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-indicator" id="progress"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        }
+
+        function checkPractice(btn, isCorrect, qId, explanation) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('option-correct', 'option-incorrect');
+            });
+            const fb = document.getElementById(`feedback-${qId}`);
+            if (isCorrect) {
+                btn.classList.add('option-correct');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
+                fb.innerHTML = `<b>🎉 ¡Excelente acierto!</b><br/>${explanation}`;
+            } else {
+                btn.classList.add('option-incorrect');
+                fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
+                fb.innerHTML = `<b>⚠️ ¡Ojo con ese paso!</b><br/>${explanation}`;
+            }
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([fb]);
+            }
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToStart() { currentSlide = 0; updateUI(); }
+        updateUI();
+    </script>
+</body>
+</html>
