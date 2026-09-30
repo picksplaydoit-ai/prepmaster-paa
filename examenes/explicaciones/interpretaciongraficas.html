@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manual Maestro: Interpretación de Gráficas PAA</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         window.MathJax = {
             tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
@@ -16,7 +17,7 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
         .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 860px; width: 100%; padding: 2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
         .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
         .btn-nav:hover { background: #334155; }
@@ -27,237 +28,327 @@
         .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
         .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
         .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
-        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
-        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
-        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 12px; margin: 8px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 12px; margin: 8px 0; }
+        .gfx-card { background: #070d1d; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px; padding: 14px; margin: 10px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .pictograma-row { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 480px; padding: 6px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .pic-label { font-size: 13px; font-weight: 700; color: #38bdf8; min-width: 110px; }
+        .pic-icons { display: flex; gap: 8px; flex-wrap: wrap; color: #38bdf8; font-size: 18px; }
     </style>
 </head>
 <body>
 
-    
     <!-- Slide 0: Portada -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
             <span class="badge" style="background:#38bdf8;">Estadística y Gráficas PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Interpretación de Gráficas y Diagramas 📊</h2>
-            
-        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
-            Aprende a leer diagramas de barras, gráficos circulares (sectores), diagramas de dispersión, líneas de tendencia y gráficos de caja sin perder tiempo calculando de más.
-        </p>
-        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🥧 Sectores y Grados</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">📈 Dispersión y Tendencia</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">⚡ Lectura Rápida</div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Interpretación de Gráficas y Datos Visuales 📊</h2>
+            <p class="text-sm sm:text-base text-slate-300 mb-5 max-w-lg mx-auto leading-relaxed">
+                El examen PAA evalúa fuertemente tu capacidad de extraer información de <b>pictogramas, barras, líneas temporales, sectores circulares y diagramas de dispersión</b>.
+            </p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-slate-300 max-w-xl mx-auto mb-5">
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/20">🐕 Pictogramas</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/20">📊 Barras</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/20">📈 Líneas y Rango</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/20">🥧 Sectores (Pastel)</div>
+            </div>
+            <div class="mt-4 flex justify-between items-center gap-2">
                 <div></div>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Interpretación de Gráficas →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Guía Visual →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 1: Concepto 1 -->
-    <div class="slide " id="slide-1">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Gráficos Circulares (Pastel): Porcentaje vs Grados 🥧</h2>
+    <!-- Slide 1: Pictogramas -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <span class="badge" style="background:#38bdf8;">Módulo Gráfico #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-2 text-cyan-400">1. Pictogramas y Escala de Símbolos 🐶</h2>
+            <p class="text-xs sm:text-sm text-slate-300 mb-3">En un pictograma, cada figura representa un <b>lote de unidades</b> definido en la leyenda. <b>Regla de oro:</b> ¡Nunca cuentes 1 a 1 sin antes revisar la escala!</p>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <p>La PAA suele pedir convertir entre <b>porcentaje</b> y <b>grados del círculo</b>:</p>
-            <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
-                <span class="text-xl font-bold text-cyan-300">$$100\% = 360^\circ \implies 1\% = 3.6^\circ$$</span>
+            <div class="gfx-card">
+                <div class="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Mascotas Atendidas por Zona en Veterinaria Municipal</div>
+                <div class="pictograma-row">
+                    <span class="pic-label">Zona Norte</span>
+                    <div class="pic-icons"><i class="fa-solid fa-dog"></i><i class="fa-solid fa-dog"></i><i class="fa-solid fa-dog"></i><i class="fa-solid fa-dog"></i></div>
+                </div>
+                <div class="pictograma-row">
+                    <span class="pic-label">Zona Sur</span>
+                    <div class="pic-icons"><i class="fa-solid fa-dog"></i><i class="fa-solid fa-dog"></i><i class="fa-solid fa-dog"></i><i class="fa-solid fa-dog"></i><i class="fa-solid fa-dog"></i><i class="fa-solid fa-dog"></i></div>
+                </div>
+                <div class="pictograma-row">
+                    <span class="pic-label">Zona Centro</span>
+                    <div class="pic-icons"><i class="fa-solid fa-dog"></i><i class="fa-solid fa-dog"></i></div>
+                </div>
+                <div class="mt-3 bg-amber-500/10 border border-amber-500/30 rounded-lg px-4 py-1.5 text-xs font-bold text-amber-300">
+                    🔑 Leyenda: Cada <i class="fa-solid fa-dog text-amber-400"></i> = 100 Mascotas
+                </div>
             </div>
+
             <div class="box-highlight text-xs">
-                Puntos de referencia clave:<br/>
-                $25\% = 90^\circ$ (un cuadrante recto).<br/>
-                $50\% = 180^\circ$ (un semicírculo).<br/>
-                Para convertir un ángulo en porcentaje: $\% = \frac{\text{Ángulo}}{360} \times 100$.
+                <b>Cálculo Rápido:</b> Zona Norte = $4 \times 100 = 400$. Zona Sur = $6 \times 100 = 600$. Zona Centro = $2 \times 100 = 200$.<br/>
+                <b>Total de mascotas atendidas:</b> $400 + 600 + 200 = \mathbf{1,200 \text{ mascotas}}$.
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+
+            <div class="mt-4 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Práctica de Pictogramas →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 2: Ejemplo Resuelto 1 -->
-    <div class="slide " id="slide-2">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: De Grados a Cantidades Reales 🔍</h2>
-            
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">En una encuesta a 1,200 personas representada en un gráfico circular, el sector de "Deporte Favorito: Fútbol" tiene un ángulo central de $108^\circ$. ¿Cuántas personas eligieron fútbol?</p>
+    <!-- Slide 2: Práctica Pictograma -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <span class="badge" style="background:#f59e0b;">Práctica Interactiva</span>
+            <h2 class="text-xl font-bold mb-3 text-cyan-400">Reto: Diferencia en Pictogramas 🎯</h2>
+            <p class="text-slate-300 text-sm mb-3">Con base en el pictograma anterior, ¿cuántas mascotas <b>MÁS</b> se atendieron en la <b>Zona Sur</b> que en la <b>Zona Norte</b>?</p>
+            <div class="space-y-2 max-w-lg mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, false, 'pic1', '2 perros es la diferencia en símbolos, pero cada símbolo vale 100.')">A) 2 mascotas</button>
+                <button class="option-btn" onclick="checkPractice(this, true, 'pic1', '¡Correcto! Zona Sur = 600, Zona Norte = 400. Diferencia: 600 - 400 = 200 mascotas (o 2 símbolos × 100 = 200).')">B) 200 mascotas</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'pic1', '600 es el total de la Zona Sur, no la diferencia.')">C) 600 mascotas</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'pic1', 'Revisa la resta 600 - 400.')">D) 400 mascotas</button>
             </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. Fracción del círculo = $\frac{108^\circ}{360^\circ} = \frac{12 \times 9}{12 \times 30} = \frac{9}{30} = \frac{3}{10} = 30\%$.<br/>
-                    2. Personas = $\frac{3}{10} \times 1,200 = 3 \times 120 = \mathbf{360 \text{ personas}}$.
-                </div>
-            </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            <div id="feedback-pic1" class="hidden"></div>
+            <div class="mt-4 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">2. Gráficas de Barras →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 3: Práctica 1 -->
-    <div class="slide " id="slide-3">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el ángulo del sector? 🎯</h2>
+    <!-- Slide 3: Barras -->
+    <div class="slide" id="slide-3">
+        <div class="card">
+            <span class="badge" style="background:#38bdf8;">Módulo Gráfico #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-2 text-cyan-400">2. Gráficas de Barras: Comparación y Modas 📊</h2>
+            <p class="text-xs sm:text-sm text-slate-300 mb-2">Permiten comparar frecuencias o magnitudes discretas. Identifica de inmediato el eje de valores y las alturas de cada columna.</p>
             
-        <p class="text-slate-300 text-sm mb-3">En una escuela con 800 estudiantes, 280 pertenecen al taller de robótica. Si se representa en un gráfico circular, ¿cuál será la medida del ángulo central del sector de robótica?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'gr1', '¡Correcto! Proporción: 280 / 800 = 28/80 = 7/20 = 35%. Ángulo: 0.35 * 360° = 126°.')">A) $126^circ$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'gr1', '35° sería el porcentaje directo sin multiplicar por 3.6°.')">B) $35^circ$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'gr1', 'Cálculo erróneo.')">C) $108^circ$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'gr1', 'Revisa la multiplicación 0.35 * 360.')">D) $140^circ$</button>
-        </div>
-        <div id="feedback-gr1" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Diagramas de Dispersión y Tendencias →</button>
-            </div>
-        </div>
-    </div>
-  
+            <div class="gfx-card">
+                <div class="text-xs font-bold text-slate-400 mb-1">Ventas Mensuales de Laptops (en miles de pesos)</div>
+                <svg width="100%" height="160" viewBox="0 0 380 160" style="max-width:440px;">
+                    <!-- Ejes -->
+                    <line x1="45" y1="20" x2="45" y2="130" stroke="#64748b" stroke-width="2"/>
+                    <line x1="45" y1="130" x2="360" y2="130" stroke="#64748b" stroke-width="2"/>
+                    <!-- Guías horizontales -->
+                    <line x1="45" y1="30" x2="360" y2="30" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3"/>
+                    <line x1="45" y1="63" x2="360" y2="63" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3"/>
+                    <line x1="45" y1="96" x2="360" y2="96" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3"/>
+                    <!-- Marcas eje Y -->
+                    <text x="35" y="34" fill="#94a3b8" font-size="10" text-anchor="end">60k</text>
+                    <text x="35" y="67" fill="#94a3b8" font-size="10" text-anchor="end">40k</text>
+                    <text x="35" y="100" fill="#94a3b8" font-size="10" text-anchor="end">20k</text>
+                    <text x="35" y="133" fill="#94a3b8" font-size="10" text-anchor="end">0</text>
+                    <!-- Barras -->
+                    <rect x="70" y="80" width="45" height="50" fill="#38bdf8" rx="4"/>
+                    <text x="92" y="74" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">30k</text>
+                    <text x="92" y="145" fill="#e2e8f0" font-size="11" text-anchor="middle">Ene</text>
 
-    <!-- Slide 4: Concepto 2 -->
-    <div class="slide " id="slide-4">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Diagramas de Dispersión y Correlación 📈</h2>
-            
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="grid grid-cols-3 gap-2 text-xs text-center">
-                <div class="bg-slate-900 p-2 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-emerald-400">Positiva ↗️</p>
-                    <p class="text-slate-300 mt-1">A mayor $x$, mayor $y$. Los puntos suben en nube inclinada.</p>
-                </div>
-                <div class="bg-slate-900 p-2 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-rose-400">Negativa ↘️</p>
-                    <p class="text-slate-300 mt-1">A mayor $x$, menor $y$. Los puntos descienden.</p>
-                </div>
-                <div class="bg-slate-900 p-2 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-cyan-300">Nula ⏺️</p>
-                    <p class="text-slate-300 mt-1">Nube dispersa sin orientación definida.</p>
-                </div>
+                    <rect x="140" y="47" width="45" height="83" fill="#818cf8" rx="4"/>
+                    <text x="162" y="41" fill="#818cf8" font-size="11" font-weight="bold" text-anchor="middle">50k</text>
+                    <text x="162" y="145" fill="#e2e8f0" font-size="11" text-anchor="middle">Feb</text>
+
+                    <rect x="210" y="96" width="45" height="34" fill="#34d399" rx="4"/>
+                    <text x="232" y="90" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">20k</text>
+                    <text x="232" y="145" fill="#e2e8f0" font-size="11" text-anchor="middle">Mar</text>
+
+                    <rect x="280" y="30" width="45" height="100" fill="#fbbf24" rx="4"/>
+                    <text x="302" y="24" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="middle">60k</text>
+                    <text x="302" y="145" fill="#e2e8f0" font-size="11" text-anchor="middle">Abr</text>
+                </svg>
             </div>
+
             <div class="box-highlight text-xs">
-                💡 <b>Línea de Mejor Ajuste:</b> Pasa por el "centro de gravedad" de los puntos; aproximadamente la misma cantidad de puntos queda por arriba y por abajo de la recta.
+                <b>Moda (Mayor venta):</b> Abril ($60,000$).<br/>
+                <b>Promedio cuatrimestral:</b> $\frac{30 + 50 + 20 + 60}{4} = \frac{160}{4} = \mathbf{40 \text{ mil pesos}}$.
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+
+            <div class="mt-4 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">3. Gráficas de Líneas y Rango →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 5: Ejemplo Resuelto 2 -->
-    <div class="slide " id="slide-5">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Lectura de Tendencia Lineal 🔍</h2>
+    <!-- Slide 4: Líneas y Rango -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <span class="badge" style="background:#38bdf8;">Módulo Gráfico #3</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-2 text-cyan-400">3. Gráficas de Líneas y Rango Estadístico 📈</h2>
+            <p class="text-xs sm:text-sm text-slate-300 mb-2">Muestran la evolución temporal continua. El <b>Rango</b> es la diferencia directa: $\text{Rango} = \text{Valor Máximo} - \text{Valor Mínimo}$.</p>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">En un diagrama de dispersión que compara horas de estudio ($x$) con calificación ($y$), la recta de ajuste es $y = 5.5x + 35$. Si un estudiante estudió 8 horas, ¿qué calificación predice el modelo?</p>
+            <div class="gfx-card">
+                <div class="text-xs font-bold text-slate-400 mb-1">Temperatura a lo Largo del Día (°C)</div>
+                <svg width="100%" height="160" viewBox="0 0 380 160" style="max-width:440px;">
+                    <!-- Ejes -->
+                    <line x1="40" y1="20" x2="40" y2="130" stroke="#64748b" stroke-width="2"/>
+                    <line x1="40" y1="130" x2="360" y2="130" stroke="#64748b" stroke-width="2"/>
+                    <!-- Guías -->
+                    <line x1="40" y1="35" x2="360" y2="35" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3"/>
+                    <line x1="40" y1="75" x2="360" y2="75" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3"/>
+                    <line x1="40" y1="115" x2="360" y2="115" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3"/>
+                    <!-- Marcas Y -->
+                    <text x="32" y="39" fill="#94a3b8" font-size="10" text-anchor="end">30°</text>
+                    <text x="32" y="79" fill="#94a3b8" font-size="10" text-anchor="end">20°</text>
+                    <text x="32" y="119" fill="#94a3b8" font-size="10" text-anchor="end">10°</text>
+                    <!-- Línea de datos -->
+                    <polyline points="70,115 130,85 190,40 250,55 310,105" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <!-- Puntos -->
+                    <circle cx="70" cy="115" r="4" fill="#38bdf8"/>
+                    <text x="70" y="105" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">10°</text>
+                    <text x="70" y="145" fill="#e2e8f0" font-size="10" text-anchor="middle">6h</text>
+
+                    <circle cx="130" cy="85" r="4" fill="#38bdf8"/>
+                    <text x="130" y="75" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">18°</text>
+                    <text x="130" y="145" fill="#e2e8f0" font-size="10" text-anchor="middle">10h</text>
+
+                    <circle cx="190" cy="40" r="5" fill="#f43f5e"/>
+                    <text x="190" y="30" fill="#f43f5e" font-size="10" font-weight="bold" text-anchor="middle">Máx 28°</text>
+                    <text x="190" y="145" fill="#e2e8f0" font-size="10" text-anchor="middle">14h</text>
+
+                    <circle cx="250" cy="55" r="4" fill="#38bdf8"/>
+                    <text x="250" y="47" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">24°</text>
+                    <text x="250" y="145" fill="#e2e8f0" font-size="10" text-anchor="middle">18h</text>
+
+                    <circle cx="310" cy="105" r="4" fill="#38bdf8"/>
+                    <text x="310" y="97" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">13°</text>
+                    <text x="310" y="145" fill="#e2e8f0" font-size="10" text-anchor="middle">22h</text>
+                </svg>
             </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. Sustituimos $x = 8$ en la ecuación de la recta de ajuste:<br/>
-                    $y = 5.5(8) + 35$<br/>
-                    2. $5.5 \times 8 = 44$<br/>
-                    3. $y = 44 + 35 = \mathbf{79 \text{ puntos}}$.
+
+            <div class="box-highlight text-xs">
+                <b>Cálculo del Rango:</b> $\text{Rango} = \text{Máximo}(28^circ) - \text{Mínimo}(10^circ) = \mathbf{18^circ \text{ C}}$.
+            </div>
+
+            <div class="mt-4 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">4. Gráficas Circulares (Pastel) →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Sectores Circulares -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <span class="badge" style="background:#38bdf8;">Módulo Gráfico #4</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-2 text-cyan-400">4. Gráficos Circulares (Pastel): Grados vs Porcentajes 🥧</h2>
+            <p class="text-xs sm:text-sm text-slate-300 mb-2">Un círculo completo representa $100\%$ o $360^\circ$. Factor de conversión universal: $1\% = 3.6^\circ$.</p>
+            
+            <div class="gfx-card">
+                <div class="text-xs font-bold text-slate-400 mb-2">Preferencia Deportiva (Total: 1,200 estudiantes)</div>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <svg width="180" height="180" viewBox="0 0 200 200">
+                        <!-- Centro 100, 100, Radio 80 -->
+                        <!-- Fútbol: 108 deg (30%) de 0 a 108 -->
+                        <path d="M100,100 L180,100 A80,80 0 0,1 75.3,176.1 Z" fill="#38bdf8"/>
+                        <!-- Básquet: 90 deg (25%) de 108 a 198 -->
+                        <path d="M100,100 L75.3,176.1 A80,80 0 0,1 23.9,75.3 Z" fill="#818cf8"/>
+                        <!-- Vóley: 72 deg (20%) de 198 a 270 -->
+                        <path d="M100,100 L23.9,75.3 A80,80 0 0,1 100,20 Z" fill="#34d399"/>
+                        <!-- Otros: 90 deg (25%) de 270 a 360 -->
+                        <path d="M100,100 L100,20 A80,80 0 0,1 180,100 Z" fill="#fbbf24"/>
+                        <!-- Círculo interior para dona -->
+                        <circle cx="100" cy="100" r="38" fill="#070d1d"/>
+                        <text x="100" y="104" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">360°</text>
+                    </svg>
+                    <div class="text-xs space-y-1.5">
+                        <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#38bdf8]"></span><span class="font-bold text-white">Fútbol:</span> 108° (30%) → <b>360 alumnos</b></div>
+                        <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#818cf8]"></span><span class="font-bold text-white">Básquet:</span> 90° (25%) → <b>300 alumnos</b></div>
+                        <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#34d399]"></span><span class="font-bold text-white">Vóleibol:</span> 72° (20%) → <b>240 alumnos</b></div>
+                        <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#fbbf24]"></span><span class="font-bold text-white">Otros:</span> 90° (25%) → <b>300 alumnos</b></div>
+                    </div>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+
+            <div class="box-highlight text-xs">
+                <b>Fórmula de Conversión Rápida PAA:</b><br/>
+                $\text{Ángulo} = \frac{\text{Parte}}{\text{Total}} \times 360^\circ \quad \Longleftrightarrow \quad \text{Personas} = \frac{\text{Ángulo}}{360^\circ} \times \text{Total}$
+            </div>
+
+            <div class="mt-4 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">5. Diagramas de Dispersión →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 6: Práctica 2 -->
-    <div class="slide " id="slide-6">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Qué afirmación es consistente con la gráfica? 🎯</h2>
+    <!-- Slide 6: Dispersión y Correlación -->
+    <div class="slide" id="slide-6">
+        <div class="card">
+            <span class="badge" style="background:#38bdf8;">Módulo Gráfico #5</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-2 text-cyan-400">5. Diagramas de Dispersión y Línea de Ajuste 📈</h2>
+            <p class="text-xs sm:text-sm text-slate-300 mb-2">Evalúan la relación entre dos variables numéricas ($x$ e $y$) y la recta de mejor ajuste.</p>
             
-        <p class="text-slate-300 text-sm mb-3">La gráfica de dispersión entre la altitud de una ciudad en metros ($x$) y la temperatura promedio anual ($y$) muestra una clara correlación negativa. Esto significa que:</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'gr2', '¡Correcto! Correlación negativa significa que al aumentar una variable (altitud), la otra disminuye (temperatura).')">A) A mayor altitud sobre el nivel del mar, menor tiende a ser la temperatura promedio.</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'gr2', 'Esa sería una correlación positiva, no negativa.')">B) A mayor altitud sobre el nivel del mar, mayor es la temperatura promedio.</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'gr2', 'Eso correspondería a correlación nula.')">C) La altitud no tiene ninguna relación con la temperatura de la ciudad.</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'gr2', 'Afirmación no sustentada.')">D) Todas las ciudades a la misma altitud tienen exactamente el mismo clima.</button>
-        </div>
-        <div id="feedback-gr2" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            <div class="gfx-card">
+                <div class="text-xs font-bold text-slate-400 mb-1">Horas de Estudio vs Calificación Obtenida</div>
+                <svg width="100%" height="150" viewBox="0 0 360 150" style="max-width:420px;">
+                    <!-- Ejes -->
+                    <line x1="40" y1="15" x2="40" y2="125" stroke="#64748b" stroke-width="2"/>
+                    <line x1="40" y1="125" x2="340" y2="125" stroke="#64748b" stroke-width="2"/>
+                    <!-- Etiquetas ejes -->
+                    <text x="340" y="140" fill="#94a3b8" font-size="10" text-anchor="end">Horas de estudio (x) →</text>
+                    <text x="35" y="18" fill="#94a3b8" font-size="10" text-anchor="end">Puntaje (y)</text>
+                    <!-- Nube de puntos -->
+                    <circle cx="70" cy="105" r="3.5" fill="#38bdf8"/>
+                    <circle cx="95" cy="98" r="3.5" fill="#38bdf8"/>
+                    <circle cx="120" cy="88" r="3.5" fill="#38bdf8"/>
+                    <circle cx="150" cy="78" r="3.5" fill="#38bdf8"/>
+                    <circle cx="180" cy="65" r="3.5" fill="#38bdf8"/>
+                    <circle cx="210" cy="58" r="3.5" fill="#38bdf8"/>
+                    <circle cx="240" cy="45" r="3.5" fill="#38bdf8"/>
+                    <circle cx="270" cy="38" r="3.5" fill="#38bdf8"/>
+                    <circle cx="300" cy="28" r="3.5" fill="#38bdf8"/>
+                    <!-- Punto atípico (outlier) -->
+                    <circle cx="130" cy="35" r="4.5" fill="#f43f5e"/>
+                    <text x="135" y="28" fill="#f43f5e" font-size="9" font-weight="bold">Outlier</text>
+                    <!-- Línea de mejor ajuste -->
+                    <line x1="50" y1="115" x2="320" y2="22" stroke="#34d399" stroke-width="2.5" stroke-dasharray="4"/>
+                </svg>
+            </div>
+
+            <div class="box-highlight text-xs">
+                <b>Correlación Positiva Fuerte:</b> Al aumentar las horas de estudio ($x$), la calificación ($y$) tiende a subir de manera lineal. La línea verde punteada permite predecir valores interpolados con precisión.
+            </div>
+
+            <div class="mt-4 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen y Machete Final →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 7: Resumen -->
-    <div class="slide " id="slide-7">
+    <!-- Slide 7: Resumen Final -->
+    <div class="slide" id="slide-7">
         <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Interpretación de Gráficas 📋</h2>
-            
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Círculo = $360^circ$</div>
-                <div class="text-slate-300 mt-1">Multiplica el porcentaje decimal por 360 para obtener el ángulo: $0.25 \times 360 = 90^\circ$.</div>
+            <span class="badge" style="background:#10b981;">Resumen Maestro</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete Rápido de Gráficas PAA 📋</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">🐕 Pictogramas</div>
+                    <div class="text-slate-300 mt-1">Busca siempre la escala en la leyenda antes de contar figuras.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">📊 Barras</div>
+                    <div class="text-slate-300 mt-1">Compara alturas relativas y suma totales para promedios y modas.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">📈 Rango = Máx - Mín</div>
+                    <div class="text-slate-300 mt-1">Resta el pico más alto del valle más bajo en las gráficas de líneas.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">🥧 Pastel = 360°</div>
+                    <div class="text-slate-300 mt-1">Recuerda: 25% = 90°, 50% = 180°, 10% = 36°. Factor: % × 3.6 = Grados.</div>
+                </div>
             </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Ejes y Escala</div>
-                <div class="text-slate-300 mt-1">Verifica si el eje empieza en cero o si está truncado para no engañarte visualmente.</div>
+            <div class="box-highlight text-xs text-slate-300">
+                🎉 <b>¡Módulo completado con éxito!</b> Ahora dominas la interpretación visual de datos para la PAA.
             </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Línea de Tendencia</div>
-                <div class="text-slate-300 mt-1">Representa el comportamiento promedio global, no cada punto aislado.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Puntos Atípicos (Outliers)</div>
-                <div class="text-slate-300 mt-1">Puntos alejados de la nube no invalidan la correlación general del modelo.</div>
-            </div>
-        </div>
-        <div class="box-highlight text-xs text-slate-300">
-            🎉 <b>¡Módulo completado!</b> La lectura de gráficos y diagramas ya es un puntaje seguro.
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            <div class="mt-4 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
                 <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
-  
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -285,11 +376,11 @@
             if (isCorrect) {
                 btn.classList.add('option-correct');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
-                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
+                fb.innerHTML = `<b>🎉 ¡Excelente acierto!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
-                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+                fb.innerHTML = `<b>⚠️ Ojo con el dato:</b><br/>${explanation}`;
             }
             if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise([fb]);

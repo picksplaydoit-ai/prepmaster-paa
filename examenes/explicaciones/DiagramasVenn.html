@@ -16,7 +16,7 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
         .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
+        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 860px; width: 100%; padding: 2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
         .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
         .btn-nav:hover { background: #334155; }
@@ -27,228 +27,303 @@
         .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
         .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
         .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
-        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
-        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
-        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 12px; margin: 8px 0; }
+        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 12px; margin: 8px 0; }
+        .gfx-card { background: #070d1d; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px; padding: 14px; margin: 10px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
 
-    
     <!-- Slide 0: Portada -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
             <span class="badge" style="background:#38bdf8;">Conjuntos y Probabilidad PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Diagramas de Venn y Conjuntos ⭕</h2>
-            
-        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
-            Aprende a resolver problemas de dos y tres conjuntos sin doble conteo mediante el principio de inclusión-exclusión: $n(A \cup B) = n(A) + n(B) - n(A \cap B)$.
-        </p>
-        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🎯 Intersección Central</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🚫 Cero Doble Conteo</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">👥 Solo A / Solo B</div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Diagramas de Venn y Teoría de Conjuntos ⭕⭕</h2>
+            <p class="text-sm sm:text-base text-slate-300 mb-5 max-w-lg mx-auto leading-relaxed">
+                Aprende a organizar datos de grupos sin cometer doble conteo. Domina la intersección central, la unión de conjuntos y los problemas de 2 y 3 categorías evaluados en la PAA.
+            </p>
+            <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-5">
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/20">🎯 Intersección Central</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/20">👥 Solo A / Solo B</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/20">⭕ 3 Conjuntos (A, B, C)</div>
+            </div>
+            <div class="mt-4 flex justify-between items-center gap-2">
                 <div></div>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Diagramas de Venn →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Explicación Visual →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 1: Concepto 1 -->
-    <div class="slide " id="slide-1">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">El Principio de Inclusión-Exclusión: Empieza por el Centro 🎯</h2>
+    <!-- Slide 1: Concepto 1 - 2 Conjuntos -->
+    <div class="slide" id="slide-1">
+        <div class="card">
+            <span class="badge" style="background:#38bdf8;">Regla Visual #1</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-2 text-cyan-400">1. Anatomía del Diagrama de 2 Conjuntos 🎯</h2>
+            <p class="text-xs sm:text-sm text-slate-300 mb-2">Para no duplicar elementos, siempre debes empezar llenando la <b>intersección central</b> ($A \cap B$).</p>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <p>El error más común es sumar los totales de cada grupo directamente. La fórmula de unión es:</p>
-            <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
-                <span class="text-xl font-bold text-cyan-300">$$n(A \cup B) = n(A) + n(B) - n(A \cap B)$$</span>
+            <div class="gfx-card">
+                <svg width="100%" height="160" viewBox="0 0 380 160" style="max-width:440px;">
+                    <!-- Universo U -->
+                    <rect x="15" y="10" width="350" height="140" rx="14" fill="#0f172a" stroke="#475569" stroke-width="1.5"/>
+                    <text x="30" y="32" fill="#94a3b8" font-size="12" font-weight="bold">Universo (U)</text>
+                    
+                    <!-- Círculo A -->
+                    <circle cx="140" cy="85" r="55" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2.5"/>
+                    <!-- Círculo B -->
+                    <circle cx="240" cy="85" r="55" fill="rgba(244, 63, 94, 0.2)" stroke="#f43f5e" stroke-width="2.5"/>
+                    
+                    <!-- Textos de conjuntos -->
+                    <text x="110" y="55" fill="#38bdf8" font-size="13" font-weight="bold">Conjunto A</text>
+                    <text x="270" y="55" fill="#f43f5e" font-size="13" font-weight="bold">Conjunto B</text>
+                    
+                    <!-- Regiones -->
+                    <text x="115" y="90" fill="#e2e8f0" font-size="11" font-weight="bold" text-anchor="middle">Solo A</text>
+                    <text x="115" y="104" fill="#94a3b8" font-size="9" text-anchor="middle">(A - B)</text>
+                    
+                    <text x="190" y="85" fill="#34d399" font-size="12" font-weight="bold" text-anchor="middle">Ambos</text>
+                    <text x="190" y="100" fill="#34d399" font-size="10" font-weight="bold" text-anchor="middle">A ∩ B</text>
+                    
+                    <text x="265" y="90" fill="#e2e8f0" font-size="11" font-weight="bold" text-anchor="middle">Solo B</text>
+                    <text x="265" y="104" fill="#94a3b8" font-size="9" text-anchor="middle">(B - A)</text>
+                    
+                    <text x="330" y="138" fill="#cbd5e1" font-size="10" text-anchor="end">Ninguno (A ∪ B)'</text>
+                </svg>
             </div>
+
             <div class="box-highlight text-xs">
-                <b>Regla de Oro del Llenado:</b> Siempre coloca primero la <b>intersección central</b> (los que tienen ambas cosas). Luego resta ese número central a cada círculo para obtener los que tienen <i>"solo A"</i> y <i>"solo B"</i>.
+                <b>Principio de Inclusión-Exclusión:</b><br/>
+                $n(A \cup B) = n(A) + n(B) - n(A \cap B) \quad \Longleftrightarrow \quad \text{Total} = \text{Solo A} + \text{Ambos} + \text{Solo B} + \text{Ninguno}$.
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+
+            <div class="mt-4 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ejemplo Resuelto Guiado →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 2: Ejemplo Resuelto 1 -->
-    <div class="slide " id="slide-2">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Encuesta con Dos Grupos 🔍</h2>
+    <!-- Slide 2: Ejemplo Guiado con Números -->
+    <div class="slide" id="slide-2">
+        <div class="card">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-2 text-cyan-400">Ejemplo Resuelto: Encuesta de Idiomas 🔍</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
             <div class="box-example text-xs">
                 <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">En un grupo de 50 alumnos, 32 estudian inglés, 24 estudian francés y 10 estudian ambos idiomas. ¿Cuántos alumnos NO estudian ninguno de los dos idiomas?</p>
+                <p class="text-slate-200">En un salón de 50 alumnos, 32 estudian inglés, 24 estudian francés y 10 estudian ambos idiomas. ¿Cuántos alumnos NO estudian ninguno de los dos idiomas?</p>
             </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. Intersección (ambos) = $10$.<br/>
-                    2. Solo inglés = $32 - 10 = 22$.<br/>
-                    3. Solo francés = $24 - 10 = 14$.<br/>
-                    4. Total que estudian al menos uno: $22 + 10 + 14 = 46$.<br/>
-                    (O bien por fórmula: $32 + 24 - 10 = 46$).<br/>
-                    5. Ninguno = Total general menos unión: $50 - 46 = \mathbf{4 \text{ alumnos}}$.
+
+            <div class="gfx-card">
+                <svg width="100%" height="150" viewBox="0 0 380 150" style="max-width:440px;">
+                    <rect x="15" y="8" width="350" height="134" rx="12" fill="#0f172a" stroke="#475569" stroke-width="1.5"/>
+                    <text x="30" y="28" fill="#94a3b8" font-size="11" font-weight="bold">Total = 50 alumnos</text>
+
+                    <!-- Círculo Inglés -->
+                    <circle cx="140" cy="78" r="50" fill="rgba(56, 189, 248, 0.25)" stroke="#38bdf8" stroke-width="2"/>
+                    <text x="100" y="40" fill="#38bdf8" font-size="11" font-weight="bold">Inglés (32)</text>
+
+                    <!-- Círculo Francés -->
+                    <circle cx="235" cy="78" r="50" fill="rgba(244, 63, 94, 0.25)" stroke="#f43f5e" stroke-width="2"/>
+                    <text x="275" y="40" fill="#f43f5e" font-size="11" font-weight="bold">Francés (24)</text>
+
+                    <!-- Números en regiones -->
+                    <text x="115" y="82" fill="#ffffff" font-size="16" font-weight="extrabold" text-anchor="middle">22</text>
+                    <text x="115" y="96" fill="#94a3b8" font-size="9" text-anchor="middle">(32 - 10)</text>
+
+                    <text x="187" y="82" fill="#34d399" font-size="18" font-weight="extrabold" text-anchor="middle">10</text>
+                    <text x="187" y="96" fill="#34d399" font-size="9" font-weight="bold" text-anchor="middle">Ambos</text>
+
+                    <text x="260" y="82" fill="#ffffff" font-size="16" font-weight="extrabold" text-anchor="middle">14</text>
+                    <text x="260" y="96" fill="#94a3b8" font-size="9" text-anchor="middle">(24 - 10)</text>
+
+                    <!-- Afuera -->
+                    <rect x="310" y="105" width="40" height="24" rx="6" fill="#e11d4820" stroke="#f43f5e" stroke-width="1"/>
+                    <text x="330" y="121" fill="#fb7185" font-size="13" font-weight="extrabold" text-anchor="middle">4</text>
+                    <text x="330" y="99" fill="#94a3b8" font-size="9" text-anchor="middle">Ninguno</text>
+                </svg>
+            </div>
+
+            <div class="box-highlight text-xs">
+                <b>Resolución en 3 Pasos:</b><br/>
+                1. Coloca primero la intersección central: $10$.<br/>
+                2. Resta a cada grupo: Solo Inglés = $32 - 10 = 22$. Solo Francés = $24 - 10 = 14$.<br/>
+                3. Total con idiomas = $22 + 10 + 14 = 46$. Ninguno = $50 - 46 = \mathbf{4 \text{ alumnos}}$.
+            </div>
+
+            <div class="mt-4 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Práctica de 2 Conjuntos →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Práctica 2 Conjuntos -->
+    <div class="slide" id="slide-3">
+        <div class="card">
+            <span class="badge" style="background:#f59e0b;">Práctica Interactiva</span>
+            <h2 class="text-xl font-bold mb-3 text-cyan-400">Reto: Lectores de Revistas 🎯</h2>
+            <p class="text-slate-300 text-sm mb-3">En un club de 80 personas, 45 leen la revista X, 35 leen la revista Y, y 15 leen ambas revistas. ¿Cuántas personas leen <b>SOLO UNA</b> de las dos revistas?</p>
+            <div class="space-y-2 max-w-lg mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'vn1', '¡Excelente! Solo X = 45 - 15 = 30. Solo Y = 35 - 15 = 20. Total solo una = 30 + 20 = 50 personas.')">A) 50 personas</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'vn1', '65 es el total que lee al menos una (incluyendo los 15 que leen ambas).')">B) 65 personas</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'vn1', 'Cálculo incompleto.')">C) 40 personas</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'vn1', 'No sumes 45 + 35 directamente sin restar la intersección.')">D) 80 personas</button>
+            </div>
+            <div id="feedback-vn1" class="hidden"></div>
+            <div class="mt-4 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">2. Diagramas de 3 Conjuntos →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Diagrama de 3 Conjuntos -->
+    <div class="slide" id="slide-4">
+        <div class="card">
+            <span class="badge" style="background:#38bdf8;">Módulo Gráfico #2</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-2 text-cyan-400">2. Diagramas de 3 Conjuntos (A, B y C) ⭕⭕⭕</h2>
+            <p class="text-xs sm:text-sm text-slate-300 mb-2">Un diagrama de tres conjuntos divide el universo en <b>8 regiones independientes</b>. El secreto para resolver cualquier problema es comenzar por el <b>centro absoluto ($A \cap B \cap C$)</b>.</p>
+            
+            <div class="gfx-card">
+                <svg width="100%" height="180" viewBox="0 0 380 180" style="max-width:440px;">
+                    <rect x="15" y="8" width="350" height="164" rx="14" fill="#0f172a" stroke="#475569" stroke-width="1.5"/>
+                    <text x="28" y="26" fill="#94a3b8" font-size="10" font-weight="bold">Universo (8 regiones)</text>
+
+                    <!-- Círculo A (Arriba) -->
+                    <circle cx="190" cy="70" r="48" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
+                    <text x="190" y="32" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">Conjunto A</text>
+
+                    <!-- Círculo B (Abajo Izq) -->
+                    <circle cx="150" cy="115" r="48" fill="rgba(244, 63, 94, 0.2)" stroke="#f43f5e" stroke-width="2"/>
+                    <text x="100" y="150" fill="#f43f5e" font-size="12" font-weight="bold">Conjunto B</text>
+
+                    <!-- Círculo C (Abajo Der) -->
+                    <circle cx="230" cy="115" r="48" fill="rgba(52, 211, 153, 0.2)" stroke="#34d399" stroke-width="2"/>
+                    <text x="280" y="150" fill="#34d399" font-size="12" font-weight="bold">Conjunto C</text>
+
+                    <!-- Regiones clave -->
+                    <text x="190" y="65" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">Solo A</text>
+                    <text x="135" y="125" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">Solo B</text>
+                    <text x="245" y="125" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">Solo C</text>
+
+                    <!-- Centro absoluto (los 3) -->
+                    <circle cx="190" cy="100" r="10" fill="#fbbf24" stroke="#d97706" stroke-width="1.5"/>
+                    <text x="190" y="103" fill="#020617" font-size="9" font-weight="extrabold" text-anchor="middle">ABC</text>
+                </svg>
+            </div>
+
+            <div class="box-highlight text-xs">
+                <b>Orden de Llenado Infalible de Adentro hacia Afuera:</b><br/>
+                1. Centro absoluto: los que tienen los tres ($A \cap B \cap C$).<br/>
+                2. Intersecciones dobles restando el centro: $(A \cap B) - \text{centro}$, $(A \cap C) - \text{centro}$, $(B \cap C) - \text{centro}$.<br/>
+                3. Solo $A$, Solo $B$, Solo $C$ restando todas las intersecciones de su círculo.<br/>
+                4. Los que no tienen ninguno (afuera de los 3 círculos).
+            </div>
+
+            <div class="mt-4 flex justify-between items-center gap-2">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">3. Operaciones Gráficas de Conjuntos →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Operaciones Gráficas de Conjuntos -->
+    <div class="slide" id="slide-5">
+        <div class="card">
+            <span class="badge" style="background:#38bdf8;">Módulo Gráfico #3</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-2 text-cyan-400">3. Las 4 Operaciones Fundamentales en Gráficos 🎨</h2>
+            <p class="text-xs sm:text-sm text-slate-300 mb-2">Reconoce visualmente la región que te piden en los reactivos de opción múltiple:</p>
+            
+            <div class="grid grid-cols-2 gap-2 my-2">
+                <!-- Unión A U B -->
+                <div class="bg-slate-900/90 border border-slate-700 rounded-xl p-2 text-center">
+                    <span class="font-bold text-cyan-300 text-xs">Unión: $A \cup B$ (TODO)</span>
+                    <svg width="100%" height="65" viewBox="0 0 160 65" class="mx-auto mt-1">
+                        <circle cx="60" cy="32" r="24" fill="#38bdf880" stroke="#38bdf8" stroke-width="2"/>
+                        <circle cx="100" cy="32" r="24" fill="#38bdf880" stroke="#38bdf8" stroke-width="2"/>
+                        <text x="45" y="36" fill="#fff" font-size="10" font-weight="bold">A</text>
+                        <text x="115" y="36" fill="#fff" font-size="10" font-weight="bold">B</text>
+                    </svg>
+                    <p class="text-[10px] text-slate-400 mt-1">Elementos que están en A, en B o en ambos.</p>
+                </div>
+
+                <!-- Intersección A ∩ B -->
+                <div class="bg-slate-900/90 border border-slate-700 rounded-xl p-2 text-center">
+                    <span class="font-bold text-emerald-400 text-xs">Intersección: $A \cap B$ (CENTRO)</span>
+                    <svg width="100%" height="65" viewBox="0 0 160 65" class="mx-auto mt-1">
+                        <circle cx="60" cy="32" r="24" fill="none" stroke="#64748b" stroke-width="1.5"/>
+                        <circle cx="100" cy="32" r="24" fill="none" stroke="#64748b" stroke-width="1.5"/>
+                        <!-- Región central intersectada -->
+                        <path d="M 80,18 A 24,24 0 0,0 80,46 A 24,24 0 0,0 80,18 Z" fill="#10b981" stroke="#10b981" stroke-width="1"/>
+                        <text x="45" y="36" fill="#64748b" font-size="10">A</text>
+                        <text x="115" y="36" fill="#64748b" font-size="10">B</text>
+                    </svg>
+                    <p class="text-[10px] text-slate-400 mt-1">Elementos comunes a ambos conjuntos simultáneamente.</p>
+                </div>
+
+                <!-- Diferencia A - B -->
+                <div class="bg-slate-900/90 border border-slate-700 rounded-xl p-2 text-center">
+                    <span class="font-bold text-amber-300 text-xs">Diferencia: $A - B$ (SOLO A)</span>
+                    <svg width="100%" height="65" viewBox="0 0 160 65" class="mx-auto mt-1">
+                        <circle cx="60" cy="32" r="24" fill="#fbbf2480" stroke="#fbbf24" stroke-width="2"/>
+                        <circle cx="100" cy="32" r="24" fill="#0b1120" stroke="#64748b" stroke-width="1.5"/>
+                        <text x="50" y="36" fill="#fff" font-size="10" font-weight="bold">A</text>
+                        <text x="115" y="36" fill="#64748b" font-size="10">B</text>
+                    </svg>
+                    <p class="text-[10px] text-slate-400 mt-1">Están en A pero NO están en B.</p>
+                </div>
+
+                <!-- Complemento A' -->
+                <div class="bg-slate-900/90 border border-slate-700 rounded-xl p-2 text-center">
+                    <span class="font-bold text-rose-400 text-xs">Complemento: $A'$ (TODO MENOS A)</span>
+                    <svg width="100%" height="65" viewBox="0 0 160 65" class="mx-auto mt-1">
+                        <rect x="10" y="5" width="140" height="55" rx="6" fill="#f43f5e30" stroke="#f43f5e" stroke-width="1"/>
+                        <circle cx="80" cy="32" r="20" fill="#0b1120" stroke="#64748b" stroke-width="1.5"/>
+                        <text x="80" y="36" fill="#64748b" font-size="10">A</text>
+                    </svg>
+                    <p class="text-[10px] text-slate-400 mt-1">Todo lo que está afuera del conjunto A en el universo.</p>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+
+            <div class="mt-4 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen y Machete Final →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 3: Práctica 1 -->
-    <div class="slide " id="slide-3">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuántos leen solo una de las dos revistas? 🎯</h2>
-            
-        <p class="text-slate-300 text-sm mb-3">En un club de 80 personas, 45 leen la revista X, 35 leen la revista Y, y 15 leen ambas revistas. ¿Cuántas personas leen SOLO UNA de las dos revistas?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'vn1', '¡Correcto! Solo X = 45 - 15 = 30. Solo Y = 35 - 15 = 20. Total solo una = 30 + 20 = 50 personas.')">A) 50 personas</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'vn1', '65 es el total que lee al menos una (incluyendo los que leen ambas).')">B) 65 personas</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'vn1', 'Cálculo erróneo.')">C) 40 personas</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'vn1', 'No sumes 45 + 35 directamente sin restar las intersecciones.')">D) 80 personas</button>
-        </div>
-        <div id="feedback-vn1" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Diagramas de 3 Conjuntos →</button>
-            </div>
-        </div>
-    </div>
-  
-
-    <!-- Slide 4: Concepto 2 -->
-    <div class="slide " id="slide-4">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Diagramas de 3 Conjuntos: El Corazón Central ⭕⭕⭕</h2>
-            
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <p>Con tres conjuntos ($A, B, C$), el orden de llenado es <b>estrictamente de adentro hacia afuera</b>:</p>
-            <div class="box-highlight text-xs space-y-1">
-                <p>1. Llena primero el centro absoluto: $n(A \cap B \cap C)$ (los que tienen las tres cosas).</p>
-                <p>2. Resta ese centro a las intersecciones dobles ($A \cap B$, $A \cap C$, $B \cap C$).</p>
-                <p>3. Resta los tres sectores interiores a cada círculo para obtener los "solo $A$", "solo $B$", "solo $C$".</p>
-            </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
-            </div>
-        </div>
-    </div>
-  
-
-    <!-- Slide 5: Ejemplo Resuelto 2 -->
-    <div class="slide " id="slide-5">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Despeje de la Intersección 🔍</h2>
-            
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">De 100 personas encuestadas, todas consumen café o té (nadie dijo ninguno). 70 toman café y 60 toman té. ¿Cuántas personas toman AMBAS bebidas?</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. Unión total: $n(C \cup T) = 100$.<br/>
-                    2. Fórmula: $n(C \cup T) = n(C) + n(T) - n(C \cap T)$.<br/>
-                    3. $100 = 70 + 60 - x$<br/>
-                    4. $100 = 130 - x \implies \mathbf{x = 30 \text{ personas toman ambas}}$.<br/>
-                    <i>Atajo: Suma los totales y resta el universo: $70 + 60 - 100 = 30$.</i>
-                </div>
-            </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
-            </div>
-        </div>
-    </div>
-  
-
-    <!-- Slide 6: Práctica 2 -->
-    <div class="slide " id="slide-6">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuántos juegan ambos deportes? 🎯</h2>
-            
-        <p class="text-slate-300 text-sm mb-3">En un salón de 40 estudiantes donde todos practican al menos un deporte, 28 juegan fútbol y 22 juegan básquetbol. ¿Cuántos estudiantes practican ambos deportes?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'vn2', '¡Excelente! Suma de grupos = 28 + 22 = 50. Como solo hay 40 alumnos en total, el exceso es la intersección: 50 - 40 = 10 alumnos.')">A) 10 estudiantes</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'vn2', '6 es la resta 28 - 22, no tiene significado de intersección.')">B) 6 estudiantes</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'vn2', 'Cálculo erróneo.')">C) 12 estudiantes</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'vn2', 'Revisa la suma 28 + 22 = 50 y resta el total 40.')">D) 15 estudiantes</button>
-        </div>
-        <div id="feedback-vn2" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
-            </div>
-        </div>
-    </div>
-  
-
-    <!-- Slide 7: Resumen -->
-    <div class="slide " id="slide-7">
+    <!-- Slide 6: Resumen Final -->
+    <div class="slide" id="slide-6">
         <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Diagramas de Venn 📋</h2>
-            
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Empieza en el Centro</div>
-                <div class="text-slate-300 mt-1">Coloca primero los que tienen ambas cosas y resta hacia afuera.</div>
+            <span class="badge" style="background:#10b981;">Resumen Maestro</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Diagramas de Venn PAA 📋</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">Empieza por el Centro</div>
+                    <div class="text-slate-300 mt-1">Nunca coloques los totales directos en las lunas de los círculos. Primero ubica la intersección y réstala a cada grupo.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">"Solo A" vs "Conjunto A"</div>
+                    <div class="text-slate-300 mt-1">"Los que prefieren A" incluye a los que también prefieren B. "Solo A" excluye tajantemente la intersección.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">Fórmula de 2 Conjuntos</div>
+                    <div class="text-slate-300 mt-1">$n(A \cup B) = n(A) + n(B) - n(A \cap B)$. Si sumas los dos círculos, debes restar la intersección una vez.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300 text-sm">Cuidado con el Universo</div>
+                    <div class="text-slate-300 mt-1">Verifica siempre si hay elementos que no pertenecen a ninguno de los grupos (afuera de los círculos).</div>
+                </div>
             </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">El Atajo del Exceso</div>
-                <div class="text-slate-300 mt-1">$\text{Intersección} = [n(A) + n(B)] - \text{Total Unión}$. Lo que sobrepase es la intersección.</div>
+            <div class="box-highlight text-xs text-slate-300">
+                🎉 <b>¡Módulo visual completado!</b> Los diagramas de Venn ya no tienen secretos para ti.
             </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">"Solo A"</div>
-                <div class="text-slate-300 mt-1">$\text{Solo } A = n(A) - n(A \cap B)$. No confundir con el total de $A$.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Los que no tienen nada</div>
-                <div class="text-slate-300 mt-1">$\text{Ninguno} = \text{Universo Total} - \text{Unión}(A \cup B)$.</div>
-            </div>
-        </div>
-        <div class="box-highlight text-xs text-slate-300">
-            🎉 <b>¡Módulo completado!</b> Con estos pasos evitarás el doble conteo en cualquier reactivo de conjuntos.
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            <div class="mt-4 flex justify-between items-center gap-2">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
                 <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
-  
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -276,7 +351,7 @@
             if (isCorrect) {
                 btn.classList.add('option-correct');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
-                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
+                fb.innerHTML = `<b>🎉 ¡Excelente acierto!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
