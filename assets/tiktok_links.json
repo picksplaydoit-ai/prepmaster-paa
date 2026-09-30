@@ -1,16 +1,283 @@
 {
-  "channel_url": "https://www.tiktok.com/@prepmasterudg?_r=1&_t=ZS-9A9TMgJTxXY",
-  "channel_handle": "@prepmasterudg",
-  "videos": {
-    "funciones": {
-      "title": "Composición de funciones f(g(x))",
-      "url": "https://www.tiktok.com/@prepmasterudg/video/7643526669839469845",
-      "target_file": "examenes/explicaciones/Funciones.html"
+  "channel": "https://www.tiktok.com/@prepmasterudg?_r=1&_t=ZS-9A9TMgJTxXY",
+  "handle": "@prepmasterudg",
+  "total_indexed_videos": 22,
+  "raw_videos": [
+    {
+      "num": 1,
+      "shortUrl": "https://vt.tiktok.com/ZSbS6Kumw/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7629553544567196948",
+      "title": "Ejercicio clásico del Examen de admisión PAA, Representación gráfica de funciones,  #collegeboard  #examendeadmisión  #udg ",
+      "author": "Prep-master"
     },
-    "cuadraticas": {
-      "title": "Funciones cuadráticas y representación gráfica",
-      "url": "https://www.tiktok.com/@prepmasterudg/video/7629553544567196948",
-      "target_file": "examenes/explicaciones/Cuadraticas.html"
+    {
+      "num": 2,
+      "shortUrl": "https://vt.tiktok.com/ZSbSM1aEo/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7626796996019408148",
+      "title": "Ejercicio clásico del PAA, triángulos semejantes, https://prepmaster-paa.vercel.app/ no te quedes fuera #examendeadmisión  #udg  #paa  #Matemáticas ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 3,
+      "shortUrl": "https://vt.tiktok.com/ZSbSMjvjT/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7630671418543377684",
+      "title": "Ejercicio del examen de admisión, figuras inscritas áreas sombreadas #paa  #udg  #examendeadmisión  #collegeboard ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 4,
+      "shortUrl": "https://vt.tiktok.com/ZSbSM1aD8/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7630664576962497812",
+      "title": "Ecuación cuadrática pero más rápido, Examen de admisión  #udg  #paa  #collegeboard ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 5,
+      "shortUrl": "https://vt.tiktok.com/ZSbSM8orb/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7630652774841109780",
+      "title": "Ejercicios para el examen de admisión gráficas con pictogramas  #examendeadmisión  #collegeboard  #udg  #Matemáticas ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 6,
+      "shortUrl": "https://vt.tiktok.com/ZSbSMj1L2/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7630179809502432533",
+      "title": "Ejercicio del PAA Volúmen de un cilindro, Pi expresado #udg  #paa  #examendeadmisión  #collegeboard ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 7,
+      "shortUrl": "https://vt.tiktok.com/ZSbSMrFhb/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7630172673531792661",
+      "title": "Ejercicio clásico del examen de admisión ecuación de la línea recta de una gráfica  #examendeadmisión  #paa  #udg  #collegeboard ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 8,
+      "shortUrl": "https://vt.tiktok.com/ZSbSMhsGB/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7629600173030771989",
+      "title": "Práctica para el PAA, triángulo rectángulo, teorema de pitagoras. #examendeadmisión  #collegeboard  #udg  #paa ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 9,
+      "shortUrl": "https://vt.tiktok.com/ZSbSM2eWT/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7629595682055261461",
+      "title": "Ejercicio clásico del PAA, Planteamiento de Inecuaciones, https://prepmaster-paa.vercel.app/ #examendeadmisión  #paa  #udg  #collegeboard ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 10,
+      "shortUrl": "https://vt.tiktok.com/ZSbSMJvWD/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7629564295449283860",
+      "title": "Examen de admisión estadística, rango y mediana #examendeadmisión  #paa  #collegeboard  #udg ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 11,
+      "shortUrl": "https://vt.tiktok.com/ZSbS639Q3/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7628492381171551509",
+      "title": "Ejercicios básicos del PAA División de fracciones  #paa  #udg  #examendeadmisión  #fraccionesmatemáticas ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 12,
+      "shortUrl": "https://vt.tiktok.com/ZSbSMrLaN/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7628484693352287508",
+      "title": "Ejercicio de inecuaciones para el examen de admisión PAA #udg  #paa  #examendeadmisión  #inecuaciones ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 13,
+      "shortUrl": "https://vt.tiktok.com/ZSbSM2fS8/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7627918145587531028",
+      "title": "Ejercicio típico del PAA Triángulos, angulos internos, ángulos complementarios y opuestos por el vertice #Matemáticas  #examendeadmisión  #paa ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 14,
+      "shortUrl": "https://vt.tiktok.com/ZSbSMYNk2/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7627261721052335381",
+      "title": "Ejercicio del PAA, promedio de un dato faltante forma rápida y fácil  #examendeadmisión  #udg  #matemáticas  #paa ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 15,
+      "shortUrl": "https://vt.tiktok.com/ZSbSMYuwF/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7627018063782743316",
+      "title": "Ejercicio clásico del PAA Interpretación de gráficas  https://prepmaster-paa.vercel.app/ no te quedes fuera #paa  #udg  #examendeadmisión  #Matemáticas ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 16,
+      "shortUrl": "https://vt.tiktok.com/ZSbSMeQcG/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7626989430334688533",
+      "title": "Ejercicio clásico del PAA Inecuaciones y sus gráficas  https://prepmaster-paa.vercel.app/ #paa  #examendeadmisión  #udg  #matemáticas ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 17,
+      "shortUrl": "https://vt.tiktok.com/ZSbSM2v4G/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7626855047686606100",
+      "title": "Ejercicio clásico del PAA promedio de números consecutivos,  https://prepmaster-paa.vercel.app/ #paa  #examendeadmisión  #udg  #matemáticas ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 18,
+      "shortUrl": "https://vt.tiktok.com/ZSbSMe1G1/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7626642652468907284",
+      "title": "Ejercicio clásico de desigualdades del PAA, no te quedes fuera https://prepmaster-paa.vercel.app/ #PAA #examendeadmisión  #udg  #matemáticas ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 19,
+      "shortUrl": "https://vt.tiktok.com/ZSbS6omAj/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7626364655925218581",
+      "title": "Ejercicio clásico del PAA evaluación de funciones, cumple tus metas https://prepmaster-paa.vercel.app/ #PAA  #examendeadmisión  #udg  #Matemáticas ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 20,
+      "shortUrl": "https://vt.tiktok.com/ZSbS6ETC3/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7626249637728390421",
+      "title": "Ejercicio clásico del PAA, Lenguaje algebraico, no te quedes fuera https://prepmaster-paa.vercel.app/ #PAA #examendeadmisión  #udg  #matemáticas ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 21,
+      "shortUrl": "https://vt.tiktok.com/ZSbSMeWTs/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7626139792719219988",
+      "title": "Ejercicio común del PAA, ángulos de un polígono regular no te quedes fuera https://prepmaster-paa.vercel.app/ #paa  #matematicas  #udg  #examendeadmisión ",
+      "author": "Prep-master"
+    },
+    {
+      "num": 22,
+      "shortUrl": "https://vt.tiktok.com/ZSbSMgGM5/",
+      "longUrl": "https://www.tiktok.com/@prepmasterudg/video/7626083463858244885",
+      "title": "Ejercicio clásico del PAA Ángulos entre paralelas,  práctica con nosotros https://prepmaster-paa.vercel.app/ #paa  #examendeadmisión  #udg #matematicas ",
+      "author": "Prep-master"
     }
+  ],
+  "topics": {
+    "Fracciones.html": [
+      {
+        "title": "División de fracciones",
+        "url": "https://vt.tiktok.com/ZSbS639Q3/"
+      }
+    ],
+    "Ecuaciones.html": [
+      {
+        "title": "Lenguaje algebraico y ecuaciones",
+        "url": "https://vt.tiktok.com/ZSbS6ETC3/"
+      }
+    ],
+    "Desigualdades.html": [
+      {
+        "title": "Planteamiento de inecuaciones",
+        "url": "https://vt.tiktok.com/ZSbSM2eWT/"
+      },
+      {
+        "title": "Inecuaciones y sus gráficas",
+        "url": "https://vt.tiktok.com/ZSbSMeQcG/"
+      },
+      {
+        "title": "Desigualdades PAA",
+        "url": "https://vt.tiktok.com/ZSbSMe1G1/"
+      }
+    ],
+    "Cuadraticas.html": [
+      {
+        "title": "Ecuación cuadrática rápida",
+        "url": "https://vt.tiktok.com/ZSbSM1aD8/"
+      },
+      {
+        "title": "Gráficas de funciones cuadráticas",
+        "url": "https://vt.tiktok.com/ZSbS6Kumw/"
+      }
+    ],
+    "Funciones.html": [
+      {
+        "title": "Evaluación de funciones f(x)",
+        "url": "https://vt.tiktok.com/ZSbS6omAj/"
+      },
+      {
+        "title": "Composición de funciones f(g(x))",
+        "url": "https://www.tiktok.com/@prepmasterudg/video/7643526669839469845"
+      },
+      {
+        "title": "Representación gráfica de funciones",
+        "url": "https://vt.tiktok.com/ZSbS6Kumw/"
+      }
+    ],
+    "Linearecta.html": [
+      {
+        "title": "Ecuación de la línea recta desde gráfica",
+        "url": "https://vt.tiktok.com/ZSbSMrFhb/"
+      }
+    ],
+    "Geometria.html": [
+      {
+        "title": "Ángulos entre paralelas y secante",
+        "url": "https://vt.tiktok.com/ZSbSMgGM5/"
+      },
+      {
+        "title": "Ángulos en triángulos y opuestos por el vértice",
+        "url": "https://vt.tiktok.com/ZSbSM2fS8/"
+      },
+      {
+        "title": "Ángulos de un polígono regular",
+        "url": "https://vt.tiktok.com/ZSbSMeWTs/"
+      },
+      {
+        "title": "Triángulo rectángulo y Pitágoras",
+        "url": "https://vt.tiktok.com/ZSbSMhsGB/"
+      }
+    ],
+    "Triangulos_notables.html": [
+      {
+        "title": "Triángulos semejantes PAA",
+        "url": "https://vt.tiktok.com/ZSbSM1aEo/"
+      },
+      {
+        "title": "Teorema de Pitágoras aplicado",
+        "url": "https://vt.tiktok.com/ZSbSMhsGB/"
+      }
+    ],
+    "Areas_sombreadas.html": [
+      {
+        "title": "Figuras inscritas y áreas sombreadas",
+        "url": "https://vt.tiktok.com/ZSbSMjvjT/"
+      }
+    ],
+    "Volumenes.html": [
+      {
+        "title": "Volumen de cilindro con Pi expresado",
+        "url": "https://vt.tiktok.com/ZSbSMj1L2/"
+      }
+    ],
+    "interpretaciongraficas.html": [
+      {
+        "title": "Gráficas con pictogramas",
+        "url": "https://vt.tiktok.com/ZSbSM8orb/"
+      },
+      {
+        "title": "Interpretación de gráficas PAA",
+        "url": "https://vt.tiktok.com/ZSbSMYuwF/"
+      }
+    ],
+    "Probabilidad.html": [
+      {
+        "title": "Rango y mediana estadística",
+        "url": "https://vt.tiktok.com/ZSbSMJvWD/"
+      },
+      {
+        "title": "Promedio de un dato faltante (rápido)",
+        "url": "https://vt.tiktok.com/ZSbSMYNk2/"
+      },
+      {
+        "title": "Promedio de números consecutivos",
+        "url": "https://vt.tiktok.com/ZSbSM2v4G/"
+      }
+    ]
   }
 }
