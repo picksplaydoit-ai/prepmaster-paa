@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Sistemas de Ecuaciones Lineales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .svg-container { background: #f8fafc; border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: center; border: 1px solid #e2e8f0; }
+        nav::-webkit-scrollbar { height: 4px; }
+        nav::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden sm:block italic">Métodos Algebraicos, Modelado Verbal y Soluciones Gráficas</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación -->
+        <nav class="flex flex-wrap gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto whitespace-nowrap">
+
+            <button onclick="showTab('algebraico')" id="btn-algebraico" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600">
+                5.1 Métodos de Reducción y Sustitución
+            </button>
+
+            <button onclick="showTab('problemas')" id="btn-problemas" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                5.2 Problemas Verbales de Aplicación
+            </button>
+
+            <button onclick="showTab('grafico')" id="btn-grafico" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                5.3 Interpretación Gráfica y Tipos de Solución
+            </button>
+        </nav>
+
+        <!-- Banner Informativo -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenidos -->
+
+        <div id="algebraico" class="tab-content active space-y-6"></div>
+
+        <div id="problemas" class="tab-content  space-y-6"></div>
+
+        <div id="grafico" class="tab-content  space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+        "algebraico": {
+                "title": "Resolución Algebraica de Sistemas 2x2",
+                "desc": "Domina los métodos de eliminación, sustitución y trucos de simetría propios del examen College Board PAA."
+        },
+        "problemas": {
+                "title": "Problemas de Planteamiento Verbal",
+                "desc": "Convierte enunciados cotidianos (boletos, monedas, edades, compras y mezclas) en sistemas lineales resolubles en menos de un minuto."
+        },
+        "grafico": {
+                "title": "Interpretación Gráfica de Sistemas",
+                "desc": "Comprende cuándo un sistema tiene solución única (rectas secantes), ninguna solución (rectas paralelas) o infinitas soluciones (rectas coincidentes)."
+        }
+};
+
+        
+
+        const data = {
+        "algebraico": [
+                {
+                        "q": "Resuelve el sistema de ecuaciones: $\\begin{cases} 2x + y = 11 \\\\ x - y = 1 \\end{cases}$. ¿Cuál es el valor de $x$?",
+                        "o": [
+                                "$3$",
+                                "$4$",
+                                "$5$",
+                                "$6$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Sumamos ambas ecuaciones para eliminar $y$: $(2x + y) + (x - y) = 11 + 1 \\implies 3x = 12 \\implies x = 4$. Luego $y = x - 1 = 3$."
+                },
+                {
+                        "q": "En el sistema $\\begin{cases} 3x + 2y = 16 \\\\ y = 2x - 6 \\end{cases}$, ¿cuál es el valor de $y$?",
+                        "o": [
+                                "$2$",
+                                "$4$",
+                                "$$-2$$",
+                                "$$6$$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Sustituimos $y$ en la primera ecuación: $3x + 2(2x - 6) = 16 \\implies 3x + 4x - 12 = 16 \\implies 7x = 28 \\implies x = 4$. Luego $y = 2(4) - 6 = 8 - 6 = 2$."
+                },
+                {
+                        "q": "Si $\\begin{cases} 5x - 2y = 19 \\\\ 3x + 4y = 1 \\end{cases}$, ¿cuál es el valor del producto $xy$?",
+                        "o": [
+                                "$-3$",
+                                "$-6$",
+                                "$6$",
+                                "$3$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Multiplicamos la primera ecuación por 2: $10x - 4y = 38$. Sumamos con la segunda: $(10x - 4y) + (3x + 4y) = 38 + 1 \\implies 13x = 39 \\implies x = 3$. Sustituimos: $3(3) + 4y = 1 \\implies 9 + 4y = 1 \\implies 4y = -8 \\implies y = -2$. Por ende, $xy = (3)(-2) = -6$."
+                },
+                {
+                        "q": "Halla la suma $x + y$ para el sistema: $\\begin{cases} x + 2y = 8 \\\\ 3x - 2y = 8 \\end{cases}$.",
+                        "o": [
+                                "$4$",
+                                "$5$",
+                                "$6$",
+                                "$8$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Sumando ambas ecuaciones: $4x = 16 \\implies x = 4$. Sustituimos en la primera: $4 + 2y = 8 \\implies 2y = 4 \\implies y = 2$. Así, $x + y = 4 + 2 = 6$."
+                },
+                {
+                        "q": "Si $2a + 3b = 13$ y $a - b = -1$, ¿cuánto vale $b$?",
+                        "o": [
+                                "$2$",
+                                "$3$",
+                                "$4$",
+                                "$5$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> De la segunda ecuación, $a = b - 1$. Sustituimos: $2(b - 1) + 3b = 13 \\implies 2b - 2 + 3b = 13 \\implies 5b = 15 \\implies b = 3$."
+                },
+                {
+                        "q": "Resuelve el sistema $\\begin{cases} 4x + 3y = 25 \\\\ 2x - y = 5 \\end{cases}$. ¿Cuál es el valor de $x$?",
+                        "o": [
+                                "$2$",
+                                "$3$",
+                                "$4$",
+                                "$5$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> De la segunda ecuación, $y = 2x - 5$. Reemplazamos en la primera: $4x + 3(2x - 5) = 25 \\implies 4x + 6x - 15 = 25 \\implies 10x = 40 \\implies x = 4$."
+                },
+                {
+                        "q": "Si $\\frac{x}{2} + \\frac{y}{3} = 4$ y $x - y = 3$, ¿cuál es el valor de $x$?",
+                        "o": [
+                                "$5$",
+                                "$6$",
+                                "$7$",
+                                "$8$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Multiplicamos la primera ecuación por 6: $3x + 2y = 24$. Como $y = x - 3$, sustituimos: $3x + 2(x - 3) = 24 \\implies 5x - 6 = 24 \\implies 5x = 30 \\implies x = 6$."
+                },
+                {
+                        "q": "¿Cuál es el valor de $x - y$ en el sistema $\\begin{cases} 7x + 3y = 41 \\\\ 3x + 7y = 29 \\end{cases}$?",
+                        "o": [
+                                "$2$",
+                                "$3$",
+                                "$4$",
+                                "$5$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Truco de simetría PAA: Restamos la segunda ecuación de la primera: $(7x + 3y) - (3x + 7y) = 41 - 29 \\implies 4x - 4y = 12$. Dividimos entre 4: $x - y = 3$."
+                },
+                {
+                        "q": "Si $x + y = 10$ y $x^2 - y^2 = 40$, ¿cuál es el valor de $x$?",
+                        "o": [
+                                "$5$",
+                                "$6$",
+                                "$7$",
+                                "$8$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Factorizamos $x^2 - y^2 = (x + y)(x - y) = 40$. Como $x + y = 10$, entonces $10(x - y) = 40 \\implies x - y = 4$. Sumamos $x + y = 10$ y $x - y = 4$: $2x = 14 \\implies x = 7$."
+                },
+                {
+                        "q": "Halla la solución del sistema $\\begin{cases} 3x - 5y = 1 \\\\ 2x + 5y = 14 \\end{cases}$.",
+                        "o": [
+                                "$x = 3, y = 1$",
+                                "$x = 3, y = 1.6$",
+                                "$x = 2, y = 1$",
+                                "$x = 4, y = 2$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Sumamos directamente: $5x = 15 \\implies x = 3$. Sustituimos en la segunda: $2(3) + 5y = 14 \\implies 6 + 5y = 14 \\implies 5y = 8 \\implies y = 1.6$."
+                },
+                {
+                        "q": "Si $3x - 2y = 7$ y $6x - 4y = k$, ¿para qué valor de $k$ el sistema tiene infinitas soluciones?",
+                        "o": [
+                                "$7$",
+                                "$12$",
+                                "$14$",
+                                "$21$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Observa que los coeficientes de la segunda ecuación son el doble de la primera ($2 \\times 3 = 6$, $2 \\times (-2) = -4$). Para que sean la misma recta coincidente (infinitas soluciones), el término independiente también debe ser el doble: $k = 2(7) = 14$."
+                },
+                {
+                        "q": "¿Cuál es el valor de $y$ en el sistema $\\begin{cases} x = 3y - 2 \\\\ 2x + 3y = 23 \\end{cases}$?",
+                        "o": [
+                                "$2$",
+                                "$3$",
+                                "$4$",
+                                "$7$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Sustituimos $x$: $2(3y - 2) + 3y = 23 \\implies 6y - 4 + 3y = 23 \\implies 9y = 27 \\implies y = 3$."
+                }
+        ],
+        "problemas": [
+                {
+                        "q": "En un cine se vendieron 200 boletos entre adultos y niños, recaudando $\\$2300$. Si el boleto de adulto cuesta $\\$15$ y el de niño $\\$10$, ¿cuántos boletos de adulto se vendieron?",
+                        "o": [
+                                "$40$",
+                                "$60$",
+                                "$80$",
+                                "$120$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Planteamos $a + n = 200$ y $15a + 10n = 2300$. De la primera $n = 200 - a$. Sustituimos: $15a + 10(200 - a) = 2300 \\implies 5a + 2000 = 2300 \\implies 5a = 300 \\implies a = 60$ boletos de adulto."
+                },
+                {
+                        "q": "La suma de las edades de Pedro y su hijo es 48 años. Pedro tiene el triple de la edad de su hijo. ¿Qué edad tiene el hijo?",
+                        "o": [
+                                "$10$ años",
+                                "$12$ años",
+                                "$14$ años",
+                                "$16$ años"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $P + H = 48$ y $P = 3H$. Sustituimos: $3H + H = 48 \\implies 4H = 48 \\implies H = 12$ años."
+                },
+                {
+                        "q": "Un granjero tiene gallinas y conejos. En total cuenta 35 cabezas y 94 patas. ¿Cuántos conejos tiene el granjero?",
+                        "o": [
+                                "$10$",
+                                "$12$",
+                                "$15$",
+                                "$23$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $g + c = 35$ y $2g + 4c = 94$. Dividiendo entre 2 la segunda: $g + 2c = 47$. Restamos la primera ecuación: $(g + 2c) - (g + c) = 47 - 35 \\implies c = 12$ conejos."
+                },
+                {
+                        "q": "Un comerciante compró 3 camisas y 2 pantalones por $\\$1200$. Más tarde compró 2 camisas y 4 pantalones por $\\$1600$. ¿Cuánto cuesta una camisa?",
+                        "o": [
+                                "$\\$200$",
+                                "$\\$250$",
+                                "$\\$300$",
+                                "$\\$350$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> $\\begin{cases} 3c + 2p = 1200 \\\\ 2c + 4p = 1600 \\implies c + 2p = 800 \\end{cases}$. De la segunda, $2p = 800 - c$. Sustituimos en la primera: $3c + (800 - c) = 1200 \\implies 2c + 800 = 1200 \\implies 2c = 400 \\implies c = \\$200$."
+                },
+                {
+                        "q": "Dos números suman 45 y su diferencia es 11. ¿Cuál es el número mayor?",
+                        "o": [
+                                "$26$",
+                                "$28$",
+                                "$30$",
+                                "$34$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $x + y = 45$ y $x - y = 11$. Sumamos: $2x = 56 \\implies x = 28$."
+                },
+                {
+                        "q": "Un estacionamiento cobra tarifas diferentes para autos y motos. Hay 50 vehículos en total y se cuentan 160 ruedas en el suelo. ¿Cuántas motos hay?",
+                        "o": [
+                                "$15$",
+                                "$20$",
+                                "$25$",
+                                "$30$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $a + m = 50$ y $4a + 2m = 160 \\implies 2a + m = 80$. Restamos: $(2a + m) - (a + m) = 80 - 50 \\implies a = 30$ autos. Por tanto, motos $m = 50 - 30 = 20$."
+                },
+                {
+                        "q": "En un examen de 30 preguntas, se otorgan 4 puntos por respuesta correcta y se restan 2 por incorrecta. Si Mariana obtuvo 78 puntos respondiendo todas, ¿cuántas correctas tuvo?",
+                        "o": [
+                                "$20$",
+                                "$21$",
+                                "$22$",
+                                "$23$"
+                        ],
+                        "a": 3,
+                        "exp": "<b>Análisis:</b> $c + i = 30 \\implies i = 30 - c$. Puntos: $4c - 2(30 - c) = 78 \\implies 4c - 60 + 2c = 78 \\implies 6c = 138 \\implies c = 23$."
+                },
+                {
+                        "q": "La base de un rectángulo mide $6\\text{ cm}$ más que su altura. Si el perímetro es de $52\\text{ cm}$, ¿cuánto mide el área?",
+                        "o": [
+                                "$140\\text{ cm}^2$",
+                                "$160\\text{ cm}^2$",
+                                "$180\\text{ cm}^2$",
+                                "$200\\text{ cm}^2$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $2(b + h) = 52 \\implies b + h = 26$. Como $b = h + 6$, entonces $(h + 6) + h = 26 \\implies 2h = 20 \\implies h = 10\\text{ cm}$ y $b = 16\\text{ cm}$. Área $= 16 \\times 10 = 160\\text{ cm}^2$."
+                },
+                {
+                        "q": "Se mezclan dos tipos de café: uno de $\\$80/\\text{kg}$ y otro de $\\$120/\\text{kg}$ para obtener $20\\text{ kg}$ de mezcla a $\\$95/\\text{kg}$. ¿Cuántos kg del café de $\\$80$ se utilizaron?",
+                        "o": [
+                                "$10.5\\text{ kg}$",
+                                "$12.5\\text{ kg}$",
+                                "$14.5\\text{ kg}$",
+                                "$15\\text{ kg}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $x + y = 20 \\implies y = 20 - x$. Costo: $80x + 120(20 - x) = 95(20) = 1900 \\implies 80x + 2400 - 120x = 1900 \\implies -40x = -500 \\implies x = 12.5\\text{ kg}$."
+                },
+                {
+                        "q": "Ana tiene billetes de $\\$50$ y de $\\$100$. Si tiene 28 billetes en total y suman $\\$2000$, ¿cuántos billetes de $\\$100$ tiene?",
+                        "o": [
+                                "$12$",
+                                "$14$",
+                                "$16$",
+                                "$18$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> $c + d = 28$ y $50c + 100d = 2000 \\implies c + 2d = 40$. Restamos: $(c + 2d) - (c + d) = 40 - 28 \\implies d = 12$ billetes de $\\$100$."
+                },
+                {
+                        "q": "Un bote navega a favor de la corriente a $20\\text{ km/h}$ y en contra de la corriente a $12\\text{ km/h}$. ¿Cuál es la velocidad del bote en aguas tranquilas?",
+                        "o": [
+                                "$14\\text{ km/h}$",
+                                "$15\\text{ km/h}$",
+                                "$16\\text{ km/h}$",
+                                "$18\\text{ km/h}$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> $v_b + v_c = 20$ y $v_b - v_c = 12$. Sumamos: $2v_b = 32 \\implies v_b = 16\\text{ km/h}$."
+                },
+                {
+                        "q": "Hace 5 años la edad de Lucía era el doble de la de Martín. Hoy la suma de sus edades es 40 años. ¿Cuántos años tiene Lucía hoy?",
+                        "o": [
+                                "$20$",
+                                "$23$",
+                                "$25$",
+                                "$27$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> $L + M = 40 \\implies M = 40 - L$. Hace 5 años: $(L - 5) = 2(M - 5) = 2(35 - L) = 70 - 2L \\implies 3L = 75 \\implies L = 25$ años."
+                }
+        ],
+        "grafico": [
+                {
+                        "q": "Si dos rectas en un plano tienen ecuaciones con la misma pendiente ($m_1 = m_2$) pero distinta ordenada al origen ($b_1 \\neq b_2$), ¿cuántas soluciones tiene el sistema?",
+                        "o": [
+                                "Una solución única",
+                                "Cero soluciones (rectas paralelas)",
+                                "Infinitas soluciones",
+                                "Dos soluciones"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Al tener pendientes iguales y diferentes puntos de corte, las rectas son estrictamente paralelas y jamás se intersectan; por lo tanto, no tienen solución."
+                },
+                {
+                        "q": "¿En qué punto del plano cartesiano se cortan las rectas $y = 2x - 1$ e $y = -x + 5$?",
+                        "o": [
+                                "$(1, 4)$",
+                                "$(2, 3)$",
+                                "$(3, 2)$",
+                                "$(2, 5)$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Igualamos: $2x - 1 = -x + 5 \\implies 3x = 6 \\implies x = 2$. Luego $y = 2(2) - 1 = 3$. El punto de intersección es $(2, 3)$."
+                },
+                {
+                        "q": "El sistema $\\begin{cases} 2x + 4y = 8 \\\\ x + 2y = 4 \\end{cases}$ representa gráficamente:",
+                        "o": [
+                                "Dos rectas perpendiculares",
+                                "Dos rectas paralelas no coincidentes",
+                                "Dos rectas coincidentes (la misma recta)",
+                                "Dos rectas secantes en el origen"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Al dividir la primera ecuación entre 2 obtenemos $x + 2y = 4$, idéntica a la segunda. Representan la misma recta y por ende tienen infinitas soluciones."
+                },
+                {
+                        "q": "¿Para qué valor de $k$ el sistema $\\begin{cases} 3x - 2y = 6 \\\\ kx - 4y = 10 \\end{cases}$ NO tiene solución?",
+                        "o": [
+                                "$k = 6$",
+                                "$k = -6$",
+                                "$k = 3$",
+                                "$k = 12$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Para no tener solución, las pendientes deben ser iguales y los términos independientes no proporcionales. $\\frac{3}{k} = \\frac{-2}{-4} = \\frac{1}{2} \\implies k = 6$. Como $\\frac{6}{10} \\ne \\frac{1}{2}$, son paralelas sin corte."
+                },
+                {
+                        "q": "Si la recta $L_1$ pasa por $(0,0)$ y $(2,4)$, y la recta $L_2$ pasa por $(0,6)$ y $(2,4)$, ¿cuál es la solución del sistema formado por ambas?",
+                        "o": [
+                                "$(0, 0)$",
+                                "$(0, 6)$",
+                                "$(2, 4)$",
+                                "No se intersectan"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> El punto que pertenece a ambas rectas simultáneamente es $(2, 4)$, que representa la solución única del sistema."
+                },
+                {
+                        "q": "Determina si el sistema $\\begin{cases} y = 3x + 1 \\\\ y = 3x - 5 \\end{cases}$ tiene solución.",
+                        "o": [
+                                "Tiene solución única en $(0, 1)$",
+                                "Tiene infinitas soluciones",
+                                "No tiene solución porque son paralelas",
+                                "Tiene solución en el infinito"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Ambas rectas tienen pendiente $m = 3$ y cortes distintos ($b = 1$ y $b = -5$), por lo que son paralelas y el sistema es incompatible (sin solución)."
+                },
+                {
+                        "q": "¿Cuál es la pendiente de la recta que pasa por la solución del sistema $\\begin{cases} x + y = 4 \\\\ x - y = 2 \\end{cases}$ y por el origen $(0,0)$?",
+                        "o": [
+                                "$1/3$",
+                                "$1/2$",
+                                "$2/3$",
+                                "$3$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Sumamos: $2x = 6 \\implies x = 3$, luego $y = 1$. La solución es $(3, 1)$. La pendiente hacia $(0,0)$ es $m = \\frac{1 - 0}{3 - 0} = 1/3$."
+                },
+                {
+                        "q": "¿Qué relación guardan las rectas $y = 2x + 3$ e $y = -\\frac{1}{2}x + 1$?",
+                        "o": [
+                                "Son paralelas",
+                                "Son perpendiculares y se cruzan en un punto",
+                                "Son coincidentes",
+                                "Tienen la misma inclinación"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El producto de sus pendientes es $m_1 \\times m_2 = 2 \\times (-1/2) = -1$. Esto significa que son geométricamente perpendiculares."
+                },
+                {
+                        "q": "Si graficas $x = 3$ e $y = -2$, ¿cuál es el punto de intersección?",
+                        "o": [
+                                "$(3, -2)$",
+                                "$(-2, 3)$",
+                                "$(0, 0)$",
+                                "No existe intersección"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Una es una línea vertical en $x = 3$ y la otra es horizontal en $y = -2$. Se cruzan exactamente en el punto $(3, -2)$."
+                },
+                {
+                        "q": "¿En qué cuadrante se intersectan las rectas $x + y = -6$ y $x - y = -2$?",
+                        "o": [
+                                "Cuadrante I",
+                                "Cuadrante II",
+                                "Cuadrante III",
+                                "Cuadrante IV"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Sumamos: $2x = -8 \\implies x = -4$. Luego $y = -6 - (-4) = -2$. Como ambas coordenadas son negativas $(-4, -2)$, el punto de corte está en el Cuadrante III."
+                },
+                {
+                        "q": "Si dos rectas se cortan sobre el eje $y$, ¿qué valor tienen en común?",
+                        "o": [
+                                "$x = 0$",
+                                "$y = 0$",
+                                "$m = 0$",
+                                "$x = 1$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Cualquier punto sobre el eje $y$ tiene coordenada $x = 0$."
+                },
+                {
+                        "q": "Para qué valor de $m$ las rectas $y = mx + 2$ e $y = 4x - 1$ se intersectan cuando $x = 1$?",
+                        "o": [
+                                "$1$",
+                                "$2$",
+                                "$3$",
+                                "$4$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Cuando $x = 1$, en la segunda recta $y = 4(1) - 1 = 3$. Sustituimos $(1, 3)$ en la primera: $3 = m(1) + 2 \\implies m = 1$."
+                }
+        ]
+};
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            const info = topicsInfo[tabId];
+            if (info) {
+                document.getElementById('topic-title').innerText = info.title;
+                document.getElementById('topic-text').innerHTML = info.desc;
+            }
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    let svgHtml = item.svg ? `<div class="svg-container">${item.svg}</div>` : '';
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4"><span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Reto ${i+1}</span></div>
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        ${svgHtml}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { btn.classList.add('correct-opt'); score += 10; }
+            else { btn.classList.add('incorrect-opt'); box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); }
+            hint.style.display = 'block';
+            if (window.MathJax) MathJax.typesetPromise([hint]);
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { if(confirm('¿Reiniciar progreso?')) { score = 0; document.getElementById('global-score').innerText = 0; render(); showTab('algebraico'); } }
+
+        window.onload = () => { render(); showTab('algebraico'); };
+    </script>
+</body>
+</html>

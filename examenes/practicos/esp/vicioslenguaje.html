@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Vicios del Lenguaje y Corrección de Estilo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .reading-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 1.25rem; border-radius: 0.75rem; margin-bottom: 1.25rem; font-style: italic; color: #92400e; line-height: 1.6; font-size: 0.95rem; }
+        nav::-webkit-scrollbar { height: 6px; }
+        nav::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+        .table-data { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1rem; }
+        .table-data th, .table-data td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; }
+        .table-data th { background: #f1f5f9; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden md:block italic">Dequeísmo, Pleonasmo, Redundancia y Ambigüedad Estructural</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación Extendida -->
+        <div class="mb-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">Módulos de Práctica</div>
+        <nav class="flex gap-2 mb-8 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto scroll-smooth no-scrollbar">
+
+            <button onclick="showTab('dequeismo')" id="btn-dequeismo" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600 flex-shrink-0">
+                11.1 Dequeísmo y Queísmo
+            </button>
+
+            <button onclick="showTab('pleonasmo')" id="btn-pleonasmo" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                11.2 Pleonasmo y Redundancia
+            </button>
+
+            <button onclick="showTab('ambiguedad')" id="btn-ambiguedad" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                11.3 Ambigüedad y Anfibología
+            </button>
+        </nav>
+
+        <!-- Banner Dinámico -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenedores de Preguntas -->
+
+        <div id="dequeismo" class="tab-content active space-y-6"></div>
+
+        <div id="pleonasmo" class="tab-content  space-y-6"></div>
+
+        <div id="ambiguedad" class="tab-content  space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+        "dequeismo": {
+                "title": "Corrección de Dequeísmo y Queísmo",
+                "desc": "Aprende el método infalible de sustitución por 'eso' ('pensar eso' vs 'estar seguro de eso') para identificar de inmediato cuándo se requiere o sobra la preposición 'de'."
+        },
+        "pleonasmo": {
+                "title": "Detección de Pleonasmos y Redundancias",
+                "desc": "Elimina repeticiones innecesarias que restan elegancia, claridad y concisión a los textos formales ('lapso de tiempo', 'resumir brevemente', 'subir arriba')."
+        },
+        "ambiguedad": {
+                "title": "Anfibología y Ambigüedad Sintáctica",
+                "desc": "Aprende a reordenar los constituyentes oracionales para evitar que una frase admita dos interpretaciones absurdas o contradictorias en la PAA."
+        }
+};
+
+        const data = {
+        "dequeismo": [
+                {
+                        "text": "El decano afirmó _____ todos los candidatos serán evaluados con el mismo rigor.",
+                        "q": "¿Qué opción completa la oración sin incurrir en dequeísmo?",
+                        "o": [
+                                "de que",
+                                "que",
+                                "en que",
+                                "con que"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El verbo 'afirmar' es transitivo y rige objeto directo sin preposición ('afirmó algo', no 'afirmó de algo'). Introducir 'de' constituye dequeísmo. La forma correcta es 'afirmó que'."
+                },
+                {
+                        "text": "Los investigadores están seguros _____ el nuevo medicamento reducirá los síntomas.",
+                        "q": "¿Qué opción completa la construcción gramaticalmente correcta?",
+                        "o": [
+                                "que",
+                                "de que",
+                                "en que",
+                                "por que"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La locución adjetival 'estar seguro' exige obligatoriamente la preposición 'de' ('estar seguro de algo'). Omitir la preposición ('están seguros que') incurre en el vicio llamado queísmo. Lo correcto es 'seguros de que'."
+                },
+                {
+                        "text": "Me acordé _____ habíamos olvidado las llaves sobre la mesa del comedor.",
+                        "q": "¿Cuál es la opción correcta para el verbo pronominal 'acordarse'?",
+                        "o": [
+                                "que",
+                                "de que",
+                                "en que",
+                                "a que"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El verbo pronominal 'acordarse' rige la preposición 'de' ('acordarse de algo'). Si fuera no pronominal ('recordar'), no llevaría preposición ('recordé que'). Aquí, al ser 'me acordé', se requiere 'de que'."
+                },
+                {
+                        "text": "El testigo declaró al juez _____ no recordaba los detalles del altercado.",
+                        "q": "¿Qué opción evita el dequeísmo?",
+                        "o": [
+                                "de que",
+                                "que",
+                                "de cómo",
+                                "en que"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Declarar' rige complemento directo: 'declaró que no recordaba'."
+                },
+                {
+                        "text": "Tengo la certeza _____ lograremos alcanzar los objetivos anuales de ventas.",
+                        "q": "¿Cuál es la formulación correcta con el sustantivo 'certeza'?",
+                        "o": [
+                                "que",
+                                "de que",
+                                "en que",
+                                "por que"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Los sustantivos abstractos de conocimiento o certidumbre ('certeza', 'seguridad', 'duda') exigen la preposición 'de' ante la oración subordinada sustantiva: 'la certeza de que'."
+                },
+                {
+                        "text": "Mi opinión es _____ debemos invertir más recursos en energía sustentable.",
+                        "o": [
+                                "que",
+                                "de que",
+                                "en que",
+                                "con que"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> En oraciones copulativas con el verbo 'ser' ('Mi opinión es...'), la subordinada cumple función de atributo y no lleva preposición: 'es que'."
+                },
+                {
+                        "text": "¿Cuál de las siguientes oraciones presenta el vicio de **dequeísmo**?",
+                        "o": [
+                                "Nos convenció de que debíamos apoyarlo.",
+                                "Me alegro de que hayas venido a la fiesta.",
+                                "Pienso de que la decisión fue muy precipitada.",
+                                "Se enteró de que habían cancelado el vuelo."
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> El verbo 'pensar' es transitivo: se 'piensa algo' (no se 'piensa de algo'). 'Pienso de que' es un claro caso de dequeísmo."
+                },
+                {
+                        "text": "¿Cuál de las siguientes oraciones presenta el vicio de **queísmo** (omisión indebida de 'de')?",
+                        "o": [
+                                "Nos dimos cuenta que no había suficiente combustible.",
+                                "Él insistió en que debíamos partir pronto.",
+                                "Ella confía en que todo saldrá bien.",
+                                "El profesor insistió que hiciéramos la tarea."
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> La locución 'darse cuenta' rige obligatoriamente 'de' ('darse cuenta de algo'). Decir 'nos dimos cuenta que' omite indebidamente la preposición 'de' (queísmo)."
+                },
+                {
+                        "text": "El abogado teme _____ el acusado sea condenado injustamente.",
+                        "o": [
+                                "de que",
+                                "que",
+                                "en que",
+                                "por que"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El verbo 'temer' es transitivo: se 'teme algo', por lo que no lleva 'de': 'teme que'."
+                },
+                {
+                        "text": "A pesar de las críticas, estoy convencido _____ este es el camino adecuado.",
+                        "o": [
+                                "que",
+                                "de que",
+                                "en que",
+                                "con que"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El participio/adjetivo 'convencido' rige la preposición 'de': 'convencido de que'."
+                },
+                {
+                        "text": "Nos informaron _____ el vuelo hacia Madrid saldría con una hora de demora.",
+                        "o": [
+                                "de que",
+                                "que",
+                                "en que",
+                                "por que"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Informar algo a alguien' lleva el contenido informativo en objeto directo sin preposición: 'informaron que el vuelo saldría'."
+                },
+                {
+                        "text": "Tengo miedo _____ no alcancemos a entregar la solicitud antes del cierre.",
+                        "o": [
+                                "que",
+                                "de que",
+                                "a que",
+                                "en que"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El sustantivo 'miedo' rige complemento del nombre con 'de': 'miedo de que no alcancemos'."
+                }
+        ],
+        "pleonasmo": [
+                {
+                        "text": "Durante un *lapso de tiempo* considerable, las investigaciones permanecieron estancadas.",
+                        "q": "¿Qué corrección elimina la redundancia pleonástica en el texto?",
+                        "o": [
+                                "Durante un tiempo considerable",
+                                "Durante un período de tiempo",
+                                "Durante un lapso temporal",
+                                "Durante un lapso de horas"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'Lapso' significa por definición un período de tiempo transcurrido; añadir 'de tiempo' constituye un pleonasmo vicioso. Lo correcto y conciso es 'Durante un tiempo considerable' o 'Durante un lapso considerable'."
+                },
+                {
+                        "text": "El conferencista comenzó por *resumir brevemente* los postulados principales de la teoría.",
+                        "q": "¿Por qué la expresión destacada es viciosa en redacción formal?",
+                        "o": [
+                                "Porque 'resumir' ya implica necesariamente brevedad y síntesis",
+                                "Porque el adverbio 'brevemente' debe colocarse al inicio",
+                                "Porque se debió usar el verbo 'resumirse'",
+                                "Porque 'brevemente' es un término coloquial"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'Resumir' significa reducir a términos breves o condensados. Agregar 'brevemente' es redundante e innecesario."
+                },
+                {
+                        "text": "El sospechoso confesó que vio el crimen con *sus propios ojos*.",
+                        "q": "¿Cómo se formula la idea con concisión académica?",
+                        "o": [
+                                "Vio el crimen por sí mismo con su vista",
+                                "Presenció el crimen",
+                                "Miró el crimen con sus ojos",
+                                "Observó personalmente con su visión"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Presenciar el crimen' sintetiza de manera formal y precisa la acción sin recurrir a la redundancia enfática 'con sus propios ojos'."
+                },
+                {
+                        "text": "¿Cuál de las siguientes frases contiene un **pleonasmo** que debe ser depurado?",
+                        "o": [
+                                "Subieron al segundo piso del edificio.",
+                                "El director ordenó salir afuera a los manifestantes.",
+                                "Se produjo una hemorragia nasal imprevista.",
+                                "Los dos países acordaron cooperar mutuamente."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Salir' ya significa pasar de dentro hacia afuera; 'salir afuera' es una redundancia flagrante."
+                },
+                {
+                        "text": "Los dos presidentes decidieron *colaborar conjuntamente* en el proyecto ambiental.",
+                        "q": "¿Cuál es la redacción más concisa y adecuada?",
+                        "o": [
+                                "Colaborar juntos y a la vez",
+                                "Colaborar en el proyecto ambiental",
+                                "Trabajar colaborando en conjunto",
+                                "Hacer colaboración conjunta"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Colaborar' significa trabajar con otros; el adverbio 'conjuntamente' reduplica innecesariamente la noción de trabajo conjunto."
+                },
+                {
+                        "text": "El médico ordenó detener la *hemorragia de sangre* inmediatamente.",
+                        "q": "¿Qué palabra sobra en el enunciado debido a redundancia semántica?",
+                        "o": [
+                                "inmediatamente",
+                                "de sangre",
+                                "ordenó",
+                                "detener"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Por definición médica y léxica, una 'hemorragia' es exclusivamente un flujo o pérdida de sangre; 'de sangre' es un pleonasmo."
+                },
+                {
+                        "text": "La nave espacial avanza hacia adelante a través de la órbita lunar.",
+                        "q": "¿Cómo se corrige la redundancia?",
+                        "o": [
+                                "Avanza a través de la órbita lunar",
+                                "Camina hacia adelante en la órbita",
+                                "Se adelanta hacia adelante",
+                                "Avanza en avance en la órbita"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'Avanzar' implica por su propia definición un movimiento hacia adelante."
+                },
+                {
+                        "text": "El testigo declaró haber visto un *cadáver sin vida* en el río.",
+                        "q": "¿Por qué es incorrecta la expresión destacada?",
+                        "o": [
+                                "Porque un cadáver, por definición, carece de vida",
+                                "Porque se debe decir 'muerto difunto'",
+                                "Porque no se puede ver un cadáver",
+                                "Porque 'sin vida' es un anglicismo"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'Cadáver' es el cuerpo muerto de una persona; agregar 'sin vida' es un pleonasmo elemental."
+                },
+                {
+                        "text": "Las autoridades deben *prever con antelación* las contingencias del temporal.",
+                        "q": "¿Cómo se expresa con propiedad estilística?",
+                        "o": [
+                                "Prever con anticipación previa",
+                                "Prever las contingencias del temporal",
+                                "Ver antes con antelación",
+                                "Tener previsión de antemano"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Prever' contiene el prefijo 'pre-' (antes); añadir 'con antelación' es redundante."
+                },
+                {
+                        "text": "Era una persona que poseía una *gran masa de volumen* en su estructura.",
+                        "q": "Sustituye por una redacción directa:",
+                        "o": [
+                                "Tenía mucho volumen espacioso",
+                                "Tenía un gran volumen",
+                                "Poseía masa volumétrica de volumen",
+                                "Era un volumen masivo de masa"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Tenía un gran volumen' elimina la innecesaria duplicación de términos."
+                },
+                {
+                        "text": "El testigo *reiteró de nuevo* su declaración ante el tribunal.",
+                        "q": "¿Qué elemento es redundante?",
+                        "o": [
+                                "de nuevo",
+                                "su declaración",
+                                "el testigo",
+                                "ante el tribunal"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'Reiterar' significa decir o hacer una cosa repetidas veces; 'de nuevo' resulta redundante."
+                },
+                {
+                        "text": "Los *hechos reales* demuestran la culpabilidad del imputado.",
+                        "q": "En redacción jurídica formal, se prefiere:",
+                        "o": [
+                                "Los hechos verídicos y reales",
+                                "Los hechos demuestran la culpabilidad",
+                                "Los sucesos de hechos reales",
+                                "Las realidades de hechos"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Un 'hecho' es aquello que ha ocurrido verdaderamente; salvo para distinguirlo de la ficción en géneros artísticos, en argumentación formal basta con 'Los hechos demuestran'."
+                }
+        ],
+        "ambiguedad": [
+                {
+                        "text": "El inspector vio al sospechoso cuando salía de su casa.",
+                        "q": "¿Cuál es la causa de la ambigüedad (anfibología) en la oración?",
+                        "o": [
+                                "No se sabe de quién era la casa (si del inspector o del sospechoso)",
+                                "Falta una coma después de inspector",
+                                "El verbo 'salía' está mal conjugado",
+                                "Debe usarse 'miró' en lugar de 'vio'"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El adjetivo posesivo 'su' crea anfibología: no se puede determinar con certeza si la casa pertenecía al inspector o al sospechoso."
+                },
+                {
+                        "text": "Para evitar la ambigüedad de la oración anterior ('El inspector vio al sospechoso cuando salía de su casa'), ¿cuál es la mejor redacción?",
+                        "o": [
+                                "El inspector, cuando este salía de la casa de él, lo vio.",
+                                "Al salir el inspector de su propia casa, vio al sospechoso.",
+                                "El inspector vio salir al sospechoso de la casa de este último.",
+                                "Ambas opciones B y C son redacciones claras que eliminan la ambigüedad según el sentido deseado."
+                        ],
+                        "a": 3,
+                        "exp": "<b>Análisis:</b> Tanto la opción B como la C desambiguan con precisión a quién pertenece la vivienda y quién estaba saliendo de ella."
+                },
+                {
+                        "text": "El médico le recomendó una pomada al paciente que contenía antibiótico.",
+                        "q": "¿Por qué esta oración contiene un error de orden sintáctico?",
+                        "o": [
+                                "Porque parece que el paciente contenía antibiótico en lugar de la pomada",
+                                "Porque 'pomada' es un vocablo informal",
+                                "Porque falta un punto y coma",
+                                "Porque no se debe usar la palabra 'recomendó'"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> La cláusula de relativo 'que contenía antibiótico' está separada de su antecedente ('la pomada') y colocada junto a 'paciente', generando la absurda lectura de que el paciente contiene antibiótico."
+                },
+                {
+                        "text": "¿Cómo se corrige de manera óptima la oración del médico y la pomada?",
+                        "o": [
+                                "El médico le recomendó al paciente una pomada que contenía antibiótico.",
+                                "Al paciente, una pomada con antibiótico, el médico se la recomendó.",
+                                "El médico recomendó, conteniendo antibiótico, una pomada al paciente.",
+                                "El médico, que contenía antibiótico, recomendó la pomada."
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Al colocar la cláusula de relativo inmediatamente después de su núcleo ('una pomada que contenía antibiótico'), se restablece la claridad sintáctica absoluta."
+                },
+                {
+                        "text": "Encontramos al perro de mi vecino que estaba ladrando en el jardín.",
+                        "q": "¿Cuál es la ambigüedad presente?",
+                        "o": [
+                                "No queda claro si quien estaba en el jardín y ladraba era el perro o el vecino",
+                                "El verbo 'encontramos' está en pasado",
+                                "Falta especificar la raza del perro",
+                                "'Ladrando' es un participio incorrecto"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> La posición del relativo 'que' produce anfibología entre 'el perro' y 'mi vecino'."
+                },
+                {
+                        "text": "¿Qué opción reescribe la oración del perro eliminando la ambigüedad?",
+                        "o": [
+                                "En el jardín encontramos al perro de mi vecino, el cual estaba ladrando.",
+                                "Vimos que mi vecino y su perro ladraban.",
+                                "El perro de mi vecino, mientras este vecino ladraba, fue hallado.",
+                                "Encontramos al vecino con un perro en el jardín."
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El uso del pronombre 'el cual' (que remite al antecedente masculino más lejano o especificado) y el orden de los constituyentes clarifican que el perro era quien ladraba."
+                },
+                {
+                        "text": "Se venden pantalones para niños de pana.",
+                        "q": "¿Qué problema sintáctico manifiesta la frase publicitaria?",
+                        "o": [
+                                "Anfibología: parece que los niños son 'de pana'",
+                                "Discordancia de género",
+                                "Cacofonía",
+                                "Uso incorrecto de preposiciones"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'De pana' modifica al material del pantalón, no al material del niño. Se debe redactar: 'Se venden pantalones de pana para niños'."
+                },
+                {
+                        "text": "María le entregó a Laura su portafolio.",
+                        "q": "¿De quién es el portafolio?",
+                        "o": [
+                                "Exclusivamente de María",
+                                "Exclusivamente de Laura",
+                                "Es ambiguo debido al posesivo 'su'",
+                                "De una tercera persona no mencionada"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Es un clásico ejemplo de ambigüedad pronominal; debe reformularse como 'el portafolio de María' o 'el portafolio de Laura'."
+                },
+                {
+                        "text": "Canto con entusiasmo cuando salgo a caminar por el parque.",
+                        "q": "¿Presenta esta oración ambigüedad?",
+                        "o": [
+                                "Sí, no se sabe quién canta",
+                                "No, el sujeto tácito de primera persona ('yo') es consistente en ambas proposiciones",
+                                "Sí, no se sabe de quién es el parque",
+                                "Sí, porque falta un conector causal"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Los verbos 'Canto' y 'salgo' concuerdan inequívocamente en 1ª persona singular ('yo'), por lo que no hay ambigüedad de sujeto."
+                },
+                {
+                        "text": "El maestro felicitó al estudiante antes de salir de la escuela.",
+                        "q": "¿Cómo desambiguar si el maestro fue quien salió de la escuela?",
+                        "o": [
+                                "Antes de salir de la escuela, el maestro felicitó al estudiante.",
+                                "El maestro felicitó antes al estudiante al salir de la escuela.",
+                                "Felicitó el maestro antes de que saliera de la escuela al estudiante.",
+                                "El estudiante fue felicitado antes de que alguien saliera."
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Colocar el complemento circunstancial temporal ('Antes de salir de la escuela') al inicio orienta directamente la acción hacia el sujeto principal de la oración que le sigue ('el maestro')."
+                },
+                {
+                        "text": "Vimos un cuadro en la galería que costaba una fortuna.",
+                        "q": "¿Qué costaba una fortuna según la sintaxis correcta?",
+                        "o": [
+                                "La galería",
+                                "El cuadro",
+                                "Es ambiguo porque 'que' puede modificar a galería o a cuadro",
+                                "La acción de ver"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> La proximidad de 'galería' y 'cuadro' genera ambigüedad; debe decirse: 'En la galería vimos un cuadro que costaba una fortuna'."
+                },
+                {
+                        "text": "La policía capturó al ladrón en su patrulla.",
+                        "q": "¿Cuál es la interpretación ambigua?",
+                        "o": [
+                                "Que el ladrón viajaba en su propia patrulla",
+                                "Que la policía no tenía patrulla",
+                                "Que el robo ocurrió en la patrulla",
+                                "No hay ninguna ambigüedad"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Parece indicar que el ladrón tenía posesión de la patrulla; lo correcto es 'A bordo de su patrulla, la policía capturó al ladrón'."
+                }
+        ]
+};
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            const info = topicsInfo[tabId];
+            if (info) {
+                document.getElementById('topic-title').innerText = info.title;
+                document.getElementById('topic-text').innerHTML = info.desc;
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                const totalInCat = data[cat].length;
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    
+                    let tableHtml = item.table ? `<table class="table-data">${item.table}</table>` : '';
+                    let readingHtml = '';
+                    let questionTitle = item.q || '';
+
+                    if (item.text && item.q) {
+                        readingHtml = `<div class="reading-box">${item.text}</div>`;
+                        questionTitle = item.q;
+                    } else if (item.text && !item.q) {
+                        if (item.text.includes('_____')) {
+                            readingHtml = `<div class="reading-box">${item.text}</div>`;
+                            questionTitle = 'Selecciona la opción que completa correctamente el enunciado:';
+                        } else if (item.text.startsWith('¿') || item.text.includes('?')) {
+                            questionTitle = item.text;
+                        } else {
+                            readingHtml = `<div class="reading-box">${item.text}</div>`;
+                            questionTitle = 'Selecciona la opción correcta con base en el texto:';
+                        }
+                    }
+                    
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4 flex justify-between items-center">
+                            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Desafío ${i+1} / ${totalInCat}</span>
+                        </div>
+                        ${readingHtml}
+                        ${tableHtml}
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${questionTitle}</h2>
+                        <div class="space-y-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { btn.classList.add('correct-opt'); score += 10; }
+            else { btn.classList.add('incorrect-opt'); box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); }
+            hint.style.display = 'block';
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { if(confirm('¿Reiniciar progreso?')) { score = 0; document.getElementById('global-score').innerText = 0; render(); showTab('dequeismo'); } }
+
+        window.onload = () => { render(); showTab('dequeismo'); };
+    </script>
+</body>
+</html>

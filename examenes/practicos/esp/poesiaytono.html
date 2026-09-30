@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Análisis de Poesía, Tono y Propósito</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .reading-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 1.25rem; border-radius: 0.75rem; margin-bottom: 1.25rem; font-style: italic; color: #92400e; line-height: 1.6; font-size: 0.95rem; }
+        nav::-webkit-scrollbar { height: 6px; }
+        nav::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+        .table-data { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1rem; }
+        .table-data th, .table-data td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; }
+        .table-data th { background: #f1f5f9; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden md:block italic">Tono Narrativo, Propósito Comunicativo y Simbolismo Lírico</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación Extendida -->
+        <div class="mb-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">Módulos de Práctica</div>
+        <nav class="flex gap-2 mb-8 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto scroll-smooth no-scrollbar">
+
+            <button onclick="showTab('tono')" id="btn-tono" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600 flex-shrink-0">
+                14.1 Tono y Actitud del Autor
+            </button>
+
+            <button onclick="showTab('proposito')" id="btn-proposito" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                14.2 Propósito Comunicativo
+            </button>
+
+            <button onclick="showTab('simbolismo')" id="btn-simbolismo" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                14.3 Análisis Poético y Simbolismo
+            </button>
+        </nav>
+
+        <!-- Banner Dinámico -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenedores de Preguntas -->
+
+        <div id="tono" class="tab-content active space-y-6"></div>
+
+        <div id="proposito" class="tab-content  space-y-6"></div>
+
+        <div id="simbolismo" class="tab-content  space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+        "tono": {
+                "title": "Identificación del Tono del Autor",
+                "desc": "Aprende a reconocer la postura anímica del emisor (nostálgico, crítico, solemne, satírico, reflexivo, escéptico) a través de las pistas léxicas del texto."
+        },
+        "proposito": {
+                "title": "Propósito Comunicativo Primordial",
+                "desc": "Determina la intención de fondo del texto (persuadir, refutar, homenajear, concienciar, instruir o denunciar) evaluada con insistencia en la PAA."
+        },
+        "simbolismo": {
+                "title": "Análisis Lírico, Métrica y Simbolismo",
+                "desc": "Interpreta poemas hispanoamericanos clásicos y contemporáneos, desentrañando metáforas, paradojas, tópicos universales y la voz lírica."
+        }
+};
+
+        const data = {
+        "tono": [
+                {
+                        "text": "'¡Ay, qué amargas son las horas que transcurren en esta celda solitaria, donde solo el eco de mis propios gemidos responde a mi angustia infinita!'",
+                        "q": "¿Cuál es el tono predominante en el fragmento?",
+                        "o": [
+                                "Satírico e irónico",
+                                "Desgarrador y elegíaco",
+                                "Optimista y jovial",
+                                "Objetivo y distante"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Vocablos como 'amargas', 'celda solitaria', 'gemidos' y 'angustia infinita' configuran un tono desgarrador, quejumbroso y elegíaco centrado en el dolor profundo."
+                },
+                {
+                        "text": "'El honorable concejal promete construir puentes donde ni siquiera hay ríos, con tal de pescar los votos de los incautos ciudadanos que vuelven a aplaudirle cada cuatro años'.",
+                        "q": "¿Qué tono emplea el autor?",
+                        "o": [
+                                "Reverente y solemne",
+                                "Científico e imparcial",
+                                "Satírico y mordaz",
+                                "Melancólico y resignado"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> La ironía sobre 'construir puentes donde no hay ríos' y 'pescar votos' denota una crítica satírica, mordaz y burlona contra la clase política demagógica."
+                },
+                {
+                        "text": "'En aquel crepúsculo de otoño, las hojas doradas caían con la suavidad de un suspiro sobre el viejo sendero donde alguna vez fuimos inmensamente felices'.",
+                        "q": "¿Qué actitud o tono destila el pasaje?",
+                        "o": [
+                                "Nostálgico y evocador",
+                                "Hostil y beligerante",
+                                "Festivo y eufórico",
+                                "Escéptico y desconfiado"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> La evocación del pasado feliz ligada a elementos crepusculares y otoñales imprime un tono marcadamente nostálgico y melancólico."
+                },
+                {
+                        "text": "'El experimento arrojó un margen de error del 0.03%, lo cual convalida la hipótesis nula en conformidad con los parámetros estipulados en el protocolo de bioensayo'.",
+                        "q": "¿Cómo se clasifica el tono del emisor?",
+                        "o": [
+                                "Poético y lírico",
+                                "Objetivo, neutral y académico",
+                                "Coloquial y afectivo",
+                                "Dramático y apasionado"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El lenguaje está desprovisto de emotividad o juicio de valor personal; es un tono rigurosamente técnico, neutro y descriptivo."
+                },
+                {
+                        "text": "'¿De verdad esperan que creamos que una corporación transnacional gasta millones en campañas ecológicas por pura bondad en su corazón? Por favor, seamos serios'.",
+                        "q": "¿Qué actitud adopta el autor ante la campaña ecológica?",
+                        "o": [
+                                "Entusiasta y crédula",
+                                "Escéptica y desconfiada",
+                                "Indiferente y desinteresada",
+                                "Ingenua y complaciente"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La pregunta retórica y el cierre descalificatorio evidencian un profundo escepticismo ante los motivos corporativos."
+                },
+                {
+                        "text": "'Con reverente devoción nos inclinamos ante el altar de los caídos, cuyos nombres resplandecen grabados con fuego en la memoria viva de la patria'.",
+                        "q": "¿Qué tono se manifiesta en el discurso patriótico?",
+                        "o": [
+                                "Solemne, reverente y laudatorio",
+                                "Crítico y censurador",
+                                "Cómico y festivo",
+                                "Lúgubre y pesimista"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El léxico sacralizado ('reverente devoción', 'altar de los caídos', 'resplandecen en la memoria') transmite un tono de profunda solemnidad y alabanza."
+                },
+                {
+                        "text": "'Caminen sin miedo hacia el futuro, porque en cada uno de ustedes reside la chispa transformadora capaz de derribar cualquier muralla y forjar un destino grandioso'.",
+                        "q": "¿Qué tono imprime el orador a su mensaje?",
+                        "o": [
+                                "Admonitorio y amenazante",
+                                "Exhortativo y motivador",
+                                "Cansado y derrotista",
+                                "Dubitativo e inseguro"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Los imperativos ('Caminen sin miedo') y las metáforas de superación imprimen un tono inspirador, exhortativo y estimulante."
+                },
+                {
+                        "text": "'Hicieron todo lo posible por salvar el galeón, pero el mar indomable lo tragó en silencio; nada quedó del orgullo de la flota sino maderas a la deriva'.",
+                        "q": "¿Qué tono describe el desenlace trágico?",
+                        "o": [
+                                "Triunfal",
+                                "Resignado y sombrío",
+                                "Cínico",
+                                "Sorpresivo"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Describe la derrota irremediable ante la naturaleza con resignación fúnebre y pesadumbre sombría."
+                },
+                {
+                        "text": "'¡Qué maravilla de fiesta! Las risas resonaban por los balcones, la música embriagaba el aire y cada rincón vibraba con una alegría contagiosa'.",
+                        "q": "¿Qué tono caracteriza al texto narrativo?",
+                        "o": [
+                                "Jovial, festivo y entusiasta",
+                                "Melancólico y sosegado",
+                                "Analítico y reflexivo",
+                                "Irónico y despectivo"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El léxico ('maravilla', 'risas', 'alegría contagiosa') instaura una atmósfera vibrante y jubilosa."
+                },
+                {
+                        "text": "'No niego que la propuesta tiene aspectos interesantes; sin embargo, aconsejo prudencia y un análisis pormenorizado antes de firmar cualquier compromiso'.",
+                        "q": "¿Qué postura tonal asume el interlocutor?",
+                        "o": [
+                                "Cautelosa y mesurada",
+                                "Agresiva e impulsiva",
+                                "Sumisa y complaciente",
+                                "Desesperada"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'Aconsejo prudencia y análisis pormenorizado' muestra una postura sobria, cautelosa y reflexiva."
+                },
+                {
+                        "text": "'Miraba las viejas cartas amarillentas y sentía que el tiempo es un ladrón silencioso que nos roba los mejores instantes de la juventud'.",
+                        "q": "¿Qué tono destila la reflexión del personaje?",
+                        "o": [
+                                "Nostálgico y elegíaco",
+                                "Alegre y festivo",
+                                "Hostil y retador",
+                                "Indiferente"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El lamento por el paso inexorable del tiempo ('ladrón silencioso') es el arquetipo del tono elegíaco y nostálgico."
+                },
+                {
+                        "text": "'¡Bravo! Otro plan de austeridad que le quita el pan a los pensionados para rescatar a banqueros multimillonarios. Una genialidad sin duda'.",
+                        "q": "¿Qué figura tonal fundamenta el enunciado?",
+                        "o": [
+                                "Ironía mordaz y sarcasmo",
+                                "Alabanza sincera",
+                                "Elegía clásica",
+                                "Objetividad periodística"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Calificar de 'bravo' y 'genialidad' una medida que perjudica a los vulnerables es un claro uso del sarcasmo y la ironía crítica."
+                }
+        ],
+        "proposito": [
+                {
+                        "text": "Un artículo periodístico detalla las irregularidades en la adjudicación de contratos públicos de pavimentación, aportando auditorías y testimonios anónimos de funcionarios.",
+                        "q": "¿Cuál es el propósito primordial del texto?",
+                        "o": [
+                                "Entretener a la audiencia con relatos novelescos",
+                                "Denunciar y visibilizar presuntos actos de corrupción administrativa",
+                                "Promover el turismo hacia la ciudad en cuestión",
+                                "Capacitar a ingenieros civiles en técnicas de asfaltado"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El contenido del reportaje (auditorías, irregularidades, testimonios) tiene como fin comunicativo evidente la denuncia pública y la rendición de cuentas."
+                },
+                {
+                        "text": "Un folleto de salud pública ilustra los síntomas de la deshidratación infantil y brinda recomendaciones para preparar suero oral casero.",
+                        "q": "¿Qué propósito persigue el folleto?",
+                        "o": [
+                                "Persuadir a los lectores de estudiar medicina",
+                                "Informar y educar preventivamente a la población sobre el cuidado de la salud",
+                                "Criticar el sistema hospitalario nacional",
+                                "Vender productos farmacéuticos de una marca específica"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Al listar síntomas y dar instrucciones prácticas, el propósito es pedagógico, preventivo y asistencial (educar en salud)."
+                },
+                {
+                        "text": "En un ensayo académico, un sociólogo rebate los argumentos de quienes afirman que la juventud actual está desinteresada de la política, mostrando estadísticas de participación digital y colectivos barriales.",
+                        "q": "¿Cuál es el propósito del autor?",
+                        "o": [
+                                "Homenajear a los fundadores de su universidad",
+                                "Refutar un estereotipo social aportando evidencia empírica",
+                                "Desalentar el activismo en las redes sociales",
+                                "Proponer la eliminación de las elecciones tradicionales"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El ensayo busca desmentir una creencia generalizada (el apoliticismo juvenil) mediante datos sociológicos directos (refutación)."
+                },
+                {
+                        "text": "Un discurso pronunciado durante la inauguración de una reserva ecológica exalta el legado de una bióloga pionera que dedicó cuarenta años a proteger el jaguar.",
+                        "q": "¿Cuál es la intención comunicativa primordial?",
+                        "o": [
+                                "Rendir homenaje y honrar la trayectoria de una científica",
+                                "Explicar la anatomía detallada de los felinos carnívoros",
+                                "Vender tierras en la periferia de la reserva",
+                                "Advertir sobre el peligro de los jaguares para los campesinos"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El encomio de virtudes y la conmemoración de la obra de vida sitúan el texto en el género laudatorio u homenaje."
+                },
+                {
+                        "text": "Un editorial argumenta apasionadamente que la lectura diaria transforma la empatía humana y pide a los ministerios de educación triplicar el presupuesto de bibliotecas públicas.",
+                        "q": "¿Cuál es el propósito del editorial?",
+                        "o": [
+                                "Persuadir e incidir en las políticas públicas educativas",
+                                "Describir el proceso químico de fabricación del papel",
+                                "Narrar una anécdota personal de infancia",
+                                "Calcular el costo del transporte de libros"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El autor busca convencer al lector y demandar una acción concreta del Estado (propósito persuasivo y apelativo)."
+                },
+                {
+                        "text": "Un instructivo de electrodoméstico enumera paso a paso las medidas de seguridad para conectar una lavadora y limpiar el filtro de desagüe.",
+                        "q": "¿Qué función comunicativa cumple?",
+                        "o": [
+                                "Prescriptiva e instructiva",
+                                "Poética y estética",
+                                "Argumentativa y dialéctica",
+                                "Lírica y expresiva"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Guía de manera secuencial y normativa la conducta operativa del usuario."
+                },
+                {
+                        "text": "Una columna de opinión satiriza las modas gastronómicas efímeras que cobran precios desorbitados por porciones minúsculas decoradas con flores comestibles.",
+                        "q": "¿Cuál es el fin del columnista?",
+                        "o": [
+                                "Instruir en alta cocina francesa",
+                                "Criticar con humor y ridiculizar el esnobismo gastronómico",
+                                "Promocionar los restaurantes de lujo",
+                                "Advertir sobre la toxicidad de las flores"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El autor recurre a la sátira para criticar y cuestionar el esnobismo y la superficialidad del mercado culinario moderno."
+                },
+                {
+                        "text": "Un manifiesto ciudadano convoca a una huelga pacífica para exigir tarifas justas en el transporte metropolitano.",
+                        "q": "¿Cuál es su meta fundamental?",
+                        "o": [
+                                "Movilizar a la sociedad civil para demandar un cambio social",
+                                "Escribir una crónica histórica sobre trenes antiguos",
+                                "Hacer un balance contable de los conductores",
+                                "Describir el plano de las líneas de metro"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El manifiesto tiene una función directiva y apelativa: movilizar a los ciudadanos hacia la acción colectiva."
+                },
+                {
+                        "text": "Una biografía novelada recrea con dramatismo y diálogos íntimos las tribulaciones de Marie Curie en sus años de mayor precariedad en París.",
+                        "q": "¿Cuál es el propósito del escritor?",
+                        "o": [
+                                "Redactar una fórmula química para uso de laboratorio",
+                                "Conmover y sensibilizar al lector al humanizar a una figura histórica",
+                                "Criticar los descubrimientos de la física cuántica",
+                                "Redactar un catálogo bibliográfico universitario"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La recreación ficcionalizada busca generar empatía emocional e interés humano por el personaje histórico."
+                },
+                {
+                        "text": "Un manual de estilo periodístico establece las pautas ortográficas y deontológicas que los reporteros de un diario deben respetar al cubrir noticias judiciales.",
+                        "q": "¿Cuál es el propósito del documento?",
+                        "o": [
+                                "Establecer normas éticas y de redacción uniformes para los profesionales del periódico",
+                                "Escribir historias de misterio y ficción policíaca",
+                                "Publicar sentencias de tribunales penales",
+                                "Aumentar las ventas de ejemplares en los quioscos"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Estandarizar la calidad ética y lingüística del medio informativo."
+                },
+                {
+                        "text": "Un manifiesto ecologista advierte sobre el colapso inminente de los arrecifes de coral si la temperatura global aumenta otro grado centígrado.",
+                        "q": "¿Qué propósito persigue el documento?",
+                        "o": [
+                                "Alertar y concienciar sobre una catástrofe ecológica inminente",
+                                "Promover el buceo recreativo en el Caribe",
+                                "Vender acuarios domésticos",
+                                "Describir la taxonomía marina sin ninguna advertencia"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Pretende sensibilizar a la comunidad global sobre la urgencia climática."
+                },
+                {
+                        "text": "Un artículo de divulgación científica explica de manera accesible cómo los telescopios captan ondas de radio emitidas por púlsares distantes.",
+                        "q": "¿Cuál es el objetivo comunicativo?",
+                        "o": [
+                                "Divulgar y democratizar el conocimiento científico haciéndolo comprensible al público general",
+                                "Demostrar que los astrónomos están equivocados",
+                                "Vender antenas parabólicas comerciales",
+                                "Escribir un cuento de ciencia ficción sobre alienígenas"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> La divulgación tiene por meta tender un puente entre la ciencia compleja y el público no especializado."
+                }
+        ],
+        "simbolismo": [
+                {
+                        "text": "'Volverán las oscuras golondrinas / en tu balcón sus nidos a colgar, / y otra vez con el ala a sus cristales / jugando llamarán. // Pero aquellas que el vuelo refrenaban / tu hermosura y mi dicha a contemplar, / aquellas que aprendieron nuestros nombres... / ¡esas... no volverán!' (Gustavo Adolfo Bécquer)",
+                        "q": "¿Qué simbolizan 'aquellas golondrinas' específicas que 'no volverán'?",
+                        "o": [
+                                "La migración biológica anual de las aves europeas",
+                                "La irrepetibilidad del amor puro y la juventud perdida",
+                                "El cambio de estación meteorológica del invierno",
+                                "La fragilidad de los balcones antiguos"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Bécquer contrasta los ciclos naturales que sí retornan (las golondrinas genéricas) con la experiencia vital del amor auténtico que, una vez fenecido, jamás podrá revivir."
+                },
+                {
+                        "text": "'Nuestras vidas son los ríos / que van a dar en la mar, / que es el morir; / allí van los señoríos / derechos a se acabar / y consumir...' (Jorge Manrique)",
+                        "q": "¿Qué metáfora central estructura los versos de Manrique?",
+                        "o": [
+                                "La vida como una expedición mercantil marítima",
+                                "La vida como un río continuo cuyo destino ineludible e igualador es el mar (la muerte)",
+                                "El mar como símbolo de la riqueza material de los reyes",
+                                "Los ríos como representación de las guerras feudales"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Es el célebre tópico del 'homo viator' y el 'río de la vida': el discurrir del agua representa el tránsito temporal y el mar simboliza la muerte igualitaria que no distingue clases sociales."
+                },
+                {
+                        "text": "'Hombres necios que acusáis / a la mujer sin razón, / sin ver que sois la ocasión / de lo mismo que culpáis...' (Sor Juana Inés de la Cruz)",
+                        "q": "¿Cuál es el tema primordial y la figura de pensamiento en la estrofa de Sor Juana?",
+                        "o": [
+                                "La celebración de la caballería andante",
+                                "La denuncia de la doble moral machista mediante la paradoja de la culpa recíproca",
+                                "El elogio de la obediencia femenina en el virreinato",
+                                "Un lamento elegíaco por la pérdida de un familiar"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Sor Juana desenmascara la hipocresía social y la incoherencia moral de los hombres que inducen al vicio y luego condenan a la mujer."
+                },
+                {
+                        "text": "'Puedo escribir los versos más tristes esta noche. / Escribir, por ejemplo: «La noche está estrellada, / y tiritan, azules, los astros, a lo lejos».' (Pablo Neruda)",
+                        "q": "En la personificación 'tiritan, azules, los astros', ¿qué emoción proyecta la voz lírica en la naturaleza?",
+                        "o": [
+                                "Entusiasmo desbordante",
+                                "Soledad gélida, desamparo y melancolía",
+                                "Furia y violencia cósmica",
+                                "Ironía mordaz"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El titilar de las estrellas personificado como un temblor de frío ('tiritan') proyecta el estado de ánimo desolado y desamparado del poeta sobre la inmensidad nocturna."
+                },
+                {
+                        "text": "'Juventud, divino tesoro, / ¡ya te vas para no volver! / Cuando quiero llorar, no lloro... / y a veces lloro sin querer...' (Rubén Darío)",
+                        "q": "¿Qué tópico literario universal aborda Darío en estos versos modernistas?",
+                        "o": [
+                                "Carpe diem (Aprovecha el día presente)",
+                                "Ubi sunt (¿Dónde están los que fueron?)",
+                                "Tempus fugit (La fugacidad inexorable del tiempo y la juventud)",
+                                "Locus amoenus (El lugar idílico y campestre)"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> 'Tempus fugit': el lamento por la pérdida irreparable de la juventud como bien supremo e irrecuperable."
+                },
+                {
+                        "text": "'Caminante, son tus huellas / el camino y nada más; / Caminante, no hay camino, / se hace camino al andar.' (Antonio Machado)",
+                        "q": "¿Qué significado filosófico encierran las huellas y el camino en Machado?",
+                        "o": [
+                                "Que la vida ya está predestinada por el destino y no puede cambiarse",
+                                "Que el sentido y la trayectoria de la existencia se forjan mediante las decisiones y acciones individuales de cada persona",
+                                "Que es peligroso viajar a pie por los senderos de España",
+                                "Que no se debe mirar hacia el pasado bajo ninguna circunstancia"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Machado concibe la vida como una creación existencial propia: no hay un destino preestablecido; cada individuo construye su senda con sus actos."
+                },
+                {
+                        "text": "¿Qué figura retórica se aprecia en: 'El dulce lamentar de dos pastores'?",
+                        "o": [
+                                "Oxímoron (unión de sensaciones contradictorias: lamentar dulce)",
+                                "Hipérbole exagerada",
+                                "Onomatopeya",
+                                "Anáfora"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El adjetivo 'dulce' aplicado a una manifestación de pesar o dolor ('lamentar') conforma un oxímoron estético."
+                },
+                {
+                        "text": "'En el silencio sólo se escuchaba / un susurro de abejas que sonaba.' (Garcilaso de la Vega)",
+                        "q": "¿Qué efecto fónico busca la repetición del fonema 's' (aliteración)?",
+                        "o": [
+                                "Imitar acústicamente el zumbido suave y continuo de las abejas",
+                                "Asustar al lector con un sonido estridente",
+                                "Acelerar el ritmo de la lectura",
+                                "Romper la rima del poema"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> La aliteración de la 's' evoca e imita de manera sensorial el zumbido apacible de las abejas en el campo."
+                },
+                {
+                        "text": "'Érase un hombre a una nariz pegado, / érase una nariz superlativa...' (Francisco de Quevedo)",
+                        "q": "¿Qué figura literaria predomina en la descripción satírica que hace Quevedo?",
+                        "o": [
+                                "Hipérbole desmesurada para satirizar al personaje",
+                                "Metáfora oscura e incomprensible",
+                                "Pleonasmo trágico",
+                                "Elipsis dramática"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> La magnificación grotesca de la nariz hasta convertir al hombre en apéndice de ella es el culmen de la hipérbole quevediana."
+                },
+                {
+                        "text": "'Vivo sin vivir en mí, / y tan alta vida espero, / que muero porque no muero.' (Santa Teresa de Jesús)",
+                        "q": "¿Qué figura de pensamiento define la contradicción mística de Santa Teresa?",
+                        "o": [
+                                "Paradoja mística",
+                                "Sarcasmo cruel",
+                                "Metonimia instrumental",
+                                "Pleonasmo verbal"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> La unión de ideas aparentemente irreconciliables (morir por no poder morir para alcanzar la vida eterna) conforma la paradoja cumbre de la lírica mística."
+                },
+                {
+                        "text": "En la poesía lírica, ¿a quién se le denomina 'voz poética' o 'hablante lírico'?",
+                        "o": [
+                                "Al autor de carne y hueso en su vida civil",
+                                "Al personaje o entidad creada en el poema que expresa sus sentimientos y visión de mundo",
+                                "Al lector que recita el poema en voz alta",
+                                "Al editor que publica el poemario"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La voz lírica es una construcción discursiva ficticia a través de la cual se enuncia el poema, no confundible biográficamente con el autor de carne y hueso."
+                },
+                {
+                        "text": "'La guitarra es un pozo / con viento en vez de agua.' (Gerardo Diego)",
+                        "q": "¿Qué recurso poético define a la guitarra identificándola con otro objeto?",
+                        "o": [
+                                "Metáfora pura que asocia la caja de resonancia con la profundidad y el aire vibrante",
+                                "Símil mediante el nexo 'como'",
+                                "Ironía punzante",
+                                "Hipérbaton latino"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Identifica directamente la guitarra con un pozo ('la guitarra es un pozo'), transportando la noción de hondura y resonancia sonora sin nexos comparativos."
+                }
+        ]
+};
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            const info = topicsInfo[tabId];
+            if (info) {
+                document.getElementById('topic-title').innerText = info.title;
+                document.getElementById('topic-text').innerHTML = info.desc;
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                const totalInCat = data[cat].length;
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    
+                    let tableHtml = item.table ? `<table class="table-data">${item.table}</table>` : '';
+                    let readingHtml = '';
+                    let questionTitle = item.q || '';
+
+                    if (item.text && item.q) {
+                        readingHtml = `<div class="reading-box">${item.text}</div>`;
+                        questionTitle = item.q;
+                    } else if (item.text && !item.q) {
+                        if (item.text.includes('_____')) {
+                            readingHtml = `<div class="reading-box">${item.text}</div>`;
+                            questionTitle = 'Selecciona la opción que completa correctamente el enunciado:';
+                        } else if (item.text.startsWith('¿') || item.text.includes('?')) {
+                            questionTitle = item.text;
+                        } else {
+                            readingHtml = `<div class="reading-box">${item.text}</div>`;
+                            questionTitle = 'Selecciona la opción correcta con base en el texto:';
+                        }
+                    }
+                    
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4 flex justify-between items-center">
+                            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Desafío ${i+1} / ${totalInCat}</span>
+                        </div>
+                        ${readingHtml}
+                        ${tableHtml}
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${questionTitle}</h2>
+                        <div class="space-y-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { btn.classList.add('correct-opt'); score += 10; }
+            else { btn.classList.add('incorrect-opt'); box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); }
+            hint.style.display = 'block';
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { if(confirm('¿Reiniciar progreso?')) { score = 0; document.getElementById('global-score').innerText = 0; render(); showTab('tono'); } }
+
+        window.onload = () => { render(); showTab('tono'); };
+    </script>
+</body>
+</html>

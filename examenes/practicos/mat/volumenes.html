@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Volúmenes y Geometría del Espacio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .svg-container { background: #f8fafc; border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: center; border: 1px solid #e2e8f0; }
+        nav::-webkit-scrollbar { height: 4px; }
+        nav::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden sm:block italic">Prismas, Cubos, Cilindros, Conos, Esferas y Capacidad</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación -->
+        <nav class="flex flex-wrap gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto whitespace-nowrap">
+
+            <button onclick="showTab('prismas')" id="btn-prismas" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600">
+                8.1 Prismas Rectangulares y Cubos
+            </button>
+
+            <button onclick="showTab('cilindros')" id="btn-cilindros" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                8.2 Cilindros, Conos y Esferas
+            </button>
+
+            <button onclick="showTab('capacidad')" id="btn-capacidad" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                8.3 Problemas de Capacidad y Vaciado
+            </button>
+        </nav>
+
+        <!-- Banner Informativo -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenidos -->
+
+        <div id="prismas" class="tab-content active space-y-6"></div>
+
+        <div id="cilindros" class="tab-content  space-y-6"></div>
+
+        <div id="capacidad" class="tab-content  space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+        "prismas": {
+                "title": "Prismas Rectangulares y Cubos",
+                "desc": "Aprende a calcular volúmenes, áreas superficiales totales y diagonales espaciales tridimensionales frecuentes en la PAA."
+        },
+        "cilindros": {
+                "title": "Cuerpos Redondos (Cilindros, Conos y Esferas)",
+                "desc": "Domina las relaciones métricas entre cilindros, conos inscritos y esferas conservando $\\pi$ para agilizar tus cálculos."
+        },
+        "capacidad": {
+                "title": "Problemas Verbales de Capacidad y Tasas de Flujo",
+                "desc": "Modela situaciones de vaciado de tanques, empaque en contenedores y desplazamiento de volumen por inmersión."
+        }
+};
+
+        
+
+        const data = {
+        "prismas": [
+                {
+                        "q": "Calcula el volumen de una caja rectangular con dimensiones de $8\\text{ cm}$ de largo, $5\\text{ cm}$ de ancho y $4\\text{ cm}$ de alto.",
+                        "svg": "<svg width=\"200\" height=\"140\" viewBox=\"0 0 200 140\" xmlns=\"http://www.w3.org/2000/svg\">\n    <polygon points=\"30,50 110,50 110,120 30,120\" fill=\"#e0e7ff\" stroke=\"#4f46e5\" stroke-width=\"2\" />\n    <polygon points=\"110,50 160,20 160,90 110,120\" fill=\"#c7d2fe\" stroke=\"#4f46e5\" stroke-width=\"2\" />\n    <polygon points=\"30,50 80,20 160,20 110,50\" fill=\"#eef2ff\" stroke=\"#4f46e5\" stroke-width=\"2\" />\n    <text x=\"60\" y=\"135\" font-size=\"11\" font-weight=\"bold\" fill=\"#312e81\">l = 8</text>\n    <text x=\"140\" y=\"115\" font-size=\"11\" font-weight=\"bold\" fill=\"#312e81\">w = 5</text>\n    <text x=\"15\" y=\"90\" font-size=\"11\" font-weight=\"bold\" fill=\"#312e81\">h = 4</text>\n  </svg>",
+                        "o": [
+                                "$120\\text{ cm}^3$",
+                                "$160\\text{ cm}^3$",
+                                "$180\\text{ cm}^3$",
+                                "$200\\text{ cm}^3$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El volumen de un prisma rectangular es $V = l \\cdot w \\cdot h = 8 \\times 5 \\times 4 = 160\\text{ cm}^3$."
+                },
+                {
+                        "q": "¿Cuál es el volumen de un cubo cuya arista mide $6\\text{ cm}$?",
+                        "o": [
+                                "$36\\text{ cm}^3$",
+                                "$144\\text{ cm}^3$",
+                                "$216\\text{ cm}^3$",
+                                "$256\\text{ cm}^3$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> $V = a^3 = 6^3 = 6 \\times 6 \\times 6 = 216\\text{ cm}^3$."
+                },
+                {
+                        "q": "Si el área superficial total de un cubo es de $150\\text{ cm}^2$, ¿cuál es la longitud de su arista?",
+                        "o": [
+                                "$4\\text{ cm}$",
+                                "$5\\text{ cm}$",
+                                "$6\\text{ cm}$",
+                                "$25\\text{ cm}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Un cubo tiene 6 caras cuadradas congruentes: $6a^2 = 150 \\implies a^2 = 25 \\implies a = 5\\text{ cm}$."
+                },
+                {
+                        "q": "Una piscina con forma de prisma rectangular mide $10\\text{ m}$ de largo, $4\\text{ m}$ de ancho y $2\\text{ m}$ de profundidad. ¿Cuántos litros de agua se necesitan para llenarla completamente? ($1\\text{ m}^3 = 1000\\text{ litros}$)",
+                        "o": [
+                                "$8,000\\text{ L}$",
+                                "$16,000\\text{ L}$",
+                                "$80,000\\text{ L}$",
+                                "$160,000\\text{ L}$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> $V = 10 \\times 4 \\times 2 = 80\\text{ m}^3$. En litros: $80 \\times 1000 = 80,000\\text{ litros}$."
+                },
+                {
+                        "q": "Si la arista de un cubo se triplica, ¿cuántas veces aumenta su volumen?",
+                        "o": [
+                                "$3$ veces",
+                                "$9$ veces",
+                                "$18$ veces",
+                                "$27$ veces"
+                        ],
+                        "a": 3,
+                        "exp": "<b>Análisis:</b> El volumen depende del cubo de la longitud: $(3a)^3 = 27a^3$, por lo que aumenta $27$ veces."
+                },
+                {
+                        "q": "¿Cuál es el área superficial total de un prisma rectangular de dimensiones $4\\text{ cm} \\times 3\\text{ cm} \\times 2\\text{ cm}$?",
+                        "o": [
+                                "$24\\text{ cm}^2$",
+                                "$52\\text{ cm}^2$",
+                                "$48\\text{ cm}^2$",
+                                "$36\\text{ cm}^2$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $A = 2(lw + lh + wh) = 2(4 \\times 3 + 4 \\times 2 + 3 \\times 2) = 2(12 + 8 + 6) = 2(26) = 52\\text{ cm}^2$."
+                },
+                {
+                        "q": "La diagonal espacial de una caja de $3\\text{ cm} \\times 4\\text{ cm} \\times 12\\text{ cm}$ mide:",
+                        "o": [
+                                "$13\\text{ cm}$",
+                                "$14\\text{ cm}$",
+                                "$15\\text{ cm}$",
+                                "$17\\text{ cm}$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> $d = \\sqrt{l^2 + w^2 + h^2} = \\sqrt{3^2 + 4^2 + 12^2} = \\sqrt{9 + 16 + 144} = \\sqrt{169} = 13\\text{ cm}$."
+                },
+                {
+                        "q": "Un bloque metálico de $10\\text{ cm} \\times 5\\text{ cm} \\times 2\\text{ cm}$ se funde para formar cubitos de $1\\text{ cm}$ de arista. ¿Cuántos cubitos se obtienen?",
+                        "o": [
+                                "$50$",
+                                "$100$",
+                                "$150$",
+                                "$200$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Volumen del bloque $= 10 \\times 5 \\times 2 = 100\\text{ cm}^3$. Cada cubito tiene volumen de $1\\text{ cm}^3$. Se obtienen $100$ cubitos."
+                },
+                {
+                        "q": "Si un cubo tiene un volumen de $64\\text{ cm}^3$, ¿cuánto mide su área superficial total?",
+                        "o": [
+                                "$16\\text{ cm}^2$",
+                                "$64\\text{ cm}^2$",
+                                "$96\\text{ cm}^2$",
+                                "$128\\text{ cm}^2$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> $a^3 = 64 \\implies a = 4\\text{ cm}$. El área total es $6a^2 = 6(4^2) = 6(16) = 96\\text{ cm}^2$."
+                },
+                {
+                        "q": "Un prisma de base triangular tiene una base con área de $15\\text{ cm}^2$ y una altura de $10\\text{ cm}$. ¿Cuál es su volumen?",
+                        "o": [
+                                "$50\\text{ cm}^3$",
+                                "$75\\text{ cm}^3$",
+                                "$150\\text{ cm}^3$",
+                                "$300\\text{ cm}^3$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Para cualquier prisma recto, $V = A_{\\text{base}} \\times h = 15 \\times 10 = 150\\text{ cm}^3$."
+                },
+                {
+                        "q": "Si se duplican el largo y el ancho de un prisma rectangular pero su altura se reduce a la mitad, ¿qué ocurre con su volumen?",
+                        "o": [
+                                "Permanece igual",
+                                "Se duplica",
+                                "Se reduce a la mitad",
+                                "Se cuadruplica"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $V' = (2l)(2w)\\left(\\frac{h}{2}\\right) = 2(lwh) = 2V$. El volumen se duplica."
+                },
+                {
+                        "q": "La suma de las 12 aristas de un cubo es de $48\\text{ cm}$. ¿Cuál es el volumen del cubo?",
+                        "o": [
+                                "$16\\text{ cm}^3$",
+                                "$36\\text{ cm}^3$",
+                                "$64\\text{ cm}^3$",
+                                "$128\\text{ cm}^3$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Un cubo tiene 12 aristas: $12a = 48 \\implies a = 4\\text{ cm}$. Su volumen es $a^3 = 4^3 = 64\\text{ cm}^3$."
+                }
+        ],
+        "cilindros": [
+                {
+                        "q": "Un tanque cilíndrico tiene un radio de $3\\text{ m}$ y una altura de $7\\text{ m}$. ¿Cuál es su volumen en términos de $\\pi$?",
+                        "svg": "<svg width=\"180\" height=\"150\" viewBox=\"0 0 180 150\" xmlns=\"http://www.w3.org/2000/svg\">\n    <ellipse cx=\"90\" cy=\"30\" rx=\"50\" ry=\"16\" fill=\"#f1f5f9\" stroke=\"#6366f1\" stroke-width=\"2\"/>\n    <path d=\"M40,30 L40,110 A50,16 0 0,0 140,110 L140,30\" fill=\"#e0e7ff\" stroke=\"#6366f1\" stroke-width=\"2\"/>\n    <ellipse cx=\"90\" cy=\"110\" rx=\"50\" ry=\"16\" fill=\"none\" stroke=\"#6366f1\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n    <line x1=\"90\" y1=\"30\" x2=\"140\" y2=\"30\" stroke=\"#4338ca\" stroke-width=\"1.5\"/>\n    <text x=\"105\" y=\"24\" font-size=\"11\" font-weight=\"bold\" fill=\"#312e81\">r = 3</text>\n    <text x=\"145\" y=\"75\" font-size=\"11\" font-weight=\"bold\" fill=\"#312e81\">h = 7</text>\n  </svg>",
+                        "o": [
+                                "$21\\pi\\text{ m}^3$",
+                                "$42\\pi\\text{ m}^3$",
+                                "$63\\pi\\text{ m}^3$",
+                                "$147\\pi\\text{ m}^3$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> $V = \\pi r^2 h = \\pi (3^2)(7) = \\pi (9)(7) = 63\\pi\\text{ m}^3$."
+                },
+                {
+                        "q": "Un cono recto tiene el mismo radio y la misma altura que un cilindro. Si el cilindro tiene un volumen de $90\\text{ cm}^3$, ¿cuál es el volumen del cono?",
+                        "o": [
+                                "$30\\text{ cm}^3$",
+                                "$45\\text{ cm}^3$",
+                                "$60\\text{ cm}^3$",
+                                "$180\\text{ cm}^3$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El volumen de un cono es exactamente un tercio del volumen del cilindro correspondiente: $V_{\\text{cono}} = \\frac{1}{3}V_{\\text{cilindro}} = \\frac{90}{3} = 30\\text{ cm}^3$."
+                },
+                {
+                        "q": "¿Cuál es el volumen de una esfera de radio $r = 3\\text{ cm}$ en términos de $\\pi$?",
+                        "o": [
+                                "$12\\pi\\text{ cm}^3$",
+                                "$27\\pi\\text{ cm}^3$",
+                                "$36\\pi\\text{ cm}^3$",
+                                "$108\\pi\\text{ cm}^3$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> $V = \\frac{4}{3}\\pi r^3 = \\frac{4}{3}\\pi (3^3) = \\frac{4}{3}\\pi (27) = 4 \\times 9\\pi = 36\\pi\\text{ cm}^3$."
+                },
+                {
+                        "q": "Si el diámetro de la base de un cilindro es $10\\text{ cm}$ y su altura es $8\\text{ cm}$, ¿cuál es su volumen?",
+                        "svg": "<svg width=\"180\" height=\"150\" viewBox=\"0 0 180 150\" xmlns=\"http://www.w3.org/2000/svg\">\n    <ellipse cx=\"90\" cy=\"30\" rx=\"50\" ry=\"16\" fill=\"#f1f5f9\" stroke=\"#6366f1\" stroke-width=\"2\"/>\n    <path d=\"M40,30 L40,110 A50,16 0 0,0 140,110 L140,30\" fill=\"#e0e7ff\" stroke=\"#6366f1\" stroke-width=\"2\"/>\n    <ellipse cx=\"90\" cy=\"110\" rx=\"50\" ry=\"16\" fill=\"none\" stroke=\"#6366f1\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n    <line x1=\"90\" y1=\"30\" x2=\"140\" y2=\"30\" stroke=\"#4338ca\" stroke-width=\"1.5\"/>\n    <text x=\"105\" y=\"24\" font-size=\"11\" font-weight=\"bold\" fill=\"#312e81\">r = 5</text>\n    <text x=\"145\" y=\"75\" font-size=\"11\" font-weight=\"bold\" fill=\"#312e81\">h = 8</text>\n  </svg>",
+                        "o": [
+                                "$200\\pi\\text{ cm}^3$",
+                                "$400\\pi\\text{ cm}^3$",
+                                "$800\\pi\\text{ cm}^3$",
+                                "$100\\pi\\text{ cm}^3$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El radio es la mitad del diámetro: $r = 5\\text{ cm}$. $V = \\pi r^2 h = \\pi (5^2)(8) = \\pi (25)(8) = 200\\pi\\text{ cm}^3$."
+                },
+                {
+                        "q": "El área lateral de un cilindro está dada por $A_L = 2\\pi r h$. Si $r = 4\\text{ cm}$ y $h = 10\\text{ cm}$, ¿cuál es su área lateral?",
+                        "o": [
+                                "$40\\pi\\text{ cm}^2$",
+                                "$80\\pi\\text{ cm}^2$",
+                                "$160\\pi\\text{ cm}^2$",
+                                "$320\\pi\\text{ cm}^2$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $A_L = 2\\pi (4)(10) = 80\\pi\\text{ cm}^2$."
+                },
+                {
+                        "q": "Un cono tiene un radio de $4\\text{ cm}$ y una altura de $3\\text{ cm}$. ¿Cuánto mide su generatriz (línea inclinada)?",
+                        "o": [
+                                "$5\\text{ cm}$",
+                                "$6\\text{ cm}$",
+                                "$7\\text{ cm}$",
+                                "$12\\text{ cm}$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> La generatriz forma la hipotenusa de un triángulo rectángulo de catetos $r = 4$ y $h = 3$: $g = \\sqrt{3^2 + 4^2} = 5\\text{ cm}$ (terna 3-4-5)."
+                },
+                {
+                        "q": "Si se duplica el radio de un cilindro manteniendo la misma altura, ¿cuántas veces aumenta su volumen?",
+                        "o": [
+                                "Se duplica (2 veces)",
+                                "Se triplica (3 veces)",
+                                "Se cuadruplica (4 veces)",
+                                "Aumenta 8 veces"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> $V' = \\pi (2r)^2 h = \\pi (4r^2) h = 4(\\pi r^2 h) = 4V$. Aumenta $4$ veces."
+                },
+                {
+                        "q": "Si se duplica la altura de un cilindro manteniendo el mismo radio, ¿cuántas veces aumenta su volumen?",
+                        "o": [
+                                "Se duplica (2 veces)",
+                                "Se cuadruplica (4 veces)",
+                                "Permanece igual",
+                                "Aumenta 8 veces"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Como $h$ tiene exponente 1 en la fórmula $V = \\pi r^2 h$, al duplicar $h$ el volumen simplemente se duplica."
+                },
+                {
+                        "q": "El volumen de un cilindro es $100\\pi\\text{ cm}^3$. Si su altura mide $4\\text{ cm}$, ¿cuánto mide el radio de su base?",
+                        "o": [
+                                "$3\\text{ cm}$",
+                                "$5\\text{ cm}$",
+                                "$10\\text{ cm}$",
+                                "$25\\text{ cm}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $\\pi r^2 (4) = 100\\pi \\implies 4r^2 = 100 \\implies r^2 = 25 \\implies r = 5\\text{ cm}$."
+                },
+                {
+                        "q": "Una semiesfera tiene un radio de $6\\text{ cm}$. ¿Cuál es su volumen en términos de $\\pi$?",
+                        "o": [
+                                "$72\\pi\\text{ cm}^3$",
+                                "$144\\pi\\text{ cm}^3$",
+                                "$288\\pi\\text{ cm}^3$",
+                                "$576\\pi\\text{ cm}^3$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El volumen de la esfera completa es $\\frac{4}{3}\\pi (6^3) = \\frac{4}{3}\\pi (216) = 288\\pi$. La semiesfera es la mitad: $\\frac{288\\pi}{2} = 144\\pi\\text{ cm}^3$."
+                },
+                {
+                        "q": "Calcula el volumen de un cono de radio $6\\text{ cm}$ y altura $10\\text{ cm}$.",
+                        "o": [
+                                "$60\\pi\\text{ cm}^3$",
+                                "$120\\pi\\text{ cm}^3$",
+                                "$360\\pi\\text{ cm}^3$",
+                                "$180\\pi\\text{ cm}^3$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $V = \\frac{1}{3}\\pi (6^2)(10) = \\frac{1}{3}\\pi (36)(10) = 120\\pi\\text{ cm}^3$."
+                },
+                {
+                        "q": "¿Cuál es el área total de una esfera cuyo radio mide $5\\text{ cm}$? ($A = 4\\pi r^2$)",
+                        "o": [
+                                "$50\\pi\\text{ cm}^2$",
+                                "$100\\pi\\text{ cm}^2$",
+                                "$125\\pi\\text{ cm}^2$",
+                                "$500\\pi\\text{ cm}^2$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $A = 4\\pi (5^2) = 4\\pi (25) = 100\\pi\\text{ cm}^2$."
+                }
+        ],
+        "capacidad": [
+                {
+                        "q": "Un tanque contiene $1.5\\text{ m}^3$ de agua. Si se consume a razón de $50\\text{ litros}$ por minuto, ¿en cuántos minutos se vaciará completamente?",
+                        "o": [
+                                "$15\\text{ min}$",
+                                "$20\\text{ min}$",
+                                "$30\\text{ min}$",
+                                "$45\\text{ min}$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> $1.5\\text{ m}^3 = 1500\\text{ litros}$. Tiempo $= \\frac{1500}{50} = 30\\text{ minutos}$."
+                },
+                {
+                        "q": "¿Cuántas cajas de $20\\text{ cm} \\times 10\\text{ cm} \\times 5\\text{ cm}$ caben exactamente en un contenedor de $100\\text{ cm} \\times 50\\text{ cm} \\times 20\\text{ cm}$?",
+                        "o": [
+                                "$50$",
+                                "$100$",
+                                "$150$",
+                                "$200$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Dividimos dimensión por dimensión: $\\frac{100}{20} = 5$; $\\frac{50}{10} = 5$; $\\frac{20}{5} = 4$. Total de cajas $= 5 \\times 5 \\times 4 = 100$ cajas."
+                },
+                {
+                        "q": "Un recipiente cilíndrico de agua tiene un radio de $10\\text{ cm}$. Si se agregan $628\\text{ cm}^3$ de agua, ¿cuántos cm sube el nivel del agua? (usa $\\pi \\approx 3.14$)",
+                        "o": [
+                                "$1\\text{ cm}$",
+                                "$2\\text{ cm}$",
+                                "$3\\text{ cm}$",
+                                "$4\\text{ cm}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $V = \\pi r^2 h \\implies 628 = (3.14)(10^2)h = 314h \\implies h = \\frac{628}{314} = 2\\text{ cm}$."
+                },
+                {
+                        "q": "Un bote cúbico de $20\\text{ cm}$ de arista está lleno al $75\\%$ de su capacidad. ¿Cuántos litros de líquido contiene?",
+                        "o": [
+                                "$4\\text{ L}$",
+                                "$6\\text{ L}$",
+                                "$8\\text{ L}$",
+                                "$12\\text{ L}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Volumen total $= 20^3 = 8000\\text{ cm}^3 = 8\\text{ litros}$. El $75\\%$ de $8\\text{ L}$ es $0.75 \\times 8 = 6\\text{ litros}$."
+                },
+                {
+                        "q": "Se sumerge completamente una piedra en un cilindro con agua de radio $4\\text{ cm}$, elevando el nivel del agua $3\\text{ cm}$. ¿Cuál es el volumen de la piedra en términos de $\\pi$?",
+                        "o": [
+                                "$12\\pi\\text{ cm}^3$",
+                                "$24\\pi\\text{ cm}^3$",
+                                "$48\\pi\\text{ cm}^3$",
+                                "$96\\pi\\text{ cm}^3$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Por el principio de Arquímedes, el volumen de la piedra equivale al volumen del líquido desplazado: $V = \\pi r^2 \\Delta h = \\pi (4^2)(3) = 48\\pi\\text{ cm}^3$."
+                },
+                {
+                        "q": "¿Cuántos cubos de $2\\text{ cm}$ de lado se necesitan para llenar un cubo de $8\\text{ cm}$ de lado?",
+                        "o": [
+                                "$16$",
+                                "$32$",
+                                "$64$",
+                                "$128$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Volumen del grande $= 8^3 = 512$. Volumen del pequeño $= 2^3 = 8$. Cantidad $= \\frac{512}{8} = 64$ cubos (o bien $(8/2)^3 = 4^3 = 64$)."
+                },
+                {
+                        "q": "Un tanque cilíndrico de radio $2\\text{ m}$ y altura $5\\text{ m}$ se llena a un ritmo de $2\\pi\\text{ m}^3$ por hora. ¿Cuánto tiempo tarda en llenarse completamente?",
+                        "o": [
+                                "$5\\text{ horas}$",
+                                "$10\\text{ horas}$",
+                                "$15\\text{ horas}$",
+                                "$20\\text{ horas}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Volumen total $= \\pi (2^2)(5) = 20\\pi\\text{ m}^3$. Tiempo $= \\frac{20\\pi}{2\\pi} = 10\\text{ horas}$."
+                },
+                {
+                        "q": "Si $1\\text{ litro} = 1000\\text{ cm}^3$, ¿cuál es el volumen de una botella de $2.5\\text{ litros}$ en $\\text{cm}^3$?",
+                        "o": [
+                                "$250\\text{ cm}^3$",
+                                "$2,500\\text{ cm}^3$",
+                                "$25,000\\text{ cm}^3$",
+                                "$250,000\\text{ cm}^3$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $2.5 \\times 1000 = 2,500\\text{ cm}^3$."
+                },
+                {
+                        "q": "Se tienen dos recipientes cilíndricos: el recipiente A tiene radio $r$ y altura $2h$; el recipiente B tiene radio $2r$ y altura $h$. ¿Cuál tiene mayor capacidad?",
+                        "o": [
+                                "El recipiente A",
+                                "El recipiente B",
+                                "Ambos tienen la misma capacidad",
+                                "Depende del valor de $\\pi$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $V_A = \\pi r^2 (2h) = 2\\pi r^2 h$. $V_B = \\pi (2r)^2 h = 4\\pi r^2 h$. El recipiente B tiene el doble de capacidad que A."
+                },
+                {
+                        "q": "Un depósito de $1200\\text{ litros}$ tiene una fuga de $10\\text{ litros/hora}$ y se llena por una manguera a $30\\text{ litros/hora}$. Si empieza vacío, ¿en cuántas horas se llena?",
+                        "o": [
+                                "$40\\text{ horas}$",
+                                "$60\\text{ horas}$",
+                                "$80\\text{ horas}$",
+                                "$120\\text{ horas}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Ritmo neto de llenado $= 30 - 10 = 20\\text{ litros/hora}$. Tiempo $= \\frac{1200}{20} = 60\\text{ horas}$."
+                },
+                {
+                        "q": "Una caja cúbica sin tapa tiene un volumen de $125\\text{ cm}^3$. ¿Cuánta cartulina se utilizó para construirla?",
+                        "o": [
+                                "$100\\text{ cm}^2$",
+                                "$125\\text{ cm}^2$",
+                                "$150\\text{ cm}^2$",
+                                "$175\\text{ cm}^2$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $a^3 = 125 \\implies a = 5\\text{ cm}$. Al no tener tapa, tiene 5 caras: $5a^2 = 5(5^2) = 5(25) = 125\\text{ cm}^2$."
+                },
+                {
+                        "q": "Una tubería cilíndrica de $10\\text{ metros}$ de longitud tiene un diámetro interno de $20\\text{ cm}$. ¿Cuál es el volumen de agua que contiene cuando está llena? ($r = 0.1\\text{ m}$)",
+                        "o": [
+                                "$0.1\\pi\\text{ m}^3$",
+                                "$0.2\\pi\\text{ m}^3$",
+                                "$1\\pi\\text{ m}^3$",
+                                "$10\\pi\\text{ m}^3$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> $r = 10\\text{ cm} = 0.1\\text{ m}$. $V = \\pi (0.1^2)(10) = \\pi (0.01)(10) = 0.1\\pi\\text{ m}^3$."
+                }
+        ]
+};
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            const info = topicsInfo[tabId];
+            if (info) {
+                document.getElementById('topic-title').innerText = info.title;
+                document.getElementById('topic-text').innerHTML = info.desc;
+            }
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    let svgHtml = item.svg ? `<div class="svg-container">${item.svg}</div>` : '';
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4"><span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Reto ${i+1}</span></div>
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        ${svgHtml}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { btn.classList.add('correct-opt'); score += 10; }
+            else { btn.classList.add('incorrect-opt'); box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); }
+            hint.style.display = 'block';
+            if (window.MathJax) MathJax.typesetPromise([hint]);
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { if(confirm('¿Reiniciar progreso?')) { score = 0; document.getElementById('global-score').innerText = 0; render(); showTab('prismas'); } }
+
+        window.onload = () => { render(); showTab('prismas'); };
+    </script>
+</body>
+</html>

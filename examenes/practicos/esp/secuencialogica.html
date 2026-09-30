@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Secuencia Lógica y Cohesión Textual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .reading-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 1.25rem; border-radius: 0.75rem; margin-bottom: 1.25rem; font-style: italic; color: #92400e; line-height: 1.6; font-size: 0.95rem; }
+        nav::-webkit-scrollbar { height: 6px; }
+        nav::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+        .table-data { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1rem; }
+        .table-data th, .table-data td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; }
+        .table-data th { background: #f1f5f9; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden md:block italic">Conectores Lógicos, Orden Cronológico y Mecanismos de Cohesión</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación Extendida -->
+        <div class="mb-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">Módulos de Práctica</div>
+        <nav class="flex gap-2 mb-8 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto scroll-smooth no-scrollbar">
+
+            <button onclick="showTab('conectores')" id="btn-conectores" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600 flex-shrink-0">
+                12.1 Conectores Lógicos y Nexos
+            </button>
+
+            <button onclick="showTab('orden')" id="btn-orden" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                12.2 Reordenamiento Secuencial de Párrafos
+            </button>
+
+            <button onclick="showTab('cohesion')" id="btn-cohesion" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                12.3 Cohesión, Anáfora y Elipsis
+            </button>
+        </nav>
+
+        <!-- Banner Dinámico -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenedores de Preguntas -->
+
+        <div id="conectores" class="tab-content active space-y-6"></div>
+
+        <div id="orden" class="tab-content  space-y-6"></div>
+
+        <div id="cohesion" class="tab-content  space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+        "conectores": {
+                "title": "Uso Estratégico de Conectores Lógicos",
+                "desc": "Aprende a seleccionar el marcador del discurso exacto (causa, consecuencia, concesión, adversación, adición) evaluado en la sección de Redacción de la PAA."
+        },
+        "orden": {
+                "title": "Secuencia Lógica y Cronología de Ideas",
+                "desc": "Domina el reordenamiento de enunciados dispersos (1-2-3-4) identificando antecedentes cronológicos, causas-efectos y desenlaces conclusivos."
+        },
+        "cohesion": {
+                "title": "Cohesión Textual, Anáfora y Elipsis",
+                "desc": "Aprende a eliminar repeticiones léxicas monótonas mediante pronombres anafóricos, hiperónimos, sinonimia y comas elípticas."
+        }
+};
+
+        const data = {
+        "conectores": [
+                {
+                        "text": "El equipo trabajó durante meses en el diseño del prototipo; _____, una falla en los sensores impidió que superara la prueba final.",
+                        "q": "¿Qué conector adversativo encaja de manera más adecuada y formal?",
+                        "o": [
+                                "por consiguiente",
+                                "sin embargo",
+                                "es decir",
+                                "asimismo"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Existe un contraste entre el arduo trabajo previo y el desenlace fallido. El conector adversativo 'sin embargo' expresa esta oposición con máxima propiedad formal."
+                },
+                {
+                        "text": "El índice de inflación disminuyó en el último trimestre; _____, el poder adquisitivo de las familias mostró una ligera recuperación.",
+                        "q": "¿Qué conector consecutivo o de causa-efecto completa el enunciado?",
+                        "o": [
+                                "por lo tanto",
+                                "a pesar de que",
+                                "en cambio",
+                                "de hecho"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> La recuperación del poder adquisitivo es una consecuencia directa de la disminución de la inflación. 'Por lo tanto' introduce con precisión la consecuencia lógica."
+                },
+                {
+                        "text": "La energía solar es inagotable y amigable con el medio ambiente. _____, requiere una inversión inicial significativa en infraestructura.",
+                        "q": "¿Qué conector introduce una objeción que no invalida el punto anterior (concesión/contraste)?",
+                        "o": [
+                                "Además",
+                                "No obstante",
+                                "Por ende",
+                                "En primer lugar"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'No obstante' introduce un obstáculo o restricción frente a las ventajas antes expuestas sin invalidarlas."
+                },
+                {
+                        "text": "El documental analiza las causas del deshielo glaciar; _____, propone soluciones viables basadas en energías renovables.",
+                        "q": "¿Qué conector aditivo enriquecedor es el más formal?",
+                        "o": [
+                                "asimismo",
+                                "pero",
+                                "o sea",
+                                "porque"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'Asimismo' añade una nueva faceta o acción complementaria realizada por el documental manteniendo un registro académico."
+                },
+                {
+                        "text": "No asistió a la ceremonia oficial _____ se encontraba convaleciente de una intervención quirúrgica.",
+                        "q": "¿Qué nexo causal fundamenta la razón de la ausencia?",
+                        "o": [
+                                "aunque",
+                                "puesto que",
+                                "por tanto",
+                                "a fin de que"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Puesto que' introduce la causa o justificación del hecho principal (equivalente a 'ya que' o 'dado que')."
+                },
+                {
+                        "text": "Las abejas desempeñan un papel crucial en la polinización; _____, su desaparición amenazaría la seguridad alimentaria mundial.",
+                        "q": "¿Qué conector de consecuencia lógica formal enlaza ambas ideas?",
+                        "o": [
+                                "en consecuencia",
+                                "por el contrario",
+                                "mientras tanto",
+                                "incluso"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> La amenaza a la seguridad alimentaria es el efecto o consecuencia lógica directa de la importancia de las abejas: 'en consecuencia'."
+                },
+                {
+                        "text": "El paciente siguió el tratamiento al pie de la letra, _____ su recuperación fue notablemente más rápida.",
+                        "o": [
+                                "de modo que",
+                                "no bien",
+                                "si bien",
+                                "salvo que"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'De modo que' introduce la consecuencia natural de la disciplina del paciente."
+                },
+                {
+                        "text": "La expedición continuó su marcha a través de la tundra, _____ las temperaturas descendieron por debajo de los treinta grados bajo cero.",
+                        "o": [
+                                "debido a que",
+                                "a pesar de que",
+                                "por cuanto",
+                                "a fin de que"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'A pesar de que' es una locución conjuntiva concesiva que indica que la marcha prosiguió venciendo la adversidad del clima extremo."
+                },
+                {
+                        "text": "El archivo histórico contiene manuscritos coloniales, cartas personales y decretos reales; _____, reúne una muestra invaluable del siglo XVIII.",
+                        "q": "¿Qué conector de resumen o reformulación sintetiza el listado?",
+                        "o": [
+                                "en suma",
+                                "por otra parte",
+                                "por ejemplo",
+                                "en cambio"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'En suma' (o 'en síntesis', 'en definitiva') recapitula y resume los elementos mencionados previamente."
+                },
+                {
+                        "text": "El investigador no solo publicó sus resultados en una prestigiosa revista científica, _____ compartió los datos abiertos con toda la comunidad internacional.",
+                        "o": [
+                                "sino que también",
+                                "pero",
+                                "aunque",
+                                "o bien"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> La correlación aditiva enfática 'no solo... sino que también' es la fórmula canónica en la redacción formal."
+                },
+                {
+                        "text": "Se implementaron filtros de carbono activado en la planta industrial _____ reducir la emisión de partículas volátiles.",
+                        "q": "¿Qué conector de finalidad explica el objetivo de la medida?",
+                        "o": [
+                                "con el propósito de",
+                                "a causa de",
+                                "a consecuencia de",
+                                "por motivo de"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'Con el propósito de' (o 'a fin de', 'para') señala el objetivo teleológico de la acción."
+                },
+                {
+                        "text": "Muchos consideraban que el cuadro era auténtico; _____, las pruebas radiológicas demostraron que se trataba de una falsificación del siglo XIX.",
+                        "o": [
+                                "en efecto",
+                                "por el contrario",
+                                "adicionalmente",
+                                "por consiguiente"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Por el contrario' enfatiza la oposición radical entre la creencia popular previa y la verdad revelada por la ciencia."
+                }
+        ],
+        "orden": [
+                {
+                        "text": "(1) En el siglo XVII, Galileo utilizó el telescopio para observar las lunas de Júpiter.\n(2) Hoy en día, telescopios espaciales como el James Webb escudriñan galaxias a miles de millones de años luz.\n(3) Durante siglos, la humanidad solo pudo contemplar el cosmos a simple vista.\n(4) Más tarde, en el siglo XX, la radioastronomía abrió ventanas invisibles al universo.",
+                        "q": "¿Cuál es el orden cronológico y lógico correcto para estructurar el párrafo?",
+                        "o": [
+                                "(3) - (1) - (4) - (2)",
+                                "(1) - (3) - (4) - (2)",
+                                "(3) - (4) - (1) - (2)",
+                                "(2) - (1) - (4) - (3)"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Orden cronológico estricto: pasado remoto sin instrumentos (3), primeros telescopios en el siglo XVII (1), avances del siglo XX (4) y tecnología contemporánea (2)."
+                },
+                {
+                        "text": "(1) El ADN contiene las instrucciones genéticas esenciales para la vida.\n(2) Estas proteínas determinan los rasgos anatómicos y funcionales del organismo.\n(3) A través de la transcripción, la información del ADN se copia en una molécula de ARN mensajero.\n(4) Finalmente, en los ribosomas, el ARN guía la síntesis de cadenas de proteínas.",
+                        "q": "¿Cuál es la secuencia causal y biológica correcta del proceso?",
+                        "o": [
+                                "(1) - (3) - (4) - (2)",
+                                "(3) - (1) - (2) - (4)",
+                                "(1) - (2) - (3) - (4)",
+                                "(4) - (3) - (1) - (2)"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Principio general (1) \\implies paso 1 de transcripción (3) \\implies paso 2 de síntesis (4) \\implies resultado en los rasgos (2)."
+                },
+                {
+                        "text": "(1) La erosión eólica y fluvial desgasta paulatinamente los estratos superiores de la meseta.\n(2) Una masa montañosa se eleva debido al choque de placas tectónicas.\n(3) Tras millones de años, surgen cañones profundos y monolitos esculpidos por los elementos.\n(4) Con el transcurso del tiempo geológico, los vientos y las lluvias intensifican su acción modeladora.",
+                        "q": "¿Qué ordenamiento describe lógicamente el ciclo geológico?",
+                        "o": [
+                                "(2) - (1) - (4) - (3)",
+                                "(1) - (2) - (3) - (4)",
+                                "(3) - (1) - (2) - (4)",
+                                "(2) - (3) - (1) - (4)"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Origen orogénico (2) \\implies inicio del desgaste (1) \\implies profundización temporal (4) \\implies paisaje final esculpido (3)."
+                },
+                {
+                        "text": "(1) Por lo tanto, el ejercicio aeróbico regular reduce sustancialmente el riesgo de cardiopatías.\n(2) El corazón humano es un músculo que responde favorablemente al entrenamiento físico continuo.\n(3) Además, mejora la elasticidad arterial y optimiza el transporte de oxígeno hacia los tejidos.\n(4) Al someterse a demanda cardiovascular, aumenta su capacidad de bombeo y eficiencia sistólica.",
+                        "q": "¿Cuál es la ordenación lógica del argumento?",
+                        "o": [
+                                "(2) - (4) - (3) - (1)",
+                                "(1) - (2) - (4) - (3)",
+                                "(2) - (1) - (3) - (4)",
+                                "(4) - (2) - (3) - (1)"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Premisa general sobre el corazón (2) \\implies explicación fisiológica directa (4) \\implies beneficio complementario introducido por 'Además' (3) \\implies conclusión introducida por 'Por lo tanto' (1)."
+                },
+                {
+                        "text": "(1) Para prepararlo, se tuestan los granos a temperatura controlada hasta obtener el perfil deseado.\n(2) El café es una de las bebidas de mayor consumo y valor comercial en el planeta.\n(3) Posteriormente, se realiza una molienda precisa antes de entrar en contacto con el agua caliente.\n(4) Su viaje comienza con la cosecha manual de las cerezas maduras en las laderas tropicales.",
+                        "q": "¿Qué secuencia organiza coherentemente la cadena productiva?",
+                        "o": [
+                                "(2) - (4) - (1) - (3)",
+                                "(2) - (1) - (3) - (4)",
+                                "(4) - (1) - (3) - (2)",
+                                "(1) - (3) - (4) - (2)"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Presentación del tema general (2) \\implies inicio del proceso en el cultivo (4) \\implies tueste (1) \\implies molienda y preparación ('Posteriormente') (3)."
+                },
+                {
+                        "text": "(1) Sin embargo, el uso indiscriminado de antibióticos ha provocado la aparición de cepas bacterianas resistentes.\n(2) El descubrimiento de la penicilina por Alexander Fleming en 1928 transformó la medicina moderna.\n(3) Ante esta amenaza, los científicos buscan con urgencia nuevas terapias alternativas como los bacteriófagos.\n(4) Durante décadas, este fármaco permitió salvar incontables vidas de infecciones mortales.",
+                        "q": "¿Cuál es la estructura argumentativa adecuada?",
+                        "o": [
+                                "(2) - (4) - (1) - (3)",
+                                "(2) - (1) - (4) - (3)",
+                                "(1) - (3) - (2) - (4)",
+                                "(4) - (2) - (1) - (3)"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Hecho histórico fundacional (2) \\implies beneficio histórico prolongado (4) \\implies problema contrastante con 'Sin embargo' (1) \\implies respuesta científica actual frente a la amenaza (3)."
+                },
+                {
+                        "text": "(1) La fotosíntesis oxigénica enriqueció la atmósfera primitiva con gas oxígeno.\n(2) Hace aproximadamente 3,800 millones de años surgieron las primeras bacterias unicelulares en los océanos.\n(3) Esta acumulación de oxígeno posibilitó la evolución de organismos multicelulares complejos.\n(4) Con el tiempo, ciertas cianobacterias desarrollaron la capacidad de convertir la luz solar en energía química.",
+                        "q": "¿Cuál es la secuencia cronológica evolutiva?",
+                        "o": [
+                                "(2) - (4) - (1) - (3)",
+                                "(4) - (2) - (1) - (3)",
+                                "(2) - (1) - (4) - (3)",
+                                "(1) - (3) - (2) - (4)"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Primeras bacterias (2) \\implies aparición de cianobacterias fotosintéticas (4) \\implies liberación masiva de oxígeno (1) \\implies surgimiento de organismos complejos (3)."
+                },
+                {
+                        "text": "(1) Así, la imprenta democratizó el conocimiento y sentó las bases de la Revolución Científica.\n(2) Hacia 1440, Johannes Gutenberg perfeccionó los tipos móviles metálicos en Maguncia.\n(3) Hasta entonces, los libros se copiaban a mano uno a uno en los monasterios medievales.\n(4) Este invento permitió producir cientos de ejemplares en una fracción del tiempo habitual.",
+                        "q": "¿Cuál es la organización correcta del texto histórico?",
+                        "o": [
+                                "(3) - (2) - (4) - (1)",
+                                "(2) - (3) - (4) - (1)",
+                                "(3) - (4) - (2) - (1)",
+                                "(2) - (4) - (3) - (1)"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Situación previa manuscrita (3) \\implies invención de Gutenberg (2) \\implies consecuencia técnica inmediata ('Este invento permitió...') (4) \\implies conclusión histórica de largo alcance con 'Así' (1)."
+                },
+                {
+                        "text": "(1) En segundo lugar, fomenta la empatía al colocarnos en la mente de personas de épocas y culturas distintas.\n(2) La lectura habitual aporta múltiples beneficios intelectuales y emocionales al ser humano.\n(3) Finalmente, enriquece el léxico y fortalece la capacidad de argumentación crítica.\n(4) En primer término, estimula la plasticidad cerebral y retarda el envejecimiento cognitivo.",
+                        "q": "¿Cómo se ordenan los argumentos enumerativos?",
+                        "o": [
+                                "(2) - (4) - (1) - (3)",
+                                "(4) - (1) - (3) - (2)",
+                                "(2) - (1) - (4) - (3)",
+                                "(1) - (2) - (4) - (3)"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Tesis inicial (2) \\implies 'En primer término' (4) \\implies 'En segundo lugar' (1) \\implies 'Finalmente' (3)."
+                },
+                {
+                        "text": "(1) El colapso del puente generó pérdidas millonarias y desconectó a tres comunidades rurales.\n(2) Años de mantenimiento insuficiente debilitaron la estructura de acero del viaducto principal.\n(3) Una crecida extraordinaria del río terminó por socavar los pilares ya agrietados.\n(4) El gobierno anunció de inmediato un plan de emergencia para reconstruir la vía.",
+                        "q": "¿Cuál es el encadenamiento causal del suceso noticioso?",
+                        "o": [
+                                "(2) - (3) - (1) - (4)",
+                                "(1) - (2) - (3) - (4)",
+                                "(3) - (2) - (1) - (4)",
+                                "(2) - (1) - (3) - (4)"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Causa de fondo (2) \\implies causa detonante (3) \\implies catástrofe y sus efectos (1) \\implies respuesta gubernamental final (4)."
+                },
+                {
+                        "text": "(1) Con la ayuda de un software de análisis acústico, aislaron los patrones de frecuencia de cada especie.\n(2) Un grupo de bioacústicos instaló micrófonos de alta fidelidad en el dosel de la selva amazónica.\n(3) El estudio reveló que varias aves modulan su canto para evitar la interferencia del ruido de las lluvias.\n(4) Durante seis meses continuos grabaron miles de horas de paisajes sonoros.",
+                        "q": "¿Qué ordenación metodológica describe el experimento?",
+                        "o": [
+                                "(2) - (4) - (1) - (3)",
+                                "(2) - (1) - (4) - (3)",
+                                "(4) - (2) - (1) - (3)",
+                                "(1) - (3) - (2) - (4)"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Instalación de equipo (2) \\implies recolección de grabaciones (4) \\implies procesamiento con software (1) \\implies hallazgo final del estudio (3)."
+                },
+                {
+                        "text": "(1) De este modo, la selección natural guía la adaptación de las poblaciones a sus hábitats.\n(2) Aquellos individuos con rasgos más ventajosos tienen mayores probabilidades de sobrevivir y reproducirse.\n(3) En cualquier ecosistema, los recursos alimenticios y el espacio vital son limitados.\n(4) En consecuencia, se desata una constante competencia entre los miembros de una misma especie.",
+                        "q": "¿Cuál es la secuencia lógica de la teoría darwiniana?",
+                        "o": [
+                                "(3) - (4) - (2) - (1)",
+                                "(2) - (3) - (4) - (1)",
+                                "(3) - (2) - (4) - (1)",
+                                "(4) - (3) - (2) - (1)"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Premisa ecológica fundamental (3) \\implies competencia derivada ('En consecuencia...') (4) \\implies supervivencia diferencial (2) \\implies conclusión con 'De este modo...' (1)."
+                }
+        ],
+        "cohesion": [
+                {
+                        "text": "El físico Albert Einstein presentó la teoría de la relatividad general en 1915. *Dicha formulación teórica* transformó para siempre nuestra concepción del espacio y del tiempo.",
+                        "q": "¿Qué mecanismo de cohesión se utiliza con la frase destacada en cursiva?",
+                        "o": [
+                                "Sustitución anafórica por hiperónimo/sinónimo referencial",
+                                "Elipsis del predicado",
+                                "Catáfora pronominal",
+                                "Conjunción disyuntiva"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'Dicha formulación teórica' remite anafóricamente a 'la teoría de la relatividad general' mediante una perífrasis sinonímica para evitar la repetición monótona del nombre."
+                },
+                {
+                        "text": "Los líderes comunitarios se reunieron en la plaza. *Allí* acordaron las prioridades para el abastecimiento de agua potable.",
+                        "q": "¿A qué elemento del texto refiere anafóricamente el adverbio 'Allí'?",
+                        "o": [
+                                "A los líderes comunitarios",
+                                "A la plaza",
+                                "Al abastecimiento de agua",
+                                "A las prioridades"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Allí' es un deíctico anafórico de lugar cuyo antecedente explícito es 'la plaza'."
+                },
+                {
+                        "text": "Para evitar la repetición viciosa en: 'El jaguar es un felino solitario. El jaguar caza de noche. El jaguar habita en selvas densas', ¿cuál es la mejor opción cohesiva?",
+                        "o": [
+                                "El jaguar es un felino solitario que caza de noche y habita en selvas densas.",
+                                "El jaguar es un felino solitario; este jaguar caza de noche y dicho jaguar habita en selvas.",
+                                "El jaguar es solitario. Él caza de noche. Aquel habita selvas.",
+                                "El felino es jaguar, cazando nocturno y habitando selvas."
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Mediante la coordinación de predicados y la subordinación relativa, se recurre a la elipsis del sujeto ya conocido, logrando fluidez y elegancia."
+                },
+                {
+                        "text": "La expedición necesitaba provisiones urgentes: agua purificada, alimentos no perecederos y combustible. *Estos pertrechos* les permitieron resistir el temporal.",
+                        "q": "¿Qué función cumple 'Estos pertrechos' en la cohesión del texto?",
+                        "o": [
+                                "Actúa como hiperónimo que engloba y sintetiza los elementos enumerados",
+                                "Introduce una idea contradictoria",
+                                "Funciona como conector de causa",
+                                "Expresa una condición hipotética"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'Pertrechos' funciona como un término hiperónimo que engloba el agua, los alimentos y el combustible mencionados."
+                },
+                {
+                        "text": "¿Qué oración presenta una ruptura en la cohesión referencial?",
+                        "o": [
+                                "Cervantes escribió El Quijote en el siglo XVII. Esta obra cumbre de la literatura sigue maravillando a lectores de todo el orbe.",
+                                "La deforestación destruye los bosques tropicales. Por ello, muchas especies animales pierden su hábitat natural.",
+                                "Los astronautas repararon el panel solar averiado. Sin embargo, las manzanas son frutas muy ricas en fibra.",
+                                "El río Nilo fertilizaba las tierras del antiguo Egipto. Sus crecidas anuales depositaban una capa de limo muy productiva."
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> La opción C rompe la unidad temática y de sentido al introducir una afirmación sobre las manzanas totalmente desconectada del contexto espacial de los astronautas."
+                },
+                {
+                        "text": "Isabel Allende ha publicado numerosas novelas célebres. *La escritora chilena* ha sido traducida a más de cuarenta idiomas.",
+                        "q": "¿Qué recurso cohesivo se empleó para sustituir el nombre de la autora?",
+                        "o": [
+                                "Perífrasis o aposición descriptiva de correferencia",
+                                "Elipsis total",
+                                "Pronombre indefinido",
+                                "Metáfora oscura"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'La escritora chilena' es una aposición sinonímica que aporta información contextual al tiempo que asegura la correferencia con Isabel Allende."
+                },
+                {
+                        "text": "La música barroca se caracteriza por el uso del bajo continuo y la ornamentación elaborada; la clásica, por la búsqueda de equilibrio y claridad melódica.",
+                        "q": "¿Qué signo de puntuación marca la elipsis del verbo 'se caracteriza' en la segunda proposición?",
+                        "o": [
+                                "El punto y coma",
+                                "La coma elíptica",
+                                "Los dos puntos",
+                                "Los puntos suspensivos"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La coma colocada tras 'la clásica' es una coma elíptica, utilizada normativamente para omitir un verbo previamente enunciado ('se caracteriza')."
+                },
+                {
+                        "text": "El sistema nervioso central procesa los estímulos sensoriales. *Este* se compone del encéfalo y la médula espinal.",
+                        "q": "El pronombre demostrativo 'Este' refiere a:",
+                        "o": [
+                                "Los estímulos sensoriales",
+                                "El sistema nervioso central",
+                                "El encéfalo",
+                                "La médula espinal"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Este' concuerda en masculino singular con el sujeto del enunciado anterior: 'El sistema nervioso central'."
+                },
+                {
+                        "text": "Marte ha fascinado a los astrónomos desde la antigüedad. *El planeta rojo* continúa siendo el foco de las misiones de exploración interplanetaria.",
+                        "q": "'El planeta rojo' funciona como un:",
+                        "o": [
+                                "Antonomasia o sinónimo contextual",
+                                "Pleonasmo innecesario",
+                                "Conector disyuntivo",
+                                "Adverbio modal"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'El planeta rojo' es una antonomasia o denominación contextual consagrada para designar al planeta Marte."
+                },
+                {
+                        "text": "Las abuelas tejían mantas de lana junto a la fogata; *las jóvenes*, jerséis de algodón.",
+                        "q": "¿Qué elemento está elidido tras 'las jóvenes'?",
+                        "o": [
+                                "mantas",
+                                "tejían",
+                                "junto a la fogata",
+                                "de lana"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Se omite el verbo 'tejían' mediante una coma elíptica para evitar la redundancia."
+                },
+                {
+                        "text": "¿Cuál de los siguientes pares de oraciones muestra la mejor transición cohesiva?",
+                        "o": [
+                                "Las abejas son cruciales para los cultivos. El fútbol es el deporte más visto de Europa.",
+                                "El telescopio James Webb fue lanzado en 2021. Dicho instrumento astronómico ha permitido observar las primeras galaxias del universo.",
+                                "Me gusta el café con leche. Mañana lloverá en la costa pacífica.",
+                                "El submarino descendió a la fosa. Los elefantes viven en manadas matriarcales."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La opción B mantiene continuidad temática plena y utiliza el sintagma anafórico 'Dicho instrumento astronómico' para unir ambos enunciados."
+                },
+                {
+                        "text": "Los gladiadores luchaban en el Coliseo ante miles de espectadores. *Aquellos hombres* arriesgaban su vida en cada combate.",
+                        "q": "¿Qué función cumple el determinante demostrativo 'Aquellos'?",
+                        "o": [
+                                "Deixis anafórica que evoca a los gladiadores mencionados anteriormente",
+                                "Deixis espacial inmediata",
+                                "Conjunción subordinante",
+                                "Preposición de distancia"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'Aquellos hombres' retoma de forma anafórica a 'Los gladiadores', vinculando ambas proposiciones."
+                }
+        ]
+};
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            const info = topicsInfo[tabId];
+            if (info) {
+                document.getElementById('topic-title').innerText = info.title;
+                document.getElementById('topic-text').innerHTML = info.desc;
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                const totalInCat = data[cat].length;
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    
+                    let tableHtml = item.table ? `<table class="table-data">${item.table}</table>` : '';
+                    let readingHtml = '';
+                    let questionTitle = item.q || '';
+
+                    if (item.text && item.q) {
+                        readingHtml = `<div class="reading-box">${item.text}</div>`;
+                        questionTitle = item.q;
+                    } else if (item.text && !item.q) {
+                        if (item.text.includes('_____')) {
+                            readingHtml = `<div class="reading-box">${item.text}</div>`;
+                            questionTitle = 'Selecciona la opción que completa correctamente el enunciado:';
+                        } else if (item.text.startsWith('¿') || item.text.includes('?')) {
+                            questionTitle = item.text;
+                        } else {
+                            readingHtml = `<div class="reading-box">${item.text}</div>`;
+                            questionTitle = 'Selecciona la opción correcta con base en el texto:';
+                        }
+                    }
+                    
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4 flex justify-between items-center">
+                            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Desafío ${i+1} / ${totalInCat}</span>
+                        </div>
+                        ${readingHtml}
+                        ${tableHtml}
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${questionTitle}</h2>
+                        <div class="space-y-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { btn.classList.add('correct-opt'); score += 10; }
+            else { btn.classList.add('incorrect-opt'); box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); }
+            hint.style.display = 'block';
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { if(confirm('¿Reiniciar progreso?')) { score = 0; document.getElementById('global-score').innerText = 0; render(); showTab('conectores'); } }
+
+        window.onload = () => { render(); showTab('conectores'); };
+    </script>
+</body>
+</html>

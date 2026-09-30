@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Concordancia Gramatical y Sintaxis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .reading-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 1.25rem; border-radius: 0.75rem; margin-bottom: 1.25rem; font-style: italic; color: #92400e; line-height: 1.6; font-size: 0.95rem; }
+        nav::-webkit-scrollbar { height: 6px; }
+        nav::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+        .table-data { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1rem; }
+        .table-data th, .table-data td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; }
+        .table-data th { background: #f1f5f9; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden md:block italic">Sujeto-Verbo, Concordancia Nominal y Correlación de Tiempos</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación Extendida -->
+        <div class="mb-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">Módulos de Práctica</div>
+        <nav class="flex gap-2 mb-8 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto scroll-smooth no-scrollbar">
+
+            <button onclick="showTab('sujeto_verbo')" id="btn-sujeto_verbo" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600 flex-shrink-0">
+                9.1 Concordancia Sujeto-Verbo
+            </button>
+
+            <button onclick="showTab('nominal')" id="btn-nominal" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                9.2 Concordancia Nominal
+            </button>
+
+            <button onclick="showTab('pronominal_verbal')" id="btn-pronominal_verbal" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                9.3 Pronombres y Tiempos Verbales
+            </button>
+        </nav>
+
+        <!-- Banner Dinámico -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenedores de Preguntas -->
+
+        <div id="sujeto_verbo" class="tab-content active space-y-6"></div>
+
+        <div id="nominal" class="tab-content  space-y-6"></div>
+
+        <div id="pronominal_verbal" class="tab-content  space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+        "sujeto_verbo": {
+                "title": "Concordancia entre Sujeto y Verbo",
+                "desc": "Aprende a resolver sujetos colectivos, oraciones impersonales con 'haber' y 'hacer', y estructuras complejas evaluadas con frecuencia en la PAA."
+        },
+        "nominal": {
+                "title": "Concordancia Nominal (Sustantivos y Adjetivos)",
+                "desc": "Domina las reglas de género y número cuando un adjetivo modifica a varios sustantivos coordinados de distinto género o número."
+        },
+        "pronominal_verbal": {
+                "title": "Pronombres y Correlación Verbal",
+                "desc": "Perfecciona el uso de oraciones condicionales (subjuntivo + condicional), pronombres relativos ('cuyo') y pronombres de objeto directo e indirecto."
+        }
+};
+
+        const data = {
+        "sujeto_verbo": [
+                {
+                        "text": "La mayoría de los estudiantes que presentaron el examen de admisión _____ altas calificaciones.",
+                        "q": "¿Qué opción completa la oración con la concordancia de sujeto colectivo preferida por la norma culta de la PAA?",
+                        "o": [
+                                "obtuvo",
+                                "obtuvieron",
+                                "obtuvisteis",
+                                "obtuviese"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Con sustantivos colectivos partitivos singulares ('la mayoría', 'un grupo', 'el conjunto') acompañados de un complemento en plural ('de los estudiantes'), la norma académica y el estándar de la PAA prefieren la concordancia en singular con el núcleo del sujeto ('obtuvo')."
+                },
+                {
+                        "text": "El envío de paquetes y cartas urgentes _____ retrasado por las fuertes lluvias.",
+                        "q": "¿Qué forma verbal concuerda correctamente?",
+                        "o": [
+                                "fueron",
+                                "fue",
+                                "habían sido",
+                                "estuvieron"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El núcleo del sujeto es el sustantivo singular 'El envío'. 'De paquetes y cartas' es un complemento preposicional que no altera el número del núcleo; por ende, el verbo debe estar en singular: 'fue retrasado'."
+                },
+                {
+                        "text": "Ni el frío ni la intensa lluvia _____ desanimar a los excursionistas.",
+                        "q": "¿Qué opción completa la concordancia con sujetos coordinados negativos?",
+                        "o": [
+                                "pudo",
+                                "pudieron",
+                                "ha podido",
+                                "pudiere"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Cuando dos elementos singulares se coordinan mediante 'ni... ni' y preceden al verbo, la concordancia natural y recomendada es en plural: 'pudieron desanimar'."
+                },
+                {
+                        "text": "Ayer _____ muchas personas esperando la apertura de la biblioteca central.",
+                        "q": "Identifica la opción gramaticalmente correcta para el verbo impersonal 'haber':",
+                        "o": [
+                                "habían",
+                                "hubo",
+                                "hubieron",
+                                "habrán"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El verbo 'haber' cuando expresa existencia es impersonal; carece de sujeto y lo que le sigue es objeto directo ('muchas personas'). Por lo tanto, no se pluraliza en pasado: la forma correcta es 'hubo'."
+                },
+                {
+                        "text": "El equipo de investigadores, junto con sus colaboradores internacionales, _____ publicar el hallazgo.",
+                        "q": "¿Qué forma verbal concuerda adecuadamente?",
+                        "o": [
+                                "decidió",
+                                "decidieron",
+                                "decidiesen",
+                                "hayan decidido"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Las construcciones del tipo 'A, junto con B,' o 'A, así como B,' introducen un adjunto y no un sujeto coordinado. El núcleo sigue siendo 'El equipo' (singular), por lo que el verbo debe ir en singular: 'decidió'."
+                },
+                {
+                        "text": "_____ varios meses desde que se inició la restauración del palacio municipal.",
+                        "q": "Selecciona la forma correcta para el verbo 'hacer' en sentido temporal:",
+                        "o": [
+                                "Hacen",
+                                "Hace",
+                                "Hacían",
+                                "Hicieron"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El verbo 'hacer' en expresiones cronológicas es impersonal y se conjuga exclusivamente en 3ª persona del singular: 'Hace varios meses'."
+                },
+                {
+                        "text": "Tanto la biología marina como la oceanografía _____ disciplinas esenciales para comprender el cambio climático.",
+                        "q": "¿Qué verbo concuerda con este sujeto compuesto?",
+                        "o": [
+                                "es",
+                                "son",
+                                "fue",
+                                "sea"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La coordinación 'Tanto A como B' une dos sujetos gramaticales, requiriendo el verbo en plural: 'son disciplinas'."
+                },
+                {
+                        "text": "A los alumnos les _____ mucho las conferencias sobre astrofísica moderna.",
+                        "q": "¿Qué opción respeta la concordancia con el sujeto pospuesto?",
+                        "o": [
+                                "interesa",
+                                "interesan",
+                                "interesaba",
+                                "interesó"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El sujeto real de la oración es 'las conferencias sobre astrofísica moderna' (plural). El pronombre 'les' es objeto indirecto. El verbo debe concordar con el sujeto: 'interesan'."
+                },
+                {
+                        "text": "Una serie de imprevistos técnicos _____ la transmisión en vivo del concierto.",
+                        "q": "Selecciona la opción con concordancia culta:",
+                        "o": [
+                                "interrumpió",
+                                "interrumpieron",
+                                "interrumpían",
+                                "interrumpiesen"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El núcleo sintáctico es 'Una serie' (femenino singular), por lo que concuerda en singular: 'interrumpió'."
+                },
+                {
+                        "text": "Se _____ casas y departamentos amueblados en el centro histórico.",
+                        "q": "¿Qué opción corresponde a la voz pasiva refleja con sujeto plural?",
+                        "o": [
+                                "renta",
+                                "rentan",
+                                "está rentando",
+                                "ha rentado"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> En la pasiva refleja con 'se', 'casas y departamentos amueblados' funciona como sujeto paciente plural; el verbo debe concordar obligatoriamente en plural: 'Se rentan'."
+                },
+                {
+                        "text": "El 20% de los asistentes al simposio _____ satisfecho con los talleres prácticos.",
+                        "q": "¿Qué opción mantiene la concordancia estricta de porcentaje con atributo singular?",
+                        "o": [
+                                "quedó",
+                                "quedaron",
+                                "quedarían",
+                                "habrán quedado"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Dado que el atributo predicativo está en singular ('satisfecho'), el verbo debe mantenerse en singular ('quedó') para preservar la concordancia del predicado."
+                },
+                {
+                        "text": "Tú y yo _____ el compromiso de entregar el reporte final el próximo viernes.",
+                        "q": "¿Qué forma verbal corresponde a la primera persona del plural resultante?",
+                        "o": [
+                                "tienen",
+                                "tenéis",
+                                "tenemos",
+                                "tendrán"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> La combinación de 2ª persona ('tú') + 1ª persona ('yo') da como sujeto gramatical 'nosotros' (1ª persona del plural): 'tenemos'."
+                }
+        ],
+        "nominal": [
+                {
+                        "text": "Compró una mesa y una silla _____ para amueblar su nuevo estudio.",
+                        "q": "¿Qué adjetivo concuerda en género y número?",
+                        "o": [
+                                "antiguo",
+                                "antigua",
+                                "antiguas",
+                                "antiguos"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Cuando un adjetivo pospuesto califica a dos sustantivos femeninos ('una mesa y una silla'), el adjetivo debe coordinarse en femenino plural: 'antiguas'."
+                },
+                {
+                        "text": "El novelista poseía un talento y una sensibilidad _____.",
+                        "o": [
+                                "extraordinario",
+                                "extraordinaria",
+                                "extraordinarias",
+                                "extraordinarios"
+                        ],
+                        "a": 3,
+                        "exp": "<b>Análisis:</b> Si se coordinan dos sustantivos de distinto género ('un talento' [masc.] y 'una sensibilidad' [fem.]), el adjetivo calificador pospuesto adopta el género masculino plural: 'extraordinarios'."
+                },
+                {
+                        "text": "Los expedientes y documentos _____ serán archivados en la bóveda de seguridad.",
+                        "q": "¿Cuál es la concordancia adecuada?",
+                        "o": [
+                                "clasificada",
+                                "clasificado",
+                                "clasificados",
+                                "clasificadas"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> 'Expedientes' y 'documentos' son sustantivos masculinos plurales; el adjetivo correspondiente debe ser masculino plural: 'clasificados'."
+                },
+                {
+                        "text": "Ella vestía un suéter y unos pantalones _____ durante la excursión.",
+                        "o": [
+                                "gris",
+                                "grises",
+                                "grisáceo",
+                                "grisácea"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Al modificar a dos prendas coordinadas en plural, el adjetivo debe concordar en plural: 'grises'."
+                },
+                {
+                        "text": "Esa es un _____ área de conservación ecológica para aves migratorias.",
+                        "q": "¿Qué forma del adjetivo indefinido es correcta ante el sustantivo femenino 'área'?",
+                        "o": [
+                                "gran",
+                                "grande",
+                                "grana",
+                                "grandísimo"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El adjetivo 'grande' se apocopa en 'gran' ante sustantivos singulares tanto masculinos como femeninos: 'un gran área' o 'una gran área'."
+                },
+                {
+                        "text": "Comieron deliciosas manzanas y peras _____ en el huerto familiar.",
+                        "o": [
+                                "cosechado",
+                                "cosechada",
+                                "cosechadas",
+                                "cosechados"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Califica a dos sustantivos femeninos en plural ('manzanas y peras'), por lo que el participio adjetival debe ser femenino plural: 'cosechadas'."
+                },
+                {
+                        "text": "El médico examinó la mano y el tobillo _____ del deportista.",
+                        "o": [
+                                "lesionado",
+                                "lesionada",
+                                "lesionadas",
+                                "lesionados"
+                        ],
+                        "a": 3,
+                        "exp": "<b>Análisis:</b> 'La mano' (fem.) y 'el tobillo' (masc.) difieren en género. La concordancia pospuesta compuesta exige masculino plural: 'lesionados'."
+                },
+                {
+                        "text": "Los ministros demostraron un valor y una paciencia _____ ante la crisis.",
+                        "o": [
+                                "admirable",
+                                "admirables",
+                                "admirados",
+                                "admiradas"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Admirable' no tiene distinción de género en singular, pero al calificar a dos virtudes coordinadas se pluraliza: 'admirables'."
+                },
+                {
+                        "text": "Las aguas de aquel manantial son sumamente _____ y cristalinas.",
+                        "o": [
+                                "limpio",
+                                "limpia",
+                                "limpios",
+                                "limpias"
+                        ],
+                        "a": 3,
+                        "exp": "<b>Análisis:</b> 'Aguas' es sustantivo femenino plural; los adjetivos predicativos deben ser femeninos plurales: 'limpias y cristalinas'."
+                },
+                {
+                        "text": "Presentaron pruebas y testimonios _____ que confirmaron la inocencia del acusado.",
+                        "o": [
+                                "decisivo",
+                                "decisiva",
+                                "decisivas",
+                                "decisivos"
+                        ],
+                        "a": 3,
+                        "exp": "<b>Análisis:</b> 'Pruebas' (fem.) + 'testimonios' (masc.) \\implies masculino plural: 'decisivos'."
+                },
+                {
+                        "text": "Su alteza real se mostró muy _____ con los resultados del certamen.",
+                        "q": "Si 'su alteza real' refiere a un príncipe (hombre), ¿cuál es la concordancia de tratamiento?",
+                        "o": [
+                                "satisfecho",
+                                "satisfecha",
+                                "satisfechos",
+                                "satisfechas"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> En los tratamientos de cortesía ('su alteza', 'su majestad', 'su excelencia'), los adjetivos concuerdan con el sexo natural de la persona aludida (masculino en este caso: 'satisfecho')."
+                },
+                {
+                        "text": "El estudiante demostró tener una actitud y un criterio muy _____.",
+                        "o": [
+                                "maduro",
+                                "madura",
+                                "maduras",
+                                "maduros"
+                        ],
+                        "a": 3,
+                        "exp": "<b>Análisis:</b> Coordinación de sustantivos mixto: 'una actitud' (fem.) y 'un criterio' (masc.) \\implies adjetivo pospuesto en masculino plural: 'maduros'."
+                }
+        ],
+        "pronominal_verbal": [
+                {
+                        "text": "Si el testigo _____ la verdad desde el principio, el juicio no se habría prolongado tanto.",
+                        "q": "¿Qué tiempo verbal respeta la correlación con el condicional compuesto?",
+                        "o": [
+                                "dijo",
+                                "hubiera dicho",
+                                "diría",
+                                "haya dicho"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La prótasis de una condición irreal en el pasado exige pretérito pluscuamperfecto de subjuntivo ('hubiera dicho') cuando la apódosis lleva condicional compuesto ('habría prolongado')."
+                },
+                {
+                        "text": "El profesor vio a los alumnos en el pasillo y _____ entregó las evaluaciones.",
+                        "q": "¿Qué pronombre de objeto indirecto corresponde a 'los alumnos'?",
+                        "o": [
+                                "los",
+                                "las",
+                                "les",
+                                "se"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> El pronombre de objeto indirecto en plural es 'les' ('entregó las evaluaciones a ellos'). Usar 'los' sería leísmo/loísmo incorrecto en este contexto."
+                },
+                {
+                        "text": "Exijo que todos los miembros del comité _____ puntualmente a la asamblea.",
+                        "q": "¿Qué tiempo verbal rige el verbo principal en presente indicativo de mandato?",
+                        "o": [
+                                "asisten",
+                                "asistieron",
+                                "asistan",
+                                "asistirían"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Los verbos de mandato, deseo o exigencia ('Exijo que...') en presente subordinan oraciones con verbo en presente de subjuntivo: 'asistan'."
+                },
+                {
+                        "text": "Buscamos un candidato que _____ experiencia comprobada en gestión de proyectos.",
+                        "q": "Al tratarse de una entidad no específica o hipotética, se requiere:",
+                        "o": [
+                                "tiene",
+                                "tenga",
+                                "tendrá",
+                                "tuvo"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> En oraciones de relativo con antecedente indefinido o no constatado ('un candidato que...'), el verbo subordinado debe ir en subjuntivo: 'tenga'."
+                },
+                {
+                        "text": "A María no _____ permitieron ingresar a la sala sin su credencial oficial.",
+                        "q": "¿Qué pronombre corresponde al objeto indirecto femenino singular?",
+                        "o": [
+                                "la",
+                                "le",
+                                "se",
+                                "lo"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El verbo permitir selecciona objeto directo (la acción de ingresar) y objeto indirecto (a la persona: a María). El pronombre correcto de objeto indirecto es 'le'."
+                },
+                {
+                        "text": "Si nosotros _____ más tiempo disponible, visitaríamos el museo arqueológico.",
+                        "q": "¿Qué forma verbal se correlaciona con el condicional simple 'visitaríamos'?",
+                        "o": [
+                                "tenemos",
+                                "tuviéramos",
+                                "tendríamos",
+                                "hayamos tenido"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Las oraciones condicionales que expresan hipótesis en el presente o futuro vinculan pretérito imperfecto de subjuntivo ('tuviéramos') con condicional simple ('visitaríamos')."
+                },
+                {
+                        "text": "La propuesta _____ autores recibieron el premio causó controversia.",
+                        "q": "¿Qué pronombre posesivo relativo concuerda con 'autores'?",
+                        "o": [
+                                "que sus",
+                                "cuyos",
+                                "cuyo",
+                                "de los cuales sus"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El relativo 'cuyo' concuerda en género y número con el sustantivo consecuente al que determina ('autores', masculino plural): 'cuyos autores'."
+                },
+                {
+                        "text": "Ojalá que mañana no _____ congestión vial en las avenidas principales.",
+                        "q": "Forma de subjuntivo para la existencia impersonal:",
+                        "o": [
+                                "haiga",
+                                "haya",
+                                "hubiese habido",
+                                "hayan"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La forma normativa del presente de subjuntivo del verbo haber es 'haya'. 'Haiga' es una incorrección vulgar."
+                },
+                {
+                        "text": "Tan pronto como el director _____ el documento, iniciaremos la obra.",
+                        "q": "¿Qué tiempo verbal es necesario tras una conjunción temporal orientada al futuro?",
+                        "o": [
+                                "firma",
+                                "firmó",
+                                "firme",
+                                "firmaría"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Conectores temporales que miran al futuro ('tan pronto como', 'en cuanto', 'cuando') exigen presente de subjuntivo: 'firme'."
+                },
+                {
+                        "text": "Ayer les dije a mis amigas que _____ a mi fiesta de cumpleaños.",
+                        "o": [
+                                "vengan",
+                                "vinieran",
+                                "vendrían",
+                                "vienen"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Tras un verbo principal en pretérito ('dije'), el estilo indirecto exige el pretérito imperfecto de subjuntivo: 'vinieran' (o 'viniesen')."
+                },
+                {
+                        "text": "A los premiados _____ reconocieron su esfuerzo en una ceremonia solemne.",
+                        "q": "Si el objeto indirecto es 'a los premiados', el pronombre reduplicado es:",
+                        "o": [
+                                "los",
+                                "les",
+                                "se",
+                                "lo"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El complemento indirecto plural se reduplica con 'les': 'les reconocieron su esfuerzo'."
+                },
+                {
+                        "text": "Deseábamos que el proyecto _____ aprobado sin tantas modificaciones.",
+                        "o": [
+                                "sea",
+                                "fuera",
+                                "sería",
+                                "ha sido"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Deseábamos' está en pretérito imperfecto; por correlación de tiempos verbales (consecutio temporum) la subordinada requiere pretérito imperfecto de subjuntivo: 'fuera' (o 'fuese')."
+                }
+        ]
+};
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            const info = topicsInfo[tabId];
+            if (info) {
+                document.getElementById('topic-title').innerText = info.title;
+                document.getElementById('topic-text').innerHTML = info.desc;
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                const totalInCat = data[cat].length;
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    
+                    let tableHtml = item.table ? `<table class="table-data">${item.table}</table>` : '';
+                    let readingHtml = '';
+                    let questionTitle = item.q || '';
+
+                    if (item.text && item.q) {
+                        readingHtml = `<div class="reading-box">${item.text}</div>`;
+                        questionTitle = item.q;
+                    } else if (item.text && !item.q) {
+                        if (item.text.includes('_____')) {
+                            readingHtml = `<div class="reading-box">${item.text}</div>`;
+                            questionTitle = 'Selecciona la opción que completa correctamente el enunciado:';
+                        } else if (item.text.startsWith('¿') || item.text.includes('?')) {
+                            questionTitle = item.text;
+                        } else {
+                            readingHtml = `<div class="reading-box">${item.text}</div>`;
+                            questionTitle = 'Selecciona la opción correcta con base en el texto:';
+                        }
+                    }
+                    
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4 flex justify-between items-center">
+                            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Desafío ${i+1} / ${totalInCat}</span>
+                        </div>
+                        ${readingHtml}
+                        ${tableHtml}
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${questionTitle}</h2>
+                        <div class="space-y-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { btn.classList.add('correct-opt'); score += 10; }
+            else { btn.classList.add('incorrect-opt'); box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); }
+            hint.style.display = 'block';
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { if(confirm('¿Reiniciar progreso?')) { score = 0; document.getElementById('global-score').innerText = 0; render(); showTab('sujeto_verbo'); } }
+
+        window.onload = () => { render(); showTab('sujeto_verbo'); };
+    </script>
+</body>
+</html>

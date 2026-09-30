@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Precisión Léxica y Vocabulario Culto</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .reading-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 1.25rem; border-radius: 0.75rem; margin-bottom: 1.25rem; font-style: italic; color: #92400e; line-height: 1.6; font-size: 0.95rem; }
+        nav::-webkit-scrollbar { height: 6px; }
+        nav::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+        .table-data { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1rem; }
+        .table-data th, .table-data td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; }
+        .table-data th { background: #f1f5f9; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden md:block italic">Homófonos Críticos, Parónimos Confusos y Supresión de Comodines</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación Extendida -->
+        <div class="mb-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">Módulos de Práctica</div>
+        <nav class="flex gap-2 mb-8 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto scroll-smooth no-scrollbar">
+
+            <button onclick="showTab('homofonos')" id="btn-homofonos" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600 flex-shrink-0">
+                10.1 Homófonos Clave PAA
+            </button>
+
+            <button onclick="showTab('paronimos')" id="btn-paronimos" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                10.2 Parónimos Confusos
+            </button>
+
+            <button onclick="showTab('comodin')" id="btn-comodin" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                10.3 Sustitución de Palabras Comodín
+            </button>
+        </nav>
+
+        <!-- Banner Dinámico -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenedores de Preguntas -->
+
+        <div id="homofonos" class="tab-content active space-y-6"></div>
+
+        <div id="paronimos" class="tab-content  space-y-6"></div>
+
+        <div id="comodin" class="tab-content  space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+        "homofonos": {
+                "title": "Diferenciación de Homófonos en Español",
+                "desc": "Aprende a distinguir palabras que suenan igual pero tienen diferente ortografía y significado (haya/halla, hecho/echo, tubo/tuvo, etc.)."
+        },
+        "paronimos": {
+                "title": "Parónimos y Confusión Vocabular",
+                "desc": "Domina términos semejantes en su forma pero con significados dispares (infringir/infligir, aptitud/actitud, perjuicio/prejuicio, accesible/asequible)."
+        },
+        "comodin": {
+                "title": "Precisión Léxica y Registro Formal",
+                "desc": "Sustituye verbos y sustantivos vacíos o comodines ('cosa', 'hacer', 'tener', 'poner', 'agarrar') por términos precisos del registro académico de la PAA."
+        }
+};
+
+        const data = {
+        "homofonos": [
+                {
+                        "text": "Espero que mi hermano _____ llegado a tiempo a la estación de trenes.",
+                        "q": "¿Qué grafía corresponde al presente de subjuntivo del verbo haber?",
+                        "o": [
+                                "halla",
+                                "haya",
+                                "aya",
+                                "allá"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Haya' (con 'y') proviene del verbo haber. 'Halla' (con 'll') es de hallar (encontrar), 'allá' es adverbio de lugar y 'aya' es cuidadora de niños."
+                },
+                {
+                        "text": "El arqueólogo _____ un vestigio ceremonial de gran valor histórico en la cueva.",
+                        "q": "¿Cuál es la forma correcta del verbo hallar (encontrar)?",
+                        "o": [
+                                "haya",
+                                "halla",
+                                "allá",
+                                "haya"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Halla' con dígrafo 'll' corresponde a la 3ª persona del presente del verbo hallar (encontrar)."
+                },
+                {
+                        "text": "Juan no _____ caso de las advertencias climáticas y subió la montaña.",
+                        "q": "¿Qué palabra corresponde a la forma del verbo hacer en pretérito perfecto?",
+                        "o": [
+                                "hizo",
+                                "izo",
+                                "echo",
+                                "hecho"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'Hizo' (con 'h') es la forma pretérita de hacer. 'Izo' (sin 'h') proviene de izar (elevar una bandera)."
+                },
+                {
+                        "text": "Para instalar la tubería de gas, los obreros utilizaron un _____ de cobre resistente.",
+                        "o": [
+                                "tubo",
+                                "tuvo",
+                                "tubos",
+                                "tuviese"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'Tubo' (con 'b') es el sustantivo que designa un cilindro hueco. 'Tuvo' (con 'v') es la forma del verbo tener."
+                },
+                {
+                        "text": "El científico _____ que postergar la publicación del artículo debido a nuevos experimentos.",
+                        "o": [
+                                "tubo",
+                                "tuvo",
+                                "tubiese",
+                                "hubo de tubo"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Tuvo' (con 'v') es la 3ª persona del pretérito del verbo tener."
+                },
+                {
+                        "text": "Antes de salir a la carretera, ve _____ si los neumáticos tienen la presión adecuada.",
+                        "o": [
+                                "a ver",
+                                "haber",
+                                "ha ver",
+                                "habers"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'A ver' es la secuencia de la preposición 'a' más el verbo infinitivo 'ver' (comprobar, mirar). 'Haber' es el verbo auxiliar de existencia."
+                },
+                {
+                        "text": "Debe de _____ ocurrido un malentendido durante la conferencia de prensa.",
+                        "o": [
+                                "a ver",
+                                "haber",
+                                "haver",
+                                "ha ver"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Haber' es el verbo infinitivo que indica probabilidad o existencia tras la perífrasis 'debe de'."
+                },
+                {
+                        "text": "El niño acostumbra _____ los residuos plásticos en el contenedor correspondiente.",
+                        "o": [
+                                "hechar",
+                                "echar",
+                                "hecho",
+                                "echo"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El verbo 'echar' (arrojar, tirar) se escribe siempre sin 'h'. 'Hecho' (con 'h') corresponde al verbo hacer."
+                },
+                {
+                        "text": "El informe pericial ya está _____ y listo para ser presentado al juez.",
+                        "o": [
+                                "echo",
+                                "hecho",
+                                "echo de menos",
+                                "hechado"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Hecho' (con 'h') es el participio del verbo hacer (concluido, elaborado)."
+                },
+                {
+                        "text": "El carpintero usó una lija especial para _____ la madera de roble.",
+                        "o": [
+                                "rallar",
+                                "rayar",
+                                "rallado",
+                                "rayado"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Rayar' (con 'y') significa hacer rayas o marcas en una superficie. 'Rallar' (con 'll') significa desmenuzar algo restregándolo con el rallador (como el queso)."
+                },
+                {
+                        "text": "La cocinera necesita _____ zanahorias para preparar la ensalada mixta.",
+                        "o": [
+                                "rayar",
+                                "rallar",
+                                "rayado",
+                                "ralladura"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> En cocina, desmenuzar un alimento se escribe con 'll': 'rallar'."
+                },
+                {
+                        "text": "El documental pretendía _____ los secretos jamás contados de la expedición ártica.",
+                        "o": [
+                                "rebelar",
+                                "revelar",
+                                "revelamiento",
+                                "rebelarse"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Revelar' (con 'v') significa descubrir algo secreto o hacer visible algo oculto. 'Rebelar' (con 'b') significa sublevarse o mostrar desobediencia."
+                }
+        ],
+        "paronimos": [
+                {
+                        "text": "El conductor fue sancionado severamente por _____ las leyes de tránsito.",
+                        "q": "¿Qué parónimo significa quebrantar o violar una norma?",
+                        "o": [
+                                "infligir",
+                                "infringir",
+                                "afligir",
+                                "restringir"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Infringir' significa vulnerar o no respetar una ley. 'Infligir' significa causar un daño físico o imponer un castigo."
+                },
+                {
+                        "text": "El ejército invasor intentó _____ una dolorosa derrota a las fuerzas locales.",
+                        "q": "¿Qué parónimo significa causar o propinar un castigo o daño?",
+                        "o": [
+                                "infringir",
+                                "infligir",
+                                "afligir",
+                                "restringir"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Infligir' se usa en el sentido de causar un daño moral o físico ('infligir una derrota')."
+                },
+                {
+                        "text": "El joven demostró tener una gran _____ para el cálculo numérico y la computación.",
+                        "q": "¿Qué término refiere a la destreza o capacidad innata para una tarea?",
+                        "o": [
+                                "actitud",
+                                "aptitud",
+                                "altitud",
+                                "actuación"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Aptitud' con 'p' se refiere a la habilidad, talento o capacidad técnica. 'Actitud' con 'c' se refiere a la postura mental o temperamento."
+                },
+                {
+                        "text": "A pesar de las dificultades económicas, el atleta mantuvo una _____ positiva y optimista.",
+                        "o": [
+                                "aptitud",
+                                "actitud",
+                                "latitud",
+                                "aptitudes"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Actitud' alude a la disposición de ánimo o comportamiento frente a una situación."
+                },
+                {
+                        "text": "La empresa debe _____ sus procesos industriales a los nuevos estándares ambientales.",
+                        "q": "¿Qué término significa acomodar o ajustar una cosa a otra?",
+                        "o": [
+                                "adoptar",
+                                "adaptar",
+                                "aceptar",
+                                "acoplar"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Adaptar' significa ajustar o modificar para amoldarse a nuevas condiciones. 'Adoptar' es tomar como propio (un hábito, una medida o un hijo)."
+                },
+                {
+                        "text": "El congreso decidió _____ medidas extraordinarias de seguridad sanitaria.",
+                        "o": [
+                                "adaptar",
+                                "adoptar",
+                                "acostumbrar",
+                                "adherir"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Se 'adoptan' decisiones, medidas, acuerdos o resoluciones legales."
+                },
+                {
+                        "text": "La difamación injusta provocó un grave _____ económico a la compañía.",
+                        "q": "¿Qué palabra alude al detrimento, daño o pérdida material o moral?",
+                        "o": [
+                                "prejuicio",
+                                "perjuicio",
+                                "presagio",
+                                "prodigio"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Perjuicio' es el daño o quebranto ocasionado. 'Prejuicio' es un juicio u opinión preconcebida sin base fidedigna."
+                },
+                {
+                        "text": "El jurado intentó evaluar el caso sin ningún _____ hacia el acusado.",
+                        "o": [
+                                "perjuicio",
+                                "prejuicio",
+                                "pernicioso",
+                                "previo"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Prejuicio' se refiere a juzgar anticipadamente con sesgos o ideas preconcebidas."
+                },
+                {
+                        "text": "Aquel libro de medicina antigua se encuentra en un formato digital muy _____ a todo público.",
+                        "q": "¿Qué adjetivo significa que se puede acceder o entrar fácilmente a algo?",
+                        "o": [
+                                "asequible",
+                                "accesible",
+                                "posible",
+                                "admisible"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Accesible' califica lo que es de fácil acceso, comprensión o entrada. 'Asequible' se reserva preferentemente para lo que tiene un precio moderado o se puede conseguir financieramente."
+                },
+                {
+                        "text": "Los nuevos teléfonos inteligentes se comercializan a un precio sumamente _____ para los estudiantes.",
+                        "o": [
+                                "accesible",
+                                "asequible",
+                                "admisible",
+                                "adquirible"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Asequible' es el adjetivo riguroso cuando se habla de precios económicos o moderados."
+                },
+                {
+                        "text": "El nuevo compuesto químico demostró ser muy _____ para exterminar plagas.",
+                        "q": "¿Qué adjetivo significa que tiene la virtud de producir el efecto deseado?",
+                        "o": [
+                                "eficiente",
+                                "eficaz",
+                                "efectista",
+                                "efectuado"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Eficaz' se enfoca en lograr el objetivo o resultado ('destruir la plaga'). 'Eficiente' enfatiza lograrlo optimizando recursos y tiempo."
+                },
+                {
+                        "text": "La ceremonia concluyó cuando el sacerdote procedió a _____ el nuevo templo.",
+                        "q": "¿Qué verbo significa dedicar solemnemente al culto divino?",
+                        "o": [
+                                "consagrar",
+                                "congraciar",
+                                "congregar",
+                                "conmover"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> 'Consagrar' significa destinar algo al servicio de la divinidad o a un fin sagrado. 'Congraciar' es ganar la voluntad o benevolencia de alguien."
+                }
+        ],
+        "comodin": [
+                {
+                        "text": "El presidente tiene que *hacer* un discurso solemne en la asamblea de las Naciones Unidas.",
+                        "q": "¿Qué verbo preciso sustituye con mayor propiedad léxica a la palabra comodín 'hacer'?",
+                        "o": [
+                                "pronunciar",
+                                "ejecutar",
+                                "elaborar",
+                                "decir"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Un discurso no se 'hace', se 'pronuncia', 'expone' o 'diserta'. 'Pronunciar' es el término más preciso y formal en el ámbito discursivo."
+                },
+                {
+                        "text": "La generosidad y el altruismo son *cosas* admirables en un líder de comunidad.",
+                        "q": "¿Qué sustantivo reemplaza con mayor rigor culto a la palabra comodín 'cosas'?",
+                        "o": [
+                                "virtudes",
+                                "temas",
+                                "objetos",
+                                "elementos"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> La generosidad y el altruismo son cualidades morales, por lo que el vocablo exacto es 'virtudes' o 'valores'."
+                },
+                {
+                        "text": "El gobierno va a *poner* un monumento en memoria de los héroes caídos.",
+                        "q": "¿Qué verbo de registro formal sustituye al comodín 'poner'?",
+                        "o": [
+                                "erigir",
+                                "colocar",
+                                "plantar",
+                                "instalar"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Los monumentos, estatuas o templos conmemorativos se 'erigen' o 'levantan'. 'Erigir' aporta máxima precisión léxica."
+                },
+                {
+                        "text": "Aquel joven *tiene* una grave enfermedad respiratoria desde su infancia.",
+                        "q": "¿Qué verbo sustituye con mayor propiedad clínica y léxica a 'tiene'?",
+                        "o": [
+                                "sufre",
+                                "padece",
+                                "porta",
+                                "guarda"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> En el lenguaje formal y médico, las enfermedades crónicas o graves se 'padecen' o 'sufren'; 'padecer' es el verbo específico preferido por la norma culta."
+                },
+                {
+                        "text": "El arquitecto *hizo* los planos detallados del rascacielos en tres semanas.",
+                        "q": "¿Cuál es el sustituto más idóneo para 'hizo' en este contexto técnico?",
+                        "o": [
+                                "trazó",
+                                "dibujó",
+                                "diseñó",
+                                "creó"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Un arquitecto 'diseña' o 'proyecta' planos y estructuras edilicias integrales."
+                },
+                {
+                        "text": "Durante la junta, el director *dijo* sus argumentos con gran elocuencia.",
+                        "q": "¿Qué verbo preciso reemplaza a 'dijo'?",
+                        "o": [
+                                "habló",
+                                "expuso",
+                                "mencionó",
+                                "murmuró"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Los argumentos se 'exponen', 'sustentan' o 'esgrimen'; 'expuso' es la elección más acertada y formal."
+                },
+                {
+                        "text": "El automóvil *agarró* una velocidad excesiva en la autopista.",
+                        "q": "¿Qué verbo sustituye al uso coloquial de 'agarrar'?",
+                        "o": [
+                                "tomó",
+                                "alcanzó",
+                                "consiguió",
+                                "obtuvo"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La velocidad en un vehículo se 'alcanza', 'desarrolla' o 'adquiere'. 'Alcanzó' es el término formal."
+                },
+                {
+                        "text": "Debemos *sacar* conclusiones fundamentadas después de revisar los datos experimentales.",
+                        "q": "¿Qué verbo culto sustituye con exactitud a 'sacar'?",
+                        "o": [
+                                "extraer",
+                                "deducir",
+                                "apartar",
+                                "quitar"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Las conclusiones lógicas se 'deducen', 'infieren' o 'derivan'. 'Deducir' denota el proceso intelectual estricto."
+                },
+                {
+                        "text": "El estudiante no sabe *dar* una respuesta adecuada a la interrogante del docente.",
+                        "q": "¿Qué verbo formal sustituye al comodín 'dar'?",
+                        "o": [
+                                "formular",
+                                "emitir",
+                                "prestar",
+                                "regalar"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Las respuestas u opiniones se 'emiten', 'articulan' o 'expresan'."
+                },
+                {
+                        "text": "En la reunión se trataron varias *cuestiones* de suma trascendencia económica.",
+                        "q": "¿Es necesario cambiar 'cuestiones' en este caso?",
+                        "o": [
+                                "Sí, por 'cosas'",
+                                "Sí, por 'asuntos'",
+                                "No, 'cuestiones' o 'asuntos' son apropiados y formales",
+                                "Sí, por 'papeleos'"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> A diferencia de 'cosas', los términos 'cuestiones', 'asuntos' o 'temas' pertenecen al registro formal culto y son perfectamente válidos."
+                },
+                {
+                        "text": "El maestro *echó* a perder el experimento por no controlar la temperatura.",
+                        "q": "¿Qué verbo formal sustituye a la locución coloquial 'echó a perder'?",
+                        "o": [
+                                "arruinó",
+                                "malogró",
+                                "rompió",
+                                "desperdició"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> 'Malogró' o 'frustró' expresa formalmente el fracaso o ruina prematura de un proyecto o proceso."
+                },
+                {
+                        "text": "En la biblioteca, los alumnos deben *guardar* silencio.",
+                        "q": "¿Qué verbo es la colocación léxica estándar y culta?",
+                        "o": [
+                                "hacer",
+                                "mantener",
+                                "tener",
+                                "poner"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La norma del español reconoce tanto 'guardar silencio' como 'mantener silencio' como colocaciones cultas correctas."
+                }
+        ]
+};
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            const info = topicsInfo[tabId];
+            if (info) {
+                document.getElementById('topic-title').innerText = info.title;
+                document.getElementById('topic-text').innerHTML = info.desc;
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                const totalInCat = data[cat].length;
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    
+                    let tableHtml = item.table ? `<table class="table-data">${item.table}</table>` : '';
+                    let readingHtml = '';
+                    let questionTitle = item.q || '';
+
+                    if (item.text && item.q) {
+                        readingHtml = `<div class="reading-box">${item.text}</div>`;
+                        questionTitle = item.q;
+                    } else if (item.text && !item.q) {
+                        if (item.text.includes('_____')) {
+                            readingHtml = `<div class="reading-box">${item.text}</div>`;
+                            questionTitle = 'Selecciona la opción que completa correctamente el enunciado:';
+                        } else if (item.text.startsWith('¿') || item.text.includes('?')) {
+                            questionTitle = item.text;
+                        } else {
+                            readingHtml = `<div class="reading-box">${item.text}</div>`;
+                            questionTitle = 'Selecciona la opción correcta con base en el texto:';
+                        }
+                    }
+                    
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4 flex justify-between items-center">
+                            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Desafío ${i+1} / ${totalInCat}</span>
+                        </div>
+                        ${readingHtml}
+                        ${tableHtml}
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${questionTitle}</h2>
+                        <div class="space-y-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { btn.classList.add('correct-opt'); score += 10; }
+            else { btn.classList.add('incorrect-opt'); box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); }
+            hint.style.display = 'block';
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { if(confirm('¿Reiniciar progreso?')) { score = 0; document.getElementById('global-score').innerText = 0; render(); showTab('homofonos'); } }
+
+        window.onload = () => { render(); showTab('homofonos'); };
+    </script>
+</body>
+</html>

@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Evidencia Textual y Reactivos Pareados</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .reading-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 1.25rem; border-radius: 0.75rem; margin-bottom: 1.25rem; font-style: italic; color: #92400e; line-height: 1.6; font-size: 0.95rem; }
+        nav::-webkit-scrollbar { height: 6px; }
+        nav::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+        .table-data { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1rem; }
+        .table-data th, .table-data td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; }
+        .table-data th { background: #f1f5f9; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden md:block italic">Preguntas Pareadas PAA, Citas de Respaldo y Contraste de Posturas</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación Extendida -->
+        <div class="mb-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">Módulos de Práctica</div>
+        <nav class="flex gap-2 mb-8 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto scroll-smooth no-scrollbar">
+
+            <button onclick="showTab('pareadas')" id="btn-pareadas" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600 flex-shrink-0">
+                13.1 Preguntas Pareadas PAA
+            </button>
+
+            <button onclick="showTab('citas')" id="btn-citas" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                13.2 Selección de Evidencia Fuerte
+            </button>
+
+            <button onclick="showTab('contraste')" id="btn-contraste" class="tab-btn py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50 flex-shrink-0">
+                13.3 Contraste de Textos y Posturas
+            </button>
+        </nav>
+
+        <!-- Banner Dinámico -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenedores de Preguntas -->
+
+        <div id="pareadas" class="tab-content active space-y-6"></div>
+
+        <div id="citas" class="tab-content  space-y-6"></div>
+
+        <div id="contraste" class="tab-content  space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+        "pareadas": {
+                "title": "Reactivos Pareados Estilo College Board",
+                "desc": "Aprende a resolver el formato insignia de la PAA: una deducción o inferencia crítica vinculada inmediatamente a la cita textual que la demuestra con rigor."
+        },
+        "citas": {
+                "title": "Fuerza Argumentativa y Citas de Respaldo",
+                "desc": "Identifica qué datos, experimentos o testimonios proporcionan evidencia directa y científica frente a opciones circunstanciales o irrelevantes."
+        },
+        "contraste": {
+                "title": "Comparación y Contraste de Textos Duales",
+                "desc": "Analiza dos posturas contrapuestas sobre un mismo tema e identifica el punto exacto de discrepancia, coincidencia o refutación entre ambos autores."
+        }
+};
+
+        const data = {
+        "pareadas": [
+                {
+                        "text": "[1] Durante décadas se creyó que las aves marinas se orientaban exclusivamente mediante el campo magnético terrestre y la posición del sol en el horizonte. [2] No obstante, investigaciones recientes en la Universidad de Oxford han revelado una faceta insospechada: el olfato. [3] Al exponer a las pardelas a olores característicos del océano, como el sulfuro de dimetilo producido por el fitoplancton, los biólogos descubrieron que estas aves siguen auténticos 'mapas aromáticos'. [4] Cuando los científicos bloquearon temporalmente el sentido olfativo de un grupo de prueba, las aves perdieron la capacidad de retornar en línea recta a sus colonias de anidación, desviándose cientos de kilómetros.",
+                        "q": "¿Cuál de las siguientes afirmaciones sobre las pardelas se deduce directamente de la lectura?",
+                        "o": [
+                                "Su única herramienta de orientación a larga distancia es el campo magnético.",
+                                "El sentido del olfato es un mecanismo indispensable para que regresen con precisión a sus nidos.",
+                                "El sulfuro de dimetilo es una sustancia tóxica que desorienta gravemente a las aves.",
+                                "Las aves marinas prefieren viajar durante la noche guiadas por la luna."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El texto demuestra que cuando se bloqueó su olfato, perdieron la capacidad de retornar en línea recta a sus colonias, lo que prueba que el olfato es indispensable para su regreso."
+                },
+                {
+                        "text": "Respecto al texto de las pardelas y la orientación olfativa:",
+                        "q": "¿Qué fragmento del texto proporciona la **MEJOR EVIDENCIA TEXTUAL** para justificar que el olfato es indispensable para regresar a sus colonias?",
+                        "o": [
+                                "Oración [1] ('Durante décadas se creyó que las aves marinas se orientaban...')",
+                                "Oración [2] ('No obstante, investigaciones recientes en la Universidad de Oxford...')",
+                                "Oración [3] ('Al exponer a las pardelas a olores característicos del océano...')",
+                                "Oración [4] ('Cuando los científicos bloquearon temporalmente el sentido olfativo... las aves perdieron la capacidad de retornar')"
+                        ],
+                        "a": 3,
+                        "exp": "<b>Análisis:</b> La oración [4] describe el experimento de control que demuestra empíricamente la necesidad del olfato, proporcionando la prueba textual directa y contundente requerida en los reactivos pareados de la PAA."
+                },
+                {
+                        "text": "[1] La domesticación del maíz en Mesoamérica hace unos 9,000 años no fue un evento súbito, sino un proceso de selección artificial que transformó una humilde gramínea silvestre llamada teocintle. [2] Mientras que la espiga de teocintle posee apenas una decena de granos diminutos protegidos por una cáscara dura como piedra, la mazorca moderna ofrece cientos de granos tiernos y expuestos. [3] Este cambio anatómico implicó un costo biológico severo: el maíz domesticado es completamente incapaz de reproducirse por sí mismo en la naturaleza, pues sus granos no pueden desprenderse sin la intervención humana. [4] Paradójicamente, la planta que sustentó el florecimiento de las grandes civilizaciones prehispánicas depende por completo de nuestra especie para no extinguirse.",
+                        "q": "Con base en el texto, ¿cuál fue una consecuencia biológica directa de la domesticación del maíz?",
+                        "o": [
+                                "El maíz desarrolló una resistencia total contra las plagas silvestres.",
+                                "La planta perdió su autonomía reproductiva en el entorno natural.",
+                                "El teocintle se extinguió inmediatamente al surgir el maíz.",
+                                "Los granos se volvieron duros e indigeribles para el ser humano."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La lectura afirma explícitamente que el maíz domesticado es incapaz de reproducirse por sí mismo en la naturaleza."
+                },
+                {
+                        "text": "Respecto a la domesticación del maíz:",
+                        "q": "¿Qué oración del texto ofrece la **MEJOR EVIDENCIA TEXTUAL** para sustentar que la planta perdió su autonomía reproductiva?",
+                        "o": [
+                                "Oración [1] ('La domesticación del maíz en Mesoamérica hace unos 9,000 años...')",
+                                "Oración [2] ('Mientras que la espiga de teocintle posee apenas una decena de granos...')",
+                                "Oración [3] ('Este cambio anatómico implicó un costo biológico severo: el maíz domesticado es completamente incapaz de reproducirse por sí mismo...')",
+                                "Oración [4] ('Paradójicamente, la planta que sustentó el florecimiento...')"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> La oración [3] señala directamente que 'es completamente incapaz de reproducirse por sí mismo en la naturaleza, pues sus granos no pueden desprenderse sin la intervención humana'."
+                },
+                {
+                        "text": "[1] En el fondo de las fosas oceánicas, a más de cuatro mil metros de profundidad, la oscuridad es absoluta y la presión hidrostática supera las cuatrocientas atmósferas. [2] A pesar de este entorno aparentemente estéril, las fuentes hidrotermales albergan prósperos ecosistemas que no dependen de la energía solar. [3] En lugar de la fotosíntesis, la base trófica de estas comunidades es la quimiosíntesis, llevada a cabo por bacterias que oxidan el sulfuro de hidrógeno expulsado por las chimeneas volcánicas. [4] Estos microorganismos nutren a gigantescos gusanos tubulares y cangrejos albinos, demostrando que la vida puede florecer con independencia del sol.",
+                        "q": "¿Qué conclusión sobre los ecosistemas de fuentes hidrotermales se desprende del pasaje?",
+                        "o": [
+                                "Su supervivencia está ligada al aporte de oxígeno disuelto desde la superficie marina.",
+                                "Constituyen comunidades ecológicas primarias cuya fuente basal de energía es de origen químico y geotérmico.",
+                                "Son ecosistemas efímeros que mueren en cuanto se apaga la luz solar estacional.",
+                                "Los animales que los habitan son idénticos a los de los arrecifes costeros."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El texto explicita que no dependen de la luz solar, sino de la quimiosíntesis bacteriana del sulfuro de hidrógeno volcánico (energía geotérmica/química)."
+                },
+                {
+                        "text": "Respecto a las fuentes hidrotermales:",
+                        "q": "¿Qué parte del texto sustenta de forma directa que la base trófica no requiere luz solar?",
+                        "o": [
+                                "Oración [1] ('En el fondo de las fosas oceánicas, a más de cuatro mil metros...')",
+                                "Oración [2] ('A pesar de este entorno aparentemente estéril, las fuentes hidrotermales...')",
+                                "Oración [3] ('En lugar de la fotosíntesis, la base trófica de estas comunidades es la quimiosíntesis...')",
+                                "Oración [4] ('Estos microorganismos nutren a gigantescos gusanos tubulares...')"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> La oración [3] define formalmente el mecanismo: 'En lugar de la fotosíntesis, la base trófica de estas comunidades es la quimiosíntesis, llevada a cabo por bacterias'."
+                },
+                {
+                        "text": "[1] El Renacimiento suele presentarse como una ruptura tajante con el Medioevo, pero los historiadores contemporáneos matizan esta visión. [2] Muchos de los avances astronómicos y matemáticos atribuidos al siglo XVI hunden sus raíces en las traducciones árabes y en los debates escolásticos de las universidades de París y Oxford del siglo XIV. [3] Lo que ocurrió en Florencia y Venecia no fue un nacimiento de la nada, sino una aceleración e hibridación de saberes que ya circulaban lentamente por la cristiandad medieval. [4] La noción de una 'edad oscura' medieval es en gran medida un artefacto propagandístico acuñado por los propios humanistas renacentistas para ensalzar su época.",
+                        "q": "Según el autor, la idea de la Edad Media como una 'edad oscura' es:",
+                        "o": [
+                                "Una verdad científica corroborada por la arqueología moderna.",
+                                "Una construcción retórica e interesada creada por los humanistas del Renacimiento.",
+                                "Una creencia que surgió en el siglo XX a través del cine.",
+                                "Un período en el que no se tradujo ningún libro árabe."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La lectura indica que la noción de 'edad oscura' medieval es un artefacto propagandístico acuñado por los humanistas para ensalzar su época."
+                },
+                {
+                        "text": "Respecto al texto sobre el Renacimiento y el Medioevo:",
+                        "q": "¿Qué oración provee la **EVIDENCIA TEXTUAL ESPECÍFICA** para la pregunta anterior?",
+                        "o": [
+                                "Oración [1] ('El Renacimiento suele presentarse como una ruptura tajante...')",
+                                "Oración [2] ('Muchos de los avances astronómicos y matemáticos atribuidos...')",
+                                "Oración [3] ('Lo que ocurrió en Florencia y Venecia no fue un nacimiento de la nada...')",
+                                "Oración [4] ('La noción de una 'edad oscura' medieval es en gran medida un artefacto propagandístico acuñado por los propios humanistas...')"
+                        ],
+                        "a": 3,
+                        "exp": "<b>Análisis:</b> La oración [4] contiene las palabras exactas que definen el concepto como un 'artefacto propagandístico acuñado por los propios humanistas'."
+                },
+                {
+                        "text": "[1] La lectura en soportes digitales ha transformado los hábitos de procesamiento cognitivo de los jóvenes. [2] Investigaciones de neurociencia han constatado que la lectura en pantallas estimula un patrón de escaneo en 'F', donde la mirada salta rápidamente buscando palabras clave sin profundizar en la estructura sintáctica compleja. [3] En contraste, la lectura en papel físico favorece una inmersión atencional sostenida y una mayor retención de secuencias temporales en textos narrativos extensos. [4] Por consiguiente, el formato de lectura no es neutral: moldea activamente la arquitectura neuronal de nuestra comprensión.",
+                        "q": "¿Cuál es el efecto distintivo de la lectura en pantallas según los estudios de neurociencia citados?",
+                        "o": [
+                                "Aumenta la memoria fotográfica de pasajes poéticos.",
+                                "Fomenta una exploración visual fragmentaria y superficial orientada a palabras clave.",
+                                "Elimina por completo la capacidad de leer novelas en adultos.",
+                                "Genera una mayor retención de secuencias temporales que el papel."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El texto describe el patrón de escaneo en 'F', donde se salta buscando palabras clave sin profundizar en sintaxis complejas."
+                },
+                {
+                        "text": "Respecto al texto de lectura digital vs lectura en papel:",
+                        "q": "¿Qué oración del texto ofrece la **MEJOR EVIDENCIA TEXTUAL** para sustentar la respuesta previa?",
+                        "o": [
+                                "Oración [1] ('La lectura en soportes digitales ha transformado los hábitos...')",
+                                "Oración [2] ('Investigaciones de neurociencia han constatado que la lectura en pantallas estimula un patrón de escaneo en 'F'...')",
+                                "Oración [3] ('En contraste, la lectura en papel físico favorece una inmersión atencional...')",
+                                "Oración [4] ('Por consiguiente, el formato de lectura no es neutral...')"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La oración [2] proporciona la evidencia experimental concreta sobre el patrón de escaneo en 'F' y el salto entre palabras clave."
+                }
+        ],
+        "citas": [
+                {
+                        "text": "Un ensayista desea defender la tesis de que 'los videojuegos de estrategia en tiempo real pueden potenciar el razonamiento lógico y la toma de decisiones bajo presión'.",
+                        "q": "¿Cuál de las siguientes citas textuales de expertos proporciona el respaldo argumentativo de MAYOR PESO?",
+                        "o": [
+                                "'A muchos adolescentes les gusta jugar videojuegos después de hacer sus deberes escolares'.",
+                                "'Un estudio de la Universidad de Ginebra demostró que los jugadores de estrategia procesan información visual compleja un 25% más rápido y formulan planes de contingencia más eficaces'.",
+                                "'La industria de los videojuegos recauda miles de millones de dólares anualmente en todo el mundo'.",
+                                "'Los gráficos tridimensionales de las consolas modernas son cada vez más realistas y envolventes'."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La opción B proviene de una institución académica respetable (Universidad de Ginebra), aporta datos cuantitativos concretos (+25%) y aborda directamente las variables de la tesis (procesamiento rápido y planes de contingencia bajo presión)."
+                },
+                {
+                        "text": "Una editorialista sostiene que 'la preservación de las lenguas indígenas es indispensable para resguardar conocimientos botánicos y ecológicos milenarios'.",
+                        "q": "¿Qué testimonio o dato textual respalda con mayor contundencia esta afirmación?",
+                        "o": [
+                                "'Las lenguas originarias poseen relatos orales muy entretenidos para niños'.",
+                                "'El 80% de las plantas medicinales identificadas en la Amazonía fueron catalogadas gracias a los nombres y taxonomías precisas conservadas en lenguas nativas'.",
+                                "'Aprender más de un idioma siempre resulta beneficioso para ejercitar la memoria'.",
+                                "'Muchas comunidades indígenas habitan en regiones montañosas y selváticas distantes'."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El dato empírico del 80% de plantas medicinales catalogadas a través de taxonomías nativas vincula directamente la diversidad lingüística con el conocimiento ecológico."
+                },
+                {
+                        "text": "El autor de un artículo afirma que 'el teletrabajo prolongado puede acentuar el aislamiento social de los empleados si no se implementan medidas de integración'.",
+                        "q": "¿Cuál de los siguientes fragmentos ofrece la mejor evidencia testimonial directa?",
+                        "o": [
+                                "'En nuestra encuesta interna, el 68% de los trabajadores remotos reportó una marcada sensación de desapego institucional y falta de convivencia espontánea con sus pares'.",
+                                "'El tráfico en las grandes metrópolis disminuyó considerablemente durante los primeros meses del trabajo a distancia'.",
+                                "'Las empresas ahorraron millones en el alquiler de oficinas corporativas durante el último año'.",
+                                "'Casi todos los hogares cuentan con conexión a internet de fibra óptica en la actualidad'."
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Proporciona estadísticas rigurosas (68%) enfocadas justamente en el desapego y la falta de convivencia (aislamiento social)."
+                },
+                {
+                        "text": "Se pretende respaldar la afirmación: 'La reforestación con monocultivos de árboles exóticos resulta perjudicial para los mantos freáticos locales'.",
+                        "q": "¿Qué fragmento de un informe técnico constituye la mejor prueba?",
+                        "o": [
+                                "'Los árboles exóticos suelen tener un follaje vistoso y agradable a la vista de los turistas'.",
+                                "'El pino y el eucalipto son especies de rápido crecimiento maderable en el mercado internacional'.",
+                                "'Mediciones hidrológicas revelaron que las plantaciones masivas de eucalipto absorbieron hasta tres veces más agua subterránea que el bosque nativo, secando pozos comunales aledaños'.",
+                                "'La tala indiscriminada de bosques es una de las principales preocupaciones globales'."
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> La evidencia hidrológica cuantitativa y comparativa con el bosque nativo demuestra de manera incontrovertible el daño a los mantos freáticos."
+                },
+                {
+                        "text": "En un debate sobre movilidad urbana, se afirma que 'la construcción de más carriles vehiculares no resuelve la congestión debido al fenómeno del tráfico inducido'.",
+                        "q": "¿Qué cita fundamenta mejor este principio económico y urbanístico?",
+                        "o": [
+                                "'A todos nos disgusta pasar horas atascados en el tráfico durante las horas pico'.",
+                                "'El economista Anthony Downs comprobó que al ensanchar una autopista, conductores que antes usaban rutas alternas o transporte público saturan los nuevos carriles en menos de un año'.",
+                                "'Los automóviles modernos emiten menos gases contaminantes que los modelos de hace tres décadas'.",
+                                "'El precio de la gasolina impacta directamente en el bolsillo de las familias trabajadoras'."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Cita la teoría económica del tráfico inducido de Anthony Downs y explica el mecanismo causal exacto de la saturación vehicular."
+                },
+                {
+                        "text": "Tesis: 'El bilingüismo en la primera infancia no genera retraso en el lenguaje y fortalece el control inhibitorio'.",
+                        "q": "¿Cuál de las siguientes afirmaciones apoya de forma más sólida la tesis?",
+                        "o": [
+                                "'Aprender inglés es un requisito casi universal en el mercado laboral contemporáneo'.",
+                                "'En pruebas de tareas cognitivas cruzadas, niños bilingües de cuatro años superaron a sus pares monolingües al filtrar estímulos distractores y alternar reglas lógicas'.",
+                                "'Muchos padres de familia compran aplicaciones móviles para que sus hijos escuchen canciones en otros idiomas'.",
+                                "'Los diccionarios bilingües son herramientas didácticas útiles en las escuelas primarias'."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Detalla un experimento comparativo en niños de cuatro años evaluando el control inhibitorio (filtrar distractores y alternar reglas)."
+                },
+                {
+                        "text": "Un texto argumenta que 'la contaminación lumínica en las costas altera fatalmente el ciclo reproductivo de las tortugas marinas'.",
+                        "q": "¿Qué observación biológica respalda con mayor precisión la aseveración?",
+                        "o": [
+                                "'Las tortugas marinas son reptiles ancestrales que han nadado en los océanos por más de cien millones de años'.",
+                                "'Las crías recién nacidas se orientan por el brillo natural del mar; las luces artificiales de los hoteles las desvían hacia carreteras donde mueren por deshidratación o atropellamiento'.",
+                                "'Las playas de arena blanca son un destino turístico privilegiado durante las vacaciones de verano'.",
+                                "'Existen diversas especies de tortugas como la caguama, la laúd y la tortuga verde'."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Explica el mecanismo etológico de desorientación lumínica y sus consecuencias mortales específicas."
+                },
+                {
+                        "text": "Tesis: 'El descanso nocturno adecuado de ocho horas consolida la memoria de largo plazo en estudiantes universitarios'.",
+                        "q": "¿Qué fragmento de un estudio clínico aporta la prueba más contundente?",
+                        "o": [
+                                "'Dormir en un colchón ortopédico reduce los dolores lumbares matutinos'.",
+                                "'Registros de electroencefalografía revelaron que durante la fase de ondas lentas y REM, el hipocampo transfiere patrones sinápticos hacia la corteza cerebral, fijando los conceptos aprendidos durante el día'.",
+                                "'La mayoría de las personas suele tomar una taza de café para mantenerse despiertas en las mañanas'.",
+                                "'Las universidades ofrecen cursos con horarios matutinos y vespertinos para adaptarse al alumnado'."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Describe el proceso neurológico exacto (transferencia del hipocampo a la corteza en fase REM/ondas lentas) que consolida la memoria."
+                },
+                {
+                        "text": "Tesis: 'La rotación de cultivos en parcelas agrícolas previene el agotamiento de nutrientes del suelo'.",
+                        "q": "¿Qué evidencia agronómica respalda directamente la tesis?",
+                        "o": [
+                                "'El maíz y el frijol son alimentos tradicionales de la dieta latinoamericana'.",
+                                "'Alternar gramíneas con leguminosas fija nitrógeno atmosférico mediante bacterias rizobios, reduciendo en un 40% la necesidad de fertilizantes sintéticos'.",
+                                "'La compra de maquinaria agrícola moderna exige inversiones financieras significativas'.",
+                                "'Las lluvias en primavera benefician el crecimiento de las plántulas recién sembradas'."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Identifica el mecanismo biológico (fijación de nitrógeno por rizobios al alternar con leguminosas) y un dato empírico (reducción del 40% de fertilizantes)."
+                },
+                {
+                        "text": "Tesis: 'El uso excesivo de pantallas brillantes antes de dormir altera la secreción de melatonina y la calidad del sueño'.",
+                        "q": "¿Qué evidencia médica valida con mayor rigor la hipótesis?",
+                        "o": [
+                                "'La luz azul de longitud de onda corta emitida por pantallas suprime la producción de melatonina pineal en más de un 50%, demorando el inicio del sueño profundo'.",
+                                "'A muchas personas les gusta ver series de televisión antes de conciliar el sueño'.",
+                                "'Las tabletas electrónicas son más ligeras de transportar que los libros impresos'.",
+                                "'Los dormitorios deben pintarse de colores suaves y relajantes'."
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Aporta la explicación endocrinológica precisa (supresión de melatonina pineal por luz azul en >50%)."
+                }
+        ],
+        "contraste": [
+                {
+                        "text": "Texto A: 'La energía nuclear es la alternativa más limpia y densa para reemplazar los combustibles fósiles sin emitir gases de efecto invernadero a la atmósfera'.\nTexto B: 'La energía nuclear implica riesgos inaceptables de contaminación radiactiva y un problema irresoluble con la gestión de residuos letales durante miles de años'.",
+                        "q": "¿Cuál es el punto central de desacuerdo entre los autores de ambos textos?",
+                        "o": [
+                                "Si la energía nuclear emite dióxido de carbono en su operación.",
+                                "La conveniencia y seguridad de adoptar la energía nuclear frente a sus riesgos y residuos.",
+                                "El costo financiero de extraer uranio en las minas.",
+                                "La cantidad de energía solar disponible en el planeta."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El Texto A enfatiza su condición de energía limpia sin emisiones para combatir el cambio climático, mientras que el Texto B subraya los peligros de accidentes radiactivos y la persistencia de residuos peligrosos."
+                },
+                {
+                        "text": "Respecto al debate entre el Texto A y el Texto B sobre energía nuclear:",
+                        "q": "¿Qué argumento del Texto A contradice la posición del Texto B?",
+                        "o": [
+                                "Que la energía nuclear es una fuente concentrada capaz de sustituir a los combustibles fósiles sin generar gases de invernadero.",
+                                "Que los residuos radiactivos desaparecen en pocas semanas.",
+                                "Que las plantas nucleares nunca han tenido accidentes en la historia.",
+                                "Que el uranio es una fuente de energía renovable e inagotable."
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El Texto A sostiene que la energía nuclear es viable y limpia frente a los combustibles fósiles, postura que choca frontalmente con la descalificación de seguridad del Texto B."
+                },
+                {
+                        "text": "Texto 1: 'La automatización mediante inteligencia artificial destruirá millones de empleos tradicionales, condenando a amplios sectores obreros al desempleo crónico'.\nTexto 2: 'Históricamente, toda revolución tecnológica ha desplazado oficios obsoletos, pero a su vez ha creado nuevas industrias y oportunidades laborales más calificadas'.",
+                        "q": "¿En qué difieren fundamentalmente las predicciones de ambos autores?",
+                        "o": [
+                                "En si la inteligencia artificial se utiliza actualmente en las fábricas.",
+                                "En si la tecnología generará un desempleo neto permanente o si propiciará una reconversión con nuevos empleos.",
+                                "En el lenguaje de programación utilizado en los robots industriales.",
+                                "En el precio de las computadoras en el mercado global."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El Texto 1 pronostica desempleo crónico e irrecuperable; el Texto 2 argumenta con base en la historia que se generarán nuevas industrias y oportunidades más calificadas."
+                },
+                {
+                        "text": "Sobre los Textos 1 y 2 de automatización:",
+                        "q": "¿En qué evidencia histórica se apoya el autor del Texto 2 para matizar la alarma del Texto 1?",
+                        "o": [
+                                "En que las revoluciones tecnológicas previas crearon nuevos empleos tras desplazar a los antiguos.",
+                                "En que las máquinas del siglo XIX no funcionaban con electricidad.",
+                                "En que ningún obrero perdió su trabajo durante la Revolución Industrial.",
+                                "En que la inteligencia artificial no puede superar al cerebro humano."
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El Texto 2 se fundamenta en el precedente histórico de las revoluciones técnicas anteriores que sustituyeron oficios antiguos por nuevas ocupaciones."
+                },
+                {
+                        "text": "Texto A: 'El proteccionismo arancelario es indispensable para resguardar la industria local frente a la competencia desleal extranjera'.\nTexto B: 'El libre comercio sin aranceles optimiza la asignación de recursos, reduce precios para el consumidor e impulsa la innovación competitiva'.",
+                        "q": "¿Cuál es la divergencia económica medular entre ambos textos?",
+                        "o": [
+                                "La conveniencia de gravar importaciones para proteger empresas nacionales vs abrir mercados para beneficiar al consumidor.",
+                                "La necesidad de imprimir más billetes para elevar el consumo interno.",
+                                "La conveniencia de nacionalizar los bancos centrales.",
+                                "El cálculo del producto interno bruto trimestral."
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Plantea el clásico debate entre proteccionismo estatal para amparar a productores locales y librecambismo global para abaratar precios al consumidor."
+                },
+                {
+                        "text": "Sobre la disputa de comercio exterior (Textos A y B):",
+                        "q": "¿Qué beneficio prioriza el autor del Texto B en su defensa del libre comercio?",
+                        "o": [
+                                "El beneficio de los monopolios estatales.",
+                                "La reducción de precios al consumidor y el estímulo a la innovación mediante competencia.",
+                                "El incremento de los ingresos fiscales por concepto de aranceles aduaneros.",
+                                "La autosuficiencia agrícola en tiempos de guerra."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El Texto B menciona explícitamente: 'optimiza la asignación de recursos, reduce precios para el consumidor e impulsa la innovación competitiva'."
+                },
+                {
+                        "text": "Texto 1: 'La exploración espacial tripulada a Marte es un derroche injustificable de recursos que deberían invertirse en resolver la pobreza y el cambio climático en la Tierra'.\nTexto 2: 'Invertir en la exploración de Marte cataliza innovaciones tecnológicas trascendentales en medicina, materiales y energía que benefician directamente la vida en la Tierra'.",
+                        "q": "¿Cuál es la controversia ética y financiera planteada?",
+                        "o": [
+                                "Si el viaje a Marte debe realizarse con naves propulsadas por energía solar.",
+                                "Si los recursos destinados a la carrera espacial se justifican por sus retornos tecnológicos o si son un dispendio frente a las urgencias terrestres.",
+                                "Si Marte posee agua congelada en sus casquetes polares.",
+                                "La cantidad de astronautas que deben integrar la primera tripulación marciana."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El dilema ético-presupuestal radica en si el gasto astronómico se justifica por las patentes e innovaciones derivadas o si es un despilfarro ante las crisis sociales de la Tierra."
+                },
+                {
+                        "text": "Sobre el debate marciano (Textos 1 y 2):",
+                        "q": "¿Cómo refuta el Texto 2 la acusación de 'derroche' planteada por el Texto 1?",
+                        "o": [
+                                "Afirmando que la tecnología desarrollada para el viaje a Marte genera aplicaciones útiles que mejoran la vida en nuestro propio planeta.",
+                                "Argumentando que la pobreza en la Tierra ya está totalmente resuelta.",
+                                "Diciendo que el viaje a Marte no costará dinero público sino privado.",
+                                "Asegurando que la Tierra será inhabitable en los próximos diez años."
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El Texto 2 sostiene que los avances en medicina, materiales y energía surgidos de la misión benefician directamente a la sociedad terrestre."
+                },
+                {
+                        "text": "Texto A: 'Los zoológicos modernos son centros esenciales de conservación biológica, rescate de especies en peligro de extinción y educación ambiental'.\nTexto B: 'Mantener animales salvajes en cautiverio es una práctica anacrónica que les causa estrés crónico y distorsiona sus pautas etológicas naturales'.",
+                        "q": "¿Cuál es el núcleo del conflicto valorativo entre ambos textos?",
+                        "o": [
+                                "El tipo de alimentación que reciben los felinos en los zoológicos.",
+                                "La justificación ética y conservacionista del cautiverio animal frente al sufrimiento y alteración de su naturaleza silvestre.",
+                                "El precio del boleto de entrada a los parques temáticos.",
+                                "La cantidad de veterinarios que deben trabajar en un refugio."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El Texto A defiende el rol de preservación y reproducción de especies amenazadas, mientras el Texto B denuncia el sufrimiento ético y etológico inherente al encierro."
+                },
+                {
+                        "text": "Respecto al debate sobre los zoológicos (Textos A y B):",
+                        "q": "¿Qué punto crítico expone el Texto B para cuestionar la validez de los zoológicos?",
+                        "o": [
+                                "Que los zoológicos cobran boletos excesivamente caros.",
+                                "Que el confinamiento provoca estrés crónico y perturba el comportamiento natural de los animales.",
+                                "Que los zoológicos no cuentan con suficiente espacio para los visitantes.",
+                                "Que los animales en libertad viven menos años que en cautiverio."
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El Texto B señala que el cautiverio 'les causa estrés crónico y distorsiona sus pautas etológicas naturales'."
+                }
+        ]
+};
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            const info = topicsInfo[tabId];
+            if (info) {
+                document.getElementById('topic-title').innerText = info.title;
+                document.getElementById('topic-text').innerHTML = info.desc;
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                const totalInCat = data[cat].length;
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    
+                    let tableHtml = item.table ? `<table class="table-data">${item.table}</table>` : '';
+                    let readingHtml = '';
+                    let questionTitle = item.q || '';
+
+                    if (item.text && item.q) {
+                        readingHtml = `<div class="reading-box">${item.text}</div>`;
+                        questionTitle = item.q;
+                    } else if (item.text && !item.q) {
+                        if (item.text.includes('_____')) {
+                            readingHtml = `<div class="reading-box">${item.text}</div>`;
+                            questionTitle = 'Selecciona la opción que completa correctamente el enunciado:';
+                        } else if (item.text.startsWith('¿') || item.text.includes('?')) {
+                            questionTitle = item.text;
+                        } else {
+                            readingHtml = `<div class="reading-box">${item.text}</div>`;
+                            questionTitle = 'Selecciona la opción correcta con base en el texto:';
+                        }
+                    }
+                    
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4 flex justify-between items-center">
+                            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Desafío ${i+1} / ${totalInCat}</span>
+                        </div>
+                        ${readingHtml}
+                        ${tableHtml}
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${questionTitle}</h2>
+                        <div class="space-y-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { btn.classList.add('correct-opt'); score += 10; }
+            else { btn.classList.add('incorrect-opt'); box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); }
+            hint.style.display = 'block';
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { if(confirm('¿Reiniciar progreso?')) { score = 0; document.getElementById('global-score').innerText = 0; render(); showTab('pareadas'); } }
+
+        window.onload = () => { render(); showTab('pareadas'); };
+    </script>
+</body>
+</html>

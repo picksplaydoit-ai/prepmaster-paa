@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Exponentes, Radicales y Notación Científica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .svg-container { background: #f8fafc; border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: center; border: 1px solid #e2e8f0; }
+        nav::-webkit-scrollbar { height: 4px; }
+        nav::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden sm:block italic">Leyes de Potencias, Simplificación de Raíces y Órdenes de Magnitud</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación -->
+        <nav class="flex flex-wrap gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto whitespace-nowrap">
+
+            <button onclick="showTab('leyes')" id="btn-leyes" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600">
+                7.1 Leyes de los Exponentes
+            </button>
+
+            <button onclick="showTab('radicales')" id="btn-radicales" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                7.2 Radicales y Exponentes Fraccionarios
+            </button>
+
+            <button onclick="showTab('notacion')" id="btn-notacion" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                7.3 Notación Científica y Operaciones
+            </button>
+        </nav>
+
+        <!-- Banner Informativo -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenidos -->
+
+        <div id="leyes" class="tab-content active space-y-6"></div>
+
+        <div id="radicales" class="tab-content  space-y-6"></div>
+
+        <div id="notacion" class="tab-content  space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+        "leyes": {
+                "title": "Leyes Fundamentales de los Exponentes",
+                "desc": "Aprende las propiedades de multiplicación, división, potencias de potencias y exponentes negativos indispensables para la PAA."
+        },
+        "radicales": {
+                "title": "Radicales y Exponentes Fraccionarios",
+                "desc": "Domina la simplificación de raíces cuadradas y cúbicas, la racionalización y la conversión a exponentes fraccionarios."
+        },
+        "notacion": {
+                "title": "Notación Científica y Órdenes de Magnitud",
+                "desc": "Resuelve operaciones con números astronómicos y microscópicos sin cometer errores con las posiciones decimales."
+        }
+};
+
+        
+
+        const data = {
+        "leyes": [
+                {
+                        "q": "Simplifica la expresión: $\\frac{x^7 \\cdot x^3}{x^4}$.",
+                        "o": [
+                                "$x^4$",
+                                "$x^5$",
+                                "$x^6$",
+                                "$x^8$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Sumamos los exponentes del numerador: $x^{7+3} = x^{10}$. Restamos el del denominador: $x^{10 - 4} = x^6$."
+                },
+                {
+                        "q": "¿Cuál es el valor numérico de $(2^3)^2 \\div 2^4$?",
+                        "o": [
+                                "$2$",
+                                "$4$",
+                                "$8$",
+                                "$16$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Potencia de potencia: $2^{3 \\times 2} = 2^6$. Dividiendo: $2^{6 - 4} = 2^2 = 4$."
+                },
+                {
+                        "q": "Expresa con exponente positivo: $5x^{-3}$.",
+                        "o": [
+                                "$\\frac{1}{5x^3}$",
+                                "$\\frac{5}{x^3}$",
+                                "$-5x^3$",
+                                "$\\frac{1}{125x^3}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El exponente negativo solo afecta a la variable $x$: $5 \\cdot x^{-3} = \\frac{5}{x^3}$."
+                },
+                {
+                        "q": "Si $3^{2x - 1} = 27$, ¿cuál es el valor de $x$?",
+                        "o": [
+                                "$1$",
+                                "$2$",
+                                "$3$",
+                                "$4$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Escribimos $27 = 3^3$. Igualamos exponentes: $2x - 1 = 3 \\implies 2x = 4 \\implies x = 2$."
+                },
+                {
+                        "q": "¿Cuál es el resultado de $(-2)^4 - (-2)^3$?",
+                        "o": [
+                                "$8$",
+                                "$16$",
+                                "$24$",
+                                "$0$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> $(-2)^4 = 16$. $(-2)^3 = -8$. Restamos: $16 - (-8) = 16 + 8 = 24$."
+                },
+                {
+                        "q": "Simplifica: $(3a^2 b^3)^3$.",
+                        "o": [
+                                "$9a^5 b^6$",
+                                "$27a^6 b^9$",
+                                "$27a^5 b^6$",
+                                "$9a^6 b^9$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Elevamos cada factor al cubo: $3^3 \\cdot (a^2)^3 \\cdot (b^3)^3 = 27 a^6 b^9$."
+                },
+                {
+                        "q": "Si $2^a = 8$ y $3^b = 81$, ¿cuánto vale $a + b$?",
+                        "o": [
+                                "$5$",
+                                "$6$",
+                                "$7$",
+                                "$8$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> $2^a = 2^3 \\implies a = 3$. $3^b = 3^4 \\implies b = 4$. Así, $a + b = 3 + 4 = 7$."
+                },
+                {
+                        "q": "¿Cuál es el valor de $\\left(\\frac{2}{3}\\right)^{-2}$?",
+                        "o": [
+                                "$-4/9$",
+                                "$4/9$",
+                                "$9/4$",
+                                "$-9/4$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Invertimos la fracción para cambiar el signo del exponente: $\\left(\\frac{3}{2}\\right)^2 = \\frac{9}{4}$."
+                },
+                {
+                        "q": "Simplifica: $\\frac{12x^5 y^{-2}}{3x^2 y^3}$.",
+                        "o": [
+                                "$\\frac{4x^3}{y^5}$",
+                                "$4x^3 y$",
+                                "$\\frac{4x^7}{y^5}$",
+                                "$4x^3 y^5$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> $\\frac{12}{3} = 4$. $x^{5-2} = x^3$. $y^{-2 - 3} = y^{-5} = \\frac{1}{y^5}$. Queda $\\frac{4x^3}{y^5}$."
+                },
+                {
+                        "q": "Todo número distinto de cero elevado a la potencia cero es igual a:",
+                        "o": [
+                                "$0$",
+                                "$1$",
+                                "El mismo número",
+                                "Indefinido"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Por definición de las leyes de los exponentes, $a^0 = 1$ para todo $a \\ne 0$."
+                },
+                {
+                        "q": "Si $4^{x+1} = 64$, ¿cuál es el valor de $x$?",
+                        "o": [
+                                "$1$",
+                                "$2$",
+                                "$3$",
+                                "$4$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $64 = 4^3 \\implies x + 1 = 3 \\implies x = 2$."
+                },
+                {
+                        "q": "Simplifica: $(x^a \\cdot x^b)^c$.",
+                        "o": [
+                                "$x^{abc}$",
+                                "$x^{ac + bc}$",
+                                "$x^{a+b+c}$",
+                                "$x^{a+bc}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $x^a \\cdot x^b = x^{a+b}$. Luego $(x^{a+b})^c = x^{c(a+b)} = x^{ac + bc}$."
+                }
+        ],
+        "radicales": [
+                {
+                        "q": "Simplifica al máximo el radical: $\\sqrt{72}$.",
+                        "o": [
+                                "$6\\sqrt{2}$",
+                                "$3\\sqrt{8}$",
+                                "$2\\sqrt{18}$",
+                                "$8\\sqrt{2}$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Descomponemos $72 = 36 \\times 2$. Por lo tanto, $\\sqrt{72} = \\sqrt{36} \\cdot \\sqrt{2} = 6\\sqrt{2}$."
+                },
+                {
+                        "q": "Expresa en forma de exponente fraccionario: $\\sqrt[3]{x^5}$.",
+                        "o": [
+                                "$x^{3/5}$",
+                                "$x^{5/3}$",
+                                "$x^{15}$",
+                                "$x^{2}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La regla de conversión es $\\sqrt[n]{x^m} = x^{m/n}$. Por lo tanto, $\\sqrt[3]{x^5} = x^{5/3}$."
+                },
+                {
+                        "q": "¿Cuál es el valor numérico de $27^{2/3}$?",
+                        "o": [
+                                "$3$",
+                                "$6$",
+                                "$9$",
+                                "$18$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> $27^{2/3} = (\\sqrt[3]{27})^2 = 3^2 = 9$."
+                },
+                {
+                        "q": "Efectúa la suma: $\\sqrt{50} + \\sqrt{18}$.",
+                        "o": [
+                                "$\\sqrt{68}$",
+                                "$8\\sqrt{2}$",
+                                "$15\\sqrt{2}$",
+                                "$4\\sqrt{2}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $\\sqrt{50} = \\sqrt{25 \\times 2} = 5\\sqrt{2}$. $\\sqrt{18} = \\sqrt{9 \\times 2} = 3\\sqrt{2}$. Sumando: $5\\sqrt{2} + 3\\sqrt{2} = 8\\sqrt{2}$."
+                },
+                {
+                        "q": "Multiplica y simplifica: $\\sqrt{3} \\cdot \\sqrt{12}$.",
+                        "o": [
+                                "$6$",
+                                "$36$",
+                                "$3\\sqrt{4}$",
+                                "$4\\sqrt{3}$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> $\\sqrt{3 \\times 12} = \\sqrt{36} = 6$."
+                },
+                {
+                        "q": "Racionaliza el denominador de: $\\frac{6}{\\sqrt{3}}$.",
+                        "o": [
+                                "$2$",
+                                "$2\\sqrt{3}$",
+                                "$3\\sqrt{3}$",
+                                "$6\\sqrt{3}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Multiplicamos numerador y denominador por $\\sqrt{3}$: $\\frac{6\\sqrt{3}}{(\\sqrt{3})^2} = \\frac{6\\sqrt{3}}{3} = 2\\sqrt{3}$."
+                },
+                {
+                        "q": "Calcula el valor de $16^{-1/2}$.",
+                        "o": [
+                                "$-4$",
+                                "$4$",
+                                "$1/4$",
+                                "$-1/4$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> $16^{-1/2} = \\frac{1}{16^{1/2}} = \\frac{1}{\\sqrt{16}} = \\frac{1}{4}$."
+                },
+                {
+                        "q": "Simplifica: $\\sqrt{x^4 y^6}$.",
+                        "o": [
+                                "$x^2 y^3$",
+                                "$x y^2$",
+                                "$x^8 y^{12}$",
+                                "$x^2 y^4$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Dividimos los exponentes entre el índice 2: $x^{4/2} y^{6/2} = x^2 y^3$."
+                },
+                {
+                        "q": "¿Cuál es el resultado de $(\\sqrt{5} + 2)(\\sqrt{5} - 2)$?",
+                        "o": [
+                                "$1$",
+                                "$3$",
+                                "$9$",
+                                "$\\sqrt{5}$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Es una diferencia de cuadrados: $(\\sqrt{5})^2 - (2)^2 = 5 - 4 = 1$."
+                },
+                {
+                        "q": "Halla el valor de $x$ si $\\sqrt{2x + 1} = 5$.",
+                        "o": [
+                                "$2$",
+                                "$10$",
+                                "$12$",
+                                "$13$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Elevamos al cuadrado ambos lados: $2x + 1 = 25 \\implies 2x = 24 \\implies x = 12$."
+                },
+                {
+                        "q": "Simplifica: $\\sqrt[3]{54}$.",
+                        "o": [
+                                "$3\\sqrt[3]{2}$",
+                                "$2\\sqrt[3]{3}$",
+                                "$9\\sqrt[3]{2}$",
+                                "$6\\sqrt[3]{3}$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> $54 = 27 \\times 2$. Como $\\sqrt[3]{27} = 3$, queda $3\\sqrt[3]{2}$."
+                },
+                {
+                        "q": "¿Cuál es el valor de $\\sqrt{20} - \\sqrt{5}$?",
+                        "o": [
+                                "$\\sqrt{15}$",
+                                "$\\sqrt{5}$",
+                                "$2$",
+                                "$3\\sqrt{5}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $\\sqrt{20} = \\sqrt{4 \\times 5} = 2\\sqrt{5}$. Restando: $2\\sqrt{5} - \\sqrt{5} = \\sqrt{5}$."
+                }
+        ],
+        "notacion": [
+                {
+                        "q": "Expresa en notación científica el número $450,000,000$.",
+                        "o": [
+                                "$4.5 \\times 10^7$",
+                                "$4.5 \\times 10^8$",
+                                "$45 \\times 10^7$",
+                                "$0.45 \\times 10^9$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El punto decimal se recorre 8 posiciones a la izquierda: $4.5 \\times 10^8$."
+                },
+                {
+                        "q": "Expresa en notación científica: $0.00032$.",
+                        "o": [
+                                "$3.2 \\times 10^{-3}$",
+                                "$3.2 \\times 10^{-4}$",
+                                "$32 \\times 10^{-5}$",
+                                "$3.2 \\times 10^4$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El punto decimal se recorre 4 posiciones a la derecha: $3.2 \\times 10^{-4}$."
+                },
+                {
+                        "q": "Efectúa el producto: $(3 \\times 10^4) \\times (2 \\times 10^5)$.",
+                        "o": [
+                                "$6 \\times 10^9$",
+                                "$6 \\times 10^{20}$",
+                                "$5 \\times 10^9$",
+                                "$6 \\times 10^8$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Multiplicamos coeficientes: $3 \\times 2 = 6$. Sumamos exponentes: $10^{4+5} = 10^9$. Resultado: $6 \\times 10^9$."
+                },
+                {
+                        "q": "Efectúa la división: $\\frac{8 \\times 10^8}{2 \\times 10^3}$.",
+                        "o": [
+                                "$4 \\times 10^{11}$",
+                                "$4 \\times 10^5$",
+                                "$6 \\times 10^5$",
+                                "$4 \\times 10^{24}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $\\frac{8}{2} = 4$. $10^{8-3} = 10^5$. Resultado: $4 \\times 10^5$."
+                },
+                {
+                        "q": "¿Cuántas veces es más grande $3 \\times 10^7$ que $3 \\times 10^4$?",
+                        "o": [
+                                "$3$ veces",
+                                "$100$ veces",
+                                "$1,000$ veces",
+                                "$10,000$ veces"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> $\\frac{3 \\times 10^7}{3 \\times 10^4} = 10^{7 - 4} = 10^3 = 1,000$ veces mayor."
+                },
+                {
+                        "q": "Convierte a notación estándar: $7.15 \\times 10^5$.",
+                        "o": [
+                                "$71,500$",
+                                "$715,000$",
+                                "$7,150,000$",
+                                "$715$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Recorremos el punto 5 lugares a la derecha: $715,000$."
+                },
+                {
+                        "q": "Suma en notación científica: $(2 \\times 10^4) + (3 \\times 10^3)$.",
+                        "o": [
+                                "$5 \\times 10^4$",
+                                "$2.3 \\times 10^4$",
+                                "$5 \\times 10^7$",
+                                "$2.3 \\times 10^3$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Escribimos con el mismo exponente: $3 \\times 10^3 = 0.3 \\times 10^4$. Sumamos: $(2 + 0.3) \\times 10^4 = 2.3 \\times 10^4$."
+                },
+                {
+                        "q": "La luz viaja a $3 \\times 10^5\\text{ km/s}$. ¿Qué distancia recorre en $200\\text{ segundos}$?",
+                        "o": [
+                                "$6 \\times 10^6\\text{ km}$",
+                                "$6 \\times 10^7\\text{ km}$",
+                                "$6 \\times 10^8\\text{ km}$",
+                                "$1.5 \\times 10^3\\text{ km}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $d = v \\times t = (3 \\times 10^5) \\times (2 \\times 10^2) = 6 \\times 10^7\\text{ km}$."
+                },
+                {
+                        "q": "Si la masa de una partícula es $4 \\times 10^{-6}\\text{ g}$ y tenemos $5 \\times 10^8$ partículas, ¿cuál es la masa total?",
+                        "o": [
+                                "$20 \\times 10^2\\text{ g} = 2 \\times 10^3\\text{ g}$",
+                                "$2 \\times 10^{-48}\\text{ g}$",
+                                "$9 \\times 10^2\\text{ g}$",
+                                "$20 \\times 10^{-14}\\text{ g}$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> $(4 \\times 10^{-6}) \\times (5 \\times 10^8) = 20 \\times 10^2 = 2 \\times 10^3\\text{ g} = 2000\\text{ g}$."
+                },
+                {
+                        "q": "¿Cuál de los siguientes números es el menor?",
+                        "o": [
+                                "$2 \\times 10^{-3}$",
+                                "$9 \\times 10^{-4}$",
+                                "$1 \\times 10^{-2}$",
+                                "$8 \\times 10^{-3}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $9 \\times 10^{-4} = 0.0009$, mientras que $2 \\times 10^{-3} = 0.002$. El menor es $9 \\times 10^{-4}$."
+                },
+                {
+                        "q": "El grosor de una hoja de papel es aproximadamente $0.0001\\text{ m}$. En notación científica es:",
+                        "o": [
+                                "$1 \\times 10^{-3}\\text{ m}$",
+                                "$1 \\times 10^{-4}\\text{ m}$",
+                                "$1 \\times 10^{-5}\\text{ m}$",
+                                "$10 \\times 10^{-4}\\text{ m}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $0.0001 = 10^{-4} = 1 \\times 10^{-4}\\text{ m}$."
+                },
+                {
+                        "q": "Calcula $(2 \\times 10^3)^3$.",
+                        "o": [
+                                "$6 \\times 10^9$",
+                                "$8 \\times 10^6$",
+                                "$8 \\times 10^9$",
+                                "$2 \\times 10^9$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> $2^3 = 8$ y $(10^3)^3 = 10^9$. El resultado es $8 \\times 10^9$."
+                }
+        ]
+};
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            const info = topicsInfo[tabId];
+            if (info) {
+                document.getElementById('topic-title').innerText = info.title;
+                document.getElementById('topic-text').innerHTML = info.desc;
+            }
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    let svgHtml = item.svg ? `<div class="svg-container">${item.svg}</div>` : '';
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4"><span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Reto ${i+1}</span></div>
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        ${svgHtml}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { btn.classList.add('correct-opt'); score += 10; }
+            else { btn.classList.add('incorrect-opt'); box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); }
+            hint.style.display = 'block';
+            if (window.MathJax) MathJax.typesetPromise([hint]);
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { if(confirm('¿Reiniciar progreso?')) { score = 0; document.getElementById('global-score').innerText = 0; render(); showTab('leyes'); } }
+
+        window.onload = () => { render(); showTab('leyes'); };
+    </script>
+</body>
+</html>

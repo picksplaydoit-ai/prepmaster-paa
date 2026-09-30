@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepMaster: Ecuaciones Cuadráticas y Parábolas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        body { font-family: 'Quicksand', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .explanation { display: none; }
+        .correct-opt { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect-opt { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .opt-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .opt-btn:hover:not(:disabled) { border-color: #6366f1; background-color: #f8fafc; }
+        .svg-container { background: #f8fafc; border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: center; border: 1px solid #e2e8f0; }
+        nav::-webkit-scrollbar { height: 4px; }
+        nav::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 px-3 py-1.5 rounded-xl text-white font-black text-lg shadow-lg shadow-indigo-200 uppercase tracking-tighter">PrepMaster</div>
+                <h1 class="font-bold text-slate-500 text-sm hidden sm:block italic">Factorización, Raíces, Vértice y Discriminante</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Puntaje</p>
+                    <p class="text-indigo-600 font-bold leading-none text-xl" id="global-score">0</p>
+                </div>
+                <button onclick="resetAll()" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-8">
+        
+        <!-- Navegación -->
+        <nav class="flex flex-wrap gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl overflow-x-auto whitespace-nowrap">
+
+            <button onclick="showTab('factorizacion')" id="btn-factorizacion" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600">
+                4.1 Factorización y Raíces
+            </button>
+
+            <button onclick="showTab('vertice')" id="btn-vertice" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                4.2 Vértice y Extremos
+            </button>
+
+            <button onclick="showTab('discriminante')" id="btn-discriminante" class="tab-btn flex-1 py-3 px-6 rounded-xl font-bold text-xs transition-all text-slate-600 hover:bg-white/50">
+                4.3 Discriminante y Fórmula General
+            </button>
+        </nav>
+
+        <!-- Banner Informativo -->
+        <div id="topic-intro" class="mb-8 p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <h3 id="topic-title" class="text-2xl font-bold mb-2">Cargando...</h3>
+            <div id="topic-text" class="text-indigo-100 text-sm italic leading-relaxed"></div>
+        </div>
+
+        <!-- Contenidos -->
+
+        <div id="factorizacion" class="tab-content active space-y-6"></div>
+
+        <div id="vertice" class="tab-content  space-y-6"></div>
+
+        <div id="discriminante" class="tab-content  space-y-6"></div>
+
+    </main>
+
+    <script>
+        const topicsInfo = {
+        "factorizacion": {
+                "title": "Factorización de Cuadráticas",
+                "desc": "Aprende a descomponer polinomios de segundo grado en factores lineales para hallar sus raíces rápidamente sin usar calculadora."
+        },
+        "vertice": {
+                "title": "Vértice y Valores Extremos",
+                "desc": "El vértice $(h, k)$ determina el punto más alto o más bajo de una parábola. Clave en problemas PAA de máximas ganancias, alturas de proyectiles y cercado de áreas."
+        },
+        "discriminante": {
+                "title": "Fórmula General y Discriminante",
+                "desc": "El discriminante $\\Delta = b^2 - 4ac$ predice si una cuadrática tiene 2 soluciones reales distintas, 1 raíz doble o ninguna solución real en el plano cartesiano."
+        }
+};
+
+        
+
+        const data = {
+        "factorizacion": [
+                {
+                        "q": "¿Cuáles son las soluciones de la ecuación cuadrática $x^2 - 7x + 12 = 0$?",
+                        "o": [
+                                "$x = -3, x = -4$",
+                                "$x = 3, x = 4$",
+                                "$x = 2, x = 6$",
+                                "$x = -2, x = -6$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Buscamos dos números que multiplicados den $12$ y sumados den $-7$: son $-3$ y $-4$. Factorizando: $(x - 3)(x - 4) = 0 \\implies x = 3$ y $x = 4$."
+                },
+                {
+                        "q": "Halla los valores de $x$ que satisfacen $2x^2 + 5x - 3 = 0$.",
+                        "o": [
+                                "$x = 1/2, x = -3$",
+                                "$x = -1/2, x = 3$",
+                                "$x = 2, x = -3$",
+                                "$x = 1, x = -6$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Factorizamos $2x^2 + 5x - 3 = (2x - 1)(x + 3) = 0$. Por lo tanto, $2x - 1 = 0 \\implies x = 1/2$ y $x + 3 = 0 \\implies x = -3$."
+                },
+                {
+                        "q": "Si $(x + 5)(x - 2) = 0$, ¿cuál es el conjunto de soluciones?",
+                        "o": [
+                                "$\\{-5, -2\\}$",
+                                "$\\{5, 2\\}$",
+                                "$\\{-5, 2\\}$",
+                                "$\\{5, -2\\}$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Igualando cada factor a cero: $x + 5 = 0 \\implies x = -5$; $x - 2 = 0 \\implies x = 2$."
+                },
+                {
+                        "q": "¿Cuál es la factorización correcta de la ecuación $x^2 - 16 = 0$ y sus raíces?",
+                        "o": [
+                                "$(x-4)^2 = 0 \\implies x = 4$",
+                                "$(x - 4)(x + 4) = 0 \\implies x = \\pm 4$",
+                                "$(x - 8)(x + 2) = 0 \\implies x = 8, -2$",
+                                "$(x - 16)(x + 1) = 0 \\implies x = 16, -1$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Es una diferencia de cuadrados: $x^2 - 4^2 = (x - 4)(x + 4) = 0 \\implies x = 4$ o $x = -4$."
+                },
+                {
+                        "q": "Resuelve para $x$: $3x^2 - 12x = 0$.",
+                        "o": [
+                                "$x = 0, x = 4$",
+                                "$x = 3, x = 4$",
+                                "$x = 0, x = -4$",
+                                "$x = 2, x = -2$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Factor común $3x$: $3x(x - 4) = 0$. Las soluciones son $3x = 0 \\implies x = 0$ y $x - 4 = 0 \\implies x = 4$."
+                },
+                {
+                        "q": "Un terreno rectangular tiene un área de $60\\text{ m}^2$. Si el largo mide $4\\text{ m}$ más que el ancho, ¿cuál es el ancho?",
+                        "o": [
+                                "$5\\text{ m}$",
+                                "$6\\text{ m}$",
+                                "$8\\text{ m}$",
+                                "$10\\text{ m}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Sea $x$ el ancho; el largo es $x + 4$. La ecuación es $x(x + 4) = 60 \\implies x^2 + 4x - 60 = 0$. Factorizamos $(x + 10)(x - 6) = 0$. Descartamos la medida negativa, por lo que el ancho es $6\\text{ m}$."
+                },
+                {
+                        "q": "Si la suma de las raíces de una cuadrática $x^2 + bx + c = 0$ es $8$ y el producto es $15$, ¿cuál es la ecuación?",
+                        "o": [
+                                "$x^2 + 8x + 15 = 0$",
+                                "$x^2 - 8x + 15 = 0$",
+                                "$x^2 - 8x - 15 = 0$",
+                                "$x^2 + 15x + 8 = 0$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Por las relaciones de Cardano-Vieta, $x^2 - (x_1 + x_2)x + (x_1 x_2) = 0 \\implies x^2 - 8x + 15 = 0$."
+                },
+                {
+                        "q": "¿Cuáles son las raíces de $x^2 - 10x + 25 = 0$?",
+                        "o": [
+                                "$x = 5$ (raíz doble)",
+                                "$x = -5$ (raíz doble)",
+                                "$x = 5, x = -5$",
+                                "$x = 10, x = 2.5$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Es un trinomio cuadrado perfecto: $(x - 5)^2 = 0 \\implies x = 5$ con multiplicidad 2."
+                },
+                {
+                        "q": "Resuelve: $x^2 + 3x - 18 = 0$.",
+                        "o": [
+                                "$x = 6, x = -3$",
+                                "$x = -6, x = 3$",
+                                "$x = 9, x = -2$",
+                                "$x = -9, x = 2$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $(x + 6)(x - 3) = 0 \\implies x = -6$ o $x = 3$."
+                },
+                {
+                        "q": "¿Para qué valores de $x$ se cumple $4x^2 - 9 = 0$?",
+                        "o": [
+                                "$x = \\pm 3/2$",
+                                "$x = \\pm 9/4$",
+                                "$x = \\pm 2/3$",
+                                "$x = 3/2$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> $(2x - 3)(2x + 3) = 0 \\implies 2x = 3 \\implies x = 3/2$ y $2x = -3 \\implies x = -3/2$."
+                },
+                {
+                        "q": "El producto de dos números enteros consecutivos positivos es $72$. ¿Cuál es el número menor?",
+                        "o": [
+                                "$7$",
+                                "$8$",
+                                "$9$",
+                                "$12$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> $n(n + 1) = 72 \\implies n^2 + n - 72 = 0 \\implies (n + 9)(n - 8) = 0$. Como es positivo, $n = 8$."
+                },
+                {
+                        "q": "Si una de las soluciones de $x^2 - kx - 12 = 0$ es $x = 4$, ¿cuál es el valor de $k$?",
+                        "o": [
+                                "$1$",
+                                "$2$",
+                                "$3$",
+                                "$4$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Sustituimos $x = 4$: $4^2 - k(4) - 12 = 0 \\implies 16 - 4k - 12 = 0 \\implies 4 - 4k = 0 \\implies 4k = 4 \\implies k = 1$."
+                }
+        ],
+        "vertice": [
+                {
+                        "q": "Una pelota es lanzada hacia arriba y su altura en metros está dada por $h(t) = -5t^2 + 20t$. ¿En cuántos segundos alcanza su altura máxima?",
+                        "o": [
+                                "$1\\text{ s}$",
+                                "$2\\text{ s}$",
+                                "$3\\text{ s}$",
+                                "$4\\text{ s}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> La coordenada temporal del vértice se halla con $t = -b / (2a) = -20 / (2(-5)) = -20 / -10 = 2\\text{ segundos}$."
+                },
+                {
+                        "q": "Con respecto a la pelota de la pregunta anterior ($h(t) = -5t^2 + 20t$), ¿cuál es la altura máxima alcanzada?",
+                        "o": [
+                                "$15\\text{ m}$",
+                                "$20\\text{ m}$",
+                                "$25\\text{ m}$",
+                                "$40\\text{ m}$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Evaluamos en $t = 2$: $h(2) = -5(2)^2 + 20(2) = -5(4) + 40 = -20 + 40 = 20\\text{ metros}$."
+                },
+                {
+                        "q": "Determina las coordenadas del vértice de la parábola $y = x^2 - 6x + 5$.",
+                        "o": [
+                                "$(3, -4)$",
+                                "$(-3, 32)$",
+                                "$(3, 4)$",
+                                "$(6, 5)$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> $h = -b/(2a) = -(-6)/(2(1)) = 3$. Sustituimos para hallar $k$: $k = 3^2 - 6(3) + 5 = 9 - 18 + 5 = -4$. El vértice es $(3, -4)$."
+                },
+                {
+                        "q": "¿En qué punto la función $f(x) = 2x^2 - 8x + 11$ alcanza su valor mínimo?",
+                        "o": [
+                                "$x = 4$",
+                                "$x = 2$",
+                                "$x = -2$",
+                                "$x = 1$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Como $a = 2 > 0$, la parábola abre hacia arriba y tiene un mínimo en $x = -b/(2a) = -(-8)/(2(2)) = 8/4 = 2$."
+                },
+                {
+                        "q": "Una empresa calcula su ganancia en miles de pesos mediante $G(x) = -2x^2 + 12x - 10$, donde $x$ es la cantidad de artículos producidos en cientos. ¿Cuántos cientos de artículos maximizan la ganancia?",
+                        "o": [
+                                "$2$",
+                                "$3$",
+                                "$4$",
+                                "$6$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> El máximo se ubica en el vértice: $x = -b/(2a) = -12 / (2(-2)) = -12 / -4 = 3$ (es decir, $300$ artículos)."
+                },
+                {
+                        "q": "¿Cuál es el eje de simetría de la parábola $y = -3(x - 4)^2 + 7$?",
+                        "o": [
+                                "$x = -4$",
+                                "$x = 4$",
+                                "$y = 7$",
+                                "$x = 7$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> En la forma canónica $y = a(x - h)^2 + k$, el eje de simetría es la recta vertical $x = h$. Aquí $h = 4$, por lo que el eje es $x = 4$."
+                },
+                {
+                        "q": "¿Cuál es el valor máximo que puede alcanzar la función $f(x) = -(x + 2)^2 + 9$?",
+                        "o": [
+                                "$-2$",
+                                "$2$",
+                                "$7$",
+                                "$9$"
+                        ],
+                        "a": 3,
+                        "exp": "<b>Análisis:</b> Como el término $-(x+2)^2 \\le 0$ para todo $x$, el valor más grande posible ocurre cuando $(x+2)=0$, obteniendo $f(-2) = 9$."
+                },
+                {
+                        "q": "La trayectoria de un proyectil viene dada por $y = -x^2 + 10x$. ¿Cuál es la distancia horizontal recorrida hasta volver a tocar el suelo ($y = 0$)?",
+                        "o": [
+                                "$5\\text{ m}$",
+                                "$8\\text{ m}$",
+                                "$10\\text{ m}$",
+                                "$25\\text{ m}$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Hacemos $y = 0 \\implies -x(x - 10) = 0 \\implies x = 0$ (lanzamiento) y $x = 10$ (caída al suelo)."
+                },
+                {
+                        "q": "¿En qué intervalo la parábola $y = x^2 - 4x + 3$ es decreciente?",
+                        "o": [
+                                "$(-\\infty, 2)$",
+                                "$(2, \\infty)$",
+                                "$(-\\infty, 4)$",
+                                "$(1, 3)$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> El vértice está en $x = 4/2 = 2$. Como abre hacia arriba ($a > 0$), la función desciende desde $-\\infty$ hasta llegar a su vértice en $x = 2$."
+                },
+                {
+                        "q": "Si el vértice de una parábola es $(1, -3)$ y pasa por el punto $(0, -1)$, ¿cuál es su ecuación en forma canónica?",
+                        "o": [
+                                "$y = 2(x - 1)^2 - 3$",
+                                "$y = (x - 1)^2 - 3$",
+                                "$y = 2(x + 1)^2 - 3$",
+                                "$y = -2(x - 1)^2 - 3$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> $y = a(x - 1)^2 - 3$. Sustituimos $(0, -1)$: $-1 = a(0 - 1)^2 - 3 \\implies -1 = a - 3 \\implies a = 2$. La ecuación es $y = 2(x - 1)^2 - 3$."
+                },
+                {
+                        "q": "Si la parábola $y = ax^2 + bx + c$ tiene su vértice en $(-2, 5)$ y abre hacia abajo, ¿cuál es su rango?",
+                        "o": [
+                                "$(-\\infty, 5]$",
+                                "$[5, \\infty)$",
+                                "$[-2, \\infty)$",
+                                "$(-\\infty, -2]$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Al abrir hacia abajo, el valor más alto de $y$ es la ordenada del vértice ($5$), por lo que el rango va desde $-\\infty$ hasta $5$ inclusive."
+                },
+                {
+                        "q": "¿Cuál es la ordenada al origen (corte con el eje y) de la función $y = 2(x - 3)^2 - 10$?",
+                        "o": [
+                                "$-10$",
+                                "$8$",
+                                "$-1$",
+                                "$18$"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Hacemos $x = 0$: $y = 2(0 - 3)^2 - 10 = 2(9) - 10 = 18 - 10 = 8$."
+                }
+        ],
+        "discriminante": [
+                {
+                        "q": "¿Cuántas soluciones reales tiene la ecuación $x^2 - 6x + 9 = 0$?",
+                        "o": [
+                                "Ninguna solución real",
+                                "Exactamente una solución real (doble)",
+                                "Dos soluciones reales distintas",
+                                "Infinitas soluciones"
+                        ],
+                        "a": 1,
+                        "exp": "<b>Análisis:</b> Evaluamos el discriminante $\\Delta = b^2 - 4ac = (-6)^2 - 4(1)(9) = 36 - 36 = 0$. Cuando $\\Delta = 0$, existe una única solución real doble."
+                },
+                {
+                        "q": "Calcula el discriminante de la ecuación $2x^2 + 3x + 5 = 0$ e interpreta el resultado.",
+                        "o": [
+                                "$\\Delta = -31$; no tiene soluciones reales",
+                                "$\\Delta = 49$; tiene dos soluciones reales",
+                                "$\\Delta = 0$; tiene una solución real",
+                                "$\\Delta = -31$; tiene dos soluciones reales"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> $\\Delta = 3^2 - 4(2)(5) = 9 - 40 = -31$. Como $\\Delta < 0$, la ecuación no corta al eje $x$ y no posee soluciones en los números reales."
+                },
+                {
+                        "q": "¿Para qué valor de $k$ la ecuación $x^2 - 8x + k = 0$ tiene exactamente una solución real?",
+                        "o": [
+                                "$8$",
+                                "$12$",
+                                "$16$",
+                                "$64$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Exigimos $\\Delta = 0$: $(-8)^2 - 4(1)(k) = 0 \\implies 64 - 4k = 0 \\implies 4k = 64 \\implies k = 16$."
+                },
+                {
+                        "q": "¿Cuál de las siguientes ecuaciones cuadráticas tiene dos soluciones reales distintas?",
+                        "o": [
+                                "$x^2 + 2x + 5 = 0$",
+                                "$x^2 - 4x + 4 = 0$",
+                                "$x^2 - 5x + 2 = 0$",
+                                "$3x^2 + x + 2 = 0$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> En $x^2 - 5x + 2 = 0$, $\\Delta = (-5)^2 - 4(1)(2) = 25 - 8 = 17 > 0$. Por lo tanto, tiene dos soluciones reales y distintas."
+                },
+                {
+                        "q": "Aplicando la fórmula general, ¿cuáles son las soluciones de $x^2 - 2x - 1 = 0$?",
+                        "o": [
+                                "$x = 1 \\pm \\sqrt{2}$",
+                                "$x = 2 \\pm \\sqrt{2}$",
+                                "$x = -1 \\pm \\sqrt{2}$",
+                                "$x = 1 \\pm 2\\sqrt{2}$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> $x = \\frac{-(-2) \\pm \\sqrt{(-2)^2 - 4(1)(-1)}}{2(1)} = \\frac{2 \\pm \\sqrt{4 + 4}}{2} = \\frac{2 \\pm \\sqrt{8}}{2} = \\frac{2 \\pm 2\\sqrt{2}}{2} = 1 \\pm \\sqrt{2}$."
+                },
+                {
+                        "q": "Si la gráfica de $y = ax^2 + bx + c$ no toca ni cruza el eje $x$, ¿qué afirmación sobre su discriminante es siempre verdadera?",
+                        "o": [
+                                "$b^2 - 4ac > 0$",
+                                "$b^2 - 4ac = 0$",
+                                "$b^2 - 4ac < 0$",
+                                "$b^2 - 4ac \\ge 0$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> Los cortes con el eje $x$ representan las raíces reales. Si no hay intersecciones con el eje $x$, no hay soluciones reales, por lo que el discriminante debe ser estrictamente negativo ($< 0$)."
+                },
+                {
+                        "q": "¿Cuál es el valor del discriminante en $3x^2 - 4x + 1 = 0$?",
+                        "o": [
+                                "$4$",
+                                "$16$",
+                                "$-4$",
+                                "$28$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> $\\Delta = (-4)^2 - 4(3)(1) = 16 - 12 = 4$."
+                },
+                {
+                        "q": "Halla las soluciones de $2x^2 - 7x + 3 = 0$ usando la fórmula general.",
+                        "o": [
+                                "$x = 3, x = 1/2$",
+                                "$x = -3, x = -1/2$",
+                                "$x = 2, x = 3/2$",
+                                "$x = 6, x = 1$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> $\\Delta = 49 - 4(2)(3) = 49 - 24 = 25$. $x = \\frac{7 \\pm 5}{4} \\implies x = 12/4 = 3$ y $x = 2/4 = 1/2$."
+                },
+                {
+                        "q": "Si una ecuación cuadrática tiene raíces $x = 3 + \\sqrt{5}$ y $x = 3 - \\sqrt{5}$, ¿cuál es el coeficiente lineal $b$ si $a = 1$?",
+                        "o": [
+                                "$-6$",
+                                "$6$",
+                                "$-4$",
+                                "$4$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> La suma de raíces es $(3 + \\sqrt{5}) + (3 - \\sqrt{5}) = 6$. Como la suma es $-b/a = -b/1 = -b$, entonces $-b = 6 \\implies b = -6$."
+                },
+                {
+                        "q": "Para que la cuadrática $kx^2 + 4x + 1 = 0$ tenga raíces reales, ¿qué condición debe cumplir $k$?",
+                        "o": [
+                                "$k \\le 4$",
+                                "$k > 4$",
+                                "$k \\ge 4$",
+                                "$k < 0$"
+                        ],
+                        "a": 0,
+                        "exp": "<b>Análisis:</b> Requerimos $\\Delta \\ge 0 \\implies 4^2 - 4(k)(1) \\ge 0 \\implies 16 - 4k \\ge 0 \\implies 16 \\ge 4k \\implies k \\le 4$."
+                },
+                {
+                        "q": "¿Cuál es la naturaleza de las raíces de $-x^2 + 4x - 6 = 0$?",
+                        "o": [
+                                "Dos raíces reales e iguales",
+                                "Dos raíces reales distintas",
+                                "No tiene raíces reales",
+                                "Una raíz real y una imaginaria"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> $\\Delta = 4^2 - 4(-1)(-6) = 16 - 24 = -8 < 0$. No existen soluciones reales."
+                },
+                {
+                        "q": "Si el producto de las raíces de $2x^2 + 8x + c = 0$ es $6$, ¿cuánto vale $c$?",
+                        "o": [
+                                "$3$",
+                                "$6$",
+                                "$12$",
+                                "$16$"
+                        ],
+                        "a": 2,
+                        "exp": "<b>Análisis:</b> El producto de raíces es $c/a = c/2$. Como el producto es $6$, $c/2 = 6 \\implies c = 12$."
+                }
+        ]
+};
+
+        let score = 0;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-slate-600', 'hover:bg-white/50');
+            });
+            const content = document.getElementById(tabId);
+            if(content) content.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+            const info = topicsInfo[tabId];
+            if (info) {
+                document.getElementById('topic-title').innerText = info.title;
+                document.getElementById('topic-text').innerHTML = info.desc;
+            }
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function render() {
+            for (const cat in data) {
+                const container = document.getElementById(cat);
+                if (!container) continue;
+                container.innerHTML = '';
+                data[cat].forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6';
+                    let svgHtml = item.svg ? `<div class="svg-container">${item.svg}</div>` : '';
+                    let opts = item.o.map((opt, idx) => `
+                        <button onclick="check(this, ${item.a}, ${idx}, '${cat}_${i}')" class="opt-btn w-full text-left p-4 rounded-xl font-semibold text-slate-700 mb-2">
+                            ${String.fromCharCode(65 + idx)}) ${opt}
+                        </button>`).join('');
+
+                    card.innerHTML = `
+                        <div class="mb-4"><span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Reto ${i+1}</span></div>
+                        <h2 class="font-bold text-slate-800 text-lg mb-6 leading-relaxed">${item.q}</h2>
+                        ${svgHtml}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="box_${cat}_${i}">${opts}</div>
+                        <div id="hint_${cat}_${i}" class="explanation mt-6 p-5 bg-indigo-50 rounded-2xl border-l-4 border-indigo-500">
+                            <p class="text-[14px] text-indigo-900 font-medium italic">${item.exp}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function check(btn, ans, sel, id) {
+            const box = document.getElementById(`box_${id}`);
+            const hint = document.getElementById(`hint_${id}`);
+            box.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            if (sel === ans) { btn.classList.add('correct-opt'); score += 10; }
+            else { btn.classList.add('incorrect-opt'); box.querySelectorAll('.opt-btn')[ans].classList.add('correct-opt'); }
+            hint.style.display = 'block';
+            if (window.MathJax) MathJax.typesetPromise([hint]);
+            document.getElementById('global-score').innerText = score;
+        }
+
+        function resetAll() { if(confirm('¿Reiniciar progreso?')) { score = 0; document.getElementById('global-score').innerText = 0; render(); showTab('factorizacion'); } }
+
+        window.onload = () => { render(); showTab('factorizacion'); };
+    </script>
+</body>
+</html>
