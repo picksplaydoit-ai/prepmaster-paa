@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PrepMaster PAA — Cuadernillo Maestro de Práctica (180 Reactivos)</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true
+    },
+    options: { enableMenu: false }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  :root {
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #cbd5e1;
+    --accent: #7c3aed;
+    --accent-light: #ede9fe;
+  }
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: var(--text);
+    background: #ffffff;
+    margin: 0;
+    padding: 30px;
+    line-height: 1.45;
+  }
+  .page-container { max-width: 820px; margin: 0 auto; }
+  .print-header {
+    border-bottom: 2px solid var(--text);
+    padding-bottom: 16px; margin-bottom: 24px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+  }
+  .brand { font-family: Georgia, serif; font-size: 22px; font-weight: 800; color: var(--accent); }
+  .doc-title { font-family: Georgia, serif; font-size: 16px; font-weight: 700; margin-top: 4px; }
+  .doc-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .student-info { font-size: 12.5px; color: var(--muted); text-align: right; }
+  .student-line { margin-top: 4px; border-bottom: 1px solid var(--border); width: 200px; height: 16px; display: inline-block; }
+  .no-print { text-align: center; margin-bottom: 24px; background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid var(--border); }
+  .btn-print { background: var(--accent); color: white; border: none; padding: 12px 26px; font-weight: 700; font-size: 14px; border-radius: 10px; cursor: pointer; transition: 0.2s; }
+  .btn-print:hover { background: #6d28d9; }
+
+  .materia-title {
+    font-family: Georgia, serif; font-size: 20px; font-weight: 800; color: var(--accent);
+    margin-top: 46px; margin-bottom: 4px; padding-bottom: 8px; border-bottom: 3px solid var(--accent);
+    page-break-before: always;
+  }
+  .materia-title.first { page-break-before: avoid; margin-top: 10px; }
+  .materia-sub { font-size: 12px; color: var(--muted); margin-bottom: 18px; }
+
+  .section-title {
+    font-family: Georgia, serif; font-size: 14.5px; font-weight: 700;
+    background: #f1f5f9; padding: 8px 12px; border-left: 4px solid var(--accent);
+    margin-top: 28px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px;
+    page-break-after: avoid;
+  }
+  .reading-box {
+    background: #fafafc; border: 1px solid #e2e8f0; border-left: 4px solid #3b82f6;
+    padding: 16px; border-radius: 10px; font-size: 13px; line-height: 1.6; color: #334155;
+    margin-bottom: 18px; page-break-inside: avoid;
+  }
+  .reading-box p { margin-bottom: 8px; }
+  .reading-box p:last-child { margin-bottom: 0; }
+
+  .exercise-item { margin-bottom: 14px; page-break-inside: avoid; }
+  .exercise-question { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .svg-box { text-align: center; margin: 10px 0; }
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; padding-left: 10px; margin-top: 6px; }
+  .option { font-size: 12.5px; color: #334155; }
+
+  @media print {
+    .no-print { display: none; }
+    body { padding: 0; }
+    .page-container { max-width: 100%; }
+    .exercise-item { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page-container">
+  <div class="no-print">
+    <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar Cuadernillo Maestro en PDF</button>
+    <div style="font-size:11.5px;color:var(--muted);margin-top:8px;">Recomendado: Espera 2 segundos a que MathJax cargue las fórmulas matemáticas antes de imprimir.</div>
+  </div>
+
+  <div class="print-header">
+    <div>
+      <div class="brand">PrepMaster PAA</div>
+      <div class="doc-title">Cuadernillo Maestro de Práctica Intensiva</div>
+      <div class="doc-sub">180 Reactivos PAA: Español (60) + Matemáticas (100) + Gráficos y Visuales (20)</div>
+    </div>
+    <div class="student-info">
+      <div>Nombre: <span class="student-line"></span></div>
+      <div style="margin-top:4px;">Fecha: <span class="student-line" style="width:110px;"></span></div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 1: ESPAÑOL (60 REACTIVOS) -->
+  <div class="materia-title first">📘 Español — Redacción, Sintaxis y Comprensión Lectora (Reactivos 1–60)</div>
+  <div class="materia-sub">60 reactivos oficiales PAA: coherencia, puntuación, análisis de texto científico, literario, lectura dual y taller de edición.</div>
+
+  <div class="section-title">Bloque 1: Redacción, Coherencia, Sintaxis y Puntuación (Reactivos 1 al 25)</div>
+<div class="exercise-item"><div class="exercise-question">1. Selecciona la opción que combine mejor las siguientes oraciones: <br/>1. El perro ladró toda la noche. <br/>2. El perro no dejó dormir a los vecinos.</div><div class="options-grid"><div class="option">A) El perro ladró toda la noche y por eso no dejando dormir.</div><div class="option">B) El perro, ladrando toda la noche, no dejó dormir a los vecinos.</div><div class="option">C) El perro que ladró toda la noche no dejó dormir a los vecinos.</div><div class="option">D) Como el perro ladró toda la noche, los vecinos no durmieron.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">2. Selecciona la opción que combine mejor las oraciones: <br/>1. La tormenta destruyó el puente. <br/>2. El pueblo quedó aislado.</div><div class="options-grid"><div class="option">A) La tormenta destruyó el puente, dejando al pueblo aislado.</div><div class="option">B) El pueblo quedó aislado, pero la tormenta destruyó el puente.</div><div class="option">C) Destruyendo el puente la tormenta, el pueblo fue aislado.</div><div class="option">D) La tormenta destruyó el puente porque el pueblo quedó aislado.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">3. Une las oraciones lógicamente: <br/>1. Juan estudió con dedicación. <br/>2. Juan aprobó el examen de admisión.</div><div class="options-grid"><div class="option">A) Juan estudió con dedicación; sin embargo, aprobó el examen.</div><div class="option">B) Aprobó el examen de admisión Juan, estudiando.</div><div class="option">C) Juan estudió con dedicación, por lo tanto, aprobó el examen.</div><div class="option">D) Juan aprobó el examen a pesar de estudiar con dedicación.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">4. ¿Qué enunciado debe eliminarse del siguiente párrafo por romper la coherencia? <br/>(1) El sol es la estrella central del sistema solar. (2) Proporciona luz y calor a la Tierra. (3) Las estrellas de mar habitan en el fondo del océano. (4) Sin la energía solar, la vida no sería posible.</div><div class="options-grid"><div class="option">A) El 1</div><div class="option">B) El 2</div><div class="option">C) El 3</div><div class="option">D) El 4</div></div></div>
+<div class="exercise-item"><div class="exercise-question">5. Identifica la oración que debe omitirse por redundancia: <br/>(1) La nueva biblioteca alberga más de mil libros. (2) Su arquitectura es moderna. (3) Cuenta con textos antiguos y contemporáneos. (4) En su interior hay una gran cantidad de libros guardados.</div><div class="options-grid"><div class="option">A) El 1</div><div class="option">B) El 2</div><div class="option">C) El 3</div><div class="option">D) El 4</div></div></div>
+<div class="exercise-item"><div class="exercise-question">6. Completa correctamente el enunciado: "Me dijo que no _______ venir a la fiesta porque _______ mucha tarea."</div><div class="options-grid"><div class="option">A) híba / tubo</div><div class="option">B) iba / tuvo</div><div class="option">C) iva / tubo</div><div class="option">D) iba / tubo</div></div></div>
+<div class="exercise-item"><div class="exercise-question">7. Identifica la oración con puntuación correcta:</div><div class="options-grid"><div class="option">A) Juan, el hermano de María llegó tarde.</div><div class="option">B) Juan, el hermano de María, llegó tarde.</div><div class="option">C) Juan el hermano, de María llegó tarde.</div><div class="option">D) Juan el hermano de María, llegó tarde.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">8. Selecciona la palabra escrita correctamente: "La decisión del juez fue un hecho _______ en la historia legal."</div><div class="options-grid"><div class="option">A) tracendental</div><div class="option">B) trasendental</div><div class="option">C) trascendental</div><div class="option">D) tranzendental</div></div></div>
+<div class="exercise-item"><div class="exercise-question">9. Identifica el error de concordancia gramatical: "La manada de lobos salvajes atacaron a la presa durante la noche."</div><div class="options-grid"><div class="option">A) La manada</div><div class="option">B) atacaron</div><div class="option">C) salvajes</div><div class="option">D) a la presa</div></div></div>
+<div class="exercise-item"><div class="exercise-question">10. ¿Qué conector completa mejor el texto? "Quería salir a correr; _______, empezó a llover fuertemente."</div><div class="options-grid"><div class="option">A) además</div><div class="option">B) sin embargo</div><div class="option">C) por lo tanto</div><div class="option">D) es decir</div></div></div>
+<div class="exercise-item"><div class="exercise-question">11. ¿Qué oración debe eliminarse por pérdida de rumbo temático? <br/>(1) El ejercicio regular mejora la salud cardiovascular. (2) Ayuda a reducir el estrés. (3) Los zapatos deportivos son muy caros hoy en día. (4) También fortalece el sistema inmunológico.</div><div class="options-grid"><div class="option">A) La 1</div><div class="option">B) La 2</div><div class="option">C) La 3</div><div class="option">D) La 4</div></div></div>
+<div class="exercise-item"><div class="exercise-question">12. Selecciona la opción que presenta correcta ortografía en el uso de grafías (b/v, c/s/z):</div><div class="options-grid"><div class="option">A) Exacerbar, exhalar, exhuberante</div><div class="option">B) Exacerbar, exhalar, exuberante</div><div class="option">C) Essacerbar, exhalar, exuberante</div><div class="option">D) Exaserbar, exalar, exuberante</div></div></div>
+<div class="exercise-item"><div class="exercise-question">13. Identifica el enunciado que posee una estructura gramatical ambigua:</div><div class="options-grid"><div class="option">A) El niño compró un libro de ciencia en la feria.</div><div class="option">B) Vi al ladrón corriendo por la ventana.</div><div class="option">C) La casa de mis abuelos es muy amplia.</div><div class="option">D) Los estudiantes entregaron sus tareas a tiempo.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">14. ¿Cuál es el sinónimo más adecuado para la palabra <strong>efímero</strong> en un texto formal?</div><div class="options-grid"><div class="option">A) Duradero</div><div class="option">B) Pasajero</div><div class="option">C) Profundo</div><div class="option">D) Constante</div></div></div>
+<div class="exercise-item"><div class="exercise-question">15. Identifica el antónimo de la palabra <strong>magnánimo</strong>:</div><div class="options-grid"><div class="option">A) Generoso</div><div class="option">B) Egoísta / Mezquino</div><div class="option">C) Valiente</div><div class="option">D) Sabio</div></div></div>
+<div class="exercise-item"><div class="exercise-question">16. ¿Qué opción presenta un uso incorrecto del gerundio?</div><div class="options-grid"><div class="option">A) Leyendo un libro, Carlos pasó la tarde.</div><div class="option">B) Se accidentó ayer, muriendo en el hospital horas después.</div><div class="option">C) Encontraron a los niños jugando en el parque.</div><div class="option">D) Salió corriendo tras escuchar la noticia.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">17. Selecciona el enunciado redactado con mayor claridad y concisión:</div><div class="options-grid"><div class="option">A) En base a los resultados obtenidos se puede ver que...</div><div class="option">B) Con base en los resultados, se observa que...</div><div class="option">C) Basándonos en base a los resultados...</div><div class="option">D) De acuerdo a lo que se vio en los resultados de base...</div></div></div>
+<div class="exercise-item"><div class="exercise-question">18. Identifica la función de la lengua predominante en los textos periodísticos informativos y científicos:</div><div class="options-grid"><div class="option">A) Apelativa o conativa</div><div class="option">B) Referencial o informativa</div><div class="option">C) Poética o estética</div><div class="option">D) Emotiva o sintomática</div></div></div>
+<div class="exercise-item"><div class="exercise-question">19. ¿Qué tipo de texto busca convencer o persuadir al lector mediante argumentos?</div><div class="options-grid"><div class="option">A) Narrativo</div><div class="option">B) Descriptivo</div><div class="option">C) Argumentativo</div><div class="option">D) Instructivo</div></div></div>
+<div class="exercise-item"><div class="exercise-question">20. Selecciona la opción que contenga únicamente nexos adversativos:</div><div class="options-grid"><div class="option">A) Y, e, ni</div><div class="option">B) Pero, mas, sin embargo</div><div class="option">C) Porque, ya que, pues</div><div class="option">D) O, u, bien</div></div></div>
+<div class="exercise-item"><div class="exercise-question">21. Identifica el enunciado que utiliza correctamente los dos puntos (:):</div><div class="options-grid"><div class="option">A) El guía nos recomendó llevar: agua, bloqueador y calzado cómodo.</div><div class="option">B) Para la expedición necesitamos tres elementos: agua, bloqueador y calzado cómodo.</div><div class="option">C) Los requisitos indispensables son: que tengas pasaporte y visa.</div><div class="option">D) El cielo estaba: despejado, luminoso y fresco esa mañana.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">22. ¿En cuál de las siguientes oraciones el uso del punto y coma (;) es normativamente adecuado?</div><div class="options-grid"><div class="option">A) Llegaron cansados; y se fueron a dormir de inmediato.</div><div class="option">B) La primera parte del informe analiza las ventas; la segunda, los costos de operación.</div><div class="option">C) Aunque hacía frío; decidieron salir al jardín sin abrigos.</div><div class="option">D) Compramos frutas; manzanas, peras y plátanos frescos.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">23. Identifica la oración que incurre en el vicio de <em>dequeísmo</em>:</div><div class="options-grid"><div class="option">A) Me alegro de que hayas obtenido la beca universitaria.</div><div class="option">B) El profesor insistió en que repasáramos los ejercicios de álgebra.</div><div class="option">C) Pienso de que la decisión tomada fue demasiado apresurada.</div><div class="option">D) Estamos seguros de que el equipo ganará la contienda final.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">24. Selecciona la opción que sustituye con mayor precisión léxica el verbo genérico 'hacer' en: "El escultor <em>hizo</em> una obra monumental en mármol blanco":</div><div class="options-grid"><div class="option">A) fabricó</div><div class="option">B) esculpió</div><div class="option">C) elaboró</div><div class="option">D) ejecutó</div></div></div>
+<div class="exercise-item"><div class="exercise-question">25. Selecciona el conector concesivo que completa de manera óptima: "___________ el proyecto presentaba serios desafíos financieros, el equipo directivo aprobó su ejecución inmediata":</div><div class="options-grid"><div class="option">A) Puesto que</div><div class="option">B) Si bien</div><div class="option">C) Por ende</div><div class="option">D) Ya que</div></div></div>
+
+  <div class="section-title">Bloque 2: Comprensión Lectora — Texto Científico (Reactivos 26 al 35)</div>
+  
+<div class="reading-box">
+  <div style="font-weight:800;font-size:14px;color:#1e3a8a;margin-bottom:8px;">Texto de Referencia: Los Misterios de los Agujeros Negros</div>
+  <p><strong>[Párrafo 1]</strong> Un agujero negro es una región finita del espacio en cuyo interior existe una concentración de masa lo suficientemente elevada como para generar un campo gravitatorio tal que ninguna partícula material, ni siquiera la luz, puede escapar de ella. Esta frontera invisible, el punto de no retorno, se denomina "horizonte de sucesos". Todo lo que cruza esta línea es absorbido inexorablemente hacia el centro, conocido como singularidad, un punto de volumen cero y densidad infinita donde las leyes actuales de la física dejan de tener sentido.</p>
+  <p><strong>[Párrafo 2]</strong> Durante décadas, los agujeros negros fueron considerados meras curiosidades matemáticas derivadas de la Teoría de la Relatividad General de Albert Einstein. Albert Einstein mismo dudaba de que la naturaleza permitiera la formación de objetos tan extremos. Sin embargo, en 1971, los astrónomos detectaron Cygnus X-1, un sistema estelar que emitía potentes rayos X. Los cálculos demostraron que el objeto masivo invisible en ese sistema era demasiado pesado para ser una estrella de neutrones; debía ser un agujero negro. Esta fue la primera evidencia empírica sólida de su existencia.</p>
+  <p><strong>[Párrafo 3]</strong> Hoy en día, se sabe que los agujeros negros no son aspiradoras cósmicas que "chupan" todo a su alrededor de manera agresiva. Si el Sol fuera reemplazado repentinamente por un agujero negro de la misma masa, la Tierra no sería succionada; simplemente continuaría orbitando en la oscuridad y el frío. Su peligro real solo existe para aquellos objetos que se acercan demasiado a su horizonte de sucesos.</p>
+</div>
+
+<div class="exercise-item"><div class="exercise-question">26. Según el texto, el "horizonte de sucesos" se define como:</div><div class="options-grid"><div class="option">A) El centro del agujero negro donde la densidad es infinita.</div><div class="option">B) Una curiosidad matemática propuesta por Albert Einstein.</div><div class="option">C) La frontera espacial de donde nada, ni la luz, puede escapar.</div><div class="option">D) El campo gravitatorio que absorbe a la Tierra.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">27. ¿Qué actitud tenía Albert Einstein respecto a los agujeros negros según la lectura?</div><div class="options-grid"><div class="option">A) Aseguraba su existencia en la vía Láctea.</div><div class="option">B) Dudaba que la naturaleza permitiera objetos tan extremos.</div><div class="option">C) Fue el primero en descubrir Cygnus X-1.</div><div class="option">D) Creía que eran aspiradoras cósmicas agresivas.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">28. La palabra <strong>inexorablemente</strong> en el primer párrafo se puede sustituir mejor por:</div><div class="options-grid"><div class="option">A) Lentamente</div><div class="option">B) Inevitablemente</div><div class="option">C) Cuidadosamente</div><div class="option">D) Aleatoriamente</div></div></div>
+<div class="exercise-item"><div class="exercise-question">29. El descubrimiento de Cygnus X-1 fue crucial porque:</div><div class="options-grid"><div class="option">A) Demostró que Einstein estaba equivocado en su teoría general.</div><div class="option">B) Constituyó la primera evidencia empírica sólida de su existencia.</div><div class="option">C) Mostró cómo las estrellas se enfrían con los rayos X.</div><div class="option">D) Comprobó que la Tierra será succionada en un futuro.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">30. De acuerdo con el tercer párrafo, la afirmación "los agujeros negros son aspiradoras cósmicas":</div><div class="options-grid"><div class="option">A) Es un hecho comprobado científicamente por la NASA.</div><div class="option">B) Solo aplica a agujeros estelares masivos.</div><div class="option">C) Es una idea errónea o mito popular desmentido por la física.</div><div class="option">D) Sucederá si el Sol se convierte en uno de ellos.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">31. Si el Sol fuera reemplazado por un agujero negro de su misma masa, la Tierra:</div><div class="options-grid"><div class="option">A) Sería destruida instantáneamente por rayos X y radiación.</div><div class="option">B) Caería hacia la singularidad de inmediato.</div><div class="option">C) Continuaría su órbita actual, aunque a oscuras y con frío extremo.</div><div class="option">D) Aumentaría su temperatura drásticamente.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">32. La palabra <strong>empírica</strong> en el segundo párrafo se refiere a algo:</div><div class="options-grid"><div class="option">A) Basado en la experiencia, observación o experimentación real.</div><div class="option">B) Puramente matemático, abstracto y deductivo.</div><div class="option">C) Extremadamente denso y masivo.</div><div class="option">D) Relacionado con los imperios estelares.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">33. ¿Cuál es la idea principal de todo el texto?</div><div class="options-grid"><div class="option">A) Describir la biografía de Albert Einstein y sus dudas.</div><div class="option">B) Explicar la naturaleza física de los agujeros negros, su comprobación y desmentir mitos.</div><div class="option">C) Advertir sobre el peligro cósmico inminente que corre el sistema solar.</div><div class="option">D) Detallar el funcionamiento técnico de los telescopios de rayos X.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">34. Del texto se infiere que en la singularidad del agujero negro:</div><div class="options-grid"><div class="option">A) Aplican perfectamente las fórmulas de la relatividad general.</div><div class="option">B) Las leyes actuales de la física colapsan y resultan insuficientes.</div><div class="option">C) Es posible viajar en el tiempo sin sufrir alteraciones atómicas.</div><div class="option">D) La densidad y la atracción gravitatoria disminuyen a cero.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">35. El tono predominante en el texto anterior es:</div><div class="options-grid"><div class="option">A) Poético y subjetivo</div><div class="option">B) Informativo, expositivo y divulgativo</div><div class="option">C) Crítico y persuasivo</div><div class="option">D) Nostálgico y melancólico</div></div></div>
+
+  <div class="section-title">Bloque 3: Comprensión Lectora — Texto Narrativo / Literario (Reactivos 36 al 45)</div>
+  
+<div class="reading-box" style="border-left-color:#8b5cf6;">
+  <div style="font-weight:800;font-size:14px;color:#6d28d9;margin-bottom:8px;">Lectura Literaria: El Relojero de Praga (Fragmento)</div>
+  <p><strong>[1]</strong> En la penumbra de su taller, entre el aroma a aceite de ballena y virutas de latón, el maestro Anselmo pasaba sus jornadas sordo a las campanas de la ciudad. Para él, los minutos no eran campanas que tañían en el campanario exterior, sino diminutos engranajes dentados que masticaban la existencia. Cada tic-tac era una migaja de vida que caía irremediablemente al abismo de los recuerdos.</p>
+  <p><strong>[2]</strong> Sus manos, otrora ágiles y certeras al calibrar los finos espirales de acero, ahora temblaban con el leve rumor de las hojas secas agitadas por el viento de otoño. Observaba la gran esfera del reloj astronómico que dominaba el centro de la habitación, una criatura de bronce a medio nacer. En ella había plasmado los planetas, las fases lunares y los signos del zodiaco, concibiendo el mecanismo no como una herramienta comercial, sino como su desafío supremo contra el olvido. "¿De qué sirve medir con tanta meticulosidad el tiempo —murmuró para sí— si uno es incapaz de detener el río invisible que no conoce orillas ni remansos?"</p>
+  <p><strong>[3]</strong> En un rincón silencioso, su aprendiz Mateo limpiaba con un trapo de lino los discos de cobre. El joven contemplaba a su maestro con una devoción reverente y a la vez teñida de una secreta tristeza: comprendía que aquella compleja catedral de engranajes sería el último testamento del anciano. El bronce brillaba con una luz dorada y taciturna, guardando la frialdad de las piedras sepulcrales, como si presintiera que cuando el péndulo comenzara su marcha perpetua, el corazón del artesano detendría por fin su propio latido.</p>
+</div>
+
+<div class="exercise-item"><div class="exercise-question">36. En el fragmento literario, la descripción inicial del taller del maestro Anselmo busca primordialmente:</div><div class="options-grid"><div class="option">A) Exponer los costos económicos de la relojería.</div><div class="option">B) Crear una atmósfera de quietud melancólica donde el tiempo se percibe como una presencia viva.</div><div class="option">C) Criticar el desorden y abandono de los talleres antiguos.</div><div class="option">D) Demostrar que los relojes mecánicos eran inútiles.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">37. En la frase "sus manos, otrora <em>ágiles</em> y certeras, ahora temblaban con el leve rumor de las hojas secas", la palabra <strong>otrora</strong> significa:</div><div class="options-grid"><div class="option">A) raramente</div><div class="option">B) en otro tiempo / antiguamente</div><div class="option">C) frecuentemente</div><div class="option">D) con dificultad</div></div></div>
+<div class="exercise-item"><div class="exercise-question">38. ¿Cuál es el conflicto interno fundamental que atormenta a Anselmo?</div><div class="options-grid"><div class="option">A) La falta de dinero para pagar a sus proveedores de bronce.</div><div class="option">B) El temor a no conseguir clientes adinerados.</div><div class="option">C) La paradoja de haber dedicado su vida a medir un tiempo que inexorablemente lo devora a él mismo.</div><div class="option">D) Los pleitos cotidianos con su aprendiz Mateo.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">39. La expresión "el río invisible que no conoce orillas ni remansos" constituye una figura retórica de:</div><div class="options-grid"><div class="option">A) Hipérbaton</div><div class="option">B) Metáfora</div><div class="option">C) Onomatopeya</div><div class="option">D) Pleonasmo</div></div></div>
+<div class="exercise-item"><div class="exercise-question">40. Según la narración, ¿qué representaba el reloj astronómico inconcluso que reposaba en el centro del taller?</div><div class="options-grid"><div class="option">A) Un encargo de bajo valor artístico.</div><div class="option">B) La culminación de su vida artística y su desafío personal contra el olvido.</div><div class="option">C) Una máquina peligrosa para los vecinos.</div><div class="option">D) Un juguete mecánico para niños.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">41. ¿Qué se infiere de la actitud del aprendiz Mateo hacia su maestro?</div><div class="options-grid"><div class="option">A) Desea que el anciano fallezca para heredar el taller.</div><div class="option">B) Manifiesta una devoción respetuosa y triste, consciente de la fragilidad del anciano.</div><div class="option">C) Quiere abandonar el oficio de relojero.</div><div class="option">D) Se burla de las reflexiones filosóficas de Anselmo.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">42. Cuando el texto describe a los minutos como "diminutos engranajes dentados que masticaban la existencia", el narrador enfatiza:</div><div class="options-grid"><div class="option">A) El carácter destructor e implacable del paso temporal.</div><div class="option">B) Que los engranajes estaban defectuosos y rotos.</div><div class="option">C) Que los habitantes de la ciudad tenían hambre.</div><div class="option">D) La velocidad de las manecillas.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">43. En la línea "el bronce guardaba la frialdad de las piedras sepulcrales", el narrador recurre a una comparación para:</div><div class="options-grid"><div class="option">A) Recordar el frío clima invernal de Praga.</div><div class="option">B) Asociar sutilmente el metal inerte del reloj con la inminencia de la muerte.</div><div class="option">C) Indicar que el taller no tenía calefacción.</div><div class="option">D) Explicar por qué las herramientas se oxidaban.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">44. Hacia el final del fragmento, el sonido del péndulo se interpreta como:</div><div class="options-grid"><div class="option">A) Una música festiva para celebrar una venta.</div><div class="option">B) El pulso continuo de una vida que se agota segundo a segundo.</div><div class="option">C) Un defecto de nivelación en el péndulo.</div><div class="option">D) Una señal horaria para los campesinos.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">45. Por sus características formales y estilísticas, el fragmento pertenece al género:</div><div class="options-grid"><div class="option">A) Lírico / Poema épico</div><div class="option">B) Narrativo / Relato de ficción reflexiva</div><div class="option">C) Dramático / Entremés teatral</div><div class="option">D) Expositivo / Crónica periodística</div></div></div>
+
+  <div class="section-title">Bloque 4: Lectura Comparada — Análisis Dual (Reactivos 46 al 55)</div>
+  
+<div class="reading-box" style="border-left-color:#059669;">
+  <div style="font-weight:800;font-size:14px;color:#047857;margin-bottom:8px;">Lectura Doble: Dos Perspectivas sobre la Inteligencia Artificial y la Creatividad Humana</div>
+  
+  <div style="background:#f0fdf4;padding:12px;border-radius:8px;margin-bottom:12px;border:1px solid #bbf7d0;">
+    <div style="font-weight:700;font-size:13px;color:#166534;margin-bottom:6px;">Lectura A: La IA como catalizador del potencial humano (Dra. Elena Valdés)</div>
+    <p style="margin:0;font-size:12.5px;line-height:1.55;">
+      La irrupción de los modelos generativos no marca el fin de la creatividad humana, sino su democratización más revolucionaria desde la invención de la imprenta. A lo largo de la historia, cada innovación tecnológica —desde los tubos de pintura sintética que permitieron a los impresionistas salir al aire libre hasta la fotografía y los sintetizadores musicales— fue recibida inicialmente con pánico y acusaciones de deshumanización. Sin embargo, la inteligencia artificial opera como un catalizador: asume las tareas mecánicas, el código repetitivo o el bocetaje preliminar, liberando a la mente creadora para que se concentre en lo verdaderamente sustantivo: la visión conceptual, la sensibilidad emocional y la curaduría crítica. La máquina no reemplaza al autor; amplifica su imaginación hasta horizontes insospechados.
+    </p>
+  </div>
+
+  <div style="background:#fef2f2;padding:12px;border-radius:8px;border:1px solid #fecaca;">
+    <div style="font-weight:700;font-size:13px;color:#991b1b;margin-bottom:6px;">Lectura B: La ilusión algorítmica y la atrofia del pensamiento crítico (Dr. Julián Sotomayor)</div>
+    <p style="margin:0;font-size:12.5px;line-height:1.55;">
+      Celebrar la automatización del proceso creativo es confundir la eficiencia industrial con la genuina experiencia del arte. Toda obra trascendente nace de la fricción, del sufrimiento y de la paciente lucha del espíritu con el lenguaje y la materia. Los algoritmos no crean nada: son gigantescos agregadores estadísticos que recombinan patrones pasados desprovistos de alma, conciencia o dilema moral. Al ceder la iniciativa a un sistema que predice el promedio de las preferencias colectivas, corremos el riesgo de adormecer el músculo del juicio crítico y estandarizar la cultura en un mar de mediocridad homogénea. Si dejamos de ejercitar la mente en el desafío de escribir, componer y deliberar por nosotros mismos, la inteligencia artificial no nos liberará: nos volverá dóciles espectadores de nuestra propia decadencia intelectual.
+    </p>
+  </div>
+</div>
+
+<div class="exercise-item"><div class="exercise-question">46. La tesis central que defiende el autor de la Lectura A sostiene que:</div><div class="options-grid"><div class="option">A) La IA reemplazará todos los empleos humanos en la próxima década.</div><div class="option">B) La IA actúa como un catalizador que democratiza y amplifica la capacidad creativa humana.</div><div class="option">C) Los artistas tradicionales deben renunciar a la pintura.</div><div class="option">D) La técnica computacional es la única forma válida de arte.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">47. En la Lectura A, la palabra <strong>catalizador</strong> denota:</div><div class="options-grid"><div class="option">A) Un obstáculo insalvable.</div><div class="option">B) Un agente que propicia o acelera una transformación positiva.</div><div class="option">C) Un filtro óptico de cámara.</div><div class="option">D) Un sustituto idéntico.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">48. La tesis medular de la Lectura B argumenta que la adopción acrítica de la IA creativa:</div><div class="options-grid"><div class="option">A) Aumentará los sueldos en el sector del diseño gráfico.</div><div class="option">B) Fomenta la pereza cognitiva, deshumaniza el arte y atrofia el pensamiento crítico.</div><div class="option">C) Es un problema insignificante que se solucionará solo.</div><div class="option">D) Impulsará la lectura de libros impresos.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">49. ¿Qué argumento emplea el autor de la Lectura B para cuestionar que la IA genere "verdadero arte"?</div><div class="options-grid"><div class="option">A) El alto costo de la energía eléctrica.</div><div class="option">B) La carencia de vivencias, dolor, dilema moral y conciencia en los algoritmos.</div><div class="option">C) La falta de leyes sobre derechos de autor.</div><div class="option">D) Que las computadoras carecen de pinceles.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">50. Un punto de convergencia (acuerdo implícito) entre ambos autores es que:</div><div class="options-grid"><div class="option">A) La inteligencia artificial no alterará el panorama cultural.</div><div class="option">B) Las herramientas algorítmicas están transformando de forma profunda y sin precedentes la producción creativa.</div><div class="option">C) El arte digital es infinitamente superior al tradicional.</div><div class="option">D) Los gobiernos deben prohibir de inmediato la tecnología.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">51. La principal discrepancia o divergencia entre la Lectura A y la Lectura B radica en:</div><div class="options-grid"><div class="option">A) La fecha de invención de las computadoras.</div><div class="option">B) Si la delegación del proceso creativo en el software enriquece o empobrece la condición intelectual humana.</div><div class="option">C) La cantidad de memoria utilizada por los servidores.</div><div class="option">D) El idioma de los comandos de programación.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">52. ¿Cómo respondería el autor de la Lectura B a la afirmación del autor A sobre la velocidad y el volumen de producción que ofrece la IA?</div><div class="options-grid"><div class="option">A) Celebrando el aumento de la rentabilidad comercial.</div><div class="option">B) Argumentando que la rapidez productiva sacrifica la densidad reflexiva y el alma de la obra.</div><div class="option">C) Sugiriendo comprar computadoras más veloces.</div><div class="option">D) Aceptando que la cantidad supera a la calidad.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">53. El tono del autor de la Lectura A frente al futuro tecnológico puede calificarse de:</div><div class="options-grid"><div class="option">A) Cínico y desencantado</div><div class="option">B) Entusiasta, optimista y visionario</div><div class="option">C) Moralizante y punitivo</div><div class="option">D) Temeroso y vacilante</div></div></div>
+<div class="exercise-item"><div class="exercise-question">54. En la Lectura B, el autor utiliza la analogía del músculo que se atrofia cuando deja de usarse para ilustrar:</div><div class="options-grid"><div class="option">A) Que los dibujantes deben hacer ejercicio físico.</div><div class="option">B) La degradación de las facultades cognitivas humanas cuando se elude el esfuerzo intelectivo.</div><div class="option">C) El calentamiento de los servidores.</div><div class="option">D) El desuso de los museos de pintura clásica.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">55. Una conclusión equilibrada que integre armónicamente ambas posturas sugeriría que:</div><div class="options-grid"><div class="option">A) Debe frenarse todo desarrollo computacional.</div><div class="option">B) Conviene aprovechar la potencia técnica de la IA manteniendo una sólida formación crítica y ética centrada en lo humano.</div><div class="option">C) La educación formal ya no debe enseñar a redactar.</div><div class="option">D) Los algoritmos deben gobernarlo todo.</div></div></div>
+
+  <div class="section-title">Bloque 5: Taller de Edición y Cohesión de Párrafos (Reactivos 56 al 60)</div>
+  
+<div class="reading-box" style="border-left-color:#d97706;">
+  <div style="font-weight:800;font-size:14px;color:#b45309;margin-bottom:8px;">Taller de Edición y Cohesión Textual: Enunciados Numerados</div>
+  <p style="margin-bottom:6px;"><em>Lee con atención el siguiente borrador de divulgación científica antes de responder los reactivos 56 al 60:</em></p>
+  <p style="line-height:1.7;margin:0;font-size:13px;">
+    <strong>[1]</strong> <em>[Oración temática por definir]</em>. 
+    <strong>[2]</strong> El incremento sostenido en la temperatura del océano provoca el blanqueamiento masivo del coral en diversas regiones tropicales. 
+    <strong>[3]</strong> Ante el estrés térmico, el coral expulsa las microalgas simbióticas que habitan en sus tejidos, las cuales le suministran alimento y coloración. 
+    <strong>[4]</strong> El costo promedio del equipo de buceo profesional ha aumentado notablemente debido a la inflación de los últimos años. 
+    <strong>[5]</strong> Sin estas algas, las estructuras calcáreas quedan expuestas a enfermedades y sufren una mortalidad acelerada. 
+    <strong>[6]</strong> Resulta de suma importancia vital que todos los países colaboren conjuntamente para mitigar el problema de las emisiones contaminantes.
+  </p>
+</div>
+
+<div class="exercise-item"><div class="exercise-question">56. Para otorgar al texto un inicio cohesivo y riguroso, ¿cuál enunciado resulta más apropiado como oración temática [1]?</div><div class="options-grid"><div class="option">A) La gente suele vacacionar en el Caribe para bucear entre peces exóticos.</div><div class="option">B) Los arrecifes de coral constituyen verdaderas metrópolis submarinas cuya fragilidad alerta sobre el equilibrio de la biosfera planetaria.</div><div class="option">C) Los corales poseen tonos muy vivos según explican los biólogos marinos.</div><div class="option">D) El agua de mar presenta salinidad alta que dificulta la natación.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">57. ¿Qué enunciado del párrafo debe suprimirse por romper la coherencia temática?</div><div class="options-grid"><div class="option">A) El enunciado [2]</div><div class="option">B) El enunciado [3]</div><div class="option">C) El enunciado [4]</div><div class="option">D) El enunciado [5]</div></div></div>
+<div class="exercise-item"><div class="exercise-question">58. Observa los enunciados [2] y [3]: ¿Qué nexo lógico vincula con mayor precisión causal ambos enunciados?</div><div class="options-grid"><div class="option">A) En consecuencia,</div><div class="option">B) Por el contrario,</div><div class="option">C) No obstante,</div><div class="option">D) Finalmente,</div></div></div>
+<div class="exercise-item"><div class="exercise-question">59. ¿En cuál posición resultaría más pertinente insertar el enunciado: <em>"De persistir este fenómeno, más del 70% de estas colonias biológicas podría extinguirse en las próximas décadas"</em>?</div><div class="options-grid"><div class="option">A) Antes del enunciado [1].</div><div class="option">B) Inmediatamente después del enunciado [5], para dimensionar la gravedad de la mortalidad descrita.</div><div class="option">C) Como encabezado de los nombres de los peces.</div><div class="option">D) Al final de cada oración del texto.</div></div></div>
+<div class="exercise-item"><div class="exercise-question">60. En el enunciado [6]: <em>"Resulta de suma importancia vital que todos los países colaboren conjuntamente para mitigar el problema"</em>, ¿qué corrección elimina la redundancia viciosa?</div><div class="options-grid"><div class="option">A) Cambiar 'países' por 'naciones del orbe'.</div><div class="option">B) Escribir: 'Es fundamental que los países colaboren para mitigar el problema'.</div><div class="option">C) Agregar más adjetivos enfáticos.</div><div class="option">D) Decir 'problema problemático'.</div></div></div>
+
+  <!-- SECCIÓN 2: MATEMÁTICAS (100 REACTIVOS) -->
+  <div class="materia-title">🔢 Matemáticas (Reactivos 1–100)</div>
+  <div class="materia-sub">100 reactivos: aritmética, porcentajes, álgebra, funciones, geometría analítica, geometría euclidiana, volúmenes, estadística, sucesiones y aplicaciones avanzadas.</div>
+  <div class="section-title">Bloque 1: Aritmética y Fracciones (Reactivos 1 al 10)</div>
+<div class="exercise-item"><div class="exercise-question">1. ¿Cuál es el resultado de simplificar la fracción $\frac{144}{216}$ a su mínima expresión?</div><div class="options-grid"><div class="option">A) $\frac{2}{3}$</div><div class="option">B) $\frac{3}{4}$</div><div class="option">C) $\frac{4}{5}$</div><div class="option">D) $\frac{5}{6}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">2. Calcula el valor de la operación combinada: $2^3 + 3^2 - \sqrt{81}$</div><div class="options-grid"><div class="option">A) $8$</div><div class="option">B) $10$</div><div class="option">C) $17$</div><div class="option">D) $25$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">3. Efectúa la operación con enteros: $(-3)^2 - (-2)^3$</div><div class="options-grid"><div class="option">A) $1$</div><div class="option">B) $17$</div><div class="option">C) $-1$</div><div class="option">D) $-17$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">4. Expresa el número decimal $0.25$ como una fracción simplificada.</div><div class="options-grid"><div class="option">A) $\frac{1}{2}$</div><div class="option">B) $\frac{1}{4}$</div><div class="option">C) $\frac{1}{5}$</div><div class="option">D) $\frac{2}{5}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">5. Realiza la suma de fracciones heterogéneas: $\frac{3}{5} + \frac{3}{4}$</div><div class="options-grid"><div class="option">A) $\frac{6}{9}$</div><div class="option">B) $\frac{27}{20}$</div><div class="option">C) $\frac{9}{20}$</div><div class="option">D) $\frac{1}{5}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">6. ¿Cuál es el mínimo común múltiplo (m.c.m.) de $12$ y $18$?</div><div class="options-grid"><div class="option">A) $24$</div><div class="option">B) $36$</div><div class="option">C) $48$</div><div class="option">D) $72$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">7. Simplifica el radical: $\sqrt{108}$</div><div class="options-grid"><div class="option">A) $6\sqrt{3}$</div><div class="option">B) $9\sqrt{2}$</div><div class="option">C) $4\sqrt{6}$</div><div class="option">D) $12\sqrt{3}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">8. Evalúa la expresión con factoriales: $\frac{7!}{5!}$</div><div class="options-grid"><div class="option">A) $2$</div><div class="option">B) $35$</div><div class="option">C) $42$</div><div class="option">D) $49$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">9. Si $\frac{3}{4}$ de un tanque equivalen a $600$ litros, ¿cuántos litros le faltan para llenarse por completo?</div><div class="options-grid"><div class="option">A) $150\text{ L}$</div><div class="option">B) $200\text{ L}$</div><div class="option">C) $300\text{ L}$</div><div class="option">D) $450\text{ L}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">10. Encuentra el valor de $x$ en la proporción directa: $\frac{4}{x} = \frac{12}{15}$</div><div class="options-grid"><div class="option">A) $3$</div><div class="option">B) $4$</div><div class="option">C) $5$</div><div class="option">D) $6$</div></div></div>
+  <div class="section-title">Bloque 2: Porcentajes y Proporciones (Reactivos 11 al 20)</div>
+<div class="exercise-item"><div class="exercise-question">11. Al comprar un artículo de $\$480$ se aplica un descuento del $25\%$ y luego un $10\%$ adicional al precio rebajado. ¿Cuánto se pagó?</div><div class="options-grid"><div class="option">A) $\$324$</div><div class="option">B) $\$330$</div><div class="option">C) $\$350$</div><div class="option">D) $\$360$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">12. ¿A cuánto equivale exactamente el $15\%$ del $40\%$ de $2000$?</div><div class="options-grid"><div class="option">A) $60$</div><div class="option">B) $80$</div><div class="option">C) $120$</div><div class="option">D) $300$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">13. Un artículo costaba $\$1,200$ y se rebajó a $\$960$. ¿Qué porcentaje de descuento se aplicó?</div><div class="options-grid"><div class="option">A) $15\%$</div><div class="option">B) $20\%$</div><div class="option">C) $25\%$</div><div class="option">D) $30\%$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">14. Si $8$ obreros construyen una barda en $12$ días, ¿cuántos días tardarán $6$ obreros trabajando al mismo ritmo?</div><div class="options-grid"><div class="option">A) $9\text{ días}$</div><div class="option">B) $16\text{ días}$</div><div class="option">C) $18\text{ días}$</div><div class="option">D) $24\text{ días}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">15. Un tren recorre $240\text{ km}$ en $3$ horas. A velocidad constante, ¿cuánto recorrerá en $5$ horas?</div><div class="options-grid"><div class="option">A) $360\text{ km}$</div><div class="option">B) $400\text{ km}$</div><div class="option">C) $450\text{ km}$</div><div class="option">D) $480\text{ km}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">16. En un grupo de $40$ alumnos, $24$ aprobaron el examen. ¿Qué porcentaje del grupo aprobó?</div><div class="options-grid"><div class="option">A) $50\%$</div><div class="option">B) $60\%$</div><div class="option">C) $75\%$</div><div class="option">D) $80\%$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">17. Si el precio de un boleto aumentó de $\$200$ a $\$250$, ¿cuál fue el porcentaje de incremento?</div><div class="options-grid"><div class="option">A) $20\%$</div><div class="option">B) $25\%$</div><div class="option">C) $30\%$</div><div class="option">D) $50\%$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">18. Una mezcla contiene alcohol y agua en razón de $3:5$. Si hay $40$ litros totales, ¿cuántos litros hay de alcohol?</div><div class="options-grid"><div class="option">A) $12\text{ L}$</div><div class="option">B) $15\text{ L}$</div><div class="option">C) $20\text{ L}$</div><div class="option">D) $25\text{ L}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">19. Si $3$ kilos de manzana cuestan $\$75$, ¿cuánto costarán $7$ kilos?</div><div class="options-grid"><div class="option">A) $\$150$</div><div class="option">B) $\$175$</div><div class="option">C) $\$185$</div><div class="option">D) $\$210$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">20. Un artículo con IVA incluido ($16\%$) cuesta $\$580$. ¿Cuál era su precio original sin IVA?</div><div class="options-grid"><div class="option">A) $\$480$</div><div class="option">B) $\$500$</div><div class="option">C) $\$520$</div><div class="option">D) $\$535$</div></div></div>
+  <div class="section-title">Bloque 3: Álgebra y Ecuaciones (Reactivos 21 al 30)</div>
+<div class="exercise-item"><div class="exercise-question">21. Resuelve la ecuación lineal: $\frac{x}{3} + 5 = 12$</div><div class="options-grid"><div class="option">A) $7$</div><div class="option">B) $14$</div><div class="option">C) $21$</div><div class="option">D) $28$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">22. Resuelve la ecuación de primer grado: $5(x - 2) = 3x + 8$</div><div class="options-grid"><div class="option">A) $6$</div><div class="option">B) $7$</div><div class="option">C) $9$</div><div class="option">D) $10$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">23. Si $2x + 3y = 14$ y $x - y = 2$, ¿cuál es el valor de $x + y$?</div><div class="options-grid"><div class="option">A) $4$</div><div class="option">B) $5$</div><div class="option">C) $6$</div><div class="option">D) $8$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">24. Resuelve el sistema: $3x + y = 7$ y $x - y = 1$. ¿Cuál es el valor de $y$?</div><div class="options-grid"><div class="option">A) $1$</div><div class="option">B) $2$</div><div class="option">C) $3$</div><div class="option">D) $4$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">25. Encuentra las soluciones de la ecuación cuadrática: $x^2 - 5x + 6 = 0$</div><div class="options-grid"><div class="option">A) $x = -2 \text{ y } -3$</div><div class="option">B) $x = 2 \text{ y } 3$</div><div class="option">C) $x = 1 \text{ y } 6$</div><div class="option">D) $x = -1 \text{ y } -6$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">26. Factoriza la diferencia de cuadrados: $x^2 - 25$</div><div class="options-grid"><div class="option">A) $(x - 5)^2$</div><div class="option">B) $(x + 5)^2$</div><div class="option">C) $(x - 5)(x + 5)$</div><div class="option">D) $(x - 25)(x + 1)$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">27. Desarrolla el binomio con término común: $(x + 6)(x - 2)$</div><div class="options-grid"><div class="option">A) $x^2 + 8x - 12$</div><div class="option">B) $x^2 + 4x - 12$</div><div class="option">C) $x^2 - 4x - 12$</div><div class="option">D) $x^2 - 8x + 12$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">28. Eleva el monomio a la potencia indicada: $(2x^2)^3$</div><div class="options-grid"><div class="option">A) $6x^5$</div><div class="option">B) $8x^5$</div><div class="option">C) $6x^6$</div><div class="option">D) $8x^6$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">29. Simplifica usando leyes de exponentes: $\frac{x^3 \cdot y^{-2}}{x^{-1} \cdot y^4}$</div><div class="options-grid"><div class="option">A) $\frac{x^4}{y^6}$</div><div class="option">B) $\frac{x^2}{y^2}$</div><div class="option">C) $\frac{x^3}{y^8}$</div><div class="option">D) $\frac{x^4}{y^2}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">30. Si $4^{x+1} = 64$, ¿cuánto vale $x$?</div><div class="options-grid"><div class="option">A) $1$</div><div class="option">B) $2$</div><div class="option">C) $3$</div><div class="option">D) $4$</div></div></div>
+  <div class="section-title">Bloque 4: Desigualdades y Funciones (Reactivos 31 al 40)</div>
+<div class="exercise-item"><div class="exercise-question">31. ¿Cuál es el conjunto solución de la inecuación lineal $2x - 5 \ge 3x + 2$?</div><div class="options-grid"><div class="option">A) $(-\infty, -7]$</div><div class="option">B) $[-7, \infty)$</div><div class="option">C) $(-\infty, 7]$</div><div class="option">D) $[7, \infty)$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">32. Si $f(x) = 3x^2 - 4x + 1$, ¿cuál es el valor de $f(-3)$?</div><div class="options-grid"><div class="option">A) $14$</div><div class="option">B) $28$</div><div class="option">C) $40$</div><div class="option">D) $52$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">33. Dada la función $g(x) = \frac{x^2 - 4}{x + 3}$, ¿cuál es el valor de $g(-5)$?</div><div class="options-grid"><div class="option">A) $10.5$</div><div class="option">B) $-7$</div><div class="option">C) $-10.5$</div><div class="option">D) $-21$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">34. Si $f(a) = 15$ para la función $f(x) = 4x - 5$, ¿cuál es el valor de $a$?</div><div class="options-grid"><div class="option">A) $2.5$</div><div class="option">B) $4$</div><div class="option">C) $5$</div><div class="option">D) $55$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">35. ¿Cuáles son las raíces o ceros de la función cuadrática $f(x) = x^2 - 3x$?</div><div class="options-grid"><div class="option">A) $0 \text{ y } 3$</div><div class="option">B) $1 \text{ y } -3$</div><div class="option">C) $-3 \text{ y } 3$</div><div class="option">D) $0 \text{ y } -3$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">36. Evalúa la función polinómica $-x^2 + 4x - 5$ si $x = -3$.</div><div class="options-grid"><div class="option">A) $-8$</div><div class="option">B) $-14$</div><div class="option">C) $-26$</div><div class="option">D) $4$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">37. Si $f(x) = x^2 + 1$ y $g(x) = 2x - 3$, halla el valor de la composición $f(g(4))$.</div><div class="options-grid"><div class="option">A) $17$</div><div class="option">B) $26$</div><div class="option">C) $33$</div><div class="option">D) $35$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">38. Si $f(x) = 4x - 5$ y $g(x) = x + 2$, ¿cuál es la expresión simplificada de $f(g(x))$?</div><div class="options-grid"><div class="option">A) $4x - 3$</div><div class="option">B) $4x + 3$</div><div class="option">C) $4x + 8$</div><div class="option">D) $4x - 10$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">39. Si la gráfica de $f(x) = x^2$ se desplaza 4 unidades hacia ARRIBA, ¿cuál es la nueva función $g(x)$?</div><div class="options-grid"><div class="option">A) $g(x) = x^2 + 4$</div><div class="option">B) $g(x) = x^2 - 4$</div><div class="option">C) $g(x) = (x + 4)^2$</div><div class="option">D) $g(x) = (x - 4)^2$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">40. ¿Dónde se ubica el vértice de la parábola dada por la función $g(x) = (x + 5)^2 - 2$?</div><div class="options-grid"><div class="option">A) $(5, -2)$</div><div class="option">B) $(-5, -2)$</div><div class="option">C) $(-5, 2)$</div><div class="option">D) $(5, 2)$</div></div></div>
+  <div class="section-title">Bloque 5: Línea Recta y Geometría Analítica (Reactivos 41 al 50)</div>
+<div class="exercise-item"><div class="exercise-question">41. Halla la pendiente ($m$) de la recta que pasa por los puntos $A(2, 3)$ y $B(6, 11)$.</div><div class="options-grid"><div class="option">A) $\frac{1}{2}$</div><div class="option">B) $2$</div><div class="option">C) $3$</div><div class="option">D) $4$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">42. ¿Cuál es la pendiente $m$ de la función lineal que conecta los puntos $P_1(1, 4)$ y $P_2(3, 10)$?</div><div class="options-grid"><div class="option">A) $m = 2$</div><div class="option">B) $m = 3$</div><div class="option">C) $m = 4$</div><div class="option">D) $m = 6$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">43. ¿Cuál es la ecuación de la recta con pendiente $m = 3$ que pasa por el origen $(0, 0)$?</div><div class="options-grid"><div class="option">A) $y = 3x$</div><div class="option">B) $y = x + 3$</div><div class="option">C) $3y = x$</div><div class="option">D) $y = \frac{3}{x}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">44. Determina la ecuación de la recta en su forma pendiente-ordenada si cruza el eje Y en $(0, -2)$ y tiene pendiente $m = 4$.</div><div class="options-grid"><div class="option">A) $y = -2x + 4$</div><div class="option">B) $y = 4x - 2$</div><div class="option">C) $y = 4x + 2$</div><div class="option">D) $y = -4x - 2$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">45. ¿Cuál es la distancia entre los puntos en el plano cartesiano $P_1(1, 2)$ y $P_2(4, 6)$?</div><div class="options-grid"><div class="option">A) $3$</div><div class="option">B) $4$</div><div class="option">C) $5$</div><div class="option">D) $7$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">46. Encuentra las coordenadas del punto medio del segmento que une a $A(-2, 3)$ y $B(4, 7)$.</div><div class="options-grid"><div class="option">A) $(1, 5)$</div><div class="option">B) $(3, 2)$</div><div class="option">C) $(2, 5)$</div><div class="option">D) $(1, 2)$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">47. ¿Cuál es la ecuación general de una recta perpendicular a $y = 2x + 1$?</div><div class="options-grid"><div class="option">A) $y = 2x - 3$</div><div class="option">B) $y = -\frac{1}{2}x + b$</div><div class="option">C) $y = -2x + b$</div><div class="option">D) $y = \frac{1}{2}x + b$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">48. Dos rectas son paralelas si sus pendientes ($m_1$ y $m_2$) cumplen que:</div><div class="options-grid"><div class="option">A) $m_1 \cdot m_2 = -1$</div><div class="option">B) $m_1 = m_2$</div><div class="option">C) $m_1 + m_2 = 0$</div><div class="option">D) $m_1 \neq m_2$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">49. ¿Cuál es la intersección con el eje $X$ (cero) de la función lineal $f(x) = 2x - 6$?</div><div class="options-grid"><div class="option">A) $x = 3$</div><div class="option">B) $x = -3$</div><div class="option">C) $x = 6$</div><div class="option">D) $x = -6$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">50. Si una recta pasa por $(-1, 3)$ y $(2, 3)$, su pendiente es:</div><div class="options-grid"><div class="option">A) Indefinida</div><div class="option">B) $1$</div><div class="option">C) $0$</div><div class="option">D) $-1$</div></div></div>
+  <div class="section-title">Bloque 6: Geometría y Trigonometría (Reactivos 51 al 60)</div>
+<div class="exercise-item"><div class="exercise-question">51. Un triángulo rectángulo tiene una hipotenusa de $13\text{ cm}$ y un cateto de $5\text{ cm}$. ¿Cuál es su área?</div><div class="options-grid"><div class="option">A) $30\text{ cm}^2$</div><div class="option">B) $32.5\text{ cm}^2$</div><div class="option">C) $60\text{ cm}^2$</div><div class="option">D) $65\text{ cm}^2$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">52. ¿Cuál es el área de un círculo cuyo diámetro mide $10\text{ cm}$?</div><div class="options-grid"><div class="option">A) $10\pi\text{ cm}^2$</div><div class="option">B) $20\pi\text{ cm}^2$</div><div class="option">C) $25\pi\text{ cm}^2$</div><div class="option">D) $100\pi\text{ cm}^2$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">53. ¿Cuánto suma la totalidad de los ángulos internos de un decágono ($10$ lados)?</div><div class="options-grid"><div class="option">A) $1080^\circ$</div><div class="option">B) $1260^\circ$</div><div class="option">C) $1440^\circ$</div><div class="option">D) $1800^\circ$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">54. ¿Cuál es el perímetro de un rombo si las longitudes de sus diagonales miden $12\text{ cm}$ y $16\text{ cm}$?</div><div class="options-grid"><div class="option">A) $40\text{ cm}$</div><div class="option">B) $48\text{ cm}$</div><div class="option">C) $32\text{ cm}$</div><div class="option">D) $20\text{ cm}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">55. ¿Cuánto mide un solo ángulo interior de un pentágono regular?</div><div class="options-grid"><div class="option">A) $90^\circ$</div><div class="option">B) $108^\circ$</div><div class="option">C) $120^\circ$</div><div class="option">D) $135^\circ$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">56. Calcula el área de un triángulo con base de $10\text{ cm}$ y altura de $7\text{ cm}$.</div><div class="options-grid"><div class="option">A) $35\text{ cm}^2$</div><div class="option">B) $70\text{ cm}^2$</div><div class="option">C) $17.5\text{ cm}^2$</div><div class="option">D) $50\text{ cm}^2$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">57. Un rectángulo de $120\text{ m}^2$ de área tiene un largo de $15\text{ m}$. ¿Cuál es su perímetro total?</div><div class="options-grid"><div class="option">A) $38\text{ m}$</div><div class="option">B) $44\text{ m}$</div><div class="option">C) $46\text{ m}$</div><div class="option">D) $60\text{ m}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">58. Si la diagonal de un cuadrado mide $8\sqrt{2}\text{ cm}$, ¿cuánto mide la longitud de su lado?</div><div class="options-grid"><div class="option">A) $4\text{ cm}$</div><div class="option">B) $8\text{ cm}$</div><div class="option">C) $16\text{ cm}$</div><div class="option">D) $64\text{ cm}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">59. ¿Cuál es el ángulo complementario de $35^\circ$?</div><div class="options-grid"><div class="option">A) $45^\circ$</div><div class="option">B) $55^\circ$</div><div class="option">C) $145^\circ$</div><div class="option">D) $155^\circ$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">60. ¿Cuál es el ángulo suplementario de $115^\circ$?</div><div class="options-grid"><div class="option">A) $65^\circ$</div><div class="option">B) $75^\circ$</div><div class="option">C) $85^\circ$</div><div class="option">D) $95^\circ$</div></div></div>
+  <div class="section-title">Bloque 7: Volúmenes y Cuerpos Geométricos (Reactivos 61 al 70)</div>
+<div class="exercise-item"><div class="exercise-question">61. Si el radio de un cilindro se duplica y su altura se mantiene constante, su volumen se:</div><div class="options-grid"><div class="option">A) Multiplica por 2</div><div class="option">B) Multiplica por 4</div><div class="option">C) Multiplica por 8</div><div class="option">D) No cambia</div></div></div>
+<div class="exercise-item"><div class="exercise-question">62. El volumen de un cubo es de $125\text{ cm}^3$. ¿Cuánto mide la longitud de su arista?</div><div class="options-grid"><div class="option">A) $3\text{ cm}$</div><div class="option">B) $5\text{ cm}$</div><div class="option">C) $25\text{ cm}$</div><div class="option">D) $15\text{ cm}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">63. Calcula el volumen de un cilindro que tiene un radio de base $r = 2\text{ cm}$ y una altura $h = 5\text{ cm}$.</div><div class="options-grid"><div class="option">A) $10\pi\text{ cm}^3$</div><div class="option">B) $20\pi\text{ cm}^3$</div><div class="option">C) $40\pi\text{ cm}^3$</div><div class="option">D) $100\pi\text{ cm}^3$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">64. ¿Cuál es el volumen de una esfera cuyo radio mide $3\text{ cm}$? ($V = \frac{4}{3}\pi r^3$)</div><div class="options-grid"><div class="option">A) $12\pi\text{ cm}^3$</div><div class="option">B) $27\pi\text{ cm}^3$</div><div class="option">C) $36\pi\text{ cm}^3$</div><div class="option">D) $108\pi\text{ cm}^3$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">65. Un cono circular recto tiene un radio de $3\text{ cm}$ y una altura de $4\text{ cm}$. ¿Cuál es su volumen? ($V = \frac{1}{3}\pi r^2 h$)</div><div class="options-grid"><div class="option">A) $12\pi\text{ cm}^3$</div><div class="option">B) $16\pi\text{ cm}^3$</div><div class="option">C) $36\pi\text{ cm}^3$</div><div class="option">D) $48\pi\text{ cm}^3$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">66. Si se funde una barra metálica cúbica de $10\text{ cm}$ de arista para formar pequeños cubos de $2\text{ cm}$ de arista, ¿cuántos cubitos se obtienen?</div><div class="options-grid"><div class="option">A) $5$</div><div class="option">B) $25$</div><div class="option">C) $125$</div><div class="option">D) $250$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">67. ¿Cuál es el área total de la superficie de un cubo cuya arista mide $4\text{ cm}$?</div><div class="options-grid"><div class="option">A) $64\text{ cm}^2$</div><div class="option">B) $96\text{ cm}^2$</div><div class="option">C) $48\text{ cm}^2$</div><div class="option">D) $32\text{ cm}^2$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">68. Un prisma rectangular mide $3\text{ cm}$ de largo, $4\text{ cm}$ de ancho y $10\text{ cm}$ de alto. ¿Cuál es su volumen?</div><div class="options-grid"><div class="option">A) $60\text{ cm}^3$</div><div class="option">B) $120\text{ cm}^3$</div><div class="option">C) $140\text{ cm}^3$</div><div class="option">D) $240\text{ cm}^3$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">69. Si la altura de un cono se triplica y su radio se mantiene igual, su volumen se:</div><div class="options-grid"><div class="option">A) Multiplica por 3</div><div class="option">B) Multiplica por 6</div><div class="option">C) Multiplica por 9</div><div class="option">D) No cambia</div></div></div>
+<div class="exercise-item"><div class="exercise-question">70. ¿Cuántas aristas tiene en total una pirámide de base cuadrangular?</div><div class="options-grid"><div class="option">A) $5$</div><div class="option">B) $8$</div><div class="option">C) $10$</div><div class="option">D) $12$</div></div></div>
+  <div class="section-title">Bloque 8: Estadística, Probabilidad y Combinatoria (Reactivos 71 al 80)</div>
+<div class="exercise-item"><div class="exercise-question">71. El promedio (media aritmética) de $4$ números es $15$. Si se agrega un quinto número, el promedio sube a $18$. ¿Cuál es el quinto número?</div><div class="options-grid"><div class="option">A) $20$</div><div class="option">B) $25$</div><div class="option">C) $30$</div><div class="option">D) $32$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">72. ¿Cuál es la mediana del conjunto de datos: $14, 8, 22, 19, 11, 30, 6$?</div><div class="options-grid"><div class="option">A) $11$</div><div class="option">B) $14$</div><div class="option">C) $15$</div><div class="option">D) $19$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">73. ¿Cuál es la probabilidad exacta de obtener una suma de $7$ al lanzar dos dados legales de $6$ caras?</div><div class="options-grid"><div class="option">A) $\frac{1}{12}$</div><div class="option">B) $\frac{1}{6}$</div><div class="option">C) $\frac{5}{36}$</div><div class="option">D) $\frac{7}{36}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">74. En una urna hay $4$ bolas rojas, $3$ azules y $3$ verdes. ¿Cuál es la probabilidad de extraer al azar una bola que NO sea roja?</div><div class="options-grid"><div class="option">A) $\frac{3}{5}$</div><div class="option">B) $\frac{2}{5}$</div><div class="option">C) $\frac{7}{10}$</div><div class="option">D) $\frac{3}{10}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">75. Si la varianza de un conjunto de datos estadísticos es $49$, ¿cuál es el valor de su desviación estándar?</div><div class="options-grid"><div class="option">A) $7$</div><div class="option">B) $14$</div><div class="option">C) $24.5$</div><div class="option">D) $49$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">76. ¿De cuántas maneras diferentes se pueden ordenar $5$ libros distintos en una repisa?</div><div class="options-grid"><div class="option">A) $24$</div><div class="option">B) $60$</div><div class="option">C) $120$</div><div class="option">D) $720$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">77. Halla la media aritmética (promedio) de los siguientes valores: $12, 15, 18, 22, 28$.</div><div class="options-grid"><div class="option">A) $18$</div><div class="option">B) $19$</div><div class="option">C) $20$</div><div class="option">D) $21$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">78. Si la probabilidad teórica de que llueva en un día determinado es $0.35$, ¿cuál es la probabilidad de que NO llueva?</div><div class="options-grid"><div class="option">A) $0.35$</div><div class="option">B) $0.65$</div><div class="option">C) $0.75$</div><div class="option">D) $1.35$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">79. Encuentra la moda del conjunto de datos: $3, 5, 2, 5, 7, 8, 5, 9, 3$.</div><div class="options-grid"><div class="option">A) $3$</div><div class="option">B) $5$</div><div class="option">C) $7$</div><div class="option">D) No hay moda</div></div></div>
+<div class="exercise-item"><div class="exercise-question">80. ¿De cuántas formas distintas se pueden elegir a $3$ personas para un comité de un grupo total de $5$ personas? (Combinación)</div><div class="options-grid"><div class="option">A) $10$</div><div class="option">B) $15$</div><div class="option">C) $20$</div><div class="option">D) $60$</div></div></div>
+  <div class="section-title">Bloque 9: Sucesiones, Valor Absoluto y Factorización Avanzada (Reactivos 81 al 90)</div>
+<div class="exercise-item"><div class="exercise-question">81. En la sucesión aritmética $4, 7, 10, 13, \dots$, ¿cuál es el valor del vigésimo quinto término ($a_{25}$)?</div><div class="options-grid"><div class="option">A) $72$</div><div class="option">B) $76$</div><div class="option">C) $79$</div><div class="option">D) $82$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">82. En una progresión geométrica cuyo primer término es $64$ y su razón común es $r = \frac{1}{2}$, ¿cuál es el valor del sexto término ($a_6$)?</div><div class="options-grid"><div class="option">A) $1$</div><div class="option">B) $2$</div><div class="option">C) $4$</div><div class="option">D) $8$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">83. Determina la suma de todas las soluciones reales de la ecuación con valor absoluto: $|2x - 5| = 11$</div><div class="options-grid"><div class="option">A) $3$</div><div class="option">B) $5$</div><div class="option">C) $8$</div><div class="option">D) $11$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">84. ¿Cuál es el intervalo que representa el conjunto solución de la desigualdad con valor absoluto: $|x - 3| \le 5$?</div><div class="options-grid"><div class="option">A) $[-2, 8]$</div><div class="option">B) $(-\infty, -2] \cup [8, \infty)$</div><div class="option">C) $[-8, 2]$</div><div class="option">D) $[0, 8]$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">85. Factoriza completamente el trinomio cuadrático: $2x^2 + 7x + 3$</div><div class="options-grid"><div class="option">A) $(2x + 3)(x + 1)$</div><div class="option">B) $(2x + 1)(x + 3)$</div><div class="option">C) $(2x - 1)(x - 3)$</div><div class="option">D) $(x + 7)(2x + 3)$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">86. Factoriza por agrupación de términos el polinomio: $ax - 2ay + bx - 2by$</div><div class="options-grid"><div class="option">A) $(a + b)(x - 2y)$</div><div class="option">B) $(a - b)(x + 2y)$</div><div class="option">C) $(x + y)(a - 2b)$</div><div class="option">D) $(ab)(x - 2y)$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">87. Simplifica a su mínima expresión la fracción algebraica: $\frac{x^2 - 16}{x^2 + 3x - 4}$</div><div class="options-grid"><div class="option">A) $\frac{x - 4}{x - 1}$</div><div class="option">B) $\frac{x + 4}{x + 1}$</div><div class="option">C) $\frac{x - 4}{x + 1}$</div><div class="option">D) $\frac{4}{3}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">88. Simplifica la expresión con potencias racionales: $(64x^6)^{2/3}$</div><div class="options-grid"><div class="option">A) $16x^4$</div><div class="option">B) $32x^4$</div><div class="option">C) $16x^9$</div><div class="option">D) $8x^4$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">89. Racionaliza el denominador y simplifica la expresión: $\frac{10}{\sqrt{5}}$</div><div class="options-grid"><div class="option">A) $2$</div><div class="option">B) $2\sqrt{5}$</div><div class="option">C) $5\sqrt{2}$</div><div class="option">D) $10\sqrt{5}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">90. Evalúa el resultado numérico de: $\left(\frac{1}{3}\right)^{-2} + \left(\frac{2}{5}\right)^{-1}$</div><div class="options-grid"><div class="option">A) $11.5$</div><div class="option">B) $10.5$</div><div class="option">C) $8.5$</div><div class="option">D) $6$</div></div></div>
+  <div class="section-title">Bloque 10: Aplicaciones PAA de Álgebra, Geometría y Probabilidad (Reactivos 91 al 100)</div>
+<div class="exercise-item"><div class="exercise-question">91. En un cine se vendieron 50 boletos en total entre adultos y niños, recaudando $\$3{,}400$. Si el boleto de adulto cuesta $\$80$ y el de niño $\$50$, ¿cuántos boletos de adulto se vendieron?</div><div class="options-grid"><div class="option">A) $20$</div><div class="option">B) $30$</div><div class="option">C) $35$</div><div class="option">D) $40$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">92. Tres campanas tocan a intervalos de 4, 6 y 10 minutos respectivamente. Si sonaron simultáneamente a las 12:00 del mediodía, ¿a qué hora volverán a sonar juntas por primera vez?</div><div class="options-grid"><div class="option">A) 12:30</div><div class="option">B) 13:00</div><div class="option">C) 13:30</div><div class="option">D) 14:00</div></div></div>
+<div class="exercise-item"><div class="exercise-question">93. Un ebanista dispone de dos listones de madera de $120\text{ cm}$ y $180\text{ cm}$ de largo. Desea cortarlos en trozos de la máxima longitud posible, todos de igual medida y sin desperdiciar nada. ¿Cuánto debe medir cada trozo?</div><div class="options-grid"><div class="option">A) $30\text{ cm}$</div><div class="option">B) $60\text{ cm}$</div><div class="option">C) $90\text{ cm}$</div><div class="option">D) $120\text{ cm}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">94. La ganancia $G(x)$ en miles de pesos de un pequeño comercio depende del precio $x$ en pesos según la función: $G(x) = -2x^2 + 40x + 100$. ¿Qué precio $x$ genera la ganancia máxima?</div><div class="options-grid"><div class="option">A) $x = 10$</div><div class="option">B) $x = 20$</div><div class="option">C) $x = 25$</div><div class="option">D) $x = 40$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">95. ¿Para qué valor de $k$ la ecuación cuadrática $x^2 - 6x + k = 0$ tiene exactamente una sola solución real repetida (raíz doble)?</div><div class="options-grid"><div class="option">A) $k = 3$</div><div class="option">B) $k = 9$</div><div class="option">C) $k = -9$</div><div class="option">D) $k = 36$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">96. Un poste vertical de $3\text{ m}$ de altura proyecta sobre el piso una sombra de $2\text{ m}$. A la misma hora, un árbol cercano proyecta una sombra de $8\text{ m}$. ¿Cuál es la altura del árbol?</div><div class="options-grid"><div class="option">A) $10\text{ m}$</div><div class="option">B) $12\text{ m}$</div><div class="option">C) $14\text{ m}$</div><div class="option">D) $16\text{ m}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">97. En un triángulo rectángulo notable 30°-60°-90°, el cateto opuesto al ángulo de 30° mide $5\text{ cm}$. ¿Cuánto mide el cateto opuesto al ángulo de 60°?</div><div class="options-grid"><div class="option">A) $5\sqrt{2}\text{ cm}$</div><div class="option">B) $5\sqrt{3}\text{ cm}$</div><div class="option">C) $10\text{ cm}$</div><div class="option">D) $10\sqrt{3}\text{ cm}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">98. En una bolsa hay 5 canicas rojas y 3 blancas. Si se extraen dos canicas sucesivamente sin reemplazo, ¿cuál es la probabilidad de que ambas resulten ser rojas?</div><div class="options-grid"><div class="option">A) $\frac{5}{14}$</div><div class="option">B) $\frac{25}{64}$</div><div class="option">C) $\frac{5}{28}$</div><div class="option">D) $\frac{15}{56}$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">99. ¿Cuántos números de 4 dígitos distintos se pueden formar utilizando exclusivamente los dígitos $\{1, 2, 3, 4, 5\}$ si el número resultante debe ser estrictamente PAR?</div><div class="options-grid"><div class="option">A) $24$</div><div class="option">B) $48$</div><div class="option">C) $60$</div><div class="option">D) $120$</div></div></div>
+<div class="exercise-item"><div class="exercise-question">100. Cuatro bombas de agua idénticas vacían un depósito en $6\text{ horas}$. Si se instalan $2$ bombas adicionales de la misma capacidad (totalizando 6 bombas), ¿cuántas horas tardarán en vaciar el mismo depósito?</div><div class="options-grid"><div class="option">A) $3\text{ horas}$</div><div class="option">B) $4\text{ horas}$</div><div class="option">C) $4.5\text{ horas}$</div><div class="option">D) $5\text{ horas}$</div></div></div>
+
+  <!-- SECCIÓN 3: REACTIVOS GRÁFICOS Y VISUALES (20 REACTIVOS) -->
+  <div class="materia-title">📊 Reactivos Gráficos y Visuales (Reactivos 1–20)</div>
+  <div class="materia-sub">20 reactivos con soporte gráfico: diagramas de Venn, triángulos, paralelas, áreas sombreadas, estadística visual y diagramas de caja.</div>
+<div class="section-title">Sección 1: Análisis de Diagramas de Venn</div>
+<div class="exercise-item">
+<div class="exercise-question">1. En una encuesta a 100 estudiantes sobre el consumo de café (C) y té (T), el diagrama muestra las cantidades por sección. ¿Cuántos estudiantes consumen <em>únicamente café</em>?</div>
+<div class="svg-box">
+<svg height="130" viewbox="0 0 260 130" width="260">
+<rect fill="none" height="120" rx="8" stroke="#64748b" stroke-width="1.5" width="250" x="5" y="5"></rect>
+<text fill="#64748b" font-size="11" x="15" y="20">U = 100</text>
+<circle cx="95" cy="65" fill="none" r="45" stroke="#7c3aed" stroke-width="2"></circle>
+<circle cx="165" cy="65" fill="none" r="45" stroke="#0ea5e9" stroke-width="2"></circle>
+<text fill="#7c3aed" font-size="13" font-weight="bold" x="75" y="68">35</text>
+<text fill="#334155" font-size="13" font-weight="bold" x="125" y="68">15</text>
+<text fill="#0ea5e9" font-size="13" font-weight="bold" x="180" y="68">40</text>
+<text fill="#7c3aed" font-size="11" font-weight="bold" x="75" y="25">Café</text>
+<text fill="#0ea5e9" font-size="11" font-weight="bold" x="165" y="25">Té</text>
+</svg>
+</div>
+<div class="options-grid">
+<div class="option">A) 35 estudiantes</div>
+<div class="option">B) 50 estudiantes</div>
+<div class="option">C) 15 estudiantes</div>
+<div class="option">D) 40 estudiantes</div>
+</div>
+</div>
+<div class="exercise-item">
+<div class="exercise-question">2. Con base en el mismo diagrama de Venn anterior, ¿cuántos estudiantes <strong>no consumen ninguna</strong> de las dos bebidas?</div>
+<div class="options-grid">
+<div class="option">A) 0 estudiantes</div>
+<div class="option">B) 10 estudiantes</div>
+<div class="option">C) 15 estudiantes</div>
+<div class="option">D) 20 estudiantes</div>
+</div>
+</div>
+<div class="exercise-item">
+<div class="exercise-question">3. Con base en el mismo diagrama de Venn, ¿cuántos estudiantes consumen café en <strong>total</strong> (incluyendo a quienes también consumen té)?</div>
+<div class="options-grid">
+<div class="option">A) 35 estudiantes</div>
+<div class="option">B) 50 estudiantes</div>
+<div class="option">C) 15 estudiantes</div>
+<div class="option">D) 40 estudiantes</div>
+</div>
+</div>
+<div class="exercise-item">
+<div class="exercise-question">4. Con base en el mismo diagrama de Venn, ¿cuántos estudiantes consumen <strong>exactamente una</strong> de las dos bebidas (café o té, pero no ambas)?</div>
+<div class="options-grid">
+<div class="option">A) 15 estudiantes</div>
+<div class="option">B) 90 estudiantes</div>
+<div class="option">C) 75 estudiantes</div>
+<div class="option">D) 50 estudiantes</div>
+</div>
+</div>
+<div class="section-title">Sección 2: Teorema de Pitágoras y Triángulos</div>
+<div class="exercise-item">
+<div class="exercise-question">5. Encuentra la longitud de la hipotenusa $x$ en el siguiente triángulo rectángulo:</div>
+<div class="svg-box">
+<svg height="140" viewbox="0 0 200 140" width="200">
+<polygon fill="none" points="40,20 40,120 160,120" stroke="#1e293b" stroke-width="2"></polygon>
+<rect fill="none" height="15" stroke="#1e293b" stroke-width="1.5" width="15" x="40" y="105"></rect>
+<text font-size="13" font-weight="bold" x="15" y="75">6 cm</text>
+<text font-size="13" font-weight="bold" x="95" y="138">8 cm</text>
+<text fill="#ff6b35" font-size="13" font-weight="bold" x="105" y="65">x</text>
+</svg>
+</div>
+<div class="options-grid">
+<div class="option">A) $x = 10\text{ cm}$</div>
+<div class="option">B) $x = 12\text{ cm}$</div>
+<div class="option">C) $x = 14\text{ cm}$</div>
+<div class="option">D) $x = 100\text{ cm}$</div>
+</div>
+</div>
+<div class="exercise-item">
+<div class="exercise-question">6. Una escalera de $10\text{ m}$ de longitud está recostada sobre una pared vertical. Si la base de la escalera se encuentra a $6\text{ m}$ de la pared, ¿a qué altura $h$ llega la parte superior de la escalera?</div>
+<div class="svg-box">
+<svg height="160" viewbox="0 0 180 160" width="180">
+<line stroke="#1e293b" stroke-width="3" x1="30" x2="150" y1="140" y2="140"></line>
+<line stroke="#1e293b" stroke-width="4" x1="30" x2="30" y1="20" y2="140"></line>
+<line stroke="#ff6b35" stroke-width="3" x1="30" x2="130" y1="35" y2="140"></line>
+<text fill="#ff6b35" font-size="12" font-weight="bold" x="70" y="75">10 m</text>
+<text font-size="12" font-weight="bold" x="10" y="90">h = ?</text>
+<text font-size="12" font-weight="bold" x="70" y="155">6 m</text>
+</svg>
+</div>
+<div class="options-grid">
+<div class="option">A) $h = 4\text{ m}$</div>
+<div class="option">B) $h = 8\text{ m}$</div>
+<div class="option">C) $h = 9\text{ m}$</div>
+<div class="option">D) $h = 16\text{ m}$</div>
+</div>
+</div>
+<div class="exercise-item">
+<div class="exercise-question">7. En el siguiente triángulo se muestran dos de sus ángulos internos. ¿Cuánto mide el ángulo faltante marcado con "?"?</div>
+<div class="svg-box">
+<svg height="140" viewbox="0 0 180 140" width="180">
+<polygon fill="none" points="30,120 150,120 90,20" stroke="#1e293b" stroke-width="2"></polygon>
+<text font-size="13" font-weight="bold" x="35" y="112">50°</text>
+<text font-size="13" font-weight="bold" x="118" y="112">70°</text>
+<text fill="#ff6b35" font-size="14" font-weight="bold" x="83" y="35">?</text>
+</svg>
+</div>
+<div class="options-grid">
+<div class="option">A) $50^\circ$</div>
+<div class="option">B) $60^\circ$</div>
+<div class="option">C) $70^\circ$</div>
+<div class="option">D) $120^\circ$</div>
+</div>
+</div>
+<div class="exercise-item">
+<div class="exercise-question">8. En el triángulo $ABC$, el lado $AB$ se prolonga hasta el punto $D$. Si los ángulos internos no adyacentes miden $55^\circ$ y $65^\circ$ como se muestra, ¿cuánto mide el ángulo exterior marcado con "?" (teorema del ángulo exterior)?</div>
+<div class="svg-box">
+<svg height="140" viewbox="0 0 220 140" width="220">
+<polygon fill="none" points="20,120 140,120 80,30" stroke="#1e293b" stroke-width="2"></polygon>
+<line stroke="#1e293b" stroke-width="2" x1="140" x2="195" y1="120" y2="120"></line>
+<text font-size="12" font-weight="bold" x="16" y="112">A</text>
+<text font-size="12" font-weight="bold" x="142" y="112">B</text>
+<text font-size="12" font-weight="bold" x="80" y="22">C</text>
+<text font-size="12" font-weight="bold" x="195" y="112">D</text>
+<text font-size="12" font-weight="bold" x="25" y="105">55°</text>
+<text font-size="12" font-weight="bold" x="70" y="45">65°</text>
+<text fill="#ff6b35" font-size="14" font-weight="bold" x="150" y="105">?</text>
+</svg>
+</div>
+<div class="options-grid">
+<div class="option">A) $55^\circ$</div>
+<div class="option">B) $65^\circ$</div>
+<div class="option">C) $110^\circ$</div>
+<div class="option">D) $120^\circ$</div>
+</div>
+</div>
+<div class="section-title">Sección 3: Ángulos entre Rectas Paralelas y Rectas Cruzadas</div>
+<div class="exercise-item">
+<div class="exercise-question">9. Las rectas $L_1$ y $L_2$ son paralelas y están cortadas por la transversal $t$. El ángulo de $70^\circ$ y el ángulo "$x$" son <strong>ángulos internos del mismo lado</strong> de la transversal (colaterales internos). ¿Cuánto mide $x$?</div>
+<div class="svg-box">
+<svg height="150" viewbox="0 0 240 150" width="240">
+<line stroke="#64748b" stroke-width="2" x1="20" x2="220" y1="40" y2="40"></line>
+<line stroke="#64748b" stroke-width="2" x1="20" x2="220" y1="110" y2="110"></line>
+<line stroke="#ff6b35" stroke-width="2" x1="50" x2="190" y1="10" y2="140"></line>
+<text fill="#64748b" font-size="11" x="8" y="43">L1</text>
+<text fill="#64748b" font-size="11" x="8" y="113">L2</text>
+<text font-size="13" font-weight="bold" x="95" y="58">70°</text>
+<text fill="#ff6b35" font-size="14" font-weight="bold" x="165" y="100">x</text>
+</svg>
+</div>
+<div class="options-grid">
+<div class="option">A) $70^\circ$</div>
+<div class="option">B) $110^\circ$</div>
+<div class="option">C) $20^\circ$</div>
+<div class="option">D) $180^\circ$</div>
+</div>
+</div>
+<div class="exercise-item">
+<div class="exercise-question">10. Dos ángulos son adyacentes sobre una línea recta, como se muestra en la figura. Si uno de ellos mide $130^\circ$, ¿cuánto mide el ángulo "$x$"?</div>
+<div class="svg-box">
+<svg height="90" viewbox="0 0 240 90" width="240">
+<line stroke="#1e293b" stroke-width="2" x1="20" x2="220" y1="70" y2="70"></line>
+<line stroke="#ff6b35" stroke-width="2" x1="120" x2="170" y1="70" y2="15"></line>
+<circle cx="120" cy="70" fill="#1e293b" r="3"></circle>
+<text font-size="13" font-weight="bold" x="55" y="55">130°</text>
+<text fill="#ff6b35" font-size="14" font-weight="bold" x="165" y="55">x</text>
+</svg>
+</div>
+<div class="options-grid">
+<div class="option">A) $50^\circ$</div>
+<div class="option">B) $40^\circ$</div>
+<div class="option">C) $130^\circ$</div>
+<div class="option">D) $90^\circ$</div>
+</div>
+</div>
+<div class="section-title">Sección 4: Áreas de Figuras Sombreadas</div>
+<div class="exercise-item">
+<div class="exercise-question">11. Un cuadrado de lado $8\text{ cm}$ tiene inscrito un círculo que toca los cuatro lados, como se muestra. ¿Cuál es el área de la región sombreada (el área del cuadrado que queda fuera del círculo)?</div>
+<div class="svg-box">
+<svg height="130" viewbox="0 0 160 130" width="160">
+<rect fill="#ede9fe" height="100" stroke="#7c3aed" stroke-width="2" width="100" x="30" y="15"></rect>
+<circle cx="80" cy="65" fill="#ffffff" r="50" stroke="#0ea5e9" stroke-width="2"></circle>
+<text font-size="12" font-weight="bold" x="60" y="10">8 cm</text>
+</svg>
+</div>
+<div class="options-grid">
+<div class="option">A) $(64 - 16\pi)\text{ cm}^2$</div>
+<div class="option">B) $(64 - 8\pi)\text{ cm}^2$</div>
+<div class="option">C) $(16\pi - 64)\text{ cm}^2$</div>
+<div class="option">D) $16\pi\text{ cm}^2$</div>
+</div>
+</div>
+<div class="exercise-item">
+<div class="exercise-question">12. Al rectángulo de $12\text{ cm}$ de largo y $6\text{ cm}$ de ancho se le recorta, en una de sus esquinas, un triángulo rectángulo con catetos de $6\text{ cm}$ y $6\text{ cm}$ (zona blanca de la figura). ¿Cuál es el área de la región sombreada?</div>
+<div class="svg-box">
+<svg height="110" viewbox="0 0 220 110" width="220">
+<polygon fill="#ede9fe" points="30,20 170,20 170,30 110,90 30,90" stroke="#7c3aed" stroke-width="2"></polygon>
+<polygon fill="#ffffff" points="170,20 170,30 110,90 170,90" stroke="#94a3b8" stroke-dasharray="4" stroke-width="1.5"></polygon>
+<text font-size="11" font-weight="bold" x="80" y="14">12 cm</text>
+<text font-size="11" font-weight="bold" x="10" y="58">6 cm</text>
+<text font-size="10" x="172" y="60">6 cm</text>
+<text font-size="10" x="130" y="100">6 cm</text>
+</svg>
+</div>
+<div class="options-grid">
+<div class="option">A) $54\text{ cm}^2$</div>
+<div class="option">B) $60\text{ cm}^2$</div>
+<div class="option">C) $36\text{ cm}^2$</div>
+<div class="option">D) $72\text{ cm}^2$</div>
+</div>
+</div>
+<div class="section-title">Sección 5: Gráficas de Barras y Estadística Visual</div>
+<div class="exercise-item">
+<div class="exercise-question">13. La gráfica muestra la asistencia a un cine durante 4 días de la semana. ¿Cuál es el promedio de asistentes diarios?</div>
+<div class="svg-box">
+<svg height="160" viewbox="0 0 260 160" width="260">
+<line stroke="#64748b" stroke-width="1.5" x1="30" x2="30" y1="20" y2="130"></line>
+<line stroke="#64748b" stroke-width="1.5" x1="30" x2="240" y1="130" y2="130"></line>
+<rect fill="#7c3aed" height="60" rx="3" width="30" x="50" y="70"></rect>
+<text font-size="10" font-weight="bold" x="57" y="63">300</text>
+<rect fill="#ff6b35" height="100" rx="3" width="30" x="95" y="30"></rect>
+<text font-size="10" font-weight="bold" x="102" y="23">500</text>
+<rect fill="#7c3aed" height="80" rx="3" width="30" x="140" y="50"></rect>
+<text font-size="10" font-weight="bold" x="147" y="43">400</text>
+<rect fill="#7c3aed" height="40" rx="3" width="30" x="185" y="90"></rect>
+<text font-size="10" font-weight="bold" x="192" y="83">200</text>
+<text font-size="10" x="55" y="145">Jue</text>
+<text font-size="10" x="100" y="145">Vie</text>
+<text font-size="10" x="145" y="145">Sáb</text>
+<text font-size="10" x="190" y="145">Dom</text>
+</svg>
+</div>
+<div class="options-grid">
+<div class="option">A) 300 personas</div>
+<div class="option">B) 350 personas</div>
+<div class="option">C) 400 personas</div>
+<div class="option">D) 500 personas</div>
+</div>
+</div>
+<div class="exercise-item">
+<div class="exercise-question">14. Con base en la misma gráfica de asistencia al cine, ¿qué día tuvo la <strong>menor</strong> asistencia?</div>
+<div class="options-grid">
+<div class="option">A) Jueves</div>
+<div class="option">B) Viernes</div>
+<div class="option">C) Sábado</div>
+<div class="option">D) Domingo</div>
+</div>
+</div>
+<div class="section-title">Sección 6: Gráficas de Líneas y Rangos</div>
+<div class="exercise-item">
+<div class="exercise-question">15. Con base en la siguiente gráfica de temperatura, ¿cuál es el <strong>Rango</strong> (máximo menos mínimo) registrado?</div>
+<div class="svg-box">
+<svg height="150" viewbox="0 0 260 150" width="260">
+<line stroke="#64748b" stroke-width="1.5" x1="30" x2="30" y1="20" y2="120"></line>
+<line stroke="#64748b" stroke-width="1.5" x1="30" x2="240" y1="120" y2="120"></line>
+<polyline fill="none" points="50,90 110,60 170,20 230,80" stroke="#0ea5e9" stroke-width="3"></polyline>
+<circle cx="50" cy="90" fill="#1e293b" r="4"></circle><text font-size="10" x="40" y="83">10°</text>
+<circle cx="110" cy="60" fill="#1e293b" r="4"></circle><text font-size="10" x="100" y="53">20°</text>
+<circle cx="170" cy="20" fill="#1e293b" r="4"></circle><text font-size="10" font-weight="bold" x="160" y="13">35°</text>
+<circle cx="230" cy="80" fill="#1e293b" r="4"></circle><text font-size="10" x="220" y="73">15°</text>
+<text font-size="10" x="45" y="135">8:00</text>
+<text font-size="10" x="105" y="135">11:00</text>
+<text font-size="10" x="165" y="135">14:00</text>
+<text font-size="10" x="225" y="135">17:00</text>
+</svg>
+</div>
+<div class="options-grid">
+<div class="option">A) 15 °C</div>
+<div class="option">B) 20 °C</div>
+<div class="option">C) 25 °C</div>
+<div class="option">D) 35 °C</div>
+</div>
+</div>
+<div class="section-title">Sección 7: Gráficas Circulares (de Pastel)</div>
+<div class="exercise-item">
+<div class="exercise-question">16. La gráfica circular muestra cómo distribuye una familia su ingreso mensual. Si el ingreso mensual total es de $\$8{,}000$, ¿cuánto dinero se destina a <strong>Comida</strong>?</div>
+<div class="svg-box">
+<svg height="150" viewbox="0 0 260 150" width="260">
+<circle cx="75" cy="75" fill="none" r="55" stroke="#7c3aed" stroke-width="22" stroke-dasharray="138.23 207.35" stroke-dashoffset="0" transform="rotate(-90 75 75)"></circle>
+<circle cx="75" cy="75" fill="none" r="55" stroke="#ff6b35" stroke-width="22" stroke-dasharray="103.67 241.91" stroke-dashoffset="-138.23" transform="rotate(-90 75 75)"></circle>
+<circle cx="75" cy="75" fill="none" r="55" stroke="#0ea5e9" stroke-width="22" stroke-dasharray="69.12 276.46" stroke-dashoffset="-241.90" transform="rotate(-90 75 75)"></circle>
+<circle cx="75" cy="75" fill="none" r="55" stroke="#10b981" stroke-width="22" stroke-dasharray="34.56 311.02" stroke-dashoffset="-311.02" transform="rotate(-90 75 75)"></circle>
+<rect fill="#7c3aed" height="10" width="10" x="165" y="20"></rect><text font-size="11" x="180" y="29">Renta — 40%</text>
+<rect fill="#ff6b35" height="10" width="10" x="165" y="45"></rect><text font-size="11" x="180" y="54">Comida — 30%</text>
+<rect fill="#0ea5e9" height="10" width="10" x="165" y="70"></rect><text font-size="11" x="180" y="79">Transporte — 20%</text>
+<rect fill="#10b981" height="10" width="10" x="165" y="95"></rect><text font-size="11" x="180" y="104">Otros — 10%</text>
+</svg>
+</div>
+<div class="options-grid">
+<div class="option">A) $\$2{,}400$</div>
+<div class="option">B) $\$3{,}200$</div>
+<div class="option">C) $\$1{,}600$</div>
+<div class="option">D) $\$800$</div>
+</div>
+</div>
+<div class="section-title">Sección 8: Triángulos Notables y Semejanza Gráfica</div>
+<div class="exercise-item">
+<div class="exercise-question">17. En el siguiente triángulo rectángulo notable 30°-60°-90°, la hipotenusa mide $12\text{ cm}$ y el cateto opuesto al ángulo de 30° mide $6\text{ cm}$. ¿Cuál es el valor exacto de $y$ (longitud del cateto opuesto a 60°)?</div>
+<div class="svg-box">
+<svg height="150" viewbox="0 0 240 150" width="240">
+  <polygon fill="none" points="40,20 40,120 200,120" stroke="#1e293b" stroke-width="2"></polygon>
+  <rect fill="none" height="14" stroke="#1e293b" stroke-width="1.5" width="14" x="40" y="106"></rect>
+  <text font-size="12" font-weight="bold" x="12" y="75">6 cm</text>
+  <text font-size="12" font-weight="bold" x="105" y="138">y = ?</text>
+  <text fill="#7c3aed" font-size="13" font-weight="bold" x="120" y="60">12 cm</text>
+  <text fill="#0ea5e9" font-size="12" font-weight="bold" x="165" y="112">30°</text>
+  <text fill="#0ea5e9" font-size="12" font-weight="bold" x="46" y="38">60°</text>
+</svg>
+</div>
+<div class="options-grid">
+<div class="option">A) $6\text{ cm}$</div>
+<div class="option">B) $6\sqrt{3}\text{ cm}$</div>
+<div class="option">C) $12\sqrt{3}\text{ cm}$</div>
+<div class="option">D) $9\text{ cm}$</div>
+</div>
+</div>
+
+<div class="exercise-item">
+<div class="exercise-question">18. Las rectas $L_1$ y $L_2$ son paralelas cortadas por una recta transversal. Si los dos ángulos alternos externos mostrados son iguales, ¿cuál es el valor numérico de la variable $x$?</div>
+<div class="svg-box">
+<svg height="150" viewbox="0 0 260 150" width="260">
+  <line stroke="#64748b" stroke-width="2" x1="20" x2="240" y1="40" y2="40"></line>
+  <line stroke="#64748b" stroke-width="2" x1="20" x2="240" y1="110" y2="110"></line>
+  <line stroke="#7c3aed" stroke-width="2.5" x1="60" x2="200" y1="10" y2="140"></line>
+  <text fill="#64748b" font-size="11" x="8" y="44">L1</text>
+  <text fill="#64748b" font-size="11" x="8" y="114">L2</text>
+  <text fill="#7c3aed" font-size="12" font-weight="bold" x="50" y="32">(3x + 10)°</text>
+  <text fill="#7c3aed" font-size="12" font-weight="bold" x="180" y="128">(5x - 30)°</text>
+</svg>
+</div>
+<div class="options-grid">
+<div class="option">A) $15$</div>
+<div class="option">B) $20$</div>
+<div class="option">C) $25$</div>
+<div class="option">D) $35$</div>
+</div>
+</div>
+
+<div class="section-title">Sección 9: Corona Circular y Diagrama de Caja</div>
+<div class="exercise-item">
+<div class="exercise-question">19. Se tienen dos círculos concéntricos de radios $R = 6\text{ cm}$ y $r = 4\text{ cm}$, como se ilustra. ¿Cuál es el área exacta de la corona circular sombreada (la región entre ambos círculos)?</div>
+<div class="svg-box">
+<svg height="150" viewbox="0 0 200 150" width="200">
+  <circle cx="100" cy="75" fill="#ede9fe" r="60" stroke="#7c3aed" stroke-width="2"></circle>
+  <circle cx="100" cy="75" fill="#ffffff" r="40" stroke="#0ea5e9" stroke-width="2"></circle>
+  <line stroke="#0ea5e9" stroke-dasharray="3" stroke-width="1.5" x1="100" x2="140" y1="75" y2="75"></line>
+  <line stroke="#7c3aed" stroke-dasharray="3" stroke-width="1.5" x1="100" x2="160" y1="75" y2="75"></line>
+  <text fill="#0ea5e9" font-size="10" font-weight="bold" x="110" y="70">r=4</text>
+  <text fill="#7c3aed" font-size="10" font-weight="bold" x="142" y="70">R=6</text>
+</svg>
+</div>
+<div class="options-grid">
+<div class="option">A) $12\pi\text{ cm}^2$</div>
+<div class="option">B) $20\pi\text{ cm}^2$</div>
+<div class="option">C) $36\pi\text{ cm}^2$</div>
+<div class="option">D) $52\pi\text{ cm}^2$</div>
+</div>
+</div>
+
+<div class="exercise-item">
+<div class="exercise-question">20. El siguiente diagrama de caja y bigotes (Boxplot) ilustra las calificaciones de un grupo escolar. ¿Cuál es el valor del Rango Intercuartílico ($RIC = Q_3 - Q_1$)?</div>
+<div class="svg-box">
+<svg height="140" viewbox="0 0 280 140" width="280">
+  <line stroke="#64748b" stroke-width="1.5" x1="30" x2="250" y1="100" y2="100"></line>
+  <!-- Marcas de escala: 40, 60, 75, 85, 100 -->
+  <line stroke="#64748b" stroke-width="1" x1="50" x2="50" y1="95" y2="105"></line><text font-size="10" x="45" y="120">40</text>
+  <line stroke="#64748b" stroke-width="1" x1="90" x2="90" y1="95" y2="105"></line><text font-size="10" x="85" y="120">60</text>
+  <line stroke="#64748b" stroke-width="1" x1="135" x2="135" y1="95" y2="105"></line><text font-size="10" x="130" y="120">75</text>
+  <line stroke="#64748b" stroke-width="1" x1="180" x2="180" y1="95" y2="105"></line><text font-size="10" x="175" y="120">85</text>
+  <line stroke="#64748b" stroke-width="1" x1="230" x2="230" y1="95" y2="105"></line><text font-size="10" x="222" y="120">100</text>
+  <!-- Bigotes y caja -->
+  <line stroke="#1e293b" stroke-width="2" x1="50" x2="90" y1="50" y2="50"></line>
+  <line stroke="#1e293b" stroke-width="2" x1="50" x2="50" y1="35" y2="65"></line>
+  <rect fill="#ede9fe" height="40" stroke="#7c3aed" stroke-width="2" width="90" x="90" y="30"></rect>
+  <line stroke="#ff6b35" stroke-width="3" x1="135" x2="135" y1="30" y2="70"></line>
+  <line stroke="#1e293b" stroke-width="2" x1="180" x2="230" y1="50" y2="50"></line>
+  <line stroke="#1e293b" stroke-width="2" x1="230" x2="230" y1="35" y2="65"></line>
+  <text fill="#7c3aed" font-size="10" font-weight="bold" x="92" y="24">Q1=60</text>
+  <text fill="#ff6b35" font-size="10" font-weight="bold" x="130" y="24">Med=75</text>
+  <text fill="#7c3aed" font-size="10" font-weight="bold" x="175" y="24">Q3=85</text>
+</svg>
+</div>
+<div class="options-grid">
+<div class="option">A) $15$</div>
+<div class="option">B) $25$</div>
+<div class="option">C) $35$</div>
+<div class="option">D) $45$</div>
+</div>
+</div>
+
+</div>
+</body>
+</html>
