@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual Maestro: Técnicas de Conteo y Combinatoria PAA</title>
+    <title>Manual Maestro: Conteo, Permutaciones y Combinatoria PAA | PrepMaster PAA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = {
@@ -13,11 +13,11 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
-        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow-x: hidden; }
+        .slide { display: none; min-height: 100vh; width: 100vw; padding: 1.5rem 1rem; opacity: 0; transition: opacity 0.25s ease; box-sizing: border-box; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
-        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card { background: #0b1120; border-radius: 1.75rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.2); max-width: 860px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 94vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
         .btn-nav:hover { background: #334155; }
         .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
@@ -27,243 +27,283 @@
         .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
         .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
         .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
-        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
-        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
-        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+        .box-dummy { background: rgba(99, 102, 241, 0.08); border-left: 4px solid #818cf8; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; }
+        .box-step { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px 18px; margin: 12px 0; }
+        .box-trap { background: rgba(239, 68, 68, 0.08); border-left: 4px solid #f87171; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fecaca; }
+        .box-hack { background: rgba(245, 158, 11, 0.08); border-left: 4px solid #fbbf24; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fef3c7; }
+        .gfx-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 10px; margin: 10px 0; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
     
-    <!-- Slide 0: Portada -->
+    <!-- Slide 0: Principio de Conteo y Combinatoria para Dummies 🎟️ -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Conteo y Combinatoria PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Técnicas de Conteo y Combinatoria 🧮</h2>
             
-        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
-            Aprende a diferenciar al vuelo si el orden importa (Permutación) o si el orden no importa (Combinación) y a resolver el principio fundamental del conteo con el método de las casillas.
-        </p>
-        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🗳️ ¿Importa el Orden?</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">📦 Método de Casillas</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">⚡ Atajo Factorial</div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Principio de Conteo y Combinatoria para Dummies 🎟️</h2>
+            
+            
+            <p class="text-sm sm:text-base text-slate-300 mb-4 max-w-xl mx-auto leading-relaxed">
+                Descubre cómo saber si un problema es de <b>multiplicación directa (Principio Fundamental)</b>, <b>Permutación (el orden SÍ importa)</b> o <b>Combinación (el orden NO importa)</b> con una sola pregunta clave.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-300 max-w-lg mx-auto mb-4">
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">👔 Combinar Ropa y Menús</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🥇 Permutaciones (Podio Olímpico)</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🥗 Combinaciones (Ensalada de Frutas)</div>
+            </div>
+            
+        <div class="my-4 p-3 bg-slate-900/80 rounded-2xl border border-pink-500/20 max-w-lg mx-auto shadow-md">
+            <div class="text-[11px] font-bold text-pink-400 uppercase tracking-wider mb-1 flex items-center justify-center gap-1.5">
+                <span>📱 Micro-clases en TikTok @prepmasterudg</span>
+            </div>
+            <a href="https://www.tiktok.com/@prepmasterudg" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 transition-all text-xs font-bold">
+                <span>▶️ Ver tips rápidos en TikTok Oficial</span>
+            </a>
         </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            <div class="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 max-w-md mx-auto">
+                <p class="text-xs text-emerald-300 font-semibold">¿Quieres ir directo a los reactivos prácticos?</p>
+                <a href="../practicos/mat/combinatoria.html" class="inline-block mt-1.5 text-xs font-extrabold text-emerald-400 hover:text-emerald-200 underline">
+                    🚀 Abrir 30 Ejercicios Prácticos de Combinatoria →
+                </a>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <div></div>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Combinatoria →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 1 de 6</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Combinatoria para Dummies →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 1: Concepto 1 -->
+    <!-- Slide 1: 1. Principio Fundamental del Conteo: Multiplicar Opciones 👔 -->
     <div class="slide " id="slide-1">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">La Pregunta del Millón: ¿Importa el Orden? 🗳️</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                <div class="bg-slate-900 p-3 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-cyan-300">SÍ importa el orden ➔ PERMUTACIÓN:</p>
-                    <ul class="list-disc list-inside mt-1 space-y-1">
-                        <li>Contraseñas, placas, códigos PIN.</li>
-                        <li>Podios deportivos (1º, 2º, 3º lugar).</li>
-                        <li>Cargos directivos (Presidente, Tesorero).</li>
-                        <li><b>No se divide entre factoriales</b>.</li>
-                    </ul>
-                </div>
-                <div class="bg-slate-900 p-3 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-cyan-300">NO importa el orden ➔ COMBINACIÓN:</p>
-                    <ul class="list-disc list-inside mt-1 space-y-1">
-                        <li>Equipos de trabajo sin jerarquía.</li>
-                        <li>Mano de cartas de póker.</li>
-                        <li>Ensalada de frutas o helados.</li>
-                        <li><b>SE DIVIDE entre el factorial del grupo</b>.</li>
-                    </ul>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Para Dummies #1</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/combinatoria.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Combinatoria</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">1. Principio Fundamental del Conteo: Multiplicar Opciones 👔</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-dummy">
+                    <p class="font-bold text-indigo-300 text-base mb-1">💡 La Elección del Outfit:</p>
+                    <p>Si tienes <b>3 camisas</b> (roja, azul, blanca) y <b>4 pantalones</b> (negro, mezclilla, beige, gris):</p>
+                    <p class="mt-1 text-xs sm:text-sm">Por cada camisa puedes elegir cualquiera de los 4 pantalones. ¿Cuántos atuendos distintos puedes armar?</p>
+                    <p class="text-center font-bold text-cyan-300 bg-slate-900 p-2 rounded-lg my-1 text-base">
+                        $$3 \times 4 = \mathbf{12\text{ atuendos diferentes}}$$
+                    </p>
+                    <p class="text-xs text-slate-300"><b>Regla general:</b> Si una decisión tiene $a$ opciones y la siguiente tiene $b$ opciones, el total es $a \times b$.</p>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 2 de 6</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <!-- Slide 2: 2. La Pregunta del Millón: ¿Importa el Orden o No? 🥇🥗 -->
     <div class="slide " id="slide-2">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Método de Casillas para Códigos 🔍</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">¿Cuántos códigos de 3 dígitos diferentes se pueden formar con los dígitos $1, 2, 3, 4, 5, 6, 7$ si el código debe ser un número IMPAR?</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso con Casillas:</b><br/>
-                    1. La restricción va primero: para ser impar, el último dígito debe ser $1, 3, 5$ ó $7$ (<b>4 opciones</b>).<br/>
-                    2. Para el primer dígito: de los 7 dígitos disponibles ya usamos uno, quedan <b>6 opciones</b>.<br/>
-                    3. Para el segundo dígito: quedan <b>5 opciones</b>.<br/>
-                    4. Total de códigos = $6 \times 5 \times 4 = \mathbf{120 \text{ códigos}}$.
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Diferencia Clave</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/combinatoria.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Combinatoria</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">2. La Pregunta del Millón: ¿Importa el Orden o No? 🥇🥗</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div class="p-3 bg-slate-900 rounded-xl border border-cyan-500/40">
+                        <p class="font-bold text-cyan-300 text-sm mb-1">🥇 PERMUTACIÓN: El Orden SÍ Importa</p>
+                        <p class="text-slate-300">Si cambias el orden de los elementos, el resultado es DISTINTO:</p>
+                        <p class="text-slate-300 mt-1">• Medallas de Oro, Plata y Bronce.</p>
+                        <p class="text-slate-300">• Contraseñas bancarias (1234 no es lo mismo que 4321).</p>
+                        <p class="text-slate-300">• Lugares en una fila o asientos numerados.</p>
+                        <p class="text-cyan-400 font-bold mt-1">Cálculo: $P(n, r) = n \times (n-1) \times (n-2)...$</p>
+                    </div>
+
+                    <div class="p-3 bg-slate-900 rounded-xl border border-emerald-500/40">
+                        <p class="font-bold text-emerald-300 text-sm mb-1">🥗 COMBINACIÓN: El Orden NO Importa</p>
+                        <p class="text-slate-300">Si cambias el orden, sigue siendo exactamente el mismo grupo:</p>
+                        <p class="text-slate-300 mt-1">• Una ensalada de manzana y plátano (es igual que plátano y manzana).</p>
+                        <p class="text-slate-300">• Un comité de 3 personas sin jerarquías.</p>
+                        <p class="text-slate-300">• Escoger 2 sabores de helado en un vaso.</p>
+                        <p class="text-emerald-400 font-bold mt-1">Cálculo: Se divide entre el factorial del grupo: $\frac{n \times (n-1)}{2!}$</p>
+                    </div>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 3 de 6</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 3: Práctica 1 -->
+    <!-- Slide 3: 3. Ejemplo Resuelto Paso a Paso (Comité de Alumnos) ✍️ -->
     <div class="slide " id="slide-3">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuántas opciones de menú existen? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">Un restaurante ofrece un menú corrido que consta de: 3 sopas diferentes, 4 platillos fuertes y 2 postres. ¿Cuántos menús diferentes de 3 tiempos se pueden armar?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'cb1', '¡Correcto! Principio fundamental del conteo: 3 * 4 * 2 = 24 menús diferentes.')">A) 24 menús</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'cb1', '9 sería sumar las opciones (3 + 4 + 2); debes multiplicarlas porque eliges uno de cada categoría.')">B) 9 menús</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'cb1', 'Cálculo erróneo.')">C) 12 menús</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'cb1', 'Revisa la multiplicación 12 * 2.')">D) 18 menús</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Ejemplo de Examen</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-cb1" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Combinaciones y Equipos de Personas →</button>
-            </div>
-        </div>
+        <a href="../practicos/mat/combinatoria.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Combinatoria</span>
+            <span>→</span>
+        </a>
     </div>
-  
-
-    <!-- Slide 4: Concepto 2 -->
-    <div class="slide " id="slide-4">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">El Atajo de la Fracción para Combinaciones $\binom{n}{r}$ ⚡</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <p>No memorices la fórmula factorial completa con factoriales gigantes. Usa el <b>desenrollado simultáneo</b>:</p>
-            <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
-                <span class="text-xl font-bold text-cyan-300">$$\binom{n}{r} = \frac{n \times (n-1) \times \dots (r \text{ factores})}{r \times (r-1) \times \dots \times 1}$$</span>
-            </div>
-            <div class="box-highlight text-xs">
-                Ejemplo: $\binom{8}{3}$ (de 8 personas elegir 3):<br/>
-                Arriba pones 3 números hacia abajo: $8 \times 7 \times 6$.<br/>
-                Abajo pones del 3 al 1: $3 \times 2 \times 1$.<br/>
-                Como $3 \times 2 = 6$, se cancela con el 6 de arriba ➔ $\mathbf{8 \times 7 = 56}$. ¡En 5 segundos!
-            </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
-            </div>
-        </div>
-    </div>
-  
-
-    <!-- Slide 5: Ejemplo Resuelto 2 -->
-    <div class="slide " id="slide-5">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Elección de un Comité 🔍</h2>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">3. Ejemplo Resuelto Paso a Paso (Comité de Alumnos) ✍️</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">De un grupo de 10 amigos, se desea seleccionar a 4 para formar un comité organizador sin jerarquías. ¿De cuántas maneras diferentes se puede elegir el comité?</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. El orden no importa (es un comité sin cargos) ➔ Combinación $\binom{10}{4}$.<br/>
-                    2. Desenrollamos 4 factores:<br/>
-                    $\binom{10}{4} = \frac{10 \times 9 \times 8 \times 7}{4 \times 3 \times 2 \times 1}$.<br/>
-                    3. Cancelaciones: $4 \times 2 = 8$ (se cancela con el 8 de arriba). $9 \div 3 = 3$.<br/>
-                    4. Queda: $10 \times 3 \times 7 = \mathbf{210 \text{ maneras}}$.
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3">
+                    <p class="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">Reactivo Clásico PAA:</p>
+                    <p class="text-sm font-semibold text-slate-100">
+                        De un salón de 10 alumnos, se desea elegir un comité de 3 alumnos para organizar un evento. ¿Cuántos comités distintos se pueden formar?
+                    </p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">Razonamiento para dummies:</p>
+                    <p><b>Paso 1 (¿Importa el orden?):</b> No hay presidente ni tesorero, solo son 3 personas iguales en un grupo $\rightarrow$ <b>Combinación (Dividimos entre $3!$)</b>.</p>
+                    
+                    <p><b>Paso 2 (Armar la multiplicación en cuenta regresiva):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40">
+                        Arriba: 3 pasos hacia atrás desde 10: $10 \times 9 \times 8$.<br/>
+                        Abajo: $3! = 3 \times 2 \times 1 = 6$.
+                    </p>
+
+                    <p><b>Paso 3 (Simplificar antes de multiplicar):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40 text-sm font-bold text-emerald-400">
+                        $$C = \frac{10 \times 9 \times 8}{3 \times 2 \times 1} = 10 \times \frac{9}{3} \times \frac{8}{2} = 10 \times 3 \times 4 = \mathbf{120\text{ comités}}$$
+                    </p>
+                    <p class="text-slate-300">¡Se cancela limpiamente y no necesitas escribir números enormes!</p>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 4 de 6</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 6: Práctica 2 -->
-    <div class="slide " id="slide-6">
+    <!-- Slide 4: 4. Tu Turno: Práctica Guiada #1 🎯 -->
+    <div class="slide " id="slide-4">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuántos comités diferentes se pueden formar? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">En una clase de 7 alumnos, se debe elegir a un equipo de 3 para representarlos en un torneo. ¿Cuántos equipos diferentes se pueden formar?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'cb2', '¡Excelente! C(7, 3) = (7 * 6 * 5) / (3 * 2 * 1). Como 3 * 2 = 6, cancelamos el 6 y queda 7 * 5 = 35 equipos.')">A) 35 equipos</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'cb2', '210 sería si el orden importara (Permutación: 7 * 6 * 5).')">B) 210 equipos</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'cb2', 'Cálculo erróneo.')">C) 21 equipos</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'cb2', 'Revisa la división entre 3! = 6.')">D) 42 equipos</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-cb2" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/combinatoria.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Combinatoria</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">4. Tu Turno: Práctica Guiada #1 🎯</h2>
+            
+            
+            <p class="text-slate-300 text-sm mb-3">En una carrera con 8 competidores, ¿de cuántas formas distintas pueden quedar asignados los tres primeros lugares (Oro, Plata y Bronce)?</p>
+            <div class="space-y-2 max-w-lg mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'com1', '¡Correcto! Aquí el orden SÍ importa (no es lo mismo ganar Oro que Bronce). Para el 1° lugar hay 8 opciones, para el 2° hay 7 y para el 3° hay 6: 8 * 7 * 6 = 336 formas.')">A) $336$ formas</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'com1', '56 sería si fuera combinación dividiendo entre 6, pero aquí el orden sí importa.')">B) $56$ formas</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'com1', '512 es 8^3, pero los corredores no se pueden repetir en dos puestos a la vez.')">C) $512$ formas</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'com1', 'Revisa la multiplicación: 8 * 7 * 6 = 336.')">D) $240$ formas</button>
+            </div>
+            <div id="feedback-com1" class="hidden"></div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 5 de 6</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 7: Resumen -->
-    <div class="slide " id="slide-7">
+    <!-- Slide 5: 5. Machete Resumen y Puente a la Práctica 🚀 -->
+    <div class="slide " id="slide-5">
         <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Combinatoria 📋</h2>
             
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">¿Orden importa?</div>
-                <div class="text-slate-300 mt-1">Sí importa ➔ Casillas directas (Permutación). No importa ➔ Divide entre $r!$ (Combinación).</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Restricciones Primero</div>
-                <div class="text-slate-300 mt-1">Si el número debe ser impar, par o empezar con cierta letra, llena esa casilla primero.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Cancelación en Cruz</div>
-                <div class="text-slate-300 mt-1">En $\binom{n}{r}$, cancela factores arriba y abajo antes de multiplicar para evitar números gigantes.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Simetría $\binom{n}{r} = \binom{n}{n-r}$</div>
-                <div class="text-slate-300 mt-1">Elegir 8 de 10 es lo mismo que descartar 2 de 10: $\binom{10}{8} = \binom{10}{2} = \frac{10 \times 9}{2} = 45$.</div>
-            </div>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Resumen Maestro</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div class="box-highlight text-xs text-slate-300">
-            🎉 <b>¡Módulo completado!</b> Con estos métodos dominarás cualquier problema de conteo en la PAA.
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/combinatoria.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Combinatoria</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">5. Machete Resumen y Puente a la Práctica 🚀</h2>
+            
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left text-xs mb-4">
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">👔 Principio de Conteo</div>
+                    <div class="text-slate-300 mt-1">Multiplica el número de opciones de cada casilla: Opciones 1 $\times$ Opciones 2 $\times$ ...</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🥇 Permutación (Orden SÍ)</div>
+                    <div class="text-slate-300 mt-1">Puestos, cargos jerárquicos, contraseñas, filas. Multiplica en reversa sin dividir.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🥗 Combinación (Orden NO)</div>
+                    <div class="text-slate-300 mt-1">Comités, parejas, grupos de frutas, selección de objetos. Divide entre el factorial del grupo.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">⚡ Simplifica Antes</div>
+                    <div class="text-slate-300 mt-1">En las combinaciones cancela factores arriba y abajo antes de multiplicar para ahorrar tiempo.</div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gradient-to-r from-cyan-950/70 via-blue-950/60 to-indigo-950/70 rounded-2xl border border-cyan-500/40 text-center my-3 shadow-xl">
+                <h3 class="text-base sm:text-lg font-black text-cyan-300 mb-1">🎉 ¡Dominaste Conteo y Combinatoria!</h3>
+                <p class="text-xs sm:text-sm text-slate-300 mb-3">Pon a prueba tu lógica resolviendo los 30 ejercicios prácticos del tema.</p>
+                <a href="../practicos/mat/combinatoria.html" class="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-slate-950 font-black text-sm sm:text-base hover:brightness-110 shadow-lg shadow-emerald-500/30 hover:scale-[1.01] transition-all">
+                    <span>🚀 Poner a prueba en 30 Ejercicios Prácticos de Combinatoria</span>
+                    <span>→</span>
+                </a>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 6 de 6</div>
                 <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
-  
+
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -279,6 +319,7 @@
             });
             const progressPercent = ((currentSlide + 1) / slides.length) * 100;
             progressBar.style.width = `${progressPercent}%`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         }
 
@@ -291,11 +332,11 @@
             if (isCorrect) {
                 btn.classList.add('option-correct');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
-                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
-                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa típica:</b><br/>${explanation}`;
             }
             if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise([fb]);
@@ -305,6 +346,12 @@
         function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
         function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
         function goToStart() { currentSlide = 0; updateUI(); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
         updateUI();
     </script>
 </body>

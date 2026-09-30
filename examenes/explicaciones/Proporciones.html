@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual Maestro: Razones y Proporciones PAA</title>
+    <title>Manual Maestro: Razones y Proporciones PAA | PrepMaster PAA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = {
@@ -13,11 +13,11 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
-        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow-x: hidden; }
+        .slide { display: none; min-height: 100vh; width: 100vw; padding: 1.5rem 1rem; opacity: 0; transition: opacity 0.25s ease; box-sizing: border-box; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
-        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card { background: #0b1120; border-radius: 1.75rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.2); max-width: 860px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 94vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
         .btn-nav:hover { background: #334155; }
         .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
@@ -27,224 +27,372 @@
         .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
         .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
         .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
-        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
-        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
-        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+        .box-dummy { background: rgba(99, 102, 241, 0.08); border-left: 4px solid #818cf8; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; }
+        .box-step { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px 18px; margin: 12px 0; }
+        .box-trap { background: rgba(239, 68, 68, 0.08); border-left: 4px solid #f87171; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fecaca; }
+        .box-hack { background: rgba(245, 158, 11, 0.08); border-left: 4px solid #fbbf24; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fef3c7; }
+        .gfx-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 10px; margin: 10px 0; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
     
-    <!-- Slide 0: Portada -->
+    <!-- Slide 0: Razones y Proporciones: El Truco de la 'k' ⚖️ -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Aritmética PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Razones y Proporciones ⚖️</h2>
             
-        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
-            Domina el método de la constante de proporcionalidad ($k$), repartos directamente proporcionales e inversamente proporcionales y mezclas.
-        </p>
-        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🔑 La Constante k</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🧪 Razones de Mezcla</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">⚖️ Reparto Equitativo</div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Razones y Proporciones: El Truco de la 'k' ⚖️</h2>
+            
+            
+            <p class="text-sm sm:text-base text-slate-300 mb-4 max-w-xl mx-auto leading-relaxed">
+                Descubre por qué una razón $3:5$ <b>NO significa que haya solo 3 y 5</b>. Aprende el método de la constante de proporción $k$ con el que resolverás cualquier reparto de dinero, mezclas químicas o lados de triángulos en 15 segundos.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-300 max-w-lg mx-auto mb-4">
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🔑 El Arma Secreta 'k'</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🍰 Suma de Partes</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🔗 Razones Triples (A:B:C)</div>
+            </div>
+            
+        <div class="my-4 p-3 bg-slate-900/80 rounded-2xl border border-pink-500/20 max-w-lg mx-auto shadow-md">
+            <div class="text-[11px] font-bold text-pink-400 uppercase tracking-wider mb-1 flex items-center justify-center gap-1.5">
+                <span>📱 Micro-clases en TikTok @prepmasterudg</span>
+            </div>
+            <a href="https://www.tiktok.com/@prepmasterudg" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 transition-all text-xs font-bold">
+                <span>▶️ Ver tips rápidos en TikTok Oficial</span>
+            </a>
         </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            <div class="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 max-w-md mx-auto">
+                <p class="text-xs text-emerald-300 font-semibold">¿Quieres medir tu nivel con 30 reactivos tipo PAA?</p>
+                <a href="../practicos/mat/regla3.html" class="inline-block mt-1.5 text-xs font-extrabold text-emerald-400 hover:text-emerald-200 underline">
+                    🚀 Abrir Práctica de Razones y Regla de Tres →
+                </a>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <div></div>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Proporciones →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 1 de 8</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Proporciones para Dummies →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 1: Concepto 1 -->
+    <!-- Slide 1: 1. ¿Qué es una razón en español simple? ☕ -->
     <div class="slide " id="slide-1">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">El Atajo de la Constante "k" 🔑</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <p>Cuando un problema de la PAA dice: <i>"Dos cantidades están en razón $3:5$"</i>, conviértelas inmediatamente a:</p>
-            <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
-                <span class="text-xl font-bold text-cyan-300">$$\text{Cantidad}_1 = 3k, \quad \text{Cantidad}_2 = 5k$$</span>
-            </div>
-            <div class="box-highlight text-xs">
-                Suma las partes: $3k + 5k = 8k = \text{Total}$. Despejas $k = \frac{\text{Total}}{8}$ y multiplicas para encontrar cualquier parte. ¡Cero sistemas complejos!
-            </div>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Para Dummies #1</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/regla3.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Razones y Regla de 3</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">1. ¿Qué es una razón en español simple? ☕</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-dummy">
+                    <p class="font-bold text-indigo-300 text-base mb-1">💡 La Receta del Café con Leche:</p>
+                    <p>Una <b>razón</b> es solo una comparación entre dos cosas: <i>"Por cada taza de café, pongo 2 cucharadas de azúcar"</i>. Se escribe $1:2$ o $\frac{1}{2}$.</p>
+                    <p class="mt-1 text-xs sm:text-sm">Si preparas una jarra grande con 4 tazas de café, ¿cuánta azúcar le echas? $4 \times 2 = \mathbf{8\text{ cucharadas}}$. La proporción se mantiene intacta.</p>
+                </div>
+
+                <div class="box-trap text-xs">
+                    <p class="font-bold text-rose-300 mb-1">⚠️ El Gran Malentendido en la PAA:</p>
+                    <p>Si un problema dice: <i>"En un salón, la razón de hombres a mujeres es de 3 a 5"</i>:</p>
+                    <p>• <b>NO</b> significa que haya solo 3 hombres y 5 mujeres (el salón no tiene solo 8 alumnos).</p>
+                    <p>• Significa que por cada grupo de 3 hombres, hay un grupo de 5 mujeres. Podría haber 30 hombres y 50 mujeres, o 15 hombres y 25 mujeres.</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 2 de 8</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <!-- Slide 2: 2. El Método Infalible de la 'k': Cero Ecuaciones Difíciles 🔑 -->
     <div class="slide " id="slide-2">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Reparto Proporcional con k 🔍</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">En una escuela, la razón de mujeres a hombres es de $7 : 4$. Si hay un total de 660 estudiantes, ¿cuántas mujeres más que hombres hay?</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. Mujeres = $7k$, Hombres = $4k$.<br/>
-                    2. Ecuación: $7k + 4k = 660 \implies 11k = 660 \implies k = 60$.<br/>
-                    3. La diferencia pedida es Mujeres menos Hombres: $7k - 4k = 3k$.<br/>
-                    4. Diferencia = $3(60) = \mathbf{180 \text{ mujeres más}}$.
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Técnica Maestra</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/regla3.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Razones y Regla de 3</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">2. El Método Infalible de la 'k': Cero Ecuaciones Difíciles 🔑</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">¿Cómo resolver cualquier problema de razones en 3 pasos?</p>
+                    <p>A cada número de la razón pégale la letra $\mathbf{k}$ (que representa el tamaño de cada paquetito):</p>
+                    <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 text-slate-200">
+                        Si la razón es $3:5$, entonces:<br/>
+                        • Cantidad 1 = $\mathbf{3k}$<br/>
+                        • Cantidad 2 = $\mathbf{5k}$
+                    </div>
+
+                    <p class="font-bold text-cyan-300 mt-2">Ejemplo en acción:</p>
+                    <p class="text-slate-300">Si en el salón con razón $3:5$ hay <b>48 alumnos en total</b>:</p>
+                    <div class="pl-3 border-l-2 border-cyan-500/40 space-y-1">
+                        <p><b>Paso 1 (Sumar las partes):</b> $3k + 5k = 48$</p>
+                        <p><b>Paso 2 (Despejar k):</b> $8k = 48 \implies k = \frac{48}{8} = \mathbf{6}$ (cada paquete tiene 6 alumnos).</p>
+                        <p><b>Paso 3 (Calcular cada grupo):</b><br/>
+                        • Hombres = $3k = 3(6) = \mathbf{18\text{ hombres}}$.<br/>
+                        • Mujeres = $5k = 5(6) = \mathbf{30\text{ mujeres}}$.
+                        </p>
+                    </div>
+                    <p class="text-emerald-400 font-bold">Comprobación: $18 + 30 = 48$ alumnos. ¡Resuelto en 15 segundos!</p>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 3 de 8</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 3: Práctica 1 -->
+    <!-- Slide 3: 3. Razones Triples: Reparto de Herencias y Ganancias 💰 -->
     <div class="slide " id="slide-3">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es la medida del lado intermedio? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">Los lados de un triángulo están en la razón $3 : 5 : 7$. Si el perímetro total del triángulo es de 75 cm, ¿cuánto mide el lado de longitud intermedia?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'pr1', '¡Correcto! 3k + 5k + 7k = 15k = 75 cm -> k = 5. El lado intermedio es 5k = 5(5) = 25 cm.')">A) 25 cm</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'pr1', '15 cm corresponde al lado menor (3k).')">B) 15 cm</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'pr1', '35 cm corresponde al lado mayor (7k).')">C) 35 cm</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'pr1', 'Cálculo incorrecto.')">D) 20 cm</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Problema Típico PAA</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-pr1" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Razón Inversa y Mezclas →</button>
-            </div>
-        </div>
+        <a href="../practicos/mat/regla3.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Razones y Regla de 3</span>
+            <span>→</span>
+        </a>
     </div>
-  
-
-    <!-- Slide 4: Concepto 2 -->
-    <div class="slide " id="slide-4">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Proporcionalidad Inversa 🔄</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <p>Dos variables son <b>inversamente proporcionales</b> cuando su producto permanece constante:</p>
-            <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
-                <span class="text-xl font-bold text-cyan-300">$$x_1 \cdot y_1 = x_2 \cdot y_2 = k$$</span>
-            </div>
-            <div class="box-highlight text-xs">
-                A más obreros ➔ menos días. A más velocidad ➔ menos tiempo de viaje. Si una variable se duplica, la otra se reduce a la mitad.
-            </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
-            </div>
-        </div>
-    </div>
-  
-
-    <!-- Slide 5: Ejemplo Resuelto 2 -->
-    <div class="slide " id="slide-5">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Tiempo y Velocidad 🔍</h2>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">3. Razones Triples: Reparto de Herencias y Ganancias 💰</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">Un automóvil viaja a una velocidad constante de 60 km/h y tarda 4 horas en completar un recorrido. Si desea hacer el mismo recorrido en solo 3 horas, ¿a qué velocidad constante debe circular?</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución:</b><br/>
-                    Distancia total constante = $v_1 \cdot t_1 = 60 \times 4 = 240 \text{ km}$.<br/>
-                    Nueva velocidad = $\frac{\text{Distancia}}{t_2} = \frac{240}{3} = \mathbf{80 \text{ km/h}}$.
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3">
+                    <p class="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">Reactivo Frecuente del Examen:</p>
+                    <p class="text-sm font-semibold text-slate-100">
+                        Tres inversionistas se reparten una ganancia de $180,000 en la razón $2:3:4$. ¿Cuánto dinero recibe el inversionista mayoritario?
+                    </p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">Resolución con la técnica de la $k$:</p>
+                    <p><b>Paso 1:</b> Asignamos las partes con $k$:</p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40">
+                        Socio 1 = $2k$ | Socio 2 = $3k$ | Socio 3 = $4k$
+                    </p>
+
+                    <p><b>Paso 2 (Sumar todas las partes e igualar al total):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40">
+                        $$2k + 3k + 4k = 180,000$$
+                        $$9k = 180,000 \implies k = \frac{180,000}{9} = \mathbf{\$20,000}$$
+                    </p>
+
+                    <p><b>Paso 3 (Responder lo que pide la pregunta):</b> Piden el <i>inversionista mayoritario</i> ($4k$):</p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40 text-sm font-bold text-emerald-400">
+                        $$\text{Socio Mayoritario} = 4(20,000) = \mathbf{\$80,000}$$
+                    </p>
+                    <p class="text-slate-300">Socio 1 se lleva $40,000 y Socio 2 se lleva $60,000. Suma: $40k + 60k + 80k = 180k$.</p>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 4 de 8</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 6: Práctica 2 -->
+    <!-- Slide 4: 4. Tu Turno: Práctica Guiada #1 🎯 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/regla3.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Razones y Regla de 3</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">4. Tu Turno: Práctica Guiada #1 🎯</h2>
+            
+            
+            <p class="text-slate-300 text-sm mb-3">Los lados de un triángulo están en la razón $3:4:5$. Si el perímetro total del triángulo es de 60 cm, ¿cuánto mide el lado más largo?</p>
+            <div class="space-y-2 max-w-lg mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'prop1', '¡Correcto! Planteamos 3k + 4k + 5k = 60. Entonces 12k = 60 -> k = 5. El lado mayor es 5k = 5 * 5 = 25 cm. (Los otros lados miden 15 cm y 20 cm, y 15+20+25 = 60).')">A) $25\text{ cm}$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'prop1', '20 cm corresponde al lado intermedio (4k = 20), no al mayor.')">B) $20\text{ cm}$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'prop1', '15 cm es el lado menor (3k = 15).')">C) $15\text{ cm}$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'prop1', 'Revisa la suma: 3k + 4k + 5k = 12k.')">D) $30\text{ cm}$</button>
+            </div>
+            <div id="feedback-prop1" class="hidden"></div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 5 de 8</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: 5. Hack Avanzado: Unificar Dos Razones Encadenadas 🔗 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Reactivo Élite PAA</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/regla3.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Razones y Regla de 3</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">5. Hack Avanzado: Unificar Dos Razones Encadenadas 🔗</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-hack">
+                    <p class="font-bold text-amber-300 text-sm mb-1">⚡ Razones Encadenadas ($A:B$ y $B:C$):</p>
+                    <p class="text-xs sm:text-sm">En reactivos avanzados te dan dos razones separadas donde una letra se repite:</p>
+                    <p class="text-xs text-amber-200 mt-1"><i>"La razón entre $A$ y $B$ es $2:3$, y la razón entre $B$ y $C$ es $4:5$. ¿Cuál es la razón entre $A$ y $C$?"</i></p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300">El Secreto: Emparejar la letra común ($B$):</p>
+                    <p>En la primera razón $B = 3$. En la segunda razón $B = 4$.</p>
+                    <p>Buscamos el mínimo común múltiplo entre 3 y 4, que es <b>12</b>:</p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40">
+                        • Multiplicamos la primera razón $(2:3)$ por 4 $\rightarrow \mathbf{A:B = 8:12}$.<br/>
+                        • Multiplicamos la segunda razón $(4:5)$ por 3 $\rightarrow \mathbf{B:C = 12:15}$.
+                    </p>
+                    <p class="font-bold text-emerald-400">Ahora que $B$ vale 12 en ambas, unificamos: $A:B:C = 8:12:15$.</p>
+                    <p class="text-slate-200">Por lo tanto, la razón directa entre $A$ y $C$ es $\mathbf{8:15}$. ¡Resuelto con elegancia matemática!</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 6 de 8</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: 6. Tu Turno: Práctica Guiada #2 🎯 -->
     <div class="slide " id="slide-6">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuántos días tardará el nuevo equipo? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">Si 6 albañiles construyen una barda perimetral en 10 días, ¿cuántos días tardarán 15 albañiles con el mismo ritmo de trabajo?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'pr2', '¡Excelente! Producto constante: 6 * 10 = 60 persona-días. Días = 60 / 15 = 4 días.')">A) 4 días</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'pr2', 'Error: si hay más albañiles deben tardar MENOS tiempo, no más.')">B) 25 días</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'pr2', 'Cálculo incorrecto.')">C) 5 días</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'pr2', 'Revisa el producto 6 * 10 = 60.')">D) 6 días</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-pr2" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/regla3.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Razones y Regla de 3</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">6. Tu Turno: Práctica Guiada #2 🎯</h2>
+            
+            
+            <p class="text-slate-300 text-sm mb-3">En una canasta con manzanas y naranjas, por cada 4 manzanas hay 7 naranjas. Si en total hay 55 frutas en la canasta, ¿cuántas naranjas MÁS que manzanas hay?</p>
+            <div class="space-y-2 max-w-lg mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'prop2', '¡Excelente lectura! 4k + 7k = 55 -> 11k = 55 -> k = 5. Manzanas = 4*5 = 20. Naranjas = 7*5 = 35. La pregunta no pide el total de naranjas, pide la DIFERENCIA: 35 - 20 = 15 naranjas más. (O directamente: 7k - 4k = 3k = 3*5 = 15).')">A) $15$ naranjas más</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'prop2', '35 es el número total de naranjas, pero la pregunta pide cuántas naranjas MÁS que manzanas hay.')">B) $35$ naranjas</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'prop2', '20 es el número de manzanas.')">C) $20$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'prop2', 'Revisa la resta entre 35 y 20.')">D) $11$</button>
+            </div>
+            <div id="feedback-prop2" class="hidden"></div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 7 de 8</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 7: Resumen -->
+    <!-- Slide 7: 7. Machete Resumen y Puente a la Práctica 🚀 -->
     <div class="slide " id="slide-7">
         <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Razones y Proporciones 📋</h2>
             
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">El Truco de la "k"</div>
-                <div class="text-slate-300 mt-1">Razón $a:b$ ➔ Cantidades $ak$ y $bk$. Suma e iguala al total.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Proporción Directa</div>
-                <div class="text-slate-300 mt-1">Cociente constante: $\frac{y_1}{x_1} = \frac{y_2}{x_2}$. A más, más.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Proporción Inversa</div>
-                <div class="text-slate-300 mt-1">Producto constante: $x_1 y_1 = x_2 y_2$. A más, menos.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Verificación Rápida</div>
-                <div class="text-slate-300 mt-1">Reemplaza $k$ en las partes y verifica que sumen el total original.</div>
-            </div>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Resumen Maestro</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div class="box-highlight text-xs text-slate-300">
-            🎉 <b>¡Módulo completado!</b> Las razones y repartos proporcionales ya no te quitarán tiempo.
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/regla3.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Razones y Regla de 3</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">7. Machete Resumen y Puente a la Práctica 🚀</h2>
+            
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left text-xs mb-4">
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🔑 La Constante 'k'</div>
+                    <div class="text-slate-300 mt-1">Convierte la razón $a:b$ en cantidades algebraicas reales: $ak$ y $bk$.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🍰 Reparto Proporcional</div>
+                    <div class="text-slate-300 mt-1">Suma los coeficientes con $k$, iguala al total, despeja $k$ y multiplica por cada parte.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">⚠️ Lee la Pregunta Final</div>
+                    <div class="text-slate-300 mt-1">Verifica si piden una parte, el socio mayor, la diferencia o la suma.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🔗 Unificar Razones</div>
+                    <div class="text-slate-300 mt-1">Iguala el término común usando su MCM para obtener la proporción global $A:B:C$.</div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gradient-to-r from-cyan-950/70 via-blue-950/60 to-indigo-950/70 rounded-2xl border border-cyan-500/40 text-center my-3 shadow-xl">
+                <h3 class="text-base sm:text-lg font-black text-cyan-300 mb-1">🎉 ¡Dominaste Razones y Proporciones!</h3>
+                <p class="text-xs sm:text-sm text-slate-300 mb-3">Completa el entrenamiento con los ejercicios prácticos de razones y regla de tres.</p>
+                <a href="../practicos/mat/regla3.html" class="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-slate-950 font-black text-sm sm:text-base hover:brightness-110 shadow-lg shadow-emerald-500/30 hover:scale-[1.01] transition-all">
+                    <span>🚀 Ir a 30 Ejercicios Prácticos de Razones y Regla de Tres</span>
+                    <span>→</span>
+                </a>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 8 de 8</div>
                 <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
-  
+
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -260,6 +408,7 @@
             });
             const progressPercent = ((currentSlide + 1) / slides.length) * 100;
             progressBar.style.width = `${progressPercent}%`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         }
 
@@ -272,11 +421,11 @@
             if (isCorrect) {
                 btn.classList.add('option-correct');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
-                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
-                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa típica:</b><br/>${explanation}`;
             }
             if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise([fb]);
@@ -286,6 +435,12 @@
         function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
         function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
         function goToStart() { currentSlide = 0; updateUI(); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
         updateUI();
     </script>
 </body>

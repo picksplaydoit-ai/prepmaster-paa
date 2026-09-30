@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual Maestro: Porcentajes y Descuentos PAA</title>
+    <title>Manual Maestro: Porcentajes e Incrementos PAA | PrepMaster PAA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = {
@@ -13,11 +13,11 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
-        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow-x: hidden; }
+        .slide { display: none; min-height: 100vh; width: 100vw; padding: 1.5rem 1rem; opacity: 0; transition: opacity 0.25s ease; box-sizing: border-box; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
-        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card { background: #0b1120; border-radius: 1.75rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.2); max-width: 860px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 94vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
         .btn-nav:hover { background: #334155; }
         .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
@@ -27,230 +27,469 @@
         .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
         .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
         .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
-        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
-        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
-        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+        .box-dummy { background: rgba(99, 102, 241, 0.08); border-left: 4px solid #818cf8; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; }
+        .box-step { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px 18px; margin: 12px 0; }
+        .box-trap { background: rgba(239, 68, 68, 0.08); border-left: 4px solid #f87171; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fecaca; }
+        .box-hack { background: rgba(245, 158, 11, 0.08); border-left: 4px solid #fbbf24; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fef3c7; }
+        .gfx-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 10px; margin: 10px 0; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
     
-    <!-- Slide 0: Portada -->
+    <!-- Slide 0: Porcentajes e Incrementos sin Fórmulas Raras 📈 -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Aritmética PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Porcentajes y Descuentos Sucesivos 🏷️</h2>
             
-        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
-            Aprende a calcular aumentos, rebajas consecutivas sin sumar porcentajes directamente y a despejar el valor original antes del IVA o descuento.
-        </p>
-        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">✖️ Factor Decimal</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">📉 Descuentos Dobles</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🔍 Precio Original</div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Porcentajes e Incrementos sin Fórmulas Raras 📈</h2>
+            
+            
+            <p class="text-sm sm:text-base text-slate-300 mb-4 max-w-xl mx-auto leading-relaxed">
+                El tema de porcentajes aparece en al menos 4 a 6 reactivos de la PAA. Aprende a calcular el 10%, 15%, 25% y 50% mentalmente en 3 segundos, esquiva la trampa de los descuentos sucesivos y domina el porcentaje inverso.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-300 max-w-lg mx-auto mb-4">
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🧠 Atajo Mental 10% / 1%</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🏷️ Descuentos Sucesivos</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🔄 Porcentaje Inverso</div>
+            </div>
+            
+        <div class="my-4 p-3 bg-slate-900/80 rounded-2xl border border-pink-500/20 max-w-lg mx-auto shadow-md">
+            <div class="text-[11px] font-bold text-pink-400 uppercase tracking-wider mb-1 flex items-center justify-center gap-1.5">
+                <span>📱 Micro-clases en TikTok @prepmasterudg</span>
+            </div>
+            <a href="https://www.tiktok.com/@prepmasterudg" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 transition-all text-xs font-bold">
+                <span>▶️ Ver tips rápidos en TikTok Oficial</span>
+            </a>
         </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            <div class="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 max-w-md mx-auto">
+                <p class="text-xs text-emerald-300 font-semibold">¿Quieres ir directo a resolver problemas de examen?</p>
+                <a href="../practicos/mat/operaciones.html" class="inline-block mt-1.5 text-xs font-extrabold text-emerald-400 hover:text-emerald-200 underline">
+                    🚀 Abrir 30 Ejercicios Prácticos de Operaciones y Porcentajes →
+                </a>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <div></div>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Porcentajes →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 1 de 10</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Porcentajes para Dummies →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 1: Concepto 1 -->
+    <!-- Slide 1: 1. ¿Qué es un porcentaje en español humano? 💡 -->
     <div class="slide " id="slide-1">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">El Atajo del Factor Multiplicador ⚡</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <p>Olvídate de la regla de tres de dos pasos. Aplica el <b>factor multiplicador directo</b>:</p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                <div class="bg-slate-900 p-3 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-cyan-300">Descuento de $X\%$:</p>
-                    <p class="text-slate-300 mt-1">Multiplica por $(1 - \frac{X}{100})$:</p>
-                    <p class="text-emerald-400 mt-1">Descuento de 20% ➔ Multiplica por <b>0.80</b>.<br/>Descuento de 15% ➔ Multiplica por <b>0.85</b>.</p>
-                </div>
-                <div class="bg-slate-900 p-3 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-cyan-300">Aumento / IVA de $Y\%$:</p>
-                    <p class="text-slate-300 mt-1">Multiplica por $(1 + \frac{Y}{100})$:</p>
-                    <p class="text-emerald-400 mt-1">Aumento de 16% (IVA) ➔ Multiplica por <b>1.16</b>.<br/>Aumento de 25% ➔ Multiplica por <b>1.25</b>.</p>
-                </div>
-            </div>
-            <div class="box-warning text-xs">
-                ⚠️ <b>Trampa Clásica PAA:</b> Un descuento del 20% seguido de otro del 10% <b>NO es un descuento del 30%</b>. Se multiplican los factores: $0.80 \times 0.90 = 0.72$ (pagas el 72%, es decir, el descuento real es de solo <b>28%</b>).
-            </div>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Para Dummies #1</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/operaciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Operaciones y Porcentajes</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">1. ¿Qué es un porcentaje en español humano? 💡</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-dummy">
+                    <p class="font-bold text-indigo-300 text-base mb-1">💡 La Regla de los Cien Billetes:</p>
+                    <p><b>Porcentaje</b> viene de <i>"por cada ciento"</i>. Imagina que tienes un montón de $100 pesos:</p>
+                    <p class="mt-1 text-xs sm:text-sm">Si una tienda te da el <b>20% de descuento</b>, significa que por cada billete de $100 que gastes, ellos te perdonan $20 y tú solo pagas $80.</p>
+                </div>
+
+                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center">
+                    <p class="text-xs text-slate-400 uppercase tracking-wider mb-1 font-bold">Las Tres Formas del Mismo Número</p>
+                    <div class="grid grid-cols-3 gap-2 text-xs sm:text-sm font-bold text-cyan-300">
+                        <div class="p-2 bg-slate-800/80 rounded-lg">Porcentaje: $25\%$</div>
+                        <div class="p-2 bg-slate-800/80 rounded-lg">Fracción: $\frac{25}{100} = \frac{1}{4}$</div>
+                        <div class="p-2 bg-slate-800/80 rounded-lg">Decimal: $0.25$</div>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-2">Para convertir cualquier porcentaje a decimal: solo recorre el punto <b>dos lugares a la izquierda</b> ($7\% = 0.07$, $15\% = 0.15$).</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 2 de 10</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <!-- Slide 2: 2. Los Porcentajes Mágicos que se Calculan Mentalmente 🧠 -->
     <div class="slide " id="slide-2">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Descuentos Consecutivos 🔍</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">Una tienda ofrece una chamarra con precio de lista de $1,200 con un 25% de descuento, y en caja aplican un 10% adicional sobre el precio ya rebajado. ¿Cuánto se paga en caja?</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución en una sola línea:</b><br/>
-                    Precio Final = $1,200 \times (0.75) \times (0.90)$<br/>
-                    1. $1,200 \times 0.75 = 900$<br/>
-                    2. $900 \times 0.90 = \mathbf{\$810}$.
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Atajos Mentales</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/operaciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Operaciones y Porcentajes</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">2. Los Porcentajes Mágicos que se Calculan Mentalmente 🧠</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>En la PAA no tienes calculadora. Si te pones a hacer multiplicaciones con decimales en papel vas a perder tiempo valioso. Usa estos 4 atajos mentales:</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                    <div class="box-step">
+                        <p class="font-bold text-cyan-300 text-sm mb-1">El 50% y el 25%</p>
+                        <p>• <b>50%:</b> Es la mitad exacta (divide entre 2). El 50% de 80 es 40.</p>
+                        <p>• <b>25%:</b> Es la mitad de la mitad (divide entre 4). El 25% de 80 es 20.</p>
+                    </div>
+                    <div class="box-step">
+                        <p class="font-bold text-cyan-300 text-sm mb-1">El 10% y el 5%</p>
+                        <p>• <b>10%:</b> Solo quítale un cero o recorre el punto un lugar. El 10% de 240 es 24.</p>
+                        <p>• <b>5%:</b> Es la mitad del 10%. Si el 10% es 24, el 5% es 12.</p>
+                    </div>
+                </div>
+
+                <div class="box-dummy text-xs">
+                    <p class="font-bold text-indigo-300 text-sm mb-1">🔥 El Truco Lego (Armar cualquier porcentaje):</p>
+                    <p>¿Cuánto es el <b>15% de 180</b>?</p>
+                    <p>• 10% de 180 = 18.</p>
+                    <p>• 5% de 180 = 9 (la mitad de 18).</p>
+                    <p>• Sumamos: $18 + 9 = \mathbf{27}$. ¡Listo! Lo calculaste en 4 segundos sin rayar la hoja.</p>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 3 de 10</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 3: Práctica 1 -->
+    <!-- Slide 3: 3. La Trampa Mortal: Aumentos y Descuentos Sucesivos 🏷️ -->
     <div class="slide " id="slide-3">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el descuento único equivalente? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">Si un artículo sufre dos aumentos sucesivos del 20% y del 30%, ¿cuál es el porcentaje total de incremento sobre el precio original?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'por1', '¡Exacto! Factor = 1.20 * 1.30 = 1.56, lo que representa un aumento del 56% (no del 50%).')">A) 56%</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'por1', 'Trampa común: no sumes 20 + 30; el segundo porcentaje actúa sobre el nuevo valor ya aumentado.')">B) 50%</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'por1', 'Cálculo erróneo.')">C) 60%</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'por1', 'Revisa la multiplicación de 1.20 * 1.30.')">D) 52%</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Trampa PAA Clásica</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-por1" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Cálculo del Precio Original →</button>
-            </div>
-        </div>
+        <a href="../practicos/mat/operaciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Operaciones y Porcentajes</span>
+            <span>→</span>
+        </a>
     </div>
-  
-
-    <!-- Slide 4: Concepto 2 -->
-    <div class="slide " id="slide-4">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Despeje Hacia Atrás: Encontrar el Precio Original 🔙</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <p>Cuando te dan el <b>precio final con descuento</b> y te piden el precio original, el error número uno es calcular el porcentaje sobre el precio final:</p>
-            <div class="box-highlight text-xs space-y-1">
-                <p><b>Fórmula de Despeje:</b> $\text{Precio Original} = \frac{\text{Precio Final}}{\text{Factor}}$</p>
-                <p>Ejemplo: Si pagaste $400 con un 20% de descuento incluido, <b>NO</b> le sumes el 20% a 400. Divide entre 0.80: $\frac{400}{0.80} = 500$.</p>
-            </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
-            </div>
-        </div>
-    </div>
-  
-
-    <!-- Slide 5: Ejemplo Resuelto 2 -->
-    <div class="slide " id="slide-5">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Despeje del Precio Original 🔍</h2>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">3. La Trampa Mortal: Aumentos y Descuentos Sucesivos 🏷️</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">Un televisor costó $9,280 con el 16% de IVA incluido. ¿Cuál era el precio del televisor antes del impuesto?</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Correcta:</b><br/>
-                    $\text{Precio Sin IVA} = \frac{\$9,280}{1.16} = \mathbf{\$8,000}$.<br/>
-                    <i>Comprobación:</i> $8,000 \times 0.16 = 1,280$ de IVA ➔ $8,000 + 1,280 = 9,280$.
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-trap">
+                    <p class="font-bold text-rose-300 text-sm mb-1">🚨 La pregunta con trampa más repetida:</p>
+                    <p class="italic text-xs text-slate-200">"Un par de tenis cuesta $100. Sube un 20% y luego la tienda ofrece un 20% de descuento. ¿El precio final vuelve a ser $100?"</p>
+                    <p class="font-bold text-rose-300 mt-1">¡NO! El 90% responde que queda igual y saca 0 puntos.</p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">Mira el desglose paso a paso:</p>
+                    <p><b>1. Precio inicial:</b> $100.</p>
+                    <p><b>2. Sube 20%:</b> $100 + 20 = \mathbf{\$120}$. (Tu nuevo precio base es $120).</p>
+                    <p><b>3. Descuento del 20%:</b> El 20% de $120 NO es $20, ¡es $120 \times 0.20 = \mathbf{\$24}$!</p>
+                    <p><b>4. Precio final:</b> $$120 - \$24 = \mathbf{\$96}$.</p>
+                    <p class="text-amber-300 font-bold">¡Los tenis quedaron más baratos que al inicio ($96)! Moraleja: Los porcentajes sucesivos NUNCA se suman ni se restan directo.</p>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 4 de 10</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 6: Práctica 2 -->
+    <!-- Slide 4: 4. El Multiplicador Decimal (Para Resolver en 10 Segundos) ⚡ -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Herramienta Pro</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/operaciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Operaciones y Porcentajes</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">4. El Multiplicador Decimal (Para Resolver en 10 Segundos) ⚡</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-hack">
+                    <p class="font-bold text-amber-300 text-sm mb-1">⚡ El Factor Multiplicador:</p>
+                    <p class="text-xs sm:text-sm">En vez de calcular el descuento y luego restarlo en dos pasos separados, hazlo en <b>una sola multiplicación</b>:</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                    <div class="p-3 bg-slate-900 rounded-xl border border-slate-700">
+                        <p class="font-bold text-rose-400 mb-1">🏷️ Si hay DESCUENTO:</p>
+                        <p>Réstale al 100% el descuento y quédate con lo que pagas:</p>
+                        <p class="text-slate-300 mt-1">• 20% de descuento $\rightarrow$ pagas el 80% $(\times 0.80)$.</p>
+                        <p class="text-slate-300">• 35% de descuento $\rightarrow$ pagas el 65% $(\times 0.65)$.</p>
+                    </div>
+
+                    <div class="p-3 bg-slate-900 rounded-xl border border-slate-700">
+                        <p class="font-bold text-emerald-400 mb-1">📈 Si hay AUMENTO o IVA:</p>
+                        <p>Súmale al 100% el incremento:</p>
+                        <p class="text-slate-300 mt-1">• 16% de IVA $\rightarrow$ pagas el 116% $(\times 1.16)$.</p>
+                        <p class="text-slate-300">• 25% de propina $\rightarrow$ pagas el 125% $(\times 1.25)$.</p>
+                    </div>
+                </div>
+
+                <div class="box-step text-xs">
+                    <p class="font-bold text-cyan-300">Ejemplo relámpago:</p>
+                    <p>Una mochila de $400 tiene 15% de descuento: multiplicas $400 \times 0.85 = \mathbf{\$340}$. ¡Listo en un solo renglón!</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 5 de 10</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: 5. Ejemplo Resuelto Paso a Paso: El Porcentaje Inverso 🔄 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Clave</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/operaciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Operaciones y Porcentajes</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">5. Ejemplo Resuelto Paso a Paso: El Porcentaje Inverso 🔄</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3">
+                    <p class="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">Problema Típico del College Board:</p>
+                    <p class="text-sm font-semibold text-slate-100">
+                        Una chamarra se vendió en $480 después de aplicar un descuento del 20%. ¿Cuál era el precio original de la chamarra antes del descuento?
+                    </p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">Cómo razonarlo para dummies:</p>
+                    <p><b>Paso 1 (Comprender qué representa el $480):</b> Si la chamarra tenía un 20% de descuento, el cliente pagó el <b>80%</b> del valor original.</p>
+                    
+                    <p><b>Paso 2 (Planteamiento sin enredos):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40">
+                        $$80\% \text{ del Original} = 480$$
+                        $$0.80 \times X = 480$$
+                    </p>
+
+                    <p><b>Paso 3 (Despeje simple):</b> Pasamos el 0.80 dividiendo:</p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40 text-sm font-bold text-emerald-400">
+                        $$X = \frac{480}{0.80} = \frac{4800}{8} = \mathbf{\$600}$$
+                    </p>
+                    <p class="text-amber-300 font-semibold">⚠️ Trampa común: Muchos calculan el 20% de 480 (96) y lo suman (576). ¡Eso está mal porque el descuento fue sobre el original de $600 (el 20% de 600 sí es 120, y $600 - 120 = 480$)!</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 6 de 10</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: 6. Tu Turno: Práctica Guiada #1 🎯 -->
     <div class="slide " id="slide-6">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál era el precio antes del descuento? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">Un libro tiene un 30% de descuento y el cliente paga $420 en caja. ¿Cuál era el precio original del libro?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'por2', '¡Impecable! Si pagó el 70% (factor 0.70), entonces Precio Original = 420 / 0.70 = $600.')">A) $600</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'por2', 'Error común: sumarle el 30% a 420 da 546, pero el descuento fue sobre el valor original mayor.')">B) $546</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'por2', 'Cálculo incorrecto.')">C) $580</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'por2', 'Revisa la división entre 0.70.')">D) $650</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-por2" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/operaciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Operaciones y Porcentajes</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">6. Tu Turno: Práctica Guiada #1 🎯</h2>
+            
+            
+            <p class="text-slate-300 text-sm mb-3">Un televisor tiene un precio de lista de $6,000. Durante una barata se le aplica un primer descuento del 20% y al pagar en caja se otorga un 10% de descuento adicional sobre lo ya rebajado. ¿Cuánto se paga al final?</p>
+            <div class="space-y-2 max-w-lg mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'por1', '¡Correcto! Primer descuento: 20% de 6000 = 1200, queda en $4,800. Segundo descuento: 10% de 4800 = 480. Precio final: 4800 - 480 = $4,320. Con multiplicadores: 6000 * 0.80 * 0.90 = $4,320.')">A) $4,320</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'por1', '¡Cuidado con la trampa! No sumes 20% + 10% = 30%. Si descuentas 30% da $4,200, lo cual es incorrecto.')">B) $4,200</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'por1', 'Revisa el cálculo: $4,800 es el precio tras el primer descuento, falta aplicar el 10% adicional.')">C) $4,800</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'por1', 'Cálculo erróneo de porcentajes sucesivos.')">D) $4,500</button>
+            </div>
+            <div id="feedback-por1" class="hidden"></div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 7 de 10</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 7: Resumen -->
+    <!-- Slide 7: 7. La Ley de la Simetría: El Hack más Loco de la PAA 🤯 -->
     <div class="slide " id="slide-7">
-        <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Porcentajes 📋</h2>
+        <div class="card ">
             
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Factor de Descuento</div>
-                <div class="text-slate-300 mt-1">Multiplica por $(1 - d)$: pagar con 25% desc = multiplicar por 0.75.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Factor de Incremento</div>
-                <div class="text-slate-300 mt-1">Multiplica por $(1 + i)$: aumento de 16% = multiplicar por 1.16.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Sucesivos = Multiplicación</div>
-                <div class="text-slate-300 mt-1">Nunca sumes porcentajes sucesivos: multiplica sus factores decimales.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Hacia Atrás = Divide</div>
-                <div class="text-slate-300 mt-1">Para hallar el precio original, divide el precio final entre el factor.</div>
-            </div>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Hack Mental</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div class="box-highlight text-xs text-slate-300">
-            🎉 <b>¡Módulo completado!</b> Los porcentajes de la PAA ya son dominio tuyo.
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/operaciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Operaciones y Porcentajes</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">7. La Ley de la Simetría: El Hack más Loco de la PAA 🤯</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-hack">
+                    <p class="font-bold text-amber-300 text-base mb-1">🤯 La Propiedad de la Simetría:</p>
+                    <p class="text-xl text-center font-black text-amber-200 my-2">$$x\% \text{ de } y = y\% \text{ de } x$$</p>
+                    <p class="text-xs sm:text-sm">¡El porcentaje de un número es idéntico si volteas los números! Esto te permite resolver cálculos que parecían imposibles mentalmente.</p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300">Ejemplo de examen:</p>
+                    <p class="text-slate-200">¿Cuánto es el <b>16% de 50</b>?</p>
+                    <p>Calcular el 16% de 50 a mano toma tiempo. Pero voltea los números:</p>
+                    <p class="text-emerald-400 font-bold text-sm bg-slate-900 p-2 rounded-lg text-center">
+                        ¿Cuánto es el 50% de 16? $\rightarrow$ ¡La mitad de 16 es 8!
+                    </p>
+                    <p class="text-slate-300">Por tanto, el 16% de 50 es <b>8</b>. ¡Lo respondiste en 2 segundos!</p>
+                    <p class="mt-2 text-cyan-300 font-semibold">• ¿El 4% de 75? $\rightarrow$ El 75% de 4 son las tres cuartas partes de 4 = 3.</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 8 de 10</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: 8. Tu Turno: Práctica Guiada #2 🎯 -->
+    <div class="slide " id="slide-8">
+        <div class="card ">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/operaciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Operaciones y Porcentajes</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">8. Tu Turno: Práctica Guiada #2 🎯</h2>
+            
+            
+            <p class="text-slate-300 text-sm mb-3">En una escuela con 500 alumnos, el 60% son mujeres. Si el 30% de las mujeres y el 20% de los hombres practican natación, ¿cuántos alumnos en total nadan en la escuela?</p>
+            <div class="space-y-2 max-w-lg mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'por2', '¡Excelente razonamiento! Total = 500 alumnos. Mujeres = 60% de 500 = 300. Hombres = 40% de 500 = 200. Nadadoras = 30% de 300 = 90. Nadadores = 20% de 200 = 40. Total que nadan = 90 + 40 = 130 alumnos.')">A) 130 alumnos</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'por2', 'No promedies los porcentajes (30% + 20% = 50% / 2 = 25%). Calcula las cantidades absolutas por grupo.')">B) 125 alumnos</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'por2', 'Calculaste solo las mujeres que nadan (90), faltan los hombres.')">C) 90 alumnos</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'por2', 'Revisa el porcentaje de hombres: si 60% son mujeres, los hombres son 40% (200).')">D) 150 alumnos</button>
+            </div>
+            <div id="feedback-por2" class="hidden"></div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 9 de 10</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: 9. Machete Resumen y Puente a la Práctica 🚀 -->
+    <div class="slide " id="slide-9">
+        <div class="card text-center">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Resumen Maestro</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/operaciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Operaciones y Porcentajes</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">9. Machete Resumen y Puente a la Práctica 🚀</h2>
+            
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left text-xs mb-4">
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🧠 Descomposición Rápida</div>
+                    <div class="text-slate-300 mt-1">10% = quita un cero. 5% = mitad del 10%. 50% = mitad. 25% = cuarta parte.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🏷️ Multiplicador Directo</div>
+                    <div class="text-slate-300 mt-1">Descuento de 30% $\rightarrow \times 0.70$. Aumento de 15% $\rightarrow \times 1.15$.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🔄 Porcentaje Inverso</div>
+                    <div class="text-slate-300 mt-1">Si ya tiene descuento del 20%, divide el precio final entre $0.80$ para volver al original.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">⚡ Ley Simétrica</div>
+                    <div class="text-slate-300 mt-1">$x\%$ de $y = y\%$ de $x$. ¡Voltea los números cuando sea más fácil!</div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gradient-to-r from-cyan-950/70 via-blue-950/60 to-indigo-950/70 rounded-2xl border border-cyan-500/40 text-center my-3 shadow-xl">
+                <h3 class="text-base sm:text-lg font-black text-cyan-300 mb-1">🎉 ¡Dominaste Porcentajes e Incrementos!</h3>
+                <p class="text-xs sm:text-sm text-slate-300 mb-3">Pon a prueba tu agilidad mental con los 30 ejercicios prácticos del módulo.</p>
+                <a href="../practicos/mat/operaciones.html" class="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-slate-950 font-black text-sm sm:text-base hover:brightness-110 shadow-lg shadow-emerald-500/30 hover:scale-[1.01] transition-all">
+                    <span>🚀 Poner a prueba en 30 Ejercicios Prácticos de Operaciones</span>
+                    <span>→</span>
+                </a>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 10 de 10</div>
                 <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
-  
+
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -266,6 +505,7 @@
             });
             const progressPercent = ((currentSlide + 1) / slides.length) * 100;
             progressBar.style.width = `${progressPercent}%`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         }
 
@@ -278,11 +518,11 @@
             if (isCorrect) {
                 btn.classList.add('option-correct');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
-                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
-                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa típica:</b><br/>${explanation}`;
             }
             if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise([fb]);
@@ -292,6 +532,12 @@
         function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
         function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
         function goToStart() { currentSlide = 0; updateUI(); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
         updateUI();
     </script>
 </body>

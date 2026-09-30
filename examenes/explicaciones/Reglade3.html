@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual Maestro: Regla de 3 Simple e Inversa PAA</title>
+    <title>Manual Maestro: Regla de Tres Directa e Inversa PAA | PrepMaster PAA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = {
@@ -13,11 +13,11 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
-        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow-x: hidden; }
+        .slide { display: none; min-height: 100vh; width: 100vw; padding: 1.5rem 1rem; opacity: 0; transition: opacity 0.25s ease; box-sizing: border-box; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
-        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card { background: #0b1120; border-radius: 1.75rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.2); max-width: 860px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 94vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
         .btn-nav:hover { background: #334155; }
         .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
@@ -27,233 +27,388 @@
         .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
         .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
         .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
-        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
-        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
-        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+        .box-dummy { background: rgba(99, 102, 241, 0.08); border-left: 4px solid #818cf8; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; }
+        .box-step { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px 18px; margin: 12px 0; }
+        .box-trap { background: rgba(239, 68, 68, 0.08); border-left: 4px solid #f87171; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fecaca; }
+        .box-hack { background: rgba(245, 158, 11, 0.08); border-left: 4px solid #fbbf24; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fef3c7; }
+        .gfx-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 10px; margin: 10px 0; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
     
-    <!-- Slide 0: Portada -->
+    <!-- Slide 0: Regla de Tres Directa e Inversa sin Caer en Trampas 🎯 -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Aritmética PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Regla de 3 Simple e Inversa ✖️</h2>
             
-        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
-            Aprende a diferenciar al instante una regla de 3 directa de una inversa y a resolver problemas de proporciones en segundos sin equivocarte de diagonal.
-        </p>
-        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">↗️ Directa (Cruz)</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">➡️ Inversa (Línea)</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">⏱️ Velocidad y Tiempo</div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Regla de Tres Directa e Inversa sin Caer en Trampas 🎯</h2>
+            
+            
+            <p class="text-sm sm:text-base text-slate-300 mb-4 max-w-xl mx-auto leading-relaxed">
+                El 75% de los aspirantes reprueba en problemas de obreros o velocidad porque <b>hacen multiplicación cruzada para TODO</b>. Aprende la pregunta mágica para distinguir al instante si es directa o inversa y resuelve sin fallar.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-300 max-w-lg mx-auto mb-4">
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🌮 Directa: Más Tacos, Más Pago</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">👷 Inversa: Más Obreros, Menos Tiempo</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">⚡ Regla Horizontal vs Cruzada</div>
+            </div>
+            
+        <div class="my-4 p-3 bg-slate-900/80 rounded-2xl border border-pink-500/20 max-w-lg mx-auto shadow-md">
+            <div class="text-[11px] font-bold text-pink-400 uppercase tracking-wider mb-1 flex items-center justify-center gap-1.5">
+                <span>📱 Micro-clases en TikTok @prepmasterudg</span>
+            </div>
+            <a href="https://www.tiktok.com/@prepmasterudg" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 transition-all text-xs font-bold">
+                <span>▶️ Ver tips rápidos en TikTok Oficial</span>
+            </a>
         </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            <div class="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 max-w-md mx-auto">
+                <p class="text-xs text-emerald-300 font-semibold">¿Prefieres ponerte a prueba directamente?</p>
+                <a href="../practicos/mat/regla3.html" class="inline-block mt-1.5 text-xs font-extrabold text-emerald-400 hover:text-emerald-200 underline">
+                    🚀 Ver 30 Ejercicios Prácticos de Regla de Tres →
+                </a>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <div></div>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Regla de 3 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 1 de 8</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Regla de Tres para Dummies →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 1: Concepto 1 -->
+    <!-- Slide 1: 1. La Pregunta de Oro: ¿Directa o Inversa? ⚖️ -->
     <div class="slide " id="slide-1">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Directa vs Inversa: El Diagnóstico Inicial 🎯</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                <div class="bg-slate-900 p-3 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-cyan-300">Regla de 3 Directa (En Cruz):</p>
-                    <p class="text-slate-300 mt-1">Si una sube, la otra también sube (o ambas bajan):</p>
-                    <p class="text-emerald-400 mt-1">$$x = \frac{b \cdot c}{a}$$</p>
-                    <p class="text-[11px] text-slate-400 mt-1">Ejemplos: kilos y precio, distancia y gasolina, horas de trabajo y salario.</p>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Para Dummies #1</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/regla3.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Regla de 3</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">1. La Pregunta de Oro: ¿Directa o Inversa? ⚖️</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>Antes de escribir un solo número, hazte SIEMPRE esta pregunta en voz alta:</p>
+                <div class="bg-slate-900/90 border border-cyan-500/40 p-2.5 rounded-xl text-center font-bold text-cyan-300 text-xs sm:text-sm">
+                    "Si aumento la primera variable, ¿la otra variable AUMENTA o DISMINUYE?"
                 </div>
-                <div class="bg-slate-900 p-3 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-cyan-300">Regla de 3 Inversa (En Línea):</p>
-                    <p class="text-slate-300 mt-1">Si una sube, la otra baja:</p>
-                    <p class="text-emerald-400 mt-1">$$x = \frac{a \cdot b}{c}$$</p>
-                    <p class="text-[11px] text-slate-400 mt-1">Ejemplos: obreros y días, velocidad y tiempo, llaves de agua y tiempo de llenado.</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div class="box-step">
+                        <p class="font-bold text-cyan-300 text-sm mb-1">📈 REGLA DIRECTA (+ con + / - con -)</p>
+                        <p>• Compras más litros de gasolina $\rightarrow$ pagas <b>más</b> dinero.</p>
+                        <p>• Trabajas más horas $\rightarrow$ ganas <b>más</b> sueldo.</p>
+                        <p class="mt-2 text-cyan-400 font-bold">👉 Se resuelve en CRUZ (cruzado):</p>
+                        <div class="bg-slate-900 p-1.5 rounded text-center font-bold text-cyan-300">
+                            $$x = \frac{b \cdot c}{a}$$
+                        </div>
+                    </div>
+
+                    <div class="box-trap">
+                        <p class="font-bold text-rose-300 text-sm mb-1">📉 REGLA INVERSA (+ con - / - con +)</p>
+                        <p>• Contratas más albañiles $\rightarrow$ tardan <b>MENOS</b> días.</p>
+                        <p>• Manejas a mayor velocidad $\rightarrow$ tardas <b>MENOS</b> horas.</p>
+                        <p class="mt-2 text-rose-400 font-bold">👉 Se resuelve en LÍNEA RECTA (horizontal):</p>
+                        <div class="bg-slate-900 p-1.5 rounded text-center font-bold text-rose-300">
+                            $$x = \frac{a \cdot b}{c}$$
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 2 de 8</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <!-- Slide 2: 2. La Trampa Clásica de los Albañiles (Por qué reprueba la mayoría) 👷 -->
     <div class="slide " id="slide-2">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Regla de 3 Directa 🔍</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">Una máquina embotelladora envasa 840 refrescos en 3.5 horas de funcionamiento continuo. ¿Cuántos refrescos envasará en una jornada de 8 horas?</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. A más horas ➔ más refrescos (Directa).<br/>
-                    2. Planteamiento en cruz:<br/>
-                    $3.5 \text{ h} \longrightarrow 840 \text{ refrescos}$<br/>
-                    $8 \text{ h} \longrightarrow x$<br/>
-                    3. $x = \frac{840 \times 8}{3.5} = \frac{6720}{3.5} = \mathbf{1,920 \text{ refrescos}}$.
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Trampa PAA Clásica</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/regla3.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Regla de 3</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">2. La Trampa Clásica de los Albañiles (Por qué reprueba la mayoría) 👷</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-trap">
+                    <p class="font-bold text-rose-300 text-sm mb-1">🚨 La trampa más famosa del examen:</p>
+                    <p class="italic text-xs text-slate-200">"4 albañiles construyen una barda en 12 días. ¿Cuántos días tardarán 8 albañiles en hacer la misma barda?"</p>
+                    <p class="text-xs text-rose-300 mt-1">El alumno descuidado aplica regla de tres cruzada:<br/>
+                    $x = \frac{8 \times 12}{4} = \mathbf{24\text{ días}}$ ❌ <b>¡ABSURDO!</b> ¿Cómo van a tardar el doble de tiempo si son el doble de trabajadores?</p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">La solución correcta (Multiplicación en línea horizontal):</p>
+                    <p>Como hay <b>más</b> albañiles, tardarán <b>menos</b> días (inversa):</p>
+                    <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 text-slate-200">
+                        Albañiles: $4 \longrightarrow 12$ días<br/>
+                        Albañiles: $8 \longrightarrow x$ días
+                    </div>
+                    <p>Multiplicamos los dos de arriba y dividimos entre el de abajo:</p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40 text-sm font-bold text-emerald-400">
+                        $$x = \frac{4 \times 12}{8} = \frac{48}{8} = \mathbf{6\text{ días}}$$
+                    </p>
+                    <p class="text-slate-300">¡Lógico! Si duplicas los albañiles, el tiempo se reduce a la mitad exacta (6 días).</p>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 3 de 8</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 3: Práctica 1 -->
+    <!-- Slide 3: 3. Ejemplo Resuelto #1: Regla Directa con Conversión de Unidades 🚗 -->
     <div class="slide " id="slide-3">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuántos kilómetros recorrerá? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">Si un automóvil consume 14 litros de gasolina para recorrer 175 km, ¿cuántos kilómetros podrá recorrer con 22 litros manteniendo el mismo rendimiento?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'rg1', '¡Correcto! Proporción directa: x = (22 * 175) / 14 = 3850 / 14 = 275 km.')">A) 275 km</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'rg1', 'Cálculo erróneo.')">B) 250 km</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'rg1', 'Revisa la multiplicación 22 * 175 / 14.')">C) 300 km</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'rg1', 'Error en el despeje.')">D) 240 km</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Ejemplo de Examen</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-rg1" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Regla de 3 Inversa →</button>
-            </div>
-        </div>
+        <a href="../practicos/mat/regla3.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Regla de 3</span>
+            <span>→</span>
+        </a>
     </div>
-  
-
-    <!-- Slide 4: Concepto 2 -->
-    <div class="slide " id="slide-4">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">La Multiplicación Horizontal en la Regla Inversa ➡️</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <p>En la regla de tres inversa, <b>la multiplicación es horizontal</b> entre las dos cantidades de la primera fila:</p>
-            <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
-                <span class="text-lg font-bold text-cyan-300">$$\begin{matrix} A & \longrightarrow & B \\ C & \longrightarrow & x \end{matrix} \implies x = \frac{A \times B}{C}$$</span>
-            </div>
-            <div class="box-highlight text-xs">
-                Nunca multipliques en cruz si al aumentar una cantidad la otra disminuye. Multiplica en línea horizontal y divide entre el que queda solo.
-            </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
-            </div>
-        </div>
-    </div>
-  
-
-    <!-- Slide 5: Ejemplo Resuelto 2 -->
-    <div class="slide " id="slide-5">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Tuberías y Tiempo de Vaciado 🔍</h2>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">3. Ejemplo Resuelto #1: Regla Directa con Conversión de Unidades 🚗</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">Cuatro bombas de agua idénticas vacían un estanque en 18 horas. Si se agregan dos bombas más de la misma capacidad, ¿en cuántas horas se vaciará el estanque?</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. A más bombas ➔ MENOS horas (Inversa).<br/>
-                    2. Bombas totales = $4 + 2 = 6$ bombas.<br/>
-                    3. Multiplicación horizontal: $x = \frac{4 \times 18}{6} = \frac{72}{6} = \mathbf{12 \text{ horas}}$.
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3">
+                    <p class="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">Problema Típico Directo:</p>
+                    <p class="text-sm font-semibold text-slate-100">
+                        Un automóvil recorre 180 kilómetros con 15 litros de combustible. Si mantiene el mismo rendimiento constante, ¿cuántos litros necesitará para completar un recorrido de 420 kilómetros?
+                    </p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">Paso a paso para dummies:</p>
+                    <p><b>Paso 1 (Pregunta de oro):</b> A <b>más</b> kilómetros recorridos, ¿necesita <b>más</b> gasolina? Sí $\rightarrow$ <b>Directa</b>.</p>
+                    
+                    <p><b>Paso 2 (Armar la tabla con columnas claras):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40">
+                        $$180\text{ km} \longrightarrow 15\text{ L}$$
+                        $$420\text{ km} \longrightarrow x\text{ L}$$
+                    </p>
+
+                    <p><b>Paso 3 (Multiplicar cruzado):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40 text-sm font-bold text-emerald-400">
+                        $$x = \frac{420 \times 15}{180} = \frac{420 \times 1}{12} = \frac{420}{12} = \mathbf{35\text{ litros}}$$
+                    </p>
+                    <p class="text-amber-300">💡 <b>Atajo mental:</b> El rendimiento por litro es $180 / 15 = 12\text{ km/L}$. Entonces $420 / 12 = \mathbf{35\text{ L}}$.</p>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 4 de 8</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 6: Práctica 2 -->
+    <!-- Slide 4: 4. Tu Turno: Práctica Guiada #1 🎯 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/regla3.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Regla de 3</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">4. Tu Turno: Práctica Guiada #1 🎯</h2>
+            
+            
+            <p class="text-slate-300 text-sm mb-3">Si 6 fotocopiadoras imprimen 900 exámenes en 10 minutos, ¿cuántos exámenes imprimirán 10 fotocopiadoras en el mismo tiempo?</p>
+            <div class="space-y-2 max-w-lg mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'r3_1', '¡Correcto! Es directa: más fotocopiadoras imprimen más exámenes. Cada máquina imprime 900 / 6 = 150 exámenes. Entonces 10 máquinas imprimirán 10 * 150 = 1,500 exámenes. (O por regla de tres: x = 10 * 900 / 6 = 1,500).')">A) $1,500$ exámenes</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'r3_1', 'Cálculo erróneo de la proporción.')">B) $1,200$ exámenes</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'r3_1', '1,800 sería para 12 fotocopiadoras.')">C) $1,800$ exámenes</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'r3_1', 'Revisa la regla de tres directa: más fotocopiadoras producen más.')">D) $1,350$ exámenes</button>
+            </div>
+            <div id="feedback-r3_1" class="hidden"></div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 5 de 8</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: 5. Ejemplo Resuelto #2: Regla Inversa de Velocidad y Tiempo ⏱️ -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Ejemplo de Examen</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/regla3.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Regla de 3</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">5. Ejemplo Resuelto #2: Regla Inversa de Velocidad y Tiempo ⏱️</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3">
+                    <p class="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">Problema Típico Inverso:</p>
+                    <p class="text-sm font-semibold text-slate-100">
+                        Un autobús que viaja a una velocidad constante de 60 km/h tarda 4 horas en llegar a su destino. Si en el viaje de regreso aumenta su velocidad a 80 km/h, ¿cuánto tiempo tardará en regresar?
+                    </p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">Desglose paso a paso:</p>
+                    <p><b>Paso 1 (Pregunta de oro):</b> A <b>más</b> velocidad, ¿tarda <b>más o menos</b> horas? Tarda <b>MENOS</b> horas $\rightarrow$ <b>Inversa</b>.</p>
+                    
+                    <p><b>Paso 2 (Armar la tabla horizontal):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40">
+                        $$60\text{ km/h} \longrightarrow 4\text{ horas}$$
+                        $$80\text{ km/h} \longrightarrow x\text{ horas}$$
+                    </p>
+
+                    <p><b>Paso 3 (Multiplicar en horizontal y dividir):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40 text-sm font-bold text-emerald-400">
+                        $$x = \frac{60 \times 4}{80} = \frac{240}{80} = \mathbf{3\text{ horas}}$$
+                    </p>
+                    <p class="text-slate-300">¡Lógico! A 80 km/h el viaje se reduce de 4 horas a solo 3 horas.</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 6 de 8</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: 6. Tu Turno: Práctica Guiada #2 🎯 -->
     <div class="slide " id="slide-6">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuántos días durarán las raciones? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">Un campamento de 20 personas tiene provisiones de alimento calculadas para 15 días. Si se incorporan 10 personas más al campamento, ¿para cuántos días alcanzarán las provisiones manteniendo la misma ración diaria por persona?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'rg2', '¡Excelente! Personas totales = 20 + 10 = 30. Proporción inversa: x = (20 * 15) / 30 = 300 / 30 = 10 días.')">A) 10 días</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'rg2', 'Si hay más personas, la comida dura MENOS días, no más.')">B) 22.5 días</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'rg2', 'Cálculo incorrecto.')">C) 12 días</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'rg2', 'Revisa el total de personas (30, no 10).')">D) 8 días</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-rg2" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/regla3.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Regla de 3</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">6. Tu Turno: Práctica Guiada #2 🎯</h2>
+            
+            
+            <p class="text-slate-300 text-sm mb-3">Un almacén de comida tiene raciones suficientes para alimentar a 15 excursionistas durante 12 días. Si al campamento se integran 5 excursionistas más (siendo 20 en total), ¿para cuántos días alcanzarán las mismas raciones de comida?</p>
+            <div class="space-y-2 max-w-lg mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'r3_2', '¡Excelente! Es inversa: más personas consumen la comida en MENOS días. Total de raciones = 15 * 12 = 180 raciones. Ahora son 15 + 5 = 20 personas. Dividimos 180 / 20 = 9 días.')">A) $9$ días</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'r3_2', 'Si calculaste 16 días usaste regla directa por error (¡más personas no hacen que la comida dure más!).')">B) $16$ días</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'r3_2', 'Cuidado: ahora son 20 excursionistas en total (15 + 5), no 5.')">C) $10$ días</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'r3_2', 'Revisa el producto constante: 15 * 12 = 180; 180 / 20 = 9.')">D) $8$ días</button>
+            </div>
+            <div id="feedback-r3_2" class="hidden"></div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 7 de 8</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 7: Resumen -->
+    <!-- Slide 7: 7. Machete Resumen y Puente a la Práctica 🚀 -->
     <div class="slide " id="slide-7">
         <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Regla de 3 📋</h2>
             
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Directa = En Cruz</div>
-                <div class="text-slate-300 mt-1">Multiplica la diagonal completa y divide entre el restante: $x = \frac{bc}{a}$.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Inversa = Horizontal</div>
-                <div class="text-slate-300 mt-1">Multiplica la fila de arriba en línea y divide entre el de abajo: $x = \frac{ab}{c}$.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Prueba del Sentido Común</div>
-                <div class="text-slate-300 mt-1">¿La respuesta debe ser mayor o menor? Si tienes más albañiles, la respuesta DEBE ser menor.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Cuidado con las Sumas</div>
-                <div class="text-slate-300 mt-1">Si dice <i>"se contratan 5 más"</i>, el nuevo valor es $original + 5$.</div>
-            </div>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Resumen Maestro</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div class="box-highlight text-xs text-slate-300">
-            🎉 <b>¡Módulo completado!</b> Has dominado la regla de 3 con la metodología más rápida de la PAA.
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/regla3.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Regla de 3</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">7. Machete Resumen y Puente a la Práctica 🚀</h2>
+            
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left text-xs mb-4">
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">📈 Regla Directa (+ con +)</div>
+                    <div class="text-slate-300 mt-1">Multiplica cruzado: $x = \frac{b \cdot c}{a}$. Más precio, más distancia, más compras.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">📉 Regla Inversa (+ con -)</div>
+                    <div class="text-slate-300 mt-1">Multiplica horizontal: $x = \frac{a \cdot b}{c}$. Más trabajadores, más velocidad, más bocas que alimentar.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">⚖️ La Pregunta de Oro</div>
+                    <div class="text-slate-300 mt-1">Siempre razona si la segunda magnitud sube o baja antes de aplicar cualquier fórmula.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">📦 Total Constante</div>
+                    <div class="text-slate-300 mt-1">En problemas inversos, el producto $A \times B$ es la cantidad total invariable.</div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gradient-to-r from-cyan-950/70 via-blue-950/60 to-indigo-950/70 rounded-2xl border border-cyan-500/40 text-center my-3 shadow-xl">
+                <h3 class="text-base sm:text-lg font-black text-cyan-300 mb-1">🎉 ¡Dominaste la Regla de Tres Directa e Inversa!</h3>
+                <p class="text-xs sm:text-sm text-slate-300 mb-3">Estás listo para asegurar todos los puntos de proporcionalidad en el examen real.</p>
+                <a href="../practicos/mat/regla3.html" class="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-slate-950 font-black text-sm sm:text-base hover:brightness-110 shadow-lg shadow-emerald-500/30 hover:scale-[1.01] transition-all">
+                    <span>🚀 Poner a prueba en 30 Ejercicios Prácticos de Regla de 3</span>
+                    <span>→</span>
+                </a>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 8 de 8</div>
                 <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
-  
+
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -269,6 +424,7 @@
             });
             const progressPercent = ((currentSlide + 1) / slides.length) * 100;
             progressBar.style.width = `${progressPercent}%`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         }
 
@@ -281,11 +437,11 @@
             if (isCorrect) {
                 btn.classList.add('option-correct');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
-                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
-                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa típica:</b><br/>${explanation}`;
             }
             if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise([fb]);
@@ -295,6 +451,12 @@
         function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
         function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
         function goToStart() { currentSlide = 0; updateUI(); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
         updateUI();
     </script>
 </body>

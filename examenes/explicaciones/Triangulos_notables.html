@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual Maestro: Triángulos Notables y Semejanza PAA</title>
+    <title>Manual Maestro: Triángulos Notables y Pitágoras PAA | PrepMaster PAA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = {
@@ -13,11 +13,11 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
-        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow-x: hidden; }
+        .slide { display: none; min-height: 100vh; width: 100vw; padding: 1.5rem 1rem; opacity: 0; transition: opacity 0.25s ease; box-sizing: border-box; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 860px; width: 100%; padding: 2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
-        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card { background: #0b1120; border-radius: 1.75rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.2); max-width: 860px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 94vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
         .btn-nav:hover { background: #334155; }
         .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
@@ -27,275 +27,327 @@
         .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
         .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
         .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
-        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 12px; margin: 8px 0; }
-        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 12px; margin: 8px 0; }
-        .gfx-card { background: #070d1d; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px; padding: 14px; margin: 10px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .box-dummy { background: rgba(99, 102, 241, 0.08); border-left: 4px solid #818cf8; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; }
+        .box-step { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px 18px; margin: 12px 0; }
+        .box-trap { background: rgba(239, 68, 68, 0.08); border-left: 4px solid #f87171; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fecaca; }
+        .box-hack { background: rgba(245, 158, 11, 0.08); border-left: 4px solid #fbbf24; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fef3c7; }
+        .gfx-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 10px; margin: 10px 0; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
-    <!-- Slide 0: Portada -->
+    
+    <!-- Slide 0: Triángulos Notables y Pitágoras sin Raíces Feas 📐 -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Geometría Especial PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Triángulos Notables, Ternas y Semejanza 📐</h2>
-            <p class="text-sm sm:text-base text-slate-300 mb-5 max-w-lg mx-auto leading-relaxed">
-                El examen PAA premia a quienes resuelven geometría de forma visual. Olvídate de cálculos largos: aprende los atajos de los triángulos <b>30°-60°-90°</b>, <b>45°-45°-90°</b>, las <b>ternas pitagóricas</b> y el <b>Teorema de Tales</b>.
+            
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Triángulos Notables y Pitágoras sin Raíces Feas 📐</h2>
+            
+            
+            <p class="text-sm sm:text-base text-slate-300 mb-4 max-w-xl mx-auto leading-relaxed">
+                El 80% de los problemas de triángulos en la PAA se resuelven en <b>10 segundos con los triángulos especiales ($30^circ-60^circ-90^circ$ y $45^circ-45^circ-90^circ$)</b> y las ternas pitagóricas ($3-4-5$) sin tener que elevar al cuadrado ni sacar raíces a mano.
             </p>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-slate-300 max-w-xl mx-auto mb-5">
-                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/20">📐 30°-60°-90° ($x, x\sqrt{3}, 2x$)</div>
-                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/20">📐 45°-45°-90° ($x, x, x\sqrt{2}$)</div>
-                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/20">⚡ Ternas (3-4-5, 5-12-13)</div>
-                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/20">☀️ Sombras de Tales</div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-300 max-w-lg mx-auto mb-4">
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">📐 Triángulo 30° - 60° - 90°</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🟩 Triángulo 45° - 45° - 90°</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">⚡ Ternas Mágicas 3-4-5 y 5-12-13</div>
             </div>
-            <div class="mt-4 flex justify-between items-center gap-2">
+            
+    <div class="my-4 p-3 bg-slate-900/80 rounded-2xl border border-pink-500/30 max-w-lg mx-auto shadow-lg shadow-pink-950/20">
+        <div class="text-[11px] font-bold text-pink-400 uppercase tracking-wider mb-2 flex items-center justify-center gap-1.5">
+            <span>📱 Micro-clases Oficiales en TikTok @prepmasterudg</span>
+        </div>
+        <div class="flex flex-wrap justify-center gap-2">
+            
+        <a href="https://www.tiktok.com/@prepmasterudg/video/7626796996019408148" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7626796996019408148', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
+            <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            <span>▶️ Triángulos semejantes PAA</span>
+        </a>
+    
+        <a href="https://www.tiktok.com/@prepmasterudg/video/7629600173030771989" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7629600173030771989', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
+            <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            <span>▶️ Teorema de Pitágoras aplicado</span>
+        </a>
+    
+        </div>
+    </div>
+            <div class="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 max-w-md mx-auto">
+                <p class="text-xs text-emerald-300 font-semibold">¿Quieres ir directo a los reactivos prácticos?</p>
+                <a href="../practicos/mat/triangulos_notables.html" class="inline-block mt-1.5 text-xs font-extrabold text-emerald-400 hover:text-emerald-200 underline">
+                    🚀 Abrir 30 Ejercicios Prácticos de Triángulos Notables →
+                </a>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <div></div>
+                <div class="text-xs text-slate-400 font-medium">Paso 1 de 6</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Triángulos para Dummies →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 1: 1. Los Dos Triángulos Especiales de la PAA (Con SVG) 📐 -->
+    <div class="slide " id="slide-1">
+        <div class="card ">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Para Dummies #1</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/triangulos_notables.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Triángulos Notables</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">1. Los Dos Triángulos Especiales de la PAA (Con SVG) 📐</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p class="text-xs">Conociendo un solo lado, puedes determinar inmediatamente los otros dos gracias a sus proporciones fijas:</p>
                 
-        
-            
-        <!-- Videos de apoyo TikTok PrepMaster -->
-        <div class="my-4 p-3.5 bg-slate-900/80 rounded-2xl border border-pink-500/30 max-w-lg mx-auto shadow-lg shadow-pink-950/20">
-            <div class="text-[11px] font-bold text-pink-400 uppercase tracking-wider mb-2 flex items-center justify-center gap-1.5">
-                <span>📱 Micro-clases Oficiales en TikTok @prepmasterudg</span>
-            </div>
-            <div class="flex flex-wrap justify-center gap-2">
-
-                <a href="https://www.tiktok.com/@prepmasterudg/video/7626796996019408148" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7626796996019408148', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
-                    <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                    <span>▶️ Triángulos semejantes PAA</span>
-                </a>
-
-                <a href="https://www.tiktok.com/@prepmasterudg/video/7629600173030771989" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7629600173030771989', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
-                    <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                    <span>▶️ Teorema de Pitágoras aplicado</span>
-                </a>
-            </div>
-        </div>
-            <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Guía Visual →</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 1: Triángulos Notables 30-60 y 45-45 -->
-    <div class="slide" id="slide-1">
-        <div class="card">
-            <span class="badge" style="background:#38bdf8;">Atajo Geométrico #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-2 text-cyan-400">1. Los Dos Triángulos Especiales de la PAA 📐</h2>
-            <p class="text-xs sm:text-sm text-slate-300 mb-2">Conociendo un solo lado, puedes determinar inmediatamente los otros dos gracias a sus proporciones fijas:</p>
-            
-            <div class="gfx-card">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-                    <!-- Triángulo 30-60-90 -->
-                    <div class="bg-slate-900/80 border border-indigo-500/30 rounded-xl p-3 text-center">
-                        <span class="text-indigo-400 font-bold text-xs uppercase tracking-wider">Triángulo 30° - 60° - 90°</span>
-                        <svg width="100%" height="135" viewBox="0 0 200 135" class="mx-auto mt-1">
-                            <polygon points="40,115 170,115 40,25" fill="rgba(99, 102, 241, 0.2)" stroke="#6366f1" stroke-width="2.5"/>
-                            <rect x="40" y="103" width="12" height="12" fill="none" stroke="#6366f1" stroke-width="1.5"/>
-                            
-                            <!-- Ángulo 30 en la punta -->
-                            <path d="M40,45 A20,20 0 0,0 52,38" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
-                            <text x="52" y="55" fill="#fbbf24" font-size="10" font-weight="bold">30°</text>
-
-                            <!-- Ángulo 60 en la base -->
-                            <path d="M150,115 A20,20 0 0,1 142,100" fill="none" stroke="#38bdf8" stroke-width="1.5"/>
-                            <text x="135" y="110" fill="#38bdf8" font-size="10" font-weight="bold">60°</text>
-
-                            <!-- Lados rotulados -->
-                            <text x="25" y="75" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="end">x (menor)</text>
-                            <text x="105" y="130" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">x√3</text>
-                            <text x="115" y="60" fill="#a5b4fc" font-size="12" font-weight="extrabold">2x (Hipotenusa)</text>
-                        </svg>
-                        <p class="text-[11px] text-indigo-200 mt-1">Opuesto a 30° = <b>Mitad de Hipotenusa</b><br/>Opuesto a 60° = <b>Cateto menor $	imes sqrt{3}$</b></p>
-                    </div>
-
-                    <!-- Triángulo 45-45-90 -->
-                    <div class="bg-slate-900/80 border border-amber-500/30 rounded-xl p-3 text-center">
-                        <span class="text-amber-400 font-bold text-xs uppercase tracking-wider">Triángulo 45° - 45° - 90°</span>
-                        <svg width="100%" height="135" viewBox="0 0 160 135" class="mx-auto mt-1">
-                            <polygon points="35,115 125,115 35,25" fill="rgba(245, 158, 11, 0.2)" stroke="#f59e0b" stroke-width="2.5"/>
-                            <rect x="35" y="103" width="12" height="12" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
-                            
-                            <text x="48" y="48" fill="#fbbf24" font-size="10" font-weight="bold">45°</text>
-                            <text x="96" y="110" fill="#fbbf24" font-size="10" font-weight="bold">45°</text>
-
-                            <text x="22" y="75" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="end">x</text>
-                            <text x="80" y="130" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">x</text>
-                            <text x="90" y="60" fill="#fde68a" font-size="12" font-weight="extrabold">x√2</text>
-                        </svg>
-                        <p class="text-[11px] text-amber-200 mt-1">Catetos <b>exactamente iguales</b> ($x$ y $x$)<br/>Hipotenusa (Diagonal) = $mathbf{xsqrt{2}}$</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="box-highlight text-xs">
-                <b>Regla de Oro en 3 Segundos:</b> Si la hipotenusa de un triángulo de 30°-60° mide $10$, el cateto opuesto a 30° mide $5$ y el opuesto a 60° mide $5sqrt{3}$. Si un cuadrado tiene lado $7$, su diagonal mide $7sqrt{2}$.
-            </div>
-
-            <div class="mt-4 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">2. Ternas Pitagóricas Rápidas →</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 2: Ternas Pitagóricas -->
-    <div class="slide" id="slide-2">
-        <div class="card">
-            <span class="badge" style="background:#38bdf8;">Atajo Geométrico #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-2 text-cyan-400">2. Ternas Pitagóricas: El Secreto del 80% PAA ⚡</h2>
-            <p class="text-xs sm:text-sm text-slate-300 mb-2">En el College Board casi nunca necesitas elevar al cuadrado ni sacar raíces gigantes ($a^2 + b^2 = c^2$). El 80% de los triángulos son múltiplos de estas familias:</p>
-            
-            <div class="gfx-card">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-                    <!-- Terna 3-4-5 y demostración visual con áreas -->
-                    <div class="bg-slate-900/80 border border-cyan-500/30 rounded-xl p-3 text-center">
-                        <span class="text-cyan-300 font-bold text-xs uppercase tracking-wider">Familia 3 - 4 - 5 ($9 + 16 = 25$)</span>
-                        <svg width="100%" height="120" viewBox="0 0 180 120" class="mx-auto mt-1">
-                            <polygon points="40,95 130,95 40,35" fill="rgba(56, 189, 248, 0.25)" stroke="#38bdf8" stroke-width="2.5"/>
-                            <rect x="40" y="85" width="10" height="10" fill="none" stroke="#38bdf8" stroke-width="1.5"/>
-                            <text x="28" y="68" fill="#f8fafc" font-size="11" font-weight="bold">3</text>
-                            <text x="85" y="110" fill="#f8fafc" font-size="11" font-weight="bold">4</text>
-                            <text x="95" y="60" fill="#38bdf8" font-size="13" font-weight="extrabold">5 (H)</text>
-                        </svg>
-                        <div class="text-[10px] text-slate-300 mt-1">
-                            Múltiplos usuales:<br/>
-                            $	imes 2 implies mathbf{6 - 8 - 10}$<br/>
-                            $	imes 3 implies mathbf{9 - 12 - 15}$<br/>
-                            $	imes 5 implies mathbf{15 - 20 - 25}$
+                <div class="gfx-card">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                        <!-- Triángulo 30-60-90 -->
+                        <div class="bg-slate-900/80 border border-indigo-500/30 rounded-xl p-3 text-center">
+                            <span class="text-indigo-400 font-bold text-xs uppercase tracking-wider">Triángulo 30° - 60° - 90°</span>
+                            <svg width="100%" height="130" viewBox="0 0 200 130" class="mx-auto mt-1">
+                                <polygon points="40,110 170,110 40,20" fill="rgba(99, 102, 241, 0.2)" stroke="#6366f1" stroke-width="2.5"/>
+                                <rect x="40" y="98" width="12" height="12" fill="none" stroke="#6366f1" stroke-width="1.5"/>
+                                <text x="52" y="48" fill="#fbbf24" font-size="10" font-weight="bold">30°</text>
+                                <text x="135" y="105" fill="#38bdf8" font-size="10" font-weight="bold">60°</text>
+                                <text x="25" y="70" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="end">x (menor)</text>
+                                <text x="105" y="125" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">x√3</text>
+                                <text x="115" y="55" fill="#a5b4fc" font-size="12" font-weight="extrabold">2x (H)</text>
+                            </svg>
+                            <p class="text-[11px] text-indigo-200 mt-1">Opuesto a 30° = <b>Mitad de Hipotenusa ($x$)</b><br/>Opuesto a 60° = $\mathbf{x\sqrt{3}}$ | Hipotenusa = $\mathbf{2x}$</p>
                         </div>
-                    </div>
 
-                    <!-- Terna 5-12-13 -->
-                    <div class="bg-slate-900/80 border border-emerald-500/30 rounded-xl p-3 text-center">
-                        <span class="text-emerald-300 font-bold text-xs uppercase tracking-wider">Familia 5 - 12 - 13 ($25 + 144 = 169$)</span>
-                        <svg width="100%" height="120" viewBox="0 0 180 120" class="mx-auto mt-1">
-                            <polygon points="30,95 150,95 30,55" fill="rgba(52, 211, 153, 0.25)" stroke="#34d399" stroke-width="2.5"/>
-                            <rect x="30" y="85" width="10" height="10" fill="none" stroke="#34d399" stroke-width="1.5"/>
-                            <text x="20" y="78" fill="#f8fafc" font-size="11" font-weight="bold">5</text>
-                            <text x="90" y="110" fill="#f8fafc" font-size="11" font-weight="bold">12</text>
-                            <text x="95" y="70" fill="#34d399" font-size="13" font-weight="extrabold">13 (H)</text>
-                        </svg>
-                        <div class="text-[10px] text-slate-300 mt-1">
-                            Otras ternas clave:<br/>
-                            $	imes 2 implies mathbf{10 - 24 - 26}$<br/>
-                            Familia $mathbf{8 - 15 - 17}$<br/>
-                            Familia $mathbf{7 - 24 - 25}$
+                        <!-- Triángulo 45-45-90 -->
+                        <div class="bg-slate-900/80 border border-amber-500/30 rounded-xl p-3 text-center">
+                            <span class="text-amber-400 font-bold text-xs uppercase tracking-wider">Triángulo 45° - 45° - 90°</span>
+                            <svg width="100%" height="130" viewBox="0 0 160 130" class="mx-auto mt-1">
+                                <polygon points="35,110 125,110 35,20" fill="rgba(245, 158, 11, 0.2)" stroke="#f59e0b" stroke-width="2.5"/>
+                                <rect x="35" y="98" width="12" height="12" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+                                <text x="48" y="45" fill="#fbbf24" font-size="10" font-weight="bold">45°</text>
+                                <text x="96" y="105" fill="#fbbf24" font-size="10" font-weight="bold">45°</text>
+                                <text x="22" y="70" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="end">x</text>
+                                <text x="80" y="125" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">x</text>
+                                <text x="90" y="55" fill="#fde68a" font-size="12" font-weight="extrabold">x√2</text>
+                            </svg>
+                            <p class="text-[11px] text-amber-200 mt-1">Catetos <b>idénticos</b> ($x$ y $x$)<br/>Hipotenusa (Diagonal) = $\mathbf{x\sqrt{2}}$</p>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="box-highlight text-xs">
-                <b>Ejemplo de Examen:</b> "Un triángulo tiene hipotenusa $25$ y un cateto $15$. ¿Cuánto mide el otro?"<br/>
-                $15 = 3 \times 5$, $25 = 5 \times 5$ ➔ Es la terna $3-4-5$ ampliada por 5. ¡El cateto es $4 \times 5 = \mathbf{20}$ al instante!
+                <div class="box-step text-xs">
+                    <p class="font-bold text-cyan-300">💡 Ejemplo Relámpago en 3 segundos:</p>
+                    <p>Si la hipotenusa de un triángulo de $30^circ-60^circ$ mide $10\text{ cm}$:</p>
+                    <p>• El cateto chico (opuesto a $30^circ$) mide la mitad exacta: $\mathbf{5\text{ cm}}$.</p>
+                    <p>• El cateto mediano (opuesto a $60^circ$) mide: $\mathbf{5\sqrt{3}\text{ cm}}$. ¡Cero Pitágoras a mano!</p>
+                </div>
             </div>
-
-            <div class="mt-4 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">3. Semejanza y Sombras (Tales) →</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 3: Semejanza y Teorema de Tales -->
-    <div class="slide" id="slide-3">
-        <div class="card">
-            <span class="badge" style="background:#38bdf8;">Geometría Visual #3</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-2 text-cyan-400">3. Semejanza y Problemas de Sombras ☀️</h2>
-            <p class="text-xs sm:text-sm text-slate-300 mb-2">A la misma hora del día, los rayos del sol son paralelos, creando <b>triángulos semejantes con proporciones directas</b>.</p>
             
-            <div class="gfx-card">
-                <svg width="100%" height="160" viewBox="0 0 380 160" style="max-width:440px;">
-                    <!-- Suelo horizontal -->
-                    <line x1="20" y1="135" x2="360" y2="135" stroke="#64748b" stroke-width="2"/>
-                    
-                    <!-- Sol radiante -->
-                    <circle cx="330" cy="25" r="14" fill="#fbbf24"/>
-                    <line x1="330" y1="42" x2="330" y2="48" stroke="#fbbf24" stroke-width="2"/>
-                    <line x1="310" y1="25" x2="304" y2="25" stroke="#fbbf24" stroke-width="2"/>
-                    
-                    <!-- Rayos solares paralelos -->
-                    <line x1="320" y1="35" x2="60" y2="135" stroke="rgba(251, 191, 36, 0.4)" stroke-width="1.5" stroke-dasharray="4"/>
-                    <line x1="330" y1="50" x2="230" y2="135" stroke="rgba(251, 191, 36, 0.4)" stroke-width="1.5" stroke-dasharray="4"/>
-
-                    <!-- Edificio Mayor (H) -->
-                    <rect x="60" y="35" width="40" height="100" fill="rgba(56, 189, 248, 0.3)" stroke="#38bdf8" stroke-width="2"/>
-                    <text x="50" y="85" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="end">H = ?</text>
-                    <line x1="60" y1="145" x2="190" y2="145" stroke="#38bdf8" stroke-width="1.5"/>
-                    <text x="125" y="156" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">Sombra = 30 m</text>
-
-                    <!-- Poste o Persona Menor (h = 1.8 m, s = 1.2 m) -->
-                    <rect x="230" y="95" width="8" height="40" fill="rgba(52, 211, 153, 0.5)" stroke="#34d399" stroke-width="2"/>
-                    <text x="220" y="115" fill="#34d399" font-size="11" font-weight="bold" text-anchor="end">h = 1.8 m</text>
-                    <line x1="230" y1="145" x2="270" y2="145" stroke="#34d399" stroke-width="1.5"/>
-                    <text x="250" y="156" fill="#34d399" font-size="10" font-weight="bold" text-anchor="middle">1.2 m</text>
-                </svg>
-            </div>
-
-            <div class="box-highlight text-xs">
-                <b>Regla de 3 Geométrica Directa:</b><br/>
-                $$\frac{\text{Altura Edificio}}{\text{Sombra Edificio}} = \frac{\text{Altura Poste}}{\text{Sombra Poste}} \implies \frac{H}{30} = \frac{1.8}{1.2} = 1.5 \implies H = 30 \times 1.5 = \mathbf{45 \text{ metros}}.$$
-            </div>
-
-            <div class="mt-4 flex justify-between items-center gap-2">
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Práctica Interactiva →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 2 de 6</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
 
-    <!-- Slide 4: Práctica Triángulos -->
-    <div class="slide" id="slide-4">
-        <div class="card">
-            <span class="badge" style="background:#f59e0b;">Práctica Interactiva</span>
-            <h2 class="text-xl font-bold mb-3 text-cyan-400">Reto: Triángulo 30°-60°-90° 🎯</h2>
-            <p class="text-slate-300 text-sm mb-3">En un triángulo rectángulo $30^\circ - 60^\circ - 90^\circ$, la hipotenusa mide $16\text{ cm}$. ¿Cuál es la longitud del cateto opuesto al ángulo de $60^\circ$?</p>
+    <!-- Slide 2: 2. Ternas Pitagóricas: El Secreto del 80% PAA ⚡ -->
+    <div class="slide " id="slide-2">
+        <div class="card ">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Atajo de Velocidad</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/triangulos_notables.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Triángulos Notables</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">2. Ternas Pitagóricas: El Secreto del 80% PAA ⚡</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-hack">
+                    <p class="font-bold text-amber-300 text-sm mb-1">⚡ Las Dos Familias Sagradas:</p>
+                    <p class="text-xs sm:text-sm">En el examen los catetos e hipotenusas casi siempre son números enteros de estas dos familias (o sus múltiplos):</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div class="box-step">
+                        <p class="font-bold text-cyan-300 text-sm mb-1">Familia 3 - 4 - 5</p>
+                        <p class="text-slate-300">Catetos $3$ y $4$, hipotenusa $5$ ($3^2 + 4^2 = 9 + 16 = 25 = 5^2$).</p>
+                        <p class="text-slate-400 mt-1 font-semibold">Múltiplos que vienen en el examen:</p>
+                        <p class="text-cyan-300 font-mono">• Multiplicado por 2: $\mathbf{6 - 8 - 10}$</p>
+                        <p class="text-cyan-300 font-mono">• Multiplicado por 3: $\mathbf{9 - 12 - 15}$</p>
+                        <p class="text-cyan-300 font-mono">• Multiplicado por 4: $\mathbf{12 - 16 - 20}$</p>
+                    </div>
+
+                    <div class="box-step">
+                        <p class="font-bold text-emerald-300 text-sm mb-1">Familia 5 - 12 - 13</p>
+                        <p class="text-slate-300">Catetos $5$ y $12$, hipotenusa $13$ ($5^2 + 12^2 = 25 + 144 = 169 = 13^2$).</p>
+                        <p class="text-slate-400 mt-1 font-semibold">Múltiplo común:</p>
+                        <p class="text-emerald-300 font-mono">• Multiplicado por 2: $\mathbf{10 - 24 - 26}$</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 3 de 6</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: 3. Ejemplo Resuelto Paso a Paso (Sombra y Altura) ✍️ -->
+    <div class="slide " id="slide-3">
+        <div class="card ">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Ejemplo de Examen</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/triangulos_notables.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Triángulos Notables</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">3. Ejemplo Resuelto Paso a Paso (Sombra y Altura) ✍️</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3">
+                    <p class="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">Reactivo Clásico PAA:</p>
+                    <p class="text-sm font-semibold text-slate-100">
+                        Una escalera de 10 metros de largo está apoyada contra una pared vertical formando un ángulo de $60^circ$ con el suelo horizontal. ¿A qué altura del suelo toca la pared la punta de la escalera?
+                    </p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">Paso a paso sin trigonometría pesada:</p>
+                    <p><b>Paso 1 (Identificar el triángulo notable):</b> El suelo y la pared forman $90^circ$. Si el suelo forma $60^circ$ con la escalera, el ángulo de arriba mide $30^circ$. ¡Es un triángulo notable $\mathbf{30^circ-60^circ-90^circ}$!</p>
+                    
+                    <p><b>Paso 2 (Hipotenusa):</b> La escalera es la rampa (hipotenusa) $= \mathbf{10\text{ metros}}$.</p>
+
+                    <p><b>Paso 3 (Cateto opuesto a 30° en la base):</b> Es la mitad exacta de la hipotenusa: $\frac{10}{2} = \mathbf{5\text{ metros}}$.</p>
+
+                    <p><b>Paso 4 (Cateto opuesto a 60° - La pared vertical):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40 text-sm font-bold text-emerald-400">
+                        $$\text{Altura} = 5\sqrt{3}\text{ metros}$$
+                    </p>
+                    <p class="text-slate-300">¡Resuelto en 15 segundos sin usar seno ni coseno!</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 4 de 6</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: 4. Tu Turno: Práctica Guiada #1 🎯 -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/triangulos_notables.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Triángulos Notables</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">4. Tu Turno: Práctica Guiada #1 🎯</h2>
+            
+            
+            <p class="text-slate-300 text-sm mb-3">Un triángulo rectángulo tiene una hipotenusa de longitud 20 y uno de sus catetos mide 12. ¿Cuál es el área de dicho triángulo?</p>
             <div class="space-y-2 max-w-lg mx-auto text-left">
-                <button class="option-btn" onclick="checkPractice(this, false, 'tr1', '8 cm es el cateto menor (opuesto a 30°), no al de 60°.')">A) $8\text{ cm}$</button>
-                <button class="option-btn" onclick="checkPractice(this, true, 'tr1', '¡Correcto! El cateto menor (opuesto a 30°) es la mitad de la hipotenusa = 8 cm. El opuesto a 60° es el menor multiplicado por √3: 8√3 cm.')">B) $8\sqrt{3}\text{ cm}$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'tr1', '√2 es exclusivo del triángulo de 45°-45°.')">C) $8\sqrt{2}\text{ cm}$</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'tr1', 'No dupliques la hipotenusa.')">D) $16\sqrt{3}\text{ cm}$</button>
+                <button class="option-btn" onclick="checkPractice(this, true, 'tri1', '¡Excelente! Reconocemos la terna 3-4-5 multiplicada por 4: Cateto 3*4 = 12, Hipotenusa 5*4 = 20. Por tanto, el otro cateto mide obligatoriamente 4*4 = 16. Área del triángulo rectángulo = (base * altura) / 2 = (12 * 16) / 2 = 192 / 2 = 96.')">A) $96$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'tri1', '192 sería sin dividir entre 2 (base * altura).')">B) $192$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'tri1', '16 es la medida del otro cateto, pero la pregunta pide el ÁREA.')">C) $16$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'tri1', 'Cálculo erróneo de la terna.')">D) $120$</button>
             </div>
-            <div id="feedback-tr1" class="hidden"></div>
-            <div class="mt-4 flex justify-between items-center gap-2">
+            <div id="feedback-tri1" class="hidden"></div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen y Machete Final →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 5 de 6</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
 
-    <!-- Slide 5: Resumen Final -->
-    <div class="slide" id="slide-5">
+    <!-- Slide 5: 5. Machete Resumen y Puente a la Práctica 🚀 -->
+    <div class="slide " id="slide-5">
         <div class="card text-center">
-            <span class="badge" style="background:#10b981;">Resumen Maestro</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Triángulos Notables PAA 📋</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Resumen Maestro</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/triangulos_notables.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Triángulos Notables</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">5. Machete Resumen y Puente a la Práctica 🚀</h2>
+            
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left text-xs mb-4">
                 <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                    <div class="font-bold text-cyan-300 text-sm">30° - 60° - 90°</div>
-                    <div class="text-slate-300 mt-1">Lados proporcionales: $x, x\sqrt{3}, 2x$. Opuesto a 30° siempre es la mitad exacta de la hipotenusa.</div>
+                    <div class="font-bold text-cyan-300">📐 Triángulo 30°-60°-90°</div>
+                    <div class="text-slate-300 mt-1">Lados en proporción: $x$ (frente a 30°), $x\sqrt{3}$ (frente a 60°), $2x$ (hipotenusa).</div>
                 </div>
                 <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                    <div class="font-bold text-cyan-300 text-sm">45° - 45° - 90°</div>
-                    <div class="text-slate-300 mt-1">Lados proporcionales: $x, x, x\sqrt{2}$. La diagonal de cualquier cuadrado con lado $L$ mide $L\sqrt{2}$.</div>
+                    <div class="font-bold text-cyan-300">🟩 Triángulo 45°-45°-90°</div>
+                    <div class="text-slate-300 mt-1">Catetos iguales ($x, x$), diagonal/hipotenusa $= x\sqrt{2}$. La diagonal de un cuadrado siempre es $L\sqrt{2}$.</div>
                 </div>
                 <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                    <div class="font-bold text-cyan-300 text-sm">Terna 3 - 4 - 5</div>
-                    <div class="text-slate-300 mt-1">Múltiplos: 6-8-10, 9-12-15, 12-16-20, 15-20-25. Terna alternativa: 5-12-13.</div>
+                    <div class="font-bold text-cyan-300">⚡ Familia 3 - 4 - 5</div>
+                    <div class="text-slate-300 mt-1">Múltiplos inmediatos: $6-8-10$, $9-12-15$, $12-16-20$.</div>
                 </div>
                 <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                    <div class="font-bold text-cyan-300 text-sm">Semejanza y Escalas</div>
-                    <div class="text-slate-300 mt-1">$\frac{H}{S} = \frac{h}{s}$. Razón lineal $k$ ➔ Razón de áreas es $k^2$ ➔ Razón de volúmenes es $k^3$.</div>
+                    <div class="font-bold text-cyan-300">⚡ Familia 5 - 12 - 13</div>
+                    <div class="text-slate-300 mt-1">Ahorra tiempo de calcular raíces cuadradas gigantes en Pitágoras.</div>
                 </div>
             </div>
-            <div class="box-highlight text-xs text-slate-300">
-                🎉 <b>¡Módulo completado con éxito!</b> Ya dominas la geometría de triángulos más rentable de la PAA.
+
+            <div class="p-4 bg-gradient-to-r from-cyan-950/70 via-blue-950/60 to-indigo-950/70 rounded-2xl border border-cyan-500/40 text-center my-3 shadow-xl">
+                <h3 class="text-base sm:text-lg font-black text-cyan-300 mb-1">🎉 ¡Dominaste Triángulos Notables y Pitágoras!</h3>
+                <p class="text-xs sm:text-sm text-slate-300 mb-3">Practica tu reconocimiento de ternas en los 30 ejercicios del módulo.</p>
+                <a href="../practicos/mat/triangulos_notables.html" class="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-slate-950 font-black text-sm sm:text-base hover:brightness-110 shadow-lg shadow-emerald-500/30 hover:scale-[1.01] transition-all">
+                    <span>🚀 Poner a prueba en 30 Ejercicios de Triángulos Notables</span>
+                    <span>→</span>
+                </a>
             </div>
-            <div class="mt-4 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 6 de 6</div>
                 <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
+
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -311,6 +363,7 @@
             });
             const progressPercent = ((currentSlide + 1) / slides.length) * 100;
             progressBar.style.width = `${progressPercent}%`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         }
 
@@ -323,11 +376,11 @@
             if (isCorrect) {
                 btn.classList.add('option-correct');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
-                fb.innerHTML = `<b>🎉 ¡Excelente acierto!</b><br/>${explanation}`;
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
-                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa típica:</b><br/>${explanation}`;
             }
             if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise([fb]);
@@ -337,6 +390,12 @@
         function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
         function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
         function goToStart() { currentSlide = 0; updateUI(); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
         updateUI();
     </script>
 </body>

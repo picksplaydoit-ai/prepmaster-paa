@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual Maestro: Sistemas de Ecuaciones 2x2 PAA</title>
+    <title>Manual Maestro: Sistemas de Ecuaciones Lineales PAA | PrepMaster PAA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = {
@@ -13,11 +13,11 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
-        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow-x: hidden; }
+        .slide { display: none; min-height: 100vh; width: 100vw; padding: 1.5rem 1rem; opacity: 0; transition: opacity 0.25s ease; box-sizing: border-box; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
-        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card { background: #0b1120; border-radius: 1.75rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.2); max-width: 860px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 94vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
         .btn-nav:hover { background: #334155; }
         .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
@@ -27,232 +27,323 @@
         .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
         .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
         .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
-        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
-        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
-        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+        .box-dummy { background: rgba(99, 102, 241, 0.08); border-left: 4px solid #818cf8; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; }
+        .box-step { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px 18px; margin: 12px 0; }
+        .box-trap { background: rgba(239, 68, 68, 0.08); border-left: 4px solid #f87171; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fecaca; }
+        .box-hack { background: rgba(245, 158, 11, 0.08); border-left: 4px solid #fbbf24; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fef3c7; }
+        .gfx-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 10px; margin: 10px 0; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
     
-    <!-- Slide 0: Portada -->
+    <!-- Slide 0: Sistemas de Ecuaciones 2x2: El Truco de la Suma Directa ⚡ -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Álgebra PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Sistemas de Ecuaciones 2x2 📊</h2>
             
-        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
-            Aprende a resolver sistemas 2x2 por eliminación rápida (suma y resta), a interpretar soluciones gráficas (rectas que se cruzan, paralelas o coincidentes) y problemas de planteamiento.
-        </p>
-        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">⚡ Eliminación Rápida</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">📉 Intersección Rectas</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🚫 Sin Solución</div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Sistemas de Ecuaciones 2x2: El Truco de la Suma Directa ⚡</h2>
+            
+            
+            <p class="text-sm sm:text-base text-slate-300 mb-4 max-w-xl mx-auto leading-relaxed">
+                Aprende cómo resolver sistemas de dos ecuaciones con dos incógnitas. Descubre el <b>truco maestro de la PAA: sumar las dos ecuaciones completas para responder $(x+y)$ en 5 segundos</b> sin tener que despejar cada variable por separado.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-300 max-w-lg mx-auto mb-4">
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">⚡ Suma Directa Rápida</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">⚔️ Método de Eliminación</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🌮 Tacos y Refrescos Verbales</div>
+            </div>
+            
+        <div class="my-4 p-3 bg-slate-900/80 rounded-2xl border border-pink-500/20 max-w-lg mx-auto shadow-md">
+            <div class="text-[11px] font-bold text-pink-400 uppercase tracking-wider mb-1 flex items-center justify-center gap-1.5">
+                <span>📱 Micro-clases en TikTok @prepmasterudg</span>
+            </div>
+            <a href="https://www.tiktok.com/@prepmasterudg" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 transition-all text-xs font-bold">
+                <span>▶️ Ver tips rápidos en TikTok Oficial</span>
+            </a>
         </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            <div class="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 max-w-md mx-auto">
+                <p class="text-xs text-emerald-300 font-semibold">¿Quieres ir directo a los 30 reactivos?</p>
+                <a href="../practicos/mat/sistemas.html" class="inline-block mt-1.5 text-xs font-extrabold text-emerald-400 hover:text-emerald-200 underline">
+                    🚀 Abrir 30 Ejercicios Prácticos de Sistemas →
+                </a>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <div></div>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Sistemas 2x2 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 1 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Sistemas para Dummies →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 1: Concepto 1 -->
+    <!-- Slide 1: 1. ¿Qué es un sistema 2x2? (Dos Pistas para Dos Secretos) 🔍 -->
     <div class="slide " id="slide-1">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">El Método de Eliminación (Suma y Resta) ⚡</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <p>Es el método más veloz para la PAA. Multiplica una o ambas ecuaciones para que los coeficientes de una variable sean <b>iguales en magnitud pero con signo contrario</b>:</p>
-            <div class="box-highlight text-xs space-y-1">
-                <p>Al sumar las ecuaciones verticalmente, esa variable <b>se cancela a cero</b> al instante, dejando una ecuación simple con una sola incógnita.</p>
-                <p>💡 <b>Atajo PAA:</b> Lee bien la pregunta. A veces la PAA no pide $x$ ni $y$, sino <i>"¿Cuánto vale $x + y$?"</i> o <i>"¿Cuánto vale $2x - y$?"</i>. En muchos casos basta con <b>sumar o restar las dos ecuaciones directamente</b> sin despejar las variables individuales.</p>
-            </div>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Para Dummies #1</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/sistemas.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Sistemas de Ecuaciones</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">1. ¿Qué es un sistema 2x2? (Dos Pistas para Dos Secretos) 🔍</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-dummy">
+                    <p class="font-bold text-indigo-300 text-base mb-1">💡 La Cuenta de los Tacos y Refrescos:</p>
+                    <p>Vas con un amigo a la taquería. No sabes cuánto cuesta cada taco ($x$) ni cada refresco ($y$). Pero tienes dos pistas claras:</p>
+                    <p class="mt-1 text-xs sm:text-sm">• Tu amigo pagó por 3 tacos y 2 refrescos: $\mathbf{3x + 2y = 80}$.</p>
+                    <p class="text-xs sm:text-sm">• Tú pagaste por 1 taco y 2 refrescos: $\mathbf{x + 2y = 40}$.</p>
+                    <p class="mt-2 text-xs text-emerald-300 font-bold">¡Mira qué fácil! Los dos pidieron 2 refrescos. La única diferencia es que tu amigo pidió 2 tacos más ($3x - x = 2x$) y pagó $40 más ($80 - 40 = 40$). Por lo tanto, 2 tacos cuestan $40 $\rightarrow$ ¡Cada taco vale $20!</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 2 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <!-- Slide 2: 2. El Atajo Maestro de la PAA: Suma Directa en 5 Segundos ⚡ -->
     <div class="slide " id="slide-2">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: El Atajo de la Suma Directa 🔍</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">Si $\begin{cases} 4x + 3y = 25 \\ 2x + 5y = 35 \end{cases}$, ¿cuál es el valor de $x + y$?</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Maestra (Sin despejar $x$ ni $y$):</b><br/>
-                    1. Sumamos ambas ecuaciones miembro a miembro:<br/>
-                    $(4x + 2x) + (3y + 5y) = 25 + 35$<br/>
-                    $6x + 6y = 60$<br/>
-                    2. Dividimos toda la igualdad entre 6:<br/>
-                    $\mathbf{x + y = 10}$. ¡Resuelto en 10 segundos!
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Hack PAA #1</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/sistemas.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Sistemas de Ecuaciones</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">2. El Atajo Maestro de la PAA: Suma Directa en 5 Segundos ⚡</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-hack">
+                    <p class="font-bold text-amber-300 text-sm mb-1">⚡ El 60% de reactivos de sistemas en la PAA se resuelven así:</p>
+                    <p class="text-xs sm:text-sm">El examen NO te pide cuánto vale $x$ ni cuánto vale $y$. Te pregunta: <b>"¿Cuál es el valor de $x + y$?"</b></p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">Ejemplo Real de Examen:</p>
+                    <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 font-mono text-center text-sm">
+                        $2x + 5y = 31$<br/>
+                        $4x + y = 17$
+                    </div>
+                    <p class="text-slate-300"><b>¡NO te pongas a despejar por sustitución!</b> Simplemente suma las dos ecuaciones hacia abajo como una suma normal de primaria:</p>
+                    <div class="bg-slate-950 p-2.5 rounded-lg text-center font-bold text-cyan-300 text-sm">
+                        $$(2x + 4x) + (5y + y) = 31 + 17$$
+                        $$6x + 6y = 48$$
+                    </div>
+                    <p class="text-slate-300">Ahora solo divide toda la ecuación entre 6:</p>
+                    <div class="bg-slate-900 p-2.5 rounded-lg border border-emerald-500/40 text-center font-bold text-emerald-400 text-base">
+                        $$\frac{6x + 6y}{6} = \frac{48}{6} \implies \mathbf{x + y = 8}$$
+                    </div>
+                    <p class="text-emerald-400 font-bold">¡Respondiste la pregunta en 10 segundos sin saber cuánto vale cada letra por separado!</p>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 3 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 3: Práctica 1 -->
+    <!-- Slide 3: 3. Método de Eliminación (Suma y Resta Paso a Paso) ⚔️ -->
     <div class="slide " id="slide-3">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el valor de x en el sistema? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">Resuelve el sistema para $x$: $\begin{cases} 3x - 2y = 13 \\ 2x + 2y = 12 \end{cases}$</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'sis1', '¡Correcto! Suma directa: las 2y se cancelan: (3x + 2x) = 13 + 12 -> 5x = 25 -> x = 5.')">A) $x = 5$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'sis1', 'y = 1 es el valor de la otra variable, te piden x.')">B) $x = 1$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'sis1', 'Cálculo erróneo.')">C) $x = 4$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'sis1', 'Revisa la suma 13 + 12 = 25.')">D) $x = 6$</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Procedimiento Seguro</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-sis1" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/sistemas.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Sistemas de Ecuaciones</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">3. Método de Eliminación (Suma y Resta Paso a Paso) ⚔️</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>Si la pregunta te pide el valor de una variable específica (ej. "¿cuánto vale $x$?"), usa <b>eliminación</b>:</p>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">Tres pasos transparentes:</p>
+                    <p><b>Paso 1:</b> Elige qué letra quieres eliminar y empareja sus números con signos opuestos.</p>
+                    <p><b>Paso 2:</b> Suma las dos ecuaciones verticalmente: esa letra se cancela y te queda una ecuación con una sola incógnita.</p>
+                    <p><b>Paso 3:</b> Despeja esa letra y sustituye en cualquiera de las ecuaciones originales para encontrar la otra.</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Casos Especiales de Solución →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 4 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 4: Concepto 2 -->
+    <!-- Slide 4: 4. Ejemplo Resuelto Paso a Paso (Eliminación Completa) ✍️ -->
     <div class="slide " id="slide-4">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Geometría del Sistema: ¿Cuántas Soluciones Hay? 📉</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-                <div class="bg-slate-900 p-2.5 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-cyan-300">1 Solución Única</p>
-                    <p class="text-slate-300 mt-1">Las rectas tienen <b>distinta pendiente</b> y se cruzan en un único punto $(x, y)$.</p>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Ejemplo de Examen</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/sistemas.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Sistemas de Ecuaciones</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">4. Ejemplo Resuelto Paso a Paso (Eliminación Completa) ✍️</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3">
+                    <p class="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">Reactivo Modelo PAA:</p>
+                    <p class="text-sm font-semibold text-slate-100">
+                        Resuelve el sistema y determina el valor de $y$:
+                        $$3x + 2y = 19$$
+                        $$5x - 2y = 13$$
+                    </p>
                 </div>
-                <div class="bg-slate-900 p-2.5 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-cyan-300">0 Soluciones (Sin solución)</p>
-                    <p class="text-slate-300 mt-1">Las rectas son <b>paralelas</b> (misma pendiente, distinto corte $b$). Al resolver da una falsedad: $0 = 7$.</p>
-                </div>
-                <div class="bg-slate-900 p-2.5 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-cyan-300">Infinitas Soluciones</p>
-                    <p class="text-slate-300 mt-1">Es la <b>misma recta</b> disfrazada (una ecuación es múltiplo de la otra). Da una identidad: $0 = 0$.</p>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">¡Mira qué regalo! Las $y$ ya tienen signos opuestos ($+2y$ y $-2y$):</p>
+                    
+                    <p><b>Paso 1 (Sumar verticalmente):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40 text-sm">
+                        $$(3x + 5x) + (2y - 2y) = 19 + 13$$
+                        $$8x + 0 = 32 \implies x = \frac{32}{8} = \mathbf{4}$$
+                    </p>
+
+                    <p><b>Paso 2 (Sustituir $x = 4$ para hallar $y$):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40">
+                        $$3(4) + 2y = 19$$
+                        $$12 + 2y = 19 \implies 2y = 19 - 12 = 7 \implies \mathbf{y = \frac{7}{2} = 3.5}$$
+                    </p>
+                    <p class="text-emerald-400 font-bold">¡Resuelto sin rodeos!</p>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 5 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 5: Ejemplo Resuelto 2 -->
+    <!-- Slide 5: 5. Tu Turno: Práctica Guiada #1 🎯 -->
     <div class="slide " id="slide-5">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Condición para que NO Tenga Solución 🔍</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">¿Para qué valor de $k$ el sistema $\begin{cases} 3x - 6y = 12 \\ kx - 4y = 8 \end{cases}$ tiene infinitas soluciones?</p>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/sistemas.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Sistemas de Ecuaciones</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">5. Tu Turno: Práctica Guiada #1 🎯</h2>
+            
+            
+            <p class="text-slate-300 text-sm mb-3">Si $3x + 4y = 25$ y $2x + y = 10$, ¿cuál es el valor de $x$?</p>
+            <div class="space-y-2 max-w-lg mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'sis1', '¡Excelente! Multiplicamos la segunda ecuación por -4 para eliminar las y: -4*(2x + y = 10) -> -8x - 4y = -40. Ahora sumamos con la primera: (3x - 8x) + (4y - 4y) = 25 - 40 -> -5x = -15 -> x = 3. (Sustituyendo: 2(3) + y = 10 -> y = 4).')">A) $x = 3$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'sis1', '4 es el valor de y, pero la pregunta pide x.')">B) $x = 4$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'sis1', 'Cuidado con los signos al multiplicar por -4: -4 * 10 = -40.')">C) $x = 5$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'sis1', 'Revisa la suma vertical de las ecuaciones.')">D) $x = 2$</button>
             </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. Para infinitas soluciones, las razones de coeficientes deben ser idénticas en todo:<br/>
-                    $\frac{3}{k} = \frac{-6}{-4} = \frac{12}{8}$.<br/>
-                    2. Simplificamos la razón numérica: $\frac{-6}{-4} = \frac{3}{2}$.<br/>
-                    3. Igualamos: $\frac{3}{k} = \frac{3}{2} \implies \mathbf{k = 2}$.
+            <div id="feedback-sis1" class="hidden"></div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 6 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: 6. Machete Resumen y Puente a la Práctica 🚀 -->
+    <div class="slide " id="slide-6">
+        <div class="card text-center">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Resumen Maestro</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/sistemas.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Sistemas de Ecuaciones</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">6. Machete Resumen y Puente a la Práctica 🚀</h2>
+            
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left text-xs mb-4">
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">⚡ Hack de Suma Directa</div>
+                    <div class="text-slate-300 mt-1">Si piden $x+y$ o $x-y$, suma o resta las dos ecuaciones completas antes de despejar.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">⚔️ Eliminación Limpia</div>
+                    <div class="text-slate-300 mt-1">Multiplica una ecuación por un número para igualar coeficientes con signos contrarios.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🌮 Planteamiento Verbal</div>
+                    <div class="text-slate-300 mt-1">Ecuación 1: cantidad de artículos. Ecuación 2: dinero o costo total.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">📍 Interpretación Geométrica</div>
+                    <div class="text-slate-300 mt-1">La solución $(x, y)$ es el punto de cruce en el plano. Paralelas = sin solución.</div>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
-            </div>
-        </div>
-    </div>
-  
 
-    <!-- Slide 6: Práctica 2 -->
-    <div class="slide " id="slide-6">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Para qué valor de k NO tiene solución? 🎯</h2>
+            <div class="p-4 bg-gradient-to-r from-cyan-950/70 via-blue-950/60 to-indigo-950/70 rounded-2xl border border-cyan-500/40 text-center my-3 shadow-xl">
+                <h3 class="text-base sm:text-lg font-black text-cyan-300 mb-1">🎉 ¡Dominaste los Sistemas de Ecuaciones!</h3>
+                <p class="text-xs sm:text-sm text-slate-300 mb-3">Pon a prueba tu agilidad resolviendo los 30 ejercicios prácticos de sistemas.</p>
+                <a href="../practicos/mat/sistemas.html" class="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-slate-950 font-black text-sm sm:text-base hover:brightness-110 shadow-lg shadow-emerald-500/30 hover:scale-[1.01] transition-all">
+                    <span>🚀 Poner a prueba en 30 Ejercicios Prácticos de Sistemas</span>
+                    <span>→</span>
+                </a>
+            </div>
             
-        <p class="text-slate-300 text-sm mb-3">¿Para qué valor de la constante $k$ el sistema de ecuaciones $\begin{cases} 2x - 5y = 10 \\ kx - 15y = 20 \end{cases}$ NO tiene ninguna solución?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'sis2', '¡Excelente! Para rectas paralelas (sin solución), las pendientes deben ser iguales pero los términos independientes distintos: 2/k = -5/(-15) = 1/3 -> k = 6. Comprobación: 10/20 = 1/2 != 1/3.')">A) $k = 6$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'sis2', 'Cuidado con el signo: (-5)/(-15) es positivo (+1/3), por lo que k = +6.')">B) $k = -6$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'sis2', 'Cálculo erróneo.')">C) $k = 4$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'sis2', 'Revisa la proporción 2/k = 5/15.')">D) $k = 10$</button>
-        </div>
-        <div id="feedback-sis2" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
-            </div>
-        </div>
-    </div>
-  
-
-    <!-- Slide 7: Resumen -->
-    <div class="slide " id="slide-7">
-        <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Sistemas 2x2 📋</h2>
-            
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Preguntas de Combinación</div>
-                <div class="text-slate-300 mt-1">Si piden $x + y$ o $x - y$, suma o resta las dos ecuaciones directamente.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Eliminación Rápida</div>
-                <div class="text-slate-300 mt-1">Multiplica cruzado para igualar coeficientes y suma verticalmente.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Sin Solución = Paralelas</div>
-                <div class="text-slate-300 mt-1">Misma relación en $x$ e $y$ ($\frac{a_1}{a_2} = \frac{b_1}{b_2}$), pero distinta en $c$.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Infinitas = Misma Recta</div>
-                <div class="text-slate-300 mt-1">Todo proporcional: $\frac{a_1}{a_2} = \frac{b_1}{b_2} = \frac{c_1}{c_2}$.</div>
-            </div>
-        </div>
-        <div class="box-highlight text-xs text-slate-300">
-            🎉 <b>¡Módulo completado!</b> Los sistemas 2x2 ya no serán una prueba de resistencia en el examen.
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 7 de 7</div>
                 <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
-  
+
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -268,6 +359,7 @@
             });
             const progressPercent = ((currentSlide + 1) / slides.length) * 100;
             progressBar.style.width = `${progressPercent}%`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         }
 
@@ -280,11 +372,11 @@
             if (isCorrect) {
                 btn.classList.add('option-correct');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
-                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
-                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa típica:</b><br/>${explanation}`;
             }
             if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise([fb]);
@@ -294,6 +386,12 @@
         function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
         function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
         function goToStart() { currentSlide = 0; updateUI(); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
         updateUI();
     </script>
 </body>

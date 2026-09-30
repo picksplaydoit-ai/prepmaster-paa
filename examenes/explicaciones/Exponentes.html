@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual Maestro: Exponentes y Radicales PAA</title>
+    <title>Manual Maestro: Leyes de Exponentes y Radicales PAA | PrepMaster PAA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = {
@@ -13,11 +13,11 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
-        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow-x: hidden; }
+        .slide { display: none; min-height: 100vh; width: 100vw; padding: 1.5rem 1rem; opacity: 0; transition: opacity 0.25s ease; box-sizing: border-box; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
-        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card { background: #0b1120; border-radius: 1.75rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.2); max-width: 860px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 94vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
         .btn-nav:hover { background: #334155; }
         .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
@@ -27,243 +27,459 @@
         .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
         .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
         .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
-        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
-        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
-        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+        .box-dummy { background: rgba(99, 102, 241, 0.08); border-left: 4px solid #818cf8; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; }
+        .box-step { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px 18px; margin: 12px 0; }
+        .box-trap { background: rgba(239, 68, 68, 0.08); border-left: 4px solid #f87171; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fecaca; }
+        .box-hack { background: rgba(245, 158, 11, 0.08); border-left: 4px solid #fbbf24; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fef3c7; }
+        .gfx-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 10px; margin: 10px 0; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
     
-    <!-- Slide 0: Portada -->
+    <!-- Slide 0: Leyes de Exponentes y Radicales sin Sufrir ⚡ -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Álgebra PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Leyes de Exponentes y Radicales 🚀</h2>
             
-        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
-            Domina las 7 leyes de los exponentes, exponentes negativos, fraccionarios y simplificación de raíces cuadradas para resolver reactivos algebraicos al vuelo.
-        </p>
-        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🔄 Exponente Negativo</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🌱 Exponente Fraccionario</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">✂️ Simplificar Raíces</div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Leyes de Exponentes y Radicales sin Sufrir ⚡</h2>
+            
+            
+            <p class="text-sm sm:text-base text-slate-300 mb-4 max-w-xl mx-auto leading-relaxed">
+                Domina las 6 leyes de exponentes que rigen el álgebra de la PAA. Aprende por qué $x^0 = 1$, cómo convertir raíces en fracciones y cómo esquivar la clásica trampa de la suma de potencias ($2^{10} + 2^{10}$).
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-300 max-w-lg mx-auto mb-4">
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">✖️ Multiplicar = Sumar Exponentes</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🔄 Exponente Negativo y Fraccionario</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">⚠️ Trampa $2^{10} + 2^{10}$</div>
+            </div>
+            
+        <div class="my-4 p-3 bg-slate-900/80 rounded-2xl border border-pink-500/20 max-w-lg mx-auto shadow-md">
+            <div class="text-[11px] font-bold text-pink-400 uppercase tracking-wider mb-1 flex items-center justify-center gap-1.5">
+                <span>📱 Micro-clases en TikTok @prepmasterudg</span>
+            </div>
+            <a href="https://www.tiktok.com/@prepmasterudg" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 transition-all text-xs font-bold">
+                <span>▶️ Ver tips rápidos en TikTok Oficial</span>
+            </a>
         </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            <div class="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 max-w-md mx-auto">
+                <p class="text-xs text-emerald-300 font-semibold">¿Quieres medir tu nivel ahora mismo?</p>
+                <a href="../practicos/mat/exponentes.html" class="inline-block mt-1.5 text-xs font-extrabold text-emerald-400 hover:text-emerald-200 underline">
+                    🚀 Abrir 30 Ejercicios Prácticos de Exponentes →
+                </a>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <div></div>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Exponentes →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 1 de 9</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Exponentes para Dummies →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 1: Concepto 1 -->
+    <!-- Slide 1: 1. ¿Qué es un exponente? (La Máquina Multiplicadora) 🏭 -->
     <div class="slide " id="slide-1">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Las Leyes Fundamentales de Exponentes 📜</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="grid grid-cols-2 gap-2 text-xs">
-                <div class="bg-slate-900 p-2.5 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-cyan-300">Multiplicación (Bases iguales):</p>
-                    <p class="text-emerald-400 mt-1">$x^a \cdot x^b = x^{a+b}$</p>
-                </div>
-                <div class="bg-slate-900 p-2.5 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-cyan-300">División (Bases iguales):</p>
-                    <p class="text-emerald-400 mt-1">$\frac{x^a}{x^b} = x^{a-b}$</p>
-                </div>
-                <div class="bg-slate-900 p-2.5 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-cyan-300">Potencia de Potencia:</p>
-                    <p class="text-emerald-400 mt-1">$(x^a)^b = x^{a \cdot b}$</p>
-                </div>
-                <div class="bg-slate-900 p-2.5 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-cyan-300">Exponente Cero:</p>
-                    <p class="text-emerald-400 mt-1">$x^0 = 1 \quad (x \neq 0)$</p>
-                </div>
-            </div>
-            <div class="box-highlight text-xs">
-                <b>Exponente Negativo:</b> Pasa al lado contrario como positivo: $x^{-n} = \frac{1}{x^n}$ y $\left(\frac{a}{b}\right)^{-n} = \left(\frac{b}{a}\right)^n$.
-            </div>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Para Dummies #1</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/exponentes.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Exponentes</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">1. ¿Qué es un exponente? (La Máquina Multiplicadora) 🏭</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-dummy">
+                    <p class="font-bold text-indigo-300 text-base mb-1">💡 La Fotocopiadora que Multiplica:</p>
+                    <p>Un exponente es solo una forma corta de escribir multiplicaciones repetidas:</p>
+                    <p class="mt-1 text-sm font-bold text-cyan-300 bg-slate-900 p-2 rounded-lg text-center">
+                        $$2^4 = 2 \times 2 \times 2 \times 2 = \mathbf{16}$$
+                    </p>
+                    <p class="text-xs text-slate-300 mt-1">⚠️ <b>El error de novato:</b> Creer que $2^4 = 2 \times 4 = 8$. ¡No! La base (el 2) se multiplica por sí misma tantas veces como diga el exponente (4 veces).</p>
+                </div>
+
+                <div class="box-step text-xs space-y-1">
+                    <p class="font-bold text-cyan-300">Anatomía:</p>
+                    <p>En $a^n$:</p>
+                    <p>• $\mathbf{a}$ es la <b>Base</b> (el número que se multiplica).</p>
+                    <p>• $\mathbf{n}$ es el <b>Exponente</b> (cuántas veces se multiplica la base).</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 2 de 9</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <!-- Slide 2: 2. Las 6 Reglas Sagradas explicadas con Manzanas 🍎 -->
     <div class="slide " id="slide-2">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Simplificación de Exponentes 🔍</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">Simplifica la expresión: $\frac{(2x^3 y^{-2})^3}{4x^5 y^{-8}}$</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. Elevar numerador al cubo: $2^3 \cdot (x^3)^3 \cdot (y^{-2})^3 = 8 x^9 y^{-6}$.<br/>
-                    2. Armar fracción: $\frac{8 x^9 y^{-6}}{4 x^5 y^{-8}}$.<br/>
-                    3. Coeficientes: $\frac{8}{4} = 2$.<br/>
-                    4. Variable $x$: $x^{9 - 5} = x^4$.<br/>
-                    5. Variable $y$: $y^{-6 - (-8)} = y^{-6 + 8} = y^2$.<br/>
-                    6. Resultado final = $\mathbf{2x^4 y^2}$.
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Reglas de Oro</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/exponentes.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Exponentes</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">2. Las 6 Reglas Sagradas explicadas con Manzanas 🍎</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    <div class="box-step">
+                        <p class="font-bold text-cyan-300">1. Multiplicación (Misma Base)</p>
+                        <p class="font-mono text-cyan-200 my-1">$x^a \cdot x^b = x^{a+b}$</p>
+                        <p class="text-slate-400">Los exponentes se <b>suman</b>: $x^2 \cdot x^3 = (xx)(xxx) = x^5$.</p>
+                    </div>
+
+                    <div class="box-step">
+                        <p class="font-bold text-cyan-300">2. División (Misma Base)</p>
+                        <p class="font-mono text-cyan-200 my-1">$\frac{x^a}{x^b} = x^{a-b}$</p>
+                        <p class="text-slate-400">Los exponentes se <b>restan</b>: $\frac{x^5}{x^2} = x^{5-2} = x^3$.</p>
+                    </div>
+
+                    <div class="box-step">
+                        <p class="font-bold text-cyan-300">3. Potencia de Potencia</p>
+                        <p class="font-mono text-cyan-200 my-1">$(x^a)^b = x^{a \cdot b}$</p>
+                        <p class="text-slate-400">Los exponentes se <b>multiplican</b>: $(x^3)^4 = x^{12}$.</p>
+                    </div>
+
+                    <div class="box-step">
+                        <p class="font-bold text-cyan-300">4. Exponente Cero</p>
+                        <p class="font-mono text-cyan-200 my-1">$x^0 = 1$ (siempre que $x \ne 0$)</p>
+                        <p class="text-slate-400">Cualquier cosa elevada a la 0 da 1: $5^0 = 1$, $(47xy)^0 = 1$.</p>
+                    </div>
+
+                    <div class="box-step">
+                        <p class="font-bold text-cyan-300">5. Exponente Negativo</p>
+                        <p class="font-mono text-cyan-200 my-1">$x^{-n} = \frac{1}{x^n}$</p>
+                        <p class="text-slate-400">El signo menos manda la potencia al sótano: $2^{-3} = \frac{1}{2^3} = \frac{1}{8}$.</p>
+                    </div>
+
+                    <div class="box-step">
+                        <p class="font-bold text-cyan-300">6. Exponente Fraccionario (Raíz)</p>
+                        <p class="font-mono text-cyan-200 my-1">$x^{\frac{m}{n}} = \sqrt[n]{x^m}$</p>
+                        <p class="text-slate-400">El de abajo es la raíz: $8^{\frac{2}{3}} = (\sqrt[3]{8})^2 = 2^2 = 4$.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 3 de 9</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 3: Práctica 1 -->
+    <!-- Slide 3: 3. La Trampa Mortal de la PAA: ¿Cuánto es $2^{10} + 2^{10}$? 🚨 -->
     <div class="slide " id="slide-3">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es la forma simplificada? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">Simplifica la expresión $\frac{(3a^2 b^3)^2}{9a^7 b^{-2}}$:</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'exp1', '¡Correcto! Numerador: 9 a^4 b^6. Dividido entre 9 a^7 b^-2: los 9 se cancelan; a^(4-7) = a^-3 = 1/a^3; b^(6 - (-2)) = b^8. Resultado: b^8 / a^3.')">A) $\frac{b^8}{a^3}$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'exp1', 'Cuidado con el exponente de b: 6 - (-2) = 6 + 2 = 8, no 4.')">B) $\frac{b^4}{a^3}$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'exp1', 'El 9 del numerador (3^2) se cancela exactamente con el 9 del denominador.')">C) $\frac{3b^8}{a^3}$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'exp1', 'La variable a queda en el denominador porque 7 > 4.')">D) $a^3 b^8$</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Trampa PAA Clásica</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-exp1" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Exponentes Fraccionarios y Radicales →</button>
-            </div>
-        </div>
+        <a href="../practicos/mat/exponentes.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Exponentes</span>
+            <span>→</span>
+        </a>
     </div>
-  
-
-    <!-- Slide 4: Concepto 2 -->
-    <div class="slide " id="slide-4">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Exponentes Fraccionarios y Descomposición de Raíces 🌱</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <p>Una raíz es simplemente una potencia fraccionaria: <i>"la raíz va abajo, la potencia va arriba"</i>:</p>
-            <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
-                <span class="text-xl font-bold text-cyan-300">$$\sqrt[n]{x^m} = x^{\frac{m}{n}}$$</span>
-            </div>
-            <div class="box-highlight text-xs">
-                <b>Simplificar raíces numéricas:</b> Descompón en un cuadrado perfecto multiplicado por otro número:<br/>
-                $\sqrt{72} = \sqrt{36 \times 2} = \sqrt{36} \cdot \sqrt{2} = 6\sqrt{2}$.<br/>
-                $\sqrt{50} = \sqrt{25 \times 2} = 5\sqrt{2}$.
-            </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
-            </div>
-        </div>
-    </div>
-  
-
-    <!-- Slide 5: Ejemplo Resuelto 2 -->
-    <div class="slide " id="slide-5">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Evaluación de Potencia Fraccionaria 🔍</h2>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">3. La Trampa Mortal de la PAA: ¿Cuánto es $2^{10} + 2^{10}$? 🚨</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">Calcula el valor numérico exacto de $27^{\frac{2}{3}} + 16^{-\frac{3}{4}}$</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. $27^{\frac{2}{3}} = (\sqrt[3]{27})^2 = (3)^2 = 9$.<br/>
-                    2. $16^{-\frac{3}{4}} = \frac{1}{16^{\frac{3}{4}}} = \frac{1}{(\sqrt[4]{16})^3} = \frac{1}{(2)^3} = \frac{1}{8}$.<br/>
-                    3. Suma: $9 + \frac{1}{8} = \frac{72 + 1}{8} = \mathbf{\frac{73}{8}}$.
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-trap">
+                    <p class="font-bold text-rose-300 text-sm mb-1">🚨 La pregunta donde reprueba el 80%:</p>
+                    <p class="text-xs text-slate-200">"¿Cuál es el resultado simplificado de $2^{10} + 2^{10}$?"</p>
+                    <p class="text-xs text-rose-300 mt-1">El alumno novato piensa: "¡Ah, sumo los exponentes!" $\rightarrow 2^{20}$ ❌ <b>¡ERROR!</b> O dice: "¡Sumo las bases!" $\rightarrow 4^{10}$ ❌ <b>¡ERROR!</b></p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">La Explicación para Dummies (Piensa en manzanas):</p>
+                    <p>Imagina que $2^{10}$ es una manzana:</p>
+                    <p class="text-center font-bold text-base text-cyan-300 my-1">
+                        $1\text{ manzana} + 1\text{ manzana} = 2\text{ manzanas}$
+                    </p>
+                    <p>Por lo tanto:</p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40 text-sm font-bold text-emerald-400">
+                        $$2^{10} + 2^{10} = 2 \times (2^{10})$$
+                    </p>
+                    <p>El primer 2 tiene un exponente 1 invisible: $2^1 \times 2^{10}$.</p>
+                    <p>Ahora sí, multiplicamos potencias de la misma base sumando exponentes: $1 + 10 = \mathbf{11}$.</p>
+                    <div class="bg-slate-900 p-2.5 rounded-lg border border-emerald-500/40 text-center font-bold text-emerald-300 text-base">
+                        $$2^{10} + 2^{10} = 2^{11}$$
+                    </div>
+                    <p class="text-slate-300">¡Si sumas dos cantidades idénticas, obtienes el doble! Y el doble de una potencia de base 2 solo aumenta su exponente en 1.</p>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 4 de 9</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 6: Práctica 2 -->
+    <!-- Slide 4: 4. Ejemplo Resuelto Paso a Paso (Sin saltos mágicos) ✍️ -->
+    <div class="slide " id="slide-4">
+        <div class="card ">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Ejemplo Desglosado</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/exponentes.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Exponentes</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">4. Ejemplo Resuelto Paso a Paso (Sin saltos mágicos) ✍️</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3">
+                    <p class="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">Reactivo Típico PAA:</p>
+                    <p class="text-sm font-semibold text-slate-100">
+                        Simplifica completamente la expresión:
+                        $$\frac{(3x^3 y^2)^3}{9x^4 y^8}$$
+                    </p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">Paso a paso metódico:</p>
+                    <p><b>Paso 1 (Elevar el numerador al cubo):</b> El exponente 3 de afuera afecta a TODO adentro:</p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40">
+                        • $3^3 = 27$<br/>
+                        • $(x^3)^3 = x^{3 \times 3} = x^9$<br/>
+                        • $(y^2)^3 = y^{2 \times 3} = y^6$<br/>
+                        Numerador limpio = $\mathbf{27x^9 y^6}$.
+                    </p>
+
+                    <p><b>Paso 2 (Escribir la fracción):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40">
+                        $$\frac{27x^9 y^6}{9x^4 y^8}$$
+                    </p>
+
+                    <p><b>Paso 3 (Simplificar número por número y letra por letra):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40">
+                        • Números: $\frac{27}{9} = \mathbf{3}$<br/>
+                        • Las $x$: $\frac{x^9}{x^4} = x^{9 - 4} = \mathbf{x^5}$ (queda arriba)<br/>
+                        • Las $y$: $\frac{y^6}{y^8} = y^{6 - 8} = y^{-2} = \mathbf{\frac{1}{y^2}}$ (queda abajo)
+                    </p>
+
+                    <p class="text-emerald-400 font-bold text-sm">Resultado final: $$\mathbf{\frac{3x^5}{y^2}}$$</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 5 de 9</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: 5. Tu Turno: Práctica Guiada #1 🎯 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/exponentes.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Exponentes</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">5. Tu Turno: Práctica Guiada #1 🎯</h2>
+            
+            
+            <p class="text-slate-300 text-sm mb-3">¿Cuál es el valor numérico exacto de la expresión $16^{\frac{3}{4}} + 27^{-\frac{1}{3}}$?</p>
+            <div class="space-y-2 max-w-lg mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'exp1', '¡Excelente! Término 1: 16^(3/4) = (raíz cuarta de 16)^3 = 2^3 = 8. Término 2: 27^(-1/3) = 1 / (27^(1/3)) = 1 / (raíz cúbica de 27) = 1/3. Sumamos: 8 + 1/3 = 24/3 + 1/3 = 25/3 (o 8 1/3).')">A) $\frac{25}{3}$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'exp1', 'Cuidado con el exponente negativo: 27^(-1/3) no es -9, es 1 / raíz cúbica(27) = 1/3.')">B) $5$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'exp1', 'Recuerda que la raíz cuarta de 16 es 2, y 2 al cubo es 8.')">C) $\frac{23}{3}$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'exp1', 'Cálculo erróneo de raíces.')">D) $11$</button>
+            </div>
+            <div id="feedback-exp1" class="hidden"></div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 6 de 9</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: 6. Ecuaciones Exponenciales: El Truco de la Misma Base 🔑 -->
     <div class="slide " id="slide-6">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el valor simplificado? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">Calcula el valor de $\sqrt{48} + \sqrt{75} - \sqrt{12}$:</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'exp2', '¡Excelente! sqrt(48) = 4sqrt(3), sqrt(75) = 5sqrt(3), sqrt(12) = 2sqrt(3). Suma: (4 + 5 - 2)sqrt(3) = 7sqrt(3).')">A) $7\sqrt{3}$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'exp2', 'No sumes los números dentro de la raíz (48 + 75 - 12); primero simplifica cada radical.')">B) $\sqrt{111}$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'exp2', 'Cálculo erróneo.')">C) $9\sqrt{3}$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'exp2', 'Revisa la resta de 2sqrt(3).')">D) $5\sqrt{3}$</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Ecuaciones Pro</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-exp2" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/exponentes.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Exponentes</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">6. Ecuaciones Exponenciales: El Truco de la Misma Base 🔑</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-hack">
+                    <p class="font-bold text-amber-300 text-sm mb-1">⚡ El Principio de Bases Iguales:</p>
+                    <p class="text-xs sm:text-sm">Si logras que ambos lados de la ecuación tengan <b>la misma base</b>, puedes tachar las bases e igualar directamente los exponentes:</p>
+                    <div class="bg-slate-900 p-2 rounded-lg text-center font-bold text-amber-200 my-1">
+                        $$a^M = a^N \implies M = N$$
+                    </div>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300">Ejemplo de Examen: Resuelve $4^{x+1} = 32$</p>
+                    <p><b>Paso 1:</b> Convertimos el 4 y el 32 a base común 2:</p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40">
+                        • $4 = 2^2 \implies (2^2)^{x+1} = 2^{2(x+1)} = 2^{2x + 2}$<br/>
+                        • $32 = 2^5$
+                    </p>
+
+                    <p><b>Paso 2:</b> Igualamos:</p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40">
+                        $$2^{2x + 2} = 2^5$$
+                    </p>
+
+                    <p><b>Paso 3:</b> Cancelamos las bases 2 e igualamos exponentes:</p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40 text-emerald-400 font-bold">
+                        $$2x + 2 = 5 \implies 2x = 3 \implies \mathbf{x = \frac{3}{2}}$$
+                    </p>
+                    <p class="text-slate-300">¡Cero logaritmos ni cálculos complejos!</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 7 de 9</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 7: Resumen -->
+    <!-- Slide 7: 7. Tu Turno: Práctica Guiada #2 🎯 -->
     <div class="slide " id="slide-7">
-        <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Exponentes y Radicales 📋</h2>
+        <div class="card ">
             
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Multiplicación y División</div>
-                <div class="text-slate-300 mt-1">$x^a \cdot x^b = x^{a+b}$ y $x^a / x^b = x^{a-b}$.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Exponente Negativo</div>
-                <div class="text-slate-300 mt-1">$x^{-n} = 1/x^n$. Invierte la fracción para hacerlo positivo.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Raíz = Denominador</div>
-                <div class="text-slate-300 mt-1">$\sqrt[n]{x^m} = x^{m/n}$. Primero saca la raíz, luego eleva a la potencia.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Extraer Factores</div>
-                <div class="text-slate-300 mt-1">Busca cuadrados perfectos: $4, 9, 16, 25, 36, 49, 64, 100$.</div>
-            </div>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div class="box-highlight text-xs text-slate-300">
-            🎉 <b>¡Módulo completado!</b> Las leyes de exponentes ya no te confundirán en expresiones complejas.
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/exponentes.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Exponentes</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">7. Tu Turno: Práctica Guiada #2 🎯</h2>
+            
+            
+            <p class="text-slate-300 text-sm mb-3">Si $9^{2x - 1} = 27^{x + 2}$, ¿cuál es el valor de $x$?</p>
+            <div class="space-y-2 max-w-lg mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'exp2', '¡Impecable! Convertimos a base 3: 9 = 3^2 -> (3^2)^(2x - 1) = 3^(4x - 2). Por otro lado: 27 = 3^3 -> (3^3)^(x + 2) = 3^(3x + 6). Igualamos exponentes: 4x - 2 = 3x + 6 -> 4x - 3x = 6 + 2 -> x = 8.')">A) $x = 8$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'exp2', 'Cuidado con distribuir el exponente: 3*(x + 2) es 3x + 6, no 3x + 2.')">B) $x = 4$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'exp2', 'No iguales las bases multiplicando 9 por 2x directo.')">C) $x = 6$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'exp2', 'Revisa el despeje: 4x - 3x = 6 + 2 = 8.')">D) $x = 5$</button>
+            </div>
+            <div id="feedback-exp2" class="hidden"></div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 8 de 9</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: 8. Machete Resumen y Puente a la Práctica 🚀 -->
+    <div class="slide " id="slide-8">
+        <div class="card text-center">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Resumen Maestro</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/exponentes.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Exponentes</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">8. Machete Resumen y Puente a la Práctica 🚀</h2>
+            
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left text-xs mb-4">
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">✖️ / ➗ Misma Base</div>
+                    <div class="text-slate-300 mt-1">Multiplicar suma exponentes ($x^a \cdot x^b = x^{a+b}$). Dividir resta exponentes.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🔄 Negativos y Raíces</div>
+                    <div class="text-slate-300 mt-1">$x^{-n} = \frac{1}{x^n}$. Exponente fraccionario: el denominador es la raíz ($x^{\frac{1}{2}} = \sqrt{x}$).</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🍎 Suma de Potencias</div>
+                    <div class="text-slate-300 mt-1">$2^n + 2^n = 2(2^n) = 2^{n+1}$. ¡Nunca sumes los exponentes en una suma!</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🔑 Misma Base</div>
+                    <div class="text-slate-300 mt-1">Lleva ambos lados a potencias de 2 o 3 para cancelar las bases y despejar la incógnita.</div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gradient-to-r from-cyan-950/70 via-blue-950/60 to-indigo-950/70 rounded-2xl border border-cyan-500/40 text-center my-3 shadow-xl">
+                <h3 class="text-base sm:text-lg font-black text-cyan-300 mb-1">🎉 ¡Dominaste las Leyes de Exponentes!</h3>
+                <p class="text-xs sm:text-sm text-slate-300 mb-3">Pon a prueba tu velocidad resolviendo los 30 ejercicios prácticos del tema.</p>
+                <a href="../practicos/mat/exponentes.html" class="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-slate-950 font-black text-sm sm:text-base hover:brightness-110 shadow-lg shadow-emerald-500/30 hover:scale-[1.01] transition-all">
+                    <span>🚀 Poner a prueba en 30 Ejercicios Prácticos de Exponentes</span>
+                    <span>→</span>
+                </a>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 9 de 9</div>
                 <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
-  
+
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -279,6 +495,7 @@
             });
             const progressPercent = ((currentSlide + 1) / slides.length) * 100;
             progressBar.style.width = `${progressPercent}%`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         }
 
@@ -291,11 +508,11 @@
             if (isCorrect) {
                 btn.classList.add('option-correct');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
-                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
-                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa típica:</b><br/>${explanation}`;
             }
             if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise([fb]);
@@ -305,6 +522,12 @@
         function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
         function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
         function goToStart() { currentSlide = 0; updateUI(); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
         updateUI();
     </script>
 </body>

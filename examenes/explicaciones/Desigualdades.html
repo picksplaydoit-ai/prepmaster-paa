@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual Maestro: Desigualdades e Inecuaciones PAA</title>
+    <title>Manual Maestro: Desigualdades e Inecuaciones PAA | PrepMaster PAA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = {
@@ -13,11 +13,11 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
-        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow-x: hidden; }
+        .slide { display: none; min-height: 100vh; width: 100vw; padding: 1.5rem 1rem; opacity: 0; transition: opacity 0.25s ease; box-sizing: border-box; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
-        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card { background: #0b1120; border-radius: 1.75rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.2); max-width: 860px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 94vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
         .btn-nav:hover { background: #334155; }
         .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
@@ -27,255 +27,346 @@
         .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
         .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
         .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
-        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
-        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
-        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+        .box-dummy { background: rgba(99, 102, 241, 0.08); border-left: 4px solid #818cf8; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; }
+        .box-step { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px 18px; margin: 12px 0; }
+        .box-trap { background: rgba(239, 68, 68, 0.08); border-left: 4px solid #f87171; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fecaca; }
+        .box-hack { background: rgba(245, 158, 11, 0.08); border-left: 4px solid #fbbf24; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fef3c7; }
+        .gfx-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 10px; margin: 10px 0; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
     
-    <!-- Slide 0: Portada -->
+    <!-- Slide 0: Desigualdades e Inecuaciones sin Confundirte ⚖️ -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Álgebra PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Desigualdades e Inecuaciones Lineales ⚠️</h2>
             
-        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
-            Aprende a resolver inecuaciones sin caer en la trampa del cambio de sentido al multiplicar o dividir por números negativos, y grafica intervalos con total certeza.
-        </p>
-        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🔄 Invertir el Signo</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">📊 Notación Intervalo</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">⚖️ Desigualdad Doble</div>
-        </div>
-      
             
-        
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Desigualdades e Inecuaciones sin Confundirte ⚖️</h2>
             
-        <!-- Videos de apoyo TikTok PrepMaster -->
-        <div class="my-4 p-3.5 bg-slate-900/80 rounded-2xl border border-pink-500/30 max-w-lg mx-auto shadow-lg shadow-pink-950/20">
-            <div class="text-[11px] font-bold text-pink-400 uppercase tracking-wider mb-2 flex items-center justify-center gap-1.5">
-                <span>📱 Micro-clases Oficiales en TikTok @prepmasterudg</span>
+            
+            <p class="text-sm sm:text-base text-slate-300 mb-4 max-w-xl mx-auto leading-relaxed">
+                Descubre por qué una inecuación se resuelve casi igual que una ecuación, con <b>una sola regla de oro que cambia todo: el cocodrilo se voltea cuando multiplicas o divides por un número negativo</b>.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-300 max-w-lg mx-auto mb-4">
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🐊 El Giro del Cocodrilo</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">📍 Bolita Abierta vs Cerrada</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🥪 Inecuaciones Dobles</div>
             </div>
-            <div class="flex flex-wrap justify-center gap-2">
-
-                <a href="https://www.tiktok.com/@prepmasterudg/video/7629595682055261461" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7629595682055261461', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
-                    <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                    <span>▶️ Planteamiento de inecuaciones</span>
-                </a>
-
-                <a href="https://www.tiktok.com/@prepmasterudg/video/7626989430334688533" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7626989430334688533', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
-                    <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                    <span>▶️ Inecuaciones y sus gráficas</span>
-                </a>
-
-                <a href="https://www.tiktok.com/@prepmasterudg/video/7626642652468907284" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7626642652468907284', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
-                    <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                    <span>▶️ Desigualdades PAA</span>
+            
+    <div class="my-4 p-3 bg-slate-900/80 rounded-2xl border border-pink-500/30 max-w-lg mx-auto shadow-lg shadow-pink-950/20">
+        <div class="text-[11px] font-bold text-pink-400 uppercase tracking-wider mb-2 flex items-center justify-center gap-1.5">
+            <span>📱 Micro-clases Oficiales en TikTok @prepmasterudg</span>
+        </div>
+        <div class="flex flex-wrap justify-center gap-2">
+            
+        <a href="https://www.tiktok.com/@prepmasterudg/video/7629595682055261461" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7629595682055261461', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
+            <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            <span>▶️ Planteamiento de inecuaciones</span>
+        </a>
+    
+        <a href="https://www.tiktok.com/@prepmasterudg/video/7626989430334688533" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7626989430334688533', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
+            <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            <span>▶️ Inecuaciones y sus gráficas</span>
+        </a>
+    
+        <a href="https://www.tiktok.com/@prepmasterudg/video/7626642652468907284" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7626642652468907284', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
+            <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            <span>▶️ Desigualdades PAA</span>
+        </a>
+    
+        </div>
+    </div>
+            <div class="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 max-w-md mx-auto">
+                <p class="text-xs text-emerald-300 font-semibold">¿Quieres ir directo a los reactivos prácticos?</p>
+                <a href="../practicos/mat/inecuaciones.html" class="inline-block mt-1.5 text-xs font-extrabold text-emerald-400 hover:text-emerald-200 underline">
+                    🚀 Abrir 30 Ejercicios Prácticos de Inecuaciones →
                 </a>
             </div>
-        </div>
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <div></div>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Desigualdades →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 1 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Desigualdades para Dummies →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 1: Concepto 1 -->
+    <!-- Slide 1: 1. ¿Qué es una desigualdad? (La Balanza Inclinada) ⚖️ -->
     <div class="slide " id="slide-1">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">La Regla de Oro del Negativo: Voltear la Desigualdad 🔄</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <p>Una inecuación se resuelve idéntica a una ecuación ordinaria, con <b>UNA SOLA EXCEPCIÓN CAPITAL</b>:</p>
-            <div class="box-warning text-xs">
-                <b>⚠️ SI MULTIPLICAS O DIVIDES ENTRE UN NÚMERO NEGATIVO:</b><br/>
-                El sentido de la desigualdad <b>SE INVIERTE OBLIGATORIAMENTE</b>:<br/>
-                $<$ se convierte en $>$.<br/>
-                $\ge$ se convierte en $\le$.<br/>
-                Ejemplo: $-2x \le 8 \implies x \ge \frac{8}{-2} \implies x \ge -4$.
-            </div>
-            <div class="box-highlight text-xs">
-                💡 <b>Si sumas o restas números negativos</b>, el signo NO cambia. Solo cambia cuando el número que está <i>multiplicando a la $x$</i> pasa dividiendo con signo menos.
-            </div>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Para Dummies #1</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/inecuaciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Inecuaciones</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">1. ¿Qué es una desigualdad? (La Balanza Inclinada) ⚖️</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-dummy">
+                    <p class="font-bold text-indigo-300 text-base mb-1">💡 La Balanza Inclinada:</p>
+                    <p>Una <b>ecuación</b> es una balanza perfecta en equilibrio ($=$). Una <b>desigualdad</b> es una balanza inclinada donde un lado pesa más que el otro:</p>
+                    <p class="mt-1 text-xs sm:text-sm">• $a < b$: $a$ es estrictamente menor que $b$.</p>
+                    <p class="text-xs sm:text-sm">• $a \le b$: $a$ es menor o igual que $b$ (se incluye el valor).</p>
+                    <p class="text-xs sm:text-sm">• $a > b$: $a$ es estrictamente mayor que $b$.</p>
+                    <p class="text-xs sm:text-sm">• $a \ge b$: $a$ es mayor o igual que $b$.</p>
+                </div>
+
+                <div class="box-step text-xs space-y-1">
+                    <p class="font-bold text-cyan-300">La boca del cocodrilo 🐊:</p>
+                    <p>El lado abierto grande siempre se come al número MÁS GRANDE. La punta cerrada señala al número más chiquito ($8 > 3$).</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 2 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <!-- Slide 2: 2. La Regla de Oro: ¿Cuándo se Voltea el Signo? 🔄 -->
     <div class="slide " id="slide-2">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Despeje con Coeficiente Negativo 🔍</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">Resuelve la inecuación: $7 - 3x < 22$</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. Restamos 7 a ambos lados: $-3x < 22 - 7 \implies -3x < 15$.<br/>
-                    2. Dividimos entre $-3$ (<b>¡Alerta! Se voltea el signo $<$ a $>$</b>):<br/>
-                    $x > \frac{15}{-3} \implies \mathbf{x > -5}$.<br/>
-                    3. En intervalo: $\mathbf{(-5, \infty)}$.
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">La Trampa Mortal</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/inecuaciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Inecuaciones</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">2. La Regla de Oro: ¿Cuándo se Voltea el Signo? 🔄</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-trap">
+                    <p class="font-bold text-rose-300 text-base mb-1">⚠️ LA REGLA MÁS IMPORTANTE DEL ÁLGEBRA:</p>
+                    <p class="text-xs sm:text-sm">Si multiplicas o divides toda la inecuación por un <b>NÚMERO NEGATIVO</b>, el signo de la desigualdad <b>SE INVIERTE OBLIGATORIAMENTE</b>:</p>
+                    <div class="bg-slate-900 p-2.5 rounded-lg text-center font-bold text-rose-300 my-2 text-sm">
+                        $$-2x < 8 \implies x > \frac{8}{-2} \implies \mathbf{x > -4}$$
+                    </div>
+                </div>
+
+                <div class="box-dummy text-xs space-y-2">
+                    <p class="font-bold text-indigo-300">¿Por qué carajos se voltea? (Demostración para dummies):</p>
+                    <p>Mira esta verdad indiscutible: <b>$2 < 5$</b> (2 es menor que 5).</p>
+                    <p>Multiplica ambos lados por $-1$:</p>
+                    <p>• El 2 se convierte en $-2$.</p>
+                    <p>• El 5 se convierte en $-5$.</p>
+                    <p class="text-amber-300 font-bold">¿Qué prefieres: deber $2 pesos o deber $5 pesos? ¡Deber $2 es mejor que deber $5! En la recta numérica, el $-2$ está a la derecha del $-5$.</p>
+                    <p class="font-bold text-emerald-400">Por eso: $\mathbf{-2 > -5}$. ¡El signo se tuvo que voltear para no mentir!</p>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 3 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 3: Práctica 1 -->
+    <!-- Slide 3: 3. Representación Gráfica: Círculo Abierto vs Cerrado 📍 -->
     <div class="slide " id="slide-3">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el conjunto solución correcto? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">Resuelve la desigualdad: $5 - 4x \ge 25$</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'des1', '¡Correcto! -4x >= 20. Al dividir entre -4 se invierte el signo: x <= -5. En intervalo: (-inf, -5].')">A) $x \le -5$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'des1', 'Error común: olvidaste invertir la desigualdad al dividir entre -4.')">B) $x \ge -5$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'des1', 'Cuidado con los signos: 25 - 5 = +20, no -20.')">C) $x \le 5$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'des1', 'Cálculo erróneo.')">D) $x \ge 5$</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Gráficas PAA</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-des1" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Desigualdades Dobles Compuestas →</button>
-            </div>
-        </div>
+        <a href="../practicos/mat/inecuaciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Inecuaciones</span>
+            <span>→</span>
+        </a>
     </div>
-  
-
-    <!-- Slide 4: Concepto 2 -->
-    <div class="slide " id="slide-4">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Desigualdades Dobles y Problemas Verbales ⚖️</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <p>En una desigualdad doble $A < Bx + C < D$, la operación que hagas al centro se debe aplicar <b>exactamente igual a los tres miembros</b> simultáneamente:</p>
-            <div class="box-highlight text-xs space-y-1">
-                <p>Ejemplo: $-1 \le 2x + 3 < 11$.</p>
-                <p>1. Resta 3 a todo: $-1 - 3 \le 2x < 11 - 3 \implies -4 \le 2x < 8$.</p>
-                <p>2. Divide entre 2 todo: $-2 \le x < 4$. Intervalo: $[-2, 4)$.</p>
-            </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
-            </div>
-        </div>
-    </div>
-  
-
-    <!-- Slide 5: Ejemplo Resuelto 2 -->
-    <div class="slide " id="slide-5">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Desigualdad Verbal de Costos 🔍</h2>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">3. Representación Gráfica: Círculo Abierto vs Cerrado 📍</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">Un chofer de taxi cobra una cuota fija de $25 pesos más $8 pesos por cada kilómetro recorrido. Si un pasajero cuenta con un presupuesto de máximo $145 pesos, ¿cuál es el número MÁXIMO entero de kilómetros que puede recorrer?</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. Planteamiento: $25 + 8k \le 145$.<br/>
-                    2. Despeje: $8k \le 145 - 25 \implies 8k \le 120$.<br/>
-                    3. $k \le \frac{120}{8} \implies k \le 15$.<br/>
-                    4. Respuesta: Puede recorrer un máximo de <b>15 kilómetros</b>.
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div class="p-3 bg-slate-900 rounded-xl border border-cyan-500/40">
+                        <p class="font-bold text-cyan-300 text-sm mb-1">⚪ Bolita Abierta $($</p>
+                        <p class="text-slate-300">• Para signos <b>$<$</b> y <b>$>$</b> (estrictos).</p>
+                        <p class="text-slate-300">• Significa que el número de la frontera <b>NO está invitado a la fiesta</b>.</p>
+                        <p class="text-slate-400 mt-1">Ejemplo: $x > 3$. El 3 no cuenta (empieza en 3.0001).</p>
+                    </div>
+
+                    <div class="p-3 bg-slate-900 rounded-xl border border-emerald-500/40">
+                        <p class="font-bold text-emerald-300 text-sm mb-1">⚫ Bolita Rellena $[$</p>
+                        <p class="text-slate-300">• Para signos <b>$\le$</b> y <b>$\ge$</b> (con raya abajo).</p>
+                        <p class="text-slate-300">• Significa que el número <b>SÍ está incluido</b>.</p>
+                        <p class="text-slate-400 mt-1">Ejemplo: $x \ge 3$. El 3 sí forma parte de las respuestas.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 4 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 6: Práctica 2 -->
-    <div class="slide " id="slide-6">
+    <!-- Slide 4: 4. Ejemplo Resuelto Paso a Paso (Con Despeje Negativo) ✍️ -->
+    <div class="slide " id="slide-4">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el número mínimo de productos? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">Una pequeña empresa gasta $4,500 en renta fija mensual y $30 en fabricar cada playera. Si cada playera se vende en $75, ¿cuál es el número MÍNIMO de playeras que debe vender al mes para obtener ganancias netas (ganancia > 0)?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'des2', '¡Excelente! Ingresos > Costos: 75x > 4500 + 30x -> 45x > 4500 -> x > 100. Como debe ser estrictamente mayor a 100 para haber ganancia (con 100 no hay ganancia, es punto de equilibrio), el mínimo entero es 101.')">A) 101 playeras</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'des2', 'Cuidado: con 100 playeras la ganancia es exactamente $0 (punto de equilibrio), no hay ganancia positiva.')">B) 100 playeras</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'des2', 'Cálculo erróneo.')">C) 90 playeras</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'des2', '150 excede el mínimo.')">D) 150 playeras</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Ejemplo de Examen</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-des2" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/inecuaciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Inecuaciones</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">4. Ejemplo Resuelto Paso a Paso (Con Despeje Negativo) ✍️</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3">
+                    <p class="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">Reactivo Típico PAA:</p>
+                    <p class="text-sm font-semibold text-slate-100">
+                        Resuelve y halla el conjunto solución de:
+                        $$5 - 3x \le 17$$
+                    </p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">Paso por paso sin saltos:</p>
+                    <p><b>Paso 1 (Pasar el 5 restando al otro lado):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40">
+                        $$-3x \le 17 - 5$$
+                        $$-3x \le 12$$
+                    </p>
+
+                    <p><b>Paso 2 (Pasar el -3 dividiendo ¡Y VOLTEAR EL SIGNO!):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40 text-sm font-bold text-emerald-400">
+                        $$x \ge \frac{12}{-3} \implies \mathbf{x \ge -4}$$
+                    </p>
+
+                    <p><b>Paso 3 (Interpretar el resultado):</b></p>
+                    <p class="text-slate-300">Todos los números mayores o iguales a $-4$. En notación de corchetes: $\mathbf{[-4, \infty)}$.</p>
+                    <p class="text-amber-300">⚠️ Trampa típica: En la opción A te ponen $x \le -4$ para que caigas si olvidaste voltear el signo.</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 5 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 7: Resumen -->
-    <div class="slide " id="slide-7">
-        <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Desigualdades 📋</h2>
+    <!-- Slide 5: 5. Tu Turno: Práctica Guiada #1 🎯 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
             
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Multiplicar por Negativo</div>
-                <div class="text-slate-300 mt-1">Invierte SIEMPRE el sentido de la desigualdad ($< \longleftrightarrow >$).</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Corchetes vs Paréntesis</div>
-                <div class="text-slate-300 mt-1">$\le, \ge$ usan corchetes $[ \ ]$. $<, >$ usan paréntesis $( \ )$. Infinitos $\pm\infty$ siempre llevan paréntesis.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Punto de Equilibrio</div>
-                <div class="text-slate-300 mt-1">Si piden ganancia estricta, recuerda que el punto de equilibrio da ganancia cero; debes tomar el entero superior.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Comprobación con un Punto</div>
-                <div class="text-slate-300 mt-1">Prueba $x = 0$ en la desigualdad original para verificar si cae dentro de la zona verdadera.</div>
-            </div>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div class="box-highlight text-xs text-slate-300">
-            🎉 <b>¡Módulo completado!</b> Con estos reflejos no volverás a caer en el cambio de signo de las inecuaciones.
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/inecuaciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Inecuaciones</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">5. Tu Turno: Práctica Guiada #1 🎯</h2>
+            
+            
+            <p class="text-slate-300 text-sm mb-3">¿Cuál es el mayor número entero $x$ que cumple con la desigualdad $-4x + 7 > 23$?</p>
+            <div class="space-y-2 max-w-lg mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'des1', '¡Excelente razonamiento! Despejamos: -4x > 23 - 7 -> -4x > 16. Dividimos entre -4 y VOLTEAMOS el signo: x < -4. La pregunta pide el MAYOR entero estrictamente menor que -4. Los enteros menores que -4 son -5, -6, -7... El mayor de todos ellos es -5.')">A) $-5$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'des1', '-4 no puede ser porque la desigualdad es estricta (x < -4), no incluye al -4.')">B) $-4$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'des1', '-3 es MAYOR que -4, violaría x < -4.')">C) $-3$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'des1', 'Si obtuviste 4 positivo, olvidaste el cambio de signo con el número negativo.')">D) $4$</button>
+            </div>
+            <div id="feedback-des1" class="hidden"></div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 6 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: 6. Machete Resumen y Puente a la Práctica 🚀 -->
+    <div class="slide " id="slide-6">
+        <div class="card text-center">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Resumen Maestro</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/inecuaciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Inecuaciones</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">6. Machete Resumen y Puente a la Práctica 🚀</h2>
+            
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left text-xs mb-4">
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🔄 Voltear con Negativo</div>
+                    <div class="text-slate-300 mt-1">Multiplicar o dividir por un número negativo invierte la dirección del cocodrilo ($< \leftrightarrow >$).</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">📍 Fronteras</div>
+                    <div class="text-slate-300 mt-1">Bolita abierta $\circ$ y paréntesis $($ para $<, >$. Bolita cerrada $\bullet$ y corchete $[$ para $\le, \ge$.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🥪 Desigualdad Doble</div>
+                    <div class="text-slate-300 mt-1">Haz la misma operación aritmética en los tres lados para mantener el equilibrio.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">❓ Pregunta de Enteros</div>
+                    <div class="text-slate-300 mt-1">Si te piden "el mayor entero que cumple $x < -4$", recuerda que es $-5$, no $-4$.</div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gradient-to-r from-cyan-950/70 via-blue-950/60 to-indigo-950/70 rounded-2xl border border-cyan-500/40 text-center my-3 shadow-xl">
+                <h3 class="text-base sm:text-lg font-black text-cyan-300 mb-1">🎉 ¡Dominaste Desigualdades e Inecuaciones!</h3>
+                <p class="text-xs sm:text-sm text-slate-300 mb-3">Pon a prueba tu aprendizaje con los 30 ejercicios prácticos del tema.</p>
+                <a href="../practicos/mat/inecuaciones.html" class="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-slate-950 font-black text-sm sm:text-base hover:brightness-110 shadow-lg shadow-emerald-500/30 hover:scale-[1.01] transition-all">
+                    <span>🚀 Poner a prueba en 30 Ejercicios Prácticos de Inecuaciones</span>
+                    <span>→</span>
+                </a>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 7 de 7</div>
                 <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
-  
+
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -291,6 +382,7 @@
             });
             const progressPercent = ((currentSlide + 1) / slides.length) * 100;
             progressBar.style.width = `${progressPercent}%`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         }
 
@@ -303,11 +395,11 @@
             if (isCorrect) {
                 btn.classList.add('option-correct');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
-                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
-                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa típica:</b><br/>${explanation}`;
             }
             if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise([fb]);
@@ -317,6 +409,12 @@
         function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
         function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
         function goToStart() { currentSlide = 0; updateUI(); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
         updateUI();
     </script>
 </body>

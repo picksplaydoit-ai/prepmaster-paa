@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual Maestro: Probabilidad y Estadística PAA</title>
+    <title>Manual Maestro: Probabilidad y Estadística PAA | PrepMaster PAA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = {
@@ -13,11 +13,11 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
-        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow-x: hidden; }
+        .slide { display: none; min-height: 100vh; width: 100vw; padding: 1.5rem 1rem; opacity: 0; transition: opacity 0.25s ease; box-sizing: border-box; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
-        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card { background: #0b1120; border-radius: 1.75rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.2); max-width: 860px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 94vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
         .btn-nav:hover { background: #334155; }
         .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
@@ -27,260 +27,305 @@
         .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
         .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
         .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
-        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
-        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
-        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+        .box-dummy { background: rgba(99, 102, 241, 0.08); border-left: 4px solid #818cf8; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; }
+        .box-step { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px 18px; margin: 12px 0; }
+        .box-trap { background: rgba(239, 68, 68, 0.08); border-left: 4px solid #f87171; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fecaca; }
+        .box-hack { background: rgba(245, 158, 11, 0.08); border-left: 4px solid #fbbf24; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fef3c7; }
+        .gfx-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 10px; margin: 10px 0; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
     
-    <!-- Slide 0: Portada -->
+    <!-- Slide 0: Probabilidad y Estadística sin Rollos Raros 🎲 -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Probabilidad y Estadística PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Probabilidad Clásica y Compuesta 🎲</h2>
             
-        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
-            Aprende a resolver probabilidad simple (Regla de Laplace), probabilidad condicional, eventos independientes (con y sin reemplazo) y la probabilidad del complemento ("al menos uno").
-        </p>
-        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🎲 Regla de Laplace</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🔄 Sin Reemplazo</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">⚡ "Al menos uno"</div>
-        </div>
-      
             
-        
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Probabilidad y Estadística sin Rollos Raros 🎲</h2>
             
-        <!-- Videos de apoyo TikTok PrepMaster -->
-        <div class="my-4 p-3.5 bg-slate-900/80 rounded-2xl border border-pink-500/30 max-w-lg mx-auto shadow-lg shadow-pink-950/20">
-            <div class="text-[11px] font-bold text-pink-400 uppercase tracking-wider mb-2 flex items-center justify-center gap-1.5">
-                <span>📱 Micro-clases Oficiales en TikTok @prepmasterudg</span>
+            
+            <p class="text-sm sm:text-base text-slate-300 mb-4 max-w-xl mx-auto leading-relaxed">
+                Aprende la Regla de Laplace ($rac{	ext{Favorables}}{	ext{Totales}}$), la diferencia entre eventos con y sin reemplazo, y domina las medidas estadísticas clave: <b>Media (promedio), Mediana, Moda y Rango</b> en menos de 20 segundos.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-300 max-w-lg mx-auto mb-4">
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🎲 Regla de Laplace</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">📊 Media, Mediana y Moda</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">⚡ Hack del Dato Faltante</div>
             </div>
-            <div class="flex flex-wrap justify-center gap-2">
-
-                <a href="https://www.tiktok.com/@prepmasterudg/video/7629564295449283860" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7629564295449283860', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
-                    <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                    <span>▶️ Rango y mediana estadística</span>
-                </a>
-
-                <a href="https://www.tiktok.com/@prepmasterudg/video/7627261721052335381" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7627261721052335381', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
-                    <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                    <span>▶️ Promedio de un dato faltante (rápido)</span>
-                </a>
-
-                <a href="https://www.tiktok.com/@prepmasterudg/video/7626855047686606100" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7626855047686606100', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
-                    <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                    <span>▶️ Promedio de números consecutivos</span>
+            
+    <div class="my-4 p-3 bg-slate-900/80 rounded-2xl border border-pink-500/30 max-w-lg mx-auto shadow-lg shadow-pink-950/20">
+        <div class="text-[11px] font-bold text-pink-400 uppercase tracking-wider mb-2 flex items-center justify-center gap-1.5">
+            <span>📱 Micro-clases Oficiales en TikTok @prepmasterudg</span>
+        </div>
+        <div class="flex flex-wrap justify-center gap-2">
+            
+        <a href="https://www.tiktok.com/@prepmasterudg/video/7629564295449283860" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7629564295449283860', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
+            <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            <span>▶️ Rango y mediana estadística</span>
+        </a>
+    
+        <a href="https://www.tiktok.com/@prepmasterudg/video/7627261721052335381" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7627261721052335381', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
+            <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            <span>▶️ Promedio de un dato faltante (rápido)</span>
+        </a>
+    
+        <a href="https://www.tiktok.com/@prepmasterudg/video/7626855047686606100" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7626855047686606100', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
+            <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            <span>▶️ Promedio de números consecutivos</span>
+        </a>
+    
+        </div>
+    </div>
+            <div class="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 max-w-md mx-auto">
+                <p class="text-xs text-emerald-300 font-semibold">¿Quieres ir directo a la práctica?</p>
+                <a href="../practicos/mat/probabilidad.html" class="inline-block mt-1.5 text-xs font-extrabold text-emerald-400 hover:text-emerald-200 underline">
+                    🚀 Abrir 30 Ejercicios Prácticos de Probabilidad →
                 </a>
             </div>
-        </div>
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <div></div>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Probabilidad →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 1 de 6</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Probabilidad para Dummies →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 1: Concepto 1 -->
+    <!-- Slide 1: 1. La Fórmula Universal de Laplace: Favorables / Totales 🎲 -->
     <div class="slide " id="slide-1">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">La Regla de Laplace y Eventos Compuestos (Y / O) 🎲</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
-                <span class="text-xl font-bold text-cyan-300">$$P = \frac{\text{Casos Favorables}}{\text{Casos Totales Posibles}}$$</span>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                <div class="bg-slate-900 p-2.5 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-cyan-300">Regla del "Y" (Intersección):</p>
-                    <p class="text-slate-300 mt-1">Eventos simultáneos o consecutivos ➔ <b>MULTIPLICA</b>:<br/>
-                    $P(A \text{ y } B) = P(A) \times P(B)$.</p>
-                </div>
-                <div class="bg-slate-900 p-2.5 rounded-xl border border-cyan-500/30">
-                    <p class="font-bold text-cyan-300">Regla del "O" (Unión):</p>
-                    <p class="text-slate-300 mt-1">Ocurre uno u otro ➔ <b>SUMA</b>:<br/>
-                    $P(A \text{ ó } B) = P(A) + P(B) - P(A \cap B)$.</p>
-                </div>
-            </div>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Para Dummies #1</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/probabilidad.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Probabilidad</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">1. La Fórmula Universal de Laplace: Favorables / Totales 🎲</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center">
+                    <p class="text-xs text-slate-400 uppercase tracking-wider mb-1 font-bold">Probabilidad de un Evento</p>
+                    <span class="text-2xl font-black text-cyan-300">$$P = \frac{\text{Casos Favorables (Lo que quiero)}}{\text{Casos Posibles (Total de opciones)}}$$</span>
+                </div>
+
+                <div class="box-step text-xs space-y-1.5">
+                    <p class="font-bold text-cyan-300">Las Tres Reglas Básicas:</p>
+                    <p>• La probabilidad siempre es un número entre <b>0</b> (imposible) y <b>1</b> (seguro al 100%).</p>
+                    <p>• <b>Probabilidad del complemento (Lo contrario):</b> $P(\text{NO pase}) = 1 - P(\text{SÍ pase})$.</p>
+                    <p>• Si sacas canicas <b>SIN REEMPLAZO</b>, ¡el total del denominador disminuye en 1 para la siguiente extracción!</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 2 de 6</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <!-- Slide 2: 2. Las 4 Medidas Estadísticas Desmenuzadas 📊 -->
     <div class="slide " id="slide-2">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Extracción SIN Reemplazo 🔍</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">Una urna contiene 5 canicas rojas, 3 canicas azules y 2 canicas verdes (total 10 canicas). Si se extraen 2 canicas al azar una tras otra <b>sin reemplazo</b>, ¿cuál es la probabilidad de que ambas sean rojas?</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. Probabilidad de la 1ª canica roja: $P(R_1) = \frac{5}{10}$.<br/>
-                    2. Como no se devuelve, quedan 4 rojas y 9 canicas en total:<br/>
-                    $P(R_2 | R_1) = \frac{4}{9}$.<br/>
-                    3. Multiplicamos (Regla del "Y"):<br/>
-                    $P = \frac{5}{10} \times \frac{4}{9} = \frac{1}{2} \times \frac{4}{9} = \mathbf{\frac{2}{9}}$.
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Estadística Básica</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/probabilidad.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Probabilidad</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">2. Las 4 Medidas Estadísticas Desmenuzadas 📊</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p class="text-xs">Para el grupo de calificaciones: <b>$5, 7, 8, 8, 10, 10, 10$</b>:</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    <div class="p-2.5 bg-slate-900 rounded-lg border border-slate-700">
+                        <span class="font-bold text-cyan-300 block">1. Media (Promedio)</span>
+                        <p class="mt-1">Sumas todos los datos y divides entre la cantidad total:</p>
+                        <p class="font-bold text-slate-200">$\frac{5+7+8+8+10+10+10}{7} = \frac{58}{7} \approx 8.28$.</p>
+                    </div>
+
+                    <div class="p-2.5 bg-slate-900 rounded-lg border border-slate-700">
+                        <span class="font-bold text-emerald-300 block">2. Mediana (El del Medio)</span>
+                        <p class="mt-1">Ordenas de menor a mayor y tomas el que queda en el centro exacto: $\mathbf{8}$. (Si son pares, promedias los dos del centro).</p>
+                    </div>
+
+                    <div class="p-2.5 bg-slate-900 rounded-lg border border-slate-700">
+                        <span class="font-bold text-pink-300 block">3. Moda (Lo que se pone de moda)</span>
+                        <p class="mt-1">El número que más veces se repite: el $\mathbf{10}$ (aparece 3 veces).</p>
+                    </div>
+
+                    <div class="p-2.5 bg-slate-900 rounded-lg border border-slate-700">
+                        <span class="font-bold text-amber-300 block">4. Rango (La Dispersión)</span>
+                        <p class="mt-1">El valor mayor menos el menor: $10 - 5 = \mathbf{5}$.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 3 de 6</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 3: Práctica 1 -->
+    <!-- Slide 3: 3. Hack de Tiempo PAA: El Promedio del Dato Faltante ⚡ -->
     <div class="slide " id="slide-3">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es la probabilidad sin reemplazo? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">En una caja hay 4 chocolates blancos y 6 chocolates negros. Si tomas dos chocolates al azar sucesivamente sin regresar ninguno, ¿cuál es la probabilidad de que el primero sea blanco y el segundo sea negro?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'pb1', '¡Correcto! P = (4/10) * (6/9) = (2/5) * (2/3) = 4/15.')">A) $\frac{4}{15}$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'pb1', '6/25 sería si hubiera reemplazo: (4/10) * (6/10) = 24/100 = 6/25.')">B) $\frac{6}{25}$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'pb1', 'Cálculo erróneo.')">C) $\frac{2}{5}$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'pb1', 'Revisa la simplificación de 24/90.')">D) $\frac{1}{3}$</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Hack Mental</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-pb1" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: El Atajo de "Al menos uno" →</button>
-            </div>
-        </div>
+        <a href="../practicos/mat/probabilidad.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Probabilidad</span>
+            <span>→</span>
+        </a>
     </div>
-  
-
-    <!-- Slide 4: Concepto 2 -->
-    <div class="slide " id="slide-4">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">El Atajo del Complemento: "Al menos uno" ⚡</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <p>Calcular "al menos un acierto" requeriría calcular 1 acierto, 2 aciertos, 3 aciertos y sumarlos. <b>¡No hagas eso!</b></p>
-            <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 text-center my-2">
-                <span class="text-xl font-bold text-cyan-300">$$P(\text{al menos uno}) = 1 - P(\text{ninguno})$$</span>
-            </div>
-            <div class="box-highlight text-xs">
-                Calcula la probabilidad de que <b>ninguno ocurra</b> (lo opuesto) y réstasela a $1$. ¡Es el atajo más potente de probabilidad de la PAA!
-            </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
-            </div>
-        </div>
-    </div>
-  
-
-    <!-- Slide 5: Ejemplo Resuelto 2 -->
-    <div class="slide " id="slide-5">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Al Menos un Sol en Monedas 🔍</h2>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">3. Hack de Tiempo PAA: El Promedio del Dato Faltante ⚡</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">Se lanzan 3 monedas al aire simultáneamente. ¿Cuál es la probabilidad de obtener AL MENOS un sol?</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. Lo opuesto a "al menos un sol" es "ningún sol" (es decir, caer tres águilas: $A, A, A$).<br/>
-                    2. $P(\text{tres águilas}) = \frac{1}{2} \times \frac{1}{2} \times \frac{1}{2} = \frac{1}{8}$.<br/>
-                    3. Aplicamos el complemento: $P = 1 - \frac{1}{8} = \mathbf{\frac{7}{8}}$.
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-hack">
+                    <p class="font-bold text-amber-300 text-sm mb-1">⚡ El Problema de la Calificación Faltante:</p>
+                    <p class="italic text-xs text-slate-200">"Lucía tiene calificaciones de 80, 85 y 90 en sus primeros 3 exámenes. ¿Cuánto debe sacar en el 4° examen para que su promedio final sea exactamente 88?"</p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">El Método de la Suma Deseada:</p>
+                    <p><b>Paso 1 (Calcular la suma total que necesita):</b> Son 4 exámenes y quiere un promedio de 88:</p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40 font-bold text-emerald-400">
+                        $$\text{Suma Necesaria} = 4 \times 88 = \mathbf{352\text{ puntos}}$$
+                    </p>
+
+                    <p><b>Paso 2 (Sumar los puntos que ya tiene):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40">
+                        $$80 + 85 + 90 = \mathbf{255\text{ puntos acumulados}}$$
+                    </p>
+
+                    <p><b>Paso 3 (Restar para ver cuánto le falta):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40 text-sm font-bold text-emerald-400">
+                        $$\text{Examen 4} = 352 - 255 = \mathbf{97}$$
+                    </p>
+                    <p class="text-slate-300">¡Resuelto en 15 segundos sin plantear ecuaciones algebraicas con $x$!</p>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 4 de 6</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 6: Práctica 2 -->
-    <div class="slide " id="slide-6">
+    <!-- Slide 4: 4. Tu Turno: Práctica Guiada #1 🎯 -->
+    <div class="slide " id="slide-4">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es la probabilidad de al menos un acierto? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">Un tirador tiene una probabilidad de $\frac{3}{4}$ de acertar en el blanco en cada disparo. Si realiza 2 disparos independientes, ¿cuál es la probabilidad de que acierte AL MENOS una vez?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'pb2', '¡Excelente! P(fallar un tiro) = 1 - 3/4 = 1/4. P(fallar ambos) = 1/4 * 1/4 = 1/16. P(al menos un acierto) = 1 - 1/16 = 15/16.')">A) $\frac{15}{16}$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'pb2', '9/16 es la probabilidad de acertar AMBOS tiros (3/4 * 3/4), no al menos uno.')">B) $\frac{9}{16}$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'pb2', '1/16 es la probabilidad de fallar ambos disparos.')">C) $\frac{1}{16}$</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'pb2', 'Cálculo erróneo.')">D) $\frac{3}{8}$</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-pb2" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/probabilidad.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Probabilidad</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">4. Tu Turno: Práctica Guiada #1 🎯</h2>
+            
+            
+            <p class="text-slate-300 text-sm mb-3">En una urna hay 6 canicas rojas, 4 azules y 10 verdes. Si se extrae una canica al azar, ¿cuál es la probabilidad de que la canica extraída NO sea verde?</p>
+            <div class="space-y-2 max-w-lg mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'pro1', '¡Correcto! Total de canicas = 6 + 4 + 10 = 20. Las que NO son verdes son las rojas y azules: 6 + 4 = 10 canicas favorables. Probabilidad = 10 / 20 = 1/2 (o 50%).')">A) $\frac{1}{2}$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'pro1', '10/20 simplificado es 1/2, no 1/4.')">B) $\frac{1}{4}$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'pro1', '1/2 es la probabilidad correcta.')">C) $\frac{3}{5}$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'pro1', 'Revisa el total: 6 + 4 + 10 = 20 canicas en total.')">D) $\frac{2}{3}$</button>
+            </div>
+            <div id="feedback-pro1" class="hidden"></div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 5 de 6</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 7: Resumen -->
-    <div class="slide " id="slide-7">
+    <!-- Slide 5: 5. Machete Resumen y Puente a la Práctica 🚀 -->
+    <div class="slide " id="slide-5">
         <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Probabilidad 📋</h2>
             
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Laplace</div>
-                <div class="text-slate-300 mt-1">$P = \text{Favorables} / \text{Totales}$. El valor siempre está entre 0 y 1.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">"Y" Multiplica, "O" Suma</div>
-                <div class="text-slate-300 mt-1">Eventos consecutivos se multiplican. Opciones alternativas se suman.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Sin Reemplazo</div>
-                <div class="text-slate-300 mt-1">Resta 1 al numerador y 1 al denominador en la segunda fracción.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Al menos uno = $1 - P(\text{ninguno})$</div>
-                <div class="text-slate-300 mt-1">El atajo supremo para evitar sumar múltiples casos largos.</div>
-            </div>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Resumen Maestro</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div class="box-highlight text-xs text-slate-300">
-            🎉 <b>¡Módulo completado!</b> La probabilidad clásica y compuesta ya es un acierto seguro.
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/probabilidad.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Probabilidad</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">5. Machete Resumen y Puente a la Práctica 🚀</h2>
+            
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left text-xs mb-4">
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🎲 Laplace</div>
+                    <div class="text-slate-300 mt-1">Favorables / Totales. Si es sin reemplazo, el total disminuye en cada extracción.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">📊 Mediana Central</div>
+                    <div class="text-slate-300 mt-1">Ordena siempre de menor a mayor antes de buscar la mediana.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">⚡ Calificación Faltante</div>
+                    <div class="text-slate-300 mt-1">Multiplica el promedio meta por el número total de datos y resta la suma acumulada.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">📏 Rango</div>
+                    <div class="text-slate-300 mt-1">Rango = Valor Máximo - Valor Mínimo. Mide qué tan dispersos están los datos.</div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gradient-to-r from-cyan-950/70 via-blue-950/60 to-indigo-950/70 rounded-2xl border border-cyan-500/40 text-center my-3 shadow-xl">
+                <h3 class="text-base sm:text-lg font-black text-cyan-300 mb-1">🎉 ¡Dominaste Probabilidad y Estadística!</h3>
+                <p class="text-xs sm:text-sm text-slate-300 mb-3">Continúa entrenando tu agilidad en los 30 ejercicios prácticos del tema.</p>
+                <a href="../practicos/mat/probabilidad.html" class="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-slate-950 font-black text-sm sm:text-base hover:brightness-110 shadow-lg shadow-emerald-500/30 hover:scale-[1.01] transition-all">
+                    <span>🚀 Poner a prueba en 30 Ejercicios Prácticos de Probabilidad</span>
+                    <span>→</span>
+                </a>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 6 de 6</div>
                 <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
-  
+
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -296,6 +341,7 @@
             });
             const progressPercent = ((currentSlide + 1) / slides.length) * 100;
             progressBar.style.width = `${progressPercent}%`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         }
 
@@ -308,11 +354,11 @@
             if (isCorrect) {
                 btn.classList.add('option-correct');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
-                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
-                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa típica:</b><br/>${explanation}`;
             }
             if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise([fb]);
@@ -322,6 +368,12 @@
         function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
         function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
         function goToStart() { currentSlide = 0; updateUI(); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
         updateUI();
     </script>
 </body>

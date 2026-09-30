@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual Maestro: Funciones y Notación f(x) PAA</title>
+    <title>Manual Maestro: Funciones y Dominio PAA | PrepMaster PAA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = {
@@ -13,11 +13,11 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow: hidden; }
-        .slide { display: none; height: 100vh; width: 100vw; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #060913; color: #f8fafc; margin: 0; overflow-x: hidden; }
+        .slide { display: none; min-height: 100vh; width: 100vw; padding: 1.5rem 1rem; opacity: 0; transition: opacity 0.25s ease; box-sizing: border-box; }
         .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
-        .card { background: #0b1120; border-radius: 2rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25); max-width: 840px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 95vh; overflow-y: auto; }
-        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.75rem; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card { background: #0b1120; border-radius: 1.75rem; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.2); max-width: 860px; width: 100%; padding: 2.2rem; position: relative; border: 1px solid rgba(56, 189, 248, 0.25); max-height: 94vh; overflow-y: auto; }
+        .badge { color: #020617; padding: 4px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-nav { background: #1e293b; color: white; padding: 9px 20px; border-radius: 10px; font-weight: 700; transition: all 0.2s ease; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.1); }
         .btn-nav:hover { background: #334155; }
         .btn-primary-action { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #020617; font-weight: 800; border: none; }
@@ -27,253 +27,345 @@
         .option-correct { background: #059669 !important; color: white !important; border-color: #10b981 !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
         .option-incorrect { background: #dc2626 !important; color: white !important; border-color: #ef4444 !important; }
         .progress-indicator { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #38bdf8, #2563eb); transition: width 0.3s ease; z-index: 100; box-shadow: 0 0 10px #38bdf8; }
-        .box-highlight { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px; margin: 10px 0; }
-        .box-example { background: rgba(30, 41, 59, 0.7); border-left: 4px solid #38bdf8; border-radius: 0 14px 14px 0; padding: 14px; margin: 10px 0; }
-        .box-warning { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 14px; padding: 14px; margin: 10px 0; color: #fca5a5; }
+        .box-dummy { background: rgba(99, 102, 241, 0.08); border-left: 4px solid #818cf8; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; }
+        .box-step { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px 18px; margin: 12px 0; }
+        .box-trap { background: rgba(239, 68, 68, 0.08); border-left: 4px solid #f87171; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fecaca; }
+        .box-hack { background: rgba(245, 158, 11, 0.08); border-left: 4px solid #fbbf24; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 12px 0; color: #fef3c7; }
+        .gfx-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 10px; margin: 10px 0; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
     
-    <!-- Slide 0: Portada -->
+    <!-- Slide 0: Funciones: La Máquina de Jugos f(x) y su Notación 🥤 -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Álgebra PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Funciones y Notación $f(x)$ 📈</h2>
             
-        <p class="text-sm sm:text-base text-slate-300 mb-6 max-w-lg mx-auto leading-relaxed">
-            Comprende la función como una máquina de entrada y salida, resuelve composiciones $f(g(x))$, traslaciones de gráficas y lecturas en tablas.
-        </p>
-        <div class="grid grid-cols-3 gap-2 text-xs text-slate-300 max-w-md mx-auto mb-4">
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">📥 Entrada y Salida</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🧩 Composición f(g(x))</div>
-            <div class="bg-slate-900/60 p-2 rounded-xl border border-cyan-500/20">🔄 Traslación Gráfica</div>
-        
-        
             
-        
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Funciones: La Máquina de Jugos f(x) y su Notación 🥤</h2>
             
-        <!-- Videos de apoyo TikTok PrepMaster -->
-        <div class="my-4 p-3.5 bg-slate-900/80 rounded-2xl border border-pink-500/30 max-w-lg mx-auto shadow-lg shadow-pink-950/20">
-            <div class="text-[11px] font-bold text-pink-400 uppercase tracking-wider mb-2 flex items-center justify-center gap-1.5">
-                <span>📱 Micro-clases Oficiales en TikTok @prepmasterudg</span>
+            
+            <p class="text-sm sm:text-base text-slate-300 mb-4 max-w-xl mx-auto leading-relaxed">
+                Desmitifica la notación $f(x)$. Aprende cómo evaluar funciones sin equivocarte en los signos con el <b>método de los paréntesis vacíos</b>, domina la composición $f(g(x))$ y encuentra el dominio sin memorizar teoremas pesados.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-300 max-w-lg mx-auto mb-4">
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🥤 La Máquina Entrada/Salida</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🪆 Composición f(g(x))</div>
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🚫 Los 2 Pecados del Dominio</div>
             </div>
-            <div class="flex flex-wrap justify-center gap-2">
-
-                <a href="https://www.tiktok.com/@prepmasterudg/video/7626364655925218581" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7626364655925218581', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
-                    <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                    <span>▶️ Evaluación de funciones f(x)</span>
-                </a>
-
-                <a href="https://www.tiktok.com/@prepmasterudg/video/7643526669839469845" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7643526669839469845', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
-                    <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                    <span>▶️ Composición de funciones f(g(x))</span>
-                </a>
-
-                <a href="https://www.tiktok.com/@prepmasterudg/video/7629553544567196948" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7629553544567196948', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
-                    <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                    <span>▶️ Representación gráfica de funciones</span>
-                </a>
-            </div>
+            
+    <div class="my-4 p-3 bg-slate-900/80 rounded-2xl border border-pink-500/30 max-w-lg mx-auto shadow-lg shadow-pink-950/20">
+        <div class="text-[11px] font-bold text-pink-400 uppercase tracking-wider mb-2 flex items-center justify-center gap-1.5">
+            <span>📱 Micro-clases Oficiales en TikTok @prepmasterudg</span>
         </div>
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <div class="flex flex-wrap justify-center gap-2">
+            
+        <a href="https://www.tiktok.com/@prepmasterudg/video/7626364655925218581" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7626364655925218581', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
+            <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            <span>▶️ Evaluación de funciones f(x)</span>
+        </a>
+    
+        <a href="https://www.tiktok.com/@prepmasterudg/video/7643526669839469845" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7643526669839469845', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
+            <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            <span>▶️ Composición de funciones f(g(x))</span>
+        </a>
+    
+        <a href="https://www.tiktok.com/@prepmasterudg/video/7629553544567196948" target="_blank" rel="noopener noreferrer" onclick="window.open('https://www.tiktok.com/@prepmasterudg/video/7629553544567196948', '_blank'); return true;" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-pink-500/40 text-pink-300 hover:text-white hover:bg-pink-950/70 hover:border-pink-400 transition-all text-xs font-bold shadow-md shadow-pink-950/20 cursor-pointer">
+            <svg class="w-3.5 h-3.5 fill-current text-pink-400 shrink-0" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            <span>▶️ Representación gráfica de funciones</span>
+        </a>
+    
+        </div>
+    </div>
+            <div class="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 max-w-md mx-auto">
+                <p class="text-xs text-emerald-300 font-semibold">¿Quieres ir directo a la práctica?</p>
+                <a href="../practicos/mat/funciones.html" class="inline-block mt-1.5 text-xs font-extrabold text-emerald-400 hover:text-emerald-200 underline">
+                    🚀 Abrir 30 Ejercicios Prácticos de Funciones →
+                </a>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <div></div>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Funciones →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 1 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Funciones para Dummies →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 1: Concepto 1 -->
+    <!-- Slide 1: 1. ¿Qué es una función? (La Máquina de Jugos) 🥤 -->
     <div class="slide " id="slide-1">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">La Regla de la Sustitución: $f(\text{caja})$ 📥</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <p>La notación $f(x)$ significa simplemente que donde veas una $x$, debes <b>reemplazarla por lo que esté dentro del paréntesis</b>:</p>
-            <div class="box-highlight text-xs space-y-1">
-                <p>Si $f(x) = 2x^2 - 3x$, entonces:</p>
-                <p>$f(4) = 2(4)^2 - 3(4) = 2(16) - 12 = 20$.</p>
-                <p>$f(-1) = 2(-1)^2 - 3(-1) = 2(1) + 3 = 5$.</p>
-                <p>$f(a + 1) = 2(a + 1)^2 - 3(a + 1)$.</p>
-            </div>
-            <div class="box-warning text-xs">
-                ⚠️ Recuerda que $f(x)$ es exactamente igual a la variable $y$ en el plano cartesiano: $(x, f(x)) = (x, y)$.
-            </div>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Para Dummies #1</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/funciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Funciones</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">1. ¿Qué es una función? (La Máquina de Jugos) 🥤</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-dummy">
+                    <p class="font-bold text-indigo-300 text-base mb-1">💡 La Licuadora Mágica:</p>
+                    <p>Una <b>función</b> $f(x)$ es simplemente una máquina con una regla fija:</p>
+                    <p class="mt-1 text-xs sm:text-sm">• <b>Entrada ($x$):</b> La fruta que metes a la máquina (variable independiente).</p>
+                    <p class="text-xs sm:text-sm">• <b>Regla ($f$):</b> Lo que la máquina le hace a la fruta (ej. multiplicarla por 3 y sumarle 1: $3x + 1$).</p>
+                    <p class="text-xs sm:text-sm">• <b>Salida ($y$ o $f(x)$):</b> El vaso de jugo que sale (variable dependiente).</p>
+                </div>
+
+                <div class="box-step text-xs space-y-1">
+                    <p class="font-bold text-cyan-300">La Notación $f(x)$:</p>
+                    <p>Decir $f(x) = 2x + 5$ es EXACTAMENTE lo mismo que decir $mathbf{y = 2x + 5}$.</p>
+                    <p>Cuando te dicen: <i>"Calcula $f(4)$"</i>, solo te están diciendo: <b>"Mete el número 4 en el lugar donde esté la $x$"</b>.</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 2 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 2: Ejemplo Resuelto 1 -->
+    <!-- Slide 2: 2. El Método de los Paréntesis Vacíos (Cero Errores de Signos) 🛡️ -->
     <div class="slide " id="slide-2">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Evaluación Inversa de $f(x)$ 🔍</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">Dada la función $g(x) = 3x - 7$, si $g(k) = 14$, ¿cuál es el valor de $k$?</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. $g(k)$ significa evaluar la función en $k$: $g(k) = 3k - 7$.<br/>
-                    2. Igualamos al resultado dado: $3k - 7 = 14$.<br/>
-                    3. Despejamos $k$: $3k = 21 \implies \mathbf{k = 7}$.
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Técnica Segura</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/funciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Funciones</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">2. El Método de los Paréntesis Vacíos (Cero Errores de Signos) 🛡️</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-trap">
+                    <p class="font-bold text-rose-300 text-sm mb-1">⚠️ El Gran Error con Números Negativos:</p>
+                    <p class="text-xs text-slate-200">Si $f(x) = x^2 - 3x$, ¿cuánto vale $f(-2)$?</p>
+                    <p class="text-xs text-rose-300 mt-1">El alumno descuidado escribe en calculadora: $-2^2 - 3(-2) = -4 + 6 = 2$ ❌ <b>¡ERROR!</b> Olvidó que el negativo también va al cuadrado.</p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300 text-sm">La Técnica Infalible PrepMaster:</p>
+                    <p><b>Paso 1:</b> Borra todas las $x$ y en su lugar pon paréntesis vacíos:</p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40 font-mono text-cyan-300">
+                        $$f() = ()^2 - 3()$$
+                    </p>
+
+                    <p><b>Paso 2:</b> Rellena los huecos con el número solicitado ($-2$):</p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40 text-sm font-bold text-emerald-400">
+                        $$f(-2) = (-2)^2 - 3(-2) = 4 + 6 = \mathbf{10}$$
+                    </p>
+                    <p class="text-slate-300">¡Con los paréntesis vacíos es literalmente imposible equivocarse en los signos!</p>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 1 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 3 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 3: Práctica 1 -->
+    <!-- Slide 3: 3. Composición de Funciones $f(g(x))$: La Muñeca Rusa 🪆 -->
     <div class="slide " id="slide-3">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #1</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el valor de f(-2)? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">Si $f(x) = 3x^2 - 5x + 4$, ¿cuál es el valor de $f(-2)$?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'fn1', '¡Correcto! f(-2) = 3(-2)^2 - 5(-2) + 4 = 3(4) + 10 + 4 = 12 + 10 + 4 = 26.')">A) 26</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'fn1', 'Cuidado con el signo: -5(-2) es +10, no -10.')">B) 6</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'fn1', 'Cuidado con (-2)^2: da +4, no -4.')">C) -18</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'fn1', 'Cálculo erróneo.')">D) 22</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Funciones Pro</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-fn1" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente: Composición de Funciones f(g(x)) →</button>
-            </div>
-        </div>
+        <a href="../practicos/mat/funciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Funciones</span>
+            <span>→</span>
+        </a>
     </div>
-  
-
-    <!-- Slide 4: Concepto 2 -->
-    <div class="slide " id="slide-4">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Regla de Oro #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Composición de Funciones: $f(g(x))$ 🧩</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <p>La composición $f(g(x))$ se lee <b>de adentro hacia afuera</b>:</p>
-            <div class="box-highlight text-xs space-y-1">
-                <p>1. Primero calcula el valor de la función interior $g(x)$.</p>
-                <p>2. El resultado numérico obtenido se mete como entrada en la función exterior $f$.</p>
-                <p>Ejemplo: Si $g(x) = 2x + 1$ y $f(x) = x^2$, para hallar $f(g(3))$:<br/>
-                $g(3) = 2(3) + 1 = 7$.<br/>
-                Luego $f(7) = 7^2 = 49$.</p>
-            </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
-                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Ver Ejemplo Resuelto 2 →</button>
-            </div>
-        </div>
-    </div>
-  
-
-    <!-- Slide 5: Ejemplo Resuelto 2 -->
-    <div class="slide " id="slide-5">
-        <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Ejemplo Guiado #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Ejemplo Resuelto: Doble Evaluación Compuesta 🔍</h2>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">3. Composición de Funciones $f(g(x))$: La Muñeca Rusa 🪆</h2>
             
-        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-            <div class="box-example text-xs">
-                <p class="font-bold text-white mb-1">Reactivo Modelo PAA:</p>
-                <p class="text-slate-200">Sean $f(x) = x^2 - 1$ y $g(x) = 2x + 3$. ¿Cuál es el valor de $g(f(3))$?</p>
-            </div>
-            <div class="space-y-2 text-xs">
-                <div class="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-200">
-                    <b>✅ Solución Paso a Paso:</b><br/>
-                    1. Función interior primero: $f(3) = 3^2 - 1 = 9 - 1 = 8$.<br/>
-                    2. Ahora evaluamos la función exterior en ese resultado: $g(8) = 2(8) + 3 = 16 + 3 = \mathbf{19}$.
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <div class="box-dummy">
+                    <p class="font-bold text-indigo-300 text-sm mb-1">💡 La Regla de Adentro hacia Afuera:</p>
+                    <p class="text-xs sm:text-sm">En $f(g(3))$: la máquina $g$ está metida adentro de la máquina $f$.</p>
+                    <p class="text-xs mt-1"><b>Siempre resuelve primero lo que está ADENTRO</b>. El resultado que obtengas se lo das de comer a la función de afuera.</p>
+                </div>
+
+                <div class="box-step text-xs space-y-2">
+                    <p class="font-bold text-cyan-300">Ejemplo de Examen: Si $f(x) = 2x + 1$ y $g(x) = x^2 - 4$, halla $f(g(3))$:</p>
+                    
+                    <p><b>Paso 1 (Calcular la de adentro, $g(3)$):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40">
+                        $$g(3) = (3)^2 - 4 = 9 - 4 = \mathbf{5}$$
+                    </p>
+
+                    <p><b>Paso 2 (Meter ese 5 en la función de afuera, $f$):</b></p>
+                    <p class="pl-3 border-l-2 border-cyan-500/40 text-sm font-bold text-emerald-400">
+                        $$f(5) = 2(5) + 1 = 10 + 1 = \mathbf{11}$$
+                    </p>
+                    <p class="text-slate-300">¡Eso es todo! Dos pasos ordenados y tienes los puntos asegurados.</p>
                 </div>
             </div>
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Tu Turno: Práctica 2 →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 4 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 6: Práctica 2 -->
-    <div class="slide " id="slide-6">
+    <!-- Slide 4: 4. Dominio: Los Dos Pecados Prohibidos en Matemáticas 🚫 -->
+    <div class="slide " id="slide-4">
         <div class="card ">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva #2</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">¿Cuál es el valor de f(g(2))? 🎯</h2>
             
-        <p class="text-slate-300 text-sm mb-3">Si $f(x) = 4x - 5$ y $g(x) = x^2 + 1$, ¿cuánto vale $f(g(2))$?</p>
-        <div class="space-y-2 max-w-lg mx-auto text-left">
-            <button class="option-btn" onclick="checkPractice(this, true, 'fn2', '¡Excelente! Interior primero: g(2) = 2^2 + 1 = 5. Exterior: f(5) = 4(5) - 5 = 20 - 5 = 15.')">A) 15</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'fn2', '10 es el resultado si hubieras hecho g(f(2)) al revés.')">B) 10</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'fn2', 'Cálculo erróneo.')">C) 12</button>
-            <button class="option-btn" onclick="checkPractice(this, false, 'fn2', 'Revisa la multiplicación 4 * 5 = 20.')">D) 25</button>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Dominio y Rango</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div id="feedback-fn2" class="hidden"></div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/funciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Funciones</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">4. Dominio: Los Dos Pecados Prohibidos en Matemáticas 🚫</h2>
+            
+            
+            <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p>El <b>dominio</b> son todos los números que TIENEN PERMISO de entrar a la máquina. Solo hay dos cosas prohibidas en el álgebra básica de la PAA:</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div class="p-3 bg-slate-900 rounded-xl border border-rose-500/40">
+                        <p class="font-bold text-rose-400 text-sm mb-1">🚫 Pecado 1: Dividir entre Cero</p>
+                        <p class="text-slate-300">El denominador NUNCA puede ser cero:</p>
+                        <p class="text-cyan-300 font-bold my-1 text-center">$f(x) = \frac{5}{x - 3}$</p>
+                        <p class="text-slate-300">¿Qué número hace que abajo sea 0? $x = 3$. Por tanto, el dominio son <b>todos los reales excepto el 3</b> ($x \ne 3$).</p>
+                    </div>
+
+                    <div class="p-3 bg-slate-900 rounded-xl border border-amber-500/40">
+                        <p class="font-bold text-amber-400 text-sm mb-1">🚫 Pecado 2: Raíz Par Negativa</p>
+                        <p class="text-slate-300">Lo que está adentro de la raíz cuadrada debe ser MAYOR O IGUAL A CERO:</p>
+                        <p class="text-cyan-300 font-bold my-1 text-center">$f(x) = \sqrt{x - 4}$</p>
+                        <p class="text-slate-300">Planteas: $x - 4 \ge 0 \implies \mathbf{x \ge 4}$.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Resumen del Módulo →</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 5 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
             </div>
         </div>
     </div>
-  
 
-    <!-- Slide 7: Resumen -->
-    <div class="slide " id="slide-7">
-        <div class="card text-center">
-            <span class="badge" style="background:#38bdf8;">Machete PAA</span>
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Machete de Funciones 📋</h2>
+    <!-- Slide 5: 5. Tu Turno: Práctica Guiada #1 🎯 -->
+    <div class="slide " id="slide-5">
+        <div class="card ">
             
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left text-xs mb-4">
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Notación $f(x)$</div>
-                <div class="text-slate-300 mt-1">Sustituye en cada $x$ el valor entre paréntesis. $f(x) = y$.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Composición $f(g(x))$</div>
-                <div class="text-slate-300 mt-1">De adentro hacia afuera: calcula $g$ primero, luego mete el resultado en $f$.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Traslaciones Verticales</div>
-                <div class="text-slate-300 mt-1">$f(x) + c$ sube $c$ unidades. $f(x) - c$ baja $c$ unidades.</div>
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                <div class="font-bold text-cyan-300 text-sm">Traslaciones Horizontales</div>
-                <div class="text-slate-300 mt-1">$f(x - c)$ mueve a la DERECHA. $f(x + c)$ mueve a la IZQUIERDA.</div>
-            </div>
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Práctica Interactiva</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
-        <div class="box-highlight text-xs text-slate-300">
-            🎉 <b>¡Módulo completado!</b> La notación de funciones y composiciones ya está bajo control.
-        </div>
-      
-            <div class="mt-5 flex justify-between items-center gap-2">
+        <a href="../practicos/mat/funciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Funciones</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">5. Tu Turno: Práctica Guiada #1 🎯</h2>
+            
+            
+            <p class="text-slate-300 text-sm mb-3">Si $f(x) = 3x - 5$ y $g(x) = x + 4$, ¿cuál es el valor de $g(f(2))$?</p>
+            <div class="space-y-2 max-w-lg mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'fun1', '¡Correcto! Primero calculamos lo de adentro: f(2) = 3(2) - 5 = 6 - 5 = 1. Ahora evaluamos la función externa con ese resultado: g(1) = 1 + 4 = 5.')">A) $5$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'fun1', '13 sería si hubieras calculado f(g(2)) al revés: g(2)=6, f(6)=18-5=13.')">B) $13$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'fun1', '1 es solo el valor de f(2), falta meterlo en g(x).')">C) $1$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'fun1', 'Cálculo erróneo de la composición.')">D) $7$</button>
+            </div>
+            <div id="feedback-fun1" class="hidden"></div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 6 de 7</div>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: 6. Machete Resumen y Puente a la Práctica 🚀 -->
+    <div class="slide " id="slide-6">
+        <div class="card text-center">
+            
+    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+            <span class="badge" style="background:#38bdf8;">Resumen Maestro</span>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
+        </div>
+        <a href="../practicos/mat/funciones.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
+            <span>🎯 30 Ejercicios de Funciones</span>
+            <span>→</span>
+        </a>
+    </div>
+            
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">6. Machete Resumen y Puente a la Práctica 🚀</h2>
+            
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left text-xs mb-4">
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🥤 Paréntesis Vacíos</div>
+                    <div class="text-slate-300 mt-1">Reemplaza cada $x$ por $()$ antes de meter números negativos para no perder signos.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🪆 Composición $f(g(x))$</div>
+                    <div class="text-slate-300 mt-1">De adentro hacia afuera: calcula primero la función interna y luego pásala a la externa.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">🚫 Dominio Seguro</div>
+                    <div class="text-slate-300 mt-1">Fracciones: denominador $\ne 0$. Raíces cuadradas: argumento interior $\ge 0$.</div>
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
+                    <div class="font-bold text-cyan-300">📈 Gráfica de Función</div>
+                    <div class="text-slate-300 mt-1">Prueba de la recta vertical: si una línea vertical corta la curva en más de un punto, NO es función.</div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gradient-to-r from-cyan-950/70 via-blue-950/60 to-indigo-950/70 rounded-2xl border border-cyan-500/40 text-center my-3 shadow-xl">
+                <h3 class="text-base sm:text-lg font-black text-cyan-300 mb-1">🎉 ¡Dominaste las Funciones y su Notación!</h3>
+                <p class="text-xs sm:text-sm text-slate-300 mb-3">Continúa practicando dominio, rango y evaluación en los ejercicios prácticos.</p>
+                <a href="../practicos/mat/funciones.html" class="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-slate-950 font-black text-sm sm:text-base hover:brightness-110 shadow-lg shadow-emerald-500/30 hover:scale-[1.01] transition-all">
+                    <span>🚀 Resolver 30 Ejercicios Prácticos de Funciones</span>
+                    <span>→</span>
+                </a>
+            </div>
+            
+            <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
+                <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
+                <div class="text-xs text-slate-400 font-medium">Paso 7 de 7</div>
                 <button class="btn-nav btn-primary-action" onclick="goToStart()">Repasar Módulo ↺</button>
             </div>
         </div>
     </div>
-  
+
 
     <div class="progress-indicator" id="progress"></div>
 
@@ -289,6 +381,7 @@
             });
             const progressPercent = ((currentSlide + 1) / slides.length) * 100;
             progressBar.style.width = `${progressPercent}%`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         }
 
@@ -301,11 +394,11 @@
             if (isCorrect) {
                 btn.classList.add('option-correct');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 block shadow-lg shadow-emerald-950/50";
-                fb.innerHTML = `<b>🎉 ¡Excelente desarrollo!</b><br/>${explanation}`;
+                fb.innerHTML = `<b>🎉 ¡Excelente análisis!</b><br/>${explanation}`;
             } else {
                 btn.classList.add('option-incorrect');
                 fb.className = "rounded-xl p-3 text-xs sm:text-sm mt-3 border border-rose-500/40 bg-rose-950/40 text-rose-200 block shadow-lg shadow-rose-950/50";
-                fb.innerHTML = `<b>⚠️ Ojo con el procedimiento:</b><br/>${explanation}`;
+                fb.innerHTML = `<b>⚠️ Cuidado con la trampa típica:</b><br/>${explanation}`;
             }
             if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise([fb]);
@@ -315,6 +408,12 @@
         function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
         function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
         function goToStart() { currentSlide = 0; updateUI(); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
         updateUI();
     </script>
 </body>
