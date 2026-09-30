@@ -765,56 +765,411 @@
 
   <!-- ═══════════════════════════════════════════════ -->
   <!-- 🗺️ VIEW: RUTA DE ESTUDIO (ACTUALIZADA)          -->
+    <!-- ═══════════════════════════════════════════════ -->
+  <!-- 🗺️ VIEW: RUTA DE ESTUDIO INTENSIVA 30 DÍAS        -->
   <!-- ═══════════════════════════════════════════════ -->
   <div id="view-ruta" class="view-container">
     <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
-    <div class="section-header">
-      <h2 class="section-title">🗺️ Ruta de estudio recomendada</h2>
-      <div class="section-line"></div>
+    
+    <div class="sim-header-box" style="margin-bottom: 24px;">
+      <div class="sim-header-info">
+        <h2 style="background:linear-gradient(90deg,#ffffff 0%,#38bdf8 40%,#00f0ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:inline-block;">
+          🗺️ Ruta de Estudio Real: 30 Días (PAA UDG)
+        </h2>
+        <p>
+          Plan intensivo paso a paso para cubrir el 100% del temario oficial (Aritmética, Álgebra, Geometría, Estadística, Lectura y Redacción) con <strong>6 Exámenes de Simulación reales</strong>.
+        </p>
+      </div>
+      <div class="sim-stats-pill">
+        <span>⭐ 4 Semanas · 45 Módulos · 6 Simulacros</span>
+      </div>
     </div>
-    <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:20px;padding:32px;">
-      <p style="font-size:14px;color:var(--muted);margin-bottom:28px;line-height:1.7;">Sigue este orden metodológico cada semana para garantizar tu progreso óptimo hacia la PAA UDG:</p>
+
+    <!-- Pestañas de Semanas -->
+    <div class="exam-tabs-bar" style="margin-bottom: 24px;">
+      <button class="exam-tab-btn active" onclick="switchRutaTab(1, this)">
+        🗓️ Semana 1: Aritmética & Diagnóstico <span class="exam-tab-badge">Días 1-7</span>
+      </button>
+      <button class="exam-tab-btn" onclick="switchRutaTab(2, this)">
+        🗓️ Semana 2: Álgebra & Redacción <span class="exam-tab-badge">Días 8-14</span>
+      </button>
+      <button class="exam-tab-btn" onclick="switchRutaTab(3, this)">
+        🗓️ Semana 3: Geometría & Lectura <span class="exam-tab-badge">Días 15-21</span>
+      </button>
+      <button class="exam-tab-btn" onclick="switchRutaTab(4, this)">
+        🗓️ Semana 4: Estadística & Simulacros <span class="exam-tab-badge">Días 22-30</span>
+      </button>
+    </div>
+
+    <!-- SEMANA 1 -->
+    <div id="ruta-semana-1" class="ruta-week-panel active" style="display: block;">
+      <div class="exam-tab-banner" style="border-left: 4px solid var(--cyan);">
+        <span>📌 <strong>Objetivo Semana 1:</strong> Consolidar bases de aritmética rápida, fijar reglas de comprensión de lectura y realizar el diagnóstico inicial de puntos débiles.</span>
+        <span class="badge-subtle badge-pdf-yes">2 Simulacros programados</span>
+      </div>
       
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;">
-        <!-- Paso 1 -->
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:22px;position:relative;">
-          <div style="font-size:24px;margin-bottom:12px;">⚡</div>
-          <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Paso 1</div>
-          <h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;">Estudia la Teoría</h3>
-          <p style="font-size:13px;color:var(--muted);line-height:1.5;">Revisa las <strong style="color:var(--text);">Explicaciones rápidas</strong> de cada tema para comprender fórmulas, reglas gramaticales y conceptos clave.</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 16px; margin-top: 18px;">
+        
+        <!-- Día 1: Simulacro 1 -->
+        <div style="background: linear-gradient(135deg, rgba(2,132,199,0.15), rgba(37,99,235,0.25)); border: 2px solid rgba(0,240,255,0.6); border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,240,255,0.15);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-size:11px; font-weight:800; color:var(--cyan); text-transform:uppercase;">Día 1 · Lunes</span>
+            <span style="background:rgba(0,240,255,0.2); color:#ffffff; font-size:10px; font-weight:800; padding:3px 8px; border-radius:6px;">🎯 SIMULACRO 1</span>
+          </div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:16px; color:#ffffff; margin-bottom:6px;">Diagnóstico Global PAA</h4>
+          <p style="font-size:12.5px; color:var(--muted2); margin-bottom:14px; line-height:1.5;">Mide tu puntaje base para identificar tus fortalezas y debilidades antes de empezar.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <button onclick="openExam('examenes/mat/diagnostico-matematicas.html','Diagnóstico Matemáticas')" class="btn-exam btn-exam-start" style="font-size:11.5px; padding:6px 12px;">📐 Diag. Mat (55r)</button>
+            <button onclick="openExam('examenes/red/diagnostico-espanol.html','Diagnóstico Español')" class="btn-exam btn-exam-start" style="font-size:11.5px; padding:6px 12px; background:linear-gradient(135deg,#059669,#047857); border-color:#10b981;">✍️ Diag. Español</button>
+          </div>
         </div>
 
-        <!-- Paso 2 -->
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:22px;position:relative;">
-          <div style="font-size:24px;margin-bottom:12px;">📝</div>
-          <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Paso 2</div>
-          <h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;">Practica y Supervive</h3>
-          <p style="font-size:13px;color:var(--muted);line-height:1.5;">Resuelve los <strong style="color:var(--text);">Ejercicios prácticos</strong> o pon a prueba tu velocidad con los módulos de <strong style="color:var(--text);">Supervivencia</strong> de cada tema.</p>
+        <!-- Día 2 -->
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 2 · Martes</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Fracciones, Porcentajes y Lectura Global</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Operaciones con quebrados, descuentos sucesivos y técnica de skimming lector.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/Fracciones.html','Fracciones')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">⚡ Fracciones</button>
+            <button onclick="openExam('examenes/explicaciones/Porcentajes.html','Porcentajes')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">⚡ Porcentajes</button>
+            <button onclick="openExam('examenes/explicaciones/Comprensiondelectura.html','Comprensión')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">📖 Lectura</button>
+            <button onclick="openExam('examenes/practicos/mat/fracciones.html','Práctica Fracciones')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">✏️ Práctica Fracciones</button>
+          </div>
         </div>
 
-        <!-- Paso 3 -->
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:22px;position:relative;">
-          <div style="font-size:24px;margin-bottom:12px;">🎮</div>
-          <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Paso 3</div>
-          <h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;">Refuerza Jugando</h3>
-          <p style="font-size:13px;color:var(--muted);line-height:1.5;">Gana agilidad mental y destreza practicando constantemente con los <strong style="color:var(--text);">Minijuegos</strong> interactivos.</p>
+        <!-- Día 3 -->
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 3 · Miércoles</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">PEMDAS, MCM/MCD y Gramática</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Jerarquía de operaciones, múltiplos comunes, signos de puntuación y concordancia.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/Jerarquia.html','Jerarquía')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">⚡ Jerarquía</button>
+            <button onclick="openExam('examenes/explicaciones/Mcm_mcd.html','MCM y MCD')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">⚡ MCM/MCD</button>
+            <button onclick="openExam('examenes/explicaciones/Signos_puntuacion.html','Puntuación')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">✒️ Puntuación</button>
+            <button onclick="openExam('examenes/practicos/esp/concordancia.html','Concordancia')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">✏️ Práctica Concordancia</button>
+          </div>
         </div>
 
-        <!-- Paso 4 -->
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:22px;position:relative;">
-          <div style="font-size:24px;margin-bottom:12px;">📄</div>
-          <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Paso 4</div>
-          <h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;">Simulacro Semanal</h3>
-          <p style="font-size:13px;color:var(--muted);line-height:1.5;">Realiza <strong style="color:var(--text);">al menos un examen de cada tipo en cada semana</strong> bajo condiciones de tiempo real.</p>
+        <!-- Día 4 -->
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 4 · Jueves</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Proporciones, Regla de 3 y Vocabulario</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Razones directas e inversas, idea principal e inferencia de palabras por contexto.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/Proporciones.html','Proporciones')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">⚡ Proporciones</button>
+            <button onclick="openExam('examenes/explicaciones/Reglade3.html','Regla de 3')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">⚡ Regla de 3</button>
+            <button onclick="openExam('examenes/explicaciones/Generalizacion.html','Idea Principal')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">📖 Idea Principal</button>
+            <button onclick="openExam('examenes/practicos/mat/regla3.html','Práctica Regla 3')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">✏️ Práctica Regla 3</button>
+          </div>
+        </div>
+
+        <!-- Día 5 -->
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 5 · Viernes</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Exponentes, Sucesiones y Precisión Léxica</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Leyes de potencias, patrones numéricos, pleonasmos y uso preciso de palabras.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/Exponentes.html','Exponentes')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">⚡ Exponentes</button>
+            <button onclick="openExam('examenes/explicaciones/Sucesiones.html','Sucesiones')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">⚡ Sucesiones</button>
+            <button onclick="openExam('examenes/explicaciones/Precision_lexica.html','Precisión Léxica')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">💎 Precisión Léxica</button>
+            <button onclick="openExam('examenes/practicos/mat/exponentes.html','Práctica Exponentes')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">✏️ Práctica Exponentes</button>
+          </div>
+        </div>
+
+        <!-- Día 6: Simulacro 2 -->
+        <div style="background: linear-gradient(135deg, rgba(2,132,199,0.15), rgba(37,99,235,0.25)); border: 2px solid rgba(0,240,255,0.6); border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,240,255,0.15);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-size:11px; font-weight:800; color:var(--cyan); text-transform:uppercase;">Día 6 · Sábado</span>
+            <span style="background:rgba(0,240,255,0.2); color:#ffffff; font-size:10px; font-weight:800; padding:3px 8px; border-radius:6px;">🎯 SIMULACRO 2</span>
+          </div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:16px; color:#ffffff; margin-bottom:6px;">Simulación 1: Mat & Lectura</h4>
+          <p style="font-size:12.5px; color:var(--muted2); margin-bottom:14px; line-height:1.5;">Pon a prueba tu agilidad en tiempo cronometrado real con las simulaciones oficiales #1.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <button onclick="openExam('examenes/mat/mat-sim-1.html','Simulación Mat 1')" class="btn-exam btn-exam-start" style="font-size:11.5px; padding:6px 12px;">📐 Simulación Mat 1 (55r)</button>
+            <button onclick="openExam('examenes/lec/lec-sim-1.html','Simulación Lectura 1')" class="btn-exam btn-exam-start" style="font-size:11.5px; padding:6px 12px; background:linear-gradient(135deg,#059669,#047857); border-color:#10b981;">📖 Simulación Lectura 1 (45r)</button>
+          </div>
+        </div>
+
+        <!-- Día 7 -->
+        <div style="background: var(--surface2); border: 1px dashed var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--gold); text-transform:uppercase; margin-bottom:6px;">Día 7 · Domingo</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Retroalimentación y Descanso Activo</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Revisa las preguntas que fallaste el sábado y juega una partida de agilidad mental.</p>
+          <button onclick="switchView('retos','mini')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 12px;">🎮 Jugar Conecta 4 PAA</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SEMANA 2 -->
+    <div id="ruta-semana-2" class="ruta-week-panel" style="display: none;">
+      <div class="exam-tab-banner" style="border-left: 4px solid #38bdf8;">
+        <span>📌 <strong>Objetivo Semana 2:</strong> Dominar el núcleo algebraico (desigualdades, ecuaciones, cuadráticas y funciones) y la cohesión textual en redacción.</span>
+        <span class="badge-subtle badge-pdf-yes">Simulacro 3 Programado</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 16px; margin-top: 18px;">
+        <!-- Días 8 a 14 -->
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 8 · Lunes</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Desigualdades y Secuencia Lógica</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Inecuaciones lineales, intervalos numéricos y orden lógico de párrafos en redacción.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/Desigualdades.html','Desigualdades')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">⚡ Desigualdades</button>
+            <button onclick="openExam('examenes/explicaciones/Secuencia_logica.html','Secuencia Lógica')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">🧩 Secuencia Lógica</button>
+            <button onclick="openExam('examenes/practicos/mat/inecuaciones.html','Práctica Inecuaciones')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">✏️ Práctica Inecuaciones</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 9 · Martes</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Álgebra, Ecuaciones y Conectores</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Despejes lineales, factorización básica y combinación de oraciones con nexos.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/Ecuaciones.html','Ecuaciones')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">⚡ Ecuaciones</button>
+            <button onclick="openExam('examenes/explicaciones/Factorizacion.html','Factorización')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">⚡ Factorización</button>
+            <button onclick="openExam('examenes/explicaciones/Combinandooraciones.html','Combinando')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">🔗 Conectores</button>
+            <button onclick="openExam('examenes/practicos/mat/algebra.html','Práctica Álgebra')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">✏️ Práctica Álgebra</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 10 · Miércoles</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Cuadráticas, Sistemas 2x2 y Eliminación</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Resolución rápida de cuadráticas, sistemas de ecuaciones y descarte de oraciones redundantes.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/Cuadraticas.html','Cuadráticas')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">⚡ Cuadráticas</button>
+            <button onclick="openExam('examenes/explicaciones/Sistemaecuaciones.html','Sistemas')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">⚡ Sistemas 2x2</button>
+            <button onclick="openExam('examenes/explicaciones/Eliminarenunciados.html','Eliminación')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">✂️ Eliminación</button>
+            <button onclick="openExam('examenes/practicos/mat/cuadraticas.html','Práctica Cuadráticas')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">✏️ Práctica Cuadráticas</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 11 · Jueves</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Funciones f(x), Recta y Evidencia Textual</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Evaluación y composición de funciones, pendientes de rectas y preguntas pareadas de evidencia.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/Funciones.html','Funciones')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">⚡ Funciones</button>
+            <button onclick="openExam('examenes/explicaciones/Linearecta.html','Línea Recta')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">📉 Línea Recta</button>
+            <button onclick="openExam('examenes/explicaciones/Evidencia_textual.html','Evidencia Textual')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">⚓ Evidencia</button>
+            <button onclick="openExam('examenes/practicos/mat/funciones.html','Práctica Funciones')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">✏️ Práctica Funciones</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 12 · Viernes</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Inferencias y Retos de Supervivencia</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Deducción lógica de lo no explícito y prueba de velocidad contrarreloj en álgebra.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/Inferencias.html','Inferencias')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">🔍 Inferencias</button>
+            <button onclick="openExam('examenes/practicos/esp/inferenciasygenerosliterarios.html','Práctica Inferencias')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">✏️ Práctica Inferencias</button>
+            <button onclick="switchView('retos','surv')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">🏋️ Supervivencia Álgebra</button>
+          </div>
+        </div>
+
+        <!-- Día 13: Simulacro 3 -->
+        <div style="background: linear-gradient(135deg, rgba(2,132,199,0.15), rgba(37,99,235,0.25)); border: 2px solid rgba(0,240,255,0.6); border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,240,255,0.15);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-size:11px; font-weight:800; color:var(--cyan); text-transform:uppercase;">Día 13 · Sábado</span>
+            <span style="background:rgba(0,240,255,0.2); color:#ffffff; font-size:10px; font-weight:800; padding:3px 8px; border-radius:6px;">🎯 SIMULACRO 3</span>
+          </div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:16px; color:#ffffff; margin-bottom:6px;">Simulación 2: Mat & Redacción</h4>
+          <p style="font-size:12.5px; color:var(--muted2); margin-bottom:14px; line-height:1.5;">Prueba tus habilidades de despeje y redacción indirecta con cronómetro estricto.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <button onclick="openExam('examenes/mat/mat-sim-2.html','Simulación Mat 2')" class="btn-exam btn-exam-start" style="font-size:11.5px; padding:6px 12px;">📐 Simulación Mat 2 (55r)</button>
+            <button onclick="openExam('examenes/red/red-sim-2.html','Simulación Redacción 2')" class="btn-exam btn-exam-start" style="font-size:11.5px; padding:6px 12px; background:linear-gradient(135deg,#7c3aed,#6d28d9); border-color:#8b5cf6;">✍️ Simulación Redacción 2 (30r)</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface2); border: 1px dashed var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--gold); text-transform:uppercase; margin-bottom:6px;">Día 14 · Domingo</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Descanso y Corrección de Errores</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Elabora una ficha con las fórmulas de álgebra que olvidaste durante la simulación.</p>
+          <button onclick="switchView('retos','ppm')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 12px;">📖 Reto PPM Lectura</button>
         </div>
       </div>
     </div>
+
+    <!-- SEMANA 3 -->
+    <div id="ruta-semana-3" class="ruta-week-panel" style="display: none;">
+      <div class="exam-tab-banner" style="border-left: 4px solid #10b981;">
+        <span>📌 <strong>Objetivo Semana 3:</strong> Dominar geometría visual (ángulos, triángulos notables, áreas sombreadas y volúmenes) y el análisis de textos dobles.</span>
+        <span class="badge-subtle badge-pdf-yes">Simulacro 4 Programado</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 16px; margin-top: 18px;">
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 15 · Lunes</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Geometría Plana, Ángulos y Tono</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Paralelas cortadas por secante, ángulos interiores y postura emocional del autor.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/Geometria.html','Geometría')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">📐 Geometría</button>
+            <button onclick="openExam('examenes/explicaciones/Tono_proposito.html','Tono y Propósito')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">🎭 Tono Autor</button>
+            <button onclick="openExam('examenes/practicos/mat/angulos.html','Práctica Ángulos')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">✏️ Práctica Ángulos</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 16 · Martes</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Triángulos Notables y Narrativa</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Proporciones 30-60-90, 45-45-90, ternas pitagóricas y elementos de la historia.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/Triangulos_notables.html','Triángulos Notables')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">📐 Triángulos Notables</button>
+            <button onclick="openExam('examenes/explicaciones/Elementos_narrativos.html','Narrativa')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">👤 Narrativa</button>
+            <button onclick="openExam('examenes/practicos/mat/triangulos_notables.html','Práctica Triángulos')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">✏️ Práctica Triángulos</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 17 · Miércoles</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Áreas Sombreadas, Volúmenes y Textos Duales</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Resta de figuras geométricas, prismas/cilindros y comparación de dos textos.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/Areas_sombreadas.html','Áreas Sombreadas')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">🔷 Áreas Sombreadas</button>
+            <button onclick="openExam('examenes/explicaciones/Volumenes.html','Volúmenes')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">📦 Volúmenes</button>
+            <button onclick="openExam('examenes/explicaciones/Analisisdual.html','Análisis Dual')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">🎙️ Análisis Dual</button>
+            <button onclick="openExam('examenes/practicos/mat/areas.html','Práctica Áreas')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">✏️ Práctica Áreas</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 18 · Jueves</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Gráficas en Lectura & Tipos de Texto</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Integración de datos gráficos con texto escrito y lectura estratégica rápida.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/Tablas_graficas_lectura.html','Gráficas Lectura')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">📊 Gráficas Lectura</button>
+            <button onclick="openExam('examenes/explicaciones/Tiposdetexto.html','Tipos de Texto')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">🎯 Estrategia Textos</button>
+            <button onclick="openExam('examenes/practicos/esp/tiposdetexto.html','Práctica Textos')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">✏️ Práctica Textos</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 19 · Viernes</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Módulos Top: Retórica y Poesía</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Asegura las preguntas de mayor dificultad del examen para superar los 1500 puntos.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/Figuras_retoricas.html','Retórica')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">🏆 Retórica Élite</button>
+            <button onclick="openExam('examenes/explicaciones/Analisis_poesia.html','Poesía')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">🏆 Poesía Élite</button>
+            <button onclick="openExam('examenes/practicos/esp/figurasretoricas.html','Práctica Retórica')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">✏️ Práctica Retórica</button>
+          </div>
+        </div>
+
+        <!-- Día 20: Simulacro 4 -->
+        <div style="background: linear-gradient(135deg, rgba(2,132,199,0.15), rgba(37,99,235,0.25)); border: 2px solid rgba(0,240,255,0.6); border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,240,255,0.15);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-size:11px; font-weight:800; color:var(--cyan); text-transform:uppercase;">Día 20 · Sábado</span>
+            <span style="background:rgba(0,240,255,0.2); color:#ffffff; font-size:10px; font-weight:800; padding:3px 8px; border-radius:6px;">🎯 SIMULACRO 4</span>
+          </div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:16px; color:#ffffff; margin-bottom:6px;">Simulación 3: Mat & Lectura 3</h4>
+          <p style="font-size:12.5px; color:var(--muted2); margin-bottom:14px; line-height:1.5;">Evalúa tu precisión en geometría y lecturas densas bajo límite de tiempo.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <button onclick="openExam('examenes/mat/mat-sim-3.html','Simulación Mat 3')" class="btn-exam btn-exam-start" style="font-size:11.5px; padding:6px 12px;">📐 Simulación Mat 3 (55r)</button>
+            <button onclick="openExam('examenes/lec/lec-sim-3.html','Simulación Lectura 3')" class="btn-exam btn-exam-start" style="font-size:11.5px; padding:6px 12px; background:linear-gradient(135deg,#059669,#047857); border-color:#10b981;">📖 Simulación Lectura 3 (45r)</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface2); border: 1px dashed var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--gold); text-transform:uppercase; margin-bottom:6px;">Día 21 · Domingo</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Pausa y Recuperación</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Descansa la vista y prepárate mentalmente para la semana de cierre.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEMANA 4 -->
+    <div id="ruta-semana-4" class="ruta-week-panel" style="display: none;">
+      <div class="exam-tab-banner" style="border-left: 4px solid #f59e0b;">
+        <span>📌 <strong>Objetivo Semana 4:</strong> Dominar estadística, probabilidad y conteo, y rematar con 2 simulacros completos de alta fidelidad.</span>
+        <span class="badge-subtle badge-pdf-yes">Simulacros 5 y 6 Programados</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 16px; margin-top: 18px;">
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 22 · Lunes</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Interpretación de Gráficas y Pictogramas</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Lectura de barras, líneas temporales, sectores circulares y diagramas de dispersión.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/interpretaciongraficas.html','Gráficas')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">📊 Gráficas</button>
+            <button onclick="openExam('examenes/practicos/mat/graficas.html','Práctica Gráficas')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">✏️ Práctica Gráficas</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 23 · Martes</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Diagramas de Venn y Conjuntos</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Intersección, unión y complemento de 2 y 3 categorías en problemas cotidianos.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/DiagramasVenn.html','Venn')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">⭕ Diagramas Venn</button>
+            <button onclick="switchView('retos','surv')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">🏋️ Supervivencia Verbal</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 24 · Miércoles</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Probabilidad, Mediana, Media y Conteo</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Regla de Laplace, cálculo de promedios ponderados y combinatoria básica.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="openExam('examenes/explicaciones/Probabilidad.html','Probabilidad')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">🎲 Probabilidad</button>
+            <button onclick="openExam('examenes/explicaciones/Combinatoria.html','Combinatoria')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">🧮 Combinatoria</button>
+            <button onclick="openExam('examenes/practicos/mat/probabilidad.html','Práctica Probabilidad')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">✏️ Práctica Probabilidad</button>
+          </div>
+        </div>
+
+        <!-- Día 25: Simulacro 5 -->
+        <div style="background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(217,119,6,0.25)); border: 2px solid rgba(245,158,11,0.7); border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(245,158,11,0.18);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-size:11px; font-weight:800; color:#fcd34d; text-transform:uppercase;">Día 25 · Jueves</span>
+            <span style="background:rgba(245,158,11,0.3); color:#ffffff; font-size:10px; font-weight:800; padding:3px 8px; border-radius:6px;">🎯 SIMULACRO 5</span>
+          </div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:16px; color:#ffffff; margin-bottom:6px;">Simulación 4: Mat & Redacción 4</h4>
+          <p style="font-size:12.5px; color:var(--muted2); margin-bottom:14px; line-height:1.5;">Simulación de ajuste de velocidad: no te quedes atorado más de 1 minuto por reactivo.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <button onclick="openExam('examenes/mat/mat-sim-4.html','Simulación Mat 4')" class="btn-exam btn-exam-start" style="font-size:11.5px; padding:6px 12px;">📐 Simulación Mat 4</button>
+            <button onclick="openExam('examenes/red/red-sim-4.html','Simulación Redacción 4')" class="btn-exam btn-exam-start" style="font-size:11.5px; padding:6px 12px; background:linear-gradient(135deg,#7c3aed,#6d28d9); border-color:#8b5cf6;">✍️ Simulación Redacción 4</button>
+          </div>
+        </div>
+
+        <!-- Día 26 -->
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px;">
+          <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Día 26 · Viernes</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:15px; color:#ffffff; margin-bottom:6px;">Cuadernillo Físico y Machetes</h4>
+          <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Repasa el cuadernillo maestro de 180 reactivos oficiales impreso o en pantalla.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="switchView('cuadernillos')" class="btn-exam btn-exam-start" style="font-size:11px; padding:5px 10px;">🖨️ Ver Cuadernillo 180</button>
+            <button onclick="openTool('calculadora.html','Calculadora')" class="btn-exam btn-exam-pdf" style="font-size:11px; padding:5px 10px;">🧮 Calculadora UDG</button>
+          </div>
+        </div>
+
+        <!-- Día 27: Simulacro 6 -->
+        <div style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(6,182,212,0.25)); border: 2px solid rgba(16,185,129,0.8); border-radius: 18px; padding: 24px; box-shadow: 0 8px 30px rgba(16,185,129,0.25);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span style="font-size:12px; font-weight:800; color:#6ee7b7; text-transform:uppercase; letter-spacing:1px;">Día 27 · Sábado · PRUEBA FINAL</span>
+            <span style="background:rgba(16,185,129,0.4); color:#ffffff; font-size:11px; font-weight:800; padding:4px 12px; border-radius:8px;">🏆 SIMULACRO 6: EXAMEN MAESTRO</span>
+          </div>
+          <h3 style="font-family:'Syne',sans-serif; font-size:19px; color:#ffffff; margin-bottom:8px;">Gran Simulacro General PAA (Condiciones 100% Reales)</h3>
+          <p style="font-size:13.5px; color:var(--muted2); margin-bottom:16px; line-height:1.6; max-width:850px;">
+            Realiza las 3 secciones completas en una sola sesión de 2 horas y 45 minutos: <strong>Matemáticas (55 reactivos) + Lectura (45 reactivos) + Redacción (30 reactivos)</strong>. Sin pausas, sin calculadora y con cronómetro en marcha.
+          </p>
+          <div style="display:flex; flex-wrap:wrap; gap:10px;">
+            <button onclick="openExam('examenes/mat/mat-sim-5.html','Simulación Mat 5')" class="btn-exam btn-exam-start" style="font-size:12.5px; padding:8px 16px;">📐 1. Mat 5 (55 reactivos)</button>
+            <button onclick="openExam('examenes/lec/lec-sim-5.html','Simulación Lectura 5')" class="btn-exam btn-exam-start" style="font-size:12.5px; padding:8px 16px; background:linear-gradient(135deg,#059669,#047857); border-color:#10b981;">📖 2. Lectura 5 (45 reactivos)</button>
+            <button onclick="openExam('examenes/red/red-sim-5.html','Simulación Redacción 5')" class="btn-exam btn-exam-start" style="font-size:12.5px; padding:8px 16px; background:linear-gradient(135deg,#7c3aed,#6d28d9); border-color:#8b5cf6;">✍️ 3. Redacción 5 (30 reactivos)</button>
+          </div>
+        </div>
+
+        <div style="grid-column: 1 / -1; background: var(--surface2); border: 1px solid var(--border-bright); border-radius: 16px; padding: 20px; text-align:center;">
+          <div style="font-size:11px; font-weight:700; color:var(--gold); text-transform:uppercase; margin-bottom:4px;">Días 28, 29 y 30</div>
+          <h4 style="font-family:'Syne',sans-serif; font-size:16px; color:#ffffff; margin-bottom:4px;">Ajustes Finales, Calma Mental y Éxito Seguro</h4>
+          <p style="font-size:13px; color:var(--muted); max-width:650px; margin:0 auto 12px;">Calcula tu puntaje global estimado, alista tu credencial, lápices del #2 y descansa adecuadamente la noche previa.</p>
+          <button onclick="openTool('calculadora.html','Calculadora de Puntaje')" class="btn-exam btn-exam-start" style="display:inline-flex; font-size:12px; padding:8px 18px;">🧮 Calcular mi Puntaje Estimado UDG</button>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 
-
-  <!-- ═══════════════════════════════════════════════ -->
-  <!-- ⚡ VIEW: EXPLICACIONES RÁPIDAS                  -->
-  <!-- ═══════════════════════════════════════════════ -->
   <div id="view-explicaciones" class="view-container">
     <button class="btn-back" onclick="switchView('home')">← Volver al Menú</button>
     <div class="section-header">
@@ -1337,6 +1692,17 @@
 
 <script>
 // Sistema de navegación por capas (Views) de manera aislada y robusta
+
+function switchRutaTab(weekNum, btn) {
+  document.querySelectorAll('.ruta-week-panel').forEach(p => p.style.display = 'none');
+  const target = document.getElementById('ruta-semana-' + weekNum);
+  if (target) target.style.display = 'block';
+  if (btn && btn.parentElement) {
+    btn.parentElement.querySelectorAll('.exam-tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+}
+
 function switchView(viewId, subTab) {
   if (viewId === 'supervivencia') {
     viewId = 'retos';
