@@ -1,0 +1,16 @@
+{
+  "channel_url": "https://www.tiktok.com/@prepmasterudg?_r=1&_t=ZS-9A9TMgJTxXY",
+  "channel_handle": "@prepmasterudg",
+  "videos": {
+    "funciones": {
+      "title": "Composición de funciones f(g(x))",
+      "url": "https://www.tiktok.com/@prepmasterudg/video/7643526669839469845",
+      "target_file": "examenes/explicaciones/Funciones.html"
+    },
+    "cuadraticas": {
+      "title": "Funciones cuadráticas y representación gráfica",
+      "url": "https://www.tiktok.com/@prepmasterudg/video/7629553544567196948",
+      "target_file": "examenes/explicaciones/Cuadraticas.html"
+    }
+  }
+}
