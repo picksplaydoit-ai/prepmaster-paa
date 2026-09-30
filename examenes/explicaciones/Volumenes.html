@@ -37,21 +37,33 @@
 <body>
 
     
-    <!-- Slide 0: Volúmenes y Geometría del Espacio para Dummies 🧊 -->
+    <!-- Slide 0: Volúmenes y Cuerpos en el Espacio Visual 🧊 -->
     <div class="slide active" id="slide-0">
         <div class="card text-center">
             
             
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Volúmenes y Geometría del Espacio para Dummies 🧊</h2>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">Volúmenes y Cuerpos en el Espacio Visual 🧊</h2>
             
             
             <p class="text-sm sm:text-base text-slate-300 mb-4 max-w-xl mx-auto leading-relaxed">
-                Descubre el principio unificado de los cuerpos geométricos: <b>Área de la Base por Altura</b>. Aprende la regla del tercio para conos y pirámides y cómo calcular volúmenes de cilindros conservando $\pi$ sin calculadoras.
+                Descubre cómo calcular capacidades y volúmenes de prismas, cilindros, conos y pirámides. <b>Cada concepto y ejercicio incluye su ilustración 3D en perspectiva</b> para que visualices dimensiones, radios y alturas de inmediato.
             </p>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-300 max-w-lg mx-auto mb-4">
-                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">📦 Prismas y Cubos (l·w·h)</div>
-                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🛢️ Cilindros con Pi (π·r²·h)</div>
-                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-cyan-500/30 font-semibold">🍦 Conos y Pirámides (Entre 3)</div>
+            <div class="gfx-card my-3">
+                <svg width="100%" height="90" viewBox="0 0 360 90" style="max-width:380px;">
+                    <!-- Prisma -->
+                    <polygon points="20,40 60,40 60,75 20,75" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8"/>
+                    <polygon points="60,40 85,25 85,60 60,75" fill="rgba(99, 102, 241, 0.2)" stroke="#6366f1"/>
+                    <text x="50" y="85" fill="#38bdf8" font-size="9" text-anchor="middle">Prisma (l·w·h)</text>
+                    <!-- Cilindro -->
+                    <ellipse cx="170" cy="30" rx="25" ry="8" fill="rgba(56, 189, 248, 0.3)" stroke="#38bdf8"/>
+                    <path d="M145,30 L145,70 A25,8 0 0,0 195,70 L195,30" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8"/>
+                    <text x="170" y="85" fill="#38bdf8" font-size="9" text-anchor="middle">Cilindro (πr²h)</text>
+                    <!-- Cono -->
+                    <ellipse cx="290" cy="70" rx="25" ry="8" fill="rgba(245, 158, 11, 0.2)" stroke="#f59e0b"/>
+                    <line x1="265" y1="70" x2="290" y2="25" stroke="#f59e0b" stroke-width="1.5"/>
+                    <line x1="315" y1="70" x2="290" y2="25" stroke="#f59e0b" stroke-width="1.5"/>
+                    <text x="290" y="85" fill="#fbbf24" font-size="9" text-anchor="middle">Cono (V/3)</text>
+                </svg>
             </div>
             
     <div class="my-4 p-3 bg-slate-900/80 rounded-2xl border border-pink-500/30 max-w-lg mx-auto shadow-lg shadow-pink-950/20">
@@ -68,7 +80,7 @@
         </div>
     </div>
             <div class="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 max-w-md mx-auto">
-                <p class="text-xs text-emerald-300 font-semibold">¿Quieres resolver ejercicios prácticos?</p>
+                <p class="text-xs text-emerald-300 font-semibold">¿Prefieres ir directo a los 30 ejercicios prácticos?</p>
                 <a href="../practicos/mat/volumenes.html" class="inline-block mt-1.5 text-xs font-extrabold text-emerald-400 hover:text-emerald-200 underline">
                     🚀 Abrir 30 Ejercicios Prácticos de Volúmenes →
                 </a>
@@ -77,18 +89,18 @@
             <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <div></div>
                 <div class="text-xs text-slate-400 font-medium">Paso 1 de 6</div>
-                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Volúmenes para Dummies →</button>
+                <button class="btn-nav btn-primary-action" onclick="nextSlide()">Iniciar Prismas y Cajas 3D →</button>
             </div>
         </div>
     </div>
 
-    <!-- Slide 1: 1. Prismas Rectangulares y Cubos (Con SVG) 📦 -->
+    <!-- Slide 1: 1. Prismas Rectangulares y Cajas 3D 📦 -->
     <div class="slide " id="slide-1">
         <div class="card ">
             
     <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
         <div class="flex items-center gap-2">
-            <span class="badge" style="background:#38bdf8;">Para Dummies #1</span>
+            <span class="badge" style="background:#38bdf8;">Cuerpos 3D #1</span>
             <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
         <a href="../practicos/mat/volumenes.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
@@ -97,30 +109,31 @@
         </a>
     </div>
             
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">1. Prismas Rectangulares y Cubos (Con SVG) 📦</h2>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">1. Prismas Rectangulares y Cajas 3D 📦</h2>
             
             
             <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-                <p class="text-xs">El volumen es simplemente <b>cuántos cubitos de $1\text{ cm}^3$ caben dentro de la caja</b>:</p>
-                
                 <div class="gfx-card">
-                    <svg width="100%" height="140" viewBox="0 0 360 140" style="max-width:380px;">
-                        <polygon points="50,55 150,55 150,120 50,120" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
-                        <polygon points="150,55 210,25 210,90 150,120" fill="rgba(99, 102, 241, 0.25)" stroke="#6366f1" stroke-width="2"/>
-                        <polygon points="50,55 110,25 210,25 150,55" fill="rgba(129, 140, 248, 0.3)" stroke="#818cf8" stroke-width="2"/>
-                        <line x1="50" y1="120" x2="110" y2="90" stroke="#475569" stroke-width="1.5" stroke-dasharray="4"/>
-                        <line x1="110" y1="90" x2="210" y2="90" stroke="#475569" stroke-width="1.5" stroke-dasharray="4"/>
-                        <line x1="110" y1="90" x2="110" y2="25" stroke="#475569" stroke-width="1.5" stroke-dasharray="4"/>
-                        <text x="100" y="135" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">Largo (l)</text>
-                        <text x="185" y="115" fill="#6366f1" font-size="11" font-weight="bold">Ancho (w)</text>
-                        <text x="35" y="90" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="end">Alto (h)</text>
+                    <svg width="100%" height="150" viewBox="0 0 340 150" style="max-width:380px;">
+                        <!-- Caras frontales del prisma -->
+                        <polygon points="40,55 140,55 140,125 40,125" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
+                        <polygon points="140,55 200,25 200,95 140,125" fill="rgba(99, 102, 241, 0.25)" stroke="#6366f1" stroke-width="2"/>
+                        <polygon points="40,55 100,25 200,25 140,55" fill="rgba(129, 140, 248, 0.3)" stroke="#818cf8" stroke-width="2"/>
+                        <!-- Líneas ocultas traseras punteadas -->
+                        <line x1="40" y1="125" x2="100" y2="95" stroke="#475569" stroke-width="1.5" stroke-dasharray="4"/>
+                        <line x1="100" y1="95" x2="200" y2="95" stroke="#475569" stroke-width="1.5" stroke-dasharray="4"/>
+                        <line x1="100" y1="95" x2="100" y2="25" stroke="#475569" stroke-width="1.5" stroke-dasharray="4"/>
+                        <text x="90" y="140" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">Largo (l)</text>
+                        <text x="175" y="120" fill="#6366f1" font-size="11" font-weight="bold">Ancho (w)</text>
+                        <text x="25" y="90" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="end">Alto (h)</text>
                     </svg>
                 </div>
 
                 <div class="box-step text-xs space-y-1">
-                    <p class="font-bold text-cyan-300">Fórmulas Clave:</p>
+                    <p class="font-bold text-cyan-300">Fórmulas Fundamentales:</p>
                     <p>• <b>Volumen:</b> $V = \text{largo} \times \text{ancho} \times \text{alto} = \mathbf{l \cdot w \cdot h}$.</p>
-                    <p>• <b>Cubo de arista $a$:</b> $V = a^3$, Área superficial total $= 6a^2$.</p>
+                    <p>• <b>Área Superficial Total (las 6 caras):</b> $A_T = 2(lw + lh + wh)$.</p>
+                    <p>• <b>Cubo de arista $a$:</b> $V = a^3$, $A_T = 6a^2$.</p>
                 </div>
             </div>
             
@@ -132,13 +145,13 @@
         </div>
     </div>
 
-    <!-- Slide 2: 2. Cilindros y la Regla del Tercio (Conos y Pirámides) 🍦 -->
+    <!-- Slide 2: 2. Cilindros y la Regla del Tercio (Conos) 🛢️🍦 -->
     <div class="slide " id="slide-2">
         <div class="card ">
             
     <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
         <div class="flex items-center gap-2">
-            <span class="badge" style="background:#38bdf8;">Fórmulas de Oro</span>
+            <span class="badge" style="background:#38bdf8;">Cuerpos 3D #2</span>
             <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
         <a href="../practicos/mat/volumenes.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
@@ -147,28 +160,42 @@
         </a>
     </div>
             
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">2. Cilindros y la Regla del Tercio (Conos y Pirámides) 🍦</h2>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">2. Cilindros y la Regla del Tercio (Conos) 🛢️🍦</h2>
             
             
             <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div class="p-3 bg-slate-900 rounded-xl border border-cyan-500/40">
-                        <p class="font-bold text-cyan-300 text-sm mb-1">🛢️ Cilindro Recto</p>
-                        <p class="text-slate-300">Base circular de área $\pi r^2$ levantada hasta la altura $h$:</p>
-                        <div class="bg-slate-950 p-2 rounded text-center font-bold text-cyan-300 my-2 text-sm">
-                            $$V = \pi r^2 h$$
+                <div class="gfx-card">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                        <!-- Cilindro -->
+                        <div class="p-2.5 bg-slate-900 rounded-xl border border-cyan-500/30 text-center">
+                            <span class="text-cyan-300 font-bold text-xs uppercase tracking-wider">Cilindro Recto</span>
+                            <svg width="100%" height="110" viewBox="0 0 140 110" class="mx-auto mt-1">
+                                <ellipse cx="70" cy="25" rx="40" ry="12" fill="rgba(56, 189, 248, 0.3)" stroke="#38bdf8" stroke-width="2"/>
+                                <path d="M30,25 L30,85 A40,12 0 0,0 110,85 L110,25" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="2"/>
+                                <line x1="70" y1="25" x2="110" y2="25" stroke="#fbbf24" stroke-width="2"/>
+                                <text x="90" y="20" fill="#fbbf24" font-size="10" font-weight="bold">r</text>
+                                <text x="120" y="55" fill="#34d399" font-size="10" font-weight="bold">h</text>
+                            </svg>
+                            <p class="font-bold text-cyan-400 text-xs mt-1">$$V = \pi r^2 h$$</p>
                         </div>
-                        <p class="text-slate-400">En la PAA casi siempre dejas $\pi$ indicado en la respuesta.</p>
-                    </div>
 
-                    <div class="p-3 bg-slate-900 rounded-xl border border-amber-500/40">
-                        <p class="font-bold text-amber-300 text-sm mb-1">🍦 La Regla del Tercio</p>
-                        <p class="text-slate-300">Cualquier figura que termine en punta (cono o pirámide) tiene <b>la tercera parte</b> del volumen:</p>
-                        <div class="bg-slate-950 p-2 rounded text-center font-bold text-amber-300 my-2 text-sm">
-                            $$V_{\text{cono}} = \frac{\pi r^2 h}{3}$$
+                        <!-- Cono -->
+                        <div class="p-2.5 bg-slate-900 rounded-xl border border-amber-500/30 text-center">
+                            <span class="text-amber-300 font-bold text-xs uppercase tracking-wider">Cono (Regla del Tercio)</span>
+                            <svg width="100%" height="110" viewBox="0 0 140 110" class="mx-auto mt-1">
+                                <ellipse cx="70" cy="85" rx="40" ry="12" fill="rgba(245, 158, 11, 0.2)" stroke="#f59e0b" stroke-width="2"/>
+                                <line x1="30" y1="85" x2="70" y2="15" stroke="#f59e0b" stroke-width="2"/>
+                                <line x1="110" y1="85" x2="70" y2="15" stroke="#f59e0b" stroke-width="2"/>
+                                <line x1="70" y1="15" x2="70" y2="85" stroke="#34d399" stroke-dasharray="3"/>
+                                <text x="75" y="55" fill="#34d399" font-size="10" font-weight="bold">h</text>
+                            </svg>
+                            <p class="font-bold text-amber-400 text-xs mt-1">$$V = \frac{\pi r^2 h}{3}$$</p>
                         </div>
-                        <p class="text-slate-400">¡Caben exactamente 3 conos dentro de un cilindro del mismo radio y altura!</p>
                     </div>
+                </div>
+
+                <div class="box-step text-xs">
+                    <p class="text-slate-300">💡 <b>Para Dummies:</b> ¡Un cono de nieve tiene exactamente <b>la tercera parte</b> del volumen de un vaso cilíndrico del mismo radio y altura! Lo mismo aplica para una pirámide respecto a su prisma.</p>
                 </div>
             </div>
             
@@ -180,7 +207,7 @@
         </div>
     </div>
 
-    <!-- Slide 3: 3. Ejemplo Resuelto Paso a Paso (Cilindro PAA) ✍️ -->
+    <!-- Slide 3: 3. Ejemplo Resuelto Visual: Tanque de Agua Cilíndrico 💧 -->
     <div class="slide " id="slide-3">
         <div class="card ">
             
@@ -195,29 +222,32 @@
         </a>
     </div>
             
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">3. Ejemplo Resuelto Paso a Paso (Cilindro PAA) ✍️</h2>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">3. Ejemplo Resuelto Visual: Tanque de Agua Cilíndrico 💧</h2>
             
             
             <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
-                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3">
-                    <p class="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">Reactivo Oficial PAA:</p>
-                    <p class="text-sm font-semibold text-slate-100">
-                        Un tanque cilíndrico de almacenamiento tiene un diámetro de base de 6 metros y una altura de 10 metros. ¿Cuál es su capacidad volumétrica en metros cúbicos?
-                    </p>
+                <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-2.5 text-xs">
+                    <p class="font-bold text-cyan-400">Problema:</p>
+                    <p class="text-slate-100 font-semibold">Un tanque cilíndrico tiene un diámetro de 6 metros y una altura de 10 metros. ¿Cuál es su volumen en metros cúbicos?</p>
                 </div>
 
-                <div class="box-step text-xs space-y-2">
-                    <p class="font-bold text-cyan-300 text-sm">Resolución con atención a las trampas:</p>
-                    <p><b>Paso 1 (Trampa del diámetro):</b> El problema da el <b>diámetro (6 m)</b>. El radio es la mitad:</p>
-                    <p class="pl-3 border-l-2 border-cyan-500/40 font-bold text-amber-300">
-                        $$r = \frac{6}{2} = \mathbf{3\text{ metros}}$$
-                    </p>
+                <div class="gfx-card">
+                    <svg width="100%" height="150" viewBox="0 0 240 150" style="max-width:260px;">
+                        <ellipse cx="120" cy="30" rx="60" ry="16" fill="rgba(56, 189, 248, 0.25)" stroke="#38bdf8" stroke-width="2"/>
+                        <path d="M60,30 L60,115 A60,16 0 0,0 180,115 L180,30" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="2"/>
+                        <line x1="60" y1="30" x2="180" y2="30" stroke="#f43f5e" stroke-width="2"/>
+                        <text x="120" y="24" fill="#f43f5e" font-size="10" font-weight="bold" text-anchor="middle">Diámetro = 6 m (r = 3 m)</text>
+                        <line x1="195" y1="30" x2="195" y2="115" stroke="#34d399" stroke-width="2"/>
+                        <text x="202" y="75" fill="#34d399" font-size="11" font-weight="bold">h = 10 m</text>
+                    </svg>
+                </div>
 
-                    <p><b>Paso 2 (Aplicar la fórmula $V = \pi r^2 h$):</b></p>
-                    <p class="pl-3 border-l-2 border-cyan-500/40 text-sm font-bold text-emerald-400">
-                        $$V = \pi (3^2) (10) = \pi (9) (10) = \mathbf{90\pi\text{ m}^3}$$
-                    </p>
-                    <p class="text-slate-300">¡No necesitas calculadora ni multiplicar por 3.1416! La respuesta en el examen viene escrita como $90\pi$.</p>
+                <div class="box-step text-xs space-y-1.5">
+                    <p class="font-bold text-cyan-300">Resolución paso a paso:</p>
+                    <p><b>1. Cuidado con el diámetro:</b> $r = \frac{6}{2} = \mathbf{3\text{ m}}$.</p>
+                    <p><b>2. Área de la base circular:</b> $A_{\text{base}} = \pi r^2 = \pi (3)^2 = \mathbf{9\pi}$.</p>
+                    <p><b>3. Multiplicar por altura:</b> $V = 9\pi \times 10 = \mathbf{90\pi\text{ m}^3}$.</p>
+                    <p class="text-amber-300 font-bold">¡Conserva el símbolo $\pi$ en la respuesta! Así viene en las opciones de la PAA.</p>
                 </div>
             </div>
             
@@ -229,13 +259,13 @@
         </div>
     </div>
 
-    <!-- Slide 4: 4. Tu Turno: Práctica Guiada #1 🎯 -->
+    <!-- Slide 4: 4. Tu Turno: Reto Visual #1 🎯 -->
     <div class="slide " id="slide-4">
         <div class="card ">
             
     <div class="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-4">
         <div class="flex items-center gap-2">
-            <span class="badge" style="background:#38bdf8;">Práctica Interactiva</span>
+            <span class="badge" style="background:#38bdf8;">Práctica con Imagen</span>
             <span class="text-xs text-slate-400 font-semibold hidden sm:inline">PrepMaster PAA • Para Dummies</span>
         </div>
         <a href="../practicos/mat/volumenes.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold hover:bg-emerald-500/30 transition-all shadow-sm">
@@ -244,17 +274,29 @@
         </a>
     </div>
             
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">4. Tu Turno: Práctica Guiada #1 🎯</h2>
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 text-cyan-400">4. Tu Turno: Reto Visual #1 🎯</h2>
             
             
-            <p class="text-slate-300 text-sm mb-3">Si la arista de un cubo se duplica (se multiplica por 2), ¿cuántas veces aumenta su volumen original?</p>
-            <div class="space-y-2 max-w-lg mx-auto text-left">
-                <button class="option-btn" onclick="checkPractice(this, true, 'vol1', '¡Correcto! El volumen de un cubo es a^3. Si la arista pasa a ser 2a, el nuevo volumen es (2a)^3 = 2^3 * a^3 = 8 * a^3. ¡Aumenta exactamente 8 veces! (El área superficial aumentaría 2^2 = 4 veces).')">A) Aumenta $8$ veces</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'vol1', '4 veces sería el aumento de su área superficial (2^2), pero el volumen es cúbico (2^3).')">B) Aumenta $4$ veces</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'vol1', 'El volumen no se duplica; al tener 3 dimensiones, el factor 2 se multiplica 3 veces.')">C) Aumenta $2$ veces</button>
-                <button class="option-btn" onclick="checkPractice(this, false, 'vol1', '16 sería si se cuadruplicara la arista.')">D) Aumenta $16$ veces</button>
+            <p class="text-slate-300 text-sm mb-2">Observa la siguiente caja rectangular. ¿Cuál es su volumen total?</p>
+            
+            <div class="gfx-card my-2">
+                <svg width="100%" height="130" viewBox="0 0 260 130" style="max-width:300px;">
+                    <polygon points="30,45 130,45 130,105 30,105" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
+                    <polygon points="130,45 190,20 190,80 130,105" fill="rgba(99, 102, 241, 0.25)" stroke="#6366f1" stroke-width="2"/>
+                    <polygon points="30,45 90,20 190,20 130,45" fill="rgba(129, 140, 248, 0.3)" stroke="#818cf8" stroke-width="2"/>
+                    <text x="80" y="120" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">Largo = 8 cm</text>
+                    <text x="165" y="100" fill="#6366f1" font-size="11" font-weight="bold">Ancho = 5 cm</text>
+                    <text x="20" y="75" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="end">Alto = 4 cm</text>
+                </svg>
             </div>
-            <div id="feedback-vol1" class="hidden"></div>
+
+            <div class="space-y-2 max-w-lg mx-auto text-left">
+                <button class="option-btn" onclick="checkPractice(this, true, 'vol_vis1', '¡Correcto! Volumen de prisma rectangular = largo * ancho * alto = 8 * 5 * 4 = 160 cm³.')">A) $160\text{ cm}^3$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'vol_vis1', '184 cm² es el área superficial total de las 6 caras, pero te piden el VOLUMEN.')">B) $184\text{ cm}^3$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'vol_vis1', '80 cm³ sería si olvidaste multiplicar por el alto 4 o si fuera una pirámide dividida entre 2.')">C) $80\text{ cm}^3$</button>
+                <button class="option-btn" onclick="checkPractice(this, false, 'vol_vis1', 'Revisa la multiplicación: 8 * 5 = 40; 40 * 4 = 160.')">D) $120\text{ cm}^3$</button>
+            </div>
+            <div id="feedback-vol_vis1" class="hidden"></div>
             
             <div class="mt-5 flex justify-between items-center gap-2 border-t border-slate-800/80 pt-4">
                 <button class="btn-nav" onclick="prevSlide()">← Atrás</button>
@@ -285,25 +327,25 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left text-xs mb-4">
                 <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
                     <div class="font-bold text-cyan-300">📦 Caja / Prisma</div>
-                    <div class="text-slate-300 mt-1">$V = l \cdot w \cdot h$. Para un cubo: $V = a^3$, Área total $= 6a^2$.</div>
+                    <div class="text-slate-300 mt-1">$V = l \cdot w \cdot h$. Cubo: $V = a^3$, Área total $= 6a^2$.</div>
                 </div>
                 <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
                     <div class="font-bold text-cyan-300">🛢️ Cilindro Recto</div>
-                    <div class="text-slate-300 mt-1">$V = \pi r^2 h$. Recuerda que $r = \text{diámetro}/2$. Conserva $\pi$ en la respuesta.</div>
+                    <div class="text-slate-300 mt-1">$V = \pi r^2 h$. Conserva $\pi$ en la respuesta. $r = \text{diámetro}/2$.</div>
                 </div>
                 <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
                     <div class="font-bold text-cyan-300">🍦 Conos y Pirámides</div>
-                    <div class="text-slate-300 mt-1">Siempre llevan un tercio: $V = \frac{\text{Área Base} \times h}{3}$.</div>
+                    <div class="text-slate-300 mt-1">Siempre dividen entre 3: $V = \frac{\text{Área Base} \times h}{3}$.</div>
                 </div>
                 <div class="bg-slate-900/80 p-3 rounded-xl border border-cyan-500/30">
-                    <div class="font-bold text-cyan-300">📈 Escala Tridimensional</div>
-                    <div class="text-slate-300 mt-1">Si multiplicas las dimensiones por $k$: las longitudes aumentan $\times k$, las áreas $\times k^2$, los volúmenes $\times k^3$.</div>
+                    <div class="font-bold text-cyan-300">📈 Factor de Escala</div>
+                    <div class="text-slate-300 mt-1">Si duplicas la arista de un cubo, su volumen se multiplica por $2^3 = 8$.</div>
                 </div>
             </div>
 
             <div class="p-4 bg-gradient-to-r from-cyan-950/70 via-blue-950/60 to-indigo-950/70 rounded-2xl border border-cyan-500/40 text-center my-3 shadow-xl">
-                <h3 class="text-base sm:text-lg font-black text-cyan-300 mb-1">🎉 ¡Dominaste Cuerpos Geométricos y Volúmenes!</h3>
-                <p class="text-xs sm:text-sm text-slate-300 mb-3">Afianza tus conocimientos con los 30 ejercicios prácticos del tema.</p>
+                <h3 class="text-base sm:text-lg font-black text-cyan-300 mb-1">🎉 ¡Dominaste los Volúmenes!</h3>
+                <p class="text-xs sm:text-sm text-slate-300 mb-3">Pon a prueba tu visión espacial resolviendo los 30 ejercicios prácticos del tema.</p>
                 <a href="../practicos/mat/volumenes.html" class="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-slate-950 font-black text-sm sm:text-base hover:brightness-110 shadow-lg shadow-emerald-500/30 hover:scale-[1.01] transition-all">
                     <span>🚀 Poner a prueba en 30 Ejercicios Prácticos de Volúmenes</span>
                     <span>→</span>
