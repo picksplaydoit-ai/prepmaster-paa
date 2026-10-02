@@ -503,6 +503,13 @@
           <div class="free-desc">55 reactivos estilo PAA real.</div>
         </div>
 
+        <div class="free-card" onclick="openFree('examenes/mat/mat_practica_oficial.html','Prueba Práctica Oficial PAA (Matemáticas)')" style="border-color:rgba(59,130,246,0.45);background:linear-gradient(180deg,rgba(59,130,246,0.08) 0%,rgba(7,11,24,0.95) 100%);">
+          <span class="free-icon">📋</span>
+          <span class="free-tag" style="background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.35);">Oficial College Board</span>
+          <div class="free-title" style="color:#93c5fd;">Prueba Práctica Oficial</div>
+          <div class="free-desc">55 reactivos matemáticos (200-800 pts).</div>
+        </div>
+
         <div class="free-card" onclick="openFree('examenes/red/diagnostico-espanol.html','Diagnóstico Español PAA')">
           <span class="free-icon">✍️</span>
           <span class="free-tag tag-free">Diagnóstico</span>
@@ -1319,14 +1326,14 @@
         <p>Entrenamiento oficial cronometrado con formato real College Board UDG. Practica en pantalla completa y descarga las hojas de procedimientos en PDF.</p>
       </div>
       <div class="sim-stats-pill">
-        <span>⭐ 38 Exámenes disponibles</span>
+        <span>⭐ 39 Exámenes disponibles</span>
       </div>
     </div>
 
     <!-- Tabs selector -->
     <div class="exam-tabs-bar">
       <button class="exam-tab-btn active" data-tab="mat" onclick="selectExamTab('mat')">
-        📐 Matemáticas <span class="exam-tab-badge">11</span>
+        📐 Matemáticas <span class="exam-tab-badge">12</span>
       </button>
       <button class="exam-tab-btn" data-tab="red" onclick="selectExamTab('red')">
         ✍️ Redacción <span class="exam-tab-badge">11</span>
@@ -1342,7 +1349,7 @@
     <!-- Panel Matemáticas -->
     <div class="exam-tab-panel active" id="tab-panel-mat">
       <div class="exam-tab-banner">
-        <span>📐 <strong>11 Simulaciones de Matemáticas:</strong> 55 reactivos c/u. Aritmética, Álgebra, Geometría, Estadística y Probabilidad.</span>
+        <span>📐 <strong>12 Simulaciones de Matemáticas:</strong> 55 reactivos c/u. Aritmética, Álgebra, Geometría, Estadística y Probabilidad (Incluye Prueba Práctica Oficial PAA).</span>
         <span class="badge-subtle badge-pdf-yes">Exámenes 1-8 incluyen hoja PDF</span>
       </div>
       <div class="exam-list-wrap" id="exams-mat"></div>
@@ -1894,13 +1901,18 @@ auth.settings.appVerificationDisabledForTesting = true;
 const db   = getFirestore(app);
 
 const EXAM_FILES = {
-  mat: ['mat_01','mat_02','mat_03','mat_04','mat_05','mat_06','mat_07','mat_08','mat_09','mat_10','mat_11'],
+  mat: ['mat_01','mat_02','mat_03','mat_04','mat_05','mat_06','mat_07','mat_08','mat_09','mat_10','mat_11','mat_practica_oficial'],
   red: ['red_01','red_02','red_03','red_04','red_05','red_06','red_07','red_08','red_09','red_10','red_11'],
   lec: ['lec_01','lec_02','lec_03','lec_04','lec_05','lec_06','lec_07','lec_08','lec_09','lec_10','lec_11'],
 };
 const EXAM_META = { mat:'55 reactivos', red:'30 reactivos', lec:'45 reactivos' };
 const EXAMS = {
-  mat: EXAM_FILES.mat.map((f,i)=>({name:`Simulación Matemáticas ${i+1}`,file:`examenes/mat/${f}.html`,pdf:`respuestas/mat/${f}_resp.pdf`,meta:EXAM_META.mat})),
+  mat: EXAM_FILES.mat.map((f,i)=>({
+    name: f === 'mat_practica_oficial' ? 'Prueba Práctica Oficial PAA (Matemáticas)' : `Simulación Matemáticas ${i+1}`,
+    file: `examenes/mat/${f}.html`,
+    pdf: `respuestas/mat/${f}_resp.pdf`,
+    meta: EXAM_META.mat
+  })),
   red: EXAM_FILES.red.map((f,i)=>({name:`Simulación Redacción ${i+1}`,file:`examenes/red/${f}.html`,pdf:`respuestas/red/${f}_resp.pdf`,meta:EXAM_META.red})),
   lec: EXAM_FILES.lec.map((f,i)=>({name:`Simulación Lectura ${i+1}`,file:`examenes/lec/${f}.html`,pdf:`respuestas/lec/${f}_resp.pdf`,meta:EXAM_META.lec})),
 };
