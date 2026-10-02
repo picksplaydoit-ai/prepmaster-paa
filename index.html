@@ -524,11 +524,18 @@
           <div class="free-desc">Estima tu puntaje PAA-UDG.</div>
         </div>
 
-        <div class="free-card free-card-wide" onclick="openFree('minijuegos/conecta4_mat.html','Conecta 4 — Matemáticas PAA')">
+        <div class="free-card" onclick="openFree('minijuegos/conecta4_mat.html','Conecta 4 — Matemáticas PAA')">
           <span class="free-icon">🔴</span>
           <span class="free-tag tag-game">Minijuego · 1 vs 1</span>
-          <div class="free-title">Conecta 4 — Matemáticas PAA</div>
-          <div class="free-desc">Duelo matemático para practicar mientras esperas. ¡Sin registro!</div>
+          <div class="free-title">Conecta 4 — Matemáticas</div>
+          <div class="free-desc">Duelo matemático para practicar. ¡Sin registro!</div>
+        </div>
+
+        <div class="free-card" onclick="openFree('https://el-bicho-paa.vercel.app/','El Bicho en el Examen PAA')" style="border-color:rgba(16,185,129,0.4);background:linear-gradient(180deg,rgba(16,185,129,0.08) 0%,rgba(7,11,24,0.95) 100%);">
+          <span class="free-icon">🐛</span>
+          <span class="free-tag" style="background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.35);">Minijuego Arcade</span>
+          <div class="free-title" style="color:#6ee7b7;">El Bicho en el PAA</div>
+          <div class="free-desc">¡Juego interactivo del Bicho! Sin registro.</div>
         </div>
 
       </div>
@@ -1385,14 +1392,14 @@
         </p>
       </div>
       <div class="sim-stats-pill">
-        <span>⚡ 19 Desafíos y Minijuegos</span>
+        <span>⚡ 20 Desafíos y Minijuegos</span>
       </div>
     </div>
 
     <!-- Pestañas del Hub de Retos -->
     <div class="exam-tabs-bar" id="retos-tabs-bar">
       <button class="exam-tab-btn active" data-retotab="todos" onclick="selectRetosTab('todos')">
-        🔥 Todos <span class="exam-tab-badge">19</span>
+        🔥 Todos <span class="exam-tab-badge">20</span>
       </button>
       <button class="exam-tab-btn" data-retotab="surv" onclick="selectRetosTab('surv')">
         🏋️ Supervivencia <span class="exam-tab-badge">8</span>
@@ -1401,7 +1408,7 @@
         📖 Lectura Rápida <span class="exam-tab-badge">4</span>
       </button>
       <button class="exam-tab-btn" data-retotab="mini" onclick="selectRetosTab('mini')">
-        🎮 Minijuegos PAA <span class="exam-tab-badge">7</span>
+        🎮 Minijuegos PAA <span class="exam-tab-badge">8</span>
       </button>
     </div>
 
@@ -1446,7 +1453,7 @@
           <span>🎮</span> Minijuegos Interactivos PAA
         </h3>
         <div class="section-line"></div>
-        <span class="section-count">7 Juegos</span>
+        <span class="section-count">8 Juegos</span>
       </div>
       <div class="exam-tab-banner">
         <span>🎮 <strong>Aprende jugando:</strong> Desafíos temáticos, crónicas y duelos 1 vs 1 para poner a prueba tu conocimiento de forma divertida.</span>
@@ -1501,6 +1508,13 @@
           <div class="mini-name">Dominando el PAA</div>
           <div class="mini-desc">Modo arcade rápido de preguntas relámpago con vidas limitadas para desbloquear medallas.</div>
           <button class="mini-btn" onclick="openExam('minijuegos/dominando_el_paa.html','Dominando el PAA')">▶ Jugar</button>
+        </div>
+        <div class="mini-card" style="border-color:rgba(16,185,129,0.4);background:linear-gradient(135deg,#071510,#0a2016);">
+          <div class="mini-icon">🐛</div>
+          <span class="mini-tag" style="background:rgba(16,185,129,0.18);color:#10b981;border-color:rgba(16,185,129,0.4);">Arcade Especial</span>
+          <div class="mini-name">El Bicho en el PAA</div>
+          <div class="mini-desc">¡Modo dinámico especial con el Bicho! Esquiva distractores y pon a prueba tu agilidad mental.</div>
+          <button class="mini-btn" style="background:linear-gradient(135deg,#10b981,#059669);border-color:rgba(16,185,129,0.5);color:#02150d;" onclick="openExam('https://el-bicho-paa.vercel.app/','El Bicho en el Examen PAA')">▶ Jugar</button>
         </div>
       </div>
     </div>
@@ -1673,6 +1687,7 @@
 <div class="iframe-modal" id="iframe-modal">
   <div class="iframe-topbar">
     <span class="iframe-title" id="iframe-title">Examen</span>
+    <button class="btn-close-modal" id="btn-open-external" style="display:none;margin-right:8px;border-color:rgba(0,240,255,0.4);color:var(--cyan);" onclick="window.open(document.getElementById('main-iframe').src, '_blank')">↗ Pantalla Completa</button>
     <button class="btn-close-modal" onclick="closeIframe()">✕ Cerrar</button>
   </div>
   <iframe id="main-iframe" src="" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"></iframe>
@@ -1804,6 +1819,10 @@ function openFree(src, title) {
     titleEl.textContent = title;
     modal.style.zIndex = '2000'; // above auth screen
     modal.classList.add('open');
+    const extBtn = document.getElementById('btn-open-external');
+    if (extBtn) {
+      extBtn.style.display = (src && src.startsWith('http')) ? 'inline-block' : 'none';
+    }
   } else {
     window.open(src, '_blank');
   }
@@ -1813,9 +1832,18 @@ function openExam(src,title) {
   document.getElementById('main-iframe').src=src;
   document.getElementById('iframe-title').textContent=title;
   document.getElementById('iframe-modal').classList.add('open');
+  const extBtn = document.getElementById('btn-open-external');
+  if (extBtn) {
+    extBtn.style.display = (src && src.startsWith('http')) ? 'inline-block' : 'none';
+  }
 }
 function openTool(src,title){ openExam(src,title); }
-function closeIframe() { document.getElementById('iframe-modal').classList.remove('open'); document.getElementById('main-iframe').src=''; }
+function closeIframe() { 
+  document.getElementById('iframe-modal').classList.remove('open'); 
+  document.getElementById('main-iframe').src=''; 
+  const extBtn = document.getElementById('btn-open-external');
+  if (extBtn) extBtn.style.display = 'none';
+}
 function openPDF(src,title) {
   const cacheBust = '?v=' + Date.now();
   document.getElementById('pdf-iframe').src = src + cacheBust + '#toolbar=0&navpanes=0';
@@ -1839,6 +1867,7 @@ window.closeGuiaModal = closeGuiaModal;
 window.closeGuiaOnBg = closeGuiaOnBg;
 window.togglePanel = togglePanel; 
 window.openExam = openExam; 
+window.openFree = openFree;
 window.openTool = openTool;
 window.closeIframe = closeIframe; 
 window.openPDF = openPDF; 
